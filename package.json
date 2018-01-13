@@ -9,10 +9,7 @@
     "main.js",
     "main.html"
   ],
-  "devDependencies": {
-    "electron": "^1.4.1"
-  },
   "dependencies": {
-    
+    "electron": "^1.7.10"
   }
 }
