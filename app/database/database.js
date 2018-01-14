@@ -52,8 +52,8 @@ class Database {
     var players = {};
 
     match.playerIDs = [];
+    match.team0 = [];
     match.team1 = [];
-    match.team2 = [];
     var playerDetails = details.m_playerList;
 
     console.log("Gathering Preliminary Player Data...");
@@ -72,13 +72,15 @@ class Database {
       pdoc.ToonHandle = pdata.m_toon.m_realm + '-' + pdata.m_toon.m_programId + '-' + pdata.m_toon.m_region + '-' + pdata.m_toon.m_id;
       pdoc.gameStats = {};
       pdoc.talents = {};
+      pdoc.takedowns = [];
+      pdoc.deaths = [];
       pdoc.gameStats.awards = [];
 
       if (pdoc.team === ReplayTypes.TeamType.Blue) {
-        match.team1.push(pdoc.ToonHandle);
+        match.team0.push(pdoc.ToonHandle);
       }
       else if (pdoc.team === ReplayTypes.TeamType.Red) {
-        match.team2.push(pdoc.ToonHandle);
+        match.team1.push(pdoc.ToonHandle);
       }
 
       players[pdoc.ToonHandle] = pdoc;
@@ -114,6 +116,9 @@ class Database {
     // track a few different kinds of things here, this is probably where most of the interesting stuff will come from
     var stats = {};
     match.XPBreakdown = [];
+    match.takedowns = [];
+    match.team0Takedowns = 0;
+    match.team1Takedowns = 0;
     var team0XPEnd;
     var team1XPEnd;
 
@@ -164,7 +169,7 @@ class Database {
           for (var j in event.m_fixedData) {
             xpb.breakdown[event.m_fixedData[j].m_key] = event.m_fixedData[j].m_value;
           }
-          
+
           match.XPBreakdown.push(xpb);
         }
         else if (event.m_eventName === ReplayTypes.StatEventType.EndOfGameXPBreakdown) {
@@ -186,6 +191,46 @@ class Database {
           else if (xpb.team === ReplayTypes.TeamType.Red) {
             team1XPEnd = xpb;
           }
+        }
+        else if (event.m_eventName === ReplayTypes.StatEventType.PlayerDeath) {
+          // add data to the match and the individual players
+          var tData = {};
+          tData.loop = event._gameloop;
+          tData.time = loopsToSeconds(tData.loop);
+          tData.x = event.m_fixedData[0].m_value;
+          tData.y = event.m_fixedData[1].m_value;
+          tData.killers = [];
+
+          // player ids
+          var victim;
+          var killers = [];
+
+          for (var j = 0; j < event.m_intData.length; j++) {
+            var entry = event.m_intData[j];
+
+            if (entry.m_key === "PlayerID") {
+              tData.victim = { player: playerIDMap[entry.m_value], hero: players[playerIDMap[entry.m_value]].hero };
+              victim = playerIDMap[entry.m_value];
+            }
+            else if (entry.m_key === "KillingPlayer") {
+              var tdo = { player: playerIDMap[entry.m_value], hero: players[playerIDMap[entry.m_value]].hero };
+              killers.push(playerIDMap[entry.m_value]);
+              tData.killers.push(tdo);
+            }
+          }
+
+          if (players[victim].team === ReplayTypes.TeamType.Blue)
+            match.team1Takedowns += 1;
+          else if (players[victim].team === ReplayTypes.TeamType.Red)
+            match.team0Takedowns += 1;
+
+          match.takedowns.push(tData);
+          players[victim].deaths.push(tData);
+          for (var j = 0; j < killers.length; j++) {
+            players[killers[j]].takedowns.push(tData);
+          }
+
+          console.log('[TRACKER] Processed Player ' + victim + ' death at ' + tData.loop);
         }
       }
 
