@@ -45,11 +45,13 @@ function parse(file, requestedData, opts) {
     replay[requestedData[i]] = JSON.parse(rawData);
   }
 
-  if (opts.saveToFile) {
-    fs.writeFile(opts.saveToFile, JSON.stringify(replay, null, 2), function (err) {
-      if (err) throw err;
-      console.log('Wrote replay data to ' + opts.saveToFile);
-    });
+  if (opts) {
+    if ('saveToFile' in opts) {
+      fs.writeFile(opts.saveToFile, JSON.stringify(replay, null, 2), function (err) {
+        if (err) throw err;
+        console.log('Wrote replay data to ' + opts.saveToFile);
+      });
+    }
   }
 
   return replay;

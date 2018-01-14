@@ -16,14 +16,14 @@ class Database {
     this._db = {};
     this._db.matches = new Datastore({ filename: this._path + '/matches.db', autoload: true });
     this._db.heroData = new Datastore({ filename: this._path + '/hero.db', autoload: true });
-    this._db.players = new Datastore({ filename: this._path + './players.db', autoload: true });
-    this._db.settings = new Datastore({ filename: this._path + './settings.db', autoload: true });
+    this._db.players = new Datastore({ filename: this._path + '/players.db', autoload: true });
+    this._db.settings = new Datastore({ filename: this._path + '/settings.db', autoload: true });
   }
 
   // processes a replay file and adds it to the database
   processReplay(file) {
     // parse it
-    var data = Parser.parse(file, Parser.commonReplayData);
+    var data = Parser.parse(file, Parser.CommonReplayData);
     var details = data.details[0];
 
     // start with the match, since a lot of things are keyed off of it
@@ -51,7 +51,7 @@ class Database {
 
     for (var i = 0; i < playerDetails.length; i++) {
       var playerID = i + 1;
-      var pdata = playerData[i];
+      var pdata = playerDetails[i];
       var pdoc = {};
 
       // collect data
@@ -61,6 +61,9 @@ class Database {
       pdoc.region = pdata.m_toon.m_region;
       pdoc.realm = pdata.m_toon.m_realm;
       pdoc.team = pdata.m_teamId;  /// the team id doesn't neatly match up with the tracker events, may adjust later
+      pdoc.ToonHandle = pdata.m_toon.m_realm + '-' + pdata.m_toon.m_programId + '-' + pdata.m_toon.m_region + '-' + pdata.m_toon.m_id;
+      pdoc.gameStats = {};
+      pdoc.gameStats.awards = [];
 
       players[playerID] = pdoc;
       match.playerIDs.push(pdoc.uuid);
@@ -75,9 +78,44 @@ class Database {
       var event = tracker[i];
 
       // case on event type
-      if (event.m_type === )
+      if (event.m_type === ReplayTypes.TrackerEvent.Score) {
+        // score is real long, separate function
+        this.processScoreArray(event.m_instanceList, match, players);
+      }
     }
-    
+
+    // insert match
+    var self = this;
+    this._db.matches.insert(match, function (err, newDoc) {
+      // update and insert players
+      for (var i in players) {
+        players[i].matchID = newDoc._id;
+        self._db.heroData.insert(players[i]);
+      }
+    });
+  }
+
+  processScoreArray(data, match, players) {
+    // iterate through each object...
+    for (var i = 0; i < data.length; i++) {
+      var name = data[i].m_name;
+      var valArray = data[i].m_values;
+
+      if (!name.startsWith('EndOfMatchAward')) {
+        for (var j = 0; j < valArray.length; j++) {
+          var playerID = j + 1;
+          players[j].gameStats[name] = valArray[j].m_value;
+        }
+      }
+      else {
+        for (var j = 0; j < valArray.legnth; j++) {
+          var playerID = j + 1;
+          if (valArray[j] !== 0) {
+            players[j].gameStats.awards.push(name);
+          }
+        }
+      }
+    }
   }
 }
 
@@ -90,3 +128,5 @@ function loopsToSeconds(loops) {
   // apparently hots does 16 updates per second
   return loops / 16;
 }
+
+exports.HeroesDatabase = Database;
