@@ -50,7 +50,10 @@ class Database {
     // in a document in the heroData db
     // players are 1-indexed, look at details first
     var players = {};
+
     match.playerIDs = [];
+    match.team1 = [];
+    match.team2 = [];
     var playerDetails = details.m_playerList;
 
     console.log("Gathering Preliminary Player Data...");
@@ -68,22 +71,50 @@ class Database {
       pdoc.team = pdata.m_teamId;  /// the team id doesn't neatly match up with the tracker events, may adjust later
       pdoc.ToonHandle = pdata.m_toon.m_realm + '-' + pdata.m_toon.m_programId + '-' + pdata.m_toon.m_region + '-' + pdata.m_toon.m_id;
       pdoc.gameStats = {};
+      pdoc.talents = {};
       pdoc.gameStats.awards = [];
 
-      players[playerID] = pdoc;
+      if (pdoc.team === ReplayTypes.TeamType.Blue) {
+        match.team1.push(pdoc.ToonHandle);
+      }
+      else if (pdoc.team === ReplayTypes.TeamType.Red) {
+        match.team2.push(pdoc.ToonHandle);
+      }
+
+      players[pdoc.ToonHandle] = pdoc;
       match.playerIDs.push(pdoc.ToonHandle);
 
       console.log("Found player " + pdoc.ToonHandle);
     }
 
     console.log("Preliminary Player Processing Complete");
+    console.log("Matching Tracker Player ID to handles...");
+    // construct identfier map for player handle to internal player object id
+    var tracker = data.trackerevents;
+
+    // maps player id in the Tracker data to the proper player object
+    var playerIDMap = {};
+
+    for (var i = 0; i < tracker.length; i++) {
+      var event = tracker[i];
+
+      // case on event type
+      if (event._eventid === ReplayTypes.TrackerEvent.Stat) {
+        if (event.m_eventName === ReplayTypes.StatEventType.PlayerInit) {
+          playerIDMap[event.m_intData[0].m_value] = event.m_stringData[1].m_value;
+
+          console.log("Player " + event.m_stringData[1].m_value + " has tracker ID " + event.m_intData[0].m_value);
+        }
+      }
+    }
+
+    console.log("Player ID Mapping Complete");
 
     // the tracker events have most of the useful data
     // track a few different kinds of things here, this is probably where most of the interesting stuff will come from
     var stats = {};
-    var tracker = data.trackerevents;
 
-    console.log("Starting Event Analysis...");
+    console.log("[TRACKER] Starting Event Analysis...");
 
     for (var i = 0; i < tracker.length; i++) {
       var event = tracker[i];
@@ -91,11 +122,41 @@ class Database {
       // case on event type
       if (event._eventid === ReplayTypes.TrackerEvent.Score) {
         // score is real long, separate function
-        this.processScoreArray(event.m_instanceList, match, players);
+        this.processScoreArray(event.m_instanceList, match, players, playerIDMap);
       }
+      if (event._eventid === ReplayTypes.TrackerEvent.Stat) {
+        if (event.m_eventName === "EndOfGameTalentChoices") {
+          var trackerPlayerID = event.m_intData[0].m_value;
+          var playerID = playerIDMap[trackerPlayerID];
+
+          console.log("[TRACKER] Processing Talent Choices for " + playerID);
+
+          // this actually contains more than talent choices
+          if (event.m_stringData[1].m_value === "Win") {
+            players[playerID].win = true;
+          }
+          else {
+            players[playerID].win = false;
+          }
+
+          players[playerID].internalHeroName = event.m_stringData[0].m_value;
+
+          // talents
+          for (var j = 0; j < event.m_stringData.length; j++) {
+            if (event.m_stringData[j].m_key.startsWith('Tier')) {
+              players[playerID].talents[event.m_stringData[j].m_key] = event.m_stringData[j].m_value;
+            }
+          }
+        }
+      }
+
     }
 
-    console.log("Event Analysis Complete");
+    console.log("[TRACKER] Event Analysis Complete");
+
+    // get a few more bits of summary data from the players...
+    // match winner
+    // match level end
 
     // insert match
     var self = this;
@@ -103,18 +164,16 @@ class Database {
       // update and insert players
       for (var i in players) {
         players[i].matchID = newDoc._id;
-        console.log(players[i].gameStats.awards);
         self._db.heroData.insert(players[i]);
       }
     });
   }
 
-  processScoreArray(data, match, players) {
+  processScoreArray(data, match, players, playerIDMap) {
   	console.log("[SCORE DATA] Processing Start");
 
     // iterate through each object...
     for (var i = 0; i < data.length; i++) {
-      console.log("[SCORE DATA] " + name);
       var name = data[i].m_name;
       var valArray = data[i].m_values;
 
@@ -122,7 +181,7 @@ class Database {
         for (var j = 0; j < valArray.length; j++) {
           if (valArray[j].length > 0) {
             var playerID = j + 1;
-            players[playerID].gameStats[name] = valArray[j][0].m_value;
+            players[playerIDMap[playerID]].gameStats[name] = valArray[j][0].m_value;
           }
         }
       }
@@ -131,12 +190,14 @@ class Database {
           if (valArray[j].length > 0) {
             var playerID = j + 1;
             if (valArray[j][0].m_value === 1) {
-              players[playerID].gameStats.awards.push(name);
+              players[playerIDMap[playerID]].gameStats.awards.push(name);
             }
           }
         }
       }
     }
+
+    console.log("[SCORE DATA] Processing Complete");
   }
 }
 

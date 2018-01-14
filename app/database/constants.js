@@ -23,18 +23,18 @@ const TrackerEvent = {
 }
 
 const StatEventType = {
-  PlayerInit: 'Player Init',
-  PlayerSpawned: 'Player Spawned',
-  TalentChosen: 'Talent Chosen',
-  RegenGlobePickedUp: 'Regen Globe Picked Up',
-  PeriodicXPBreakdown: 'Periodic XP Breakdown',
-  PlayerDeath: 'Player Death',
-  LevelUp: 'Level Up',
-  SkyTempleCaptured: 'Sky Temple Captured',
-  SkyTempleShotsFired: 'Sky Temple Shot Fired',
-  EndOfGameXPBreakdown: 'End of Game XP Breakdown',
-  EndOfGameTimeSpentDead: 'Time Spent Dead',
-  EndOfGameTalentChoices: 'Talent Choices'
+  PlayerInit: 'PlayerInit',
+  PlayerSpawned: 'PlayerSpawned',
+  TalentChosen: 'TalentChosen',
+  RegenGlobePickedUp: 'RegenGlobePickedUp',
+  PeriodicXPBreakdown: 'PeriodicXPBreakdown',
+  PlayerDeath: 'PlayerDeath',
+  LevelUp: 'LevelUp',
+  SkyTempleCaptured: 'SkyTempleCaptured',
+  SkyTempleShotsFired: 'SkyTempleShotsFired',
+  EndOfGameXPBreakdown: 'EndOfGameXPBreakdown',
+  EndOfGameTimeSpentDead: 'EndOfGameTimeSpentDead',
+  EndOfGameTalentChoices: 'EndOfGameTalentChoices'
 };
 
 // display strings for score event names
