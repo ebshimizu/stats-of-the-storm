@@ -155,8 +155,22 @@ class Database {
     console.log("[TRACKER] Event Analysis Complete");
 
     // get a few more bits of summary data from the players...
-    // match winner
-    // match level end
+    for (var p in players) {
+      if (players[p].team === ReplayTypes.TeamType.Blue) {
+        match.blueTeamLevel = players[p].gameStats.Level;
+      
+        if (players[p].win) {
+          match.winner = ReplayTypes.TeamType.Blue;
+        }
+      }
+      else if (players[p].team === ReplayTypes.TeamType.Red) {
+        match.redTeamLevel = players[p].gameStats.Level;
+
+        if (players[p].win) {
+          match.winner = ReplayTypes.TeamType.Red;
+        }
+      }
+    }
 
     // insert match
     var self = this;
