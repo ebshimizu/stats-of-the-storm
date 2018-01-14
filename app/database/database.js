@@ -84,7 +84,7 @@ class Database {
       players[pdoc.ToonHandle] = pdoc;
       match.playerIDs.push(pdoc.ToonHandle);
 
-      console.log("Found player " + pdoc.ToonHandle);
+      console.log("Found player " + pdoc.ToonHandle + " (" + pdoc.name+ ")");
     }
 
     console.log("Preliminary Player Processing Complete");
@@ -113,6 +113,9 @@ class Database {
     // the tracker events have most of the useful data
     // track a few different kinds of things here, this is probably where most of the interesting stuff will come from
     var stats = {};
+    match.XPBreakdown = [];
+    var team0XPEnd;
+    var team1XPEnd;
 
     console.log("[TRACKER] Starting Event Analysis...");
 
@@ -124,8 +127,8 @@ class Database {
         // score is real long, separate function
         this.processScoreArray(event.m_instanceList, match, players, playerIDMap);
       }
-      if (event._eventid === ReplayTypes.TrackerEvent.Stat) {
-        if (event.m_eventName === "EndOfGameTalentChoices") {
+      else if (event._eventid === ReplayTypes.TrackerEvent.Stat) {
+        if (event.m_eventName === ReplayTypes.StatEventType.EndOfGameTalentChoices) {
           var trackerPlayerID = event.m_intData[0].m_value;
           var playerID = playerIDMap[trackerPlayerID];
 
@@ -148,9 +151,49 @@ class Database {
             }
           }
         }
+        else if (event.m_eventName === ReplayTypes.StatEventType.PeriodicXPBreakdown) {
+          var xpb = {};
+          xpb.loop = event._gameloop;
+          xpb.time = loopsToSeconds(xpb.loop);
+          xpb.team = event.m_intData[0].m_value;
+          xpb.teamLevel = event.m_intData[1].m_value;
+          xpb.breakdown = {};
+
+          console.log("[TRACKER] Processing XP Breakdown for team " + xpb.team + " at loop " + xpb.loop);
+
+          for (var j in event.m_fixedData) {
+            xpb.breakdown[event.m_fixedData[j].m_key] = event.m_fixedData[j].m_value;
+          }
+          
+          match.XPBreakdown.push(xpb);
+        }
+        else if (event.m_eventName === ReplayTypes.StatEventType.EndOfGameXPBreakdown) {
+          var xpb = {};
+          xpb.loop = event._gameloop;
+          xpb.time = loopsToSeconds(xpb.loop);
+          xpb.team = players[playerIDMap[event.m_intData[0].m_value]].team;
+          xpb.breakdown = {};
+
+          console.log("[TRACKER] Caching Final XP Breakdown for team " + xpb.team + " at loop " + xpb.loop);
+
+          for (var j in event.m_fixedData) {
+            xpb.breakdown[event.m_fixedData[j].m_key] = event.m_fixedData[j].m_value;
+          }
+
+          if (xpb.team === ReplayTypes.TeamType.Blue) {
+            team0XPEnd = xpb;
+          }
+          else if (xpb.team === ReplayTypes.TeamType.Red) {
+            team1XPEnd = xpb;
+          }
+        }
       }
 
     }
+
+    console.log("[TRACKER] Adding final XP breakdown")
+    match.XPBreakdown.push(team0XPEnd);
+    match.XPBreakdown.push(team1XPEnd);
 
     console.log("[TRACKER] Event Analysis Complete");
 
