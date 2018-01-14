@@ -1,4 +1,5 @@
-const fs = require('child_process')
+const cp = require('child_process');
+const fs = require('fs');
 
 const ReplayDataType = {
   game: "gameevents",
@@ -29,7 +30,7 @@ function parse(file, requestedData, opts) {
       console.log("This is a ton of data, processing may take additional time...");
     }
 
-    const script = fs.spawnSync('python', ['../third_party/heroprotocol/heroprotocol.py','--json', '--' + requestedData[i], file], {
+    const script = cp.spawnSync('python', ['../third_party/heroprotocol/heroprotocol.py','--json', '--' + requestedData[i], file], {
       maxBuffer: 500000*1024    // if anyone asks why it's 500MB it's because gameevents is huge
     });
 
@@ -42,6 +43,13 @@ function parse(file, requestedData, opts) {
     rawData = '[' + rawData + ']';
 
     replay[requestedData[i]] = JSON.parse(rawData);
+  }
+
+  if (opts.saveToFile) {
+    fs.writeFile(opts.saveToFile, JSON.stringify(replay, null, 2), function (err) {
+      if (err) throw err;
+      console.log('Wrote replay data to ' + opts.saveToFile);
+    });
   }
 
   return replay;
