@@ -34,7 +34,8 @@ const StatEventType = {
   SkyTempleShotsFired: 'SkyTempleShotsFired',
   EndOfGameXPBreakdown: 'EndOfGameXPBreakdown',
   EndOfGameTimeSpentDead: 'EndOfGameTimeSpentDead',
-  EndOfGameTalentChoices: 'EndOfGameTalentChoices'
+  EndOfGameTalentChoices: 'EndOfGameTalentChoices',
+  LootSprayUsed: 'LootSprayUsed'
 };
 
 // display strings for score event names

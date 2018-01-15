@@ -93,6 +93,8 @@ class Database {
       pdoc.deaths = [];
       pdoc.gameStats.awards = [];
       pdoc.bsteps = [];
+      pdoc.sprays = [];
+      pdoc.taunts = [];
 
       if (pdoc.team === ReplayTypes.TeamType.Blue) {
         match.team0.push(pdoc.ToonHandle);
@@ -249,6 +251,17 @@ class Database {
           }
 
           console.log('[TRACKER] Processed Player ' + victim + ' death at ' + tData.loop);
+        }
+        else if (event.m_eventName === ReplayTypes.StatEventType.LootSprayUsed) {
+          var spray = {};
+          var id = event.m_stringData[1].m_value;
+          spray.kind = event.m_stringData[2].m_value;
+          spray.x = event.m_fixedData[0].m_value;
+          spray.y = event.m_fixedData[1].m_value;
+
+          players[id].sprays.push(spray);
+
+          console.log('[TRACKER] Spray from player ' + id + ' found');
         }
       }
 
