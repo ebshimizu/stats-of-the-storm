@@ -92,6 +92,7 @@ class Database {
         pdoc.deaths = [];
         pdoc.gameStats.awards = [];
         pdoc.bsteps = [];
+        pdoc.voiceLines = [];
         pdoc.sprays = [];
         pdoc.taunts = [];
 
@@ -142,7 +143,7 @@ class Database {
       match.objective = { type: match.map };
 
       // objective object initialization (per-map)
-      if (match.map === ReplayTypes.MapType.SkyTemple) {
+      if (match.map === ReplayTypes.MapType.SkyTemple || match.map === ReplayTypes.MapType.Towers) {
         match.objective[0] = { count: 0, damage: 0, events: [] };
         match.objective[1] = { count: 0, damage: 0, events: [] };
       }
@@ -278,6 +279,17 @@ class Database {
 
             console.log('[TRACKER] Spray from player ' + id + ' found');
           }
+          else if (event.m_eventName === ReplayTypes.StatEventType.LootVoiceLineUsed) {
+            let line = {};
+            let id = event.m_stringData[1].m_value;
+            line.kind = event.m_stringData[2].m_value;
+            line.x = event.m_fixedData[0].m_value;
+            line.y = event.m_fixedData[1].m_value;
+
+            players[id].voiceLines.push(line);
+
+            console.log('[TRACKER] Voice Line from player ' + id + ' found');
+          }
           else if (event.m_eventName === ReplayTypes.StatEventType.GatesOpen) {
             loopGameStart = event._gameloop;
           }
@@ -287,8 +299,18 @@ class Database {
             match.objective[objEvent.team].events.push(objEvent);
             match.objective[objEvent.team].damage += objEvent.damage;
             match.objective[objEvent.team].count += 1;
-              
+
             console.log("[TRACKER] Sky Temple: Shot fired for team " + objEvent.team);
+          }
+          else if (event.m_eventName === ReplayTypes.StatEventType.AltarCaptured) {
+            let objEvent = { team: event.m_intData[0].m_value - 1, time: event._gameloop, owned: event.m_intData[1].m_value };
+            objEvent.damage = objEvent.owned + 1;
+
+            match.objective[objEvent.team].events.push(objEvent);
+            match.objective[objEvent.team].damage += objEvent.damage;
+            match.objective[objEvent.team].count += 1;
+
+            console.log("[TRACKER] Towers of Doom: Altar Capture for team " + objEvent.team);
           }
         }
         else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {

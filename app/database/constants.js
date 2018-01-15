@@ -36,7 +36,9 @@ const StatEventType = {
   EndOfGameTimeSpentDead: 'EndOfGameTimeSpentDead',
   EndOfGameTalentChoices: 'EndOfGameTalentChoices',
   LootSprayUsed: 'LootSprayUsed',
-  GatesOpen: 'GatesOpen'
+  LootVoiceLineUsed: 'LootVoiceLineUsed',
+  GatesOpen: 'GatesOpen',
+  AltarCaptured: 'Altar Captured'
 };
 
 // display strings for score event names
@@ -134,7 +136,8 @@ const ScoreEventNames = {
 };
 
 const MapType = {
-  SkyTemple: 'Sky Temple'
+  SkyTemple: 'Sky Temple',
+  Towers: 'Towers of Doom'
 };
 
 const MessageType = {
