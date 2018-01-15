@@ -133,6 +133,10 @@ const ScoreEventNames = {
   // I skip the "Wins___" categories, they appear to be used for daily quest completion checks
 };
 
+const MapType = {
+  SkyTemple: 'Sky Temple'
+};
+
 const MessageType = {
   Chat: 0,
   Ping: 1,
@@ -192,3 +196,4 @@ exports.VitalType = VitalType;
 exports.UnitType = UnitType;
 exports.MinionXP = MinionXP;
 exports.TombMinionXP = TombMinionXP;
+exports.MapType = MapType;

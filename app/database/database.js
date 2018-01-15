@@ -138,6 +138,15 @@ class Database {
       match.takedowns = [];
       match.team0Takedowns = 0;
       match.team1Takedowns = 0;
+
+      match.objective = { type: match.map };
+
+      // objective object initialization (per-map)
+      if (match.map === ReplayTypes.MapType.SkyTemple) {
+        match.objective[0] = { count: 0, damage: 0, events: [] };
+        match.objective[1] = { count: 0, damage: 0, events: [] };
+      }
+
       var team0XPEnd;
       var team1XPEnd;
 
@@ -271,6 +280,15 @@ class Database {
           }
           else if (event.m_eventName === ReplayTypes.StatEventType.GatesOpen) {
             loopGameStart = event._gameloop;
+          }
+          else if (event.m_eventName === ReplayTypes.StatEventType.SkyTempleShotsFired) {
+            let objEvent = { team: event.m_intData[2].m_value - 1, time: event._gameloop, damage: event.m_fixedData[0].m_value / 4096 };
+
+            match.objective[objEvent.team].events.push(objEvent);
+            match.objective[objEvent.team].damage += objEvent.damage;
+            match.objective[objEvent.team].count += 1;
+              
+            console.log("[TRACKER] Sky Temple: Shot fired for team " + objEvent.team);
           }
         }
         else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {

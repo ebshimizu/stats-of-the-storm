@@ -10,7 +10,7 @@ const ReplayDataType = {
   details: "details",
   init: "initdata",
   stats: "stats"
-}
+};
 
 // it's everything except gameevents which is just a massive amount of data
 const CommonReplayData = [ReplayDataType.message, ReplayDataType.tracker, ReplayDataType.attribute, ReplayDataType.header, ReplayDataType.details, ReplayDataType.init, ReplayDataType.stats];
@@ -25,7 +25,7 @@ function parse(file, requestedData, opts) {
 
   // execute sync
   for (var i in requestedData) {
-    console.log("Retrieving " + requestedData[i])
+    console.log("Retrieving " + requestedData[i]);
 
     if (requestedData[i] === ReplayDataType.game) {
       console.log("This is a ton of data, processing may take additional time...");
