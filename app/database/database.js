@@ -5,6 +5,7 @@
 const Parser = require('./parser.js');
 const ReplayTypes = require('./constants.js');
 const timers = require('timers');
+const fs = require('fs');
 
 // databases are loaded from the specified folder when the database object is created
 var Datastore = require('nedb');
@@ -36,7 +37,7 @@ class Database {
     console.log("Processing " + file);
 
     // parse it
-    var data = Parser.parse(file, Parser.CommonReplayData);
+    var data = Parser.parse(file, Parser.AllReplayData);
     var details = data.details[0];
 
     // start with the match, since a lot of things are keyed off of it
@@ -91,6 +92,7 @@ class Database {
       pdoc.takedowns = [];
       pdoc.deaths = [];
       pdoc.gameStats.awards = [];
+      pdoc.bsteps = [];
 
       if (pdoc.team === ReplayTypes.TeamType.Blue) {
         match.team0.push(pdoc.ToonHandle);
@@ -314,6 +316,80 @@ class Database {
     }
 
     console.log("[MESSAGES] Message Processing Complete");
+
+    console.log("[GAME] B-Step Detection Running...");
+
+    // this is probably the worst use of cpu cycles i can think of but i'm gonna do it
+    var gameLog = data.gameevents;
+    var playerBSeq = {};
+    for (var i = 0; i < gameLog.length; i++) {
+      // the b action is likely of type 27 however i don't actually know how to interpret that data
+      // working theory: eventid 27 abilLink 200 is b.
+      var event = gameLog[i];
+      if (event._eventid === 27) {
+        if (event.m_abil && event.m_abil.m_abilLink === 200) {
+          // player ids are actually off by one here
+          var playerID = event._userid.m_userId + 1;
+          var id = playerIDMap[playerID];
+
+          if (!(id in playerBSeq))
+            playerBSeq[id] = [];
+
+          // create chains of b-actions. threshold is within 16 loops (1 second)
+          if (playerBSeq[id].length === 0)
+            playerBSeq[id].push([event]);
+          else {
+            var currentSeq = playerBSeq[id].length - 1;
+            var currentStep = playerBSeq[id][currentSeq].length - 1;
+            if (Math.abs(playerBSeq[id][currentSeq][currentStep]._gameloop - event._gameloop) <= 16) {
+              playerBSeq[id][currentSeq].push(event);
+            }
+            else {
+              playerBSeq[id].push([event]);
+            }
+          }
+        }
+      }
+    }
+
+    // process the bseq arrays
+    for (var id in playerBSeq) {
+      var playerSeqs = playerBSeq[id];
+      for (var i = 0; i < playerSeqs.length; i++) {
+        if (playerSeqs[i].length > 1) {
+          // reformat the data and place in the player data
+          var bStep = {};
+          bStep.start = playerSeqs[i][0]._gameloop;
+          bStep.stop = playerSeqs[i][playerSeqs[i].length - 1]._gameloop;
+          bStep.duration = bStep.stop - bStep.start;
+          bStep.kills = 0;
+          bStep.deaths = 0;
+
+          var min = bStep.start - 160;
+          var max = bStep.stop + 160;
+
+          // scan the takedowns array to see if anything interesting happened
+          // range is +/- 10 seconds (160 loops)
+          for (var j = 0; j < match.takedowns.length; j++) {
+            var td = match.takedowns[j];
+            var time = td.loop;
+
+            if (min <= time && time <= max) {
+              // check involved players
+              if (td.victim === id)
+                bStep.deaths += 1;
+
+              if (td.killers.indexOf(id) > -1)
+                bStep.kills += 1;
+            }
+          }
+
+          players[id].bsteps.push(bStep);
+        }
+      }
+    }
+
+    console.log("[GAME] B-Step Detection Complete");
 
     // insert match, upsert is used just in case duplicates exist
     var self = this;

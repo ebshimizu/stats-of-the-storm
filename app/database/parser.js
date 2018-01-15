@@ -14,6 +14,7 @@ const ReplayDataType = {
 
 // it's everything except gameevents which is just a massive amount of data
 const CommonReplayData = [ReplayDataType.message, ReplayDataType.tracker, ReplayDataType.attribute, ReplayDataType.header, ReplayDataType.details, ReplayDataType.init, ReplayDataType.stats];
+const AllReplayData = [ReplayDataType.game, ReplayDataType.message, ReplayDataType.tracker, ReplayDataType.attribute, ReplayDataType.header, ReplayDataType.details, ReplayDataType.init, ReplayDataType.stats];
 
 // this just wraps the reference python implementation inside of
 // a javascript module and will return json objects containing the different
@@ -58,5 +59,6 @@ function parse(file, requestedData, opts) {
 }
 
 exports.parse = parse;
-exports.ReplayDataType = ReplayDataType
-exports.CommonReplayData = CommonReplayData
+exports.ReplayDataType = ReplayDataType;
+exports.CommonReplayData = CommonReplayData;
+exports.AllReplayData = AllReplayData;
