@@ -1,3 +1,5 @@
+/* jshint esversion: 6, maxerr: 1000, node: true */
+
 // this is the main database connector used by the app
 // storage model is a persistent NeDB
 
@@ -14,7 +16,7 @@ const ReplayStatus = {
   OK: 1,
   Duplicate: -1,
   Failure: -2
-}
+};
 
 class Database {
   constructor(databasePath) {
@@ -114,8 +116,8 @@ class Database {
       // maps player id in the Tracker data to the proper player object
       var playerIDMap = {};
 
-      for (var i = 0; i < tracker.length; i++) {
-        var event = tracker[i];
+      for (let i = 0; i < tracker.length; i++) {
+        let event = tracker[i];
 
         // case on event type
         if (event._eventid === ReplayTypes.TrackerEvent.Stat) {
@@ -139,10 +141,14 @@ class Database {
       var team0XPEnd;
       var team1XPEnd;
 
+      // player 11 = blue (0) team ai?, player 12 = red (0) team ai?
+      var possibleMinionXP = { "0" : 0, "1" : 0 };
+      var loopGameStart = 0; // fairly sure this is always 610 but just in case look for the "GatesOpen" event
+
       console.log("[TRACKER] Starting Event Analysis...");
 
-      for (var i = 0; i < tracker.length; i++) {
-        var event = tracker[i];
+      for (let i = 0; i < tracker.length; i++) {
+        let event = tracker[i];
 
         // case on event type
         if (event._eventid === ReplayTypes.TrackerEvent.Score) {
@@ -151,8 +157,8 @@ class Database {
         }
         else if (event._eventid === ReplayTypes.TrackerEvent.Stat) {
           if (event.m_eventName === ReplayTypes.StatEventType.EndOfGameTalentChoices) {
-            var trackerPlayerID = event.m_intData[0].m_value;
-            var playerID = playerIDMap[trackerPlayerID];
+            let trackerPlayerID = event.m_intData[0].m_value;
+            let playerID = playerIDMap[trackerPlayerID];
 
             console.log("[TRACKER] Processing Talent Choices for " + playerID);
 
@@ -167,30 +173,33 @@ class Database {
             players[playerID].internalHeroName = event.m_stringData[0].m_value;
 
             // talents
-            for (var j = 0; j < event.m_stringData.length; j++) {
+            for (let j = 0; j < event.m_stringData.length; j++) {
               if (event.m_stringData[j].m_key.startsWith('Tier')) {
                 players[playerID].talents[event.m_stringData[j].m_key] = event.m_stringData[j].m_value;
               }
             }
           }
           else if (event.m_eventName === ReplayTypes.StatEventType.PeriodicXPBreakdown) {
-            var xpb = {};
+            // periodic xp breakdown
+            let xpb = {};
             xpb.loop = event._gameloop;
             xpb.time = loopsToSeconds(xpb.loop);
-            xpb.team = event.m_intData[0].m_value;
+            xpb.team = event.m_intData[0].m_value - 1;  // team is 1-indexed in this event?
             xpb.teamLevel = event.m_intData[1].m_value;
             xpb.breakdown = {};
+            xpb.theoreticalMinionXP = possibleMinionXP[xpb.team];
 
             console.log("[TRACKER] Processing XP Breakdown for team " + xpb.team + " at loop " + xpb.loop);
 
-            for (var j in event.m_fixedData) {
-              xpb.breakdown[event.m_fixedData[j].m_key] = event.m_fixedData[j].m_value;
+            for (let j in event.m_fixedData) {
+              xpb.breakdown[event.m_fixedData[j].m_key] = event.m_fixedData[j].m_value / 4096;
             }
 
             match.XPBreakdown.push(xpb);
           }
           else if (event.m_eventName === ReplayTypes.StatEventType.EndOfGameXPBreakdown) {
-            var xpb = {};
+            // end of game xp breakdown
+            let xpb = {};
             xpb.loop = event._gameloop;
             xpb.time = loopsToSeconds(xpb.loop);
             xpb.team = players[playerIDMap[event.m_intData[0].m_value]].team;
@@ -198,8 +207,8 @@ class Database {
 
             console.log("[TRACKER] Caching Final XP Breakdown for team " + xpb.team + " at loop " + xpb.loop);
 
-            for (var j in event.m_fixedData) {
-              xpb.breakdown[event.m_fixedData[j].m_key] = event.m_fixedData[j].m_value;
+            for (let j in event.m_fixedData) {
+              xpb.breakdown[event.m_fixedData[j].m_key] = event.m_fixedData[j].m_value / 4096;
             }
 
             if (xpb.team === ReplayTypes.TeamType.Blue) {
@@ -211,7 +220,7 @@ class Database {
           }
           else if (event.m_eventName === ReplayTypes.StatEventType.PlayerDeath) {
             // add data to the match and the individual players
-            var tData = {};
+            let tData = {};
             tData.loop = event._gameloop;
             tData.time = loopsToSeconds(tData.loop);
             tData.x = event.m_fixedData[0].m_value;
@@ -219,18 +228,18 @@ class Database {
             tData.killers = [];
 
             // player ids
-            var victim;
-            var killers = [];
+            let victim;
+            let killers = [];
 
-            for (var j = 0; j < event.m_intData.length; j++) {
-              var entry = event.m_intData[j];
+            for (let j = 0; j < event.m_intData.length; j++) {
+              let entry = event.m_intData[j];
 
               if (entry.m_key === "PlayerID") {
                 tData.victim = { player: playerIDMap[entry.m_value], hero: players[playerIDMap[entry.m_value]].hero };
                 victim = playerIDMap[entry.m_value];
               }
               else if (entry.m_key === "KillingPlayer") {
-                var tdo = { player: playerIDMap[entry.m_value], hero: players[playerIDMap[entry.m_value]].hero };
+                let tdo = { player: playerIDMap[entry.m_value], hero: players[playerIDMap[entry.m_value]].hero };
                 killers.push(playerIDMap[entry.m_value]);
                 tData.killers.push(tdo);
               }
@@ -243,15 +252,15 @@ class Database {
 
             match.takedowns.push(tData);
             players[victim].deaths.push(tData);
-            for (var j = 0; j < killers.length; j++) {
+            for (let j = 0; j < killers.length; j++) {
               players[killers[j]].takedowns.push(tData);
             }
 
             console.log('[TRACKER] Processed Player ' + victim + ' death at ' + tData.loop);
           }
           else if (event.m_eventName === ReplayTypes.StatEventType.LootSprayUsed) {
-            var spray = {};
-            var id = event.m_stringData[1].m_value;
+            let spray = {};
+            let id = event.m_stringData[1].m_value;
             spray.kind = event.m_stringData[2].m_value;
             spray.x = event.m_fixedData[0].m_value;
             spray.y = event.m_fixedData[1].m_value;
@@ -260,18 +269,41 @@ class Database {
 
             console.log('[TRACKER] Spray from player ' + id + ' found');
           }
+          else if (event.m_eventName === ReplayTypes.StatEventType.GatesOpen) {
+            loopGameStart = event._gameloop;
+          }
+        }
+        else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {
+          // there's going to be a special case for tomb once i figure out the map name for it
+          // unit type
+          let type = event.m_unitTypeName;
+
+          // if it's a minion...
+          if (type in ReplayTypes.MinionXP) {
+            let elapsedGameMinutes = parseInt(loopsToSeconds(event._gameloop - loopGameStart) / 60);
+
+            if (elapsedGameMinutes > 30)
+              elapsedGameMinutes = 30;
+
+            let xpVal = ReplayTypes.MinionXP[type][elapsedGameMinutes];
+
+            if (event.m_upkeepPlayerId === 11)
+              possibleMinionXP[ReplayTypes.TeamType.Blue] += xpVal;
+            else if (event.m_upkeepPlayerId === 12)
+              possibleMinionXP[ReplayTypes.TeamType.Red] += xpVal;
+          }
         }
 
       }
 
-      console.log("[TRACKER] Adding final XP breakdown")
+      console.log("[TRACKER] Adding final XP breakdown");
       match.XPBreakdown.push(team0XPEnd);
       match.XPBreakdown.push(team1XPEnd);
 
       console.log("[TRACKER] Event Analysis Complete");
 
       // get a few more bits of summary data from the players...
-      for (var p in players) {
+      for (let p in players) {
         if (players[p].team === ReplayTypes.TeamType.Blue) {
           match.blueTeamLevel = players[p].gameStats.Level;
         
@@ -293,10 +325,10 @@ class Database {
       var messages = data.messageevents;
       match.messages = [];
 
-      for (var i = 0; i < messages.length; i++) {
-        var message = messages[i];
+      for (let i = 0; i < messages.length; i++) {
+        let message = messages[i];
 
-        var msg = {};
+        let msg = {};
         msg.type = message._eventid;
 
         // don't really care about these
@@ -332,15 +364,15 @@ class Database {
       // this is probably the worst use of cpu cycles i can think of but i'm gonna do it
       var gameLog = data.gameevents;
       var playerBSeq = {};
-      for (var i = 0; i < gameLog.length; i++) {
+      for (let i = 0; i < gameLog.length; i++) {
         // the b action is likely of type 27 however i don't actually know how to interpret that data
         // working theory: eventid 27 abilLink 200 is b.
-        var event = gameLog[i];
+        let event = gameLog[i];
         if (event._eventid === 27) {
           if (event.m_abil && event.m_abil.m_abilLink === 200) {
             // player ids are actually off by one here
-            var playerID = event._userid.m_userId + 1;
-            var id = playerIDMap[playerID];
+            let playerID = event._userid.m_userId + 1;
+            let id = playerIDMap[playerID];
 
             if (!(id in playerBSeq))
               playerBSeq[id] = [];
@@ -349,8 +381,8 @@ class Database {
             if (playerBSeq[id].length === 0)
               playerBSeq[id].push([event]);
             else {
-              var currentSeq = playerBSeq[id].length - 1;
-              var currentStep = playerBSeq[id][currentSeq].length - 1;
+              let currentSeq = playerBSeq[id].length - 1;
+              let currentStep = playerBSeq[id][currentSeq].length - 1;
               if (Math.abs(playerBSeq[id][currentSeq][currentStep]._gameloop - event._gameloop) <= 16) {
                 playerBSeq[id][currentSeq].push(event);
               }
@@ -363,26 +395,26 @@ class Database {
       }
 
       // process the bseq arrays
-      for (var id in playerBSeq) {
-        var playerSeqs = playerBSeq[id];
-        for (var i = 0; i < playerSeqs.length; i++) {
+      for (let id in playerBSeq) {
+        let playerSeqs = playerBSeq[id];
+        for (let i = 0; i < playerSeqs.length; i++) {
           if (playerSeqs[i].length > 1) {
             // reformat the data and place in the player data
-            var bStep = {};
+            let bStep = {};
             bStep.start = playerSeqs[i][0]._gameloop;
             bStep.stop = playerSeqs[i][playerSeqs[i].length - 1]._gameloop;
             bStep.duration = bStep.stop - bStep.start;
             bStep.kills = 0;
             bStep.deaths = 0;
 
-            var min = bStep.start - 160;
-            var max = bStep.stop + 160;
+            let min = bStep.start - 160;
+            let max = bStep.stop + 160;
 
             // scan the takedowns array to see if anything interesting happened
             // range is +/- 10 seconds (160 loops)
-            for (var j = 0; j < match.takedowns.length; j++) {
-              var td = match.takedowns[j];
-              var time = td.loop;
+            for (let j = 0; j < match.takedowns.length; j++) {
+              let td = match.takedowns[j];
+              let time = td.loop;
 
               if (min <= time && time <= max) {
                 // check involved players
@@ -448,17 +480,17 @@ class Database {
       var valArray = data[i].m_values;
 
       if (!name.startsWith('EndOfMatchAward')) {
-        for (var j = 0; j < valArray.length; j++) {
+        for (let j = 0; j < valArray.length; j++) {
           if (valArray[j].length > 0) {
-            var playerID = j + 1;
+            let playerID = j + 1;
             players[playerIDMap[playerID]].gameStats[name] = valArray[j][0].m_value;
           }
         }
       }
       else {
-        for (var j = 0; j < valArray.length; j++) {
+        for (let j = 0; j < valArray.length; j++) {
           if (valArray[j].length > 0) {
-            var playerID = j + 1;
+            let playerID = j + 1;
             if (valArray[j][0].m_value === 1) {
               players[playerIDMap[playerID]].gameStats.awards.push(name);
             }

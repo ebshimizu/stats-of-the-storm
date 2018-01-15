@@ -2,7 +2,7 @@
 const TeamType = {
   'Blue' : 0,
   'Red' : 1
-}
+};
 
 const TrackerEvent = {
   UnitBorn: 1,
@@ -20,7 +20,7 @@ const TrackerEvent = {
   HeroBanned: 13,
   HeroPicked: 14,
   HeroSwapped: 15
-}
+};
 
 const StatEventType = {
   PlayerInit: 'PlayerInit',
@@ -35,7 +35,8 @@ const StatEventType = {
   EndOfGameXPBreakdown: 'EndOfGameXPBreakdown',
   EndOfGameTimeSpentDead: 'EndOfGameTimeSpentDead',
   EndOfGameTalentChoices: 'EndOfGameTalentChoices',
-  LootSprayUsed: 'LootSprayUsed'
+  LootSprayUsed: 'LootSprayUsed',
+  GatesOpen: 'GatesOpen'
 };
 
 // display strings for score event names
@@ -130,7 +131,7 @@ const ScoreEventNames = {
   TimeOnPoint: 'Time On Point',
   TimeInTemple: 'Time In Temple'
   // I skip the "Wins___" categories, they appear to be used for daily quest completion checks
-}
+};
 
 const MessageType = {
   Chat: 0,
@@ -139,25 +140,25 @@ const MessageType = {
   ServerPing: 3,
   ReconnectNotify: 4,
   PlayerAnnounce: 5
-}
+};
 
 const AnnouncmentType = {
   None: 0,
   Ability: 1,
   Behavior: 2,
   Vitals: 3
-}
+};
 
 const MessageTarget = {
   All: 0,
   Allies: 1,
   Obeservers: 4
-}
+};
 
 const VitalType = {
   Health: 0,
   Mana: 2
-}
+};
 
 const UnitType = {
   FootmanMinion: 'Footman Minion',
@@ -165,20 +166,20 @@ const UnitType = {
   RangedMinion: 'Ranged Minion',
   RegenGlobe: 'Regen Globe',
   RegenGlobeNeutral: 'Neutral Regen Globe'
-}
+};
 
 const MinionXP = {
   FootmanMinion:  [70, 71, 72, 73, 74, 76, 77, 78, 79, 80, 82, 83, 84, 85, 86, 88, 89, 90, 91, 92, 94, 95, 96, 97, 98, 100, 101, 102, 103, 104, 106],
   WizardMinion:   [62, 64, 66, 67, 69, 71, 73, 75, 76, 78, 80, 82, 84, 85, 87, 89, 91, 93, 94, 96, 98, 100, 102, 103, 105, 107, 109, 111, 112, 114, 116],
   RangedMinion:   [60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 110, 112, 114, 116, 118, 120],
   CatapultMinion: [1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 29, 30]
-}
+};
 
 const TombMinionXP = {
   FootmanMinion: [55, 56, 57, 58, 59, 61, 62, 63, 64, 65, 67, 68, 69, 70, 71, 73, 74, 75, 76, 77 ,79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 90, 92],
   WizardMinion:  [51, 53, 55, 56, 58, 60, 62, 64, 65, 67, 69, 71, 73, 74, 76, 78, 80, 82, 83, 85, 87, 89, 91, 92, 94, 96, 98, 100, 101, 103, 105],
   RangedMinion:  [51, 53, 55, 57, 59, 61, 63, 65, 67, 69, 71, 73, 75, 77, 79, 81, 83, 85, 87, 89, 91, 93, 95, 97, 99, 101, 103, 105, 107, 109, 111] 
-}
+};
 
 exports.TeamType = TeamType;
 exports.TrackerEvent = TrackerEvent;
@@ -189,3 +190,5 @@ exports.AnnouncmentType = AnnouncmentType;
 exports.MessageTarget = MessageTarget;
 exports.VitalType = VitalType;
 exports.UnitType = UnitType;
+exports.MinionXP = MinionXP;
+exports.TombMinionXP = TombMinionXP;
