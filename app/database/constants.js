@@ -131,6 +131,33 @@ const ScoreEventNames = {
   // I skip the "Wins___" categories, they appear to be used for daily quest completion checks
 }
 
+const MessageType = {
+  Chat: 0,
+  Ping: 1,
+  LoadingProgress: 2,
+  ServerPing: 3,
+  ReconnectNotify: 4,
+  PlayerAnnounce: 5
+}
+
+const AnnouncmentType = {
+  None: 0,
+  Ability: 1,
+  Behavior: 2,
+  Vitals: 3
+}
+
+const MessageTarget = {
+  All: 0,
+  Allies: 1,
+  Obeservers: 4
+}
+
+const VitalType = {
+  Health: 0,
+  Mana: 2
+}
+
 const UnitType = {
   FootmanMinion: 'Footman Minion',
   WizardMinion: 'Wizard Minion',
@@ -143,3 +170,8 @@ exports.TeamType = TeamType;
 exports.TrackerEvent = TrackerEvent;
 exports.StatEventType = StatEventType;
 exports.ScoreEventNames = ScoreEventNames;
+exports.MessageType = MessageType;
+exports.AnnouncmentType = AnnouncmentType;
+exports.MessageTarget = MessageTarget;
+exports.VitalType = VitalType;
+exports.UnitType = UnitType;

@@ -4,6 +4,7 @@
 // libraries
 const Parser = require('./parser.js');
 const ReplayTypes = require('./constants.js');
+const timers = require('timers');
 
 // databases are loaded from the specified folder when the database object is created
 var Datastore = require('nedb');
@@ -27,6 +28,11 @@ class Database {
 
   // processes a replay file and adds it to the database
   processReplay(file) {
+    if (this._processingReplay) {
+      // defer processing until later
+      timers.setTimeout
+    }
+
     console.log("Processing " + file);
 
     // parse it
@@ -51,26 +57,9 @@ class Database {
     match.date = winFileTimeToDate(details.m_timeUTC);
     match.rawDate = details.m_timeUTC;
 
-    // check for duplicate matches
-    // use date, map, and length
-    var self = this;
-    this._db.matches.find({ 'map' : match.map, 'date' : match.date, 'loopLength' : match.loopLength }, function(err, docs) {
-      if (err)
-        console.log(err);
-
-      if (docs.length > 0) {
-        console.log("Duplicate Match Found. Cancelling Process...");
-        return ReplayStatus.Duplicate;
-      }
-      else {
-        // proceed
-        return self.continueProcess(data, match);
-      }
-    });
-  }
-
-  continueProcess(data, match) {
-    var details = data.details[0];
+    // check for duplicate matches somewhere else, this function executes without async calls
+    // until insertion. Should have a processReplays function that does the de-duplication.
+    //this._db.matches.find({ 'map' : match.map, 'date' : match.date, 'loopLength' : match.loopLength }, function(err, docs) {
 
     // players
     // the match will just store the players involed. The details will be stored
@@ -287,25 +276,72 @@ class Database {
       }
     }
 
-    // insert match
-    var self = this;
-    this._db.matches.insert(match, function (err, newDoc) {
-      // update and insert players
-      for (var i in players) {
-        players[i].matchID = newDoc._id;
-        self._db.heroData.insert(players[i]);
+    console.log("[MESSAGES] Message Processing Start...");
 
-        // log unique players in the player database
-        var playerDbEntry = {};
-        playerDbEntry._id = players[i].ToonHandle;
-        playerDbEntry.name = players[i].name;
-        playerDbEntry.uuid = players[i].uuid;
-        playerDbEntry.region = players[i].region;
-        playerDbEntry.realm = players[i].realm;
-        self._db.players.update({ _id: playerDbEntry._id }, playerDbEntry, {upsert: true}, function(err, numReplaced, upsert) {
-          if (err)
-            console.log(err);
-        });
+    var messages = data.messageevents;
+    match.messages = [];
+
+    for (var i = 0; i < messages.length; i++) {
+      var message = messages[i];
+
+      var msg = {};
+      msg.type = message._eventid;
+
+      // don't really care about these
+      if (msg.type === ReplayTypes.MessageType.LoadingProgress)
+        continue;
+
+      if (!(message._userid.m_userId in playerIDMap))
+        continue;
+
+      msg.player = playerIDMap[message._userid.m_userId];
+      msg.team = players[msg.player].team;
+      msg.recipient = message.m_recipient;
+      msg.loop = message._gameloop;
+      msg.time = loopsToSeconds(msg.loop);
+
+      if (message._eventid === ReplayTypes.MessageType.Ping) {
+        msg.point = { x: message.m_point.x, y: message.m_point.y };
+      }
+      else if (message._eventid === ReplayTypes.MessageType.Chat) {
+        msg.text = message.m_string;
+      }
+      else if (message._eventid === ReplayTypes.MessageType.PlayerAnnounce) {
+        msg.announcement = message.m_announcement;
+      }
+
+      match.messages.push(msg);
+    }
+
+    console.log("[MESSAGES] Message Processing Complete");
+
+    // insert match, upsert is used just in case duplicates exist
+    var self = this;
+
+    this._db.matches.update({ 'map' : match.map, 'date' : match.date, 'loopLength' : match.loopLength }, match, {upsert: true}, function (err, numReplaced, newDoc) {
+      if (!newDoc) {
+        console.log("Duplicate match found, skipping player update");
+      }
+      else {
+        console.log("Inserted new match " + newDoc._id);
+
+        // update and insert players
+        for (var i in players) {
+          players[i].matchID = newDoc._id;
+          self._db.heroData.insert(players[i]);
+
+          // log unique players in the player database
+          var playerDbEntry = {};
+          playerDbEntry._id = players[i].ToonHandle;
+          playerDbEntry.name = players[i].name;
+          playerDbEntry.uuid = players[i].uuid;
+          playerDbEntry.region = players[i].region;
+          playerDbEntry.realm = players[i].realm;
+          self._db.players.update({ _id: playerDbEntry._id }, playerDbEntry, {upsert: true}, function(err, numReplaced, upsert) {
+            if (err)
+              console.log(err);
+          });
+        }
       }
     });
 
