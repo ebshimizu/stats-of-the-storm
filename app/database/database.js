@@ -267,6 +267,18 @@ class Database {
       for (var i in players) {
         players[i].matchID = newDoc._id;
         self._db.heroData.insert(players[i]);
+
+        // log unique players in the player database
+        var playerDbEntry = {};
+        playerDbEntry._id = players[i].ToonHandle;
+        playerDbEntry.name = players[i].name;
+        playerDbEntry.uuid = players[i].uuid;
+        playerDbEntry.region = players[i].region;
+        playerDbEntry.realm = players[i].realm;
+        self._db.players.update({ _id: playerDbEntry._id }, playerDbEntry, {upsert: true}, function(err, numReplaced, upsert) {
+          if (err)
+            console.log(err);
+        });
       }
     });
   }
