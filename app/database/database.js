@@ -8,6 +8,11 @@ const ReplayTypes = require('./constants.js');
 // databases are loaded from the specified folder when the database object is created
 var Datastore = require('nedb');
 
+const ReplayStatus = {
+  OK: 1,
+  Duplicate: -1
+}
+
 class Database {
   constructor(databasePath) {
     this._path = databasePath;
@@ -44,6 +49,28 @@ class Database {
     // map details
     match.map = details.m_title;
     match.date = winFileTimeToDate(details.m_timeUTC);
+    match.rawDate = details.m_timeUTC;
+
+    // check for duplicate matches
+    // use date, map, and length
+    var self = this;
+    this._db.matches.find({ 'map' : match.map, 'date' : match.date, 'loopLength' : match.loopLength }, function(err, docs) {
+      if (err)
+        console.log(err);
+
+      if (docs.length > 0) {
+        console.log("Duplicate Match Found. Cancelling Process...");
+        return ReplayStatus.Duplicate;
+      }
+      else {
+        // proceed
+        return self.continueProcess(data, match);
+      }
+    });
+  }
+
+  continueProcess(data, match) {
+    var details = data.details[0];
 
     // players
     // the match will just store the players involed. The details will be stored
@@ -281,6 +308,8 @@ class Database {
         });
       }
     });
+
+    return ReplayStatus.OK;
   }
 
   processScoreArray(data, match, players, playerIDMap) {
