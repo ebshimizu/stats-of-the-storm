@@ -14,6 +14,7 @@ var Datastore = require('nedb');
 
 const ReplayStatus = {
   OK: 1,
+  Unsupported: 0,
   Duplicate: -1,
   Failure: -2
 };
@@ -55,6 +56,16 @@ class Database {
       match.map = details.m_title;
       match.date = winFileTimeToDate(details.m_timeUTC);
       match.rawDate = details.m_timeUTC;
+
+      // game mode
+      match.mode = data.initdata[1].m_syncLobbyState.m_gameDescription.m_gameOptions.m_ammId;
+
+      // check for supported mode
+      if (match.mode === ReplayTypes.GameMode.Brawl) {
+        return ReplayStatus.Unsupported;
+      }
+
+      // ai n stuff is ok, we can just filter it out of the database
 
       // check for duplicate matches somewhere else, this function executes without async calls
       // until insertion. Should have a processReplays function that does the de-duplication.

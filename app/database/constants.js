@@ -137,7 +137,8 @@ const ScoreEventNames = {
 
 const MapType = {
   SkyTemple: 'Sky Temple',
-  Towers: 'Towers of Doom'
+  Towers: 'Towers of Doom',
+  Mine: 'Haunted Mines'
 };
 
 const MessageType = {
@@ -189,6 +190,16 @@ const TombMinionXP = {
 };
 
 const GameStart = 610;
+
+const GameMode = {
+  AI: 50021,
+  Practice: 50041,
+  QuickMatch: 50001,
+  Brawl: 50031,
+  UnrankedDraft: 50051,
+  HeroLeague: 50061,
+  TeamLeague: 50071
+}
 
 exports.TeamType = TeamType;
 exports.TrackerEvent = TrackerEvent;
