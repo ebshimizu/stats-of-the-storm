@@ -138,7 +138,7 @@ const ScoreEventNames = {
 const MapType = {
   SkyTemple: 'Sky Temple',
   Towers: 'Towers of Doom',
-  Mine: 'Haunted Mines'
+  Mines: 'Haunted Mines'
 };
 
 const MessageType = {
@@ -169,11 +169,12 @@ const VitalType = {
 };
 
 const UnitType = {
-  FootmanMinion: 'Footman Minion',
-  WizardMinion: 'Wizard Minion',
-  RangedMinion: 'Ranged Minion',
-  RegenGlobe: 'Regen Globe',
-  RegenGlobeNeutral: 'Neutral Regen Globe'
+  FootmanMinion: 'FootmanMinion',
+  WizardMinion: 'WizardMinion',
+  RangedMinion: 'RangedMinion',
+  RegenGlobe: 'RegenGlobe',
+  RegenGlobeNeutral: 'RegenGlobeNeutral',
+  MinesBoss: 'UnderworldSummonedBoss'
 };
 
 const MinionXP = {

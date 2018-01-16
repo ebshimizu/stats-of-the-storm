@@ -166,6 +166,17 @@ class Database {
         match.objective[0] = { count: 0, damage: 0, events: [] };
         match.objective[1] = { count: 0, damage: 0, events: [] };
       }
+      else if (match.map === ReplayTypes.MapType.Mines) {
+        // unfortunately the mines map seems to be missing some older events that had the info about the golem spawns
+        // the data would be... tricky to reconstruct due to ambiguity over who picks up the skull
+        // relevant units:
+        // - UnderworldSummonedBoss
+        // - UnderworldItemPowerup (skull)
+        // we can track when these are summoned though and maybe how long they last
+        var golems = [null, null];
+        match.objective[0] = [];
+        match.objective[1] = [];
+      }
 
       var team0XPEnd;
       var team1XPEnd;
@@ -357,6 +368,56 @@ class Database {
               possibleMinionXP[ReplayTypes.TeamType.Blue] += xpVal;
             else if (event.m_upkeepPlayerId === 12)
               possibleMinionXP[ReplayTypes.TeamType.Red] += xpVal;
+          }
+          else if (type === ReplayTypes.UnitType.MinesBoss) {
+            let spawn = { loop: event._gameloop, team: event.m_controlPlayerId - 11 };
+            spawn.time = loopsToSeconds(spawn.loop - match.loopGameStart);
+            spawn.unitTagIndex = event.m_unitTagIndex;
+            spawn.unitTagRecycle = event.m_unitTagRecycle;
+
+            golems[spawn.team] = spawn;
+          }
+        }
+        else if (event._eventid === ReplayTypes.TrackerEvent.UnitDied) {
+          // Haunted Mines - check for matching golem death
+          if (match.map === ReplayTypes.MapType.Mines) {
+            let tag = event.m_unitTagIndex;
+            let rtag = event.m_unitTagRecycle;
+
+            for (let g in golems) {
+              let golem = golems[g];
+
+              if (golem && golem.unitTagIndex === tag && golem.unitTagRecycle) {
+                let objEvent = { startLoop: golem.loop, startTime: golem.time, endLoop: event._gameloop };
+                objEvent.endTime = loopsToSeconds(objEvent.endLoop - match.loopGameStart);
+                objEvent.duration = objEvent.endTime - objEvent.startTime;
+                objEvent.team = golem.team;
+                golems[g] = null;
+
+                console.log('[TRACKER] Team ' + objEvent.team + ' golem lasted for ' + objEvent.duration + ' seconds');
+
+                match.objective[objEvent.team].push(objEvent);
+              }
+            }
+          }
+        }
+      }
+
+      // mines clean up
+      if (match.map === ReplayTypes.MapType.Mines) {
+        for (let g in golems) {
+          let golem = golems[g];
+
+          if (golem) {
+            let objEvent = { startLoop: golem.loop, startTime: golem.time, endLoop: match.loopLength };
+            objEvent.endTime = loopsToSeconds(objEvent.endLoop - match.loopGameStart);
+            objEvent.duration = objEvent.endTime - objEvent.startTime;
+            objEvent.team = golem.team;
+            golems[g] = null;
+
+            console.log('[TRACKER] Team ' + objEvent.team + ' golem lasted for ' + objEvent.duration + ' seconds');
+
+            match.objective[objEvent.team].push(objEvent);
           }
         }
       }
