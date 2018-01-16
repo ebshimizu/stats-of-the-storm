@@ -169,13 +169,13 @@ class Database {
       else if (match.map === ReplayTypes.MapType.Mines) {
         // unfortunately the mines map seems to be missing some older events that had the info about the golem spawns
         // the data would be... tricky to reconstruct due to ambiguity over who picks up the skull
-        // relevant units:
-        // - UnderworldSummonedBoss
-        // - UnderworldItemPowerup (skull)
         // we can track when these are summoned though and maybe how long they last
         var golems = [null, null];
         match.objective[0] = [];
         match.objective[1] = [];
+      }
+      else if (match.map === ReplayTypes.MapType.BOE) {
+        match.objective.results = [];
       }
 
       var team0XPEnd;
@@ -348,6 +348,15 @@ class Database {
             match.objective[objEvent.team].count += 1;
 
             console.log("[TRACKER] Towers of Doom: Altar Capture for team " + objEvent.team);
+          }
+          else if (event.m_eventName === ReplayTypes.StatEventType.ImmortalDefeated) {
+            let objEvent = { winner: event.m_intData[1].m_value - 1, loop: event._gameloop, duration: event.m_intData[2].m_value };
+            objEvent.time = loopsToSeconds(objEvent.loop - match.loopGameStart);
+            objEvent.power = event.m_fixedData[0].m_value / 4096;
+
+            console.log("[TRACKER] Immortal Fight Completed");
+
+            match.objective.results.push(objEvent);
           }
         }
         else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {

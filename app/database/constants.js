@@ -38,7 +38,8 @@ const StatEventType = {
   LootSprayUsed: 'LootSprayUsed',
   LootVoiceLineUsed: 'LootVoiceLineUsed',
   GatesOpen: 'GatesOpen',
-  AltarCaptured: 'Altar Captured'
+  AltarCaptured: 'Altar Captured',
+  ImmortalDefeated: 'Immortal Defeated'
 };
 
 // display strings for score event names
@@ -138,7 +139,8 @@ const ScoreEventNames = {
 const MapType = {
   SkyTemple: 'Sky Temple',
   Towers: 'Towers of Doom',
-  Mines: 'Haunted Mines'
+  Mines: 'Haunted Mines',
+  BOE: 'Battlefield of Eternity'
 };
 
 const MessageType = {
