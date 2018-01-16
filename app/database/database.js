@@ -50,7 +50,6 @@ class Database {
       match.version = data.header[0].m_version;
       match.type = data.header[0].m_type;
       match.loopLength = data.header[0].m_elapsedGameLoops;
-      match.length = loopsToSeconds(match.loopLength);
 
       // map details
       match.map = details.m_title;
@@ -117,6 +116,7 @@ class Database {
 
       // maps player id in the Tracker data to the proper player object
       var playerIDMap = {};
+      match.loopGameStart = 0; // fairly sure this is always 610 but just in case look for the "GatesOpen" event
 
       for (let i = 0; i < tracker.length; i++) {
         let event = tracker[i];
@@ -128,8 +128,13 @@ class Database {
 
             console.log("Player " + event.m_stringData[1].m_value + " has tracker ID " + event.m_intData[0].m_value);
           }
+          else if (event.m_eventName === ReplayTypes.StatEventType.GatesOpen) {
+            match.loopGameStart = event._gameloop;
+          }
         }
       }
+
+      match.length = loopsToSeconds(match.loopLength - match.loopGameStart);
 
       console.log("Player ID Mapping Complete");
 
@@ -154,7 +159,6 @@ class Database {
 
       // player 11 = blue (0) team ai?, player 12 = red (0) team ai?
       var possibleMinionXP = { "0" : 0, "1" : 0 };
-      var loopGameStart = 0; // fairly sure this is always 610 but just in case look for the "GatesOpen" event
 
       console.log("[TRACKER] Starting Event Analysis...");
 
@@ -194,7 +198,7 @@ class Database {
             // periodic xp breakdown
             let xpb = {};
             xpb.loop = event._gameloop;
-            xpb.time = loopsToSeconds(xpb.loop);
+            xpb.time = loopsToSeconds(xpb.loop - match.loopGameStart);
             xpb.team = event.m_intData[0].m_value - 1;  // team is 1-indexed in this event?
             xpb.teamLevel = event.m_intData[1].m_value;
             xpb.breakdown = {};
@@ -212,8 +216,9 @@ class Database {
             // end of game xp breakdown
             let xpb = {};
             xpb.loop = event._gameloop;
-            xpb.time = loopsToSeconds(xpb.loop);
+            xpb.time = loopsToSeconds(xpb.loop - match.loopGameStart);
             xpb.team = players[playerIDMap[event.m_intData[0].m_value]].team;
+            xpb.theoreticalMinionXP = possibleMinionXP[xpb.team];
             xpb.breakdown = {};
 
             console.log("[TRACKER] Caching Final XP Breakdown for team " + xpb.team + " at loop " + xpb.loop);
@@ -233,7 +238,7 @@ class Database {
             // add data to the match and the individual players
             let tData = {};
             tData.loop = event._gameloop;
-            tData.time = loopsToSeconds(tData.loop);
+            tData.time = loopsToSeconds(tData.loop - match.loopGameStart);
             tData.x = event.m_fixedData[0].m_value;
             tData.y = event.m_fixedData[1].m_value;
             tData.killers = [];
@@ -299,11 +304,9 @@ class Database {
 
             console.log('[TRACKER] Voice Line from player ' + id + ' found');
           }
-          else if (event.m_eventName === ReplayTypes.StatEventType.GatesOpen) {
-            loopGameStart = event._gameloop;
-          }
           else if (event.m_eventName === ReplayTypes.StatEventType.SkyTempleShotsFired) {
-            let objEvent = { team: event.m_intData[2].m_value - 1, time: event._gameloop, damage: event.m_fixedData[0].m_value / 4096 };
+            let objEvent = { team: event.m_intData[2].m_value - 1, loop: event._gameloop, damage: event.m_fixedData[0].m_value / 4096 };
+            objEvent.time = loopsToSeconds(objEvent.loop - match.loopGameStart);
 
             match.objective[objEvent.team].events.push(objEvent);
             match.objective[objEvent.team].damage += objEvent.damage;
@@ -312,8 +315,9 @@ class Database {
             console.log("[TRACKER] Sky Temple: Shot fired for team " + objEvent.team);
           }
           else if (event.m_eventName === ReplayTypes.StatEventType.AltarCaptured) {
-            let objEvent = { team: event.m_intData[0].m_value - 1, time: event._gameloop, owned: event.m_intData[1].m_value };
+            let objEvent = { team: event.m_intData[0].m_value - 1, loop: event._gameloop, owned: event.m_intData[1].m_value };
             objEvent.damage = objEvent.owned + 1;
+            objEvent.time = loopsToSeconds(objEvent.loop - match.loopGameStart);
 
             match.objective[objEvent.team].events.push(objEvent);
             match.objective[objEvent.team].damage += objEvent.damage;
@@ -344,9 +348,8 @@ class Database {
         }
       }
 
-      match.loopGameStart = loopGameStart;
-
       console.log("[TRACKER] Adding final XP breakdown");
+
       match.XPBreakdown.push(team0XPEnd);
       match.XPBreakdown.push(team1XPEnd);
 
@@ -392,7 +395,7 @@ class Database {
         msg.team = players[msg.player].team;
         msg.recipient = message.m_recipient;
         msg.loop = message._gameloop;
-        msg.time = loopsToSeconds(msg.loop);
+        msg.time = loopsToSeconds(msg.loop - match.loopGameStart);
 
         if (message._eventid === ReplayTypes.MessageType.Ping) {
           msg.point = { x: message.m_point.x, y: message.m_point.y };
