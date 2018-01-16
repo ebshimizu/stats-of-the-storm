@@ -15,3 +15,4 @@ npm install
 
 ## Third-Party Libraries
 [heroprotocol](https://github.com/Blizzard/heroprotocol)
+[NeDB](https://github.com/louischatriot/nedb)
