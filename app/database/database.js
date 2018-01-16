@@ -34,7 +34,7 @@ class Database {
   // processes a replay file and adds it to the database
   processReplay(file) {
     try {
-      console.log("Processing " + file);
+      console.log("Parsing " + file);
 
       // parse it
       var data = Parser.parse(file, Parser.AllReplayData);
@@ -45,12 +45,11 @@ class Database {
       // TODO: de-duplication
       var match = {};
 
-      console.log("Writing header...");
-
       // header data
       match.version = data.header[0].m_version;
       match.type = data.header[0].m_type;
       match.loopLength = data.header[0].m_elapsedGameLoops;
+      match.filename = file;
 
       // map details
       match.map = details.m_title;
@@ -60,8 +59,11 @@ class Database {
       // game mode
       match.mode = data.initdata[1].m_syncLobbyState.m_gameDescription.m_gameOptions.m_ammId;
 
+      console.log("Processing " + ReplayTypes.GameModeStrings[match.mode]  + " game on " + match.map + " at " + match.date);
+
       // check for supported mode
       if (match.mode === ReplayTypes.GameMode.Brawl) {
+        console.log("Brawls are not supported!");
         return ReplayStatus.Unsupported;
       }
 
@@ -292,7 +294,7 @@ class Database {
             spray.x = event.m_fixedData[0].m_value;
             spray.y = event.m_fixedData[1].m_value;
             spray.loop = event._gameloop;
-            spray.time = loopsToSeconds(spray.loop - loopGameStart);
+            spray.time = loopsToSeconds(spray.loop - match.loopGameStart);
             spray.kills = 0;
             spray.deaths = 0;
 
@@ -307,7 +309,7 @@ class Database {
             line.x = event.m_fixedData[0].m_value;
             line.y = event.m_fixedData[1].m_value;
             line.loop = event._gameloop;
-            line.time = loopsToSeconds(line.loop - loopGameStart);
+            line.time = loopsToSeconds(line.loop - match.loopGameStart);
             line.kills = 0;
             line.deaths = 0;
 
@@ -344,7 +346,7 @@ class Database {
 
           // if it's a minion...
           if (type in ReplayTypes.MinionXP) {
-            let elapsedGameMinutes = parseInt(loopsToSeconds(event._gameloop - loopGameStart) / 60);
+            let elapsedGameMinutes = parseInt(loopsToSeconds(event._gameloop - match.loopGameStart) / 60);
 
             if (elapsedGameMinutes > 30)
               elapsedGameMinutes = 30;

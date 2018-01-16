@@ -201,6 +201,16 @@ const GameMode = {
   TeamLeague: 50071
 }
 
+const GameModeStrings = {
+  50021: 'Versus AI',
+  50041: 'Practice',
+  50001: 'Quick Match',
+  50031: 'Brawl',
+  50051: 'Unranked Draft',
+  50061: 'Hero League',
+  50071: 'Team League'
+}
+
 exports.TeamType = TeamType;
 exports.TrackerEvent = TrackerEvent;
 exports.StatEventType = StatEventType;
@@ -214,3 +224,5 @@ exports.MinionXP = MinionXP;
 exports.TombMinionXP = TombMinionXP;
 exports.MapType = MapType;
 exports.GameStart = GameStart;
+exports.GameMode = GameMode;
+exports.GameModeStrings = GameModeStrings;
