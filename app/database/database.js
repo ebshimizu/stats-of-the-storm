@@ -95,6 +95,7 @@ class Database {
         pdoc.voiceLines = [];
         pdoc.sprays = [];
         pdoc.taunts = [];
+        pdoc.dances = [];
 
         if (pdoc.team === ReplayTypes.TeamType.Blue) {
           match.team0.push(pdoc.ToonHandle);
@@ -274,6 +275,10 @@ class Database {
             spray.kind = event.m_stringData[2].m_value;
             spray.x = event.m_fixedData[0].m_value;
             spray.y = event.m_fixedData[1].m_value;
+            spray.loop = event._gameloop;
+            spray.time = loopsToSeconds(spray.loop - loopGameStart);
+            spray.kills = 0;
+            spray.deaths = 0;
 
             players[id].sprays.push(spray);
 
@@ -285,6 +290,10 @@ class Database {
             line.kind = event.m_stringData[2].m_value;
             line.x = event.m_fixedData[0].m_value;
             line.y = event.m_fixedData[1].m_value;
+            line.loop = event._gameloop;
+            line.time = loopsToSeconds(line.loop - loopGameStart);
+            line.kills = 0;
+            line.deaths = 0;
 
             players[id].voiceLines.push(line);
 
@@ -333,8 +342,9 @@ class Database {
               possibleMinionXP[ReplayTypes.TeamType.Red] += xpVal;
           }
         }
-
       }
+
+      match.loopGameStart = loopGameStart;
 
       console.log("[TRACKER] Adding final XP breakdown");
       match.XPBreakdown.push(team0XPEnd);
@@ -399,7 +409,7 @@ class Database {
 
       console.log("[MESSAGES] Message Processing Complete");
 
-      console.log("[GAME] B-Step Detection Running...");
+      console.log("[GAME] Taunt Detection Running...");
 
       // this is probably the worst use of cpu cycles i can think of but i'm gonna do it
       var gameLog = data.gameevents;
@@ -431,45 +441,30 @@ class Database {
               }
             }
           }
-        }
-      }
+          // taunts and dances
+          else if (event.m_abil && event.m_abil.m_abilLink === 19) {
+            let playerID = event._userid.m_userId + 1;
+            let id = playerIDMap[playerID];
 
-      // process the bseq arrays
-      for (let id in playerBSeq) {
-        let playerSeqs = playerBSeq[id];
-        for (let i = 0; i < playerSeqs.length; i++) {
-          if (playerSeqs[i].length > 1) {
-            // reformat the data and place in the player data
-            let bStep = {};
-            bStep.start = playerSeqs[i][0]._gameloop;
-            bStep.stop = playerSeqs[i][playerSeqs[i].length - 1]._gameloop;
-            bStep.duration = bStep.stop - bStep.start;
-            bStep.kills = 0;
-            bStep.deaths = 0;
+            let eventObj = {};
+            eventObj.loop = event._gameloop;
+            eventObj.time = loopsToSeconds(event._gameLoop - match.loopGameStart);
+            eventObj.kills = 0;
+            eventObj.deaths = 0;
 
-            let min = bStep.start - 160;
-            let max = bStep.stop + 160;
-
-            // scan the takedowns array to see if anything interesting happened
-            // range is +/- 10 seconds (160 loops)
-            for (let j = 0; j < match.takedowns.length; j++) {
-              let td = match.takedowns[j];
-              let time = td.loop;
-
-              if (min <= time && time <= max) {
-                // check involved players
-                if (td.victim === id)
-                  bStep.deaths += 1;
-
-                if (td.killers.indexOf(id) > -1)
-                  bStep.kills += 1;
-              }
+            // taunt
+            if (event.m_abil.m_abilCmdIndex === 4) {
+              players[id].taunts.push(eventObj);
             }
-
-            players[id].bsteps.push(bStep);
+            // dance
+            else if (event.m_abil.m_abilCmdIndex === 3) {
+              players[id].dances.push(eventObj);
+            }
           }
         }
       }
+
+      this.processTauntData(players, match.takedowns, playerBSeq);
 
       console.log("[GAME] B-Step Detection Complete");
 
@@ -540,6 +535,125 @@ class Database {
     }
 
     console.log("[SCORE DATA] Processing Complete");
+  }
+
+  processTauntData(players, takedowns, playerBSeq) {
+    // process the bseq arrays
+    for (let id in playerBSeq) {
+      let playerSeqs = playerBSeq[id];
+      for (let i = 0; i < playerSeqs.length; i++) {
+        if (playerSeqs[i].length > 1) {
+          // reformat the data and place in the player data
+          let bStep = {};
+          bStep.start = playerSeqs[i][0]._gameloop;
+          bStep.stop = playerSeqs[i][playerSeqs[i].length - 1]._gameloop;
+          bStep.duration = bStep.stop - bStep.start;
+          bStep.kills = 0;
+          bStep.deaths = 0;
+
+          let min = bStep.start - 160;
+          let max = bStep.stop + 160;
+
+          // scan the takedowns array to see if anything interesting happened
+          // range is +/- 10 seconds (160 loops)
+          for (let j = 0; j < takedowns.length; j++) {
+            let td = takedowns[j];
+            let time = td.loop;
+
+            if (min <= time && time <= max) {
+              // check involved players
+              if (td.victim === id)
+                bStep.deaths += 1;
+
+              if (td.killers.indexOf(id) > -1)
+                bStep.kills += 1;
+            }
+          }
+
+          players[id].bsteps.push(bStep);
+        }
+      }
+    }
+
+    for (let id in players) {
+      let player = players[id];
+
+      // taunts
+      for (let i = 0; i < player.taunts.length; i++) {
+        let tauntTime = player.taunts[i].loop;
+
+        for (let j = 0; j < takedowns.length; j++) {
+          let td = takedowns[j];
+          let time = td.loop;
+
+          if (Math.abs(tauntTime - time) <= 160) {
+            // check involved players
+            if (td.victim === id)
+              player.taunts[i].deaths += 1;
+
+            if (td.killers.indexOf(id) > -1)
+              player.taunts[i].kills += 1;
+          }
+        }
+      }
+
+      // voice lines
+      for (let i = 0; i < player.voiceLines.length; i++) {
+        let tauntTime = player.voiceLines[i].loop;
+
+        for (let j = 0; j < takedowns.length; j++) {
+          let td = takedowns[j];
+          let time = td.loop;
+
+          if (Math.abs(tauntTime - time) <= 160) {
+            // check involved players
+            if (td.victim === id)
+              player.voiceLines[i].deaths += 1;
+
+            if (td.killers.indexOf(id) > -1)
+              player.voiceLines[i].kills += 1;
+          }
+        }
+      }
+
+      // sprays
+      for (let i = 0; i < player.sprays.length; i++) {
+        let tauntTime = player.sprays[i].loop;
+
+        for (let j = 0; j < takedowns.length; j++) {
+          let td = takedowns[j];
+          let time = td.loop;
+
+          if (Math.abs(tauntTime - time) <= 160) {
+            // check involved players
+            if (td.victim === id)
+              player.sprays[i].deaths += 1;
+
+            if (td.killers.indexOf(id) > -1)
+              player.sprays[i].kills += 1;
+          }
+        }
+
+        // dances
+        for (let i = 0; i < player.dances.length; i++) {
+          let tauntTime = player.dances[i].loop;
+
+          for (let j = 0; j < takedowns.length; j++) {
+            let td = takedowns[j];
+            let time = td.loop;
+
+            if (Math.abs(tauntTime - time) <= 160) {
+              // check involved players
+              if (td.victim === id)
+                player.dances[i].deaths += 1;
+
+              if (td.killers.indexOf(id) > -1)
+                player.dances[i].kills += 1;
+            }
+          }
+        }
+      }
+    }
   }
 }
 

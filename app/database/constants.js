@@ -188,6 +188,8 @@ const TombMinionXP = {
   RangedMinion:  [51, 53, 55, 57, 59, 61, 63, 65, 67, 69, 71, 73, 75, 77, 79, 81, 83, 85, 87, 89, 91, 93, 95, 97, 99, 101, 103, 105, 107, 109, 111] 
 };
 
+const GameStart = 610;
+
 exports.TeamType = TeamType;
 exports.TrackerEvent = TrackerEvent;
 exports.StatEventType = StatEventType;
@@ -200,3 +202,4 @@ exports.UnitType = UnitType;
 exports.MinionXP = MinionXP;
 exports.TombMinionXP = TombMinionXP;
 exports.MapType = MapType;
+exports.GameStart = GameStart;

@@ -27,10 +27,6 @@ function parse(file, requestedData, opts) {
   for (var i in requestedData) {
     console.log("Retrieving " + requestedData[i]);
 
-    if (requestedData[i] === ReplayDataType.game) {
-      console.log("This is a ton of data, processing may take additional time...");
-    }
-
     const script = cp.spawnSync('python', ['../third_party/heroprotocol/heroprotocol.py','--json', '--' + requestedData[i], file], {
       maxBuffer: 500000*1024    // if anyone asks why it's 500MB it's because gameevents is huge
     });
