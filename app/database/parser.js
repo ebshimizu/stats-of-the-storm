@@ -207,6 +207,11 @@ function processReplay(file, opts = {}) {
       match.objective[0] = { count: 0, damage: 0, events: [] };
       match.objective[1] = { count: 0, damage: 0, events: [] };
     }
+    else if (match.map === ReplayTypes.MapType.Cursed) {
+      match.objective.tributes = [];
+      match.objective[0] = {count: 0, events: []};
+      match.objective[1] = {count: 0, events: []};
+    }
     else if (match.map === ReplayTypes.MapType.Mines) {
       // unfortunately the mines map seems to be missing some older events that had the info about the golem spawns
       // the data would be... tricky to reconstruct due to ambiguity over who picks up the skull
@@ -399,6 +404,15 @@ function processReplay(file, opts = {}) {
 
           match.objective.results.push(objEvent);
         }
+        else if (event.m_eventName === ReplayTypes.StatEventType.TributeCollected) {
+          let objEvent = { team: event.m_fixedData[0].m_value / 4096 - 1, loop: event._gameloop };
+          objEvent.time = loopsToSeconds(objEvent.loop - match.loopGameStart);
+          
+          match.objective[objEvent.team].events.push(objEvent);
+          match.objective[objEvent.team].count += 1;
+
+          console.log("[TRACKER] Tribute collected by team " + objEvent.team);
+        }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {
         // there's going to be a special case for tomb once i figure out the map name for it
@@ -426,6 +440,14 @@ function processReplay(file, opts = {}) {
           spawn.unitTagRecycle = event.m_unitTagRecycle;
 
           golems[spawn.team] = spawn;
+        }
+        else if (type === ReplayTypes.UnitType.RavenLordTribute) {
+          let spawn = { loop: event._gameloop };
+          spawn.x = event.m_x;
+          spawn.y = event.m_y;
+          spawn.time = loopsToSeconds(spawn.loop - match.loopGameStart);
+
+          match.objective.tributes.push(spawn);
         }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitDied) {

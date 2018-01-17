@@ -39,7 +39,8 @@ const StatEventType = {
   LootVoiceLineUsed: 'LootVoiceLineUsed',
   GatesOpen: 'GatesOpen',
   AltarCaptured: 'Altar Captured',
-  ImmortalDefeated: 'Immortal Defeated'
+  ImmortalDefeated: 'Immortal Defeated',
+  TributeCollected: 'TributeCollected'
 };
 
 // display strings for score event names
@@ -140,7 +141,9 @@ const MapType = {
   SkyTemple: 'Sky Temple',
   Towers: 'Towers of Doom',
   Mines: 'Haunted Mines',
-  BOE: 'Battlefield of Eternity'
+  BOE: 'Battlefield of Eternity',
+  Blackheart: "Blackheart's Bay",
+  Cursed: 'Cursed Hollow'
 };
 
 const MessageType = {
@@ -176,7 +179,8 @@ const UnitType = {
   RangedMinion: 'RangedMinion',
   RegenGlobe: 'RegenGlobe',
   RegenGlobeNeutral: 'RegenGlobeNeutral',
-  MinesBoss: 'UnderworldSummonedBoss'
+  MinesBoss: 'UnderworldSummonedBoss',
+  RavenLordTribute: 'RavenLordTribute'
 };
 
 const MinionXP = {
