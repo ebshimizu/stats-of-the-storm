@@ -7,8 +7,9 @@ Why not? Also this parser extracts some additional data that current sites do no
 * A complete list of takedowns with involved players and locations
 * All possible minion xp generated since the start of the game (can be used to determine amount of missed soak)
 * Dragon Shire: Duration of Shrine Control and when control switched
-* Haunted Mines: Amount of time golems were alive for
+* Haunted Mines: Amount of time golems were alive
 * Cursed Hollow: When tributes spawned (and where they spawned)
+* Garden of Terror: Amount of time the terrors were alive
 * B-step events and takedowns within a 10 second window
 * Other taunt/spray/dance events and also takedowns within a 10 second window
 * yes this parser basically detects BM

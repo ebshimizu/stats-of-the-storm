@@ -41,7 +41,8 @@ const StatEventType = {
   AltarCaptured: 'Altar Captured',
   ImmortalDefeated: 'Immortal Defeated',
   TributeCollected: 'TributeCollected',
-  DragonKnightActivated: 'DragonKnightActivated'
+  DragonKnightActivated: 'DragonKnightActivated',
+  GardenTerrorActivated: 'GardenTerrorActivated'
 };
 
 // display strings for score event names
@@ -145,7 +146,8 @@ const MapType = {
   BOE: 'Battlefield of Eternity',
   Blackheart: "Blackheart's Bay",
   Cursed: 'Cursed Hollow',
-  Dragon: 'Dragon Shire'
+  Dragon: 'Dragon Shire',
+  Garden: 'Garden of Terror'
 };
 
 const MessageType = {
@@ -184,7 +186,8 @@ const UnitType = {
   MinesBoss: 'UnderworldSummonedBoss',
   RavenLordTribute: 'RavenLordTribute',
   SunShrine: 'DragonShireShrineSun',
-  MoonShrine: 'DragonShireShrineMoon'
+  MoonShrine: 'DragonShireShrineMoon',
+  GardenTerrorVehicle: 'VehiclePlantHorror'
 };
 
 const MinionXP = {

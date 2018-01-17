@@ -220,6 +220,11 @@ function processReplay(file, opts = {}) {
       match.objective[0] = { count: 0, events: []};
       match.objective[1] = { count: 0, events: []};
     }
+    else if (match.map === ReplayTypes.MapType.Garden) {
+      var currentTerror = {0: {}, 1: {}};
+      match.objective[0] = { count: 0, events: []};
+      match.objective[1] = { count: 0, events: []};
+    }
     else if (match.map === ReplayTypes.MapType.Mines) {
       // unfortunately the mines map seems to be missing some older events that had the info about the golem spawns
       // the data would be... tricky to reconstruct due to ambiguity over who picks up the skull
@@ -430,6 +435,16 @@ function processReplay(file, opts = {}) {
 
           console.log("[TRACKER] Dragon Knight Activated by team " + objEvent.team);
         }
+        else if (event.m_eventName === ReplayTypes.StatEventType.GardenTerrorActivated) {
+          let objEvent = {team: event.m_fixedData[1].m_value / 4096 - 1, loop: event._gameloop};
+          objEvent.time = loopsToSeconds(objEvent.loop - match.loopGameStart);
+
+          match.objective[objEvent.team].events.push(objEvent);
+          match.objective[objEvent.team].count += 1;
+          currentTerror[objEvent.team].active = true;
+
+          console.log("[TRACKER] Garden Terror Activated by team " + objEvent.team);
+        }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {
         // there's going to be a special case for tomb once i figure out the map name for it
@@ -472,6 +487,10 @@ function processReplay(file, opts = {}) {
         else if (type === ReplayTypes.UnitType.SunShrine) {
           sun = { tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle };
         }
+        else if (type === ReplayTypes.UnitType.GardenTerrorVehicle) {
+          let spawn = { team: event.m_controlPlayerId - 11, active: false, tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle };
+          currentTerror[spawn.team] = spawn;
+        }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitDied) {
         // Haunted Mines - check for matching golem death
@@ -492,6 +511,26 @@ function processReplay(file, opts = {}) {
               console.log('[TRACKER] Team ' + objEvent.team + ' golem lasted for ' + objEvent.duration + ' seconds');
 
               match.objective[objEvent.team].push(objEvent);
+            }
+          }
+        }
+        else if (match.map === ReplayTypes.MapType.Garden) {
+          // check plant death
+          let tag = event.m_unitTagIndex;
+          let rtag = event.m_unitTagRecycle;
+
+          for (let t in currentTerror) {
+            let terror = currentTerror[t];
+
+            if (terror.active && terror.tag === tag && terror.rtag === rtag) {
+              let team = parseInt(t);
+              let duration = event._gameloop - match.objective[team].events[match.objective[team].events.length - 1].loop;
+              match.objective[team].events[match.objective[team].events.length - 1].loopDuration = duration;
+              match.objective[team].events[match.objective[team].events.length - 1].duration = loopsToSeconds(duration);
+
+              currentTerror[t].active = false;
+
+              console.log('[TRACKER] Team ' + team + ' terror lasted for ' + loopsToSeconds(duration) + ' seconds');
             }
           }
         }
@@ -545,6 +584,23 @@ function processReplay(file, opts = {}) {
           console.log('[TRACKER] Team ' + objEvent.team + ' golem lasted for ' + objEvent.duration + ' seconds');
 
           match.objective[objEvent.team].push(objEvent);
+        }
+      }
+    }
+    // garden clean up
+    if (match.map === ReplayTypes.MapType.Garden) {
+      for (let t in currentTerror) {
+        let terror = currentTerror[t];
+
+        if (terror.active) {
+          let team = parseInt(t);
+          let duration = match.loopLength - match.objective[team].events[match.objective[team].events.length - 1].loop;
+          match.objective[team].events[match.objective[team].events.length - 1].loopDuration = duration;
+          match.objective[team].events[match.objective[team].events.length - 1].duration = loopsToSeconds(duration);
+
+          currentTerror[t].active = false;
+
+          console.log('[TRACKER] Team ' + team + ' terror lasted for ' + loopsToSeconds(duration) + ' seconds');
         }
       }
     }
