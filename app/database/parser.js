@@ -488,7 +488,8 @@ function processReplay(file, opts = {}) {
           sun = { tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle };
         }
         else if (type === ReplayTypes.UnitType.GardenTerrorVehicle) {
-          let spawn = { team: event.m_controlPlayerId - 11, active: false, tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle };
+          let spawn = { team: event.m_upkeepPlayerId - 11, active: false, tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle };
+
           currentTerror[spawn.team] = spawn;
         }
       }
@@ -527,6 +528,7 @@ function processReplay(file, opts = {}) {
               let duration = event._gameloop - match.objective[team].events[match.objective[team].events.length - 1].loop;
               match.objective[team].events[match.objective[team].events.length - 1].loopDuration = duration;
               match.objective[team].events[match.objective[team].events.length - 1].duration = loopsToSeconds(duration);
+              match.objective[team].events[match.objective[team].events.length - 1].player = terror.player;
 
               currentTerror[t].active = false;
 
@@ -566,6 +568,18 @@ function processReplay(file, opts = {}) {
             match.objective.shrines.sun.push(objEvent);
           }
         }
+        if (match.map === ReplayTypes.MapType.Garden) {
+          let tag = event.m_unitTagIndex;
+          let rtag = event.m_unitTagRecycle;
+
+          for (let t in currentTerror) {
+            let terror = currentTerror[t];
+
+            if (terror.tag === tag && terror.rtag === rtag) {
+              currentTerror[t].player = playerIDMap[event.m_controlPlayerId];
+            }
+          }
+        }
       }
     }
 
@@ -597,6 +611,7 @@ function processReplay(file, opts = {}) {
           let duration = match.loopLength - match.objective[team].events[match.objective[team].events.length - 1].loop;
           match.objective[team].events[match.objective[team].events.length - 1].loopDuration = duration;
           match.objective[team].events[match.objective[team].events.length - 1].duration = loopsToSeconds(duration);
+          match.objective[team].events[match.objective[team].events.length - 1].player = terror.player;
 
           currentTerror[t].active = false;
 
