@@ -2,6 +2,15 @@
 
 This application is in the very early development stage.
 Folders will be moved at will, breaking changes will probably be in every commit.
+## Why?
+Why not? Also this parser extracts some additional data that current sites do not such as:
+* A complete list of takedowns with involved players
+* All possible minion xp generated since the start of the game (can be used to determine amount of missed soak)
+* Dragon Shire: Duration of Shrine Control and when control switched
+* Haunted Mines: Amount of time golems were alive for
+* B-step events and takedowns within a 10 second window
+* Other taunt/spray/dance events and also takedowns within a 10 second window
+* yes this parser basically detects BM
 
 ## Setup
 External Requirements:
