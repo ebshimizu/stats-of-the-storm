@@ -62,3 +62,4 @@ app/.vs/*
 *.db
 app/test_data/*
 test.js
+.vscode/settings.json
