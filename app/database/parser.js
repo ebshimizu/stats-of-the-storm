@@ -216,6 +216,7 @@ function processReplay(file, opts = {}) {
       // it appears that we can track the status of the shrines based on owner changed events
       var moon = {};
       var sun = {};
+      var dragon = null;
       match.objective.shrines = {moon: [], sun: []};
       match.objective[0] = { count: 0, events: []};
       match.objective[1] = { count: 0, events: []};
@@ -432,6 +433,7 @@ function processReplay(file, opts = {}) {
 
           match.objective[objEvent.team].events.push(objEvent);
           match.objective[objEvent.team].count += 1;
+          dragon.team = objEvent.team;
 
           console.log("[TRACKER] Dragon Knight Activated by team " + objEvent.team);
         }
@@ -492,6 +494,10 @@ function processReplay(file, opts = {}) {
 
           currentTerror[spawn.team] = spawn;
         }
+        else if (type === ReplayTypes.UnitType.DragonVehicle) {
+          // current dragon knight spawn
+          dragon = { tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle };
+        }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitDied) {
         // Haunted Mines - check for matching golem death
@@ -536,6 +542,20 @@ function processReplay(file, opts = {}) {
             }
           }
         }
+        else if (match.map === ReplayTypes.MapType.Dragon) {
+          let tag = event.m_unitTagIndex;
+          let rtag = event.m_unitTagRecycle;
+
+          if (dragon && dragon.tag === tag && dragon.rtag === rtag) {
+            // log duration
+            let lastIdx = match.objective[dragon.team].events.length - 1;
+            match.objective[dragon.team].events[lastIdx].loopDuration = event._gameloop - match.objective[dragon.team].events[lastIdx].loop;
+            match.objective[dragon.team].events[lastIdx].duration = loopsToSeconds(match.objective[dragon.team].events[lastIdx].loopDuration);
+            match.objective[dragon.team].events[lastIdx].player = dragon.player;
+
+            dragon = null;
+          }
+        }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitOwnerChange) {
         if (match.map === ReplayTypes.MapType.Dragon) {
@@ -566,6 +586,12 @@ function processReplay(file, opts = {}) {
               objEvent.team = -1;
 
             match.objective.shrines.sun.push(objEvent);
+          }
+          else if (dragon && dragon.tag === tag && dragon.rtag === rtag) {
+            // player got it 
+            if (event.m_controlPlayerId > 0 && event.m_controlPlayerId < 11) {
+              dragon.player = playerIDMap[event.m_controlPlayerId];
+            }
           }
         }
         if (match.map === ReplayTypes.MapType.Garden) {
@@ -617,6 +643,19 @@ function processReplay(file, opts = {}) {
 
           console.log('[TRACKER] Team ' + team + ' terror lasted for ' + loopsToSeconds(duration) + ' seconds');
         }
+      }
+    }
+    if (match.map === ReplayTypes.MapType.Dragon) {
+      // turns out a dragon can spawn well after the game ends,
+      // it isn't assigned to a team by the parser if this is the case, so skip it
+      if (dragon && dragon.team) {
+        // log duration
+        let lastIdx = match.objective[dragon.team].events.length - 1;
+        match.objective[dragon.team].events[lastIdx].loopDuration = match.loopLength - match.objective[dragon.team].events[lastIdx].loop;
+        match.objective[dragon.team].events[lastIdx].duration = loopsToSeconds(match.objective[dragon.team].events[lastIdx].loopDuration);
+        match.objective[dragon.team].events[lastIdx].player = dragon.player;
+
+        dragon = null;
       }
     }
 

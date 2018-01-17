@@ -187,7 +187,8 @@ const UnitType = {
   RavenLordTribute: 'RavenLordTribute',
   SunShrine: 'DragonShireShrineSun',
   MoonShrine: 'DragonShireShrineMoon',
-  GardenTerrorVehicle: 'VehiclePlantHorror'
+  GardenTerrorVehicle: 'VehiclePlantHorror',
+  DragonVehicle: 'VehicleDragon'
 };
 
 const MinionXP = {
