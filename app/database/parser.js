@@ -212,6 +212,14 @@ function processReplay(file, opts = {}) {
       match.objective[0] = {count: 0, events: []};
       match.objective[1] = {count: 0, events: []};
     }
+    else if (match.map === ReplayTypes.MapType.Dragon) {
+      // it appears that we can track the status of the shrines based on owner changed events
+      var moon = {};
+      var sun = {};
+      match.objective.shrines = {moon: [], sun: []};
+      match.objective[0] = { count: 0, events: []};
+      match.objective[1] = { count: 0, events: []};
+    }
     else if (match.map === ReplayTypes.MapType.Mines) {
       // unfortunately the mines map seems to be missing some older events that had the info about the golem spawns
       // the data would be... tricky to reconstruct due to ambiguity over who picks up the skull
@@ -413,6 +421,15 @@ function processReplay(file, opts = {}) {
 
           console.log("[TRACKER] Tribute collected by team " + objEvent.team);
         }
+        else if (event.m_eventName === ReplayTypes.StatEventType.DragonKnightActivated) {
+          let objEvent = {team: event.m_fixedData[0].m_value / 4096 - 1, loop: event._gameloop};
+          objEvent.time = loopsToSeconds(objEvent.loop - match.loopGameStart);
+
+          match.objective[objEvent.team].events.push(objEvent);
+          match.objective[objEvent.team].count += 1;
+
+          console.log("[TRACKER] Dragon Knight Activated by team " + objEvent.team);
+        }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {
         // there's going to be a special case for tomb once i figure out the map name for it
@@ -449,6 +466,12 @@ function processReplay(file, opts = {}) {
 
           match.objective.tributes.push(spawn);
         }
+        else if (type === ReplayTypes.UnitType.MoonShrine) {
+          moon = { tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle };
+        }
+        else if (type === ReplayTypes.UnitType.SunShrine) {
+          sun = { tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle };
+        }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitDied) {
         // Haunted Mines - check for matching golem death
@@ -470,6 +493,38 @@ function processReplay(file, opts = {}) {
 
               match.objective[objEvent.team].push(objEvent);
             }
+          }
+        }
+      }
+      else if (event._eventid === ReplayTypes.TrackerEvent.UnitOwnerChange) {
+        if (match.map === ReplayTypes.MapType.Dragon) {
+          // dragon shire shrine control
+          // actually you can probably track this on braxis too huh
+          let tag = event.m_unitTagIndex;
+          let rtag = event.m_unitTagRecycle;
+          let team = event.m_controlPlayerId;
+
+          if (moon.tag === tag && moon.rtag === rtag) {
+            let objEvent = { loop: event._gameloop, team };
+            objEvent.time = loopsToSeconds(objEvent.loop - match.loopGameStart);
+
+            if (objEvent.team !== 0)
+              objEvent.team -= 11;
+            else
+              objEvent.team = -1; // oops have to indicate no team, but our blue team is already 0
+
+            match.objective.shrines.moon.push(objEvent);
+          }
+          else if (sun.tag === tag && sun.rtag === rtag) {
+            let objEvent = { loop: event._gameloop, team };
+            objEvent.time = loopsToSeconds(objEvent.loop - match.loopGameStart);
+
+            if (objEvent.team !== 0)
+              objEvent.team -= 11;
+            else
+              objEvent.team = -1;
+
+            match.objective.shrines.sun.push(objEvent);
           }
         }
       }
