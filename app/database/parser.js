@@ -237,6 +237,12 @@ function processReplay(file, opts = {}) {
     else if (match.map === ReplayTypes.MapType.BOE) {
       match.objective.results = [];
     }
+    else if (match.map === ReplayTypes.MapType.Shrines) {
+      // track shrine outcome, and each team's punishers.
+      match.objective.shrines = [];
+      match.objective[0] = { count: 0, events: []};
+      match.objective[1] = { count: 0, events: []};
+    }
 
     var team0XPEnd;
     var team1XPEnd;
@@ -446,6 +452,28 @@ function processReplay(file, opts = {}) {
           currentTerror[objEvent.team].active = true;
 
           console.log("[TRACKER] Garden Terror Activated by team " + objEvent.team);
+        }
+        else if (event.m_eventName === ReplayTypes.StatEventType.ShrineCaptured) {
+          let objEvent = {team: event.m_intData[1].m_value - 1, loop: event._gameloop};
+          objEvent.time = loopsToSeconds(objEvent.loop - match.loopGameStart);
+          objEvent.team0Score = (objEvent.team === 0) ? objEvent.m_intData[2].m_value : objEvent.m_intData[3].m_value;
+          objEvent.team1Score = (objEvent.team === 1) ? objEvent.m_intData[2].m_value : objEvent.m_intData[3].m_value;
+
+          match.shrines.push(objEvent);
+          
+          console.log('[TRACKER] Shrine won by team ' + objEvent.team);
+        }
+        else if (event.m_eventName === ReplayTypes.StatEventType.PunisherKilled) {
+          let objEvent = { team: event.m_intData[1].m_value - 1, loop: event._gameloop, type: event.m_stringData[0].m_value };
+          objEvent.time = loopsToSeconds(objEvent.loop - match.loopGameStart);
+          objEvent.duration = event.m_intData[2].m_value;
+          objEvent.seigeDamage = event.m_fixedData[0].m_value / 4096;
+          objEvent.heroDamage = event.m_fixedData[1].m_value / 4096;
+
+          match.objective[objEvent.team].events.push(objEvent);
+          match.objective[objEvent.team].count += 1;
+
+          console.log('[TRACKER] Punisher defeated');
         }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {

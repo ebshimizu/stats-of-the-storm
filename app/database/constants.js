@@ -42,7 +42,9 @@ const StatEventType = {
   ImmortalDefeated: 'Immortal Defeated',
   TributeCollected: 'TributeCollected',
   DragonKnightActivated: 'DragonKnightActivated',
-  GardenTerrorActivated: 'GardenTerrorActivated'
+  GardenTerrorActivated: 'GardenTerrorActivated',
+  ShrineCaptured: 'Infernal Shrine Capture',
+  PunisherKilled: 'Punisher Killed'
 };
 
 // display strings for score event names
@@ -147,7 +149,8 @@ const MapType = {
   Blackheart: "Blackheart's Bay",
   Cursed: 'Cursed Hollow',
   Dragon: 'Dragon Shire',
-  Garden: 'Garden of Terror'
+  Garden: 'Garden of Terror',
+  Shrines: 'Infernal Shrines'
 };
 
 const MessageType = {
