@@ -152,7 +152,8 @@ const MapType = {
   Dragon: 'Dragon Shire',
   Garden: 'Garden of Terror',
   Shrines: 'Infernal Shrines',
-  Tomb: 'Tomb of the Spider Queen'
+  Tomb: 'Tomb of the Spider Queen',
+  Volskaya: 'Volskaya Foundry'
 };
 
 const MessageType = {
@@ -196,7 +197,8 @@ const UnitType = {
   MoonShrine: 'DragonShireShrineMoon',
   GardenTerrorVehicle: 'VehiclePlantHorror',
   DragonVehicle: 'VehicleDragon',
-  Webweaver: 'SoulEater'
+  Webweaver: 'SoulEater',
+  Triglav: 'VolskayaVehicle'
 };
 
 const MinionXP = {
