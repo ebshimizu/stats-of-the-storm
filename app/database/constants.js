@@ -43,8 +43,9 @@ const StatEventType = {
   TributeCollected: 'TributeCollected',
   DragonKnightActivated: 'DragonKnightActivated',
   GardenTerrorActivated: 'GardenTerrorActivated',
-  ShrineCaptured: 'Infernal Shrine Capture',
-  PunisherKilled: 'Punisher Killed'
+  ShrineCaptured: 'Infernal Shrine Captured',
+  PunisherKilled: 'Punisher Killed',
+  SpidersSpawned: 'SoulEatersSpawned'
 };
 
 // display strings for score event names
@@ -150,7 +151,8 @@ const MapType = {
   Cursed: 'Cursed Hollow',
   Dragon: 'Dragon Shire',
   Garden: 'Garden of Terror',
-  Shrines: 'Infernal Shrines'
+  Shrines: 'Infernal Shrines',
+  Tomb: 'Tomb of the Spider Queen'
 };
 
 const MessageType = {
@@ -180,6 +182,8 @@ const VitalType = {
   Mana: 2
 };
 
+// note that this is a subset of all possible units,
+// only the ones we actually care about in the parse are listed here
 const UnitType = {
   FootmanMinion: 'FootmanMinion',
   WizardMinion: 'WizardMinion',
@@ -191,7 +195,8 @@ const UnitType = {
   SunShrine: 'DragonShireShrineSun',
   MoonShrine: 'DragonShireShrineMoon',
   GardenTerrorVehicle: 'VehiclePlantHorror',
-  DragonVehicle: 'VehicleDragon'
+  DragonVehicle: 'VehicleDragon',
+  Webweaver: 'SoulEater'
 };
 
 const MinionXP = {

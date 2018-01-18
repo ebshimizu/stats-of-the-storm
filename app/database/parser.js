@@ -243,6 +243,11 @@ function processReplay(file, opts = {}) {
       match.objective[0] = { count: 0, events: []};
       match.objective[1] = { count: 0, events: []};
     }
+    else if (match.map === ReplayTypes.MapType.Tomb) {
+      var currentSpiders = { units: {}, active: false };
+      match.objective[0] = {count: 0, events: []};
+      match.objective[1] = {count: 0, events: []};
+    }
 
     var team0XPEnd;
     var team1XPEnd;
@@ -456,10 +461,10 @@ function processReplay(file, opts = {}) {
         else if (event.m_eventName === ReplayTypes.StatEventType.ShrineCaptured) {
           let objEvent = {team: event.m_intData[1].m_value - 1, loop: event._gameloop};
           objEvent.time = loopsToSeconds(objEvent.loop - match.loopGameStart);
-          objEvent.team0Score = (objEvent.team === 0) ? objEvent.m_intData[2].m_value : objEvent.m_intData[3].m_value;
-          objEvent.team1Score = (objEvent.team === 1) ? objEvent.m_intData[2].m_value : objEvent.m_intData[3].m_value;
+          objEvent.team0Score = (objEvent.team === 0) ? event.m_intData[2].m_value : event.m_intData[3].m_value;
+          objEvent.team1Score = (objEvent.team === 1) ? event.m_intData[2].m_value : event.m_intData[3].m_value;
 
-          match.shrines.push(objEvent);
+          match.objective.shrines.push(objEvent);
           
           console.log('[TRACKER] Shrine won by team ' + objEvent.team);
         }
@@ -474,6 +479,19 @@ function processReplay(file, opts = {}) {
           match.objective[objEvent.team].count += 1;
 
           console.log('[TRACKER] Punisher defeated');
+        }
+        else if (event.m_eventName === ReplayTypes.StatEventType.SpidersSpawned) {
+          let objEvent = { team: event.m_fixedData[0].m_value / 4096 - 1, score: event.m_intData[1].m_value, loop: event._gameloop };
+          objEvent.time = loopsToSeconds(objEvent.loop - match.loopGameStart);
+          currentSpiders.active = true;
+          currentSpiders.team = objEvent.team;
+
+          match.objective[objEvent.team].events.push(objEvent);
+          match.objective[objEvent.team].count += 1;
+          currentSpiders.eventIdx = match.objective[objEvent.team].count - 1;
+          currentSpiders.unitIdx = 0;
+
+          console.log('[TRACKER] Webweaver phase for team ' + objEvent.team + ' started');
         }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {
@@ -525,6 +543,15 @@ function processReplay(file, opts = {}) {
         else if (type === ReplayTypes.UnitType.DragonVehicle) {
           // current dragon knight spawn
           dragon = { tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle };
+        }
+        else if (type === ReplayTypes.UnitType.Webweaver) {
+          // dump some spiders in
+          let spider = { tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle, x: event.m_x, y: event.m_y };
+          spider.loop = event._gameloop;
+          spider.time = loopsToSeconds(spider.loop - match.loopGameStart);
+
+          currentSpiders.units[currentSpiders.unitIdx] = spider;
+          currentSpiders.unitIdx += 1;
         }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitDied) {
@@ -582,6 +609,34 @@ function processReplay(file, opts = {}) {
             match.objective[dragon.team].events[lastIdx].player = dragon.player;
 
             dragon = null;
+          }
+        }
+        else if (match.map === ReplayTypes.MapType.Tomb) {
+          let tag = event.m_unitTagIndex;
+          let rtag = event.m_unitTagRecycle;
+
+          if (currentSpiders.active) {
+            for (let s in currentSpiders.units) {
+              let spider = currentSpiders.units[s];
+
+              if (tag === spider.tag && rtag === spider.rtag) {
+                currentSpiders.maxDuration = loopsToSeconds(event._gameloop - spider.loop);
+
+                // hey so like this is a removal of a key during iteration but i think it's
+                delete currentSpiders.units[s];
+                if (Object.keys(currentSpiders.units).length === 0) {
+                  // all webweavers died, clean up data
+                  match.objective[currentSpiders.team].events[currentSpiders.eventIdx].duration = currentSpiders.maxDuration;
+                  match.objective[currentSpiders.team].events[currentSpiders.eventIdx].endLoop = event._gameloop;
+                  match.objective[currentSpiders.team].events[currentSpiders.eventIdx].end = loopsToSeconds(event._gameloop - match.loopGameStart);
+                  currentSpiders.active = false;
+                  currentSpiders.units = {};
+
+                  console.log("[TRACKER] Webweaver phase ended");
+                  break;
+                }
+              }
+            }
           }
         }
       }
@@ -656,7 +711,7 @@ function processReplay(file, opts = {}) {
       }
     }
     // garden clean up
-    if (match.map === ReplayTypes.MapType.Garden) {
+    else if (match.map === ReplayTypes.MapType.Garden) {
       for (let t in currentTerror) {
         let terror = currentTerror[t];
 
@@ -673,7 +728,7 @@ function processReplay(file, opts = {}) {
         }
       }
     }
-    if (match.map === ReplayTypes.MapType.Dragon) {
+    else if (match.map === ReplayTypes.MapType.Dragon) {
       // turns out a dragon can spawn well after the game ends,
       // it isn't assigned to a team by the parser if this is the case, so skip it
       if (dragon && dragon.team) {
@@ -686,6 +741,15 @@ function processReplay(file, opts = {}) {
         dragon = null;
       }
     }
+    else if (match.map === ReplayTypes.MapType.Tomb) {
+      if (currentSpiders.active === true) {
+        let spider = currentSpiders.units[Object.keys(currentSpiders.units)[0]];
+        match.objective[currentSpiders.team].events[currentSpiders.eventIdx].duration = loopsToSeconds(match.loopDuration - spider.loop);
+        match.objective[currentSpiders.team].events[currentSpiders.eventIdx].endLoop = match.loopDuration;
+        match.objective[currentSpiders.team].events[currentSpiders.eventIdx].end = loopsToSeconds(match.loopDuration - match.loopGameStart);
+      }
+    }
+
 
     console.log("[TRACKER] Adding final XP breakdown");
 

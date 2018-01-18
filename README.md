@@ -11,6 +11,7 @@ Why not? Also this parser extracts some additional data that current sites do no
 * Haunted Mines: Amount of time golems were alive
 * Cursed Hollow: When tributes spawned (and where they spawned)
 * Garden of Terror: Amount of time the terrors were alive
+* Tomb of the Spider Queen: How long the webweavers were alive
 * B-step events and takedowns within a 10 second window
 * Other taunt/spray/dance events and also takedowns within a 10 second window
 * yes this parser basically detects BM
