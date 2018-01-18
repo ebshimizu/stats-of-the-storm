@@ -253,6 +253,11 @@ function processReplay(file, opts = {}) {
       match.objective[0] = {count: 0, events: []};
       match.objective[1] = {count: 0, events: []};
     }
+    else if (match.map === ReplayTypes.MapType.Warhead) {
+      var nukes = {};
+      match.objective[0] = {count: 0, success: 0, events: []};
+      match.objective[1] = {count: 0, success: 0, events: []};
+    }
 
     var team0XPEnd;
     var team1XPEnd;
@@ -513,6 +518,10 @@ function processReplay(file, opts = {}) {
 
           let xpVal = ReplayTypes.MinionXP[type][elapsedGameMinutes];
 
+          if (match.map === ReplayTypes.MapType.Tomb) {
+            xpVal = ReplayTypes.TombMinionXP[type][elapsedGameMinutes];
+          }
+          
           if (event.m_upkeepPlayerId === 11)
             possibleMinionXP[ReplayTypes.TeamType.Blue] += xpVal;
           else if (event.m_upkeepPlayerId === 12)
@@ -571,6 +580,16 @@ function processReplay(file, opts = {}) {
           currentProtector.eventIdx = match.objective[currentProtector.team].count - 1;
 
           console.log('[TRACKER] Triglav Protector spawned by team ' + currentProtector.team);
+        }
+        else if (type === ReplayTypes.UnitType.Nuke) {
+          // create an id for the unit
+          let id = event.m_unitTagIndex + '-' + event.m_unitTagRecycle;
+          let eventObj = { tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle, loop: event._gameloop, x: event.m_x, y: event.m_y };
+          eventObj.time = loopsToSeconds(eventObj.loop - match.loopGameStart);
+          eventObj.player = playerIDMap[event.m_controlPlayerId];
+          eventObj.team = players[eventObj.player].team;
+
+          nukes[id] = eventObj;
         }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitDied) {
@@ -670,6 +689,17 @@ function processReplay(file, opts = {}) {
             currentProtector = {active: false};
 
             console.log('[TRACKER] Triglav Protector destroyed');
+          }
+        }
+        else if (match.map === ReplayTypes.MapType.Warhead) {
+          let tag = event.m_unitTagIndex;
+          let rtag = event.m_unitTagRecycle;
+          let id = tag + '-' + rtag;
+
+          if (id in nukes) {
+            nukes[id].success = event._gameloop - nukes[id].loop > 16 * 2;
+
+            console.log('[TRACKER] Nuclear Launch Detected');
           }
         }
       }
@@ -786,6 +816,18 @@ function processReplay(file, opts = {}) {
       if (currentProtector.active) {
         let duration = loopsToSeconds(match.loopDuration - currentProtector.loop);
         match.objective[currentProtector.team].events[currentProtector.eventIdx].duration = duration;
+      }
+    }
+    else if (match.map === ReplayTypes.MapType.Warhead) {
+      // nuke sorting
+      for (let id in nukes) {
+        let nuke = nukes[id];
+        match.objective[nuke.team].events.push(nuke);
+        match.objective[nuke.team].count += 1;
+
+        // if success is true or undefined (never died, mark as success) mark it
+        if (nuke.success === true || !('success' in nuke))
+          match.objective[nuke.team].success += 1;
       }
     }
 
