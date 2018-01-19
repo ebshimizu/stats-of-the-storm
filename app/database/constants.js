@@ -152,7 +152,10 @@ const MapType = {
   Dragon: 'Dragon Shire',
   Garden: 'Garden of Terror',
   Shrines: 'Infernal Shrines',
-  Tomb: 'Tomb of the Spider Queen'
+  Tomb: 'Tomb of the Spider Queen',
+  Volskaya: 'Volskaya Foundry',
+  Warhead: 'Warhead Junction',
+  Braxis: 'Braxis Holdout'
 };
 
 const MessageType = {
@@ -196,7 +199,19 @@ const UnitType = {
   MoonShrine: 'DragonShireShrineMoon',
   GardenTerrorVehicle: 'VehiclePlantHorror',
   DragonVehicle: 'VehicleDragon',
-  Webweaver: 'SoulEater'
+  Webweaver: 'SoulEater',
+  Triglav: 'VolskayaVehicle',
+  Nuke: 'NukeTargetMinimapIconUnit',
+  BraxisControlPoint: 'ZergHiveControlBeacon',
+  BraxisZergPath: 'ZergPathDummy'
+};
+
+const BraxisUnitType = {
+  ZergZergling: 'ZergZergling',
+  ZergBaneling: 'ZergBaneling',
+  ZergHydralisk: 'ZergHydralisk',
+  ZergGuardian: 'ZergGuardian',
+  ZergUltralisk: 'ZergUltralisk'
 };
 
 const MinionXP = {
@@ -249,3 +264,4 @@ exports.MapType = MapType;
 exports.GameStart = GameStart;
 exports.GameMode = GameMode;
 exports.GameModeStrings = GameModeStrings;
+exports.BraxisUnitType = BraxisUnitType;

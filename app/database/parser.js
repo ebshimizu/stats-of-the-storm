@@ -248,6 +248,24 @@ function processReplay(file, opts = {}) {
       match.objective[0] = {count: 0, events: []};
       match.objective[1] = {count: 0, events: []};
     }
+    else if (match.map === ReplayTypes.MapType.Volskaya) {
+      var currentProtector = { active: false };
+      match.objective[0] = {count: 0, events: []};
+      match.objective[1] = {count: 0, events: []};
+    }
+    else if (match.map === ReplayTypes.MapType.Warhead) {
+      var nukes = {};
+      match.objective[0] = {count: 0, success: 0, events: []};
+      match.objective[1] = {count: 0, success: 0, events: []};
+    
+    }
+    else if (match.map === ReplayTypes.MapType.Braxis) {
+      var waveUnits = {0: {}, 1: {}};
+      var waveID = -1;
+      var beacons = {};
+      match.objective.beacons = [];
+      match.objective.waves = [];
+    }
 
     var team0XPEnd;
     var team1XPEnd;
@@ -508,6 +526,10 @@ function processReplay(file, opts = {}) {
 
           let xpVal = ReplayTypes.MinionXP[type][elapsedGameMinutes];
 
+          if (match.map === ReplayTypes.MapType.Tomb) {
+            xpVal = ReplayTypes.TombMinionXP[type][elapsedGameMinutes];
+          }
+          
           if (event.m_upkeepPlayerId === 11)
             possibleMinionXP[ReplayTypes.TeamType.Blue] += xpVal;
           else if (event.m_upkeepPlayerId === 12)
@@ -553,13 +575,76 @@ function processReplay(file, opts = {}) {
           currentSpiders.units[currentSpiders.unitIdx] = spider;
           currentSpiders.unitIdx += 1;
         }
+        else if (type === ReplayTypes.UnitType.Triglav) {
+          currentProtector = { tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle, team: event.m_upkeepPlayerId - 11, loop: event._gameloop };
+          currentProtector.x = event.m_x;
+          currentProtector.y = event.m_y;
+          currentProtector.time = loopsToSeconds(currentProtector.loop - match.loopGameStart);
+          currentProtector.active = true;
+
+          // add to objectives array, can ref later
+          match.objective[currentProtector.team].events.push(currentProtector);
+          match.objective[currentProtector.team].count += 1;
+          currentProtector.eventIdx = match.objective[currentProtector.team].count - 1;
+
+          console.log('[TRACKER] Triglav Protector spawned by team ' + currentProtector.team);
+        }
+        else if (type === ReplayTypes.UnitType.Nuke) {
+          // create an id for the unit
+          let id = event.m_unitTagIndex + '-' + event.m_unitTagRecycle;
+          let eventObj = { tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle, loop: event._gameloop, x: event.m_x, y: event.m_y };
+          eventObj.time = loopsToSeconds(eventObj.loop - match.loopGameStart);
+          eventObj.player = playerIDMap[event.m_controlPlayerId];
+          eventObj.team = players[eventObj.player].team;
+
+          nukes[id] = eventObj;
+        }
+        else if (type in ReplayTypes.BraxisUnitType) {
+          // add things to the waves, these objects get reset when the wave launches
+          let id = event.m_unitTagIndex + '-' + event.m_unitTagRecycle;
+          let eventObj = {tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle, loop: event._gameloop, x: event.m_x, y: event.m_y};
+          eventObj.team = event.m_controlPlayerId - 11;
+          eventObj.time = loopsToSeconds(eventObj.loop - match.loopGameStart);
+          eventObj.type = event.m_unitTypeName;
+
+          if (Object.keys(waveUnits[0]).length === 0 && Object.keys(waveUnits[1]).length === 0) {
+            // init a new wave tracker object
+            waveID += 1;
+            // events includes beacon ownership events, scores include score over time, which can be updated any time
+            // a new unit gets spawned for the current wave
+            let waveObj = { initLoop: event._gameloop, initTime: eventObj.time, scores: [], endLoop: {0: 0, 1: 0}, endTime: {0: 0, 1: 0}};
+            waveObj.scores.push({loop: event._gameloop, time: eventObj.time, 0: 0, 1: 0});
+            match.objective.waves.push(waveObj);
+          }
+          else {
+            // TODO: wave strength score update
+            let score = {0: braxisWaveStrength(waveUnits[0]), 1: braxisWaveStrength(waveUnits[1])};
+            score.loop = event._gameloop;
+            score.time = loopsToSeconds(score.loop - match.loopGameStart);
+            match.objective.waves[waveID].scores.push(score);
+          }
+
+          waveUnits[eventObj.team][id] = eventObj;
+        }
+        else if (type === ReplayTypes.UnitType.BraxisZergPath) {
+          // start the wave
+          match.objective.waves[waveID].startLoop = event._gameloop;
+          match.objective.waves[waveID].startTime = loopsToSeconds(event._gameloop - match.loopGameStart);
+
+          match.objective.waves[waveID].startScore = {0: braxisWaveStrength(waveUnits[0]), 1: braxisWaveStrength(waveUnits[1])};
+        }
+        else if (type === ReplayTypes.UnitType.BraxisControlPoint) {
+          let id = event.m_unitTagIndex + '-' + event.m_unitTagRecycle;
+          let y = event.m_y;
+          beacons[id] = { tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle, side: y > 100 ? 'top' : 'bottom'};
+        }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitDied) {
+        let tag = event.m_unitTagIndex;
+        let rtag = event.m_unitTagRecycle;
+
         // Haunted Mines - check for matching golem death
         if (match.map === ReplayTypes.MapType.Mines) {
-          let tag = event.m_unitTagIndex;
-          let rtag = event.m_unitTagRecycle;
-
           for (let g in golems) {
             let golem = golems[g];
 
@@ -578,9 +663,6 @@ function processReplay(file, opts = {}) {
         }
         else if (match.map === ReplayTypes.MapType.Garden) {
           // check plant death
-          let tag = event.m_unitTagIndex;
-          let rtag = event.m_unitTagRecycle;
-
           for (let t in currentTerror) {
             let terror = currentTerror[t];
 
@@ -598,9 +680,6 @@ function processReplay(file, opts = {}) {
           }
         }
         else if (match.map === ReplayTypes.MapType.Dragon) {
-          let tag = event.m_unitTagIndex;
-          let rtag = event.m_unitTagRecycle;
-
           if (dragon && dragon.tag === tag && dragon.rtag === rtag) {
             // log duration
             let lastIdx = match.objective[dragon.team].events.length - 1;
@@ -612,9 +691,6 @@ function processReplay(file, opts = {}) {
           }
         }
         else if (match.map === ReplayTypes.MapType.Tomb) {
-          let tag = event.m_unitTagIndex;
-          let rtag = event.m_unitTagRecycle;
-
           if (currentSpiders.active) {
             for (let s in currentSpiders.units) {
               let spider = currentSpiders.units[s];
@@ -637,6 +713,57 @@ function processReplay(file, opts = {}) {
                 }
               }
             }
+          }
+        }
+        else if (match.map === ReplayTypes.MapType.Volskaya) {
+          // checking for protector death
+          if (currentProtector.active && currentProtector.tag === tag && currentProtector.rtag === rtag) {
+            // it ded
+            let duration = loopsToSeconds(event._gameloop - currentProtector.loop);
+            match.objective[currentProtector.team].events[currentProtector.eventIdx].duration = duration;
+            currentProtector = {active: false};
+
+            console.log('[TRACKER] Triglav Protector destroyed');
+          }
+        }
+        else if (match.map === ReplayTypes.MapType.Warhead) {
+          let id = tag + '-' + rtag;
+
+          if (id in nukes) {
+            nukes[id].success = event._gameloop - nukes[id].loop > 16 * 2;
+
+            console.log('[TRACKER] Nuclear Launch Detected');
+          }
+        }
+        else if (match.map === ReplayTypes.MapType.Braxis) {
+          let id = tag + '-' + rtag;
+
+          if (id in waveUnits[0]) {
+            if (waveUnits[0][id].type === ReplayTypes.BraxisUnitType.ZergUltralisk) {
+              // ok so if an ultralisk died and the killer was null, then we have to update
+              // the starting strength of the other team's wave to 1 because this unit got
+              // dead instantly
+              if (event.m_killerPlayerId === null) {
+                match.objective.waves[waveID].startScore[1] = 1;
+              }
+            }
+
+            match.objective.waves[waveID].endLoop[0] = event._gameloop;
+            match.objective.waves[waveID].endTime[0] = loopsToSeconds(event._gameloop - match.loopGameStart);
+            delete waveUnits[0][id];
+          }
+          else if (id in waveUnits[1]) {
+            if (waveUnits[1][id].type === ReplayTypes.BraxisUnitType.ZergUltralisk) {
+              // ok so if an ultralisk died and the killer was null, then we have to update
+              // the starting strength of the other team's wave to 1 because this unit got
+              // dead instantly
+              if (event.m_killerPlayerId === null) {
+                match.objective.waves[waveID].startScore[0] = 1;
+              }
+            }
+            match.objective.waves[waveID].endLoop[1] = event._gameloop;
+            match.objective.waves[waveID].endTime[1] = loopsToSeconds(event._gameloop - match.loopGameStart);
+            delete waveUnits[1][id];
           }
         }
       }
@@ -687,6 +814,19 @@ function processReplay(file, opts = {}) {
             if (terror.tag === tag && terror.rtag === rtag) {
               currentTerror[t].player = playerIDMap[event.m_controlPlayerId];
             }
+          }
+        }
+        if (match.map === ReplayTypes.MapType.Braxis) {
+          let tag = event.m_unitTagIndex;
+          let rtag = event.m_unitTagRecycle;
+          let id = tag + '-' + rtag;
+
+          if (id in beacons) {
+            let team = (event.m_controlPlayerId === 0) ? -1 : event.m_controlPlayerId - 11;
+            let beaconEvent = { team, loop: event._gameloop, side: beacons[id].side };
+            beaconEvent.time = loopsToSeconds(event._gameloop - match.loopGameStart);
+
+            match.objective.beacons.push(beaconEvent);
           }
         }
       }
@@ -749,7 +889,24 @@ function processReplay(file, opts = {}) {
         match.objective[currentSpiders.team].events[currentSpiders.eventIdx].end = loopsToSeconds(match.loopDuration - match.loopGameStart);
       }
     }
+    else if (match.map === ReplayTypes.MapType.Volskaya) {
+      if (currentProtector.active) {
+        let duration = loopsToSeconds(match.loopDuration - currentProtector.loop);
+        match.objective[currentProtector.team].events[currentProtector.eventIdx].duration = duration;
+      }
+    }
+    else if (match.map === ReplayTypes.MapType.Warhead) {
+      // nuke sorting
+      for (let id in nukes) {
+        let nuke = nukes[id];
+        match.objective[nuke.team].events.push(nuke);
+        match.objective[nuke.team].count += 1;
 
+        // if success is true or undefined (never died, mark as success) mark it
+        if (nuke.success === true || !('success' in nuke))
+          match.objective[nuke.team].success += 1;
+      }
+    }
 
     console.log("[TRACKER] Adding final XP breakdown");
 
@@ -874,7 +1031,7 @@ function processReplay(file, opts = {}) {
       processTauntData(players, match.takedowns, playerBSeq);
     }
 
-    console.log("[GAME] B-Step Detection Complete");
+    console.log("[GAME] Taunt Detection Complete");
 
     return { match, players, status : ReplayStatus.OK };
   }
@@ -1032,6 +1189,28 @@ function processTauntData(players, takedowns, playerBSeq) {
       }
     }
   }
+}
+
+function braxisWaveStrength(units) {
+  // determines the strength of the wave based on
+  // this is basically just a max of all the possible percentages indicated by the units
+  var types = {};
+
+  for (let t in ReplayTypes.BraxisUnitType) {
+    types[t] = 0;
+  }
+
+  for (let u in units) {
+    types[units[u].type] += 1
+  }
+
+  // percentage counts
+  var score = 0.05 * (types[ReplayTypes.BraxisUnitType.ZergZergling] - 6) + types[ReplayTypes.BraxisUnitType.ZergBaneling] * 0.05;
+  score = Math.max(score, types[ReplayTypes.BraxisUnitType.ZergHydralisk] * 0.14);
+  score = Math.max(score, types[ReplayTypes.BraxisUnitType.ZergGuardian] * 0.3);
+  // skip ultralisks they're unreliable
+
+  return score;
 }
 
 // general parsing utilities, not db specific
