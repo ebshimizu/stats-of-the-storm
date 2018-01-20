@@ -49,8 +49,23 @@ const StatEventType = {
   CampCapture: 'JungleCampCapture',
   SixTowersStart: 'Six Town Event Start',
   SixTowersEnd: 'Six Town Event End',
-  TowersFortCaptured: 'Town Captured'
+  TowersFortCaptured: 'Town Captured',
+  Fort: 'TownTownHallL2',
+  Keep: 'TownTownHallL3',
+  FortWell: 'TownMoonwellL2',
+  KeepWell: 'TownMoonwellL3',
+  FortTower: 'TownCannonTowerL2',
+  KeepTower: 'TownCannonTowerL3'
 };
+
+const StructureStrings = {
+  TownTownHallL2: 'Fort',
+  TownTownHallL3: 'Keep',
+  TownMoonwellL2: 'Fort Well',
+  TownMoonwellL3: 'Keep Well',
+  TownCannonTowerL2: 'Fort Tower',
+  TownCannonTowerL3: 'Keep Tower'
+}
 
 // display strings for score event names
 const ScoreEventNames = {
@@ -295,3 +310,4 @@ exports.GameMode = GameMode;
 exports.GameModeStrings = GameModeStrings;
 exports.BraxisUnitType = BraxisUnitType;
 exports.MercUnitType = MercUnitType;
+exports.StructureStrings = StructureStrings

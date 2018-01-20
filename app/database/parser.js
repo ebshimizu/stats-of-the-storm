@@ -760,6 +760,12 @@ function processReplay(file, opts = {}) {
 
           console.log('[MERCS] id:' + id + ' ' + unit.type + ' spawned for team ' + unit.team);
         }
+        else if (type in ReplayTypes.StructureStrings) {
+          let id = event.m_unitTagIndex + '-' + event.m_unitTagRecycle;
+          let str = {type, name: ReplayTypes.StructureStrings[type], tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle, x: event.m_x, y: event.m_y };
+          str.team = event.m_controlPlayerId - 11;
+          match.structures[id] = str;
+        }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitDied) {
         let tag = event.m_unitTagIndex;
@@ -771,6 +777,14 @@ function processReplay(file, opts = {}) {
           match.mercs.units[uid].duration = loopsToSeconds(event._gameloop - match.mercs.units[uid].loop);
 
           console.log('[MERCS] Mercenary id ' + uid + ' died');
+        }
+
+        // structures, all maps
+        if (uid in match.structures) {
+          match.structures[uid].destroyedLoop = event._gameloop;
+          match.structures[uid].destroyed = loopsToSeconds(event._gameloop - match.loopGameStart);
+
+          console.log('[STRUCTURES] Team ' + match.structures[uid].team + ' ' + match.structures[uid].type + ' destroyed');
         }
 
         // Haunted Mines - check for matching golem death
