@@ -197,6 +197,7 @@ function processReplay(file, opts = {}) {
     // track a few different kinds of things here, this is probably where most of the interesting stuff will come from
     match.XPBreakdown = [];
     match.takedowns = [];
+    match.mercs = { captures: [], units: {}};
     match.team0Takedowns = 0;
     match.team1Takedowns = 0;
 
@@ -513,6 +514,13 @@ function processReplay(file, opts = {}) {
 
           console.log('[TRACKER] Webweaver phase for team ' + objEvent.team + ' started');
         }
+        else if (event.m_eventName === ReplayTypes.StatEventType.CampCapture) {
+          let cap = { loop: event._gameloop, type: event.m_stringData[0].m_value, team: event.m_fixedData[0].m_value / 4096 - 1};
+          cap.time = loopsToSeconds(cap.loop - match.loopGameStart);
+          match.mercs.captures.push(cap);
+
+          console.log('[TRACKER] Mercenary camp captured by team ' + cap.team + ' of type ' + cap.type);
+        }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {
         // there's going to be a special case for tomb once i figure out the map name for it
@@ -655,10 +663,27 @@ function processReplay(file, opts = {}) {
           eventObj.time = loopsToSeconds(eventObj.loop - match.loopGameStart);
           match.objective.warheads.push(eventObj);
         }
+        else if (type in ReplayTypes.MercUnitType) {
+          // mercs~
+          let id = event.m_unitTagIndex + '-' + event.m_unitTagRecycle;
+          let unit = { loop: event._gameloop, team: event.m_controlPlayerId - 11, type: event.m_unitTypeName};
+          unit.time = loopsToSeconds(unit.loop - match.loopGameStart);
+          match.mercs.units[id] = unit;
+
+          console.log('[MERCS] id:' + id + ' ' + unit.type + ' spawned for team ' + unit.team);
+        }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitDied) {
         let tag = event.m_unitTagIndex;
         let rtag = event.m_unitTagRecycle;
+
+        // mercs, all maps
+        let uid = tag + '-' + rtag;
+        if (uid in match.mercs.units) {
+          match.mercs.units[uid].duration = loopsToSeconds(event._gameloop - match.mercs.units[uid].loop);
+
+          console.log('[MERCS] Mercenary id ' + uid + ' died');
+        }
 
         // Haunted Mines - check for matching golem death
         if (match.map === ReplayTypes.MapType.Mines) {

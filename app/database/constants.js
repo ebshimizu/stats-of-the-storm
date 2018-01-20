@@ -45,7 +45,8 @@ const StatEventType = {
   GardenTerrorActivated: 'GardenTerrorActivated',
   ShrineCaptured: 'Infernal Shrine Captured',
   PunisherKilled: 'Punisher Killed',
-  SpidersSpawned: 'SoulEatersSpawned'
+  SpidersSpawned: 'SoulEatersSpawned',
+  CampCapture: 'JungleCampCapture'
 };
 
 // display strings for score event names
@@ -207,7 +208,9 @@ const UnitType = {
   ImmortalHeaven: 'BossDuelLanerHeaven',
   ImmortalHell: 'BossDuelLanerHell',
   WarheadSpawn: 'WarheadSingle',
-  WarheadDropped: 'WarheadDropped'
+  WarheadDropped: 'WarheadDropped',
+  HealingPulseItem: 'HealingPulsePickup',
+  TurretItem: 'TurretPickup'
 };
 
 const BraxisUnitType = {
@@ -217,6 +220,21 @@ const BraxisUnitType = {
   ZergGuardian: 'ZergGuardian',
   ZergUltralisk: 'ZergUltralisk'
 };
+
+const MercUnitType = {
+  TerranHellbat: 'TerranHellbat',
+  SlimeBossLaner: 'SlimeBossLaner',
+  TerranArchangelLaner: 'TerranArchangelLaner',
+  TerranGoliath: 'TerranGoliath',
+  TerranRaven: 'TerranRaven',
+  JungleGraveGolemLaner: 'JungleGraveGolemLaner',
+  MercLanerSiegeGiant: 'MercLanerSiegeGiant',
+  MercGoblinSapperLaner: 'MercGoblinSapperLaner',
+  MercSeigeTrooperLaner: 'MercSiegeTrooperLaner',
+  MercSummonerLaner: 'MercSummonerLaner',
+  MercLanerRangedOgre: 'MercLanerRangedOgre',
+  MercLanerMeleeOgre: 'MercLanerMeleeOgre'
+}
 
 const MinionXP = {
   FootmanMinion:  [70, 71, 72, 73, 74, 76, 77, 78, 79, 80, 82, 83, 84, 85, 86, 88, 89, 90, 91, 92, 94, 95, 96, 97, 98, 100, 101, 102, 103, 104, 106],
@@ -269,3 +287,4 @@ exports.GameStart = GameStart;
 exports.GameMode = GameMode;
 exports.GameModeStrings = GameModeStrings;
 exports.BraxisUnitType = BraxisUnitType;
+exports.MercUnitType = MercUnitType;
