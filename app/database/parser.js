@@ -102,6 +102,9 @@ function processReplay(file, opts = {}) {
     // game mode
     match.mode = data.initdata[1].m_syncLobbyState.m_gameDescription.m_gameOptions.m_ammId;
 
+    if (match.mode === null)
+      match.mode = -1;
+
     console.log("Processing " + ReplayTypes.GameModeStrings[match.mode]  + " game on " + match.map + " at " + match.date);
 
     // check for supported mode
@@ -268,6 +271,14 @@ function processReplay(file, opts = {}) {
       var beacons = {};
       match.objective.beacons = [];
       match.objective.waves = [];
+    }
+    else if (match.map === ReplayTypes.MapType.Blackheart) {
+      // hopefully something goes here eventually
+    }
+    else {
+      // unsupported map
+      console.log('Map ' + match.map + ' is not supported');
+      return { status: ReplayStatus.Unsupported };
     }
 
     var team0XPEnd;
@@ -518,6 +529,15 @@ function processReplay(file, opts = {}) {
           let cap = { loop: event._gameloop, type: event.m_stringData[0].m_value, team: event.m_fixedData[0].m_value / 4096 - 1};
           cap.time = loopsToSeconds(cap.loop - match.loopGameStart);
           match.mercs.captures.push(cap);
+
+          if (match.map === ReplayTypes.MapType.Towers) {
+            if (cap.type === "Boss Camp") {
+              let bossEvent = { team: cap.team, loop: cap.loop, time: cap.time, type: 'boss', damage: 4};
+              match.objective[cap.team].events.push(bossEvent);
+              match.objective[cap.team].damage += bossEvent.damage;
+              match.objective[cap.team].count += 1;
+            }
+          }
 
           console.log('[TRACKER] Mercenary camp captured by team ' + cap.team + ' of type ' + cap.type);
         }
@@ -1102,26 +1122,34 @@ function processReplay(file, opts = {}) {
 function processScoreArray(data, match, players, playerIDMap) {
   console.log("[SCORE DATA] Processing Start");
 
+  // ok so custom games have empty arrays where observers sit
+  // also the data isn't continuous, i believe the order is the same (as in data
+  // for internal game user 1 comes before game user 2) and the empty arrays just need to 
+  // be removed
+
   // iterate through each object...
   for (var i = 0; i < data.length; i++) {
     var name = data[i].m_name;
     var valArray = data[i].m_values;
+    let realIndex = 0;
 
     if (!name.startsWith('EndOfMatchAward')) {
       for (let j = 0; j < valArray.length; j++) {
         if (valArray[j].length > 0) {
-          let playerID = j + 1;
+          let playerID = realIndex + 1;
           players[playerIDMap[playerID]].gameStats[name] = valArray[j][0].m_value;
+          realIndex += 1;
         }
       }
     }
     else {
       for (let j = 0; j < valArray.length; j++) {
         if (valArray[j].length > 0) {
-          let playerID = j + 1;
+          let playerID = realIndex + 1;
           if (valArray[j][0].m_value === 1) {
             players[playerIDMap[playerID]].gameStats.awards.push(name);
           }
+          realIndex += 1;
         }
       }
     }

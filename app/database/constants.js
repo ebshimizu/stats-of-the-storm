@@ -233,7 +233,9 @@ const MercUnitType = {
   MercSeigeTrooperLaner: 'MercSiegeTrooperLaner',
   MercSummonerLaner: 'MercSummonerLaner',
   MercLanerRangedOgre: 'MercLanerRangedOgre',
-  MercLanerMeleeOgre: 'MercLanerMeleeOgre'
+  MercLanerMeleeOgre: 'MercLanerMeleeOgre',
+  MercLanerMeleeKnight: 'MercLanerMeleeKnight',
+  MercLanerRangedMage: 'MercLanerRangedMage'
 }
 
 const MinionXP = {
@@ -258,7 +260,8 @@ const GameMode = {
   Brawl: 50031,
   UnrankedDraft: 50051,
   HeroLeague: 50061,
-  TeamLeague: 50071
+  TeamLeague: 50071,
+  Custom: -1
 }
 
 const GameModeStrings = {
@@ -268,7 +271,8 @@ const GameModeStrings = {
   50031: 'Brawl',
   50051: 'Unranked Draft',
   50061: 'Hero League',
-  50071: 'Team League'
+  50071: 'Team League',
+  '-1': 'Custom'
 }
 
 exports.TeamType = TeamType;
