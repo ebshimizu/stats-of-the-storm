@@ -1025,16 +1025,19 @@ function processReplay(file, opts = {}) {
     console.log("[TRACKER] Event Analysis Complete");
 
     // get a few more bits of summary data from the players...
+    match.heroes = {0: [], 1: []};
     for (let p in players) {
       if (players[p].team === ReplayTypes.TeamType.Blue) {
         match.blueTeamLevel = players[p].gameStats.Level;
-      
+        match.heroes[ReplayTypes.TeamType.Blue].push(players[p].internalHeroName);
+
         if (players[p].win) {
           match.winner = ReplayTypes.TeamType.Blue;
         }
       }
       else if (players[p].team === ReplayTypes.TeamType.Red) {
         match.redTeamLevel = players[p].gameStats.Level;
+        match.heroes[ReplayTypes.TeamType.Red].push(players[p].internalHeroName);
 
         if (players[p].win) {
           match.winner = ReplayTypes.TeamType.Red;
