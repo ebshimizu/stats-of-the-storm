@@ -203,7 +203,9 @@ const UnitType = {
   Triglav: 'VolskayaVehicle',
   Nuke: 'NukeTargetMinimapIconUnit',
   BraxisControlPoint: 'ZergHiveControlBeacon',
-  BraxisZergPath: 'ZergPathDummy'
+  BraxisZergPath: 'ZergPathDummy',
+  ImmortalHeaven: 'BossDuelLanerHeaven',
+  ImmortalHell: 'BossDuelLanerHell'
 };
 
 const BraxisUnitType = {

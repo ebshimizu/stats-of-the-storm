@@ -235,6 +235,7 @@ function processReplay(file, opts = {}) {
       match.objective[1] = [];
     }
     else if (match.map === ReplayTypes.MapType.BOE) {
+      var immortal = {};
       match.objective.results = [];
     }
     else if (match.map === ReplayTypes.MapType.Shrines) {
@@ -638,6 +639,11 @@ function processReplay(file, opts = {}) {
           let y = event.m_y;
           beacons[id] = { tag: event.m_unitTagIndex, rtag: event.m_unitTagRecycle, side: y > 100 ? 'top' : 'bottom'};
         }
+        else if (type === ReplayTypes.UnitType.ImmortalHeaven || type === ReplayTypes.UnitType.ImmortalHell) {
+          immortal.start = event._gameloop;
+          immortal.tag = event.m_unitTagIndex;
+          immortal.rtag = event.m_unitTagRecycle;
+        }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitDied) {
         let tag = event.m_unitTagIndex;
@@ -764,6 +770,16 @@ function processReplay(file, opts = {}) {
             match.objective.waves[waveID].endLoop[1] = event._gameloop;
             match.objective.waves[waveID].endTime[1] = loopsToSeconds(event._gameloop - match.loopGameStart);
             delete waveUnits[1][id];
+          }
+        }
+        else if (match.map === ReplayTypes.MapType.BOE) {
+          if ('tag' in immortal) {
+            if (tag === immortal.tag && rtag === immortal.rtag) {
+              // append duration to last result
+              let res = match.objective.results.length - 1;
+              match.objective.results[res].immortalDuration = loopsToSeconds(event._gameloop - immortal.start);
+              immortal = {};
+            }
           }
         }
       }
@@ -905,6 +921,12 @@ function processReplay(file, opts = {}) {
         // if success is true or undefined (never died, mark as success) mark it
         if (nuke.success === true || !('success' in nuke))
           match.objective[nuke.team].success += 1;
+      }
+    }
+    else if (match.map === ReplayTypes.MapType.BOE) {
+      if ('tag' in immortal) {
+        let res = match.objective.results.length - 1;
+        match.objective.results[res].immortalDuration = loopsToSeconds(match.loopLength - immortal.start);
       }
     }
 
