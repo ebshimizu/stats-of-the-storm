@@ -258,6 +258,7 @@ function processReplay(file, opts = {}) {
       var nukes = {};
       match.objective[0] = {count: 0, success: 0, events: []};
       match.objective[1] = {count: 0, success: 0, events: []};
+      match.objective.warheads = [];
     
     }
     else if (match.map === ReplayTypes.MapType.Braxis) {
@@ -643,6 +644,16 @@ function processReplay(file, opts = {}) {
           immortal.start = event._gameloop;
           immortal.tag = event.m_unitTagIndex;
           immortal.rtag = event.m_unitTagRecycle;
+        }
+        else if (type === ReplayTypes.UnitType.WarheadSpawn) {
+          let eventObj = { loop: event._gameloop, type: 'spawn', x: event.m_x, y: event.m_y };
+          eventObj.time = loopsToSeconds(eventObj.loop - match.loopGameStart);
+          match.objective.warheads.push(eventObj);
+        }
+        else if (type === ReplayTypes.UnitType.WarheadDropped) {
+          let eventObj = { loop: event._gameloop, type: 'dropped', x: event.m_x, y: event.m_y };
+          eventObj.time = loopsToSeconds(eventObj.loop - match.loopGameStart);
+          match.objective.warheads.push(eventObj);
         }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitDied) {

@@ -205,7 +205,9 @@ const UnitType = {
   BraxisControlPoint: 'ZergHiveControlBeacon',
   BraxisZergPath: 'ZergPathDummy',
   ImmortalHeaven: 'BossDuelLanerHeaven',
-  ImmortalHell: 'BossDuelLanerHell'
+  ImmortalHell: 'BossDuelLanerHell',
+  WarheadSpawn: 'WarheadSingle',
+  WarheadDropped: 'WarheadDropped'
 };
 
 const BraxisUnitType = {
