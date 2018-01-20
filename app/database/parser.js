@@ -196,6 +196,37 @@ function processReplay(file, opts = {}) {
 
     console.log("Player ID Mapping Complete");
 
+    // draft bans check
+    if (match.mode === ReplayTypes.GameMode.UnrankedDraft || match.mode === ReplayTypes.GameMode.HeroLeague ||
+        match.mode === ReplayTypes.GameMode.TeamLeague || match.mode === ReplayTypes.GameMode.Custom) {
+      console.log("Gathering draft data...");
+      match.bans = {0: [], 1: []};
+
+      let attr = data.attributeevents[0].scopes["16"];
+      for (let a in attr) {
+        let obj = attr[a][0];
+
+        if (obj.attrid === 4023) {
+          // team 0 ban 1
+          match.bans[0].push({hero: obj.value, order: 1});
+        }
+        else if (obj.attrid === 4025) {
+          // team 0 ban 2
+          match.bans[0].push({hero: obj.value, order: 2});
+        }
+        else if (obj.attrid === 4028) {
+          // team 1 ban 1
+          match.bans[1].push({hero: obj.value, order: 1});
+        }
+        else if (obj.attrid === 4030) {
+          // team 1 ban 2
+          match.bans[1].push({hero: obj.value, order: 2});
+        }
+      }
+
+      console.log("Draft data complete");
+    }
+
     // the tracker events have most of the useful data
     // track a few different kinds of things here, this is probably where most of the interesting stuff will come from
     match.XPBreakdown = [];
