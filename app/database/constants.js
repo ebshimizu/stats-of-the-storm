@@ -46,7 +46,10 @@ const StatEventType = {
   ShrineCaptured: 'Infernal Shrine Captured',
   PunisherKilled: 'Punisher Killed',
   SpidersSpawned: 'SoulEatersSpawned',
-  CampCapture: 'JungleCampCapture'
+  CampCapture: 'JungleCampCapture',
+  SixTowersStart: 'Six Town Event Start',
+  SixTowersEnd: 'Six Town Event End',
+  TowersFortCaptured: 'Town Captured'
 };
 
 // display strings for score event names

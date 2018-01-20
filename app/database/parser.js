@@ -17,7 +17,9 @@ const ReplayStatus = {
   OK: 1,
   Unsupported: 0,
   Duplicate: -1,
-  Failure: -2
+  Failure: -2,
+  UnsupportedMap: -3,
+  ComputerPlayerFound: -4
 };
 
 // it's everything except gameevents which is just a massive amount of data
@@ -182,6 +184,11 @@ function processReplay(file, opts = {}) {
       // case on event type
       if (event._eventid === ReplayTypes.TrackerEvent.Stat) {
         if (event.m_eventName === ReplayTypes.StatEventType.PlayerInit) {
+          if (event.m_stringData[0].m_value === "Computer") {
+            console.log("Games with computer players are not supported");
+            return { status: ReplayStatus.ComputerPlayerFound };
+          }
+
           playerIDMap[event.m_intData[0].m_value] = event.m_stringData[1].m_value;
 
           console.log("Player " + event.m_stringData[1].m_value + " has tracker ID " + event.m_intData[0].m_value);
@@ -234,11 +241,19 @@ function processReplay(file, opts = {}) {
     match.mercs = { captures: [], units: {}};
     match.team0Takedowns = 0;
     match.team1Takedowns = 0;
+    match.structures = {};
 
     match.objective = { type: match.map };
 
     // objective object initialization (per-map)
-    if (match.map === ReplayTypes.MapType.SkyTemple || match.map === ReplayTypes.MapType.Towers) {
+    if (match.map === ReplayTypes.MapType.SkyTemple) {
+      match.objective[0] = { count: 0, damage: 0, events: [] };
+      match.objective[1] = { count: 0, damage: 0, events: [] };
+    }
+    else if (match.map === ReplayTypes.MapType.Towers) {
+      match.sixTowerEvents = [];
+      // this is a special case for towers, other matches will have a general 'structures' object in the root
+      match.objective.structures = [];
       match.objective[0] = { count: 0, damage: 0, events: [] };
       match.objective[1] = { count: 0, damage: 0, events: [] };
     }
@@ -309,7 +324,7 @@ function processReplay(file, opts = {}) {
     else {
       // unsupported map
       console.log('Map ' + match.map + ' is not supported');
-      return { status: ReplayStatus.Unsupported };
+      return { status: ReplayStatus.UnsupportedMap };
     }
 
     var team0XPEnd;
@@ -571,6 +586,23 @@ function processReplay(file, opts = {}) {
           }
 
           console.log('[TRACKER] Mercenary camp captured by team ' + cap.team + ' of type ' + cap.type);
+        }
+        else if (event.m_eventName === ReplayTypes.StatEventType.SixTowersStart) {
+          let six = { loop: event._gameloop, team: event.m_intData[0].m_value - 1, kind: 'capture' };
+          six.time = loopsToSeconds(six.loop - match.loopGameStart);
+
+          match.objective.sixTowerEvents.push(six);
+        }
+        else if (event.m_eventName === ReplayTypes.StatEventType.SixTowersEnd) {
+          let six = { loop: event._gameloop, team: event.m_intData[0].m_value - 1, kind: 'end' };
+          six.time = loopsToSeconds(six.loop - match.loopGameStart);
+
+          match.objective.sixTowerEvents.push(six);
+        }
+        else if (event.m_eventName === ReplayTypes.StatEventType.TowersFortCaptured) {
+          let fort = { loop: event._gameloop, ownedBy: event.m_intData[0].m_value - 11 };
+          fort.time = loopsToSeconds(fort.loop - match.loopGameStart);
+          match.objective.structures.push(fort);
         }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {
