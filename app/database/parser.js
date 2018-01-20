@@ -143,6 +143,11 @@ function processReplay(file, opts = {}) {
       pdoc.uuid = pdata.m_toon.m_id;
       pdoc.region = pdata.m_toon.m_region;
       pdoc.realm = pdata.m_toon.m_realm;
+
+      // match region should be logged too, since all players should be 
+      // in the same region, overwrite constantly
+      match.region = pdata.m_toon.m_region;
+      
       pdoc.team = pdata.m_teamId;  /// the team id doesn't neatly match up with the tracker events, may adjust later
       pdoc.ToonHandle = pdata.m_toon.m_region + '-' + pdata.m_toon.m_programId + '-' + pdata.m_toon.m_realm + '-' + pdata.m_toon.m_id;
       pdoc.gameStats = {};
