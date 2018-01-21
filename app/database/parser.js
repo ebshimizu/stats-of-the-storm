@@ -162,6 +162,7 @@ function processReplay(file, opts = {}) {
       pdoc.taunts = [];
       pdoc.dances = [];
       pdoc.votes = 0;
+      pdoc.globes = { count: 0, events: []};
 
       if (pdoc.team === ReplayTypes.TeamType.Blue) {
         match.team0.push(pdoc.ToonHandle);
@@ -641,6 +642,13 @@ function processReplay(file, opts = {}) {
         else if (event.m_eventName === ReplayTypes.StatEventType.Upvote) {
           let targetPlayer = event.m_intData[0].m_value;
           players[playerIDMap[targetPlayer]].votes = event.m_intData[2].m_value;
+        }
+        else if (event.m_eventName === ReplayTypes.StatEventType.RegenGlobePickedUp) {
+          let globe = { loop: event._gameloop };
+          globe.time = loopsToSeconds(globe.loop - match.loopGameStart);
+          let id = playerIDMap[event.m_intData[0].m_value];
+          players[id].globes.count += 1;
+          players[id].globes.events.push(globe);
         }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {
