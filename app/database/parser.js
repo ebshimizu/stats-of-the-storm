@@ -208,6 +208,24 @@ function processReplay(file, opts = {}) {
 
     console.log("Player ID Mapping Complete");
 
+    console.log("Gathering player cosmetic info...");
+
+    let lobbyState = data.initdata[1].m_syncLobbyState.m_lobbyState.m_slots; 
+    for (let i = 0; i < lobbyState.length; i++) {
+      let p = lobbyState[i];
+      let id = p.m_toonHandle;
+
+      if (id === "")
+        continue;
+
+      players[id].skin = p.m_skin;
+      players[id].announcer = p.m_announcerPack;
+      players[id].mount = p.m_mount;
+      players[id].silenced = p.m_hasSilencePenalty;
+    }
+
+    console.log("Cosmetic use data collection complete");
+
     // draft bans check
     if (match.mode === ReplayTypes.GameMode.UnrankedDraft || match.mode === ReplayTypes.GameMode.HeroLeague ||
         match.mode === ReplayTypes.GameMode.TeamLeague || match.mode === ReplayTypes.GameMode.Custom) {
