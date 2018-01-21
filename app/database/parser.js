@@ -130,6 +130,7 @@ function processReplay(file, opts = {}) {
     match.playerIDs = [];
     match.team0 = [];
     match.team1 = [];
+    match.levelTimes = {0: {}, 1: {}};
     var playerDetails = details.m_playerList;
 
     console.log("Gathering Preliminary Player Data...");
@@ -626,6 +627,15 @@ function processReplay(file, opts = {}) {
           let fort = { loop: event._gameloop, ownedBy: event.m_intData[0].m_value - 11 };
           fort.time = loopsToSeconds(fort.loop - match.loopGameStart);
           match.objective.structures.push(fort);
+        }
+        else if (event.m_eventName === ReplayTypes.StatEventType.LevelUp) {
+          // just kinda dump this all into the object. the only important data is the time.
+          let lobj = { loop: event._gameloop, level: event.m_intData[1].m_value };
+          // team is mapped by player
+          lobj.team = players[playerIDMap[event.m_intData[0].m_value]].team;
+          lobj.time = loopsToSeconds(event._gameloop - match.loopGameStart);
+
+          match.levelTimes[lobj.team][lobj.level] = lobj;
         }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {
