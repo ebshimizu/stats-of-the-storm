@@ -50,12 +50,7 @@ const StatEventType = {
   SixTowersStart: 'Six Town Event Start',
   SixTowersEnd: 'Six Town Event End',
   TowersFortCaptured: 'Town Captured',
-  Fort: 'TownTownHallL2',
-  Keep: 'TownTownHallL3',
-  FortWell: 'TownMoonwellL2',
-  KeepWell: 'TownMoonwellL3',
-  FortTower: 'TownCannonTowerL2',
-  KeepTower: 'TownCannonTowerL3'
+  Upvote: 'EndOfGameUpVotesCollected'
 };
 
 const StructureStrings = {
@@ -228,7 +223,13 @@ const UnitType = {
   WarheadSpawn: 'WarheadSingle',
   WarheadDropped: 'WarheadDropped',
   HealingPulseItem: 'HealingPulsePickup',
-  TurretItem: 'TurretPickup'
+  TurretItem: 'TurretPickup',
+  Fort: 'TownTownHallL2',
+  Keep: 'TownTownHallL3',
+  FortWell: 'TownMoonwellL2',
+  KeepWell: 'TownMoonwellL3',
+  FortTower: 'TownCannonTowerL2',
+  KeepTower: 'TownCannonTowerL3'
 };
 
 const BraxisUnitType = {

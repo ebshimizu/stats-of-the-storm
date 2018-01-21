@@ -161,6 +161,7 @@ function processReplay(file, opts = {}) {
       pdoc.sprays = [];
       pdoc.taunts = [];
       pdoc.dances = [];
+      pdoc.votes = 0;
 
       if (pdoc.team === ReplayTypes.TeamType.Blue) {
         match.team0.push(pdoc.ToonHandle);
@@ -636,6 +637,10 @@ function processReplay(file, opts = {}) {
           lobj.time = loopsToSeconds(event._gameloop - match.loopGameStart);
 
           match.levelTimes[lobj.team][lobj.level] = lobj;
+        }
+        else if (event.m_eventName === ReplayTypes.StatEventType.Upvote) {
+          let targetPlayer = event.m_intData[0].m_value;
+          players[playerIDMap[targetPlayer]].votes = event.m_intData[2].m_value;
         }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {
