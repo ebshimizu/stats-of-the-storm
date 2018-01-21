@@ -2,6 +2,6 @@
     height: 100%;
 }
 
-#replay-file-list {
-    height: 100%;
+.settings-table-wrapper {
+    overflow-y: scroll;
 }

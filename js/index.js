@@ -5,6 +5,7 @@
 const HeroesDB = require('./js/database.js');
 const settings = require('electron-settings');
 const app = require('electron').remote.app;
+const Handlebars = require('handlebars');
 
 var DB;
 
@@ -43,14 +44,14 @@ function initGlobalUIHandlers() {
 
 function loadSections() {
   // settings
-  $('#main-content').append(getTemplate('settings'));
+  $('#main-content').append(getTemplate('settings', '#settings-page'));
   initSettingsPage();
 }
 
 // returns the template contained in an import
-function getTemplate(name) {
+function getTemplate(name, selector) {
   let link = document.querySelector('link[name="'+ name + '"]');
-  let template = link.import.querySelector('template');
+  let template = link.import.querySelector(selector);
   let clone = $(document.importNode(template.content, true));
 
   return clone;

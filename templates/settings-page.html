@@ -7,17 +7,19 @@
             <div class="stretched row">
                 <div class="eleven wide column">
                     <!-- replay file import status -->
-                    <table class="ui single line padded table" id="replay-file-list">
-                        <thead><tr>
-                            <th>Filename</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr></thead> 
-                        <tbody>
-                            <!-- i think it's time to get handlebars and use templates to fill out the rows -->
-                        </tbody>
-                    </table>
+                    <div class="settings-table-wrapper">
+                        <table class="ui single line padded table" id="replay-file-list">
+                            <thead><tr>
+                                <th>Filename</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr></thead> 
+                            <tbody>
+                                <!-- i think it's time to get handlebars and use templates to fill out the rows -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="five wide column">
                     <div class="ui inverted segment">
@@ -78,4 +80,13 @@
             </div>
         </div>
     </div>
+</template>
+
+<template id="replay-row-template">
+    <tr>
+        <td>{{filename}}</td>
+        <td>{{date}}</td>
+        <td>{{status}}</td>
+        <td></td>
+    </tr>
 </template>
