@@ -4,7 +4,7 @@
 // storage model is a persistent NeDB
 
 // libraries
-const Parser = require('./parser.js');
+const Parser = require('../parser/parser.js');
 
 // databases are loaded from the specified folder when the database object is created
 var Datastore = require('nedb');

@@ -4,3 +4,9 @@
 [submodule "app/third_party/heroprotocol"]
 	path = app/third_party/heroprotocol
 	url = https://github.com/Blizzard/heroprotocol.git
+[submodule "parser/heroprotocol"]
+	path = parser/heroprotocol
+	url = https://github.com/Blizzard/heroprotocol.git
+[submodule "assets/heroes-talents"]
+	path = assets/heroes-talents
+	url = https://github.com/heroespatchnotes/heroes-talents.git

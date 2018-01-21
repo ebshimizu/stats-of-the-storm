@@ -60,6 +60,6 @@ typings/
 .vs/*
 app/.vs/*
 *.db
-app/test_data/*
+parser/test_data/*
 test.js
 .vscode/settings.json

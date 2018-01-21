@@ -8,8 +8,8 @@
             "type": "node",
             "request": "launch",
             "name": "Test Parser",
-            "program": "${workspaceFolder}/app/database/test.js",
-            "cwd": "${workspaceFolder}/app/database"
+            "program": "${workspaceFolder}/parser/test.js",
+            "cwd": "${workspaceFolder}/parser"
         }
     ]
 }
