@@ -9,7 +9,9 @@
     <script src="assets/semantic/dist/semantic.min.js"></script>
     <!-- End Library includes -->
     <!-- Application includes -->
-    <link rel="stylesheet" type="text/css" href="assets/index.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/index.css">
+    <link rel="import" href="templates/settings-page.html" name="settings">
+
     <script src="js/index.js"></script>
     <!-- End Application includes -->
     <title>Heroes of the Storm Analyzer</title>
@@ -21,11 +23,14 @@
       <a class="item" id="players-browser-button">Players</a>
       <a class="item" id="settings-page-button">Settings</a>
     </div>
-    <div class="inverted pusher" id="main-content">
+    <div class="inverted pusher" id="page-wrapper">
       <!-- put stuff here! -->
       <div class="ui top fixed inverted menu" id="section-menu">
         <a class="icon item" id="show-sidebar-button"><i class="sidebar icon"></i></a>
-        <div class="header item" id="section-menu-name">[Section Name]</div>
+        <div class="header item" id="section-menu-name">Settings</div>
+      </div>
+      <div id="main-content">
+        <p>im some test things</p>
       </div>
     </div>
   </body>

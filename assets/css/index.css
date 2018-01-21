@@ -1,0 +1,17 @@
+/* Main application style sheet */
+body {
+    background-color: #1b1c1d;
+}
+
+#page-wrapper {
+    background-color: #5d5d5d;
+}
+
+.is-page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin-top: 8px;
+    padding: 1em;
+    height: calc(100% - 40px);
+}

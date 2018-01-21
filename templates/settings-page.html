@@ -1,0 +1,81 @@
+<script src="../js/settings.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/css/settings.css">
+
+<template id="settings-page">
+    <div id="settings-page-content" class="is-page">
+        <div class="ui grid" id="settings-layout">
+            <div class="stretched row">
+                <div class="eleven wide column">
+                    <!-- replay file import status -->
+                    <table class="ui single line padded table" id="replay-file-list">
+                        <thead><tr>
+                            <th>Filename</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr></thead> 
+                        <tbody>
+                            <!-- i think it's time to get handlebars and use templates to fill out the rows -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="five wide column">
+                    <div class="ui inverted segment">
+                        <div class="ui top attached label">Database Settings</div>
+                        <div class="ui left aligned grid">
+                            <div class="four wide column"><div class="item">Replay Folder</div></div>
+                            <div class="twelve wide column">
+                                <div class="ui inverted fluid action input">
+                                    <input type="text" value="" disabled>
+                                    <button class="ui blue right labeled icon button">
+                                        <i class="folder icon"></i>
+                                        Set
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="four wide column"><div class="item">Database Folder</div></div>
+                            <div class="twelve wide column">
+                                <div class="ui inverted fluid action input" id="settings-set-db-folder">
+                                    <input type="text" value="" disabled>
+                                    <button class="ui blue right labeled icon button">
+                                        <i class="folder icon"></i>
+                                        Set
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="four wide column"><div class="item">File Start Date</div></div>
+                            <div class="twelve wide column">
+                                <div class="ui inverted fluid action input">
+                                    <input type="text" value="">
+                                </div>
+                            </div>
+                            <div class="four wide column"><div class="item">Parser</div></div>
+                            <div class="four wide column"><div class="item"></div></div>
+                            <div class="four wide column"><div class="item">
+                                <div class="ui fluid green button">Start</div>
+                            </div></div>
+                            <div class="four wide column"><div class="item">
+                                <div class="ui fluid button">Refresh</div>
+                            </div></div>
+                        </div>
+                    </div>
+                    <div class="ui inverted segment">
+                        <div class="ui top attached label">Application Settings</div>
+                        <div class="ui left aligned grid">
+                            <div class="four wide column"><div class="item">My ID</div></div>
+                            <div class="twelve wide column">
+                                <div class="ui inverted fluid action input">
+                                    <input type="text" value="" disabled>
+                                    <button class="ui blue right labeled icon button">
+                                        <i class="search icon"></i>
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
