@@ -5,7 +5,9 @@
 const HeroesDB = require('./js/database.js');
 const settings = require('electron-settings');
 const app = require('electron').remote.app;
+const dialog = require('electron').remote.dialog;
 const Handlebars = require('handlebars');
+const fs = require('fs');
 
 var DB;
 
@@ -15,6 +17,8 @@ function initApp() {
   // initialization for the entire app
   // we'll probably want to pop up a loading thing here while all the things
   // happen.
+
+  $('table').tablesort();
 
   // load database
   loadDatabase();
@@ -39,7 +43,8 @@ function loadDatabase() {
 
 function initGlobalUIHandlers() {
   // sidebar
-  $('#main-menu').sidebar('setting', 'transition', 'overlay').sidebar('attach events', '#show-sidebar-button');
+  $('#main-menu').sidebar('setting', 'transition', 'overlay').
+    sidebar('attach events', '#show-sidebar-button');
 }
 
 function loadSections() {

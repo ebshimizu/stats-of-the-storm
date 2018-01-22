@@ -3,5 +3,5 @@
 }
 
 .settings-table-wrapper {
-    overflow-y: scroll;
+    overflow-y: auto;
 }

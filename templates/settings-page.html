@@ -8,12 +8,11 @@
                 <div class="eleven wide column">
                     <!-- replay file import status -->
                     <div class="settings-table-wrapper">
-                        <table class="ui single line padded table" id="replay-file-list">
+                        <table class="ui sortable single line compact table" id="replay-file-list">
                             <thead><tr>
                                 <th>Filename</th>
                                 <th>Date</th>
                                 <th>Status</th>
-                                <th>Actions</th>
                             </tr></thead> 
                             <tbody>
                                 <!-- i think it's time to get handlebars and use templates to fill out the rows -->
@@ -27,17 +26,7 @@
                         <div class="ui left aligned grid">
                             <div class="four wide column"><div class="item">Replay Folder</div></div>
                             <div class="twelve wide column">
-                                <div class="ui inverted fluid action input">
-                                    <input type="text" value="" disabled>
-                                    <button class="ui blue right labeled icon button">
-                                        <i class="folder icon"></i>
-                                        Set
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="four wide column"><div class="item">Database Folder</div></div>
-                            <div class="twelve wide column">
-                                <div class="ui inverted fluid action input" id="settings-set-db-folder">
+                                <div class="ui inverted fluid action input" id="settings-set-replay-folder">
                                     <input type="text" value="" disabled>
                                     <button class="ui blue right labeled icon button">
                                         <i class="folder icon"></i>
@@ -58,6 +47,11 @@
                             </div></div>
                             <div class="four wide column"><div class="item">
                                 <div class="ui fluid button">Refresh</div>
+                            </div></div>
+                            <div class="four wide column"><div class="item">Database</div></div>
+                            <div class="eight wide column"><div class="item"></div></div>
+                            <div class="four wide column"><div class="item">
+                                <div class="ui fluid red button">Delete</div>
                             </div></div>
                         </div>
                     </div>
@@ -83,10 +77,9 @@
 </template>
 
 <template id="replay-row-template">
-    <tr>
+    <tr replay-id="{{id}}">
         <td>{{filename}}</td>
         <td>{{date}}</td>
         <td>{{status}}</td>
-        <td></td>
     </tr>
 </template>
