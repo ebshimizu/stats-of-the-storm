@@ -1,5 +1,4 @@
 /* jshint esversion: 6, maxerr: 1000, node: true */
-
 // this is the main database connector used by the app
 // storage model is a persistent NeDB
 
@@ -26,37 +25,52 @@ class Database {
 
     if (data.status === Parser.ReplayStatus.OK) {
       // insert match, upsert is used just in case duplicates exist
-      var self = this;
-      var match = data.match;
-      var players = data.players;
-
-      this._db.matches.update({ 'map' : match.map, 'date' : match.date, 'loopLength' : match.loopLength }, match, {upsert: true}, function (err, numReplaced, newDoc) {
-        if (!newDoc) {
-          console.log("Duplicate match found, skipping player update");
-        }
-        else {
-          console.log("Inserted new match " + newDoc._id);
-
-          // update and insert players
-          for (var i in players) {
-            players[i].matchID = newDoc._id;
-            self._db.heroData.insert(players[i]);
-
-            // log unique players in the player database
-            var playerDbEntry = {};
-            playerDbEntry._id = players[i].ToonHandle;
-            playerDbEntry.name = players[i].name;
-            playerDbEntry.uuid = players[i].uuid;
-            playerDbEntry.region = players[i].region;
-            playerDbEntry.realm = players[i].realm;
-            self._db.players.update({ _id: playerDbEntry._id }, playerDbEntry, {upsert: true}, function(err, numReplaced, upsert) {
-              if (err)
-                console.log(err);
-            });
-          }
-        }
-      });
+      this.insertReplay(data.match, data.players);
     }
+  }
+
+  insertReplay(match, players) {
+    var self = this;
+
+    this._db.matches.update({ 'map' : match.map, 'date' : match.date, 'loopLength' : match.loopLength }, match, {upsert: true}, function (err, numReplaced, newDoc) {
+      if (!newDoc) {
+        console.log("Duplicate match found, skipping player update");
+      }
+      else {
+        console.log("Inserted new match " + newDoc._id);
+
+        // update and insert players
+        for (var i in players) {
+          players[i].matchID = newDoc._id;
+          self._db.heroData.insert(players[i]);
+
+          // log unique players in the player database
+          var playerDbEntry = {};
+          playerDbEntry._id = players[i].ToonHandle;
+          playerDbEntry.name = players[i].name;
+          playerDbEntry.uuid = players[i].uuid;
+          playerDbEntry.region = players[i].region;
+          playerDbEntry.realm = players[i].realm;
+          self._db.players.update({ _id: playerDbEntry._id }, playerDbEntry, {upsert: true}, function(err, numReplaced, upsert) {
+            if (err)
+              console.log(err);
+          });
+        }
+      }
+    });
+  }
+
+  checkDuplicate(file, callback) {
+    let data = Parser.parse(file, [Parser.ReplayDataType.header, Parser.ReplayDataType.details]);
+    let search = {};
+    search.type = data.header[0].m_type;
+    search.loopLength = data.header[0].m_elapsedGameLoops;
+    search.map = data.details[0].m_title;
+    search.rawDate = data.details[0].m_timeUTC;
+
+    this._db.matches.find(search, function(err, docs) {
+      callback(docs.length > 0);
+    });
   }
 }
 

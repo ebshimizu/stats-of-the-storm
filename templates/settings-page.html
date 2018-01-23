@@ -41,12 +41,14 @@
                                 </div>
                             </div>
                             <div class="four wide column"><div class="item">Parser</div></div>
-                            <div class="four wide column"><div class="item"></div></div>
                             <div class="four wide column"><div class="item">
-                                <div class="ui fluid green button">Start</div>
+                                <div class="ui fluid green button" id="start-process-button">Start</div>
                             </div></div>
                             <div class="four wide column"><div class="item">
-                                <div class="ui fluid button">Refresh</div>
+                                <div class="ui fluid red button" id="stop-process-button">Stop</div>
+                            </div></div>
+                            <div class="four wide column"><div class="item">
+                                <div class="ui fluid button" id="rescan-replays-button">Refresh</div>
                             </div></div>
                             <div class="four wide column"><div class="item">Database</div></div>
                             <div class="eight wide column"><div class="item"></div></div>
@@ -78,8 +80,8 @@
 
 <template id="replay-row-template">
     <tr replay-id="{{id}}">
-        <td>{{filename}}</td>
-        <td>{{date}}</td>
-        <td>{{status}}</td>
+        <td class="replay-filename">{{filename}}</td>
+        <td class="replay-date">{{date}}</td>
+        <td class="replay-status">{{status}}</td>
     </tr>
 </template>

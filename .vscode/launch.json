@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Test Parser",
             "program": "${workspaceFolder}/parser/test.js",
-            "cwd": "${workspaceFolder}/parser"
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

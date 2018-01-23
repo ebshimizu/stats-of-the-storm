@@ -4,19 +4,27 @@
 
 const HeroesDB = require('./js/database.js');
 const settings = require('electron-settings');
+const Parser = require('./parser/parser.js');
 const app = require('electron').remote.app;
 const dialog = require('electron').remote.dialog;
 const Handlebars = require('handlebars');
 const fs = require('fs');
+const cp = require('child_process');
+const BrowserWindow = require('electron').remote.BrowserWindow
+const ipcRenderer = require('electron').ipcRenderer
+const path = require('path');
 
 var DB;
 
-$(document).ready(initApp)
+$(document).ready(initApp);
+var bgWindow;
 
 function initApp() {
   // initialization for the entire app
   // we'll probably want to pop up a loading thing here while all the things
   // happen.
+  // create background window
+  createBGWindow();
 
   $('table').tablesort();
 
@@ -60,4 +68,10 @@ function getTemplate(name, selector) {
   let clone = $(document.importNode(template.content, true));
 
   return clone;
+}
+
+function createBGWindow() {
+  let bgPath = 'file://' + path.join(__dirname, './background.html');
+  bgWindow = new BrowserWindow({width: 400, hegith: 400, show: false});
+  bgWindow.loadURL(bgPath);
 }

@@ -1,0 +1,15 @@
+<html>
+  <script type="text/javascript">
+    const Parser = require('./parser/parser.js');
+    const ipc = require('electron').ipcRenderer;
+    const BrowserWindow = require('electron').remote.BrowserWindow;
+    const app = require('electron').remote.app;
+
+    ipc.on('parseReplay', function(event, file, id, fromWindowId) {
+      let out = Parser.processReplay(file);
+      out.idx = id;
+      let fromWindow = BrowserWindow.fromId(fromWindowId);
+      fromWindow.webContents.send('replayParsed', out);
+    });
+  </script>
+</html>

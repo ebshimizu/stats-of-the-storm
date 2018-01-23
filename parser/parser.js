@@ -22,6 +22,15 @@ const ReplayStatus = {
   ComputerPlayerFound: -4
 };
 
+const StatusString = {
+  1: 'OK',
+  0: 'Unsupported',
+  '-1' : 'Duplicate',
+  '-2' : 'General Error',
+  '-3' : 'Unsupported Map',
+  '-4' : 'Computer Player Found'
+}
+
 // it's everything except gameevents which is just a massive amount of data
 const CommonReplayData = [ReplayDataType.message, ReplayDataType.tracker, ReplayDataType.attribute, ReplayDataType.header, ReplayDataType.details, ReplayDataType.init, ReplayDataType.stats];
 const AllReplayData = [ReplayDataType.game, ReplayDataType.message, ReplayDataType.tracker, ReplayDataType.attribute, ReplayDataType.header, ReplayDataType.details, ReplayDataType.init, ReplayDataType.stats];
@@ -37,7 +46,7 @@ function parse(file, requestedData, opts) {
   for (var i in requestedData) {
     console.log("Retrieving " + requestedData[i]);
 
-    const script = cp.spawnSync('python', ['./heroprotocol/heroprotocol.py','--json', '--' + requestedData[i], file], {
+    const script = cp.spawnSync('python', ['./parser/heroprotocol/heroprotocol.py','--json', '--' + requestedData[i], file], {
       maxBuffer: 500000*1024    // if anyone asks why it's 500MB it's because gameevents is huge
     });
 
@@ -219,6 +228,9 @@ function processReplay(file, opts = {}) {
       let id = p.m_toonHandle;
 
       if (id === "")
+        continue;
+
+      if (!(id in players))
         continue;
 
       players[id].skin = p.m_skin;
@@ -1441,3 +1453,4 @@ exports.CommonReplayData = CommonReplayData;
 exports.AllReplayData = AllReplayData;
 exports.processReplay = processReplay;
 exports.ReplayStatus = ReplayStatus;
+exports.StatusString = StatusString;
