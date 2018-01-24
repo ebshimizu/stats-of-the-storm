@@ -3,7 +3,7 @@
 }
 
 #match-list {
-  height: 100%;
+  height: 98%;
 }
 
 #matches-page-header {
@@ -14,4 +14,106 @@
 #matches-page-header .statistics {
   float: right;
   margin-right: 0px;
+}
+
+#match-list .match-summary {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+#match-list .match-summary .match-basic-info {
+  display: block;
+  float: left;
+  width: 25%;
+  height: 100%;
+}
+
+#match-list .match-summary .match-details {
+  display: block;
+  float: right;
+  width: 75%;
+  height: 100%;
+  position: relative;
+}
+
+#match-list .match-summary .match-details .match-blue-heroes {
+  float: left;
+  width: 45%;
+  height: 100%;
+}
+
+#match-list .match-summary .match-details .match-red-heroes {
+  float: right;
+  width: 45%;
+  height: 100%;
+}
+
+#match-list .match-hero-icon {
+  width: 18%;
+  height: 70%;
+  margin: 0 2px;
+}
+
+#match-list .match-hero-icon .match-hero-player-name {
+  font-size: 0.9vmin;
+  width: 100%;
+  clear: both;
+  text-align: center;
+}
+
+#match-list .match-blue-heroes .match-hero-icon {
+  float: left;
+}
+
+#match-list .match-red-heroes .match-hero-icon {
+  float: right;
+}
+
+#match-list .match-summary .match-details .tiny.images .image {
+  width: 90%;
+}
+
+#match-list .match-summary .match-details .tiny.images.match-blue-heroes .image {
+  border: 3px solid #2185d0;
+  float: left;
+}
+
+#match-list .match-summary .match-details .tiny.images.match-red-heroes .image {
+  border: 3px solid #db2828;
+  float: right;
+}
+
+#match-list .match-center-stats {
+  margin: 0 auto;
+  width: 15%;
+  height: 100%;
+}
+
+#match-list .match-center-stats .blue {
+  color: #2185d0;
+  float: left;
+  margin-left: -1.35vmin;
+}
+
+#match-list .match-center-stats .red {
+  color: #db2828;
+  float: right;
+  margin-right: -1.35vmin;
+}
+
+#match-list .match-center-stats .match-game-length {
+  height: 30%;
+  font-size: 1.5vmin;
+  text-align: center;
+}
+
+#match-list .match-center-stats .match-takedown-score {
+  font-size: 3vmin;
+  height: 40%;
+}
+
+#match-list .match-center-stats .match-levels {
+  font-size: 1.3vmin;
+  height: 30%;
 }

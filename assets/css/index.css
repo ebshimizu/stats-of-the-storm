@@ -15,3 +15,7 @@ body {
     padding: 1em;
     height: calc(100% - 40px);
 }
+
+.clear {
+    clear: both;
+}

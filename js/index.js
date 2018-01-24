@@ -70,7 +70,7 @@ function loadSections() {
   initSettingsPage();
 
   $('#main-content').append(getTemplate('matches', '#matches-page'));
-  // initMatchesPage();
+  initMatchesPage();
 
   // register sections
   sections.settings = {id: '#settings-page-content', title: 'Settings' };
