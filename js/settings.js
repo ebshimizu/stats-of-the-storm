@@ -7,6 +7,9 @@ var listedReplays;
 function initSettingsPage() {
   // templates
   settingsRowTemplate = Handlebars.compile(getTemplate('settings', '#replay-row-template').find('tr')[0].outerHTML);
+  let date = settings.get('lastReplayDate');
+  if (!date)
+    date = new Date(2012, 1, 1);
 
   // handlers
   $('#replay-file-list').stickyTableHeaders({scrollableArea: $('.settings-table-wrapper')})
@@ -17,6 +20,8 @@ function initSettingsPage() {
   $('#start-process-button').click(parseReplays);
   $('#stop-process-button').click(stopParse);
   $('#rescan-replays-button').click(startReplayScan);
+  $('#replay-file-start').datepicker();
+  $('#replay-file-start').datepicker('setDate', date);
 
   // initial settings
   let path = settings.get('dbPath');
@@ -49,6 +54,7 @@ function setReplayFolder() {
 function startReplayScan() {
   // lists the files in the folder
   console.log("Listing replay files...");
+  let currentDate = $('#replay-file-start').datepicker('getDate');
 
   $('#replay-file-list tbody').html('');
   let path = settings.get('replayPath');
@@ -70,10 +76,13 @@ function startReplayScan() {
         context.status = "";
         let stats = fs.statSync(path + '/' + files[i]);
         context.date = new Date(stats.ctime);
-        context.id = i;
-        context.path = path + '/' + files[i];
-        replays.push(context);
-        count += 1;
+
+        if (context.date >= currentDate) {
+          context.id = i;
+          context.path = path + '/' + files[i];
+          replays.push(context);
+          count += 1;
+        }
       }
     }
 
@@ -135,6 +144,7 @@ function parseReplaysAsync(replay) {
       listedReplays[replay.idx].duplicate = true;
       $('tr[replay-id="' + replay.id + '"] .replay-status').text('Duplicate').addClass('warning');
       listedReplays[replay.idx].processed = true;
+      updateLastDate(listedReplays[replay.idx].date);
 
       if (replayQueue.length > 0) {
         parseReplaysAsync(replayQueue.shift());
@@ -158,6 +168,7 @@ function loadReplay(data) {
   }
 
   listedReplays[data.idx].processed = true;
+  updateLastDate(listedReplays[data.idx].date);
 
   if (replayQueue.length > 0) {
     parseReplaysAsync(replayQueue.shift());
@@ -167,4 +178,9 @@ function loadReplay(data) {
 function stopParse() {
   console.log("Parser will stop after next replay");
   replayQueue = [];
+}
+
+function updateLastDate(date) {
+  settings.set('lastReplayDate', date);
+  $('#replay-file-start').datepicker('setDate', date);
 }

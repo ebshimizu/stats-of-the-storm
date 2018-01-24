@@ -24,8 +24,7 @@ npm install
 ```
 
 ## Third-Party Libraries
-[heroprotocol](https://github.com/Blizzard/heroprotocol)
-
-[NeDB](https://github.com/louischatriot/nedb)
-
-[Seamntic UI](https://semantic-ui.com/)
+* [heroprotocol](https://github.com/Blizzard/heroprotocol)
+* [NeDB](https://github.com/louischatriot/nedb)
+* [Seamntic UI](https://semantic-ui.com/)
+* [datepicker](https://github.com/fengyuanchen/datepicker)
