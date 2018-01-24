@@ -1133,7 +1133,7 @@ function processReplay(file, opts = {}) {
     for (let p in players) {
       if (players[p].team === ReplayTypes.TeamType.Blue) {
         match.blueTeamLevel = players[p].gameStats.Level;
-        match.heroes[ReplayTypes.TeamType.Blue].push(players[p].internalHeroName);
+        match.heroes[ReplayTypes.TeamType.Blue].push(players[p].hero);
 
         if (players[p].win) {
           match.winner = ReplayTypes.TeamType.Blue;
@@ -1141,7 +1141,7 @@ function processReplay(file, opts = {}) {
       }
       else if (players[p].team === ReplayTypes.TeamType.Red) {
         match.redTeamLevel = players[p].gameStats.Level;
-        match.heroes[ReplayTypes.TeamType.Red].push(players[p].internalHeroName);
+        match.heroes[ReplayTypes.TeamType.Red].push(players[p].hero);
 
         if (players[p].win) {
           match.winner = ReplayTypes.TeamType.Red;

@@ -13,5 +13,5 @@ body {
     height: 100%;
     margin-top: 40px;
     padding: 1em;
-    height: calc(100% - 1em);
+    height: calc(100% - 40px);
 }

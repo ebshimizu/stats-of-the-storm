@@ -77,7 +77,7 @@ function loadSections() {
   sections.matches = {id: '#matches-page-content', title: 'Matches'};
 
   // DEBUG: SHOWING SPECIFIC SECTION ON LOAD FOR TESTING
-  showSection('settings');
+  showSection('matches');
 }
 
 // returns the template contained in an import

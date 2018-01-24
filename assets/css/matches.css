@@ -1,0 +1,17 @@
+#match-page-table {
+  height: calc(100% - 20px);
+}
+
+#match-list {
+  height: 100%;
+}
+
+#matches-page-header {
+  height: 65px;
+  display: block;
+}
+
+#matches-page-header .statistics {
+  float: right;
+  margin-right: 0px;
+}

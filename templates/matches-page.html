@@ -4,6 +4,124 @@
 
 <template id="matches-page">
   <div id="matches-page-content" class="is-page transition hidden">
-
+    <div id="matches-page-header">
+      <div class="ui grid">
+        <div class="eight wide column">
+          <h1 class="ui inverted header">Matches</h1>
+        </div>
+        <div class="eight wide column">
+          <div class="ui right floated inverted tiny statistics">
+            <div class="ui statistic">
+              <div class="value" id="matches-selected">8</div>
+              <div class="label">Selected</div>
+            </div>
+            <div class="ui statistic">
+              <div class="value" id="matches-in-database-stat">22</div>
+              <div class="label">Total</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui grid" id="match-page-table">
+      <div class="eleven wide column">
+        <table class="ui table" id="match-list">
+          <tbody>
+            <tr>
+              <td>
+                <div class="match-summary">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="match-summary">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="match-summary">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="match-summary">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="match-summary">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="match-summary">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="match-summary">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="match-summary">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="match-summary">
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr><th>
+              <div class="ui right floated pagination menu">
+                <a class="icon item">
+                  <i class="left chevron icon"></i>
+                </a>
+                <a class="item">1</a>
+                <a class="item">2</a>
+                <a class="item">3</a>
+                <a class="item">4</a>
+                <a class="item">...</a>
+                <a class="icon item">
+                  <i class="right chevron icon"></i>
+                </a>
+              </div>
+            </th></tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="five wide column">
+        <div class="ui inverted segment">
+          <div class="ui top attached label">Search Matches</div>
+          <div class="ui grid">
+            <div class="four wide column">Season</div>
+            <div class="twelve wide column"></div>
+            <div class="four wide column">Start Date</div>
+            <div class="four wide column"></div>
+            <div class="four wide column">End Date</div>
+            <div class="four wide column"></div>
+            <div class="four wide column">Players</div>
+            <div class="twelve wide column"></div>
+            <div class="four wide column">Hero</div>
+            <div class="twelve wide column"></div>
+            <div class="four wide column">Tags</div>
+            <div class="twelve wide column"></div>
+            <div class="four wide column">Teams</div>
+            <div class="twelve wide column"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
