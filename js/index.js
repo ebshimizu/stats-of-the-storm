@@ -13,6 +13,7 @@ const cp = require('child_process');
 const BrowserWindow = require('electron').remote.BrowserWindow
 const ipcRenderer = require('electron').ipcRenderer
 const path = require('path');
+const ReplayTypes = require('./parser/constants.js');
 
 var DB;
 var sections = {};
@@ -117,4 +118,9 @@ function hideSection(name) {
 
 function setMenuTitle(title) {
   $('#section-menu-name').text(title);
+}
+
+function sanitizeHeroName(name) {
+  // remove all spaces, non-alphanum characters, convert to lower
+  return name.replace(/[^\w\d]|_/g, "").toLowerCase();
 }

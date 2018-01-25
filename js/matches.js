@@ -1,14 +1,29 @@
 // list of selected match ids
 // note that this isn't the currently displayed match ids, that's a different one
 var selectedMatches;
+const summaryProjection = {
+  _id: 1,
+  teams: 1,
+  length: 1,
+  map: 1,
+  mode: 1,
+  date: 1,
+  winner: 1
+};
+
+// idk man it just kinda looks nice this way
+const matchesPerPage = 7;
 
 var displayedMatchIDs;
 var currentPage;
+var matchRowTemplate;
 
 function initMatchesPage() {
+  // templates
+  matchRowTemplate = Handlebars.compile(getTemplate('matches', '#match-summary-row').find('td')[0].outerHTML);
+
   // bindings
   $('#match-player-search').dropdown();
-  $('.match-details .ui.image').popup();
 
   // initial settings
   getMatchCount();
@@ -25,23 +40,102 @@ function getMatchCount() {
 
 function selectAllMatches() {
   // get just the necessary info in descending time order
-  // need: blueTeamLevel
-  let pro = {};
-  pro._id = 1;
-  pro.teams = 1;
-  pro.length = 1;
-  pro.map = 1;
-  pro.mode = 1;
-  pro.date = 1;
-
-  DB.getMatches({}, updateSelectedMatches, {projection: pro, sort: {'date' : -1 }});
+  DB.getMatches({}, updateSelectedMatches, {projection: summaryProjection, sort: {'date' : -1 }});
 }
 
 function updateSelectedMatches(err, docs) {
   selectedMatches = docs;
   $('#matches-selected').text(selectedMatches.length);
+  showPage(currentPage);
 }
 
 function showPage(pageNum) {
+  // check in range
+  let maxPages = Math.ceil(selectedMatches.length / matchesPerPage);
+  if (0 <= pageNum && pageNum < maxPages) {
+    // so like pick the correct range and just render it
+    let startIdx = pageNum * matchesPerPage;
 
+    for (let i = 0; i < matchesPerPage; i++) {
+      if (i + startIdx < selectedMatches.length) {
+        renderToSlot(selectedMatches[i + startIdx], i);
+      }
+    }
+    currentPage = pageNum;
+
+    // update the pagination buttons
+    $('#match-list-page-menu').html('');
+    
+    // determine what to show
+    let show = Array.from(new Array(5), (x, i) => i - 2 + currentPage);
+    // first, we always have the first page
+    let elems = '<a class="icon item prev"><i class="left chevron icon"></i></a>';
+    elems += '<a class="item" page="1">1</a>';
+
+    if (show[0] >= 2)
+      elems += '<a class="item disabled">...</a>';
+
+    for (let i = 0; i < show.length; i++) {
+      let pn = show[i];
+      
+      if (pn < 1 || pn >= maxPages - 1)
+        continue;
+      
+      elems += '<a class="item" page="' + (pn + 1) + '">' + (pn + 1) + '</a>';
+    }
+
+    if (show[show.length - 1] <= maxPages - 2)
+      elems += '<a class="item disabled">...</a>';
+    
+    elems += '<a class="item" page="' + maxPages + '">' + maxPages + '</a>';
+    elems += '<a class="icon item next"><i class="right chevron icon"></i></a>';
+    $('#match-list-page-menu').html(elems);
+    $('#match-list-page-menu .item[page="' + (currentPage + 1) + '"]').addClass('active');
+
+    $('#match-list-page-menu .item').click(function() {
+      if ($(this).hasClass('next'))
+        showPage(currentPage + 1);
+      else if ($(this).hasClass('prev'))
+        showPage(currentPage - 1);
+      else
+        showPage(parseInt($(this).attr('page')) - 1);
+    });
+  }
+}
+
+function renderToSlot(gameData, slot) {
+  let context = {};
+  context.map = gameData.map;
+  context.mode = ReplayTypes.GameModeStrings[gameData.mode];
+  
+  // if player id is defined, highlight if present, otherwise red/blue
+  if (gameData.winner === 0) {
+    context.winClass = "blue";
+    context.winText = "Blue Team Victory";
+  }
+  else {
+    context.winClass = "red";
+    context.winText = "Red Team Victory";
+  }
+  
+  context.date = new Date(gameData.date);
+  context.date = context.date.toLocaleString('en-US');
+  let duration = new Date(gameData.length * 1000);
+  let seconds = duration.getUTCSeconds();
+
+  context.length = duration.getUTCMinutes() + ":" + ((seconds < 10) ? "0" : "") + duration.getUTCSeconds();
+  context.takedowns = { blue: gameData.teams[0].takedowns, red: gameData.teams[1].takedowns };
+  context.level = { blue: gameData.teams[0].level, red: gameData.teams[1].level };
+  context.blueHeroes = [];
+  context.redHeroes = [];
+
+  let bd = gameData.teams[0];
+  let rd = gameData.teams[1];
+  for (let i = 0; i < gameData.teams[0].ids.length; i++) {
+    context.blueHeroes.push({heroImg: sanitizeHeroName(bd.heroes[i]), playerName: bd.names[i], playerID: bd.ids[i]});
+    context.redHeroes.push({heroImg: sanitizeHeroName(rd.heroes[i]), playerName: rd.names[i], playerID: rd.ids[i]});
+  }
+
+  $('#match-list tr[slot="' + slot + '"]').html(matchRowTemplate(context));
+  $('tr[slot="' + slot + '"] .match-details .ui.image').popup();
 }

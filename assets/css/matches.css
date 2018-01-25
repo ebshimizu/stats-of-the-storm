@@ -20,6 +20,11 @@
   display: block;
   height: 100%;
   width: 100%;
+  position: relative
+}
+
+#match-list .match-summary {
+  cursor: pointer;
 }
 
 #match-list .match-summary .match-basic-info {
@@ -27,6 +32,21 @@
   float: left;
   width: 25%;
   height: 100%;
+}
+
+#match-list .match-map-name {
+  margin-bottom: 0.25em;
+}
+
+#match-list .match-mode {
+  margin-bottom: 0.1em;
+}
+
+#match-list .match-date {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  font-size: 9pt;
 }
 
 #match-list .match-summary .match-details {
@@ -72,6 +92,9 @@
 
 #match-list .match-summary .match-details .tiny.images .image {
   width: 17%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 #match-list .match-summary .match-details .tiny.images.match-blue-heroes .image {
@@ -114,6 +137,6 @@
 }
 
 #match-list .match-center-stats .match-levels {
-  font-size: 1.3vmin;
+  font-size: 1.5vmin;
   height: 30%;
 }
