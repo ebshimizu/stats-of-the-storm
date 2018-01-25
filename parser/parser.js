@@ -137,8 +137,6 @@ function processReplay(file, opts = {}) {
     var players = {};
 
     match.playerIDs = [];
-    match.team0 = [];
-    match.team1 = [];
     match.levelTimes = {0: {}, 1: {}};
     var playerDetails = details.m_playerList;
 
@@ -149,6 +147,10 @@ function processReplay(file, opts = {}) {
 
       // collect data
       pdoc.hero = pdata.m_hero;
+      // some uh, unicode issues here
+      if (pdoc.hero === "LÃºcio")
+        pdoc.hero = "Lucio";
+
       pdoc.name = pdata.m_name;
       pdoc.uuid = pdata.m_toon.m_id;
       pdoc.region = pdata.m_toon.m_region;
@@ -172,13 +174,6 @@ function processReplay(file, opts = {}) {
       pdoc.dances = [];
       pdoc.votes = 0;
       pdoc.globes = { count: 0, events: []};
-
-      if (pdoc.team === ReplayTypes.TeamType.Blue) {
-        match.team0.push(pdoc.ToonHandle);
-      }
-      else if (pdoc.team === ReplayTypes.TeamType.Red) {
-        match.team1.push(pdoc.ToonHandle);
-      }
 
       players[pdoc.ToonHandle] = pdoc;
       match.playerIDs.push(pdoc.ToonHandle);
@@ -1129,25 +1124,34 @@ function processReplay(file, opts = {}) {
     console.log("[TRACKER] Event Analysis Complete");
 
     // get a few more bits of summary data from the players...
-    match.heroes = {0: [], 1: []};
+    match.teams = {0: { ids: [], names: [], heroes: [] }, 1: { ids: [], names: [], heroes: [] }};
+    match.teams[0].takedowns = match.team0Takedowns;
+    match.teams[1].takedowns = match.team1Takedowns;
+
     for (let p in players) {
       if (players[p].team === ReplayTypes.TeamType.Blue) {
-        match.blueTeamLevel = players[p].gameStats.Level;
-        match.heroes[ReplayTypes.TeamType.Blue].push(players[p].hero);
+        match.teams[0].level = players[p].gameStats.Level;
+        match.teams[0].heroes.push(players[p].hero);
+        match.teams[0].names.push(players[p].name);
+        match.teams[0].ids.push(p);
 
         if (players[p].win) {
           match.winner = ReplayTypes.TeamType.Blue;
         }
       }
       else if (players[p].team === ReplayTypes.TeamType.Red) {
-        match.redTeamLevel = players[p].gameStats.Level;
-        match.heroes[ReplayTypes.TeamType.Red].push(players[p].hero);
+        match.teams[1].level = players[p].gameStats.Level;
+        match.teams[1].heroes.push(players[p].hero);
+        match.teams[1].names.push(players[p].name);
+        match.teams[1].ids.push(p);
 
         if (players[p].win) {
           match.winner = ReplayTypes.TeamType.Red;
         }
       }
     }
+
+    match.winningPlayers = match.teams[match.winner].ids;
 
     console.log("[MESSAGES] Message Processing Start...");
 

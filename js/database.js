@@ -72,6 +72,42 @@ class Database {
       callback(docs.length > 0);
     });
   }
+
+  // counts the given matches
+  countMatches(query, callback) {
+    this._db.matches.count(query, callback);
+  }
+
+  // retrieves a match from the database using the given query
+  getMatches(query, callback, opts = {}) {
+    if ('sort' in opts) {
+      let cursor;
+      if ('projection' in opts)
+        cursor = this._db.matches.find(query, opts.projection);
+      else
+        cursor = this._db.matches.find(query);
+      
+      cursor.sort(opts.sort).exec(callback);
+    }
+    else {
+      if ('projection' in opts) {
+        this._db.matches.find(query, opts.projection, callback);
+      }
+      else {
+        this._db.matches.find(query, callback);
+      }
+    }
+  }
+
+  // retrieves matches by id
+  getMatchesByID(ids, callback, opts = {}) {
+    let query = {$or: []};
+    for (let i in ids) {
+      query.$or.push({_id: ids[i]});
+    }
+
+    this.getMatches(query, callback, opts);
+  }
 }
 
 exports.HeroesDatabase = Database;
