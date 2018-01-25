@@ -11,8 +11,8 @@
   display: block;
 }
 
-#matches-page-header .statistics {
-  float: right;
+#match-list .statistics {
+  float: left;
   margin-right: 0px;
 }
 

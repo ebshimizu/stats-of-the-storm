@@ -107,6 +107,7 @@ function renderToSlot(gameData, slot) {
   let context = {};
   context.map = gameData.map;
   context.mode = ReplayTypes.GameModeStrings[gameData.mode];
+  context.id = gameData._id;
   
   // if player id is defined, highlight if present, otherwise red/blue
   if (gameData.winner === 0) {
