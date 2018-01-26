@@ -45,12 +45,14 @@
 }
 
 #match-detail-summary tr.blue,
-#match-detail-details th.blue {
+#match-detail-details th.blue,
+#match-detail-body .floatThead-wrapper th.blue {
   background-color: #125080;
 }
 
 #match-detail-summary tr.red,
-#match-detail-details th.red {
+#match-detail-details th.red,
+#match-detail-body .floatThead-wrapper th.red {
   background-color: #8e0e0e;
 }
 
@@ -63,7 +65,8 @@
   overflow-y: auto;
 }
 
-#match-detail-details th.corner {
+#match-detail-details th.corner,
+#match-detail-body .floatThead-wrapper th.corner {
   border: 0;
   background: #5d5d5d;
   border-radius: 0;
@@ -74,4 +77,9 @@
 #match-detail-details td {
   border-left: 1px solid #FFF;
   font-size: 12pt;
+}
+
+#match-detail-body .floatThead-wrapper,
+#match-detail-body .full-height {
+  height: 100%;
 }

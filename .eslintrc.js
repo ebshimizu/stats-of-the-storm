@@ -228,7 +228,7 @@ module.exports = {
                 "allowMultiplePropertiesPerLine": true
             }
         ],
-        "object-shorthand": "error",
+        "object-shorthand": "off",
         "one-var": "off",
         "one-var-declaration-per-line": "error",
         "operator-assignment": [

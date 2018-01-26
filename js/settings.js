@@ -12,7 +12,6 @@ function initSettingsPage() {
     date = new Date(2012, 1, 1);
 
   // handlers
-  $('#replay-file-list').stickyTableHeaders({scrollableArea: $('.settings-table-wrapper')})
   $('#settings-set-replay-folder button').click(setReplayFolder);
   ipcRenderer.on('replayParsed', function(event, data) {
     loadReplay(data);

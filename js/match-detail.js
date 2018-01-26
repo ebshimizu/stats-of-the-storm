@@ -84,7 +84,7 @@ function updateBasicInfo() {
 
 function loadPlayers() {
   $('#match-detail-summary tbody').html('');
-  $('#match-detail-details table').stickyTableHeaders('destroy');
+  $('#match-detail-details table').floatThead('destroy');
   $('#match-detail-details thead').html('<tr><th class="corner"></th></tr>');
   $('#match-detail-details tbody').html('');
 
@@ -136,7 +136,13 @@ function loadDetailedStats() {
     appendDetailRow(list[i]);
   }
 
-  $('#match-detail-details table').stickyTableHeaders({scrollableArea: $('#match-detail-details')})
+  $('#match-detail-details table').floatThead({
+    scrollContainer: function($table) {
+      return $('#match-detail-details');
+    },
+    autoReflow: true
+  });
+  $('#match-detail-details table').floatThead('reflow');
 }
 
 function appendDetailRow(field) {
