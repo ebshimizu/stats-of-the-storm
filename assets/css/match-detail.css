@@ -44,14 +44,34 @@
   height: 100%;
 }
 
-#match-detail-summary tr.blue {
+#match-detail-summary tr.blue,
+#match-detail-details th.blue {
   background-color: #125080;
 }
 
-#match-detail-summary tr.red {
+#match-detail-summary tr.red,
+#match-detail-details th.red {
   background-color: #8e0e0e;
 }
 
 #match-detail-summary td h3 {
   font-size: 1.5rem;
+}
+
+#match-detail-body .match-detail-wrapper {
+  height: calc(100% - 40px);
+  overflow-y: auto;
+}
+
+#match-detail-details th.corner {
+  border: 0;
+  background: #5d5d5d;
+  border-radius: 0;
+  box-shadow: 0px 0px 0 0px #fff;
+  -webkit-box-shadow: 0px 0px 0 0px #FFF;
+}
+
+#match-detail-details td {
+  border-left: 1px solid #FFF;
+  font-size: 12pt;
 }

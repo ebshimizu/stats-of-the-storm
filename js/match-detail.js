@@ -1,21 +1,29 @@
 var matchDetailMatch;
 var matchDetailPlayers;
 var matchSummaryRowTemplate;
+var matchDetailHeaderTemplate;
+var matchDetailRowTemplate;
+const matchDetailRowTemplateSrc = '<tr class="center aligned"><td>{{fieldName}}</td>{{#each stats}}<td>{{this}}</td>{{/each}}</tr>';
 
 function initMatchDetailPage() {
   $('#match-detail-submenu .item').tab();
 
   // templates
   matchSummaryRowTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-summary-row-template').find('tr')[0].outerHTML);
+  matchDetailHeaderTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-detail-header').find('th')[0].outerHTML);
+  matchDetailRowTemplate = Handlebars.compile(matchDetailRowTemplateSrc);
 
   // DEBUG - LOAD SPECIFIC MATCH
-  loadMatchData("7OopFPAGNwpmi3qJ", function() { console.log("done loading"); });
+  loadMatchData("95uraT3GIKqHfj5S", function() { console.log("done loading"); });
 }
 
 // retrieves the proper data and then renders to the page
 function loadMatchData(id, doneLoadCallback) {
   // this is actually a series of callbacks...
   DB.getMatchesByID([id], function(err, doc) {
+    if (doc === [])
+      return;
+
     matchDetailMatch = doc[0];
     DB.getHeroDataForID(id, function(err, docs) {
       loadMatch(docs, doneLoadCallback);
@@ -36,6 +44,7 @@ function loadMatch(docs, doneLoadCallback) {
 
   // load summary / player data
   loadPlayers();
+  loadDetailedStats();
 
   // load talents
 
@@ -48,6 +57,7 @@ function loadMatch(docs, doneLoadCallback) {
   // load timeline
   // this one might take a while
 
+  $('#match-detail-details').scrollTop(0);
   doneLoadCallback();
 }
 
@@ -74,13 +84,18 @@ function updateBasicInfo() {
 
 function loadPlayers() {
   $('#match-detail-summary tbody').html('');
+  $('#match-detail-details table').stickyTableHeaders('destroy');
+  $('#match-detail-details thead').html('<tr><th class="corner"></th></tr>');
+  $('#match-detail-details tbody').html('');
 
   for (let i in matchDetailMatch.teams[0].ids) {
     appendSummaryRow("blue", matchDetailMatch.teams[0].ids[i]);
+    appendDetailHeader("blue", matchDetailMatch.teams[0].ids[i]);
   }
 
   for (let i in matchDetailMatch.teams[1].ids) {
     appendSummaryRow("red", matchDetailMatch.teams[1].ids[i]);
+    appendDetailHeader('red', matchDetailMatch.teams[1].ids[i]);
   }
 
   $('#match-detail-summary table').tablesort();
@@ -95,8 +110,52 @@ function appendSummaryRow(color, id) {
   context.heroImg = sanitizeHeroName(data.hero);
   context.playerID = id;
   context.playerName = data.name;
-  context.kills = data.gameStats.Takedowns - data.gameStats.Assists;
+  context.kills = data.gameStats.SoloKill;
   context.gameStats = data.gameStats;
 
   $('#match-detail-summary table tbody').append(matchSummaryRowTemplate(context));
+}
+
+function appendDetailHeader(color, id) {
+  let data = matchDetailPlayers[id];
+  let context = {};
+  context.heroName = data.hero;
+  context.playerID = id;
+  context.playerName = data.name;
+  context.teamColor = color;
+  context.heroImg = sanitizeHeroName(data.hero);
+
+  $('#match-detail-details table thead tr').append(matchDetailHeaderTemplate(context));
+}
+
+function loadDetailedStats() {
+  // full list is detail list + map specifics
+  let list = DetailStatList.concat(PerMapStatList[matchDetailMatch.map]);
+
+  for (let i in list) {
+    appendDetailRow(list[i]);
+  }
+
+  $('#match-detail-details table').stickyTableHeaders({scrollableArea: $('#match-detail-details')})
+}
+
+function appendDetailRow(field) {
+  // kinda sucks but have to iterate through the teams and stuff in order
+  let context = {};
+  context.fieldName = DetailStatString[field];
+  context.stats = [];
+
+  for (let i in matchDetailMatch.teams[0].ids) {
+    let p = matchDetailPlayers[matchDetailMatch.teams[0].ids[i]];
+
+    context.stats.push(formatStat(field, p.gameStats[field]));
+  }
+
+  for (let i in matchDetailMatch.teams[1].ids) {
+    let p = matchDetailPlayers[matchDetailMatch.teams[1].ids[i]];
+
+    context.stats.push(formatStat(field, p.gameStats[field]));
+  }
+
+  $('#match-detail-details table tbody').append(matchDetailRowTemplate(context));
 }

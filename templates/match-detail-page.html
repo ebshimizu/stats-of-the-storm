@@ -48,14 +48,14 @@
     </div>
     <div id="match-detail-body">
       <div class="ui secondary inverted pointing menu" id="match-detail-submenu">
-        <a class="active item" data-tab="summary">Summary</a>
+        <a class="item" data-tab="summary">Summary</a>
         <a class="item" data-tab="talents">Talents</a>
-        <a class="item" data-tab="details">Detailed Stats</a>
+        <a class="active item" data-tab="details">Detailed Stats</a>
         <a class="item" data-tab="xp">XP Breakdown</a>
         <a class="item" data-tab="timeline">Timeline</a>
         <a class="item" data-tab="log">Chat and Taunt Log</a>
       </div>
-      <div class="ui active tab match-detail-wrapper" data-tab="summary" id="match-detail-summary">
+      <div class="ui tab" data-tab="summary" id="match-detail-summary">
         <table class="ui sortable selectable inverted table">
           <thead>
             <tr>
@@ -72,6 +72,7 @@
             </tr>
           </thead>
           <tbody>
+            <!-- matchSummaryRowTemplate target area -->
           </tbody>
         </table>
       </div>
@@ -93,8 +94,17 @@
           </tbody>
         </table>
       </div>
-      <div class="ui inverted tab segment" data-tab="details" id="match-detail-details">
-
+      <div class="ui active tab match-detail-wrapper" data-tab="details" id="match-detail-details">
+        <table class="ui selectable fixed definition inverted table">
+          <thead>
+            <tr>
+              <!-- matchDetailHeaderTemplate target area -->
+            </tr>
+          </thead>
+          <tbody>
+              <!-- matchDetailRowTemplate target area -->
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -121,4 +131,16 @@
     <td class="center aligned" data-sort-value="{{gameStats.DamageTaken}}"><div class="ui inverted mini statistic"><div class="value">{{gameStats.DamageTaken}}</div></div></td>
     <td class="center aligned" data-sort-value="{{gameStats.ExperienceContribution}}"><div class="ui inverted mini statistic"><div class="value">{{gameStats.ExperienceContribution}}</div></div></td>
   </tr>
+</template>
+
+<template id="match-detail-detail-header">
+  <th class="{{teamColor}}">
+    <h4 class="ui image inverted header">
+      <img src="assets/heroes-talents/images/heroes/{{heroImg}}.png" class="ui medium rounded image">
+      <div class="content">
+        {{heroName}}
+        <div class="sub header player-name" playerID="{{playerID}}">{{playerName}}</div>
+      </div>
+    </h4>
+  </th>
 </template>

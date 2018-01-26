@@ -173,6 +173,7 @@ function processReplay(file, opts = {}) {
       pdoc.taunts = [];
       pdoc.dances = [];
       pdoc.votes = 0;
+      pdoc.map = match.map;
       pdoc.globes = { count: 0, events: []};
 
       players[pdoc.ToonHandle] = pdoc;
@@ -1129,7 +1130,10 @@ function processReplay(file, opts = {}) {
     match.teams[1].takedowns = match.team1Takedowns;
 
     for (let p in players) {
+      players[p].gameStats.KDA = players[p].gameStats.Takedowns / Math.max(players[p].gameStats.Deaths, 1);
+
       if (players[p].team === ReplayTypes.TeamType.Blue) {
+        players[p].gameStats.KillParticipation = players[p].gameStats.Takedowns / match.team0Takedowns;
         match.teams[0].level = players[p].gameStats.Level;
         match.teams[0].heroes.push(players[p].hero);
         match.teams[0].names.push(players[p].name);
@@ -1140,6 +1144,7 @@ function processReplay(file, opts = {}) {
         }
       }
       else if (players[p].team === ReplayTypes.TeamType.Red) {
+        players[p].gameStats.KillParticipation = players[p].gameStats.Takedowns / match.team1Takedowns;
         match.teams[1].level = players[p].gameStats.Level;
         match.teams[1].heroes.push(players[p].hero);
         match.teams[1].names.push(players[p].name);
