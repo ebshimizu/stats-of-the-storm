@@ -100,6 +100,11 @@ function showPage(pageNum) {
       else
         showPage(parseInt($(this).attr('page')) - 1);
     });
+
+    $('#match-page-table .match-summary').click(function() {
+      let id = $(this).attr('match-id');
+      loadMatchData(id, function() { changeSection('match-detail'); });
+    })
   }
 }
 
@@ -121,10 +126,8 @@ function renderToSlot(gameData, slot) {
   
   context.date = new Date(gameData.date);
   context.date = context.date.toLocaleString('en-US');
-  let duration = new Date(gameData.length * 1000);
-  let seconds = duration.getUTCSeconds();
 
-  context.length = duration.getUTCMinutes() + ":" + ((seconds < 10) ? "0" : "") + duration.getUTCSeconds();
+  context.length = formatSeconds(gameData.length);
   context.takedowns = { blue: gameData.teams[0].takedowns, red: gameData.teams[1].takedowns };
   context.level = { blue: gameData.teams[0].level, red: gameData.teams[1].level };
   context.blueHeroes = [];

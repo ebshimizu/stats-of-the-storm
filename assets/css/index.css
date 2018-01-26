@@ -19,3 +19,11 @@ body {
 .clear {
     clear: both;
 }
+
+#section-menu-back-button {
+    display: none;
+}
+
+#section-menu-back-button.show {
+    display: block;
+}

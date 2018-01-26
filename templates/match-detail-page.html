@@ -1,0 +1,124 @@
+
+<script src="../js/match-detail.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/css/match-detail.css">
+
+<template id="match-detail-page">
+  <div id="match-detail-page-content" class="is-page transition hidden" section-name="match-detail">
+    <div id="match-detail-page-header">
+      <div class="ui grid">
+        <div class="four wide column">
+          <h1 class="ui inverted header" id="match-detail-map-name">[MAP NAME]</h1>
+          <h2 class="ui inverted header" id="match-detail-mode"></h2>
+          <div class="" id="match-detail-date"></div>
+        </div>
+        <div class="two wide column">
+          <h2 class="ui inverted header" id="match-detail-victor"></h2>
+        </div>
+        <div class="two wide column">
+          <div class="ui blue inverted statistic">
+            <div class="value" id="match-detail-blue-level">15</div>
+            <div class="label">Level</div>
+          </div>
+        </div>
+        <div class="two wide column">
+          <div class="ui blue inverted statistic">
+            <div class="value" id="match-detail-blue-takedowns">28</div>
+            <div class="label">Takedowns</div>
+          </div>
+        </div>
+        <div class="two wide column">
+          <div class="ui inverted statistic">
+            <div class="value" id="match-detail-duration">13:24</div>
+            <div class="label">Game Length</div>
+          </div>
+        </div>
+        <div class="two wide column">
+          <div class="ui red inverted statistic">
+            <div class="value" id="match-detail-red-takedowns">28</div>
+            <div class="label">Takedowns</div>
+          </div>
+        </div>
+        <div class="two wide column">
+          <div class="ui red inverted statistic">
+            <div class="value" id="match-detail-red-level">28</div>
+            <div class="label">Level</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="match-detail-body">
+      <div class="ui secondary inverted pointing menu" id="match-detail-submenu">
+        <a class="active item" data-tab="summary">Summary</a>
+        <a class="item" data-tab="talents">Talents</a>
+        <a class="item" data-tab="details">Detailed Stats</a>
+        <a class="item" data-tab="xp">XP Breakdown</a>
+        <a class="item" data-tab="timeline">Timeline</a>
+        <a class="item" data-tab="log">Chat and Taunt Log</a>
+      </div>
+      <div class="ui active tab match-detail-wrapper" data-tab="summary" id="match-detail-summary">
+        <table class="ui sortable selectable inverted table">
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th class="center aligned">Award</th>
+              <th class="center aligned">Kills</th>
+              <th class="center aligned">Assists</th>
+              <th class="center aligned">Deaths</th>
+              <th class="center aligned">Hero Damage</th>
+              <th class="center aligned">Seige Damage</th>
+              <th class="center aligned">Healing</th>
+              <th class="center aligned">Damage Taken</th>
+              <th class="center aligned">XP Contribution</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div class="ui tab match-detail-wrapper" data-tab="talents" id="match-detail-talents">
+        <table class="ui selectable inverted table">
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th class="center aligned">1</th>
+              <th class="center aligned">4</th>
+              <th class="center aligned">7</th>
+              <th class="center aligned">10</th>
+              <th class="center aligned">13</th>
+              <th class="center aligned">16</th>
+              <th class="center aligned">20</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <div class="ui inverted tab segment" data-tab="details" id="match-detail-details">
+
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="match-detail-summary-row-template">
+  <tr class="match-detail-summary-row {{teamColor}}" playerID="{{playerID}}">
+    <td data-sort-value="{{teamColor}}">
+      <h3 class="ui image inverted header">
+        <img src="assets/heroes-talents/images/heroes/{{heroImg}}.png" class="ui large rounded image">
+        <div class="content">
+          {{heroName}}
+          <div class="sub header player-name">{{playerName}}</div>
+        </div>
+      </h3>
+    </td>
+    <td><div class="{{awardClass}}"></div></td>
+    <td class="center aligned" data-sort-value="{{kills}}"><div class="ui inverted mini statistic"><div class="value">{{kills}}</div></div></td>
+    <td class="center aligned" data-sort-value="{{gameStats.Assists}}"><div class="ui inverted mini statistic"><div class="value">{{gameStats.Assists}}</div></div></td>
+    <td class="center aligned" data-sort-value="{{gameStats.Deaths}}"><div class="ui inverted mini statistic"><div class="value">{{gameStats.Deaths}}</div></div></td>
+    <td class="center aligned" data-sort-value="{{gameStats.HeroDamage}}"><div class="ui inverted mini statistic"><div class="value">{{gameStats.HeroDamage}}</div></div></td>
+    <td class="center aligned" data-sort-value="{{gameStats.SiegeDamage}}"><div class="ui inverted mini statistic"><div class="value">{{gameStats.SiegeDamage}}</div></div></td>
+    <td class="center aligned" data-sort-value="{{gameStats.Healing}}"><div class="ui inverted mini statistic"><div class="value">{{gameStats.Healing}}</div></div></td>
+    <td class="center aligned" data-sort-value="{{gameStats.DamageTaken}}"><div class="ui inverted mini statistic"><div class="value">{{gameStats.DamageTaken}}</div></div></td>
+    <td class="center aligned" data-sort-value="{{gameStats.ExperienceContribution}}"><div class="ui inverted mini statistic"><div class="value">{{gameStats.ExperienceContribution}}</div></div></td>
+  </tr>
+</template>

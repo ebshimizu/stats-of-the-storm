@@ -1,0 +1,57 @@
+#match-detail-page-header {
+  height: 110px;
+}
+
+#match-detail-page-header .two.wide.column {
+  text-align: center;
+}
+
+#match-detail-map-name {
+  margin-bottom: 0.2em;
+}
+
+#match-detail-mode {
+  margin: 0;
+}
+
+#match-detail-date {
+  font-size: 10pt;
+  color: #FFF;
+  margin-top: 0.5em;
+}
+
+#match-detail-victor {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#match-detail-body {
+  height: calc(100% - 110px);
+}
+
+#match-detail-body .tab.segment {
+  height: 95%;
+}
+
+#match-detail-page-content .secondary.pointing.menu {
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+}
+
+#match-detail-summary table {
+  height: 100%;
+}
+
+#match-detail-summary tr.blue {
+  background-color: #125080;
+}
+
+#match-detail-summary tr.red {
+  background-color: #8e0e0e;
+}
+
+#match-detail-summary td h3 {
+  font-size: 1.5rem;
+}

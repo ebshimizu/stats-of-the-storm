@@ -17,6 +17,7 @@ const ReplayTypes = require('./parser/constants.js');
 
 var DB;
 var sections = {};
+var prevSections = [];
 
 $(document).ready(initApp);
 var bgWindow;
@@ -63,6 +64,10 @@ function initGlobalUIHandlers() {
       $('#main-menu').sidebar('hide');
     })
   });
+
+  $('#section-menu-back-button').click(function() {
+    changeSection(prevSections.pop());
+  });
 }
 
 function loadSections() {
@@ -73,12 +78,16 @@ function loadSections() {
   $('#main-content').append(getTemplate('matches', '#matches-page'));
   initMatchesPage();
 
+  $('#main-content').append(getTemplate('match-detail', '#match-detail-page'));
+  initMatchDetailPage();
+
   // register sections
-  sections.settings = {id: '#settings-page-content', title: 'Settings' };
-  sections.matches = {id: '#matches-page-content', title: 'Matches'};
+  sections.settings = {id: '#settings-page-content', title: 'Settings', showBack: false };
+  sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false };
+  sections['match-detail'] = {id: '#match-detail-page-content', title: 'Match Detail', showBack: true};
 
   // DEBUG: SHOWING SPECIFIC SECTION ON LOAD FOR TESTING
-  showSection('matches');
+  showSection('match-detail');
 }
 
 // returns the template contained in an import
@@ -98,6 +107,15 @@ function createBGWindow() {
 
 function changeSection(to) {
   // this should only trigger for the visible section
+  // if the back button is visible, we should store a little history
+  if (sections[to].showBack) {
+    prevSections.push($('.is-page.visible').attr('section-name'));
+  }
+  else {
+    // clear the history
+    prevSections = [];
+  }
+
   for (let s in sections)
     hideSection(s);
 
@@ -108,7 +126,7 @@ function showSection(name) {
   if ($(sections[name].id).hasClass('hidden'))
     $(sections[name].id).transition('fade right');
 
-  setMenuTitle(sections[name].title);
+  setMenuTitle(sections[name].title, sections[name].showBack);
 }
 
 function hideSection(name) {
@@ -116,11 +134,27 @@ function hideSection(name) {
     $(sections[name].id).transition('fade right');
 }
 
-function setMenuTitle(title) {
+function setMenuTitle(title, showBackButton) {
   $('#section-menu-name').text(title);
+
+  if (showBackButton) {
+    $('#section-menu-back-button').addClass('show');
+  }
+  else {
+    $('#section-menu-back-button').removeClass('show');
+  }
 }
 
 function sanitizeHeroName(name) {
   // remove all spaces, non-alphanum characters, convert to lower
   return name.replace(/[^\w\d]|_/g, "").toLowerCase();
+}
+
+// formats to mm:ss
+function formatSeconds(val) {
+  let duration = new Date(val * 1000);
+  let seconds = duration.getUTCSeconds();
+  let minutes = duration.getUTCMinutes();
+
+  return ((minutes < 1) ? "0" : "") + minutes + ":" + ((seconds < 10) ? "0" : "") + seconds;
 }

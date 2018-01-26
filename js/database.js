@@ -108,6 +108,11 @@ class Database {
 
     this.getMatches(query, callback, opts);
   }
+
+  getHeroDataForID(matchID, callback) {
+    let query = {matchID: matchID};
+    this._db.heroData.find(query, callback);
+  }
 }
 
 exports.HeroesDatabase = Database;
