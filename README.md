@@ -28,3 +28,6 @@ npm install
 * [NeDB](https://github.com/louischatriot/nedb)
 * [Semantic UI](https://semantic-ui.com/)
 * [datepicker](https://github.com/fengyuanchen/datepicker)
+* [jquery.floatThead](https://github.com/mkoryak/floatThead)
+* jquery
+* electron
