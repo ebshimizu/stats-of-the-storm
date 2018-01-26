@@ -15,6 +15,62 @@ const ipcRenderer = require('electron').ipcRenderer
 const path = require('path');
 const ReplayTypes = require('./parser/constants.js');
 
+const DetailStatList = [
+  'Takedowns',
+  'KillParticipation', // special case
+  'Kills',  // special case
+  'HighestKillStreak',
+  'SoloKill',
+  'VengeancesPerformed',
+  'Assists',
+  'Deaths',
+  'TimeSpentDead',
+  'OutnumberedDeaths',
+  'EscapesPerformed',
+  'HeroDamage',
+  'SiegeDamage',
+  'StructureDamage',
+  'MinionDamage',
+  'SummonDamage',
+  'CreepDamage',
+  'Healing',
+  'SelfHealing',
+  'ProtectionGivenToAllies',
+  'ClutchHealsPerformed',
+  'DamageTaken',
+  'TeamfightDamageTaken',
+  'TeamfightEscapesPerformed',
+  'TeamfightHealingDone',
+  'TeamfightHeroDamage',
+  'TimeCCdEnemyHeroes',
+  'TimeRootingEnemyHeroes',
+  'TimeSilencingEnemyHeroes',
+  'TimeStunningEnemyHeroes',
+  'TimeOnPoint',
+  'OnFireTimeOnFire',
+  'ExperienceContribution',
+  'MercCampCaptures',
+  'TownKills',
+  'WatchTowerCaptures',
+  'Role'
+];
+
+const PerMapStatList = {
+  "Towers of Doom" : ["AltarDamageDone"],
+  "Battlefield of Eternity" : ["DamageDoneToImmortal"],
+  "Dragon Shire" : ["DragonNumberOfDragonCaptures", "DragonShrinesCaptured"],
+  "Blackheart's Bay" : ["BlackheartDoubloonsCollected", "BlackheartDoubloonsTurnedIn"],
+  "Haunted Mines" : ["MinesSkullsCollected"],
+  "Infernal Shrines" : ["DamageDoneToShrineMinions"],
+  "Garden of Terror" : ["GardensPlantDamage", "GardensSeedsCollected"],
+  "Tomb of the Spider Queen" : ["GemsTurnedIn"],
+  "Warhead Junction" : ["NukeDamageDone"],
+  "Cursed Hollow" : ["CurseDamageDone"],
+  "Volskaya Foundry" : [],
+  "Sky Temple" : ["TimeInTemple"],
+  "Braxis Holdout" : ["DamageDoneToZerg"]
+};
+
 var DB;
 var sections = {};
 var prevSections = [];
