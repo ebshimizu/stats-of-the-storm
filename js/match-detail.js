@@ -47,12 +47,11 @@ function loadMatch(docs, doneLoadCallback) {
   updateBasicInfo();
 
   // load summary / player data
-  loadPlayers();
-  loadDetailedStats();
-
   // load talents
+  loadPlayers();
 
   // load details
+  loadDetailedStats();
 
   // load xp
   
