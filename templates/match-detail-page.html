@@ -77,7 +77,7 @@
         </table>
       </div>
       <div class="ui tab match-detail-wrapper" data-tab="talents" id="match-detail-talents">
-        <table class="ui selectable inverted table">
+        <table class="ui fixed inverted table">
           <thead>
             <tr>
               <th>Player</th>
@@ -91,6 +91,7 @@
             </tr>
           </thead>
           <tbody>
+            <!-- appendTalentRow output here -->
           </tbody>
         </table>
       </div>
@@ -116,7 +117,7 @@
   <tr class="match-detail-summary-row {{teamColor}}" playerID="{{playerID}}">
     <td data-sort-value="{{teamColor}}">
       <h3 class="ui image inverted header">
-        <img src="assets/heroes-talents/images/heroes/{{heroImg}}.png" class="ui large rounded image">
+        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui large rounded image">
         <div class="content">
           {{heroName}}
           <div class="sub header player-name">{{playerName}}</div>
@@ -138,11 +139,34 @@
 <template id="match-detail-detail-header">
   <th class="{{teamColor}}">
     <h4 class="ui image inverted header">
-      <img src="assets/heroes-talents/images/heroes/{{heroImg}}.png" class="ui medium rounded image">
+      <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui tiny rounded image">
       <div class="content">
         {{heroName}}
         <div class="sub header player-name" playerID="{{playerID}}">{{playerName}}</div>
       </div>
     </h4>
   </th>
+</template>
+
+<template id="match-detail-talents-row-title-template">
+  <tr class="match-detail-talents-row {{teamColor}}" playerID="{{playerID}}">
+    <td>
+      <h3 class="ui image inverted header">
+        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui large rounded image">
+        <div class="content">
+          {{heroName}}
+          <div class="sub header player-name">{{playerName}}</div>
+        </div>
+      </h3>
+    </td>
+  </tr>
+</template>
+
+<template id="match-detail-talents-row-cell-template">
+  <td>
+    <div class="ui content">
+      <img src="assets/heroes-talents/images/talents/{{img}}" class="ui centered tiny rounded image"
+        data-html='<div class="header">{{name}}</div><div class="content">{{description}}</div>' data-position="top center">
+    </div>
+  </td>
 </template>

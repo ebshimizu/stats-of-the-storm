@@ -4,6 +4,8 @@ var matchSummaryRowTemplate;
 var matchDetailHeaderTemplate;
 var matchDetailRowTemplate;
 const matchDetailRowTemplateSrc = '<tr class="center aligned"><td>{{fieldName}}</td>{{#each stats}}<td>{{this}}</td>{{/each}}</tr>';
+var matchTalentRowTitleTemplate;
+var matchTalentRowCellTemplate;
 
 function initMatchDetailPage() {
   $('#match-detail-submenu .item').tab();
@@ -12,6 +14,8 @@ function initMatchDetailPage() {
   matchSummaryRowTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-summary-row-template').find('tr')[0].outerHTML);
   matchDetailHeaderTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-detail-header').find('th')[0].outerHTML);
   matchDetailRowTemplate = Handlebars.compile(matchDetailRowTemplateSrc);
+  matchTalentRowTitleTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-talents-row-title-template').find('tr')[0].outerHTML);
+  matchTalentRowCellTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-talents-row-cell-template').find('td')[0].outerHTML);
 
   // DEBUG - LOAD SPECIFIC MATCH
   loadMatchData("95uraT3GIKqHfj5S", function() { console.log("done loading"); });
@@ -59,6 +63,7 @@ function loadMatch(docs, doneLoadCallback) {
 
   $('#match-detail-details').scrollTop(0);
   doneLoadCallback();
+  $('#match-detail-details table').floatThead('reflow');
 }
 
 function updateBasicInfo() {
@@ -87,18 +92,22 @@ function loadPlayers() {
   $('#match-detail-details table').floatThead('destroy');
   $('#match-detail-details thead').html('<tr><th class="corner"></th></tr>');
   $('#match-detail-details tbody').html('');
+  $('#match-detail-talents tbody').html('');
 
   for (let i in matchDetailMatch.teams[0].ids) {
     appendSummaryRow("blue", matchDetailMatch.teams[0].ids[i]);
     appendDetailHeader("blue", matchDetailMatch.teams[0].ids[i]);
+    appendTalentRow('blue', matchDetailMatch.teams[0].ids[i]);
   }
 
   for (let i in matchDetailMatch.teams[1].ids) {
     appendSummaryRow("red", matchDetailMatch.teams[1].ids[i]);
     appendDetailHeader('red', matchDetailMatch.teams[1].ids[i]);
+    appendTalentRow('red', matchDetailMatch.teams[1].ids[i]);
   }
 
   $('#match-detail-summary table').tablesort();
+  $('#match-detail-talents .tiny.image').popup();
 }
 
 function appendSummaryRow(color, id) {
@@ -107,7 +116,7 @@ function appendSummaryRow(color, id) {
   let context = {};
   context.teamColor = color;
   context.heroName = data.hero;
-  context.heroImg = sanitizeHeroName(data.hero);
+  context.heroImg = Heroes.heroIcon(data.hero);
   context.playerID = id;
   context.playerName = data.name;
   context.kills = data.gameStats.SoloKill;
@@ -123,7 +132,7 @@ function appendDetailHeader(color, id) {
   context.playerID = id;
   context.playerName = data.name;
   context.teamColor = color;
-  context.heroImg = sanitizeHeroName(data.hero);
+  context.heroImg = Heroes.heroIcon(data.hero);
 
   $('#match-detail-details table thead tr').append(matchDetailHeaderTemplate(context));
 }
@@ -164,4 +173,35 @@ function appendDetailRow(field) {
   }
 
   $('#match-detail-details table tbody').append(matchDetailRowTemplate(context));
+}
+
+function appendTalentRow(color, id) {
+  let data = matchDetailPlayers[id];
+
+  let titleContext = {};
+  titleContext.teamColor = color;
+  titleContext.playerID = id;
+  titleContext.heroImg = Heroes.heroIcon(data.hero);
+  titleContext.heroName = data.hero;
+  titleContext.playerName = data.name;
+
+  let row = $(matchTalentRowTitleTemplate(titleContext));
+
+  let keys = Object.keys(data.talents);
+  for (let i = 0; i < 7; i++) {
+    // this should theoretically be in order
+    let context = {};
+
+    if (i < keys.length) {
+      context.img = Heroes.talentIcon(data.talents[keys[i]]);
+      context.description = Heroes.talentDesc(data.talents[keys[i]]);
+      context.name = Heroes.talentName(data.talents[keys[i]]);
+      row.append(matchTalentRowCellTemplate(context));
+    }
+    else {
+      row.append('<td></td>');
+    }
+  }
+
+  $('#match-detail-talents table tbody').append(row);
 }

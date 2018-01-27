@@ -45,12 +45,14 @@
 }
 
 #match-detail-summary tr.blue,
+#match-detail-talents tr.blue,
 #match-detail-details th.blue,
 #match-detail-body .floatThead-wrapper th.blue {
   background-color: #125080;
 }
 
 #match-detail-summary tr.red,
+#match-detail-talents tr.red,
 #match-detail-details th.red,
 #match-detail-body .floatThead-wrapper th.red {
   background-color: #8e0e0e;
@@ -82,4 +84,14 @@
 #match-detail-body .floatThead-wrapper,
 #match-detail-body .full-height {
   height: 100%;
+}
+
+#match-detail-talents .tiny.image {
+  width: 50px;
+  border: 2px solid #000;
+}
+
+#match-detail-talents .tiny.image:hover {
+  cursor: pointer;
+  border-color: #FFF;
 }

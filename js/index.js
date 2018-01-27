@@ -5,6 +5,7 @@
 const HeroesDB = require('./js/database.js');
 const settings = require('electron-settings');
 const Parser = require('./parser/parser.js');
+const HeroesTalents = require('./js/heroes-talents.js');
 const app = require('electron').remote.app;
 const dialog = require('electron').remote.dialog;
 const Handlebars = require('handlebars');
@@ -128,6 +129,7 @@ const DetailStatString = {
 };
 
 var DB;
+var Heroes;
 var sections = {};
 var prevSections = [];
 
@@ -140,8 +142,6 @@ function initApp() {
   // happen.
   // create background window
   createBGWindow();
-
-  $('table').tablesort();
 
   // load database
   loadDatabase();
@@ -162,6 +162,9 @@ function loadDatabase() {
   DB = new HeroesDB.HeroesDatabase(path);
 
   console.log("Databse directory set to " + path);
+
+  // load the heroes talents database
+  Heroes = new HeroesTalents.HeroesTalents('./assets/heroes-talents');
 }
 
 function initGlobalUIHandlers() {
@@ -255,11 +258,6 @@ function setMenuTitle(title, showBackButton) {
   else {
     $('#section-menu-back-button').removeClass('show');
   }
-}
-
-function sanitizeHeroName(name) {
-  // remove all spaces, non-alphanum characters, convert to lower
-  return name.replace(/[^\w\d]|_/g, "").toLowerCase();
 }
 
 // formats to mm:ss

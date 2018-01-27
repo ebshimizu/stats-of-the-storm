@@ -136,8 +136,8 @@ function renderToSlot(gameData, slot) {
   let bd = gameData.teams[0];
   let rd = gameData.teams[1];
   for (let i = 0; i < gameData.teams[0].ids.length; i++) {
-    context.blueHeroes.push({heroImg: sanitizeHeroName(bd.heroes[i]), playerName: bd.names[i], playerID: bd.ids[i]});
-    context.redHeroes.push({heroImg: sanitizeHeroName(rd.heroes[i]), playerName: rd.names[i], playerID: rd.ids[i]});
+    context.blueHeroes.push({heroImg: Heroes.heroIcon(bd.heroes[i]), playerName: bd.names[i], playerID: bd.ids[i]});
+    context.redHeroes.push({heroImg: Heroes.heroIcon(rd.heroes[i]), playerName: rd.names[i], playerID: rd.ids[i]});
   }
 
   $('#match-list tr[slot="' + slot + '"]').html(matchRowTemplate(context));
