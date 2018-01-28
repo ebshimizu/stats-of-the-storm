@@ -199,13 +199,17 @@ function loadSections() {
   $('#main-content').append(getTemplate('match-detail', '#match-detail-page'));
   initMatchDetailPage();
 
+  $('#main-content').append(getTemplate('player', '#player-page'));
+  initPlayerPage();
+
   // register sections
   sections.settings = {id: '#settings-page-content', title: 'Settings', showBack: false };
   sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false };
-  sections['match-detail'] = {id: '#match-detail-page-content', title: 'Match Detail', showBack: true};
+  sections['match-detail'] = {id: '#match-detail-page-content', title: 'Match Details', showBack: true};
+  sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false};
 
   // DEBUG: SHOWING SPECIFIC SECTION ON LOAD FOR TESTING
-  showSection('matches');
+  showSection('player');
 }
 
 // returns the template contained in an import

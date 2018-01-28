@@ -48,14 +48,14 @@
     </div>
     <div id="match-detail-body">
       <div class="ui secondary inverted pointing menu" id="match-detail-submenu">
-        <a class="item" data-tab="summary">Summary</a>
+        <a class="active item" data-tab="summary">Summary</a>
         <a class="item" data-tab="talents">Talents</a>
-        <a class="active item" data-tab="details">Detailed Stats</a>
+        <a class="item" data-tab="details">Detailed Stats</a>
         <a class="item" data-tab="xp">XP Breakdown</a>
         <a class="item" data-tab="timeline">Timeline</a>
         <a class="item" data-tab="log">Chat and Taunt Log</a>
       </div>
-      <div class="ui tab" data-tab="summary" id="match-detail-summary">
+      <div class="ui active tab" data-tab="summary" id="match-detail-summary">
         <table class="ui sortable selectable inverted table">
           <thead>
             <tr>
@@ -95,7 +95,7 @@
           </tbody>
         </table>
       </div>
-      <div class="ui active tab full-height" data-tab="details">
+      <div class="ui tab full-height" data-tab="details">
         <div class="match-detail-wrapper" id="match-detail-details">
           <table class="ui selectable fixed definition inverted table">
             <thead>

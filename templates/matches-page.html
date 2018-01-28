@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="../assets/css/matches.css">
 
 <template id="matches-page">
-  <div id="matches-page-content" class="is-page transition hidden" section-name="matches"</div>
+  <div id="matches-page-content" class="is-page transition hidden" section-name="matches">
     <div id="matches-page-header">
       <div class="ui grid">
         <div class="eight wide column">
@@ -73,6 +73,21 @@
         <div class="ui inverted segment">
           <div class="ui top attached label">Search Matches</div>
           <div class="ui grid">
+            <div class="three wide column">Mode</div>
+            <div class="thirteen wide column">
+              <div class="ui fluid multiple search selection dropdown">
+                <i class="dropdown icon"></i>
+                <div class="default text">All</div>
+                <div class="menu">
+                  <div class="item" data-value="-2">All</div>
+                  <div class="item" data-value="50001">Quick Match</div>
+                  <div class="item" data-value="50051">Unranked Draft</div>
+                  <div class="item" data-value="50061">Hero League</div>
+                  <div class="item" data-value="50071">Team League</div>
+                  <div class="item" data-value="-1">Custom</div>
+                </div>
+              </div>
+            </div>
             <div class="three wide column">Season</div>
             <div class="thirteen wide column">
               <div class="ui fluid selection dropdown">

@@ -1,0 +1,26 @@
+<script src="../js/player.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/css/player.css">
+
+<template id="player-page">
+  <div id="player-page-content" class="is-page transition hidden" section-name="player">
+    <div id="player-page-header">
+      <div class="ui grid">
+        <div class="eight wide column">
+          <h1 class="ui inverted header">[Player Name]</h1>
+        </div>
+        <div class="eight wide column">
+          
+        </div>
+      </div>
+    </div>
+    <div id="player-detail-body">
+      <div class="ui secondary inverted pointing menu" id="player-detail-submenu">
+        <a class="active item" data-tab="summary">Summary</a>
+        <a class="item" data-tab="">Hero Details</a>
+        <a class="item" data-tab="">Comparison</a>
+      </div>
+      <div class="ui active tab" data-tab="summary" id="player-detail-summary">
+      </div>
+    </div>
+  </div>
+</template>
