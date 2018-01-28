@@ -117,6 +117,12 @@ class Database {
     this._db.heroData.find(query, callback);
   }
 
+  // returns all hero data entries for the given player id
+  getHeroDataForPlayer(playerID, callback) {
+    let query = {ToonHandle: playerID};
+    this._db.heroData.find(query, callback);
+  }
+
   getPlayers(query, callback, opts = {}) {
     if ('sort' in opts) {
       let cursor;
@@ -135,6 +141,11 @@ class Database {
         this._db.players.find(query, callback);
       }
     }
+  }
+
+  // gets a single player from the players table
+  getPlayer(id, callback) {
+    this.getPlayers({_id: id}, callback);
   }
 }
 

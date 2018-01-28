@@ -18,7 +18,7 @@ function initMatchDetailPage() {
   matchTalentRowCellTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-talents-row-cell-template').find('td')[0].outerHTML);
 
   // DEBUG - LOAD SPECIFIC MATCH
-  //loadMatchData("95uraT3GIKqHfj5S", function() { console.log("done loading"); });
+  loadMatchData("D3cu4wGXE8FwrGXr", function() { console.log("done loading"); });
 }
 
 // retrieves the proper data and then renders to the page
@@ -84,6 +84,23 @@ function updateBasicInfo() {
   $('#match-detail-blue-takedowns').text(matchDetailMatch.teams[0].takedowns);
   $('#match-detail-red-takedowns').text(matchDetailMatch.teams[1].takedowns);
   $('#match-detail-duration').text(formatSeconds(matchDetailMatch.length));
+
+  // bans
+  if (matchDetailMatch.mode !== ReplayTypes.GameMode.QuickMatch) {
+    $('#match-detail-bans').removeClass('hidden');
+    for (let t in matchDetailMatch.bans) {
+      let bans = matchDetailMatch.bans[t];
+      for (let b in bans) {
+        let h = bans[b];
+        let slot = t + '-' + h.order;
+        let icon = Heroes.heroIcon(Heroes.heroNameFromAttr(h.hero));
+        $('div[ban-slot="' + slot + '"] img').attr('src', 'assets/heroes-talents/images/heroes/' + icon);
+      }
+    }
+  }
+  else {
+    $('#match-detail-bans').addClass('hidden');
+  }
 }
 
 function loadPlayers() {

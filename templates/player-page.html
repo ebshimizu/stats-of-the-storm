@@ -5,11 +5,17 @@
   <div id="player-page-content" class="is-page transition hidden" section-name="player">
     <div id="player-page-header">
       <div class="ui grid">
-        <div class="eight wide column">
-          <h1 class="ui inverted header">[Player Name]</h1>
+        <div class="twelve wide column">
+          <h1 class="ui inverted header player-name">[Player Name]</h1>
         </div>
-        <div class="eight wide column">
-          
+        <div class="four wide column">
+          <div class="ui fluid search selection dropdown player-menu" id="players-set-player">
+            <i class="dropdown icon"></i>
+            <span class="text">Player ID</span>
+            <div class="menu">
+
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -17,10 +23,78 @@
       <div class="ui secondary inverted pointing menu" id="player-detail-submenu">
         <a class="active item" data-tab="summary">Summary</a>
         <a class="item" data-tab="">Hero Details</a>
-        <a class="item" data-tab="">Comparison</a>
+        <a class="item" data-tab="">Map Details</a>
+        <a class="item" data-tab="">Compare</a>
       </div>
-      <div class="ui active tab" data-tab="summary" id="player-detail-summary">
+      <div class="ui active tab player-detail-wrapper" data-tab="summary" id="player-detail-summary">
+        <div class="ui grid">
+          <div class="ten wide column">
+            <div class="ui inverted segment" id="player-detail-hero-summary">
+              <div class="ui top attached label">Hero Summary</div>
+              <div id="player-detail-hero-summary">
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Hero</th>
+                        <th class="center aligned">Games</th>
+                        <th class="center aligned">Win %</th>
+                        <th class="center aligned">Takedowns</th>
+                        <th class="center aligned">Deaths</th>
+                        <th class="center aligned">KDA</th>
+                        <th class="center aligned">MVP %</th>
+                        <th class="center aligned">Award %</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="four wide column">
+            <div class="ui inverted segment" id="player-detail-map-summary">
+              <div class="ui top attached label">Map Summary</div>
+              <table class="ui sortable selectable inverted table">
+                <thead>
+                  <tr>
+                    <th>Map</th>
+                    <th>Games</th>
+                    <th>Win %</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+          <div class="two wide column">
+            <div class="ui inverted segment" id="player-detail-misc-summary">
+              <div class="ui top attached label">Overall Stats</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+</template>
+
+<template id="player-detail-hero-summary-row">
+  <tr class="player-detail-summary-row">
+    <td data-sort-value="{{heroName}}">
+      <h3 class="ui image inverted header">
+        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui rounded image">
+        <div class="content">
+          {{heroName}}
+        </div>
+      </h3>
+    </td>
+    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
+    <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
+    <td class="center aligned" data-sort-value="{{stats.Takedowns}}">{{stats.Takedowns}}</td>
+    <td class="center aligned" data-sort-value="{{stats.Deaths}}">{{stats.Deaths}}</td>
+    <td class="center aligned" data-sort-value="{{stats.totalKDA}}">{{stats.totalKDA}}</td>
+    <td class="center aligned" data-sort-value="{{stats.MVPPct}}">{{stats.formatMVPPct}}</td>
+    <td class="center aligned" data-sort-value="{{stats.AwardPct}}">{{stats.formatAwardPct}}</td>
+  </tr>
 </template>

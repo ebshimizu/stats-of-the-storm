@@ -174,6 +174,9 @@ function processReplay(file, opts = {}) {
       pdoc.dances = [];
       pdoc.votes = 0;
       pdoc.map = match.map;
+      pdoc.date = match.date;
+      pdoc.build = match.build;
+      pdoc.mode = match.mode;
       pdoc.globes = { count: 0, events: []};
 
       players[pdoc.ToonHandle] = pdoc;

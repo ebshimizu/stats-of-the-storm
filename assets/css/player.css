@@ -1,0 +1,46 @@
+#player-detail-body {
+  height: calc(100% - 40px);
+}
+
+#player-detail-summary .grid {
+  height: 100%;
+}
+
+#player-detail-summary .grid #player-detail-hero-summary {
+  height: 100%;
+}
+
+#player-detail-summary .floatThead-wrapper {
+  height: 100%;
+}
+
+
+#player-detail-summary .grid .table-wrapper {
+  height: calc(100% - 2rem);
+  overflow: auto;
+  margin-top: 2rem!important;
+}
+
+#player-detail-summary .grid .table-wrapper table {
+  margin-top: 0!important;
+}
+
+#players-set-player.ui.icon.button .icon {
+  vertical-align: middle;
+}
+
+#player-detail-body .secondary.pointing.menu {
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+}
+
+.player-detail-wrapper {
+  height: calc(100% - 40px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#player-detail-hero-summary td {
+  font-size: 14pt;
+}

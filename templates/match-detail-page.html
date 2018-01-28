@@ -55,7 +55,7 @@
         <a class="item" data-tab="timeline">Timeline</a>
         <a class="item" data-tab="log">Chat and Taunt Log</a>
       </div>
-      <div class="ui active tab" data-tab="summary" id="match-detail-summary">
+      <div class="ui active tab match-detail-wrapper" data-tab="summary" id="match-detail-summary">
         <table class="ui sortable selectable inverted table">
           <thead>
             <tr>
@@ -75,6 +75,27 @@
             <!-- matchSummaryRowTemplate target area -->
           </tbody>
         </table>
+        <div class="ui inverted segment" id="match-detail-bans">
+          <div class="ui top left attached label">Bans</div>
+          <div class="ui tiny images">
+            <div class="ui blue rounded image" ban-slot="0-1">
+              <img src="">
+              <div class="ui blue floating circular label">1</div>
+            </div>
+            <div class="ui blue rounded image" ban-slot="0-2">
+              <img src="">
+              <div class="ui blue floating circular label">2</div>
+            </div>
+            <div class="ui red rounded image" ban-slot="1-1">
+              <img src="">
+              <div class="ui red floating circular label">1</div>
+            </div>
+            <div class="ui red rounded image" ban-slot="1-2">
+              <img src="">
+              <div class="ui red floating circular label">2</div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="ui tab match-detail-wrapper" data-tab="talents" id="match-detail-talents">
         <table class="ui fixed inverted table">

@@ -16,6 +16,7 @@ class HeroesTalents {
     this._heroes = {};
     this._talents = {};
     this._roles = {};
+    this._heroAttr = {};
 
     let files = fs.readdirSync(this._heroPath);
 
@@ -27,6 +28,7 @@ class HeroesTalents {
       
       // sort everything, some data is replicated but that's ok
       this._heroes[data.name] = data;
+      this._heroAttr[data.attributeId] = data.name;
 
       for (let tier in data.talents) {
         for (let t in data.talents[tier]) {
@@ -39,6 +41,13 @@ class HeroesTalents {
       
       this._roles[data.role].push(data.name);
     }
+  }
+
+  heroNameFromAttr(attr) {
+    if (attr in this._heroAttr)
+      return this._heroAttr[attr];
+    
+    return 'NotFound';
   }
 
   heroIcon(hero) {

@@ -40,8 +40,31 @@
   border-left: 0;
 }
 
-#match-detail-summary table {
-  height: 100%;
+#match-detail-bans {
+  height: 110px;
+  width: 450px;
+  margin: 0 auto;
+}
+
+#match-detail-bans.hidden {
+  display: none;
+}
+
+#match-detail-bans .images {
+  margin-left: 40px;
+  margin-top: 0.5rem!important;
+}
+
+#match-detail-bans .images .image {
+  margin-right: 10px;
+}
+
+#match-detail-bans .images .blue.image img {
+  border: 2px solid #2185d0;
+}
+
+#match-detail-bans .images .red.image img {
+  border: 2px solid #db2828;
 }
 
 #match-detail-summary tr.blue,

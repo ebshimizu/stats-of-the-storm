@@ -47,13 +47,13 @@ const DetailStatList = [
   'TimeRootingEnemyHeroes',
   'TimeSilencingEnemyHeroes',
   'TimeStunningEnemyHeroes',
-  'TimeOnPoint',
+  //'TimeOnPoint',
   'OnFireTimeOnFire',
   'ExperienceContribution',
   'MercCampCaptures',
-  'TownKills',
-  'WatchTowerCaptures',
-  'Role'
+  //'TownKills',
+  'WatchTowerCaptures'
+  //'Role'
 ];
 
 const PerMapStatList = {
@@ -69,7 +69,8 @@ const PerMapStatList = {
   "Cursed Hollow" : ["CurseDamageDone"],
   "Volskaya Foundry" : [],
   "Sky Temple" : ["TimeInTemple"],
-  "Braxis Holdout" : ["DamageDoneToZerg"]
+  "Braxis Holdout" : ["DamageDoneToZerg"],
+  "Hanamura" : []
 };
 
 const DetailStatString = {
