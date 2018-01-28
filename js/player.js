@@ -2,6 +2,7 @@ var playerDetailID;
 var playerDetailStats;
 var playerDetailInfo;
 var playerDetailHeroSummaryRowTemplate;
+var playerDetailMapSummaryRowTemplate;
 
 function initPlayerPage() {
   // player menu init
@@ -17,12 +18,21 @@ function initPlayerPage() {
 
   // templates
   playerDetailHeroSummaryRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-hero-summary-row').find('tr')[0].outerHTML);
+  playerDetailMapSummaryRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-map-summary-row').find('tr')[0].outerHTML);
 
   // plugins and callbacks
   $('#player-detail-hero-summary table').tablesort();
   $('#player-detail-hero-summary table').floatThead({
     scrollContainer: function($table) {
       return $('#player-detail-hero-summary .table-wrapper');
+    },
+    autoReflow: true
+  });
+
+  $('#player-detail-map-summary table').tablesort();
+  $('#player-detail-map-summary table').floatThead({
+    scrollContainer: function($table) {
+      return $('#player-detail-map-summary .table-wrapper');
     },
     autoReflow: true
   });
@@ -55,78 +65,7 @@ function updatePlayerPage(err, doc) {
 }
 
 function processPlayerData(err, docs) {
-  // collect data
-  // hero averages
-  playerDetailStats = {};
-  playerDetailStats.heroes = {};
-  playerDetailStats.maps = {};
-  playerDetailStats.rawDocs = docs;
-  playerDetailStats.games = 0;
-  playerDetailStats.wins = 0;
-
-  for (let i = 0; i < docs.length; i++) {
-    let match = docs[i];
-    let statList = DetailStatList.concat(PerMapStatList[match.map]);
-
-    // hero stuff
-    if (!(match.hero in playerDetailStats.heroes)) {
-      playerDetailStats.heroes[match.hero] = { games: 0, wins: 0, totalAwards: 0, stats: {}, awards: {} };
-    }
-
-    playerDetailStats.games += 1;
-    playerDetailStats.heroes[match.hero].games += 1;
-
-    if (!(match.map in playerDetailStats.maps))
-      playerDetailStats.maps[match.map] = { games: 0, wins: 0 };
-
-    playerDetailStats.maps[match.map].games += 1;
-
-    for (let s in statList) {
-      let statName = statList[s];
-      if (!(statName in playerDetailStats.heroes[match.hero].stats))
-        playerDetailStats.heroes[match.hero].stats[statName] = 0;
-      
-      playerDetailStats.heroes[match.hero].stats[statName] += match.gameStats[statName];
-    }
-
-    // you only ever get 1 but just in case...
-    // ALSO custom games don't get counted here since you can't get awards
-    if (match.mode !== ReplayTypes.GameMode.Custom && 'awards' in match.gameStats) {
-      for (let a in match.gameStats.awards) {
-        let awardName = match.gameStats.awards[a];
-        if (!(awardName in playerDetailStats.heroes[match.hero].awards))
-          playerDetailStats.heroes[match.hero].awards[awardName] = 0;
-        
-        playerDetailStats.heroes[match.hero].awards[awardName] += 1;
-        playerDetailStats.heroes[match.hero].totalAwards += 1;
-      }
-    }
-
-    if (match.win) {
-      playerDetailStats.wins += 1;
-      playerDetailStats.maps[match.map].wins += 1;
-      playerDetailStats.heroes[match.hero].wins += 1;
-    }
-  }
-
-  // averages
-  playerDetailStats.averages = {};
-  for (let h in playerDetailStats.heroes) {
-    playerDetailStats.averages[h] = {};
-    for (let s in playerDetailStats.heroes[h].stats) {
-      playerDetailStats.averages[h][s] = playerDetailStats.heroes[h].stats[s] / playerDetailStats.heroes[h].games;
-    }
-    playerDetailStats.heroes[h].stats.totalKDA = playerDetailStats.heroes[h].stats.Takedowns / Math.max(playerDetailStats.heroes[h].stats.Deaths, 1);
-
-    if ('EndOfMatchAwardMVPBoolean' in playerDetailStats.heroes[h].awards) {
-      playerDetailStats.heroes[h].stats.MVPPct = playerDetailStats.heroes[h].awards.EndOfMatchAwardMVPBoolean / playerDetailStats.heroes[h].games;
-    }
-    else {
-      playerDetailStats.heroes[h].stats.MVPPct = 0;
-    }
-
-    playerDetailStats.heroes[h].stats.AwardPct = playerDetailStats.heroes[h].totalAwards / playerDetailStats.heroes[h].games;
-  }
+  playerDetailStats = DB.summarizeHeroData(docs);
 
   // render to the proper spots
   renderPlayerSummary();
@@ -134,6 +73,7 @@ function processPlayerData(err, docs) {
 
 function renderPlayerSummary() {
   $('#player-detail-hero-summary tbody').html('');
+  $('#player-detail-map-summary tbody').html('');
 
   for (let h in playerDetailStats.heroes) {
     let context = {};
@@ -152,5 +92,24 @@ function renderPlayerSummary() {
     $('#player-detail-hero-summary tbody').append(playerDetailHeroSummaryRowTemplate(context));
   }
 
+  for (let m in playerDetailStats.maps) {
+    let context = playerDetailStats.maps[m];
+    context.mapName = m;
+    context.winPct = context.wins / context.games;
+    context.formatWinPct = (context.winPct* 100).toFixed(2) + '%';
+
+    $('#player-detail-map-summary tbody').append(playerDetailMapSummaryRowTemplate(context));
+  }
+
+  // individual stats
+  $('.statistic[name="overallWin"] .value').text((playerDetailStats.wins / playerDetailStats.games * 100).toFixed(2) + '%');
+  $('.statistic[name="overallGames"] .value').text(playerDetailStats.games);
+  $('.statistic[name="overallTD"] .value').text(playerDetailStats.totalTD);
+  $('.statistic[name="overallDeaths"] .value').text(playerDetailStats.totalDeaths);
+  $('.statistic[name="overallKDA"] .value').text((playerDetailStats.totalTD / Math.max(playerDetailStats.totalDeaths, 1)).toFixed(2));
+  $('.statistic[name="overallMVP"] .value').text((playerDetailStats.totalMVP / Math.max(playerDetailStats.games, 1) * 100).toFixed(1) + '%');
+  $('.statistic[name="overallAward"] .value').text((playerDetailStats.totalAward / Math.max(playerDetailStats.games) * 100).toFixed(1) + '%');
+
   $('#player-detail-hero-summary table').floatThead('reflow');
+  $('#player-detail-map-summary table').floatThead('reflow');
 }

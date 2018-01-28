@@ -6,7 +6,8 @@
   height: 100%;
 }
 
-#player-detail-summary .grid #player-detail-hero-summary {
+#player-detail-summary .grid #player-detail-hero-summary,
+#player-detail-summary .grid #player-detail-map-summary {
   height: 100%;
 }
 
@@ -43,4 +44,11 @@
 
 #player-detail-hero-summary td {
   font-size: 14pt;
+}
+
+#player-page-header .button {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  float: right;
 }

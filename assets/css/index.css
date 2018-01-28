@@ -27,3 +27,7 @@ body {
 #section-menu-back-button.show {
     display: block;
 }
+
+.floatThead-container {
+    z-index: 5!important;
+}

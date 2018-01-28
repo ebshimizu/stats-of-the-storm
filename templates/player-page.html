@@ -5,8 +5,14 @@
   <div id="player-page-content" class="is-page transition hidden" section-name="player">
     <div id="player-page-header">
       <div class="ui grid">
-        <div class="twelve wide column">
+        <div class="ten wide column">
           <h1 class="ui inverted header player-name">[Player Name]</h1>
+        </div>
+        <div class="two wide column">
+          <button class="ui labeled icon button">
+            <i class="filter icon"></i>
+            Filter Matches
+          </button>
         </div>
         <div class="four wide column">
           <div class="ui fluid search selection dropdown player-menu" id="players-set-player">
@@ -31,46 +37,79 @@
           <div class="ten wide column">
             <div class="ui inverted segment" id="player-detail-hero-summary">
               <div class="ui top attached label">Hero Summary</div>
-              <div id="player-detail-hero-summary">
-                <div class="table-wrapper">
-                  <table class="ui sortable selectable inverted table">
-                    <thead>
-                      <tr>
-                        <th>Hero</th>
-                        <th class="center aligned">Games</th>
-                        <th class="center aligned">Win %</th>
-                        <th class="center aligned">Takedowns</th>
-                        <th class="center aligned">Deaths</th>
-                        <th class="center aligned">KDA</th>
-                        <th class="center aligned">MVP %</th>
-                        <th class="center aligned">Award %</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+              <div class="table-wrapper">
+                <table class="ui sortable selectable inverted table">
+                  <thead>
+                    <tr>
+                      <th>Hero</th>
+                      <th class="center aligned">Win %</th>
+                      <th class="center aligned">Games</th>
+                      <th class="center aligned">Takedowns</th>
+                      <th class="center aligned">Deaths</th>
+                      <th class="center aligned">KDA</th>
+                      <th class="center aligned">MVP %</th>
+                      <th class="center aligned">Award %</th>
+                    </tr>
+                  </thead>
+                  <tbody>
 
-                    </tbody>
-                  </table>
-                </div>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
           <div class="four wide column">
             <div class="ui inverted segment" id="player-detail-map-summary">
               <div class="ui top attached label">Map Summary</div>
-              <table class="ui sortable selectable inverted table">
-                <thead>
-                  <tr>
-                    <th>Map</th>
-                    <th>Games</th>
-                    <th>Win %</th>
-                  </tr>
-                </thead>
-              </table>
+              <div class="table-wrapper">
+                <table class="ui sortable selectable inverted table">
+                  <thead>
+                    <tr>
+                      <th>Map</th>
+                      <th>Win %</th>
+                      <th>Games</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
           <div class="two wide column">
             <div class="ui inverted segment" id="player-detail-misc-summary">
               <div class="ui top attached label">Overall Stats</div>
+              <div class="ui horizontal inverted statistics">
+                <div class="statistic" name="overallWin">
+                  <div class="value">###</div>
+                  <div class="label">Win</div>
+                </div>
+                <div class="statistic" name="overallGames">
+                  <div class="value">###</div>
+                  <div class="label">Games</div>
+                </div>
+                <div class="statistic" name="overallTD">
+                  <div class="value">###</div>
+                  <div class="label">Takedowns</div>
+                </div>
+                <div class="statistic" name="overallDeaths">
+                  <div class="value">###</div>
+                  <div class="label">Deaths</div>
+                </div>
+                <div class="statistic" name="overallKDA">
+                  <div class="value">###</div>
+                  <div class="label">KDA</div>
+                </div>
+                <div class="statistic" name="overallMVP">
+                  <div class="value">###</div>
+                  <div class="label">MVP </div>
+                </div>
+                <div class="statistic" name="overallAward">
+                  <div class="value">###</div>
+                  <div class="label">Award</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -89,12 +128,22 @@
         </div>
       </h3>
     </td>
-    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
+    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
     <td class="center aligned" data-sort-value="{{stats.Takedowns}}">{{stats.Takedowns}}</td>
     <td class="center aligned" data-sort-value="{{stats.Deaths}}">{{stats.Deaths}}</td>
     <td class="center aligned" data-sort-value="{{stats.totalKDA}}">{{stats.totalKDA}}</td>
     <td class="center aligned" data-sort-value="{{stats.MVPPct}}">{{stats.formatMVPPct}}</td>
     <td class="center aligned" data-sort-value="{{stats.AwardPct}}">{{stats.formatAwardPct}}</td>
+  </tr>
+</template>
+
+<template id="player-detail-map-summary-row">
+  <tr class="player-detail-map-summary-row">
+    <td>
+      <h4 class="inverted header">{{mapName}}</h3>
+    </td>
+    <td class="center aligned" data-sort-value="{{winPct}}">{{formatWinPct}}</td>
+    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
   </tr>
 </template>
