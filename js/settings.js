@@ -29,8 +29,22 @@ function initSettingsPage() {
   let replayPath = settings.get('replayPath');
   $('#settings-set-replay-folder input').val(replayPath);
 
-  // load the directory
-  startReplayScan();
+  let selectedPlayerID = settings.get('selectedPlayerID');
+  // add one thing to the player menu and like init it
+  // it's basically temporary
+  let initOpt = '<div class="item" data-value="' + selectedPlayerID + '">' + selectedPlayerID + '</div>';
+  $('#settings-set-player .menu').append(initOpt);
+  $('#settings-set-player').dropdown({
+    action: 'activate',
+    fullTextSearch: true,
+    onChange: updateSelectedUser
+  });
+  $('#settings-set-player').dropdown('set selected', selectedPlayerID);
+
+  if (replayPath) {
+    // load the directory
+    startReplayScan();
+  }
 }
 
 function setReplayFolder() {
@@ -169,6 +183,10 @@ function loadReplay(data) {
   listedReplays[data.idx].processed = true;
   updateLastDate(listedReplays[data.idx].date);
 
+  // updates certain elements in the entire application (player search dropdowns for instance)
+  // after a new replay is processed.
+  globalDBUpdate();
+
   if (replayQueue.length > 0) {
     parseReplaysAsync(replayQueue.shift());
   }
@@ -182,4 +200,8 @@ function stopParse() {
 function updateLastDate(date) {
   settings.set('lastReplayDate', date);
   $('#replay-file-start').datepicker('setDate', date);
+}
+
+function updateSelectedUser(value, text, $item) {
+  settings.set('selectedPlayerID', value);
 }

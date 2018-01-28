@@ -151,6 +151,9 @@ function initApp() {
 
   // sections
   loadSections();
+
+  // populate some menus
+  globalDBUpdate();
 }
 
 function loadDatabase() {
@@ -202,7 +205,7 @@ function loadSections() {
   sections['match-detail'] = {id: '#match-detail-page-content', title: 'Match Detail', showBack: true};
 
   // DEBUG: SHOWING SPECIFIC SECTION ON LOAD FOR TESTING
-  showSection('match-detail');
+  showSection('settings');
 }
 
 // returns the template contained in an import
@@ -278,4 +281,33 @@ function formatStat(field, val) {
     return formatSeconds(val);
   else
     return val;
+}
+
+// updates certain elements based on a new replay inserted into the database
+function globalDBUpdate() {
+  // populate user selection dropdowns with new entries.
+  DB.getPlayers({}, updatePlayerMenus, {sort: {'matches' : -1}});
+}
+
+function updatePlayerMenus(err, players) {
+  // everything with a .player-menu class will do this update
+  $('.player-menu').each(function(idx, elem) {
+    // save selected
+    let selected = $(elem).dropdown('get value');
+
+    // replace things
+    let opts = $(elem).find('.menu');
+    opts.html('');
+
+    for (let p in players) {
+      let elem = '<div class="item" data-value="' + players[p]._id + '">';
+      elem += '<div class="ui horizontal label"><i class="file outline icon"></i>' + players[p].matches + '</div>';
+      elem += players[p].name + ' (' + players[p]._id + ')</div>';
+
+      opts.append(elem);
+    }
+
+    $(elem).dropdown('refresh');
+    $(elem).dropdown('set selected', selected);
+  });
 }

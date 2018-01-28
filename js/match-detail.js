@@ -18,7 +18,7 @@ function initMatchDetailPage() {
   matchTalentRowCellTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-talents-row-cell-template').find('td')[0].outerHTML);
 
   // DEBUG - LOAD SPECIFIC MATCH
-  loadMatchData("95uraT3GIKqHfj5S", function() { console.log("done loading"); });
+  //loadMatchData("95uraT3GIKqHfj5S", function() { console.log("done loading"); });
 }
 
 // retrieves the proper data and then renders to the page

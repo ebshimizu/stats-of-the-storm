@@ -51,7 +51,10 @@ class Database {
           playerDbEntry.uuid = players[i].uuid;
           playerDbEntry.region = players[i].region;
           playerDbEntry.realm = players[i].realm;
-          self._db.players.update({ _id: playerDbEntry._id }, playerDbEntry, {upsert: true}, function(err, numReplaced, upsert) {
+
+          var updateEntry = { $set: playerDbEntry, $inc: { matches: 1}};
+
+          self._db.players.update({ _id: playerDbEntry._id }, updateEntry, {upsert: true}, function(err, numReplaced, upsert) {
             if (err)
               console.log(err);
           });
@@ -112,6 +115,26 @@ class Database {
   getHeroDataForID(matchID, callback) {
     let query = {matchID: matchID};
     this._db.heroData.find(query, callback);
+  }
+
+  getPlayers(query, callback, opts = {}) {
+    if ('sort' in opts) {
+      let cursor;
+      if ('projection' in opts)
+        cursor = this._db.players.find(query, opts.projection);
+      else
+        cursor = this._db.players.find(query);
+      
+      cursor.sort(opts.sort).exec(callback);
+    }
+    else {
+      if ('projection' in opts) {
+        this._db.players.find(query, opts.projection, callback);
+      }
+      else {
+        this._db.players.find(query, callback);
+      }
+    }
   }
 }
 
