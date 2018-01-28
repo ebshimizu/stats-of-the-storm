@@ -1137,6 +1137,7 @@ function processReplay(file, opts = {}) {
 
       if (players[p].team === ReplayTypes.TeamType.Blue) {
         players[p].gameStats.KillParticipation = players[p].gameStats.Takedowns / match.team0Takedowns;
+        players[p].gameStats.length = match.length;
         match.teams[0].level = players[p].gameStats.Level;
         match.teams[0].heroes.push(players[p].hero);
         match.teams[0].names.push(players[p].name);
@@ -1148,6 +1149,7 @@ function processReplay(file, opts = {}) {
       }
       else if (players[p].team === ReplayTypes.TeamType.Red) {
         players[p].gameStats.KillParticipation = players[p].gameStats.Takedowns / match.team1Takedowns;
+        players[p].gameStats.length = match.length;
         match.teams[1].level = players[p].gameStats.Level;
         match.teams[1].heroes.push(players[p].hero);
         match.teams[1].names.push(players[p].name);

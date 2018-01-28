@@ -118,3 +118,7 @@
   cursor: pointer;
   border-color: #FFF;
 }
+
+#player-hero-detail-stats table {
+  width: 5000px;
+}

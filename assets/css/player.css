@@ -11,10 +11,10 @@
   height: 100%;
 }
 
-#player-detail-summary .floatThead-wrapper {
+#player-detail-summary .floatThead-wrapper,
+#player-hero-detail-stats .floatThead-wrapper {
   height: 100%;
 }
-
 
 #player-detail-summary .grid .table-wrapper {
   height: calc(100% - 2rem);
@@ -51,4 +51,18 @@
   top: 50%;
   transform: translateY(-50%);
   float: right;
+}
+
+#player-hero-detail-stats {
+  height: calc(100% - 90px);
+}
+
+#player-hero-detail-stats .table-wrapper-xy {
+  overflow: auto;
+  height: calc(100% - 16px);
+}
+
+#player-hero-detail-stats tbody td {
+  cursor: pointer;
+  font-size: 12pt;
 }

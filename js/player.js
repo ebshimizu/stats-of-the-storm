@@ -3,6 +3,21 @@ var playerDetailStats;
 var playerDetailInfo;
 var playerDetailHeroSummaryRowTemplate;
 var playerDetailMapSummaryRowTemplate;
+var allDetailStats;
+var playerHeroDetailRowTemplate;
+const playerHeroDetailRowTemplateContent = `<tr>
+  <td data-sort-value="{{heroName}}">
+    <h3 class="ui inverted header">
+      <div class="content">{{heroName}}</div>
+    </h3>
+  </td>
+  </td>
+  {{#each stat}}
+    <td class="center aligned" data-sort-value="{{avg}}" data-position="top center" data-html='<h4 class="ui image header"><img class="ui rounded image" src="assets/heroes-talents/images/heroes/{{../heroImg}}"><div class="content">{{../heroName}}</div><div class="ui sub header">{{name}}</div></h4>'>
+      {{avg}}
+    </td>
+  {{/each}}
+ </tr>`;
 
 function initPlayerPage() {
   // player menu init
@@ -19,6 +34,9 @@ function initPlayerPage() {
   // templates
   playerDetailHeroSummaryRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-hero-summary-row').find('tr')[0].outerHTML);
   playerDetailMapSummaryRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-map-summary-row').find('tr')[0].outerHTML);
+  playerHeroDetailRowTemplate = Handlebars.compile(playerHeroDetailRowTemplateContent);
+
+  createDetailTableHeader();
 
   // plugins and callbacks
   $('#player-detail-hero-summary table').tablesort();
@@ -36,6 +54,40 @@ function initPlayerPage() {
     },
     autoReflow: true
   });
+
+  $('#player-hero-detail-stats table').tablesort();
+  $('#player-hero-detail-stats table th.stat').data('sortBy', function(th, td, tablesort) {
+    return parseInt(td.text());
+  });
+  $('#player-hero-detail-stats table').on('tablesort:complete', function(event, tablesort) {
+    $('#player-hero-detail-stats td').popup();
+  });
+  $('#player-hero-detail-stats table').floatThead({
+    scrollContainer: function($table) {
+      return $('#player-hero-detail-stats .table-wrapper-xy');
+    },
+    autoReflow: true
+  });
+
+  $('#player-detail-submenu .item').tab();
+
+  $('a[data-tab="player-summary"]').click(function() {
+    $('#player-detail-map-summary table').floatThead('reflow');
+    $('#player-detail-hero-summary table').floatThead('reflow');
+  })
+}
+
+function createDetailTableHeader() {
+  allDetailStats = DetailStatList;
+  for (let m in PerMapStatList) {
+    allDetailStats = allDetailStats.concat(PerMapStatList[m]);
+  }
+
+  // add the headings n stuff
+  $('#player-hero-detail-stats thead tr').append('<th style="width: 500px;">Hero</th>');
+  for (let i in allDetailStats) {
+    $('#player-hero-detail-stats thead tr').append('<th class="stat">' + DetailStatString[allDetailStats[i]] + '</th>');
+  }
 }
 
 function updatePlayerDetailID(value, text, $item) {
@@ -69,6 +121,7 @@ function processPlayerData(err, docs) {
 
   // render to the proper spots
   renderPlayerSummary();
+  renderPlayerHeroDetail();
 }
 
 function renderPlayerSummary() {
@@ -112,4 +165,28 @@ function renderPlayerSummary() {
 
   $('#player-detail-hero-summary table').floatThead('reflow');
   $('#player-detail-map-summary table').floatThead('reflow');
+}
+
+function renderPlayerHeroDetail() {
+  for (let h in playerDetailStats.averages) {
+    let avgData = playerDetailStats.averages[h];
+    let context = {};
+    context.heroName = h;
+    context.heroImg = Heroes.heroIcon(h);
+    context.stat = [];
+
+    for (let s in allDetailStats) {
+      if (allDetailStats[s] in avgData) {
+        context.stat.push({ avg: avgData[allDetailStats[s]].toFixed(2), name: DetailStatString[allDetailStats[s]] });
+      }
+      else {
+        context.stat.push({avg: '', name: DetailStatString[allDetailStats[s]]});
+      }
+    }
+
+    $('#player-hero-detail-stats tbody').append(playerHeroDetailRowTemplate(context));
+  }
+
+  $('#player-hero-detail-stats table').floatThead('reflow');
+  $('#player-hero-detail-stats td').popup();
 }

@@ -27,12 +27,12 @@
     </div>
     <div id="player-detail-body">
       <div class="ui secondary inverted pointing menu" id="player-detail-submenu">
-        <a class="active item" data-tab="summary">Summary</a>
-        <a class="item" data-tab="">Hero Details</a>
+        <a class="item" data-tab="player-summary">Summary</a>
+        <a class="active item" data-tab="player-hero-detail">Hero Details</a>
         <a class="item" data-tab="">Map Details</a>
         <a class="item" data-tab="">Compare</a>
       </div>
-      <div class="ui active tab player-detail-wrapper" data-tab="summary" id="player-detail-summary">
+      <div class="ui tab player-detail-wrapper" data-tab="player-summary" id="player-detail-summary">
         <div class="ui grid">
           <div class="ten wide column">
             <div class="ui inverted segment" id="player-detail-hero-summary">
@@ -111,6 +111,26 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="ui active tab player-detail-wrapper" data-tab="player-hero-detail" id="player-detail-hero">
+        <div class="ui secondary inverted menu" id="player-detail-hero-submenu">
+          <a class="active item" data-tab="player-hero-detail-stats">Detailed Stats</a>
+          <a class="item" data-tab="player-hero-detail-ind">Individual Hero Details</a>
+          <a class="item" data-tab="player-hero-detail-award">Awards Details</a>
+        </div>
+        <div class="ui inverted segment active tab" id="player-hero-detail-stats" data-tab="player-hero-detail-stats">
+          <div class="ui top attached label">Detailed Average Stats</div>
+          <div class="table-wrapper-xy">
+            <table class="ui sortable selectable celled inverted table">
+              <thead>
+                <tr>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
