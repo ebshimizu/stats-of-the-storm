@@ -126,12 +126,12 @@
       <div class="match-details">
         <div class="ui tiny circular images match-blue-heroes">
           {{#each blueHeroes}}
-          <img class="ui image" src="assets/heroes-talents/images/heroes/{{heroImg}}" data-content="{{playerName}}" player-id="{{playerID}}" data-position="top center">
+          <img class="ui image {{isFocus}}" src="assets/heroes-talents/images/heroes/{{heroImg}}" data-content="{{playerName}}" player-id="{{playerID}}" data-position="top center">
           {{/each}}
         </div>
         <div class="ui tiny circular images match-red-heroes">
           {{#each redHeroes}}
-          <img class="ui image" src="assets/heroes-talents/images/heroes/{{heroImg}}" data-content="{{playerName}}" player-id="{{playerID}}" data-position="top center">
+          <img class="ui image {{isFocus}}" src="assets/heroes-talents/images/heroes/{{heroImg}}" data-content="{{playerName}}" player-id="{{playerID}}" data-position="top center">
           {{/each}}
         </div>
         <div class="match-center-stats">

@@ -205,7 +205,7 @@ function loadSections() {
   sections['match-detail'] = {id: '#match-detail-page-content', title: 'Match Detail', showBack: true};
 
   // DEBUG: SHOWING SPECIFIC SECTION ON LOAD FOR TESTING
-  showSection('settings');
+  showSection('matches');
 }
 
 // returns the template contained in an import
@@ -310,4 +310,12 @@ function updatePlayerMenus(err, players) {
     $(elem).dropdown('refresh');
     $(elem).dropdown('set selected', selected);
   });
+}
+
+// given a user id, returns 'focus-player' class if the player id is, well, the focus player
+function focusClass(id) {
+  if (id === settings.get('selectedPlayerID'))
+    return 'focus-player';
+
+  return '';
 }

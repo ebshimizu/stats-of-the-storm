@@ -60,6 +60,9 @@ function showPage(pageNum) {
       if (i + startIdx < selectedMatches.length) {
         renderToSlot(selectedMatches[i + startIdx], i);
       }
+      else {
+        $('tr[slot="' + i + '"]').html('');
+      }
     }
     currentPage = pageNum;
 
@@ -84,7 +87,7 @@ function showPage(pageNum) {
       elems += '<a class="item" page="' + (pn + 1) + '">' + (pn + 1) + '</a>';
     }
 
-    if (show[show.length - 1] <= maxPages - 2)
+    if (show[show.length - 1] < maxPages - 2)
       elems += '<a class="item disabled">...</a>';
     
     elems += '<a class="item" page="' + maxPages + '">' + maxPages + '</a>';
@@ -115,13 +118,25 @@ function renderToSlot(gameData, slot) {
   context.id = gameData._id;
   
   // if player id is defined, highlight if present, otherwise red/blue
-  if (gameData.winner === 0) {
-    context.winClass = "blue";
-    context.winText = "Blue Team Victory";
+  let focusId = settings.get('selectedPlayerID');
+  if ((gameData.teams[0].ids.indexOf(focusId) > -1 && gameData.winner === 0) ||
+      (gameData.teams[1].ids.indexOf(focusId) > -1 && gameData.winner === 1)) {
+    context.winClass = "green";
+    context.winText = "Victory";
+  }
+  else if (gameData.teams[0].ids.indexOf(focusId) > -1 || gameData.teams[1].ids.indexOf(focusId) > -1) {
+    context.winClass = "red";
+    context.winText = "Defeat";
   }
   else {
-    context.winClass = "red";
-    context.winText = "Red Team Victory";
+    if (gameData.winner === 0) {
+      context.winClass = "blue";
+      context.winText = "Blue Team Victory";
+    }
+    else {
+      context.winClass = "red";
+      context.winText = "Red Team Victory";
+    }
   }
   
   context.date = new Date(gameData.date);
@@ -136,8 +151,8 @@ function renderToSlot(gameData, slot) {
   let bd = gameData.teams[0];
   let rd = gameData.teams[1];
   for (let i = 0; i < gameData.teams[0].ids.length; i++) {
-    context.blueHeroes.push({heroImg: Heroes.heroIcon(bd.heroes[i]), playerName: bd.names[i], playerID: bd.ids[i]});
-    context.redHeroes.push({heroImg: Heroes.heroIcon(rd.heroes[i]), playerName: rd.names[i], playerID: rd.ids[i]});
+    context.blueHeroes.push({heroImg: Heroes.heroIcon(bd.heroes[i]), playerName: bd.names[i], playerID: bd.ids[i], isFocus: focusClass(bd.ids[i] )});
+    context.redHeroes.push({heroImg: Heroes.heroIcon(rd.heroes[i]), playerName: rd.names[i], playerID: rd.ids[i], isFocus: focusClass(rd.ids[i]) });
   }
 
   $('#match-list tr[slot="' + slot + '"]').html(matchRowTemplate(context));
