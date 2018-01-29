@@ -168,6 +168,8 @@ function renderPlayerSummary() {
 }
 
 function renderPlayerHeroDetail() {
+  $('#player-hero-detail-stats tbody').html('');
+
   for (let h in playerDetailStats.averages) {
     let avgData = playerDetailStats.averages[h];
     let context = {};
