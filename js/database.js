@@ -4,6 +4,7 @@
 
 // libraries
 const Parser = require('../parser/parser.js');
+const fs = require('fs');
 
 // databases are loaded from the specified folder when the database object is created
 var Datastore = require('nedb');
@@ -18,6 +19,16 @@ class Database {
     this._db.heroData = new Datastore({ filename: this._path + '/hero.db', autoload: true });
     this._db.players = new Datastore({ filename: this._path + '/players.db', autoload: true });
     this._db.settings = new Datastore({ filename: this._path + '/settings.db', autoload: true });
+  }
+
+  // this should have a GUI warning, this code sure won't stop you.
+  deleteDB() {
+    fs.unlinkSync(this._path + '/matches.db');
+    fs.unlinkSync(this._path + '/hero.db');
+    fs.unlinkSync(this._path + '/players.db');
+    fs.unlinkSync(this._path + '/settings.db');
+
+    delete this._db;
   }
 
   addReplayToDatabase(file, opts = {}) {
@@ -160,10 +171,24 @@ class Database {
     playerDetailStats.games = 0;
     playerDetailStats.wins = 0;
     playerDetailStats.nonCustomGames = 0;
+    playerDetailStats.withPlayer = {};
+    playerDetailStats.withHero = {};
+    playerDetailStats.againstPlayer = {};
+    playerDetailStats.againstHero = {};
+    playerDetailStats.deathHistogram = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    playerDetailStats.takedownHistogram = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    playerDetailStats.skins = {};
+    playerDetailStats.taunts = { 
+      bsteps: { count: 0, duration: 0, takedowns: 0, deaths: 0 },
+      dances: { count: 0, takedowns: 0, deaths: 0 },
+      sprays: { count: 0, takedowns: 0, deaths: 0},
+      taunts: { count: 0, takedowns: 0, deaths: 0},
+      voiceLines: { count: 0, takedowns: 0, deaths: 0 }
+    };
 
     for (let i = 0; i < docs.length; i++) {
       let match = docs[i];
-      let statList = DetailStatList.concat(PerMapStatList[match.map]);
+    let statList = DetailStatList.concat(PerMapStatList[match.map]);
 
       // hero stuff
       if (!(match.hero in playerDetailStats.heroes)) {
@@ -202,10 +227,69 @@ class Database {
         }
       }
 
+      // with and against stats
+      for (let j = 0; j < match.against.ids.length; j++) {
+        if (!(match.against.ids[j] in playerDetailStats.againstPlayer)) {
+          playerDetailStats.againstPlayer[match.against.ids[j]] = { id: match.against.ids[j], name: match.against.names[j], games: 0, defeated: 0 };
+        }
+        if (!(match.against.heroes[j] in playerDetailStats.againstHero)) {
+          playerDetailStats.againstHero[match.against.heroes[j]] = { name: match.against.heroes[j], games: 0, defeated: 0 };
+        }
+        if (!(match.with.ids[j] in playerDetailStats.withPlayer)) {
+          playerDetailStats.withPlayer[match.with.ids[j]] = { id: match.with.ids[j], name: match.with.names[j], games: 0, wins: 0 };
+        }
+        if (!(match.with.heroes[j] in playerDetailStats.withHero)) {
+          playerDetailStats.withHero[match.with.heroes[j]] = { name: match.with.heroes[j], games: 0, wins: 0 };
+        }
+
+        playerDetailStats.againstPlayer[match.against.ids[j]].games += 1;
+        playerDetailStats.againstHero[match.against.heroes[j]].games += 1;
+        playerDetailStats.withPlayer[match.with.ids[j]].games += 1;
+        playerDetailStats.withHero[match.with.heroes[j]].games += 1;
+
+        if (match.win) {
+          playerDetailStats.againstPlayer[match.against.ids[j]].defeated += 1;
+          playerDetailStats.againstHero[match.against.heroes[j]].defeated += 1;
+          playerDetailStats.withPlayer[match.with.ids[j]].wins += 1;
+          playerDetailStats.withHero[match.with.heroes[j]].wins += 1;
+        }
+      }
+
+      // taunts
+      for (let t in playerDetailStats.taunts) {
+        let bm = match[t];
+
+        for (let j = 0; j < bm.length; j++) {
+          playerDetailStats.taunts[t].count += 1;
+          playerDetailStats.taunts[t].takedowns += bm[j].kills;
+          playerDetailStats.taunts[t].deaths += bm[j].deaths;
+
+          if ('duration' in bm[j]) {
+            playerDetailStats.taunts[t].duration += bm[j].duration;
+          }
+        }
+      }
+
+      // takedowns
+      for (let j = 0; j < match.takedowns.length; j++) {
+        playerDetailStats.takedownHistogram[match.takedowns[j].killers.length] += 1;
+      }
+
+      for (let j = 0; j < match.deaths.length; j++) {
+        playerDetailStats.deathHistogram[match.deaths[j].killers.length] += 1;
+      }
+
+      // skins
+      if (!(match.skin in playerDetailStats.skins))
+        playerDetailStats.skins[match.skin] = { games: 0, wins: 0};
+      
+      playerDetailStats.skins[match.skin].games += 1;
+
       if (match.win) {
         playerDetailStats.wins += 1;
         playerDetailStats.maps[match.map].wins += 1;
         playerDetailStats.heroes[match.hero].wins += 1;
+        playerDetailStats.skins[match.skin].wins += 1;
       }
     }
 

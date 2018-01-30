@@ -18,6 +18,7 @@ const playerHeroDetailRowTemplateContent = `<tr>
     </td>
   {{/each}}
  </tr>`;
+ var playerWinRateRowTemplate;
 
 function initPlayerPage() {
   // player menu init
@@ -34,6 +35,7 @@ function initPlayerPage() {
   // templates
   playerDetailHeroSummaryRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-hero-summary-row').find('tr')[0].outerHTML);
   playerDetailMapSummaryRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-map-summary-row').find('tr')[0].outerHTML);
+  playerWinRateRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-player-win-row').find('tr')[0].outerHTML);
   playerHeroDetailRowTemplate = Handlebars.compile(playerHeroDetailRowTemplateContent);
 
   createDetailTableHeader();
@@ -41,17 +43,25 @@ function initPlayerPage() {
   // plugins and callbacks
   $('#player-detail-hero-summary table').tablesort();
   $('#player-detail-hero-summary table').floatThead({
-    scrollContainer: function($table) {
-      return $('#player-detail-hero-summary .table-wrapper');
-    },
+    scrollContainer: closestWrapper,
     autoReflow: true
   });
 
   $('#player-detail-map-summary table').tablesort();
   $('#player-detail-map-summary table').floatThead({
-    scrollContainer: function($table) {
-      return $('#player-detail-map-summary .table-wrapper');
-    },
+    scrollContainer: closestWrapper,
+    autoReflow: true
+  });
+
+  $('#player-detail-friend-summary table').tablesort();
+  $('#player-detail-friend-summary table').floatThead({
+    scrollContainer: closestWrapper,
+    autoReflow: true
+  });
+
+  $('#player-detail-rival-summary table').tablesort();
+  $('#player-detail-rival-summary table').floatThead({
+    scrollContainer: closestWrapper,
     autoReflow: true
   });
 
@@ -70,11 +80,17 @@ function initPlayerPage() {
   });
 
   $('#player-detail-submenu .item').tab();
+  $('#player-detail-hero-submenu .item').tab();
 
   $('a[data-tab="player-summary"]').click(function() {
     $('#player-detail-map-summary table').floatThead('reflow');
     $('#player-detail-hero-summary table').floatThead('reflow');
+    $('#player-detail-friend-summary table').floatThead('reflow');
   })
+}
+
+function closestWrapper($table) {
+  return $table.closest('.table-wrapper');
 }
 
 function createDetailTableHeader() {
@@ -127,6 +143,8 @@ function processPlayerData(err, docs) {
 function renderPlayerSummary() {
   $('#player-detail-hero-summary tbody').html('');
   $('#player-detail-map-summary tbody').html('');
+  $('#player-detail-friend-summary tbody').html('');
+  $('#player-detail-rival-summary tbody').html('');
 
   for (let h in playerDetailStats.heroes) {
     let context = {};
@@ -152,6 +170,28 @@ function renderPlayerSummary() {
     context.formatWinPct = (context.winPct* 100).toFixed(2) + '%';
 
     $('#player-detail-map-summary tbody').append(playerDetailMapSummaryRowTemplate(context));
+  }
+
+  // friends / rivals / hero matchups
+  for (let d in playerDetailStats.withPlayer) {
+    if (d === playerDetailID)
+      continue;
+
+    let context = playerDetailStats.withPlayer[d];
+    context.winPercent = context.wins / context.games;
+    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
+
+    $('#player-detail-friend-summary tbody').append(playerWinRateRowTemplate(context));
+  }
+
+  for (let d in playerDetailStats.againstPlayer) {
+    // can't really be vs yourself huh
+    let context = playerDetailStats.againstPlayer[d];
+    context.winPercent = context.defeated / context.games;
+    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
+
+    $('#player-detail-rival-summary tbody').append(playerWinRateRowTemplate(context));
+
   }
 
   // individual stats

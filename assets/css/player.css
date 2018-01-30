@@ -8,7 +8,7 @@
 
 #player-detail-summary .grid #player-detail-hero-summary,
 #player-detail-summary .grid #player-detail-map-summary {
-  height: 100%;
+  height: 650px;
 }
 
 #player-detail-summary .floatThead-wrapper,
@@ -65,4 +65,8 @@
 #player-hero-detail-stats tbody td {
   cursor: pointer;
   font-size: 12pt;
+}
+
+#player-detail-body .player-win {
+  height: 600px;
 }

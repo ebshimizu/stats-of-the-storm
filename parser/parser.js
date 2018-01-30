@@ -1161,6 +1161,18 @@ function processReplay(file, opts = {}) {
       }
     }
 
+    // uh ok one more time
+    for (let p in players) {
+      players[p].with = match.teams[players[p].team];
+
+      if (players[p].team === ReplayTypes.TeamType.Blue) {
+        players[p].against = match.teams[ReplayTypes.TeamType.Red];
+      }
+      else if (players[p].team === ReplayTypes.TeamType.Red) {
+        players[p].against = match.teams[ReplayTypes.TeamType.Blue];
+      }
+    }
+
     match.winningPlayers = match.teams[match.winner].ids;
 
     console.log("[MESSAGES] Message Processing Start...");
