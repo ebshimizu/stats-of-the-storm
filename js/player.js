@@ -98,7 +98,7 @@ function initPlayerPage() {
 
   $('#player-hero-detail-stats table').tablesort();
   $('#player-hero-detail-stats table th.stat').data('sortBy', function(th, td, tablesort) {
-    return parseInt(td.text());
+    return parseFloat(td.text());
   });
   $('#player-hero-detail-stats table').on('tablesort:complete', function(event, tablesort) {
     $('#player-hero-detail-stats td').popup();
@@ -119,6 +119,10 @@ function initPlayerPage() {
     $('#player-detail-friend-summary table').floatThead('reflow');
     $('#player-detail-hero-talent table').floatThead('reflow');
   });
+
+  $('a[data-tab="player-hero-detail"]').click(function() {
+    $('#player-hero-detail-stats table').floatThead('reflow');
+  })
   
   $('#player-hero-select-menu').dropdown({
     action: 'activate',
@@ -159,6 +163,8 @@ function updatePlayerPage(err, doc) {
   if (doc.length === 1) {
     playerDetailInfo = doc[0];
     $('#player-page-header .header.player-name').text(playerDetailInfo.name);
+    $('#player-hero-select-menu').dropdown('set text', 'All Heroes');
+    updateHeroTitle('all');
 
     // then do the big query
     // depending on filters, this may get increasingly complicated
@@ -291,6 +297,10 @@ function renderPlayerSummary() {
     if (d === playerDetailID)
       continue;
 
+    // more than 1 game, filters out a lot of useless data
+    if (playerDetailStats.withPlayer[d].games === 1)
+      continue;
+
     let context = playerDetailStats.withPlayer[d];
     context.winPercent = context.wins / context.games;
     context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
@@ -299,6 +309,9 @@ function renderPlayerSummary() {
   }
 
   for (let d in playerDetailStats.againstPlayer) {
+    if (playerDetailStats.againstPlayer[d].games === 1)
+      continue;
+
     // can't really be vs yourself huh
     let context = playerDetailStats.againstPlayer[d];
     context.winPercent = context.defeated / context.games;

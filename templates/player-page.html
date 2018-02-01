@@ -28,8 +28,7 @@
     <div id="player-detail-body">
       <div class="ui secondary inverted pointing menu" id="player-detail-submenu">
         <a class="active item" data-tab="player-summary">Summary</a>
-        <a class="item" data-tab="player-hero-detail">Detailed Hero Stats</a>
-        <a class="item" data-tab="">Map Details</a>
+        <a class="item" data-tab="player-hero-detail">Detailed Hero Stats Table</a>
         <a class="item" data-tab="">Compare</a>
       </div>
       <div class="ui active tab" data-tab="player-summary" id="player-detail-summary">
@@ -75,8 +74,8 @@
                     <thead>
                       <tr>
                         <th>Talent</th>
-                        <th class="center aligned">Frequency</th>
                         <th class="center aligned">Win %</th>
+                        <th class="center aligned">Games</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -109,7 +108,7 @@
             <div class="two wide column">
               <div class="ui inverted segment" id="player-detail-misc-summary">
                 <div class="ui top attached label">Overall Stats</div>
-                <div class="ui horizontal inverted statistics">
+                <div class="ui horizontal small inverted statistics">
                   <div class="statistic" name="overallWin">
                     <div class="value">###</div>
                     <div class="label">Win</div>
@@ -319,7 +318,7 @@
         </div>
       </div>
     </td>
-    <td class="center aligned talent-stat">{{games}}</td>
     <td class="center aligned talent-stat">{{formatWinPercent}}</td>
+    <td class="center aligned talent-stat">{{games}}</td>
   </tr>
 </template>

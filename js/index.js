@@ -305,6 +305,10 @@ function updatePlayerMenus(err, players) {
     opts.html('');
 
     for (let p in players) {
+      // in non-collection mode players with less than 1 game are hidden
+      if (players[p].matches === 1)
+        continue;
+
       let elem = '<div class="item" data-value="' + players[p]._id + '">';
       elem += '<div class="ui horizontal label"><i class="file outline icon"></i>' + players[p].matches + '</div>';
       elem += players[p].name + ' (' + players[p]._id + ')</div>';
