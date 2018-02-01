@@ -134,6 +134,10 @@ class Database {
     this._db.heroData.find(query, callback);
   }
 
+  getHeroData(query, callback) {
+    this._db.heroData.find(query, callback);
+  }
+
   getPlayers(query, callback, opts = {}) {
     if ('sort' in opts) {
       let cursor;
@@ -188,7 +192,7 @@ class Database {
 
     for (let i = 0; i < docs.length; i++) {
       let match = docs[i];
-    let statList = DetailStatList.concat(PerMapStatList[match.map]);
+      let statList = DetailStatList.concat(PerMapStatList[match.map]);
 
       // hero stuff
       if (!(match.hero in playerDetailStats.heroes)) {
@@ -229,29 +233,36 @@ class Database {
 
       // with and against stats
       for (let j = 0; j < match.against.ids.length; j++) {
+        if (match.with.ids[j] !== match.ToonHandle) {
+          if (!(match.with.ids[j] in playerDetailStats.withPlayer)) {
+            playerDetailStats.withPlayer[match.with.ids[j]] = { id: match.with.ids[j], name: match.with.names[j], games: 0, wins: 0 };
+          }
+          if (!(match.with.heroes[j] in playerDetailStats.withHero)) {
+            playerDetailStats.withHero[match.with.heroes[j]] = { name: match.with.heroes[j], games: 0, wins: 0 };
+          }
+
+          playerDetailStats.withPlayer[match.with.ids[j]].games += 1;
+          playerDetailStats.withHero[match.with.heroes[j]].games += 1;
+
+          if (match.win) {
+            playerDetailStats.withPlayer[match.with.ids[j]].wins += 1;
+            playerDetailStats.withHero[match.with.heroes[j]].wins += 1;
+          }
+        }
+
         if (!(match.against.ids[j] in playerDetailStats.againstPlayer)) {
           playerDetailStats.againstPlayer[match.against.ids[j]] = { id: match.against.ids[j], name: match.against.names[j], games: 0, defeated: 0 };
         }
         if (!(match.against.heroes[j] in playerDetailStats.againstHero)) {
           playerDetailStats.againstHero[match.against.heroes[j]] = { name: match.against.heroes[j], games: 0, defeated: 0 };
         }
-        if (!(match.with.ids[j] in playerDetailStats.withPlayer)) {
-          playerDetailStats.withPlayer[match.with.ids[j]] = { id: match.with.ids[j], name: match.with.names[j], games: 0, wins: 0 };
-        }
-        if (!(match.with.heroes[j] in playerDetailStats.withHero)) {
-          playerDetailStats.withHero[match.with.heroes[j]] = { name: match.with.heroes[j], games: 0, wins: 0 };
-        }
 
         playerDetailStats.againstPlayer[match.against.ids[j]].games += 1;
         playerDetailStats.againstHero[match.against.heroes[j]].games += 1;
-        playerDetailStats.withPlayer[match.with.ids[j]].games += 1;
-        playerDetailStats.withHero[match.with.heroes[j]].games += 1;
 
         if (match.win) {
           playerDetailStats.againstPlayer[match.against.ids[j]].defeated += 1;
           playerDetailStats.againstHero[match.against.heroes[j]].defeated += 1;
-          playerDetailStats.withPlayer[match.with.ids[j]].wins += 1;
-          playerDetailStats.withHero[match.with.heroes[j]].wins += 1;
         }
       }
 
@@ -322,6 +333,37 @@ class Database {
     }
 
     return playerDetailStats;
+  }
+
+  // this is intended to be used with only one hero but can be used with multiple (?)
+  summarizeTalentData(docs) {
+    let talentStats = {};
+
+    for (let d in docs) {
+      let match = docs[d];
+
+      if (!(match.hero in talentStats)) {
+        talentStats[match.hero] = {};
+      }
+
+      for (let t in match.talents) {
+        if (!(t in talentStats[match.hero])) {
+          talentStats[match.hero][t] = {};
+        }
+
+        if (!(match.talents[t] in talentStats[match.hero][t])) {
+          talentStats[match.hero][t][match.talents[t]] = { games: 0, wins: 0};
+        }
+
+        talentStats[match.hero][t][match.talents[t]].games += 1;
+        
+        if (match.win) {
+          talentStats[match.hero][t][match.talents[t]].wins += 1;
+        }
+      }
+    }
+
+    return talentStats;
   }
 }
 

@@ -28,180 +28,208 @@
     <div id="player-detail-body">
       <div class="ui secondary inverted pointing menu" id="player-detail-submenu">
         <a class="active item" data-tab="player-summary">Summary</a>
-        <a class="item" data-tab="player-hero-detail">Hero Details</a>
+        <a class="item" data-tab="player-hero-detail">Detailed Hero Stats</a>
         <a class="item" data-tab="">Map Details</a>
         <a class="item" data-tab="">Compare</a>
       </div>
-      <div class="ui active tab player-detail-wrapper" data-tab="player-summary" id="player-detail-summary">
-        <div class="ui grid">
-          <div class="ten wide column">
-            <div class="ui inverted segment" id="player-detail-hero-summary">
-              <div class="ui top attached label">Hero Summary</div>
-              <div class="table-wrapper">
-                <table class="ui sortable selectable inverted table">
-                  <thead>
-                    <tr>
-                      <th>Hero</th>
-                      <th class="center aligned">Win %</th>
-                      <th class="center aligned">Games</th>
-                      <th class="center aligned">Takedowns</th>
-                      <th class="center aligned">Deaths</th>
-                      <th class="center aligned">KDA</th>
-                      <th class="center aligned">MVP %</th>
-                      <th class="center aligned">Award %</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+      <div class="ui active tab" data-tab="player-summary" id="player-detail-summary">
+        <div id="player-detail-summary-header">
+          <h2 class="ui inverted header">All Hero Summary</h2>
+          <div class="ui search selection dropdown" id="player-hero-select-menu">
+            <i class="dropdown icon"></i>
+            <div class="default text">All Heroes</div>
+            <div class="menu">
 
-                  </tbody>
-                </table>
-              </div>
             </div>
           </div>
-          <div class="four wide column">
-            <div class="ui inverted segment" id="player-detail-map-summary">
-              <div class="ui top attached label">Map Summary</div>
-              <div class="table-wrapper">
-                <table class="ui sortable selectable inverted table">
-                  <thead>
-                    <tr>
-                      <th>Map</th>
-                      <th>Win %</th>
-                      <th>Games</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+        </div>
+        <div class="player-detail-wrapper">
+          <div class="ui grid">
+            <div class="ten wide column">
+              <div class="ui inverted segment" id="player-detail-hero-summary">
+                <div class="ui top attached label">Hero Summary</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Hero</th>
+                        <th class="center aligned">Win %</th>
+                        <th class="center aligned">Games</th>
+                        <th class="center aligned">Takedowns</th>
+                        <th class="center aligned">Deaths</th>
+                        <th class="center aligned">KDA</th>
+                        <th class="center aligned">MVP %</th>
+                        <th class="center aligned">Award %</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="ui inverted segment is-hidden" id="player-detail-hero-talent">
+                <div class="ui top attached label">Talents</div>
+                <div class="table-wrapper">
+                  <table class="ui selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Talent</th>
+                        <th class="center aligned">Frequency</th>
+                        <th class="center aligned">Win %</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        
+                      <tr><td colspan="3">Level 1</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="four wide column">
+              <div class="ui inverted segment" id="player-detail-map-summary">
+                <div class="ui top attached label">Map Summary</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Map</th>
+                        <th>Win %</th>
+                        <th>Games</th>
+                      </tr>
+                    </thead>
+                    <tbody>
 
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div class="two wide column">
-            <div class="ui inverted segment" id="player-detail-misc-summary">
-              <div class="ui top attached label">Overall Stats</div>
-              <div class="ui horizontal inverted statistics">
-                <div class="statistic" name="overallWin">
-                  <div class="value">###</div>
-                  <div class="label">Win</div>
-                </div>
-                <div class="statistic" name="overallGames">
-                  <div class="value">###</div>
-                  <div class="label">Games</div>
-                </div>
-                <div class="statistic" name="overallTD">
-                  <div class="value">###</div>
-                  <div class="label">Takedowns</div>
-                </div>
-                <div class="statistic" name="overallDeaths">
-                  <div class="value">###</div>
-                  <div class="label">Deaths</div>
-                </div>
-                <div class="statistic" name="overallKDA">
-                  <div class="value">###</div>
-                  <div class="label">KDA</div>
-                </div>
-                <div class="statistic" name="overallMVP">
-                  <div class="value">###</div>
-                  <div class="label">MVP </div>
-                </div>
-                <div class="statistic" name="overallAward">
-                  <div class="value">###</div>
-                  <div class="label">Award</div>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="four wide column">
-            <div class="ui inverted segment player-win" id="player-detail-with-summary">
-              <div class="ui top attached label">Win Rate With Hero</div>
-              <div class="table-wrapper">
-                <table class="ui sortable selectable inverted table">
-                  <thead>
-                    <tr>
-                      <th>Hero</th>
-                      <th>Win %</th>
-                      <th>Games</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    
-                  </tbody>
-                </table>
+            <div class="two wide column">
+              <div class="ui inverted segment" id="player-detail-misc-summary">
+                <div class="ui top attached label">Overall Stats</div>
+                <div class="ui horizontal inverted statistics">
+                  <div class="statistic" name="overallWin">
+                    <div class="value">###</div>
+                    <div class="label">Win</div>
+                  </div>
+                  <div class="statistic" name="overallGames">
+                    <div class="value">###</div>
+                    <div class="label">Games</div>
+                  </div>
+                  <div class="statistic" name="overallTD">
+                    <div class="value">###</div>
+                    <div class="label">Takedowns</div>
+                  </div>
+                  <div class="statistic" name="overallDeaths">
+                    <div class="value">###</div>
+                    <div class="label">Deaths</div>
+                  </div>
+                  <div class="statistic" name="overallKDA">
+                    <div class="value">###</div>
+                    <div class="label">KDA</div>
+                  </div>
+                  <div class="statistic" name="overallMVP">
+                    <div class="value">###</div>
+                    <div class="label">MVP </div>
+                  </div>
+                  <div class="statistic" name="overallAward">
+                    <div class="value">###</div>
+                    <div class="label">Award</div>
+                  </div>
+                  <div class="statistic" name="rtd">
+                    <div class="value">###</div>
+                    <div class="label">Avg Players Died To</div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="four wide column">
-            <div class="ui inverted segment player-win" id="player-detail-against-summary">
-              <div class="ui top attached label">Win Rate Against Hero</div>
-              <div class="table-wrapper">
-                <table class="ui sortable selectable inverted table">
-                  <thead>
-                    <tr>
-                      <th>Hero</th>
-                      <th>Win %</th>
-                      <th>Games</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    
-                  </tbody>
-                </table>
+            <div class="four wide column">
+              <div class="ui inverted segment player-win" id="player-detail-with-summary">
+                <div class="ui top attached label">Win Rate With Hero</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Hero</th>
+                        <th>Win %</th>
+                        <th>Games</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="three wide column">
-            <div class="ui inverted segment player-win" id="player-detail-friend-summary">
-              <div class="ui top attached label">Win Rate With Player</div>
-              <div class="table-wrapper">
-                <table class="ui sortable selectable inverted table">
-                  <thead>
-                    <tr>
-                      <th>Player</th>
-                      <th>Win %</th>
-                      <th>Games</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    
-                  </tbody>
-                </table>
+            <div class="four wide column">
+              <div class="ui inverted segment player-win" id="player-detail-against-summary">
+                <div class="ui top attached label">Win Rate Against Hero</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Hero</th>
+                        <th>Win %</th>
+                        <th>Games</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="three wide column">
-            <div class="ui inverted segment player-win" id="player-detail-rival-summary">
-              <div class="ui top attached label">Win Rate Against Player</div>
-              <div class="table-wrapper">
-                <table class="ui sortable selectable inverted table">
-                  <thead>
-                    <tr>
-                      <th>Player</th>
-                      <th>Win %</th>
-                      <th>Games</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    
-                  </tbody>
-                </table>
+            <div class="three wide column">
+              <div class="ui inverted segment player-win" id="player-detail-friend-summary">
+                <div class="ui top attached label">Win Rate With Player</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Player</th>
+                        <th>Win %</th>
+                        <th>Games</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="two wide column">
-            <div class="ui inverted segment" id="player-detail-taunt-summary">
-              <div class="ui top attached label">Taunt Stats</div>
+            <div class="three wide column">
+              <div class="ui inverted segment player-win" id="player-detail-rival-summary">
+                <div class="ui top attached label">Win Rate Against Player</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Player</th>
+                        <th>Win %</th>
+                        <th>Games</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="two wide column">
+              <div class="ui inverted segment" id="player-detail-taunt-summary">
+                <div class="ui top attached label">Taunt Stats</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div class="ui tab player-detail-wrapper" data-tab="player-hero-detail" id="player-detail-hero">
-        <div class="ui secondary inverted menu" id="player-detail-hero-submenu">
-          <a class="item" data-tab="player-hero-detail-stats">Detailed Stats</a>
-          <a class="active item" data-tab="player-hero-detail-ind">Individual Hero Details</a>
-          <a class="item" data-tab="player-hero-detail-award">Awards Details</a>
-        </div>
-        <div class="ui inverted segment tab" id="player-hero-detail-stats" data-tab="player-hero-detail-stats">
+        <div class="ui inverted segment" id="player-hero-detail-stats" data-tab="player-hero-detail-stats">
           <div class="ui top attached label">Detailed Average Stats</div>
           <div class="table-wrapper-xy">
             <table class="ui sortable selectable celled inverted table">
@@ -212,35 +240,6 @@
               <tbody>
               </tbody>
             </table>
-          </div>
-        </div>
-        <div class="ui active tab" id="player-hero-detail-ind" data-tab="player-hero-detail-ind">
-          <div class="ui grid">
-            <div class="five wide column">
-              <div class="ui inverted segment">
-                <div class="ui top attached label">Talents</div>
-              </div>
-            </div>
-            <div class="three wide column">
-              <div class="ui inverted segment">
-                <div class="ui top attached label">Win Rate Against</div>
-              </div>
-            </div>
-            <div class="three wide column">
-              <div class="ui inverted segment">
-                <div class="ui top attached label">Win Rate With</div>
-              </div>
-            </div>
-            <div class="three wide column">
-              <div class="ui inverted segment">
-                <div class="ui top attached label">Win Rate by Map</div>
-              </div>
-            </div>
-            <div class="two wide column">
-              <div class="ui inverted segment">
-                <div class="ui top attached label">Taunt Stats</div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -285,5 +284,42 @@
     </td>
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
     <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
+  </tr>
+</template>
+
+<template id="player-detail-hero-win-row">
+  <tr>
+    <td data-sort-value="{{name}}">
+      <h3 class="ui image inverted header">
+        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui rounded image">
+        <div class="content">
+          {{name}}
+        </div>
+      </h3>
+    </td>
+    <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
+    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
+  </tr>
+</template>
+
+<template id="player-detail-talent-row">
+  <tr>
+    <td>
+      <div class="ui items">
+        <div class="ui item">
+          <div class="ui rounded image">
+            <img src="assets/heroes-talents/images/talents/{{icon}}">
+          </div>
+          <div class="content">
+            <div class="ui inverted header">{{name}}</div>
+            <div class="description">
+              {{description}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </td>
+    <td class="center aligned talent-stat">{{games}}</td>
+    <td class="center aligned talent-stat">{{formatWinPercent}}</td>
   </tr>
 </template>

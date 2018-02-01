@@ -31,3 +31,7 @@ body {
 .floatThead-container {
     z-index: 5!important;
 }
+
+.is-hidden {
+    display: none;
+}

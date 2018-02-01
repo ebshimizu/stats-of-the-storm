@@ -2,12 +2,13 @@
   height: calc(100% - 40px);
 }
 
-#player-detail-summary .grid {
+#player-detail-summary {
   height: 100%;
 }
 
 #player-detail-summary .grid #player-detail-hero-summary,
-#player-detail-summary .grid #player-detail-map-summary {
+#player-detail-summary .grid #player-detail-map-summary,
+#player-detail-summary .grid #player-detail-hero-talent {
   height: 650px;
 }
 
@@ -42,6 +43,25 @@
   overflow-x: hidden;
 }
 
+#player-detail-summary .player-detail-wrapper {
+  height: calc(100% - 110px);
+}
+
+#player-detail-summary-header {
+  height: 60px;
+  position: relative;
+}
+
+#player-hero-select-menu {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#player-detail-hero-talent {
+  margin-top: 0;
+}
+
 #player-detail-hero-summary td {
   font-size: 14pt;
 }
@@ -69,4 +89,27 @@
 
 #player-detail-body .player-win {
   height: 600px;
+}
+
+#player-detail-body .player-win {
+  font-size: 11pt;
+}
+
+#player-detail-hero-talent .item .header,
+#player-detail-hero-talent .item .description {
+  color: #FFFFFF;
+}
+
+#player-detail-hero-talent .talent-stat {
+  font-size: 14pt;
+}
+
+#player-detail-hero-talent tr.level-header {
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+#player-detail-hero-talent tr.level-header:hover,
+#player-detail-hero-talent tr.level-header td:hover {
+  background-color: #333;
 }
