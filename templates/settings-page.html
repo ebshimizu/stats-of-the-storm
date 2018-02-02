@@ -53,7 +53,7 @@
                             <div class="four wide column"><div class="item">Database</div></div>
                             <div class="eight wide column"><div class="item"></div></div>
                             <div class="four wide column"><div class="item">
-                                <div class="ui fluid red button">Delete</div>
+                                <div class="ui fluid red button" id="delete-db-button">Delete</div>
                             </div></div>
                         </div>
                     </div>
@@ -73,6 +73,16 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="ui modal" id="confirm-db-delete-modal">
+            <div class="header">Confirm Database Delete</div>
+            <div class="content">
+                <div class="description">Are you sure you want to delete the current database? This action cannot be undone.</div>
+            </div>
+            <div class="actions">
+                <div class="ui red approve button">Yes</div>
+                <div class="ui green cancel button">No</div>
             </div>
         </div>
     </div>

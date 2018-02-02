@@ -21,6 +21,19 @@ function initSettingsPage() {
   $('#rescan-replays-button').click(startReplayScan);
   $('#replay-file-start').datepicker();
   $('#replay-file-start').datepicker('setDate', date);
+  $('#delete-db-button').click(function() {
+    $('#confirm-db-delete-modal').modal({
+      closable: false,
+      onDeny: function() {
+        return true;
+      },
+      onApprove: function() {
+        DB.deleteDB();
+        loadDatabase();
+        return true;
+      }
+    }).modal('show');
+  });
 
   // initial settings
   let path = settings.get('dbPath');
