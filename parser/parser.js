@@ -465,7 +465,17 @@ function processReplay(file, opts = {}) {
               victim = playerIDMap[entry.m_value];
             }
             else if (entry.m_key === "KillingPlayer") {
-              let tdo = { player: playerIDMap[entry.m_value], hero: players[playerIDMap[entry.m_value]].hero };
+              let tdo = {};
+              if (entry.m_value === 0) {
+                // this poor person died to a creep
+                tdo.player = "0";
+                tdo.hero = "Nexus Forces"
+              }
+              else {
+                tdo = { player: playerIDMap[entry.m_value], hero: players[playerIDMap[entry.m_value]].hero };
+              }
+              
+                
               killers.push(playerIDMap[entry.m_value]);
               tData.killers.push(tdo);
             }
@@ -479,6 +489,9 @@ function processReplay(file, opts = {}) {
           match.takedowns.push(tData);
           players[victim].deaths.push(tData);
           for (let j = 0; j < killers.length; j++) {
+            if (killers[j] === undefined)
+              continue;
+
             players[killers[j]].takedowns.push(tData);
           }
 
@@ -1347,10 +1360,10 @@ function processTauntData(players, takedowns, playerBSeq) {
 
           if (min <= time && time <= max) {
             // check involved players
-            if (td.victim === id)
+            if (td.victim.player === id)
               bStep.deaths += 1;
 
-            if (td.killers.indexOf(id) > -1)
+            if (td.killers.find(function(elem) { return elem.player === id; }))
               bStep.kills += 1;
           }
         }
@@ -1373,10 +1386,10 @@ function processTauntData(players, takedowns, playerBSeq) {
 
         if (Math.abs(tauntTime - time) <= 160) {
           // check involved players
-          if (td.victim === id)
+          if (td.victim.player === id)
             player.taunts[i].deaths += 1;
 
-          if (td.killers.indexOf(id) > -1)
+          if (td.killers.find(function(elem) { return elem.player === id; }))
             player.taunts[i].kills += 1;
         }
       }
@@ -1392,10 +1405,10 @@ function processTauntData(players, takedowns, playerBSeq) {
 
         if (Math.abs(tauntTime - time) <= 160) {
           // check involved players
-          if (td.victim === id)
+          if (td.victim.player === id)
             player.voiceLines[i].deaths += 1;
 
-          if (td.killers.indexOf(id) > -1)
+          if (td.killers.find(function(elem) { return elem.player === id; }))
             player.voiceLines[i].kills += 1;
         }
       }
@@ -1411,10 +1424,10 @@ function processTauntData(players, takedowns, playerBSeq) {
 
         if (Math.abs(tauntTime - time) <= 160) {
           // check involved players
-          if (td.victim === id)
+          if (td.victim.player === id)
             player.sprays[i].deaths += 1;
 
-          if (td.killers.indexOf(id) > -1)
+          if (td.killers.find(function(elem) { return elem.player === id; }))
             player.sprays[i].kills += 1;
         }
       }
@@ -1429,10 +1442,10 @@ function processTauntData(players, takedowns, playerBSeq) {
 
           if (Math.abs(tauntTime - time) <= 160) {
             // check involved players
-            if (td.victim === id)
+            if (td.victim.player === id)
               player.dances[i].deaths += 1;
 
-            if (td.killers.indexOf(id) > -1)
+            if (td.killers.find(function(elem) { return elem.player === id; }))
               player.dances[i].kills += 1;
           }
         }
