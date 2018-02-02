@@ -59,6 +59,9 @@ function initPlayerPage() {
     scrollContainer: closestWrapper,
     autoReflow: true
   });
+  $('#player-detail-hero-summary table th.stat').data('sortBy', function(th, td, tablesort) {
+    return parseFloat(td.text());
+  });
 
   $('#player-detail-map-summary table').tablesort();
   $('#player-detail-map-summary table').floatThead({

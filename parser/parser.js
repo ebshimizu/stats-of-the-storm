@@ -290,7 +290,7 @@ function processReplay(file, opts = {}) {
       match.objective[1] = { count: 0, damage: 0, events: [] };
     }
     else if (match.map === ReplayTypes.MapType.Towers) {
-      match.sixTowerEvents = [];
+      match.objective.sixTowerEvents = [];
       // this is a special case for towers, other matches will have a general 'structures' object in the root
       match.objective.structures = [];
       match.objective[0] = { count: 0, damage: 0, events: [] };
