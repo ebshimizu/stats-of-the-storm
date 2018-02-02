@@ -347,14 +347,24 @@ function renderPlayerSummary() {
   $('.statistic[name="overallMVP"] .value').text((playerDetailStats.totalMVP / Math.max(playerDetailStats.games, 1) * 100).toFixed(1) + '%');
   $('.statistic[name="overallAward"] .value').text((playerDetailStats.totalAward / Math.max(playerDetailStats.games) * 100).toFixed(1) + '%');
 
-  let dh = 0;
-  for (let d in playerDetailStats.deathHistogram) {
-    dh += d * playerDetailStats.deathHistogram[d];
-  }
-  $('.statistic[name="rtd"] .value').text((dh / Math.max(playerDetailStats.totalDeaths, 1)).toFixed(2));
+  // taunts
+  setTauntStats('bstep', playerDetailStats.taunts.bsteps);
+  setTauntStats('taunt', playerDetailStats.taunts.taunts);
+  setTauntStats('spray', playerDetailStats.taunts.sprays);
+  setTauntStats('dance', playerDetailStats.taunts.dances);
+  setTauntStats('voice', playerDetailStats.taunts.voiceLines);
+
+  $('.statistic[name="soloKills"] .value').text(playerDetailStats.takedownHistogram[1]);
+  $('.statistic[name="soloDeaths"] .value').text(playerDetailStats.deathHistogram[1]);
 
   $('#player-detail-hero-summary table').floatThead('reflow');
   $('#player-detail-map-summary table').floatThead('reflow');
+}
+
+function setTauntStats(name, obj) {
+  $('.statistic[name="' + name + '-total"] .value').text(obj.count);
+  $('.statistic[name="' + name + '-tds"] .value').text(obj.takedowns);
+  $('.statistic[name="' + name + '-deaths"] .value').text(obj.deaths);
 }
 
 function renderPlayerHeroDetail() {

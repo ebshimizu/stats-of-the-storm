@@ -222,6 +222,7 @@ function processReplay(file, opts = {}) {
     console.log("Gathering player cosmetic info...");
 
     let lobbyState = data.initdata[1].m_syncLobbyState.m_lobbyState.m_slots; 
+    var playerLobbyID = {};
     for (let i = 0; i < lobbyState.length; i++) {
       let p = lobbyState[i];
       let id = p.m_toonHandle;
@@ -236,6 +237,7 @@ function processReplay(file, opts = {}) {
       players[id].announcer = p.m_announcerPack;
       players[id].mount = p.m_mount;
       players[id].silenced = p.m_hasSilencePenalty;
+      playerLobbyID[p.m_userId] = id;
     }
 
     console.log("Cosmetic use data collection complete");
@@ -1203,10 +1205,10 @@ function processReplay(file, opts = {}) {
       if (msg.type === ReplayTypes.MessageType.LoadingProgress)
         continue;
 
-      if (!(message._userid.m_userId in playerIDMap))
+      if (!(message._userid.m_userId in playerLobbyID))
         continue;
 
-      msg.player = playerIDMap[message._userid.m_userId];
+      msg.player = playerLobbyID[message._userid.m_userId];
       msg.team = players[msg.player].team;
       msg.recipient = message.m_recipient;
       msg.loop = message._gameloop;
@@ -1240,8 +1242,8 @@ function processReplay(file, opts = {}) {
         if (event._eventid === 27) {
           if (event.m_abil && event.m_abil.m_abilLink === 200) {
             // player ids are actually off by one here
-            let playerID = event._userid.m_userId + 1;
-            let id = playerIDMap[playerID];
+            let playerID = event._userid.m_userId;
+            let id = playerLobbyID[playerID];
 
             if (!(id in playerBSeq))
               playerBSeq[id] = [];
@@ -1262,8 +1264,8 @@ function processReplay(file, opts = {}) {
           }
           // taunts and dances
           else if (event.m_abil && event.m_abil.m_abilLink === 19) {
-            let playerID = event._userid.m_userId + 1;
-            let id = playerIDMap[playerID];
+            let playerID = event._userid.m_userId;
+            let id = playerLobbyID[playerID];
 
             let eventObj = {};
             eventObj.loop = event._gameloop;
