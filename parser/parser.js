@@ -468,7 +468,7 @@ function processReplay(file, opts = {}) {
             }
             else if (entry.m_key === "KillingPlayer") {
               let tdo = {};
-              if (entry.m_value === 0) {
+              if (entry.m_value === 0 || entry.m_value === 11 || entry.m_value === 12) {
                 // this poor person died to a creep
                 tdo.player = "0";
                 tdo.hero = "Nexus Forces"
