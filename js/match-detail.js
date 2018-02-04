@@ -17,8 +17,11 @@ function initMatchDetailPage() {
   matchTalentRowTitleTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-talents-row-title-template').find('tr')[0].outerHTML);
   matchTalentRowCellTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-talents-row-cell-template').find('td')[0].outerHTML);
 
+  $('#match-detail-body a[data-tab="details"]').click(function() {
+    $('#match-detail-details table').floatThead('reflow');
+  });
   // DEBUG - LOAD SPECIFIC MATCH
-  loadMatchData("D3cu4wGXE8FwrGXr", function() { console.log("done loading"); });
+  //loadMatchData("D3cu4wGXE8FwrGXr", function() { console.log("done loading"); });
 }
 
 // retrieves the proper data and then renders to the page
@@ -137,8 +140,18 @@ function appendSummaryRow(color, id) {
   context.playerName = data.name;
   context.kills = data.gameStats.SoloKill;
   context.gameStats = data.gameStats;
+  context.hasAwardClass = "is-hidden"
+
+  if (data.gameStats.awards.length > 0) {
+    let award = Heroes.awardInfo(data.gameStats.awards[0]);
+    context.awardImg = award.image;
+    context.awardName = award.name;
+    context.awardSub = award.subtitle;
+    context.hasAwardClass = "";
+  }
 
   $('#match-detail-summary table tbody').append(matchSummaryRowTemplate(context));
+  $('#match-detail-summary table .image').popup();
 }
 
 function appendDetailHeader(color, id) {

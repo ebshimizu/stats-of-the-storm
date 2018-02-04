@@ -122,3 +122,7 @@
 #player-hero-detail-stats table {
   width: 5000px;
 }
+
+.match-detail-summary-row td .image {
+  margin: 0 auto;
+}

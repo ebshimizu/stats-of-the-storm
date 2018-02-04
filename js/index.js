@@ -173,7 +173,7 @@ function loadDatabase() {
 
 function initGlobalUIHandlers() {
   // sidebar
-  $('#main-menu').sidebar('setting', 'transition', 'overlay').
+  $('#main-menu').sidebar('setting', 'transition', 'uncover').
     sidebar('attach events', '#show-sidebar-button');
 
   $('#main-menu .item').each(function(idx, elem) {
