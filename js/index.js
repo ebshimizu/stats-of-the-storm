@@ -229,6 +229,10 @@ function createBGWindow() {
 }
 
 function changeSection(to) {
+  // if it's already being shown, do nothing
+  if (!$(sections[to].id).hasClass('hidden'))
+    return;
+
   // this should only trigger for the visible section
   // if the back button is visible, we should store a little history
   if (sections[to].showBack) {
