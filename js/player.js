@@ -5,6 +5,7 @@ var playerDetailHeroSummaryRowTemplate;
 var playerDetailMapSummaryRowTemplate;
 var allDetailStats;
 var playerHeroDetailRowTemplate;
+var playerAwardRowTemplate;
 const playerHeroDetailRowTemplateContent = `<tr>
   <td data-sort-value="{{heroName}}">
     <h3 class="ui inverted header">
@@ -49,6 +50,7 @@ function initPlayerPage() {
   playerWinRateRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-player-win-row').find('tr')[0].outerHTML);
   heroWinRateRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-hero-win-row').find('tr')[0].outerHTML);
   heroTalentRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-talent-row').find('tr')[0].outerHTML);
+  playerAwardRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-hero-award-row').find('tr')[0].outerHTML);
   playerHeroDetailRowTemplate = Handlebars.compile(playerHeroDetailRowTemplateContent);
 
   createDetailTableHeader();
@@ -99,6 +101,18 @@ function initPlayerPage() {
     autoReflow: true
   });
 
+  $('#player-detail-skin-summary table').tablesort();
+  $('#player-detail-skin-summary table').floatThead({
+    scrollContainer: closestWrapper,
+    autoReflow: true
+  });
+
+  $('#player-detail-award-summary table').tablesort();
+  $('#player-detail-award-summary table').floatThead({
+    scrollContainer: closestWrapper,
+    autoReflow: true
+  });
+
   $('#player-hero-detail-stats table').tablesort();
   $('#player-hero-detail-stats table th.stat').data('sortBy', function(th, td, tablesort) {
     return parseFloat(td.text());
@@ -121,6 +135,8 @@ function initPlayerPage() {
     $('#player-detail-hero-summary table').floatThead('reflow');
     $('#player-detail-friend-summary table').floatThead('reflow');
     $('#player-detail-hero-talent table').floatThead('reflow');
+    $('#player-detail-skin-summary table').floatThead('reflow');
+    $('#player-detail-award-summary table').floatThead('reflow');
   });
 
   $('a[data-tab="player-hero-detail"]').click(function() {
@@ -284,7 +300,8 @@ function renderPlayerSummary() {
   $('#player-detail-rival-summary tbody').html('');
   $('#player-detail-with-summary tbody').html('');
   $('#player-detail-against-summary tbody').html('');
-
+  $('#player-detail-skin-summary tbody').html('');
+  $('#player-detail-award-summary tbody').html('');
 
   for (let m in playerDetailStats.maps) {
     let context = playerDetailStats.maps[m];
@@ -339,6 +356,32 @@ function renderPlayerSummary() {
     context.heroImg = Heroes.heroIcon(context.name);
 
     $('#player-detail-against-summary tbody').append(heroWinRateRowTemplate(context));
+  }
+
+  // skins
+  for (let s in playerDetailStats.skins) {
+    let context = {};
+    context.name = s;
+
+    if (context.name === "")
+      context.name = "Default";
+    
+    context.games = playerDetailStats.skins[s].games;
+    context.winPercent = playerDetailStats.skins[s].wins / context.games;
+    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
+
+    $('#player-detail-skin-summary tbody').append(playerWinRateRowTemplate(context));
+  }
+
+  // awards
+  for (let a in playerDetailStats.awards) {
+    let context = Heroes.awardInfo(a);
+
+    context.games = playerDetailStats.awards[a];
+    context.winPercent = context.games / playerDetailStats.games;
+    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
+
+    $('#player-detail-award-summary tbody').append(playerAwardRowTemplate(context));
   }
 
   // individual stats

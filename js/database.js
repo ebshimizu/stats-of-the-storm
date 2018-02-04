@@ -182,6 +182,7 @@ class Database {
     playerDetailStats.deathHistogram = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
     playerDetailStats.takedownHistogram = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
     playerDetailStats.skins = {};
+    playerDetailStats.awards = {};
     playerDetailStats.taunts = { 
       bsteps: { count: 0, duration: 0, takedowns: 0, deaths: 0 },
       dances: { count: 0, takedowns: 0, deaths: 0 },
@@ -225,6 +226,10 @@ class Database {
             if (!(awardName in playerDetailStats.heroes[match.hero].awards))
               playerDetailStats.heroes[match.hero].awards[awardName] = 0;
             
+            if (!(awardName in playerDetailStats.awards))
+              playerDetailStats.awards[awardName] = 0;
+
+            playerDetailStats.awards[awardName] += 1;
             playerDetailStats.heroes[match.hero].awards[awardName] += 1;
             playerDetailStats.heroes[match.hero].totalAwards += 1;
           }

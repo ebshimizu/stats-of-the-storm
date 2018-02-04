@@ -221,6 +221,42 @@
                 </div>
               </div>
             </div>
+            <div class="five wide column">
+              <div class="ui inverted segment player-win" id="player-detail-award-summary">
+                <div class="ui top attached label">Awards</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Award</th>
+                        <th>Award %</th>
+                        <th>Games</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="four wide column">
+              <div class="ui inverted segment player-win" id="player-detail-skin-summary">
+                <div class="ui top attached label">Win Rate By Skin</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Skin ID</th>
+                        <th>Win %</th>
+                        <th>Games</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
             <div class="three wide column">
               <div class="ui inverted segment" id="player-detail-taunt-summary">
                 <div class="ui top attached label">Taunt Stats</div>
@@ -301,6 +337,7 @@
                 <div class="ui inverted divider"></div> 
               </div>
             </div>
+            
           </div>
         </div>
       </div>
@@ -397,5 +434,21 @@
     </td>
     <td class="center aligned talent-stat">{{formatWinPercent}}</td>
     <td class="center aligned talent-stat">{{games}}</td>
+  </tr>
+</template>
+
+<template id="player-detail-hero-award-row">
+  <tr>
+    <td data-sort-value="{{name}}">
+      <h3 class="ui image inverted header">
+        <img src="assets/images/{{image}}" class="ui rounded small image">
+        <div class="content">
+          {{name}}
+          <div class="sub header">{{subtitle}}</div>
+        </div>
+      </h3>
+    </td>
+    <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
+    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
   </tr>
 </template>
