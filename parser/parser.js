@@ -19,16 +19,18 @@ const ReplayStatus = {
   Duplicate: -1,
   Failure: -2,
   UnsupportedMap: -3,
-  ComputerPlayerFound: -4
+  ComputerPlayerFound: -4,
+  Incomplete: -5
 };
 
 const StatusString = {
   1: 'OK',
   0: 'Unsupported',
   '-1' : 'Duplicate',
-  '-2' : 'General Error',
+  '-2' : 'Internal Exception',
   '-3' : 'Unsupported Map',
-  '-4' : 'Computer Player Found'
+  '-4' : 'Computer Player Found',
+  '-5' : 'Incomplete'
 }
 
 // it's everything except gameevents which is just a massive amount of data
@@ -533,9 +535,11 @@ function processReplay(file, opts = {}) {
           let objEvent = { team: event.m_intData[2].m_value - 1, loop: event._gameloop, damage: event.m_fixedData[0].m_value / 4096 };
           objEvent.time = loopsToSeconds(objEvent.loop - match.loopGameStart);
 
-          match.objective[objEvent.team].events.push(objEvent);
-          match.objective[objEvent.team].damage += objEvent.damage;
-          match.objective[objEvent.team].count += 1;
+          if (objEvent.team === 0 || objEvent.team === 1) {
+            match.objective[objEvent.team].events.push(objEvent);
+            match.objective[objEvent.team].damage += objEvent.damage;
+            match.objective[objEvent.team].count += 1;
+          }
 
           console.log("[TRACKER] Sky Temple: Shot fired for team " + objEvent.team);
         }
@@ -1188,6 +1192,11 @@ function processReplay(file, opts = {}) {
       }
     }
 
+    if (!match.winner) {
+      // match has no winner and is incomplete. reject
+      return {status: ReplayStatus.Incomplete};
+    }
+
     match.winningPlayers = match.teams[match.winner].ids;
 
     console.log("[MESSAGES] Message Processing Start...");
@@ -1269,7 +1278,7 @@ function processReplay(file, opts = {}) {
 
             let eventObj = {};
             eventObj.loop = event._gameloop;
-            eventObj.time = loopsToSeconds(event._gameLoop - match.loopGameStart);
+            eventObj.time = loopsToSeconds(event._gameloop - match.loopGameStart);
             eventObj.kills = 0;
             eventObj.deaths = 0;
 

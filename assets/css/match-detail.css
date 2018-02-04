@@ -88,6 +88,7 @@
 #match-detail-body .match-detail-wrapper {
   height: calc(100% - 40px);
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #match-detail-details th.corner,
@@ -125,4 +126,21 @@
 
 .match-detail-summary-row td .image {
   margin: 0 auto;
+}
+
+#match-detail-chat .content .summary {
+  color: #FFF;
+}
+
+#match-detail-chat .content .date {
+  color: #ababab;
+}
+
+#match-detail-chat {
+  height: calc(100% - 25px);
+  overflow-y: auto;
+}
+
+#match-detail-taunt-table {
+  
 }

@@ -48,14 +48,14 @@
     </div>
     <div id="match-detail-body">
       <div class="ui secondary inverted pointing menu" id="match-detail-submenu">
-        <a class="active item" data-tab="summary">Summary</a>
+        <a class="item" data-tab="summary">Summary</a>
         <a class="item" data-tab="talents">Talents</a>
         <a class="item" data-tab="details">Detailed Stats</a>
         <a class="item" data-tab="xp">XP Breakdown</a>
         <a class="item" data-tab="timeline">Timeline</a>
-        <a class="item" data-tab="log">Chat and Taunt Log</a>
+        <a class="active item" data-tab="match-detail-log">Chat and Taunt Log</a>
       </div>
-      <div class="ui active tab match-detail-wrapper" data-tab="summary" id="match-detail-summary">
+      <div class="ui tab match-detail-wrapper" data-tab="summary" id="match-detail-summary">
         <table class="ui sortable selectable inverted table">
           <thead>
             <tr>
@@ -130,6 +130,39 @@
           </table>
         </div>
       </div>
+      <div class="ui active tab match-detail-wrapper" data-tab="match-detail-log" id="match-detail-chat-log">
+        <div class="ui grid full-height">
+          <div class="twelve wide column">
+            <div class="ui inverted segment full-height">
+              <div class="ui top attached label">Chat Log</div>
+              <div class="ui feed" id="match-detail-chat">
+
+              </div>
+            </div>
+          </div>
+          <div class="four wide column">
+            <div class="ui inverted segment full-height">
+              <div class="ui top attached label">Taunt Log</div>
+                <div class='table-wrapper'>
+                  <table class="ui inverted sortable table" id="match-detail-taunt-table">
+                  <thead>
+                    <tr>
+                      <th>Player</th>
+                      <th>Taunt</th>
+                      <th class="time-sort">Time</th>
+                      <th>TD</th>
+                      <th>Death</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -189,7 +222,31 @@
   <td>
     <div class="ui content">
       <img src="assets/heroes-talents/images/talents/{{img}}" class="ui centered tiny rounded image"
-        data-html='<div class="header">{{name}}</div><div class="content">{{description}}</div>' data-position="top center">
+        data-html='<div class="header">{{name}}</div><div class="content">{{description}}</div>' data-position="left center">
     </div>
   </td>
+</template>
+
+<template id="match-detail-chat-log-entry">
+  <div class="event">
+    <div class="label {{showImg}}">
+      <img src="assets/heroes-talents/images/heroes/{{heroImg}}">
+    </div>
+    <div class="content">
+      <div class="date">{{time}}</div>
+      <div class="summary">
+        {{playerName}}: {{message}}
+      </div>
+    </div>
+  </div> 
+</template>
+
+<template id="match-detail-taunt-entry">
+  <tr>
+    <td>{{name}}</td>
+    <td>{{type}}</td>
+    <td data-sort-value="{{loop}}">{{time}}</td>
+    <td>{{kills}}</td>
+    <td>{{deaths}}</td>
+  </tr>
 </template>

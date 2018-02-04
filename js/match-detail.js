@@ -6,6 +6,8 @@ var matchDetailRowTemplate;
 const matchDetailRowTemplateSrc = '<tr class="center aligned"><td>{{fieldName}}</td>{{#each stats}}<td>{{this}}</td>{{/each}}</tr>';
 var matchTalentRowTitleTemplate;
 var matchTalentRowCellTemplate;
+var matchChatEntryTemplate;
+var matchTauntEntryTemplate;
 
 function initMatchDetailPage() {
   $('#match-detail-submenu .item').tab();
@@ -16,12 +18,26 @@ function initMatchDetailPage() {
   matchDetailRowTemplate = Handlebars.compile(matchDetailRowTemplateSrc);
   matchTalentRowTitleTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-talents-row-title-template').find('tr')[0].outerHTML);
   matchTalentRowCellTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-talents-row-cell-template').find('td')[0].outerHTML);
+  matchChatEntryTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-chat-log-entry').find('div.event')[0].outerHTML);
+  matchTauntEntryTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-taunt-entry').find('tr')[0].outerHTML);
+
+  $('#match-detail-taunt-table').tablesort();
+  $('#match-detail-taunt-table').floatThead({
+    scrollContainer: closestWrapper,
+    autoReflow: true
+  });
+  $('#player-hero-detail-stats table th.time-sort').data('sortBy', function(th, td, tablesort) {
+    return parseInt(td.attr('data-sort-value'));
+  });
 
   $('#match-detail-body a[data-tab="details"]').click(function() {
     $('#match-detail-details table').floatThead('reflow');
   });
+  $('#match-detail-body a[data-tab="match-detail-log"]').click(function() {
+    $('#match-detail-taunt-table').floatThead('reflow');
+  });
   // DEBUG - LOAD SPECIFIC MATCH
-  //loadMatchData("D3cu4wGXE8FwrGXr", function() { console.log("done loading"); });
+  loadMatchData("xYZ8FTuQAi24vcmI", function() { console.log("done loading"); });
 }
 
 // retrieves the proper data and then renders to the page
@@ -59,6 +75,7 @@ function loadMatch(docs, doneLoadCallback) {
   // load xp
   
   // load chat
+  loadChat();
 
   // load timeline
   // this one might take a while
@@ -233,4 +250,72 @@ function appendTalentRow(color, id) {
   }
 
   $('#match-detail-talents table tbody').append(row);
+}
+
+function loadChat() {
+  // loads the chat and the taunts really
+  $('#match-detail-chat').html('');
+  $('#match-detail-taunt-table tbody').html('');
+
+  for (let m in matchDetailMatch.messages) {
+    let msg = matchDetailMatch.messages[m];
+    if ('text' in msg) {
+      let context = { message: msg.text };
+      context.time = formatSeconds(msg.time);
+      
+      if (msg.player in matchDetailPlayers) {
+        context.playerName = matchDetailPlayers[msg.player].name;
+        context.showImg = '';
+        context.heroImg = Heroes.heroIcon(matchDetailPlayers[msg.player].hero);
+      }
+      else {
+        context.showImg = 'is-hidden';
+        context.playerName = msg.player;
+      }
+
+      $('#match-detail-chat').append(matchChatEntryTemplate(context));
+    }
+  }
+
+  for (let p in matchDetailPlayers) {
+    let player = matchDetailPlayers[p];
+
+    for (let t in player.bsteps) {
+      addTauntEntry('Bstep', player, player.bsteps[t]);
+    }
+    for (let t in player.dances) {
+      addTauntEntry('Dance', player, player.dances[t]);
+    }
+    for (let t in player.sprays) {
+      addTauntEntry('Spray', player, player.sprays[t]);
+    }
+    for (let t in player.taunts) {
+      addTauntEntry('Taunt', player, player.taunts[t]);
+    }
+    for (let t in player.voiceLines) {
+      addTauntEntry('Voice Line', player, player.voiceLines[t]);
+    }
+  }
+
+  $('#match-detail-taunt-table').floatThead('reflow');
+}
+
+function addTauntEntry(type, player, data) {
+  let context = {};
+  context.name = data.name;
+  context.kills = data.kills;
+  context.deaths = data.deaths;
+  context.type = type;
+  context.name = player.name;
+  context.loop = data.loop;
+
+  if ('time' in data) {
+    context.time = formatSeconds(data.time);
+  }
+  else {
+    context.loop = data.start;
+    context.time = formatSeconds(data.start / 16);
+  }
+
+  $('#match-detail-taunt-table tbody').append(matchTauntEntryTemplate(context));
 }

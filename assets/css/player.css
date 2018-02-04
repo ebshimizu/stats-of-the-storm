@@ -17,7 +17,7 @@
   height: 100%;
 }
 
-#player-detail-summary .grid .table-wrapper {
+.table-wrapper {
   height: calc(100% - 2rem);
   overflow: auto;
   margin-top: 2rem!important;

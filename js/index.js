@@ -210,7 +210,7 @@ function loadSections() {
   sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false};
 
   // DEBUG: SHOWING SPECIFIC SECTION ON LOAD FOR TESTING
-  showSection('player');
+  showSection('match-detail');
 }
 
 // returns the template contained in an import
@@ -274,11 +274,16 @@ function setMenuTitle(title, showBackButton) {
 
 // formats to mm:ss
 function formatSeconds(val) {
+  let invert = false;
+  if (val < 0)
+    invert = true;
+  val = Math.abs(val);
+
   let duration = new Date(val * 1000);
   let seconds = duration.getUTCSeconds();
   let minutes = duration.getUTCMinutes();
 
-  return ((minutes < 1) ? "0" : "") + minutes + ":" + ((seconds < 10) ? "0" : "") + seconds;
+  return (invert ? '-' : '' ) + ((minutes < 1) ? "0" : "") + minutes + ":" + ((seconds < 10) ? "0" : "") + seconds;
 }
 
 function formatStat(field, val) {
