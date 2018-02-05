@@ -8,6 +8,36 @@ var matchTalentRowTitleTemplate;
 var matchTalentRowCellTemplate;
 var matchChatEntryTemplate;
 var matchTauntEntryTemplate;
+var overallXPGraph, overallXPGraphData;
+var blueTeamXPGraph, blueTeamXPGraphData;
+var redTeamXPGraph, redTeamXPGraphData;
+const xpBreakdownOpts = {
+  responsive: true,
+  tooltips: {
+    position: 'nearest',
+    mode: 'index',
+    intersect: false
+  },
+  legend: {
+    labels: {
+      fontColor: 'white'
+    }
+  },
+  scales: {
+    yAxes: [{
+      stacked: true,
+      ticks: {
+        fontColor: '#FFFFFF'
+      }
+    }],
+    xAxes: [{
+      ticks: {
+        fontColor: '#FFFFFF'
+      }
+    }]
+  }
+}
+
 
 function initMatchDetailPage() {
   $('#match-detail-submenu .item').tab();
@@ -36,8 +66,66 @@ function initMatchDetailPage() {
   $('#match-detail-body a[data-tab="match-detail-log"]').click(function() {
     $('#match-detail-taunt-table').floatThead('reflow');
   });
+
+  overallXPGraphData = {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: 'Blue Team',
+        borderColor: '#2185d0',
+        backgroundColor: '#2185d0',
+        fill: false,
+        cubicInterpolationMode: 'monotone'
+      }, {
+        label: 'Red Team',
+        borderColor: '#db2828',
+        backgroundColor: '#db2828',
+        fill: false,
+        cubicInterpolationMode: 'monotone'
+      }]
+    },
+    options: {
+      responsive: true,
+      tooltips: {
+        position: 'nearest',
+        mode: 'index',
+        intersect: false
+      },
+      legend: {
+        labels: {
+          fontColor: 'white'
+        }
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: '#FFFFFF'
+          }
+        }],
+        xAxes: [{
+          ticks: {
+            fontColor: '#FFFFFF'
+          }
+        }]
+      }
+    }
+  }
+  redTeamXPGraphData = {
+    type: 'line',
+    data: {},
+    options: xpBreakdownOpts
+  };
+  blueTeamXPGraphData = {
+    type: 'line',
+    data: {},
+    options: xpBreakdownOpts
+  };
+  overallXPGraph = new Chart($('#match-detail-overall-xp'), overallXPGraphData);
+  redTeamXPGraph = new Chart($('#match-detail-red-xpb'), redTeamXPGraphData);
+  blueTeamXPGraph = new Chart($('#match-detail-blue-xpb'), blueTeamXPGraphData);
+
   // DEBUG - LOAD SPECIFIC MATCH
-  loadMatchData("xYZ8FTuQAi24vcmI", function() { console.log("done loading"); });
+  loadMatchData("GAvAZDuS5EqWvH3b", function() { console.log("done loading"); });
 }
 
 // retrieves the proper data and then renders to the page
@@ -73,6 +161,7 @@ function loadMatch(docs, doneLoadCallback) {
   loadDetailedStats();
 
   // load xp
+  graphXP();
   
   // load chat
   loadChat();
@@ -318,4 +407,111 @@ function addTauntEntry(type, player, data) {
   }
 
   $('#match-detail-taunt-table tbody').append(matchTauntEntryTemplate(context));
+}
+
+function graphXP() {
+  graphOverallXP();
+}
+
+// takes the total of all the xp values 
+function graphOverallXP() {
+  let team0XP = getTotalXPSet(0);
+  let team1XP = getTotalXPSet(1);
+
+  overallXPGraphData.data.datasets[0].data = team0XP.data;
+  overallXPGraphData.data.datasets[1].data = team1XP.data;
+  overallXPGraphData.data.labels = team0XP.labels;
+  overallXPGraph.update();
+
+  let team0xpb = getTeamXPBGraphData(0);
+  let team1xpb = getTeamXPBGraphData(1);
+
+  blueTeamXPGraphData.data.datasets = team0xpb.data;
+  redTeamXPGraphData.data.datasets = team1xpb.data;
+  blueTeamXPGraphData.data.labels = team0xpb.labels;
+  redTeamXPGraphData.data.labels = team1xpb.labels;
+
+  blueTeamXPGraph.update();
+  redTeamXPGraph.update();
+}
+
+function getTotalXPSet(teamID) {
+  let data = [0];
+  let labels = [0];
+  for (let xp in matchDetailMatch.XPBreakdown) {
+    let x = matchDetailMatch.XPBreakdown[xp];
+
+    if (x.team === teamID) {
+      // we want the total here. 
+
+      // game time is in seconds here, convert to minutes
+      labels.push(formatSeconds(x.time));
+
+      let y = x.breakdown.CreepXP + x.breakdown.HeroXP + x.breakdown.MinionXP + x.breakdown.StructureXP + x.breakdown.TrickleXP
+      data.push(parseInt(y));
+    }
+  }
+
+  return {data, labels};
+}
+
+function getTeamXPBGraphData(teamID) {
+  // order of the categories:
+  // - trickle
+  // - structure
+  // - creep
+  // - minion
+  // - hero
+  let labels = [0];
+  let data = [{
+    label: 'Trickle XP',
+    borderColor: '#264653',
+    backgroundColor: '#264653',
+    cubicInterpolationMode: 'monotone',
+    data: [0]
+  }, {
+    label: 'Structure XP',
+    borderColor: '#2A9D8F',
+    backgroundColor: '#2A9D8F',
+    cubicInterpolationMode: 'monotone',
+    data: [0]
+  }, {
+    label: 'Creep XP',
+    borderColor: '#E9C46A',
+    backgroundColor: '#E9C46A',
+    cubicInterpolationMode: 'monotone',
+    data: [0]
+  }, {
+    label: 'Minion XP',
+    borderColor: '#F4A261',
+    backgroundColor: '#F4A261',
+    cubicInterpolationMode: 'monotone',
+    data: [0]
+  }, {
+    label: 'Hero XP',
+    borderColor: '#E76F51',
+    backgroundColor: '#E76F51',
+    cubicInterpolationMode: 'monotone',
+    data: [0]
+  }];
+
+  for (let xp in matchDetailMatch.XPBreakdown) {
+    let x = matchDetailMatch.XPBreakdown[xp];
+
+    if (x.team === teamID) {
+      let runningTotal = x.breakdown.TrickleXP;
+      data[0].data.push(x.breakdown.TrickleXP);
+      runningTotal += x.breakdown.StructureXP;
+      data[1].data.push(x.breakdown.StructureXP);
+      runningTotal += x.breakdown.CreepXP;
+      data[2].data.push(x.breakdown.CreepXP);
+      runningTotal += x.breakdown.MinionXP;
+      data[3].data.push(x.breakdown.MinionXP);
+      runningTotal += x.breakdown.HeroXP;
+      data[4].data.push(x.breakdown.HeroXP);
+      labels.push(formatSeconds(x.time));
+    }
+  }
+
+  return {data, labels};
 }

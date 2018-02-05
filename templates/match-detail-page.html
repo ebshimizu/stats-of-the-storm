@@ -51,9 +51,9 @@
         <a class="item" data-tab="summary">Summary</a>
         <a class="item" data-tab="talents">Talents</a>
         <a class="item" data-tab="details">Detailed Stats</a>
-        <a class="item" data-tab="xp">XP Breakdown</a>
+        <a class="active item" data-tab="match-detail-xp">XP Breakdown</a>
         <a class="item" data-tab="timeline">Timeline</a>
-        <a class="active item" data-tab="match-detail-log">Chat and Taunt Log</a>
+        <a class="item" data-tab="match-detail-log">Chat and Taunt Log</a>
       </div>
       <div class="ui tab match-detail-wrapper" data-tab="summary" id="match-detail-summary">
         <table class="ui sortable selectable inverted table">
@@ -130,7 +130,29 @@
           </table>
         </div>
       </div>
-      <div class="ui active tab match-detail-wrapper" data-tab="match-detail-log" id="match-detail-chat-log">
+      <div class="ui active tab match-detail-wrapper" data-tab="match-detail-xp" id="match-detail-xp-graphs">
+        <div class="ui grid">
+          <div class="sixteen wide column">
+            <div class="ui inverted segment">
+              <div class="ui top attached label">Overall XP Graph</div>
+              <canvas id="match-detail-overall-xp" width="2000" height="400"></canvas>
+            </div>
+          </div>
+          <div class="eight wide column">
+            <div class="ui inverted segment">
+              <div class="ui top attached label">Blue Team XP Breakdown</div>
+              <canvas id="match-detail-blue-xpb"></canvas>
+            </div>
+          </div>
+          <div class="eight wide column">
+            <div class="ui inverted segment">
+              <div class="ui top attached label">Red Team XP Breakdown</div>
+              <canvas id="match-detail-red-xpb"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ui tab match-detail-wrapper" data-tab="match-detail-log" id="match-detail-chat-log">
         <div class="ui grid full-height">
           <div class="twelve wide column">
             <div class="ui inverted segment full-height">

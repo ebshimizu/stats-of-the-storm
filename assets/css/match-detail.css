@@ -141,6 +141,13 @@
   overflow-y: auto;
 }
 
-#match-detail-taunt-table {
-  
+#match-detail-overall-xp {
+  margin-top: 24px;
+}
+
+#match-detail-red-xpb,
+#match-detail-blue-xpb {
+  margin-top: 24px;
+  width: 100%;
+  height: 300px;
 }

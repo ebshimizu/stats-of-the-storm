@@ -325,7 +325,7 @@ class Database {
 
       if ('EndOfMatchAwardMVPBoolean' in playerDetailStats.heroes[h].awards) {
         playerDetailStats.heroes[h].stats.MVPPct = playerDetailStats.heroes[h].awards.EndOfMatchAwardMVPBoolean / playerDetailStats.heroes[h].games;
-        playerDetailStats.totalMVP += 1;
+        playerDetailStats.totalMVP += playerDetailStats.heroes[h].awards.EndOfMatchAwardMVPBoolean;
       }
       else {
         playerDetailStats.heroes[h].stats.MVPPct = 0;
