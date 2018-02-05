@@ -1,6 +1,6 @@
 {
   "name": "hots-analyzer",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha",
   "main": "main.js",
   "description": "An experimental hots replay analysis app",
   "bugs": "falindrith@gmail.com",

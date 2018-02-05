@@ -22,10 +22,16 @@
 
     <script src="js/index.js"></script>
     <!-- End Application includes -->
-    <title>Heroes of the Storm Analyzer</title>
+    <title>Stats of the Storm</title>
   </head>
   <body>
     <div id="main-menu" class="ui sidebar inverted vertical menu">
+      <div class="header item app-title">
+        <img class="ui mini image" src="assets/images/storm_ui_mvp_icon.png">
+        Stats of the Storm
+        <div class="app-version-number sub header">
+        </div>
+      </div>
       <a class="item" section-name="matches">Matches</a>
       <a class="item" section-name="player">Player Details</a>
       <div class="item">
@@ -37,6 +43,7 @@
         </div>
       </div>
       <a class="item" section-name="settings">Settings</a>
+      <a class="item" section-name="about">About</a>
     </div>
     <div class="inverted pusher" id="page-wrapper">
       <!-- put stuff here! -->
@@ -44,6 +51,11 @@
         <a class="icon item" id="show-sidebar-button"><i class="sidebar icon"></i></a>
         <a class="icon item" id="section-menu-back-button"><i class="arrow left icon"></i></a>
         <div class="header item" id="section-menu-name">Settings</div>
+        <div class="right menu">
+          <a class="item"><i class="window minimize icon"></i></a>
+          <a class="item"><i class="window maximize icon"></i></a>
+          <a class="item"><i class="window close icon"></i></a>
+        </div>
       </div>
       <div id="main-content">
       </div>

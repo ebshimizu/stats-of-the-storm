@@ -35,3 +35,17 @@ body {
 .is-hidden {
     display: none!important;
 }
+
+#main-menu .app-title {
+    font-size: 14pt;
+    line-height: 1em;
+}
+
+#main-menu .app-title .image {
+    float: left;
+    margin-right: 10px;
+}
+
+#main-menu .app-version-number {
+    font-size: 9pt;
+}

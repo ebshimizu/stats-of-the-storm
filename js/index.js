@@ -138,6 +138,8 @@ $(document).ready(initApp);
 var bgWindow;
 
 function initApp() {
+  $('.app-version-number').text(app.getVersion());
+
   // initialization for the entire app
   // we'll probably want to pop up a loading thing here while all the things
   // happen.

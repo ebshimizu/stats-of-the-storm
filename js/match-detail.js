@@ -28,11 +28,17 @@ const xpBreakdownOpts = {
       stacked: true,
       ticks: {
         fontColor: '#FFFFFF'
+      },
+      gridLines: {
+        color: '#ababab'
       }
     }],
     xAxes: [{
       ticks: {
         fontColor: '#FFFFFF'
+      },
+      gridLines: {
+        color: '#ababab'
       }
     }]
   }
@@ -74,12 +80,14 @@ function initMatchDetailPage() {
         label: 'Blue Team',
         borderColor: '#2185d0',
         backgroundColor: '#2185d0',
+        borderWidth: 7,
         fill: false,
         cubicInterpolationMode: 'monotone'
       }, {
         label: 'Red Team',
         borderColor: '#db2828',
         backgroundColor: '#db2828',
+        borderWidth: 7,
         fill: false,
         cubicInterpolationMode: 'monotone'
       }]
@@ -100,11 +108,17 @@ function initMatchDetailPage() {
         yAxes: [{
           ticks: {
             fontColor: '#FFFFFF'
+          },
+          gridLines: {
+            color: '#ababab'
           }
         }],
         xAxes: [{
           ticks: {
             fontColor: '#FFFFFF'
+          },
+          gridLines: {
+            color: '#ababab'
           }
         }]
       }
@@ -431,6 +445,11 @@ function graphOverallXP() {
   blueTeamXPGraphData.data.labels = team0xpb.labels;
   redTeamXPGraphData.data.labels = team1xpb.labels;
 
+  let maxXp = Math.max(team0XP.data[team0XP.data.length - 1], team1XP.data[team1XP.data.length - 1]);
+  maxXp = Math.ceil(maxXp / 10000) * 10000;
+  blueTeamXPGraphData.options.scales.yAxes[0].ticks.max = maxXp;
+  redTeamXPGraphData.options.scales.yAxes[0].ticks.max = maxXp;
+
   blueTeamXPGraph.update();
   redTeamXPGraph.update();
 }
@@ -499,15 +518,10 @@ function getTeamXPBGraphData(teamID) {
     let x = matchDetailMatch.XPBreakdown[xp];
 
     if (x.team === teamID) {
-      let runningTotal = x.breakdown.TrickleXP;
       data[0].data.push(x.breakdown.TrickleXP);
-      runningTotal += x.breakdown.StructureXP;
       data[1].data.push(x.breakdown.StructureXP);
-      runningTotal += x.breakdown.CreepXP;
       data[2].data.push(x.breakdown.CreepXP);
-      runningTotal += x.breakdown.MinionXP;
       data[3].data.push(x.breakdown.MinionXP);
-      runningTotal += x.breakdown.HeroXP;
       data[4].data.push(x.breakdown.HeroXP);
       labels.push(formatSeconds(x.time));
     }
