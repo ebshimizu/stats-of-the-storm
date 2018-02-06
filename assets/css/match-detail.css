@@ -146,7 +146,8 @@
 }
 
 #match-detail-red-xpb,
-#match-detail-blue-xpb {
+#match-detail-blue-xpb ,
+#match-detail-xp-soak {
   margin-top: 24px;
   width: 100%;
   height: 300px;

@@ -11,6 +11,7 @@ var matchTauntEntryTemplate;
 var overallXPGraph, overallXPGraphData;
 var blueTeamXPGraph, blueTeamXPGraphData;
 var redTeamXPGraph, redTeamXPGraphData;
+var teamXPSoakGraph, teamXPSoakGraphData;
 const xpBreakdownOpts = {
   responsive: true,
   tooltips: {
@@ -26,6 +27,38 @@ const xpBreakdownOpts = {
   scales: {
     yAxes: [{
       stacked: true,
+      ticks: {
+        fontColor: '#FFFFFF'
+      },
+      gridLines: {
+        color: '#ababab'
+      }
+    }],
+    xAxes: [{
+      ticks: {
+        fontColor: '#FFFFFF'
+      },
+      gridLines: {
+        color: '#ababab'
+      }
+    }]
+  }
+}
+const xpSoakOpts = {
+  responsive: true,
+  tooltips: {
+    position: 'nearest',
+    mode: 'index',
+    intersect: false
+  },
+  legend: {
+    labels: {
+      fontColor: 'white'
+    }
+  },
+  scales: {
+    yAxes: [{
+      stacked: false,
       ticks: {
         fontColor: '#FFFFFF'
       },
@@ -134,9 +167,15 @@ function initMatchDetailPage() {
     data: {},
     options: xpBreakdownOpts
   };
+  teamXPSoakGraphData = {
+    type: 'line',
+    data: {},
+    options: xpSoakOpts
+  };
   overallXPGraph = new Chart($('#match-detail-overall-xp'), overallXPGraphData);
   redTeamXPGraph = new Chart($('#match-detail-red-xpb'), redTeamXPGraphData);
   blueTeamXPGraph = new Chart($('#match-detail-blue-xpb'), blueTeamXPGraphData);
+  teamXPSoakGraph = new Chart($('#match-detail-xp-soak'), teamXPSoakGraphData);
 
   // DEBUG - LOAD SPECIFIC MATCH
   loadMatchData("GAvAZDuS5EqWvH3b", function() { console.log("done loading"); });
@@ -452,6 +491,13 @@ function graphOverallXP() {
 
   blueTeamXPGraph.update();
   redTeamXPGraph.update();
+
+  let teamsoak = getTeamXPSoakData();
+
+  teamXPSoakGraphData.data.datasets = teamsoak.data;
+  teamXPSoakGraphData.data.labels = teamsoak.labels;
+
+  teamXPSoakGraph.update();
 }
 
 function getTotalXPSet(teamID) {
@@ -524,6 +570,47 @@ function getTeamXPBGraphData(teamID) {
       data[3].data.push(x.breakdown.MinionXP);
       data[4].data.push(x.breakdown.HeroXP);
       labels.push(formatSeconds(x.time));
+    }
+  }
+
+  return {data, labels};
+}
+
+function getTeamXPSoakData() {
+  let labels = [0];
+  let data = [{
+    label: 'Maximum Possible Minion XP',
+    fill: false,
+    borderColor: '#E9C46A',
+    backgroundColor: '#E9C46A',
+    cubicInterpolationMode: 'monotone',
+    data: [0]
+  }, {
+    label: 'Blue Team',
+    fill: false,
+    borderColor: '#2185d0',
+    backgroundColor: '#2185d0',
+    cubicInterpolationMode: 'monotone',
+    data: [0]
+  }, {
+    label: 'Red Team',
+    fill: false,
+    borderColor: '#db2828',
+    backgroundColor: '#db2828',
+    cubicInterpolationMode: 'monotone',
+    data: [0]
+  }];
+
+  for (let xp in matchDetailMatch.XPBreakdown) {
+    let x = matchDetailMatch.XPBreakdown[xp];
+
+    if (x.team === 0) {
+      data[0].data.push(x.theoreticalMinionXP);
+      data[1].data.push(x.breakdown.MinionXP);
+      labels.push(formatSeconds(x.time));
+    }
+    else if (x.team === 1) {
+      data[2].data.push(x.breakdown.MinionXP);
     }
   }
 

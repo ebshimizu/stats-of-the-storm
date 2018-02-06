@@ -1192,7 +1192,7 @@ function processReplay(file, opts = {}) {
       }
     }
 
-    if (!match.winner) {
+    if (match.winner !== 0 && match.winner !== 1) {
       // match has no winner and is incomplete. reject
       return {status: ReplayStatus.Incomplete};
     }
