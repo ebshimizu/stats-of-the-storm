@@ -16,7 +16,8 @@
     "handlebars": "^4.0.11",
     "jquery": "^3.3.1",
     "nedb": "^1.8.0",
-    "sticky-table-headers": "^0.1.24"
+    "sticky-table-headers": "^0.1.24",
+    "vis": "^4.21.0"
   },
   "devDependencies": {
     "eslint-config-standard": "^11.0.0-beta.0",
