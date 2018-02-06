@@ -14,7 +14,7 @@ const playerHeroDetailRowTemplateContent = `<tr>
   </td>
   </td>
   {{#each stat}}
-    <td class="center aligned" data-sort-value="{{avg}}" data-position="top center" data-html='<h4 class="ui image header"><img class="ui rounded image" src="assets/heroes-talents/images/heroes/{{../heroImg}}"><div class="content">{{../heroName}}<div class="ui sub header">{{name}}</div></div></h4>'>
+    <td class="center aligned" data-sort-value="{{avg}}" data-position="left center" data-variation="wide" data-html='<h4 class="ui image header"><img class="ui rounded image" src="assets/heroes-talents/images/heroes/{{../heroImg}}"><div class="content">{{../heroName}}<div class="ui sub header">{{name}}</div></div></h4>'>
       {{avg}}
     </td>
   {{/each}}
