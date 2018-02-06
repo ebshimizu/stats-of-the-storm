@@ -206,7 +206,7 @@ function loadSections() {
   initPlayerPage();
 
   // register sections
-  sections.settings = {id: '#settings-page-content', title: 'Settings', showBack: false };
+  sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false };
   sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false };
   sections['match-detail'] = {id: '#match-detail-page-content', title: 'Match Details', showBack: true};
   sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false};

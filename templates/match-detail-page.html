@@ -132,10 +132,16 @@
       </div>
       <div class="ui active tab match-detail-wrapper" data-tab="match-detail-xp" id="match-detail-xp-graphs">
         <div class="ui grid">
-          <div class="sixteen wide column">
+          <div class="eight wide column">
             <div class="ui inverted segment">
               <div class="ui top attached label">Overall XP Graph</div>
-              <canvas id="match-detail-overall-xp" width="2000" height="400"></canvas>
+              <canvas id="match-detail-overall-xp"></canvas>
+            </div>
+          </div>
+          <div class="eight wide column">
+            <div class="ui inverted segment">
+              <div class="ui top attached label">Team Soak</div>
+              <canvas id="match-detail-xp-soak"></canvas>
             </div>
           </div>
           <div class="eight wide column">
@@ -148,12 +154,6 @@
             <div class="ui inverted segment">
               <div class="ui top attached label">Red Team XP Breakdown</div>
               <canvas id="match-detail-red-xpb"></canvas>
-            </div>
-          </div>
-          <div class="eight wide column">
-            <div class="ui inverted segment">
-              <div class="ui top attached label">Team Soak</div>
-              <canvas id="match-detail-xp-soak"></canvas>
             </div>
           </div>
         </div>
