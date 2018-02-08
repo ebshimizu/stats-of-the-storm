@@ -81,32 +81,44 @@ var matchDetailTimelineGroups = [
   {
     id: 1,
     content: 'Takedowns',
-    classname: 'timeline-tds'
+    classname: 'timeline-tds',
+    visible: true
   },
   {
     id: 2,
     content: 'Levels',
-    classname: 'timeiine-levels'
+    classname: 'timeiine-levels',
+    visible: true
   },
   {
     id: 3,
     content: 'Level Advantage',
-    classname: 'timeline-level-adv'
-  },
-  {
-    id: 6,
-    content: 'Structures Lost',
-    classname: 'timeline-structures'
-  },
-  {
-    id: 5,
-    content: 'Mercenaries',
-    classname: 'timeline-mercs'
+    classname: 'timeline-level-adv',
+    visible: true
   },
   {
     id: 4,
     content: 'Objective',
-    classname: 'timeline-objective'
+    classname: 'timeline-objective',
+    visible: true
+  },
+  {
+    id: 5,
+    content: 'Mercenary Captures',
+    classname: 'timeline-mercs',
+    visible: true
+  },
+  {
+    id: 6,
+    content: 'Mercenary Units',
+    classname: 'timeline-merc-units',
+    visible: false
+  },
+  {
+    id: 7,
+    content: 'Structures Destroyed',
+    classname: 'timeline-structures',
+    visible: true
   }
 ];
 
@@ -208,6 +220,17 @@ function initMatchDetailPage() {
   redTeamXPGraph = new Chart($('#match-detail-red-xpb'), redTeamXPGraphData);
   blueTeamXPGraph = new Chart($('#match-detail-blue-xpb'), blueTeamXPGraphData);
   teamXPSoakGraph = new Chart($('#match-detail-xp-soak'), teamXPSoakGraphData);
+
+  // init buttons
+  for (let g in matchDetailTimelineGroups) {
+    if (matchDetailTimelineGroups[g].visible) {
+      $('#match-detail-timeline-buttons .button[button-id="' + g + '"]').addClass('violet');
+    }
+  }
+
+  $('#match-detail-timeline-buttons .button').click(function() {
+    toggleGroup(parseInt($(this).attr('button-id')));
+  });
 
   // DEBUG - LOAD SPECIFIC MATCH
   loadMatchData("GAvAZDuS5EqWvH3b", function() { console.log("done loading"); });
@@ -786,14 +809,57 @@ function loadTimeline() {
       item.start = struct.destroyed;
       item.content = struct.name;
       if (struct.team === 0) {
-        item.className = 'blue';
-      }
-      else {
         item.className = 'red';
       }
-      item.group = 6;
+      else {
+        item.className = 'blue';
+      }
+      item.group = 7;
       items.push(item);
     }
+  }
+
+  // merc captures;
+  for (let m in matchDetailMatch.mercs.captures) {
+    let merc = matchDetailMatch.mercs.captures[m];
+    let item = {};
+    item.start = merc.time;
+    item.content = merc.type;
+    
+    if (merc.team === 0) {
+      item.className = 'blue';
+    }
+    else {
+      item.className = 'red';
+    }
+
+    item.group = 5;
+    items.push(item);
+  }
+
+  // merc units
+  for (let m in matchDetailMatch.mercs.units) {
+    let merc = matchDetailMatch.mercs.units[m];
+    let item = {};
+    item.start = merc.time;
+    item.end = merc.time + merc.duration;
+    item.content = ReplayTypes.MercUnitString[merc.type];
+    item.type = 'range';
+
+    if (merc.team === 0) {
+      item.className = 'blue';
+    }
+    else {
+      item.className = 'red';
+    }
+
+    item.group = 6;
+    items.push(item);
+  }
+
+  // objectives...
+  if (matchDetailMatch.map === ReplayTypes.MapType.Braxis) {
+    getBraxisEvents(items);
   }
 
   let opts = {};
@@ -801,6 +867,7 @@ function loadTimeline() {
   opts.max = matchDetailMatch.length + 10;
   opts.selectable = false;
   opts.showMajorLabels = false;
+  opts.maxHeight = "100%";
   opts.format = {
     minorLabels: function(date, scale, step) {
       if (date._d < new Date(0)) {
@@ -820,6 +887,20 @@ function loadTimeline() {
   }); 
 }
 
+function toggleGroup(idx) {
+  matchDetailTimelineGroups[idx].visible = !matchDetailTimelineGroups[idx].visible;
+
+  if (matchDetailTimelineGroups[idx].visible) {
+    $('#match-detail-timeline-buttons .button[button-id="' + idx + '"]').addClass('violet');
+  }
+  else {
+    $('#match-detail-timeline-buttons .button[button-id="' + idx + '"]').removeClass('violet');
+  }
+
+  matchDetailTimeline.setGroups(matchDetailTimelineGroups);
+  matchDetailTimeline.redraw();
+}
+
 // not a template because i'm kind of lazy? I dunno
 function generateTDTimeline(data) {
   let pop = "<h3 class='ui image header'>";
@@ -835,6 +916,43 @@ function generateTDTimeline(data) {
   }
   pop += "</div>";
 
-  let text = '<div class="timeline-popup" data-html="' + pop + '">' + data.victim.hero + '</div>';
+  let text = '<div class="timeline-popup" data-html="' + pop + '">';
+  text += '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(data.victim.hero) + '" class="ui circular avatar image">';
+  text += data.victim.hero + '</div>';
   return text;
+}
+
+function getBraxisEvents(items) {
+  for (let w in matchDetailMatch.objective.waves) {
+    let wave = matchDetailMatch.objective.waves[w];
+    let item0 = {};
+    let item1 = {};
+
+    item0.start = wave.startTime;
+    item1.start = wave.startTime;
+
+    item0.className = 'blue';
+    item1.className = 'red';
+
+    item0.content = (wave.startScore[0] * 100).toFixed(2) + '% Zerg Wave';
+    item1.content = (wave.startScore[1] * 100).toFixed(2) + '% Zerg Wave';
+
+    item0.end = wave.endTime[0];
+    item1.end = wave.endTime[1];
+
+    item0.group = 4;
+    item1.group = 4;
+
+    items.push(item0);
+    items.push(item1);
+
+    // spawns
+    sitem = {};
+    sitem.start = wave.initTime;
+    sitem.content = "Beacons Active";
+    sitem.type = 'background';
+    sitem.group = 4;
+    sitem.end = wave.startTime;
+    items.push(sitem);
+  }
 }

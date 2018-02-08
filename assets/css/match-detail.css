@@ -154,7 +154,8 @@
 }
 
 #match-detail-timeline-wrapper {
-  height: 100%;
+  height: calc(100% - 60px);
+  margin-top: 10px;
 }
 
 /* Timeline Styles */
@@ -190,9 +191,6 @@
 
 #match-detail-timeline-wrapper .vis-item.vis-background {
   cursor: default;
-}
-
-#match-detail-timeline-wrapper .vis-item.vis-background.level-adv {
   color: #FFF;
 }
 

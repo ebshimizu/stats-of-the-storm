@@ -257,6 +257,23 @@ const MercUnitType = {
   MercLanerRangedMage: 'MercLanerRangedMage'
 }
 
+const MercUnitString = {
+  TerranHellbat: 'Hellbat',
+  SlimeBossLaner: 'Warhead Boss',
+  TerranArchangelLaner: 'Archangel Boss',
+  TerranGoliath: 'Goliath',
+  TerranRaven: 'Raven',
+  JungleGraveGolemLaner: 'Grave Golem Boss',
+  MercLanerSiegeGiant: 'Siege Giant',
+  MercGoblinSapperLaner: 'Goblin Sapper',
+  MercSeigeTrooperLaner: 'Siege Trooper',
+  MercSummonerLaner: 'Summoner',
+  MercLanerRangedOgre: 'Ranged Ogre',
+  MercLanerMeleeOgre: 'Melee Ogre',
+  MercLanerMeleeKnight: 'Melee Knight',
+  MercLanerRangedMage: 'Ranged Mage'
+}
+
 const MinionXP = {
   FootmanMinion:  [70, 71, 72, 73, 74, 76, 77, 78, 79, 80, 82, 83, 84, 85, 86, 88, 89, 90, 91, 92, 94, 95, 96, 97, 98, 100, 101, 102, 103, 104, 106],
   WizardMinion:   [62, 64, 66, 67, 69, 71, 73, 75, 76, 78, 80, 82, 84, 85, 87, 89, 91, 93, 94, 96, 98, 100, 102, 103, 105, 107, 109, 111, 112, 114, 116],
@@ -313,3 +330,4 @@ exports.GameModeStrings = GameModeStrings;
 exports.BraxisUnitType = BraxisUnitType;
 exports.MercUnitType = MercUnitType;
 exports.StructureStrings = StructureStrings
+exports.MercUnitString = MercUnitString;
