@@ -312,6 +312,41 @@ const GameModeStrings = {
   '-1': 'Custom'
 }
 
+const SeasonDates = {
+  'Preseason' : {
+    start: new Date(0),
+    end: new Date('06-14-2016')
+  },
+  '2016 Season 1' : {
+    start: new Date('06-14-2016'),
+    end: new Date('09-13-2016')
+  },
+  '2016 Season 2' : {
+    start: new Date('09-13-2016'),
+    end: new Date('12-13-2016')
+  },
+  '2016 Season 3' : {
+    start: new Date('12-13-2016'),
+    end: new Date('3-13-2017')
+  },
+  '2017 Season 1' : {
+    start: new Date('3-13-2017'),
+    end: new Date('6-14-2017')
+  },
+  '2017 Season 2' : {
+    start: new Date('6-14-2017'),
+    end: new Date('9-5-2017')
+  },
+  '2017 Season 3' : {
+    start: new Date('9-5-2017'),
+    end: new Date('12-13-2017')
+  },
+  '2017 Season 4' : {
+    start: new Date('12-13-2017'),
+    end: new Date('3-7-2018')
+  }
+}
+
 exports.TeamType = TeamType;
 exports.TrackerEvent = TrackerEvent;
 exports.StatEventType = StatEventType;
@@ -331,3 +366,4 @@ exports.BraxisUnitType = BraxisUnitType;
 exports.MercUnitType = MercUnitType;
 exports.StructureStrings = StructureStrings
 exports.MercUnitString = MercUnitString;
+exports.SeasonDates = SeasonDates;

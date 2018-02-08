@@ -73,13 +73,19 @@
         <div class="ui inverted segment">
           <div class="ui top attached label">Search Matches</div>
           <div class="ui grid">
+            <div class="eight wide column"></div>
+            <div class="four wide column">
+              <div class="ui fluid button" id="match-search-reset-button">Reset</div>
+            </div>
+            <div class="four wide column">
+              <div class="ui fluid green button" id="match-search-button">Search</div>
+            </div>
             <div class="three wide column">Mode</div>
             <div class="thirteen wide column">
-              <div class="ui fluid multiple search selection dropdown">
+              <div class="ui fluid multiple search selection dropdown" id="match-mode-select">
                 <i class="dropdown icon"></i>
                 <div class="default text">All</div>
                 <div class="menu">
-                  <div class="item" data-value="-2">All</div>
                   <div class="item" data-value="50001">Quick Match</div>
                   <div class="item" data-value="50051">Unranked Draft</div>
                   <div class="item" data-value="50061">Hero League</div>
@@ -110,18 +116,43 @@
                 <input type="text" value="">
               </div>
             </div>
-            <div class="three wide column">Players</div>
-            <div class="thirteen wide column">
-              <select class="ui fluid search dropdown" multiple="" id="match-player-search">
-                <option value="asdf">Test User</option>
-              </select>
+            <div class="three wide column">Player</div>
+            <div class="ten wide column">
+              <div class="ui fluid multiple search selection dropdown player-menu" id="match-search-players">
+                <i class="dropdown icon"></i>
+                <span class="text"></span>
+                <div class="menu">
+    
+                </div>
+              </div>
+            </div>
+            <div class="three wide column">
+              <div class="ui fluid selection dropdown" id="match-search-players-mode">
+                <i class="dropdown icon"></i>
+                <span class="default text">Any</span>
+                <div class="menu">
+                  <div class="item" data-value="or">Any</div>
+                  <div class="item" data-value="and">All</div>
+                </div>
+              </div>
             </div>
             <div class="three wide column">Hero</div>
+            <div class="thirteen wide column">
+              <div class="ui fluid multiple search selection dropdown" id="match-search-heroes">
+                <i class="dropdown icon"></i>
+                <span class="default text">All Heroes</span>
+                <div class="menu">
+
+                </div>
+              </div>
+            </div>
+            <!-- Planned features -->
+            <!-- <div class="three wide column">Teams</div>
             <div class="thirteen wide column"></div>
             <div class="three wide column">Tags</div>
-            <div class="thirteen wide column"></div>
-            <div class="three wide column">Teams</div>
-            <div class="thirteen wide column"></div>
+            <div class="thirteen wide column">-->
+
+            </div>
           </div>
         </div>
       </div>

@@ -233,7 +233,7 @@ function initMatchDetailPage() {
   });
 
   // DEBUG - LOAD SPECIFIC MATCH
-  loadMatchData("oe6aEJHvQ78XjMK0", function() { console.log("done loading"); });
+  //loadMatchData("oe6aEJHvQ78XjMK0", function() { console.log("done loading"); });
 }
 
 // retrieves the proper data and then renders to the page

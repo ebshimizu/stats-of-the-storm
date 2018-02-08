@@ -19,11 +19,26 @@ var currentPage;
 var matchRowTemplate;
 
 function initMatchesPage() {
+  // player menu init
+  let selectedPlayerID = settings.get('selectedPlayerID');
+  $('#match-search-player').dropdown({
+    action: 'activate',
+    fullTextSearch: true
+    // on change isn't actually necessary here. the search button handles all options
+  });
+  
   // templates
   matchRowTemplate = Handlebars.compile(getTemplate('matches', '#match-summary-row').find('td')[0].outerHTML);
 
   // bindings
   $('#match-player-search').dropdown();
+  $('#match-mode-select').dropdown({
+    action: 'activate',
+    fullTextSearch: true
+  });
+  $('#match-search-players-mode').dropdown({
+    action: 'activate'
+  });
 
   // initial settings
   getMatchCount();

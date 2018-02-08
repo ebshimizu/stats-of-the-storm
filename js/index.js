@@ -212,7 +212,7 @@ function loadSections() {
   sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false};
 
   // DEBUG: SHOWING SPECIFIC SECTION ON LOAD FOR TESTING
-  showSection('match-detail');
+  showSection('matches');
 }
 
 // returns the template contained in an import
