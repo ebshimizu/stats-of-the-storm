@@ -708,7 +708,7 @@ function loadTimeline() {
         continue;
 
       let item = {};
-      item.className = (t === "0") ? "blue" : "red";
+      item.className = t === "0" ? "blue" : "red";
       item.start = level.time;
       item.content = "Level " + level.level;
       item.group = 2;
@@ -852,6 +852,7 @@ function loadTimeline() {
     else {
       item.className = 'red';
     }
+    item.className += ' merc-unit';
 
     item.group = 6;
     items.push(item);
@@ -861,11 +862,13 @@ function loadTimeline() {
   if (matchDetailMatch.map === ReplayTypes.MapType.Braxis) {
     getBraxisEvents(items);
   }
+  else if (matchDetailMatch.map === ReplayTypes.MapType.Garden) {
+    getGardenEvents(items);
+  }
 
   let opts = {};
   opts.min = 0;
   opts.max = matchDetailMatch.length + 10;
-  opts.selectable = false;
   opts.showMajorLabels = false;
   opts.maxHeight = "100%";
   opts.format = {
@@ -874,7 +877,7 @@ function loadTimeline() {
         return formatSeconds(-(1000-date._d.getUTCMilliseconds()));
       }
 
-      return formatSeconds(date._d.getUTCMilliseconds());
+      return formatSeconds(date._d.getUTCMilliseconds() + date._d.getUTCSeconds() * 1000);
     }
   }
   opts.onInitialDrawComplete = function() {
@@ -930,15 +933,25 @@ function getBraxisEvents(items) {
 
     item0.start = wave.startTime;
     item1.start = wave.startTime;
+    item0.end = wave.endTime[0];
+    item1.end = wave.endTime[1];
 
     item0.className = 'blue';
     item1.className = 'red';
 
-    item0.content = (wave.startScore[0] * 100).toFixed(2) + '% Zerg Wave';
-    item1.content = (wave.startScore[1] * 100).toFixed(2) + '% Zerg Wave';
+    let t0 = (wave.startScore[0] * 100).toFixed(2) + '% Zerg Wave';
+    let t1 = (wave.startScore[1] * 100).toFixed(2) + '% Zerg Wave';
 
-    item0.end = wave.endTime[0];
-    item1.end = wave.endTime[1];
+    let pop0 = "<h3 class='ui header'>";
+    pop0 += "<div class='content'>" + t0 + "<div class='sub header'>Spawned at: " + formatSeconds(item0.start) + ", Duration: " + formatSeconds(item0.end - item0.start);
+    pop0 += "</div></div></h3>";
+
+    let pop1 = "<h3 class='ui header'>";
+    pop1 += "<div class='content'>" + t1 + "<div class='sub header'>Spawned at: " + formatSeconds(item1.start) + ", Duration: " + formatSeconds(item1.end - item1.start);
+    pop1 += "</div></div></h3>";
+
+    item0.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop0 + '">' + t0 + '</div>';
+    item1.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop1 + '">' + t1 + '</div>';
 
     item0.group = 4;
     item1.group = 4;
@@ -954,5 +967,31 @@ function getBraxisEvents(items) {
     sitem.group = 4;
     sitem.end = wave.startTime;
     items.push(sitem);
+  }
+}
+
+function getGardenEvents(items) {
+  for (let t in matchDetailMatch.objective) {
+    for (let i in matchDetailMatch.objective[t].events) {
+      let terror = matchDetailMatch.objective[t].events[i];
+
+      let item = {};
+      item.start = terror.time;
+      item.end = item.start + terror.duration;
+      item.className = t === "0" ? 'blue' : 'red';
+      item.group = 4;
+
+      let hero = matchDetailMatch.teams[t].heroes[matchDetailMatch.teams[t].ids.indexOf(terror.player)];
+      
+      let pop = "<h3 class='ui image header'>";
+      pop += "<img src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(hero) + "' class='ui large circular image'>";
+      pop += "<div class='content'>Garden Terror<div class='sub header'>Spawned at: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(terror.duration);
+      pop += "</div></div></h3>";
+
+      item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">';
+      item.content += '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(hero) + '" class="ui circular avatar image">Garden Terror';
+      item.content += '</div>';
+      items.push(item);
+    }
   }
 }

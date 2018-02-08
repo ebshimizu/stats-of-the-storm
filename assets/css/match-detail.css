@@ -189,6 +189,11 @@
   color: #FFF;
 }
 
+#match-detail-timeline-wrapper .vis-selected {
+  border-color: #FFC200!important;
+  border: 2px solid;
+}
+
 #match-detail-timeline-wrapper .vis-item.vis-background {
   cursor: default;
   color: #FFF;

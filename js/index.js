@@ -279,13 +279,13 @@ function formatSeconds(val) {
   let invert = false;
   if (val < 0)
     invert = true;
-  val = Math.abs(val);
+  let fval = Math.abs(val);
 
-  let duration = new Date(val * 1000);
+  let duration = new Date(fval * 1000);
   let seconds = duration.getUTCSeconds();
   let minutes = duration.getUTCMinutes();
 
-  return (invert ? '-' : '' ) + ((minutes < 1) ? "0" : "") + minutes + ":" + ((seconds < 10) ? "0" : "") + seconds;
+  return (invert ? '-' : '') + (minutes < 1 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 }
 
 function formatStat(field, val) {
@@ -295,8 +295,8 @@ function formatStat(field, val) {
     return val.toFixed(2);
   else if (field.startsWith('Time') || field === 'OnFireTimeOnFire')
     return formatSeconds(val);
-  else
-    return val;
+
+  return val;
 }
 
 // updates certain elements based on a new replay inserted into the database

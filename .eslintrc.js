@@ -10,7 +10,7 @@ module.exports = {
     },
     "rules": {
         "accessor-pairs": "error",
-        "array-bracket-newline": "error",
+        "array-bracket-newline": "off",
         "array-bracket-spacing": [
             "error",
             "never"
@@ -23,7 +23,7 @@ module.exports = {
         "block-scoped-var": "off",
         "block-spacing": "error",
         "brace-style": [
-            "error",
+            "off",
             "stroustrup"
         ],
         "callback-return": "error",
@@ -112,7 +112,7 @@ module.exports = {
         "new-parens": "error",
         "newline-after-var": "off",
         "newline-before-return": "off",
-        "newline-per-chained-call": "error",
+        "newline-per-chained-call": "warn",
         "no-alert": "error",
         "no-array-constructor": "error",
         "no-await-in-loop": "error",
@@ -142,7 +142,7 @@ module.exports = {
             "error",
             "functions"
         ],
-        "no-invalid-this": "error",
+        "no-invalid-this": "off",
         "no-iterator": "error",
         "no-label-var": "error",
         "no-labels": "error",
@@ -211,6 +211,7 @@ module.exports = {
         "no-useless-constructor": "error",
         "no-useless-rename": "error",
         "no-useless-return": "error",
+        "no-unused-vars" : "warn",
         "no-var": "off",
         "no-void": "error",
         "no-warning-comments": "off",
