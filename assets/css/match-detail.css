@@ -170,6 +170,9 @@
 
 #match-detail-timeline-wrapper .vis-item {
   font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+}
+
+#match-detail-timeline-wrapper .timeline-popup {
   cursor: pointer;
 }
 
@@ -217,6 +220,16 @@
 
 #match-detail-timeline-wrapper .vis-time-axis .vis-grid.vis-minor {
   border-color: rgba(229, 229, 229, 0.25);
+}
+
+#match-detail-timeline-wrapper .vis-item.merc-unit,
+#match-detail-timeline-wrapper .vis-item.temple-shot {
+  font-size: 9pt;
+}
+
+#match-detail-timeline-wrapper .vis-item.temple-shot .vis-item-content,
+#match-detail-timeline-wrapper .vis-item.merc-unit .vis-item-content {
+  padding: 2px;
 }
 
 .ui.header.second {

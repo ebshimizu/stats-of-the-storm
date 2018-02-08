@@ -98,27 +98,27 @@ var matchDetailTimelineGroups = [
   },
   {
     id: 4,
+    content: 'Structures Destroyed',
+    classname: 'timeline-structures',
+    visible: true
+  },
+  {
+    id: 5,
     content: 'Objective',
     classname: 'timeline-objective',
     visible: true
   },
   {
-    id: 5,
+    id: 6,
     content: 'Mercenary Captures',
     classname: 'timeline-mercs',
     visible: true
   },
   {
-    id: 6,
+    id: 7,
     content: 'Mercenary Units',
     classname: 'timeline-merc-units',
     visible: false
-  },
-  {
-    id: 7,
-    content: 'Structures Destroyed',
-    classname: 'timeline-structures',
-    visible: true
   }
 ];
 
@@ -233,7 +233,7 @@ function initMatchDetailPage() {
   });
 
   // DEBUG - LOAD SPECIFIC MATCH
-  loadMatchData("GAvAZDuS5EqWvH3b", function() { console.log("done loading"); });
+  loadMatchData("oe6aEJHvQ78XjMK0", function() { console.log("done loading"); });
 }
 
 // retrieves the proper data and then renders to the page
@@ -814,7 +814,7 @@ function loadTimeline() {
       else {
         item.className = 'blue';
       }
-      item.group = 7;
+      item.group = 4;
       items.push(item);
     }
   }
@@ -833,7 +833,7 @@ function loadTimeline() {
       item.className = 'red';
     }
 
-    item.group = 5;
+    item.group = 6;
     items.push(item);
   }
 
@@ -854,16 +854,48 @@ function loadTimeline() {
     }
     item.className += ' merc-unit';
 
-    item.group = 6;
+    item.group = 7;
     items.push(item);
   }
 
   // objectives...
-  if (matchDetailMatch.map === ReplayTypes.MapType.Braxis) {
-    getBraxisEvents(items);
+  if (matchDetailMatch.map === ReplayTypes.MapType.SkyTemple) {
+    getSkyTempleEvents(items);
+  }
+  else if (matchDetailMatch.map === ReplayTypes.MapType.Towers) {
+    getTowersEvents(items);
+  }
+  else if (matchDetailMatch.map === ReplayTypes.MapType.Mines) {
+    getMinesEvents(items);
+  } 
+  else if (matchDetailMatch.map === ReplayTypes.MapType.BOE) {
+    getBOEEvents(items);
+  }
+  // NOTE: Blackheart's bay has no discernable objective data so it's not listed here right now
+  // i hope one day we find it.
+  else if (matchDetailMatch.map === ReplayTypes.MapType.Cursed) {
+    getCursedEvents(items);
+  }
+  else if (matchDetailMatch.map === ReplayTypes.MapType.Dragon) {
+    getDragonEvents(items);
   }
   else if (matchDetailMatch.map === ReplayTypes.MapType.Garden) {
     getGardenEvents(items);
+  }
+  else if (matchDetailMatch.map === ReplayTypes.MapType.Shrines) {
+    getShrinesEvents(items);
+  }
+  else if (matchDetailMatch.map === ReplayTypes.MapType.Tomb) {
+    getTombEvents(items);
+  }
+  else if (matchDetailMatch.map === ReplayTypes.MapType.Volskaya) {
+    getVolskayaEvents(items);
+  }
+  else if (matchDetailMatch.map === ReplayTypes.MapType.Warhead) {
+    getWarheadEvents(items);
+  }
+  else if (matchDetailMatch.map === ReplayTypes.MapType.Braxis) {
+    getBraxisEvents(items);
   }
 
   let opts = {};
@@ -953,8 +985,8 @@ function getBraxisEvents(items) {
     item0.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop0 + '">' + t0 + '</div>';
     item1.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop1 + '">' + t1 + '</div>';
 
-    item0.group = 4;
-    item1.group = 4;
+    item0.group = 54
+    item1.group = 5;
 
     items.push(item0);
     items.push(item1);
@@ -964,7 +996,7 @@ function getBraxisEvents(items) {
     sitem.start = wave.initTime;
     sitem.content = "Beacons Active";
     sitem.type = 'background';
-    sitem.group = 4;
+    sitem.group = 5;
     sitem.end = wave.startTime;
     items.push(sitem);
   }
@@ -979,7 +1011,7 @@ function getGardenEvents(items) {
       item.start = terror.time;
       item.end = item.start + terror.duration;
       item.className = t === "0" ? 'blue' : 'red';
-      item.group = 4;
+      item.group = 5;
 
       let hero = matchDetailMatch.teams[t].heroes[matchDetailMatch.teams[t].ids.indexOf(terror.player)];
       
@@ -990,6 +1022,280 @@ function getGardenEvents(items) {
 
       item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">';
       item.content += '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(hero) + '" class="ui circular avatar image">Garden Terror';
+      item.content += '</div>';
+      items.push(item);
+    }
+  }
+}
+
+function getSkyTempleEvents(items) {
+  for (let t in matchDetailMatch.objective) {
+    for (let i in matchDetailMatch.objective[t].events) {
+      // haha there are so many i bet people will probably turn it off
+      let shot = matchDetailMatch.objective[t].events[i];
+
+      let item = {};
+      item.start = shot.time;
+      item.className = t === "0" ? 'blue' : 'red';
+      item.className += ' temple-shot';
+      item.group = 5;
+
+      let pop = "<h3 class='ui header'><div class='content'>Temple Shot Fired<div class='sub header'>" + formatSeconds(item.start);
+      pop += ", Damage: " + shot.damage + "</div></div></h3>";
+
+      item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '"><i class="bullseye icon"></i></div>';
+      items.push(item);
+    }
+  }
+}
+
+function getTowersEvents(items) {
+  for (let t in ["0", "1"]) {
+    for (let i in matchDetailMatch.objective[t].events) {
+      let altar = matchDetailMatch.objective[t].events[i];
+
+      let item = {};
+      item.start = altar.time;
+      item.className = t === 0 ? 'blue' : 'red';
+      item.group = 5;
+
+      let pop = "<h3 class='ui header'><div class='content'>Altar Captured<div class='sub header'>" + altar.damage + " Core Damage</div></div></h3>";
+      item.content = '<div class="timeline-popup" data-html="' + pop + '">Altar Capture</div>';
+      items.push(item);
+    }
+  }
+
+  // six tower events
+  let complete = true;
+  let start = 0;
+  let team = -1;
+  for (let t in matchDetailMatch.objective.sixTowerEvents) {
+    let event = matchDetailMatch.objective.sixTowerEvents[t];
+    if (event.kind === 'capture') {
+      complete = false;
+      start = event.time;
+      team = event.team;
+    }
+    else if (event.kind === 'end') {
+      complete = true;
+      let item = {};
+      item.start = start;
+      item.end = event.time;
+      item.group = 5;
+      item.type = 'background';
+      item.className = event.team === 0 ? 'blue' : 'red';
+      item.content = (event.team === 0 ? 'Blue' : 'Red') + ' Team All Forts';
+      items.push(item);
+    }
+  }
+
+  if (!complete) {
+    let item = {};
+    item.start = start;
+    item.end = matchDetailMatch.length;
+    item.group = 5;
+    item.type = 'background';
+    item.className = team === 0 ? 'blue' : 'red';
+    item.className += ' plus2';
+    item.content = 'All Forts';
+    items.push(item);
+  }
+}
+
+function getMinesEvents(items) {
+  for (let t in [0, 1]) {
+    for (let g in matchDetailMatch.objective[t]) {
+      let golem = matchDetailMatch.objective[t][g];
+      let item = {};
+      item.start = golem.startTime;
+      item.end = golem.endTime;
+      item.group = 5;
+      item.className = golem.team === 0 ? 'blue' : 'red';
+      
+      let pop = "<h3 class='ui header'><div class='content'>Grave Golem<div class='sub header'>Spawn: " + formatSeconds(golem.startTime);
+      pop += ", Duration: " + formatSeconds(golem.duration) + "</div></div></h3>";
+
+      item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">Grave Golem</div>';
+      items.push(item);
+    }
+  }
+}
+
+function getBOEEvents(items) {
+  for (let i in matchDetailMatch.objective.results) {
+    let immo = matchDetailMatch.objective.results[i];
+
+    // two parts: immortal pushing and immortal fight
+    let item = {};
+    item.start = immo.time;
+    item.end = immo.time + immo.immortalDuration;
+    item.group = 5;
+    item.className = immo.winner === 0 ? 'blue' : 'red';
+
+    let pop = "<h3 class='ui header'><div class='content'>" + immo.power.toFixed(2) + "% Immortal";
+    pop += "<div class='sub header'>Spawn: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(immo.immortalDuration);
+    pop += "</div></div></h3>";
+
+    item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">Immortal</div>';
+    items.push(item);
+
+    // bg
+    let bitem = {};
+    bitem.start = immo.time - immo.duration;
+    bitem.end = immo.time;
+    bitem.group = 5;
+    bitem.content = "Immortals Active";
+    bitem.type = 'background';
+    items.push(bitem);
+  }
+}
+
+function getCursedEvents(items) {
+  for (let t in [0, 1]) {
+    for (let c in matchDetailMatch.objective[t].events) {
+      let trib = matchDetailMatch.objective[t].events[c];
+
+      let item = {};
+      item.start = trib.time;
+      item.group = 5;
+      item.className = t === '0' ? 'blue' : 'red';
+      item.content = 'Tribute Captured';
+      items.push(item);
+    }
+  }
+}
+
+function getDragonEvents(items) {
+  for (let t in [0, 1]) {
+    for (let d in matchDetailMatch.objective[t].events) {
+      let dragon = matchDetailMatch.objective[t].events[d];
+
+      if (!('duration' in dragon))
+        dragon.duration = matchDetailMatch.length - dragon.time;
+
+      let item = {};
+      item.start = dragon.time;
+      item.end = item.start + dragon.duration;
+      item.className = t === "0" ? 'blue' : 'red';
+      item.group = 5;
+
+      let hero = matchDetailMatch.teams[t].heroes[matchDetailMatch.teams[t].ids.indexOf(dragon.player)];
+      let pop = "<h3 class='ui image header'>";
+      pop += "<img src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(hero) + "' class='ui large circular image'>";
+      pop += "<div class='content'>Dragon Knight<div class='sub header'>Spawned at: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(dragon.duration);
+      pop += "</div></div></h3>";
+
+      item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">';
+      item.content += '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(hero) + '" class="ui circular avatar image">Dragon Knight';
+      item.content += '</div>';
+      items.push(item);
+    }
+  }
+}
+
+function getShrinesEvents(items) {
+  for (let s in matchDetailMatch.objective.shrines) {
+    // there are two types of events here
+    // this one details when the shrine was won
+    let shrine = matchDetailMatch.objective.shrines[s];
+    let item = {};
+    item.start = shrine.time;
+    item.className = shrine.team === 0 ? 'blue' : 'red';
+    item.group = 5;
+
+    let pop = "<h3 class='ui header'><div class='content'>Shrine Cleared";
+    pop += "<div class='sub header'>Blue: " + shrine.team0Score + ", Red: " + shrine.team1Score;
+    pop += "</div></div></h3>";
+
+    item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">Shrine Cleared</div>';
+    items.push(item);
+  }
+
+  // then the actual punisher stats
+  for (let t in [0, 1]) {
+    for (let p in matchDetailMatch.objective[t].events) {
+      let punisher = matchDetailMatch.objective[t].events[p];
+
+      let item = {};
+      item.start = punisher.time - punisher.duration;
+      item.end = punisher.time;
+      item.className = t === '0' ? 'blue' : 'red';
+      item.group = 5;
+
+      let pop = "<h3 class='ui header'><div class='content'>" + punisher.type.substr(0, punisher.type.length - 6) + " Punisher";
+      pop += "<div class='sub header'>Spawn: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(punisher.duration);
+      pop += "</div></div></h3>";
+      pop += "<p>Siege Damage: " + parseInt(punisher.siegeDamage) + "<br>Hero Damage: " + parseInt(punisher.heroDamage) + "</p>";
+      
+      item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">'
+      item.content += punisher.type.substr(0, punisher.type.length - 6) + ' Punisher</div>';
+      items.push(item);
+    }
+  }
+}
+
+function getTombEvents(items) {
+  for (let t in [0, 1]) {
+    for (let s in matchDetailMatch.objective[t].events) {
+      let spider = matchDetailMatch.objective[t].events[s];
+
+      let item = {};
+      item.start = spider.time;
+      item.end = spider.end;
+      item.group = 5;
+      item.className = spider.team === 0 ? 'blue' : 'red';
+  
+      let pop = "<h3 class='ui header'><div class='content'>Webweavers";
+      pop += "<div class='sub header'>Spawn: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(spider.duration);
+      pop += "</div></div></h3>";
+  
+      item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">Webweavers</div>';
+      items.push(item);
+    }
+  }
+}
+
+function getVolskayaEvents(items) {
+ for (let t in [0, 1]) {
+   for (let p in matchDetailMatch.objective[t].events) {
+     let tri = matchDetailMatch.objective[t].events[p];
+
+     let item = {};
+     item.start = tri.time;
+     item.end = tri.time + tri.duration;
+     item.group = 5;
+     item.className = tri.team === 0 ? 'blue' : 'red';
+
+     let pop = "<h3 class='ui header'><div class='content'>Triglav";
+     pop += "<div class='sub header'>Spawn: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(tri.duration);
+     pop += "</div></div></h3>";
+
+     item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">Triglav</div>';
+     items.push(item);
+   }
+ } 
+}
+
+function getWarheadEvents(items) {
+  for (let t in [0,1]) {
+    for (let w in matchDetailMatch.objective[t].events) {
+      let nuke = matchDetailMatch.objective[t].events[w];
+
+      let item = {};
+      item.start = nuke.time;
+      item.group = 5;
+      item.className = nuke.team === 0 ? 'blue' : 'red';
+      
+      let hero = matchDetailMatch.teams[t].heroes[matchDetailMatch.teams[t].ids.indexOf(nuke.player)];
+      let pop = "<h3 class='ui image header'>";
+      pop += "<img src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(hero) + "' class='ui large circular image'>";
+      pop += "<div class='content'>Nuke" + (nuke.success ? '' : ' Attempt') + "<div class='sub header'>";
+      pop += "x: " + nuke.x + ", y: " + nuke.y;
+      pop += "</div></div></h3>";
+
+      item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">';
+      item.content += '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(hero) + '" class="ui circular avatar image">';
+      item.content += 'Nuke' + (nuke.success ? '' : ' Attempt');
       item.content += '</div>';
       items.push(item);
     }

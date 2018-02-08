@@ -606,7 +606,7 @@ function processReplay(file, opts = {}) {
           let objEvent = { team: event.m_intData[1].m_value - 1, loop: event._gameloop, type: event.m_stringData[0].m_value };
           objEvent.time = loopsToSeconds(objEvent.loop - match.loopGameStart);
           objEvent.duration = event.m_intData[2].m_value;
-          objEvent.seigeDamage = event.m_fixedData[0].m_value / 4096;
+          objEvent.siegeDamage = event.m_fixedData[0].m_value / 4096;
           objEvent.heroDamage = event.m_fixedData[1].m_value / 4096;
 
           match.objective[objEvent.team].events.push(objEvent);
@@ -1096,7 +1096,7 @@ function processReplay(file, opts = {}) {
     else if (match.map === ReplayTypes.MapType.Dragon) {
       // turns out a dragon can spawn well after the game ends,
       // it isn't assigned to a team by the parser if this is the case, so skip it
-      if (dragon && dragon.team) {
+      if (dragon && (dragon.team === 0 || dragon.team === 1)) {
         // log duration
         let lastIdx = match.objective[dragon.team].events.length - 1;
         match.objective[dragon.team].events[lastIdx].loopDuration = match.loopLength - match.objective[dragon.team].events[lastIdx].loop;
