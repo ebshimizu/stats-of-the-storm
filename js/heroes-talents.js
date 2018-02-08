@@ -96,7 +96,7 @@ class HeroesTalents {
       return this._heroes[hero].icon;
 
     // specific to this project
-    return 'hero-not-found.png';
+    return 'not-found.png';
   }
 
   talentIcon(talentName) {

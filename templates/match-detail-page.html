@@ -51,8 +51,8 @@
         <a class="item" data-tab="summary">Summary</a>
         <a class="item" data-tab="talents">Talents</a>
         <a class="item" data-tab="details">Detailed Stats</a>
-        <a class="active item" data-tab="match-detail-xp">XP Breakdown</a>
-        <a class="item" data-tab="timeline">Timeline</a>
+        <a class="item" data-tab="match-detail-xp">XP Breakdown</a>
+        <a class="active item" data-tab="match-detail-timeline">Timeline</a>
         <a class="item" data-tab="match-detail-log">Chat and Taunt Log</a>
       </div>
       <div class="ui tab match-detail-wrapper" data-tab="summary" id="match-detail-summary">
@@ -130,7 +130,7 @@
           </table>
         </div>
       </div>
-      <div class="ui active tab match-detail-wrapper" data-tab="match-detail-xp" id="match-detail-xp-graphs">
+      <div class="ui tab match-detail-wrapper" data-tab="match-detail-xp" id="match-detail-xp-graphs">
         <div class="ui grid">
           <div class="eight wide column">
             <div class="ui inverted segment">
@@ -156,6 +156,11 @@
               <canvas id="match-detail-red-xpb"></canvas>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="ui active tab match-detail-wrapper" data-tab="match-detail-timeline" id="match-detail-timeline">
+        <div id="match-detail-timeline-wrapper">
+
         </div>
       </div>
       <div class="ui tab match-detail-wrapper" data-tab="match-detail-log" id="match-detail-chat-log">

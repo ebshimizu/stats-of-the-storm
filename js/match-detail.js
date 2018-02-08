@@ -12,6 +12,7 @@ var overallXPGraph, overallXPGraphData;
 var blueTeamXPGraph, blueTeamXPGraphData;
 var redTeamXPGraph, redTeamXPGraphData;
 var teamXPSoakGraph, teamXPSoakGraphData;
+var matchDetailTimeline;
 const xpBreakdownOpts = {
   responsive: true,
   tooltips: {
@@ -76,7 +77,38 @@ const xpSoakOpts = {
     }]
   }
 }
-
+var matchDetailTimelineGroups = [
+  {
+    id: 1,
+    content: 'Takedowns',
+    classname: 'timeline-tds'
+  },
+  {
+    id: 2,
+    content: 'Levels',
+    classname: 'timeiine-levels'
+  },
+  {
+    id: 3,
+    content: 'Level Advantage',
+    classname: 'timeline-level-adv'
+  },
+  {
+    id: 6,
+    content: 'Structures Lost',
+    classname: 'timeline-structures'
+  },
+  {
+    id: 5,
+    content: 'Mercenaries',
+    classname: 'timeline-mercs'
+  },
+  {
+    id: 4,
+    content: 'Objective',
+    classname: 'timeline-objective'
+  }
+];
 
 function initMatchDetailPage() {
   $('#match-detail-submenu .item').tab();
@@ -220,7 +252,7 @@ function loadMatch(docs, doneLoadCallback) {
   loadChat();
 
   // load timeline
-  // this one might take a while
+  loadTimeline();
 
   $('#match-detail-details').scrollTop(0);
   doneLoadCallback();
@@ -615,4 +647,194 @@ function getTeamXPSoakData() {
   }
 
   return {data, labels};
+}
+
+function loadTimeline() {
+  $('#match-detail-timeline-wrapper').html('');
+  let items = [];
+
+  // takedowns
+  for (let t in matchDetailMatch.takedowns) {
+    let td = matchDetailMatch.takedowns[t];
+    let item = {};
+
+    // the parser doesn't uh, actually store what team the person died is on but
+    // it's not too bad to figure out
+    if (matchDetailMatch.teams[0].ids.indexOf(td.victim.player) >= 0) {
+      item.className = "red";
+    }
+    else {
+      item.className = "blue";
+    }
+
+    item.start = td.time;
+    item.content = generateTDTimeline(td);
+    item.group = 1;
+    items.push(item);
+  }
+
+  // levels
+  let adv = [];
+  for (let t in matchDetailMatch.levelTimes) {
+    for (let lv in matchDetailMatch.levelTimes[t]) {
+      let level = matchDetailMatch.levelTimes[t][lv];
+      level.team = t;
+      adv.push(level);
+
+      if (level.level === 1)
+        continue;
+
+      let item = {};
+      item.className = (t === "0") ? "blue" : "red";
+      item.start = level.time;
+      item.content = "Level " + level.level;
+      item.group = 2;
+      items.push(item);
+    }
+
+    let keys = Object.keys(matchDetailMatch.levelTimes[t]);
+    let last = keys[keys.length - 1];
+    adv.push({
+      team: t,
+      time: matchDetailMatch.length,
+      level: matchDetailMatch.levelTimes[t][last].level
+    });
+  }
+
+  // level advantage
+  // calculate the intervals and the level diff at each interval
+  adv.sort(function(a, b) {
+    if (a.time === b.time)
+      return 0;
+    if (a.time < b.time)
+      return -1;
+    
+    return 1;
+  });
+  let start = 0;
+  let currentLevelDiff = 0;
+  let blueLevel = 1;
+  let redLevel = 1;
+  for (let i = 0; i < adv.length; i++) {
+    let event = adv[i];
+
+    if (event.team === "0") {
+      blueLevel = event.level;
+    }
+    else {
+      redLevel = event.level;
+    }
+
+    let newLevelDiff = blueLevel - redLevel;
+    if (newLevelDiff !== currentLevelDiff) {
+      // end the previous group
+      let item = {};
+      item.start = start;
+      item.end = event.time;
+      
+      if (currentLevelDiff === 0) {
+        item.content = "0";
+      }
+      else if (currentLevelDiff < 0) {
+        // negative means red > blue
+        item.content = "+" + Math.abs(currentLevelDiff);
+        item.className = "red";
+      }
+      else {
+        item.content = "+" + Math.abs(currentLevelDiff);
+        item.className = "blue";
+      }
+
+      item.className = item.className + ' level-adv plus' + Math.abs(currentLevelDiff);
+
+      item.type = 'background';
+      item.group = 3;
+      items.push(item);
+      start = event.time;
+      currentLevelDiff = newLevelDiff;
+    }
+  }
+
+  // final levels
+  let lastItem = {};
+  lastItem.start = start;
+  lastItem.end = matchDetailMatch.length;
+  let lastLevelDiff = blueLevel - redLevel;
+  if (lastLevelDiff === 0) {
+    lastItem.content = "0";
+  }
+  else if (lastLevelDiff < 0) {
+    // negative means red > blue
+    lastItem.content = "+" + Math.abs(lastLevelDiff);
+    lastItem.className = "red";
+  }
+  else {
+    lastItem.content = "+" + Math.abs(lastLevelDiff);
+    lastItem.className = "blue";
+  }
+  lastItem.className = lastItem.className + ' level-adv plus' + Math.abs(lastLevelDiff);
+  lastItem.type = 'background';
+  lastItem.group = 3;
+  items.push(lastItem);
+
+  // structures
+  for (let s in matchDetailMatch.structures) {
+    let struct = matchDetailMatch.structures[s];
+
+    if ('destroyed' in struct) {
+      let item = {};
+      item.start = struct.destroyed;
+      item.content = struct.name;
+      if (struct.team === 0) {
+        item.className = 'blue';
+      }
+      else {
+        item.className = 'red';
+      }
+      item.group = 6;
+      items.push(item);
+    }
+  }
+
+  let opts = {};
+  opts.min = 0;
+  opts.max = matchDetailMatch.length + 10;
+  opts.selectable = false;
+  opts.showMajorLabels = false;
+  opts.format = {
+    minorLabels: function(date, scale, step) {
+      if (date._d < new Date(0)) {
+        return formatSeconds(-(1000-date._d.getUTCMilliseconds()));
+      }
+
+      return formatSeconds(date._d.getUTCMilliseconds());
+    }
+  }
+  opts.onInitialDrawComplete = function() {
+    $('.timeline-popup').popup();
+  }
+
+  matchDetailTimeline = new vis.Timeline($('#match-detail-timeline-wrapper')[0], new vis.DataSet(items), matchDetailTimelineGroups, opts);
+  matchDetailTimeline.on('rangechanged', function(props) {
+    $('.timeline-popup').popup();
+  }); 
+}
+
+// not a template because i'm kind of lazy? I dunno
+function generateTDTimeline(data) {
+  let pop = "<h3 class='ui image header'>";
+  pop += "<img src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(data.victim.hero) + "' class='ui large circular image'>";
+  pop += "<div class='content'>" + data.victim.hero + "<div class='sub header player-name'>Killed at ";
+  pop += formatSeconds(data.time) + "</div></div></h3>";
+  pop += "<h3 class='ui header second'>Killed By</h3>";
+  pop += "<div class='ui mini circular images'>";
+  
+  for (let a in data.killers) {
+    let k = data.killers[a];
+    pop += "<img class='ui image' src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(k.hero) + "'>";
+  }
+  pop += "</div>";
+
+  let text = '<div class="timeline-popup" data-html="' + pop + '">' + data.victim.hero + '</div>';
+  return text;
 }

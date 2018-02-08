@@ -152,3 +152,70 @@
   width: 100%;
   height: 300px;
 }
+
+#match-detail-timeline-wrapper {
+  height: 100%;
+}
+
+/* Timeline Styles */
+#match-detail-timeline-wrapper .vis-timeline {
+  background-color: #1b1c1d;
+}
+
+#match-detail-timeline-wrapper .vis-text,
+#match-detail-timeline-wrapper .vis-label {
+  color: #FFF;
+}
+
+#match-detail-timeline-wrapper .vis-item {
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  cursor: pointer;
+}
+
+#match-detail-timeline-wrapper .vis-item-content {
+  padding: 8px;
+}
+
+#match-detail-timeline-wrapper .vis-item.blue {
+  background-color: #2185d0;
+  border-color: #2185d0;
+  color: #FFF;
+}
+
+#match-detail-timeline-wrapper .vis-item.red {
+  background-color: #db2828;
+  border-color: #db2828;
+  color: #FFF;
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background {
+  cursor: default;
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background.level-adv {
+  color: #FFF;
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background.blue.plus1 {
+  background-color: rgba(33, 133, 208, 0.33);
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background.blue.plus2 {
+  background-color: rgba(33, 133, 208, 0.66);
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background.red.plus1 {
+  background-color: rgba(219, 40, 40, 0.33);
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background.red.plus2 {
+  background-color: rgba(219, 40, 40, 0.66);
+}
+
+#match-detail-timeline-wrapper .vis-time-axis .vis-grid.vis-minor {
+  border-color: rgba(229, 229, 229, 0.25);
+}
+
+.ui.header.second {
+  margin-top: 0;
+}
