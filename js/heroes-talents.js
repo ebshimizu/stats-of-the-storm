@@ -96,7 +96,7 @@ class HeroesTalents {
       return this._heroes[hero].icon;
 
     // specific to this project
-    return 'not-found.png';
+    return '../../../images/not-found.png';
   }
 
   talentIcon(talentName) {
@@ -105,7 +105,7 @@ class HeroesTalents {
     }
 
     // specific to this project
-    return 'not-found.png';
+    return '../../../images/not-found.png';
   }
 
   talentDesc(talentName) {
