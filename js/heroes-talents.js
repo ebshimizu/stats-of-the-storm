@@ -78,14 +78,30 @@ class HeroesTalents {
       }
 
       if (!(data.role in this._roles))
-        this._roles[data.role] = [];
+        this._roles[data.role] = { all: [], Ranged: [], Melee: [] };
       
-      this._roles[data.role].push(data.name);
+      this._roles[data.role].all.push(data.name);
+      this._roles[data.role][data.type].push(data.name);
     }
   }
 
   get allHeroNames() {
     return Object.keys(this._heroes);
+  }
+
+  heroRole(data) {
+    if (!data.role) {
+      let result = [];
+      for (let r in this._roles) {
+        result = result.concat(this._roles[r][data.type]);
+      }
+      return result;
+    }
+    else if (data.type) {
+      return this._roles[data.role][data.type];
+    }
+
+    return this._roles[data.role].all;
   }
 
   heroNameFromAttr(attr) {

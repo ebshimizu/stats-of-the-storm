@@ -365,3 +365,7 @@ function addMapMenuOptions(menu) {
     menu.find('.menu').append('<div class="item" data-value="' + map + '">' + map + '</div>');
   }
 }
+
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}

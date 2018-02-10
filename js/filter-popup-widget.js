@@ -78,7 +78,7 @@ function resetFilterWidget() {
 function getPopupQuery() {
   // mode
   let modes = $('#filter-popup-widget').find('.filter-widget-mode').dropdown('get value').split(',');
-  for (m in modes) {
+  for (let m in modes) {
     if (modes[m] !== "")
       modes[m] = parseInt(modes[m]);
   }
@@ -87,8 +87,24 @@ function getPopupQuery() {
   let start = $('#filter-popup-widget').find('.filter-widget-start-date').datepicker('getDate');
   let end = $('#filter-popup-widget').find('.filter-widget-end-date').datepicker('getDate');
 
-  // heroe type
-  // TODO
+  // hero type
+  let types = $('#filter-popup-widget .filter-widget-hero-type').dropdown('get value').split(',')
+  for (let t in types) {
+    if (types[t] !== "") {
+      if (types[t].split(' ').length === 1) {
+        if (types[t] === "melee" || types[t] === "ranged") {
+          types[t] = { type: capitalize(types[t]) }
+        }
+        else {
+          types[t] = { role: capitalize(types[t]) }
+        }
+      }
+      else {
+        let s = types[t].split(' ');
+        types[t] = { type: capitalize(s[0]), role: capitalize(s[1])}
+      }
+    }
+  }
 
   // maps
   let maps = $('#filter-popup-widget').find('.filter-widget-map').dropdown('get value').split(',');
@@ -109,6 +125,25 @@ function getPopupQuery() {
     return (start <= d && d <= end);
   }
 
-  // right now the queries are identical
-  return { map: query, hero: query };
+  // queries diverge here
+  let map = Object.assign({}, query);
+  let hero = Object.assign({}, query);
+
+  // heroes
+  if (types[0] !== "") {
+    heroArr = []
+    for (let t in types) {
+      let heroes = Heroes.heroRole(types[t]);
+      for (let h in heroes) {
+        if (heroArr.indexOf(heroes[h]) === -1) {
+          heroArr.push(heroes[h]);
+        }
+      }
+    }
+
+    hero.hero = { $in: heroArr };
+    map.heroes = { $elemMatch: { $in: heroArr } };
+  }
+
+  return { map, hero };
 }
