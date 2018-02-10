@@ -48,6 +48,12 @@ function initMatchesPage() {
   addHeroMenuOptions($('#match-search-heroes'));
   $('#match-search-heroes').dropdown('refresh');
 
+  $('#match-map-select').dropdown({
+    fullTextSearch: true
+  })
+  addMapMenuOptions($('#match-map-select'));
+  $('#match-map-select').dropdown('refresh');
+
   $('#match-search-start-date').datepicker();
   $('#match-search-start-date').datepicker('setDate', new Date('1-1-2012'));
 
@@ -85,6 +91,7 @@ function resetMatchFilters() {
   $('#match-search-players-mode').dropdown('restore defaults');
   $('#match-search-heroes').dropdown('restore defaults');
   $('#match-search-heroes-mode').dropdown('restore defaults');
+  $('#match-map-select').dropdown('restore defaults');
 
   $('#match-search-start-date').datepicker('setDate', new Date('1-1-2012'));
   $('#match-search-end-date').datepicker('setDate', new Date());
@@ -111,10 +118,17 @@ function selectMatches() {
   let heroes = $('#match-search-heroes').dropdown('get value').split(',');
   let heroMode = $('#match-search-heroes-mode').dropdown('get value');
 
+  // maps
+  let maps = $('#match-map-select').dropdown('get value').split(',');
+
   // construct the query
   let query = {};
   if (modes[0] !== "") {
     query.mode = { $in: modes };
+  }
+
+  if (maps[0] !== "") {
+    query.map = { $in: maps };
   }
 
   // dates

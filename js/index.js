@@ -354,3 +354,11 @@ function addHeroMenuOptions(menu) {
     menu.find('.menu').append(elem);
   }
 }
+
+function addMapMenuOptions(menu) {
+  menu.find('.menu').html('');
+  for (let m in ReplayTypes.MapType) {
+    let map = ReplayTypes.MapType[m];
+    menu.find('.menu').append('<div class="item" data-value="' + map + '">' + map + '</div>');
+  }
+}
