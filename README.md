@@ -1,4 +1,4 @@
-# hots-analysis
+# Stats of the Storm
 
 A flexible stat tracker for Heroes of the Storm.
 
