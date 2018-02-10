@@ -1308,6 +1308,12 @@ function processReplay(file, opts = {}) {
 
     console.log("[GAME] Taunt Detection Complete");
 
+    console.log("[STATS] Collecting Team Stats...");
+
+    collectTeamStats(match, players);
+    
+    console.log("[STATS] Team stat collection complete");
+
     return { match, players, status : ReplayStatus.OK };
   }
   catch (err) {
@@ -1494,6 +1500,168 @@ function braxisWaveStrength(units) {
   // skip ultralisks they're unreliable
 
   return score;
+}
+
+function collectTeamStats(match, players) {
+  // merc capture count
+  for (let t in match.teams) {
+    match.teams[t].stats = {};
+
+    // object keys are strings so bleh convert back
+    let team = parseInt(t);
+
+    // merc captures
+    match.teams[t].stats.mercCaptures = 0;
+    for (let m in match.mercs.captures) {
+      if (match.mercs.captures[m].team === team) {
+        match.teams[t].stats.mercCaptures += 1;
+      }
+    }
+
+    // merc uptime
+    match.teams[t].stats.mercUptime = 0;
+    match.teams[t].stats.mercUptimePercent = 0;
+    // basically combine the intervals, then sum the durations
+    let intervals = [];
+    for (let m in match.mercs.units) {
+      let unit = match.mercs.units[m];
+      if (unit.team === team) {
+        let interval = [unit.time];
+        if (!('duration' in unit)) {
+          interval.push(match.length);
+        }
+        else {
+          interval.push(unit.time + unit.duration);
+        }
+        intervals.push(interval);
+      }
+    }
+
+    // combine intervals
+    intervals = combineIntervals(intervals);
+
+    // sum
+    for (let i in intervals) {
+      match.teams[t].stats.mercUptime += (intervals[i][1] - intervals[i][0]);
+    }
+
+    match.teams[t].stats.mercUptimePercent = match.teams[t].stats.mercUptime / match.length;
+
+    // time to first fort and keep
+    let otherTeam = team === 0 ? 1 : 0;
+    let structures = {};
+    for (let s in match.structures) {
+      let structure = match.structures[s];
+      
+      if (!(structure.name in structures)) {
+        structures[structure.name] = {
+          lost: 0,
+          destroyed: 0,
+          first: match.length
+        }
+      }
+      if ('destroyed' in structure) {
+        if (structure.team === team) {
+          structures[structure.name].lost += 1;
+        }
+        else if (structure.team === otherTeam) {
+          structures[structure.name].destroyed += 1;
+          structures[structure.name].first = Math.min(structures[structure.name].first, structure.destroyed);
+        }
+      }
+    }
+    match.teams[t].stats.structures = structures;
+
+    // team kda
+    let totalTD = match.teams[t].takedowns;
+    let totalDeaths = match.teams[otherTeam].takedowns;
+    match.teams[t].stats.KDA = totalTD / Math.max(totalDeaths, 1);
+
+    // people per kill
+    let ppk = 0;
+    for (let i in match.takedowns) {
+      let td = match.takedowns[i];
+
+      if (match.teams[otherTeam].ids.indexOf(td.victim.player) !== -1) {
+        ppk += td.killers.length;
+      }
+    }
+    match.teams[t].stats.PPK = ppk / Math.max(totalTD, 1);
+
+    if ('10' in match.levelTimes[t]) {
+      match.teams[t].stats.timeTo10 = match.levelTimes[t]['10'].time;
+    }
+
+    if ('20' in match.levelTimes[t]) {
+      match.teams[t].stats.timeTo20 = match.levelTimes[t]['20'].time;
+    }
+
+    // stats
+    // only certain stats really make sense for teams
+    let totals = {
+      'DamageTaken' : 0,
+      'CreepDamage' : 0,
+      'Healing' : 0,
+      'HeroDamage' : 0,
+      'MinionDamage' : 0,
+      'SelfHealing' : 0,
+      'SiegeDamage' : 0,
+      'ProtectionGivenToAllies' : 0,
+      'TeamfightDamageTaken' : 0,
+      'TeamfightHealingDone' : 0,
+      'TeamfightHeroDamage' : 0,
+      'TimeCCdEnemyHeroes' : 0,
+      'TimeRootingEnemyHeroes' : 0,
+      'TimeSpentDead' : 0,
+      'TimeStunningEnemyHeroes' : 0
+    };
+    for (let p in players) {
+      let player = players[p];
+      if (player.team === team) {
+        for (let s in totals) {
+          totals[s] += player.gameStats[s];
+        }
+      }
+    }
+    totals.avgTimeSpentDead = totals.TimeSpentDead / 5;
+    match.teams[t].stats.totals = totals;
+  }
+}
+
+// lifted from http://blog.sodhanalibrary.com/2015/06/merge-intervals-using-javascript.html
+function combineIntervals(intervals) {
+  if (intervals.length <= 1)
+    return;
+
+  // sort
+  intervals.sort(function(a, b) {
+    if (a[0] > b[0]) {
+      return 1;
+    }
+    else if (a[0] < b[0]) {
+      return -1;
+    }
+    return 0;
+  });
+
+  let result = [];
+  let prev = intervals[0];
+  for (let i = 1; i < intervals.length; i++) {
+    let c = intervals[i];
+
+    if (prev[1] >= c[0]) {
+      // merge
+      let merged = [prev[0], Math.max(prev[1], c[1])];
+      prev = merged;
+    }
+    else {
+      result.push(prev);
+      prev = c;
+    }
+  }
+
+  result.push(prev);
+  return result;
 }
 
 // general parsing utilities, not db specific
