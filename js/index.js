@@ -330,6 +330,8 @@ function updatePlayerMenus(err, players) {
     $(elem).dropdown('refresh');
     $(elem).dropdown('set selected', selected);
   });
+
+  getMatchCount();
 }
 
 // given a user id, returns 'focus-player' class if the player id is, well, the focus player
@@ -338,4 +340,17 @@ function focusClass(id) {
     return 'focus-player';
 
   return '';
+}
+
+// given a json object this function will insert the proper hero menu items into the
+// structure. it will NOT initialize callbacks for the menu, that is up to the caller
+function addHeroMenuOptions(menu) {
+  let heroes = Heroes.allHeroNames;
+
+  menu.find('.menu').html('');
+  for (let i in heroes) {
+    let elem = '<div class="item" data-value="' + heroes[i] + '"><img class="ui avatar image" src="assets/heroes-talents/images/heroes/';
+    elem += Heroes.heroIcon(heroes[i]) + '">' + heroes[i] + '</div>';
+    menu.find('.menu').append(elem);
+  }
 }

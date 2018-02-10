@@ -39,6 +39,26 @@ function initMatchesPage() {
   $('#match-search-players-mode').dropdown({
     action: 'activate'
   });
+  $('#match-search-heroes-mode').dropdown();
+
+  // again most of the things here don't actually need callbacks
+  $('#match-search-heroes').dropdown({
+    fullTextSearch: true
+  });
+  addHeroMenuOptions($('#match-search-heroes'));
+  $('#match-search-heroes').dropdown('refresh');
+
+  $('#match-search-start-date').datepicker();
+  $('#match-search-start-date').datepicker('setDate', new Date('1-1-2012'));
+
+  $('#match-search-end-date').datepicker();
+  $('#match-search-end-date').datepicker('setDate', new Date());
+
+  // season menu tho that has some stuff
+  initSeasonMenu();
+
+  $('#match-search-button').click(selectMatches);
+  $('#match-search-reset-button').click(resetMatchFilters);
 
   // initial settings
   getMatchCount();
@@ -58,6 +78,85 @@ function selectAllMatches() {
   DB.getMatches({}, updateSelectedMatches, {projection: summaryProjection, sort: {'date' : -1 }});
 }
 
+function resetMatchFilters() {
+  $('#match-mode-select').dropdown('restore defaults');
+  $('#match-search-seasons').dropdown('restore defaults');
+  $('#match-search-players').dropdown('restore defaults');
+  $('#match-search-players-mode').dropdown('restore defaults');
+  $('#match-search-heroes').dropdown('restore defaults');
+  $('#match-search-heroes-mode').dropdown('restore defaults');
+
+  $('#match-search-start-date').datepicker('setDate', new Date('1-1-2012'));
+  $('#match-search-end-date').datepicker('setDate', new Date());
+}
+
+// using the current search settings, search for matches
+function selectMatches() {
+  // mode
+  let modes = $('#match-mode-select').dropdown('get value').split(',');
+  for (m in modes) {
+    if (modes[m] !== "")
+      modes[m] = parseInt(modes[m]);
+  }
+
+  // dates
+  let start = $('#match-search-start-date').datepicker('getDate');
+  let end = $('#match-search-end-date').datepicker('getDate');
+
+  // players
+  let players = $('#match-search-players').dropdown('get value').split(',');
+  let playerMode = $('#match-search-players-mode').dropdown('get value');
+
+  // heroes
+  let heroes = $('#match-search-heroes').dropdown('get value').split(',');
+  let heroMode = $('#match-search-heroes-mode').dropdown('get value');
+
+  // construct the query
+  let query = {};
+  if (modes[0] !== "") {
+    query.mode = { $in: modes };
+  }
+
+  // dates
+  query.$where = function() {
+    let d = new Date(this.date);
+    return (start <= d && d <= end);
+  }
+
+  // heroes
+  if (heroes[0] !== "") {
+    if (heroMode === 'and') {
+      if (!('$and' in query))
+        query.$and = [];
+      
+      for (let h in heroes) {
+        query.$and.push({ 'heroes' : heroes[h] });
+      }
+    }
+    else {
+      query.heroes = { $elemMatch: { $in: heroes } };
+    }
+  }
+
+  // players
+  if (players[0] !== "") {
+    if (playerMode === 'and') {
+      if (!('$and' in query))
+        query.$and = [];
+      
+      for (let p in players) {
+        query.$and.push({ 'playerIDs' : players[p] });
+      }
+    }
+    else {
+      query.players = { $elemMatch: { $in: players } };
+    }
+  }
+
+  currentPage = 0;
+  DB.getMatches(query, updateSelectedMatches, {projection: summaryProjection, sort: {'date' : -1}});
+}
+
 function updateSelectedMatches(err, docs) {
   selectedMatches = docs;
   $('#matches-selected').text(selectedMatches.length);
@@ -65,6 +164,11 @@ function updateSelectedMatches(err, docs) {
 }
 
 function showPage(pageNum) {
+  // clear
+  for (let i = 0; i < matchesPerPage; i++) {
+    $('tr[slot="' + i + '"]').html('');
+  }
+
   // check in range
   let maxPages = Math.ceil(selectedMatches.length / matchesPerPage);
   if (0 <= pageNum && pageNum < maxPages) {
@@ -74,9 +178,6 @@ function showPage(pageNum) {
     for (let i = 0; i < matchesPerPage; i++) {
       if (i + startIdx < selectedMatches.length) {
         renderToSlot(selectedMatches[i + startIdx], i);
-      }
-      else {
-        $('tr[slot="' + i + '"]').html('');
       }
     }
     currentPage = pageNum;
@@ -123,6 +224,9 @@ function showPage(pageNum) {
       let id = $(this).attr('match-id');
       loadMatchData(id, function() { changeSection('match-detail'); });
     })
+  }
+  else {
+    $('#match-list-page-menu').html('');
   }
 }
 
@@ -172,4 +276,25 @@ function renderToSlot(gameData, slot) {
 
   $('#match-list tr[slot="' + slot + '"]').html(matchRowTemplate(context));
   $('tr[slot="' + slot + '"] .match-details .ui.image').popup();
+}
+
+function initSeasonMenu() {
+  $('#match-search-seasons .menu').html('');
+  for (let s in ReplayTypes.SeasonDates) {
+    $('#match-search-seasons .menu').prepend('<div class="item">' + s + '</div>');
+  }
+  $('#match-search-seasons .menu').prepend('<div class="item" data-value="0">None</div>');
+
+  $('#match-search-seasons').dropdown({
+    onChange: function(value, text, $item) {
+      if (value !== '0' && value !== '') {
+        $('#match-search-start-date').datepicker('setDate', ReplayTypes.SeasonDates[text].start);
+        $('#match-search-end-date').datepicker('setDate', ReplayTypes.SeasonDates[text].end);
+      }
+      else {
+        $('#match-search-start-date').datepicker('setDate', new Date('1-1-2012'));
+        $('#match-search-end-date').datepicker('setDate', new Date());
+      }
+    }
+  })
 }

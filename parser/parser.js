@@ -139,6 +139,7 @@ function processReplay(file, opts = {}) {
     var players = {};
 
     match.playerIDs = [];
+    match.heroes = [];
     match.levelTimes = {0: {}, 1: {}};
     var playerDetails = details.m_playerList;
 
@@ -183,6 +184,7 @@ function processReplay(file, opts = {}) {
 
       players[pdoc.ToonHandle] = pdoc;
       match.playerIDs.push(pdoc.ToonHandle);
+      match.heroes.push(pdoc.hero);
 
       console.log("Found player " + pdoc.ToonHandle + " (" + pdoc.name+ ")");
     }
@@ -959,6 +961,9 @@ function processReplay(file, opts = {}) {
               // the starting strength of the other team's wave to 1 because this unit got
               // dead instantly
               if (event.m_killerPlayerId === null) {
+                if (!('startScore' in match.objective.waves[waveID])) {
+                  match.objective.waves[waveID].startScore = {0: braxisWaveStrength(waveUnits[0]), 1: braxisWaveStrength(waveUnits[1]) };
+                }
                 match.objective.waves[waveID].startScore[1] = 1;
               }
             }
@@ -973,6 +978,10 @@ function processReplay(file, opts = {}) {
               // the starting strength of the other team's wave to 1 because this unit got
               // dead instantly
               if (event.m_killerPlayerId === null) {
+                if (!('startScore' in match.objective.waves[waveID])) {
+                  match.objective.waves[waveID].startScore = {0: braxisWaveStrength(waveUnits[0]), 1: braxisWaveStrength(waveUnits[1]) };
+                }
+
                 match.objective.waves[waveID].startScore[0] = 1;
               }
             }

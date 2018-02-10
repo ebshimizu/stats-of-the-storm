@@ -84,6 +84,10 @@ class HeroesTalents {
     }
   }
 
+  get allHeroNames() {
+    return Object.keys(this._heroes);
+  }
+
   heroNameFromAttr(attr) {
     if (attr in this._heroAttr)
       return this._heroAttr[attr];

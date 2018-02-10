@@ -19,6 +19,9 @@ class Database {
     this._db.heroData = new Datastore({ filename: this._path + '/hero.db', autoload: true });
     this._db.players = new Datastore({ filename: this._path + '/players.db', autoload: true });
     this._db.settings = new Datastore({ filename: this._path + '/settings.db', autoload: true });
+
+    this._db.matches.ensureIndex({ fieldName: 'map' });
+    this._db.players.ensureIndex({ fieldName: 'hero' });
   }
 
   // this should have a GUI warning, this code sure won't stop you.
