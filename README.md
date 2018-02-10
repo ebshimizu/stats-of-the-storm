@@ -45,6 +45,10 @@ Folders will be moved at will, breaking changes will probably be in every commit
   * [Planned] Create Collections of matches to track statistics for a league
   * [Planned] All previously listed features are avaialble, and simply restricted to matches within a specific collection
 
+* Other
+  * Movable Database - Don't want to parse matches yourself? You can load someone else's database instead of your own.
+  * [Planned] HotsAPI and HotsLogs uploader
+
 ## Setup
 External Requirements:
 * Node
