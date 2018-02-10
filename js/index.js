@@ -189,6 +189,9 @@ function initGlobalUIHandlers() {
   $('#section-menu-back-button').click(function() {
     changeSection(prevSections.pop());
   });
+
+  $('#filter-widget').append(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
+  initPopup();
 }
 
 function loadSections() {
@@ -212,7 +215,7 @@ function loadSections() {
   sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false};
 
   // DEBUG: SHOWING SPECIFIC SECTION ON LOAD FOR TESTING
-  showSection('matches');
+  showSection('player');
 }
 
 // returns the template contained in an import

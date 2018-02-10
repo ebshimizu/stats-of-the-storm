@@ -22,6 +22,7 @@ const playerHeroDetailRowTemplateContent = `<tr>
 var playerWinRateRowTemplate;
 var heroWinRateRowTemplate;
 var heroTalentRowTemplate;
+var playerDetailFilter = {};
 const tierToLevel = {
   "Tier 1 Choice" : 1,
   "Tier 2 Choice" : 4,
@@ -147,6 +148,15 @@ function initPlayerPage() {
     action: 'activate',
     onChange: showHeroDetails
   });
+
+  $('#players-filter-button').popup({
+    popup: '#filter-popup-widget',
+    on: 'click',
+    variation: 'fluid',
+    closable: false
+  });
+  // ensure proper callback on click
+  $('#players-filter-button').click(showPlayerFilter);
 }
 
 function closestWrapper($table) {
@@ -187,7 +197,7 @@ function updatePlayerPage(err, doc) {
 
     // then do the big query
     // depending on filters, this may get increasingly complicated
-    DB.getHeroDataForPlayer(playerDetailInfo._id, processPlayerData);
+    DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, playerDetailFilter, processPlayerData);
   }
   else {
     console.log("no player found?");
@@ -215,14 +225,15 @@ function processPlayerData(err, docs) {
 
 function showHeroDetails(value, text, $selectedItem) {
   if (value === 'all') {
-    DB.getHeroDataForPlayer(playerDetailInfo._id, function(err, docs) {
+    DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, playerDetailFilter, function(err, docs) {
       playerDetailStats = DB.summarizeHeroData(docs);
       renderAllHeroSummary();
       renderPlayerSummary();
     });
   }
   else {
-    let query = { ToonHandle: playerDetailInfo._id };
+    let query = Object.assign({}, playerDetailFilter);
+    query.ToonHandle = playerDetailInfo._id;
     query.hero = value;
 
     DB.getHeroData(query, function(err, docs) {
@@ -437,4 +448,23 @@ function renderPlayerHeroDetail() {
 
   $('#player-hero-detail-stats table').floatThead('reflow');
   $('#player-hero-detail-stats td').popup();
+}
+
+function showPlayerFilter() {
+  bindFilterButton(updatePlayerFilter);
+  bindFilterResetButton(resetPlayerFilter);
+}
+
+function updatePlayerFilter(mapQ, heroQ) {
+  playerDetailFilter = heroQ;
+  $('#players-filter-button').addClass('green');
+
+  // uh, redraw the entire page I guess
+  DB.getPlayer(playerDetailID, updatePlayerPage);
+}
+
+function resetPlayerFilter() {
+  playerDetailFilter = {};
+  $('#players-filter-button').removeClass('green');
+  DB.getPlayer(playerDetailID, updatePlayerPage);
 }

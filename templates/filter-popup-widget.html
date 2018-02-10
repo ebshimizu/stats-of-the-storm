@@ -1,0 +1,72 @@
+<script src="../js/filter-popup-widget.js"></script>
+
+<template id="filter-popup-widget-template">
+  <div class="ui popup filter-popup-widget" data-variation="very wide" id="filter-popup-widget">
+    <div class="ui grid">
+      <div class="three wide column">Mode</div>
+      <div class="thirteen wide column">
+        <div class="ui fluid multiple search selection dropdown filter-widget-mode">
+          <i class="dropdown icon"></i>
+          <div class="default text">All</div>
+          <div class="menu">
+            <div class="item" data-value="50001">Quick Match</div>
+            <div class="item" data-value="50051">Unranked Draft</div>
+            <div class="item" data-value="50061">Hero League</div>
+            <div class="item" data-value="50071">Team League</div>
+            <div class="item" data-value="-1">Custom</div>
+          </div>
+        </div>
+      </div>
+      <div class="three wide column">Map</div>
+      <div class="thirteen wide column">
+        <div class="ui fluid multiple search selection dropdown filter-widget-map">
+          <i class="dropdown icon"></i>
+          <div class="default text">All</div>
+          <div class="menu">
+
+          </div>
+        </div>
+      </div>
+      <div class="three wide column">Season</div>
+      <div class="thirteen wide column">
+        <div class="ui fluid selection dropdown filter-widget-season">
+          <i class="dropdown icon"></i>
+          <div class="default text">All Dates</div>
+          <div class="menu">
+          </div>
+        </div>
+      </div>
+      <div class="three wide column">Start Date</div>
+      <div class="five wide column">
+        <div class="ui fluid input">
+          <input type="text" value="" class="filter-widget-start-date">
+        </div>
+      </div>
+      <div class="three wide column">End Date</div>
+      <div class="five wide column">
+        <div class="ui fluid input">
+          <input type="text" value="" class="filter-widget-end-date">
+        </div>
+      </div>
+      <div class="three wide column">Hero Type</div>
+      <div class="thirteen wide column">
+        <div class="ui fluid multiple search selection dropdown filter-widget-hero-type">
+          <i class="dropdown icon"></i>
+          <span class="default text">All</span>
+          <div class="menu">
+            <div class="item" data-value="Assassin">Assassin</div>
+            <div class="item" data-value="Warrior">Warrior</div>
+            <div class="item" data-value="Support">Support</div>
+            <div class="item" data-value="Specialist">Specialist</div>
+          </div>
+        </div>
+      </div>
+      <div class="eight wide column">
+        <div class="ui fluid button filter-widget-reset">Reset</div>
+      </div>
+      <div class="eight wide column">
+        <div class="ui fluid green button filter-widget-search">Search</div>
+      </div>
+    </div>
+  </div>
+</template>

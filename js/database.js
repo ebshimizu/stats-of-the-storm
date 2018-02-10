@@ -137,6 +137,12 @@ class Database {
     this._db.heroData.find(query, callback);
   }
 
+  getHeroDataForPlayerWithFilter(playerID, filter, callback) {
+    let query = Object.assign({}, filter);
+    query.ToonHandle = playerID;
+    this._db.heroData.find(query, callback);
+  }
+
   getHeroData(query, callback) {
     this._db.heroData.find(query, callback);
   }

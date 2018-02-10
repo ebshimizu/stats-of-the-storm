@@ -163,7 +163,7 @@ function selectMatches() {
       }
     }
     else {
-      query.players = { $elemMatch: { $in: players } };
+      query.playerIDs = { $elemMatch: { $in: players } };
     }
   }
 

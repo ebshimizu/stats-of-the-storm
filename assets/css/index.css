@@ -49,3 +49,7 @@ body {
 #main-menu .app-version-number {
     font-size: 9pt;
 }
+
+.filter-popup-widget {
+    width: 550px;
+}
