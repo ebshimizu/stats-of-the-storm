@@ -1,17 +1,49 @@
 # hots-analysis
 
+A flexible stat tracker for Heroes of the Storm.
+
+Provides the ability to track individual stats, team stats in a league, and overall statistics
+for a league.
+
 This application is in the very early development stage.
 Folders will be moved at will, breaking changes will probably be in every commit.
-## Why?
-Why not? Also this parser extracts some additional data that current sites do not such as:
-* A complete list of takedowns with involved players and locations
-* All possible minion xp generated since the start of the game (can be used to determine amount of missed soak)
-* Duration and timing of most map objectives
-* Team structure lifespan
-* Regen globe acquisition, timings, locations
-* B-step events and takedowns within a 10 second window
-* Other taunt/spray/dance events and also takedowns within a 10 second window
-* yes this parser basically detects BM
+
+## Features
+* Match Summary
+  * All end-game statics shown in-client
+  * Detailed end-game statistics only stored in replay
+  * XP Contribution and Soak graphs
+  * As detailed as possible timeline with takedowns, levels, level advantage, objectives, merc captures, and merc unit lifespan listed
+  * Chat and Taunt log (including bsteps)
+  * [Planned] Team statistics including structures destroyed, merc captures, merc uptime, total damage/healing per team
+
+* Individual Stats
+  * Hero Win Rate, KDA, MVP, and Award stats
+  * Talent win rates
+  * [Planned] Build win rates
+  * Win rate per map
+  * Win rate with/against heroes
+  * Win rate with/against commonly played friends/opponents
+  * Award stats
+  * Skin win rate stats
+  * Taunt stats (including number of deaths/takedowns with a 10 second window of the taunt)
+  * Detailed hidden statistics for each hero
+  * Filter by mode, date, hero type, and map
+  * Track individual win rate, KDA, and award rate over time
+
+* Collection Statistics
+  * Overall hero win/pick/ban/popularity rates
+  * Overall map win rates
+  * Player Rankings (per hero and overall)
+  * [Planned] Teams
+    * [Planned] Assign two or more players to a team to track statistics for matches where those players are present
+    * [Planned] Teams can have an arbitrary number of players on them
+    * [Planned] Team statistics page listing the combined individual stats for the team and additional team statistics from the match summary
+    * [Planned] Team rankings based on overall team statistics
+
+* [Planned] League Tracking (Collections)
+  * [Planned] Create Collections of matches to track statistics for a league
+  * [Planned] All previously listed features are avaialble, and simply restricted to matches within a specific collection
 
 ## Setup
 External Requirements:
