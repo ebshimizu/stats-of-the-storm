@@ -23,6 +23,15 @@ var playerWinRateRowTemplate;
 var heroWinRateRowTemplate;
 var heroTalentRowTemplate;
 var playerDetailFilter = {};
+
+const IntervalMode = {
+  Month: 'month',
+  Week: 'week',
+  Season: 'season'
+  // patch - planned but need patch date info
+}
+var playerProgressionInterval = IntervalMode.Month;
+
 const tierToLevel = {
   "Tier 1 Choice" : 1,
   "Tier 2 Choice" : 4,
@@ -32,6 +41,122 @@ const tierToLevel = {
   "Tier 6 Choice" : 16,
   "Tier 7 Choice" : 20
 }
+
+var progressionGraphSettings = {
+  responsive: true,
+  tooltips: {
+    position: 'nearest',
+    mode: 'index',
+    intersect: false
+  },
+  legend: {
+    labels: {
+      fontColor: 'white'
+    }
+  },
+  scales: {
+    yAxes: [{
+      ticks: {
+        fontColor: '#FFFFFF',
+        min: 0,
+        max: 100
+      },
+      gridLines: {
+        color: '#ababab'
+      }
+    }],
+    xAxes: [{
+      ticks: {
+        fontColor: '#FFFFFF'
+      },
+      gridLines: {
+        color: '#ababab'
+      }
+    }]
+  }
+};
+
+var progressionWinGraphSettings = {
+  responsive: true,
+  tooltips: {
+    position: 'nearest',
+    mode: 'index',
+    intersect: false
+  },
+  legend: {
+    labels: {
+      fontColor: 'white'
+    }
+  },
+  scales: {
+    yAxes: [{
+      ticks: {
+        fontColor: '#FFFFFF',
+        min: 0,
+        max: 100
+      },
+      position: 'left',
+      gridLines: {
+        color: '#ababab'
+      },
+      id: 'winPct'
+    }, {
+      position: 'right',
+      ticks: {
+        fontColor: '#FFFFFF',
+        min: 0
+      },
+      gridLines: {
+        drawOnChartArea: 'false'
+      },
+      id: 'games'
+    }],
+    xAxes: [{
+      ticks: {
+        fontColor: '#FFFFFF'
+      },
+      gridLines: {
+        color: '#ababab'
+      }
+    }]
+  }
+};
+
+var progressionKDAGraphSettings = {
+  responsive: true,
+  tooltips: {
+    position: 'nearest',
+    mode: 'index',
+    intersect: false
+  },
+  legend: {
+    labels: {
+      fontColor: 'white'
+    }
+  },
+  scales: {
+    yAxes: [{
+      ticks: {
+        fontColor: '#FFFFFF',
+        min: 0
+      },
+      gridLines: {
+        color: '#ababab'
+      }
+    }],
+    xAxes: [{
+      ticks: {
+        fontColor: '#FFFFFF'
+      },
+      gridLines: {
+        color: '#ababab'
+      }
+    }]
+  }
+}
+var progressionWinRateGraphData, progressionWinRateGraph;
+var progressionKDAGraphData, progressionKDAGraph;
+var progressionAwardsGraphData, progressionAwardsGraph;
 
 function initPlayerPage() {
   // player menu init
@@ -135,6 +260,9 @@ function initPlayerPage() {
     $('#player-detail-map-summary table').floatThead('reflow');
     $('#player-detail-hero-summary table').floatThead('reflow');
     $('#player-detail-friend-summary table').floatThead('reflow');
+    $('#player-detail-rival-summary table').floatThead('reflow');
+    $('#player-detail-with-summary table').floatThead('reflow');
+    $('#player-detail-against-summary table').floatThead('reflow');
     $('#player-detail-hero-talent table').floatThead('reflow');
     $('#player-detail-skin-summary table').floatThead('reflow');
     $('#player-detail-award-summary table').floatThead('reflow');
@@ -157,6 +285,82 @@ function initPlayerPage() {
   });
   // ensure proper callback on click
   $('#players-filter-button').click(showPlayerFilter);
+
+  $('#progression-interval-menu div.dropdown').dropdown({
+    onChange: updateGraphInterval
+  });
+
+  // graphs
+  progressionWinRateGraphData = {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: 'Win Rate',
+        fill: false,
+        borderColor: '#21ba45',
+        backgroundColor: '#21ba45',
+        cubicInterpolationMode: 'monotone',
+        data: [],
+        yAxisID: 'winPct'
+      }, {
+        label: 'Games Played',
+        fill: false,
+        borderColor: '#fbbd08',
+        backgroundColor: '#fbbd08',
+        cubicInterpolationMode: 'monotone',
+        data: [],
+        yAxisID: 'games'
+      }]
+    },
+    options: progressionWinGraphSettings
+  };
+  progressionKDAGraphData = {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: 'KDA',
+        fill: 'false',
+        borderColor: '#21ba45',
+        backgroundColor: '#21ba45',
+        cubicInterpolationMode: 'monotone',
+        data: []
+      }]
+    },
+    options: progressionKDAGraphSettings
+  };
+  progressionAwardsGraphData = {
+    type: 'line',
+    data:{
+      datasets: [{
+        label: 'Award Rate',
+        fill: 'false',
+        borderColor: '#21ba45',
+        backgroundColor: '#21ba45',
+        cubicInterpolationMode: 'monotone',
+        data: []
+      }, {
+        label: 'MVP Rate',
+        fill: 'false',
+        borderColor: '#fbbd08',
+        backgroundColor: '#fbbd08',
+        cubicInterpolationMode: 'monotone',
+        data: []
+      }]
+    },
+    options: progressionGraphSettings
+  };
+
+  progressionWinRateGraphData.options.scales.yAxes[0].ticks.max = 100;
+  progressionWinRateGraphData.options.scales.yAxes[0].ticks.min = 0;
+
+  progressionKDAGraphData.options.scales.yAxes[0].ticks.min = 0;
+
+  progressionAwardsGraphData.options.scales.yAxes[0].ticks.max = 100;
+  progressionAwardsGraphData.options.scales.yAxes[0].ticks.min = 0;
+
+  progressionWinRateGraph = new Chart($('#player-progression-win-rate'), progressionWinRateGraphData);
+  progressionKDAGraph = new Chart($('#player-progression-kda'), progressionKDAGraphData);
+  progressionAwardsGraph = new Chart($('#player-progression-awards'), progressionAwardsGraphData);
 }
 
 function closestWrapper($table) {
@@ -221,14 +425,17 @@ function processPlayerData(err, docs) {
   renderAllHeroSummary();
   renderPlayerSummary();
   renderPlayerHeroDetail();
+  renderProgression();
 }
 
+// callback for hero select menu
 function showHeroDetails(value, text, $selectedItem) {
   if (value === 'all') {
     DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, playerDetailFilter, function(err, docs) {
       playerDetailStats = DB.summarizeHeroData(docs);
       renderAllHeroSummary();
       renderPlayerSummary();
+      renderProgression();
     });
   }
   else {
@@ -241,6 +448,7 @@ function showHeroDetails(value, text, $selectedItem) {
 
       renderHeroTalents(value);
       renderPlayerSummary();
+      renderProgression();
     });
   }
 
@@ -467,4 +675,143 @@ function resetPlayerFilter() {
   playerDetailFilter = {};
   $('#players-filter-button').removeClass('green');
   DB.getPlayer(playerDetailID, updatePlayerPage);
+}
+
+function updateGraphInterval(value, text, $item) {
+  playerProgressionInterval = value;
+  renderProgression();
+}
+
+function renderProgression() {
+  // collect a few stats along the specified interval
+  let data = {};
+  for (let d in playerDetailStats.rawDocs) {
+    let doc = playerDetailStats.rawDocs[d];
+
+    // ok where are we putting this
+    let hash = hashInterval(new Date(doc.date), playerProgressionInterval);
+
+    if (!(hash[0] in data)) {
+      // initialize the data
+      data[hash[0]] = {
+        kills: 0,
+        takedowns: 0,
+        deaths: 0,
+        wins: 0,
+        award: 0,
+        mvp: 0,
+        games: 0,
+        sort: hash[1],
+        label: hash[0]
+      }
+    }
+
+    // stats
+    data[hash[0]].takedowns += doc.gameStats.Takedowns;
+    data[hash[0]].deaths += doc.gameStats.Deaths;
+    data[hash[0]].wins += doc.win ? 1 : 0;
+    data[hash[0]].award += doc.gameStats.awards.length;
+    data[hash[0]].mvp += doc.gameStats.awards.indexOf('EndOfMatchAwardMVPBoolean') >= 0 ? 1 : 0;
+    data[hash[0]].games += 1;
+  }
+
+  // stick objects in array then sort
+  let dataArr = [];
+  for (let d in data) {
+    dataArr.push(data[d]);
+  }
+
+  if (playerProgressionInterval === IntervalMode.Week) {
+    dataArr.sort(function(a, b) {
+      let ad = a.label.split('-');
+      let bd = b.label.split('-');
+
+      if (parseInt(ad[0]) < parseInt(bd[0]))
+        return -1;
+      else if (parseInt(ad[0]) > parseInt(bd[0]))
+        return 1;
+      
+      if (parseInt(ad[1]) < parseInt(bd[1]))
+        return -1;
+      else if (parseInt(ad[1]) > parseInt(bd[1]))
+        return 1;
+      
+      return 0;
+    });
+  }
+  else {
+    dataArr.sort(function(a, b) {
+      if (a.sort < b.sort)
+        return -1;
+      else if (a.sort > b.sort)
+        return 1;
+
+      return 0;
+    })  
+  }
+
+  // update data arrays
+  let labels = [];
+  progressionWinRateGraphData.data.datasets[0].data = [];
+  progressionWinRateGraphData.data.datasets[1].data = [];
+  progressionKDAGraphData.data.datasets[0].data = [];
+  progressionAwardsGraphData.data.datasets[0].data = [];
+  progressionAwardsGraphData.data.datasets[1].data = [];
+  for (let i = 0; i < dataArr.length; i++) {
+    let stat = dataArr[i];
+
+    if (playerProgressionInterval === IntervalMode.Month) {
+      let m = moment(stat.sort);
+      labels.push(m.format('YYYY MMM'));
+    }
+    else if (playerProgressionInterval === IntervalMode.Week) {
+      let spl = stat.label.split('-');
+      labels.push(spl[0] + ' Week ' + spl[1]);
+    }
+    else if (playerProgressionInterval === IntervalMode.Season) {
+      labels.push(stat.label);
+    }
+    progressionWinRateGraphData.data.datasets[0].data.push((stat.wins / stat.games * 100).toFixed(2));
+    progressionWinRateGraphData.data.datasets[1].data.push(stat.games);
+    progressionKDAGraphData.data.datasets[0].data.push((stat.takedowns / Math.max(stat.deaths, 1)).toFixed(2));
+    progressionAwardsGraphData.data.datasets[0].data.push((stat.award / stat.games * 100).toFixed(2));
+    progressionAwardsGraphData.data.datasets[1].data.push((stat.mvp / stat.games * 100).toFixed(2));
+  }
+
+  progressionWinRateGraphData.data.labels = labels;
+  progressionKDAGraphData.data.labels = labels;
+  progressionAwardsGraphData.data.labels = labels;
+
+  progressionWinRateGraph.update();
+  progressionKDAGraph.update();
+  progressionAwardsGraph.update();
+}
+
+// gonna need a bunch of helpers
+// returns an identifier and a sort value
+function hashInterval(date, mode) {
+  if (mode === IntervalMode.Month) {
+    let ident = date.getFullYear() + '-' + (date.getUTCMonth() + 1);
+    return [ident, new Date(ident + '-1')];
+  }
+  else if (mode === IntervalMode.Week) {
+    let mdate = moment(date)
+    let ident = date.getFullYear() + '-' + mdate.week();
+    
+    return [ident, mdate];
+  }
+  else if (mode === IntervalMode.Season) {
+    for (let s in ReplayTypes.SeasonDates) {
+      let season = ReplayTypes.SeasonDates[s];
+      if (season.start <= date && date < season.end) {
+        return [s, season.id];
+      }
+    }
+
+    // if we didn't return, uh, the season isn't in the db yet so make one up
+    return ['Future Season', Object.keys(ReplayTypes.SeasonDates).length];
+  }
+  
+  //listen if you call this with an invalid mode i hope it crashes
+  return [null, null];
 }

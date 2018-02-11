@@ -27,11 +27,11 @@
     </div>
     <div id="player-detail-body">
       <div class="ui secondary inverted pointing menu" id="player-detail-submenu">
-        <a class="active item" data-tab="player-summary">Summary</a>
+        <a class="item" data-tab="player-summary">Summary</a>
         <a class="item" data-tab="player-hero-detail">Detailed Hero Stats Table</a>
-        <a class="item" data-tab="">Progression</a>
+        <a class="active item" data-tab="player-progression">Progression</a>
       </div>
-      <div class="ui active tab" data-tab="player-summary" id="player-detail-summary">
+      <div class="ui tab" data-tab="player-summary" id="player-detail-summary">
         <div id="player-detail-summary-header">
           <h2 class="ui inverted header">All Hero Summary</h2>
           <div class="ui search selection dropdown" id="player-hero-select-menu">
@@ -353,6 +353,44 @@
               <tbody>
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+      <div class="ui active tab" data-tab="player-progression" id="player-progression">
+        <div id="progression-interval-menu">
+          <div class="ui label">
+            Interval
+          </div>
+          <div class="ui selection dropdown">
+            <i class="dropdown icon"></i>
+            <div class="default text">Month</div>
+            <div class="menu">
+              <div class="item" data-value="month">Month</div>
+              <div class="item" data-value="week">Week</div>
+              <div class="item" data-value="season">Season</div>
+            </div>
+          </div>
+        </div>
+        <div class="player-detail-wrapper">
+          <div class="ui two column grid">
+            <div class="column">
+              <div class="ui inverted segment">
+                <div class="ui top attached label">Win %</div>
+                <canvas id="player-progression-win-rate"></canvas>
+              </div>
+            </div>
+            <div class="column">
+              <div class="ui inverted segment">
+                <div class="ui top attached label">KDA</div>
+                <canvas id="player-progression-kda"></canvas>
+              </div>
+            </div>
+            <div class="column">
+              <div class="ui inverted segment">
+                <div class="ui top attached label">Awards</div>
+                <canvas id="player-progression-awards"></canvas>
+              </div>
+            </div>
           </div>
         </div>
       </div>

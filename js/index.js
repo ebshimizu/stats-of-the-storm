@@ -15,6 +15,7 @@ const BrowserWindow = require('electron').remote.BrowserWindow
 const ipcRenderer = require('electron').ipcRenderer
 const path = require('path');
 const ReplayTypes = require('./parser/constants.js');
+const moment = require('moment');
 
 const DetailStatList = [
   'Takedowns',

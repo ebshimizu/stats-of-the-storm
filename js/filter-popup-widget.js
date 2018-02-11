@@ -122,7 +122,7 @@ function getPopupQuery() {
   // dates
   query.$where = function() {
     let d = new Date(this.date);
-    return (start <= d && d <= end);
+    return start <= d && d <= end;
   }
 
   // queries diverge here
