@@ -41,9 +41,18 @@ function initPopup() {
   elem.find('.filter-widget-season .menu').prepend('<div class="item" data-value="0">None</div>');
   elem.find('.filter-widget-season').dropdown('refresh');
 
+  // patch
+  elem.find('.filter-widget-patch').dropdown({
+    fullTextSearch: true
+  });
+  addPatchMenuOptions(elem.find('.filter-widget-patch'), function() {
+    elem.find('.filter-widget-patch').dropdown('refresh');
+  });
 
   // hero type
-  elem.find('.filter-widget-hero-type').dropdown();
+  elem.find('.filter-widget-hero-type').dropdown({
+    fullTextSearch: true
+  });
 
   // the buttons get rebound depending on the page
   elem.find('.filter-widget-reset').click(resetFilterWidget);
@@ -109,6 +118,14 @@ function getPopupQuery() {
   // maps
   let maps = $('#filter-popup-widget').find('.filter-widget-map').dropdown('get value').split(',');
 
+  // patches
+  let patches = $('#filter-popup-widget .filter-widget-patch').dropdown('get value').split(',');
+
+  for (let p in patches) {
+    if (patches[p] !== "")
+      patches[p] = parseInt(patches[p]);
+  }
+
   // construct the query
   let query = {};
   if (modes[0] !== "") {
@@ -117,6 +134,10 @@ function getPopupQuery() {
 
   if (maps[0] !== "") {
     query.map = { $in: maps };
+  }
+
+  if (patches[0] !== "") {
+    query['version.m_build'] = { $in: patches };
   }
 
   // dates

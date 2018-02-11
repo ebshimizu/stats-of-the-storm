@@ -8,7 +8,8 @@ const summaryProjection = {
   map: 1,
   mode: 1,
   date: 1,
-  winner: 1
+  winner: 1,
+  version: 1
 };
 
 // idk man it just kinda looks nice this way
@@ -53,6 +54,13 @@ function initMatchesPage() {
   })
   addMapMenuOptions($('#match-map-select'));
   $('#match-map-select').dropdown('refresh');
+
+  $('#match-patch-select').dropdown({
+    fullTextSearch: true
+  });
+  addPatchMenuOptions($('#match-patch-select'), function() {
+    $('#match-patch-select').dropdown('refresh');
+  })
 
   $('#match-search-start-date').datepicker();
   $('#match-search-start-date').datepicker('setDate', new Date('1-1-2012'));
@@ -101,7 +109,7 @@ function resetMatchFilters() {
 function selectMatches() {
   // mode
   let modes = $('#match-mode-select').dropdown('get value').split(',');
-  for (m in modes) {
+  for (let m in modes) {
     if (modes[m] !== "")
       modes[m] = parseInt(modes[m]);
   }
@@ -121,6 +129,14 @@ function selectMatches() {
   // maps
   let maps = $('#match-map-select').dropdown('get value').split(',');
 
+  // patches
+  let patches = $('#match-patch-select').dropdown('get value').split(',');
+
+  for (let p in patches) {
+    if (patches[p] !== "")
+      patches[p] = parseInt(patches[p]);
+  }
+
   // construct the query
   let query = {};
   if (modes[0] !== "") {
@@ -129,6 +145,10 @@ function selectMatches() {
 
   if (maps[0] !== "") {
     query.map = { $in: maps };
+  }
+
+  if (patches[0] !== "") {
+    query['version.m_build'] = { $in: patches };
   }
 
   // dates
@@ -273,8 +293,7 @@ function renderToSlot(gameData, slot) {
   }
   
   context.date = new Date(gameData.date);
-  context.date = context.date.toLocaleString('en-US');
-
+  context.date = context.date.toLocaleString('en-US') + ' (' + gameData.version.m_major + '.' + gameData.version.m_minor + '.' + gameData.version.m_revision + ')';
   context.length = formatSeconds(gameData.length);
   context.takedowns = { blue: gameData.teams[0].takedowns, red: gameData.teams[1].takedowns };
   context.level = { blue: gameData.teams[0].level, red: gameData.teams[1].level };

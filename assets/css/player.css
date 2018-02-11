@@ -24,8 +24,7 @@
 
 .table-wrapper {
   height: calc(100% - 2rem);
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: auto;
   margin-top: 2rem!important;
 }
 

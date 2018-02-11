@@ -27,8 +27,8 @@ var playerDetailFilter = {};
 const IntervalMode = {
   Month: 'month',
   Week: 'week',
-  Season: 'season'
-  // patch - planned but need patch date info
+  Season: 'season',
+  Patch: 'patch'
 }
 var playerProgressionInterval = IntervalMode.Month;
 
@@ -689,7 +689,13 @@ function renderProgression() {
     let doc = playerDetailStats.rawDocs[d];
 
     // ok where are we putting this
-    let hash = hashInterval(new Date(doc.date), playerProgressionInterval);
+    let hash;
+    if (playerProgressionInterval === IntervalMode.Patch) {
+      hash = hashInterval(doc.version, playerProgressionInterval);
+    }
+    else {
+      hash = hashInterval(new Date(doc.date), playerProgressionInterval);
+    }
 
     if (!(hash[0] in data)) {
       // initialize the data
@@ -768,7 +774,7 @@ function renderProgression() {
       let spl = stat.label.split('-');
       labels.push(spl[0] + ' Week ' + spl[1]);
     }
-    else if (playerProgressionInterval === IntervalMode.Season) {
+    else {
       labels.push(stat.label);
     }
     progressionWinRateGraphData.data.datasets[0].data.push((stat.wins / stat.games * 100).toFixed(2));
@@ -810,6 +816,11 @@ function hashInterval(date, mode) {
 
     // if we didn't return, uh, the season isn't in the db yet so make one up
     return ['Future Season', Object.keys(ReplayTypes.SeasonDates).length];
+  }
+  else if (mode === IntervalMode.Patch) {
+    // in this case date is not a date but instead a version object.
+    let versionString = date.m_major + '.' + date.m_minor + '.' + date.m_revision + ' (build ' + date.m_build + ')';
+    return [versionString, date.m_build];
   }
   
   //listen if you call this with an invalid mode i hope it crashes

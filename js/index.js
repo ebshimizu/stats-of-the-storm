@@ -307,6 +307,15 @@ function formatStat(field, val) {
 function globalDBUpdate() {
   // populate user selection dropdowns with new entries.
   DB.getPlayers({}, updatePlayerMenus, {sort: {'matches' : -1}});
+
+  // patch update
+  addPatchMenuOptions($('#filter-popup-widget .filter-widget-patch'), function() {
+    $('#filter-popup-widget .filter-widget-patch').dropdown('refresh');
+  });
+
+  addPatchMenuOptions($('#match-patch-select'), function() {
+    $('#match-patch-select').dropdown('refresh');
+  })
 }
 
 function updatePlayerMenus(err, players) {
@@ -369,4 +378,16 @@ function addMapMenuOptions(menu) {
 
 function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function addPatchMenuOptions(elem, callback) {
+  DB.getVersions(function(versions) {
+    elem.find('.menu').html('');
+
+    for (let v in versions) {
+      elem.find('.menu').append('<div class="item" data-value="' + v + '">' + versions[v] + '</div>');
+    }
+
+    callback();
+  });
 }

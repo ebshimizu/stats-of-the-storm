@@ -379,6 +379,20 @@ class Database {
 
     return talentStats;
   }
+
+  // returns a list of versions in the database along with
+  // a formatted string for each of them.
+  getVersions(callback) {
+    this._db.matches.find({}, {version: 1}, function(err, docs) {
+      let versions = {}
+
+      for (let doc of docs) {
+        versions[doc.version.m_build] = doc.version.m_major + '.' + doc.version.m_minor + '.' + doc.version.m_revision + ' (build ' + doc.version.m_build + ')';
+      }
+
+      callback(versions);
+    });
+  }
 }
 
 exports.HeroesDatabase = Database;
