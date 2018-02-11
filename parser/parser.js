@@ -180,6 +180,7 @@ function processReplay(file, opts = {}) {
       pdoc.date = match.date;
       pdoc.build = match.build;
       pdoc.mode = match.mode;
+      pdoc.version = match.version;
       pdoc.globes = { count: 0, events: []};
 
       players[pdoc.ToonHandle] = pdoc;
