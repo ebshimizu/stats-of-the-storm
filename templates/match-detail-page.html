@@ -126,13 +126,221 @@
             </div>
           </div>
           <div class="ui eight wide column">
-            <div class="ui inverted segment">
+            <div class="ui inverted segment" id="match-detail-blue-team-stats">
               <div class="ui top attached label">Blue Team Stats</div>
+              <div class="ui four inverted blue statistics">
+                <div class="statistic" name="team-kda">
+                  <div class="value">###</div>
+                  <div class="label">Team KDA</div>
+                </div>
+                <div class="statistic" name="team-ppk">
+                  <div class="value">###</div>
+                  <div class="label">Team PPK</div>
+                </div>
+                <div class="statistic" name="team-time-to-10">
+                  <div class="value">###</div>
+                  <div class="label">Time To 10</div>
+                </div> 
+                <div class="statistic" name="team-time-to-20">
+                  <div class="value">###</div>
+                  <div class="label">Time To 20</div>
+                </div> 
+              </div>
+              <div class="ui inverted horizontal divider">Mercenaries</div>
+              <div class="ui three inverted blue statistics">
+                <div class="statistic" name="merc-capture">
+                  <div class="value">####</div>
+                  <div class="label">Captures</div>
+                </div>
+                <div class="statistic" name="merc-uptime">
+                  <div class="value">####</div>
+                  <div class="label">Uptime</div>
+                </div>
+                <div class="statistic" name="merc-uptime-pct">
+                  <div class="value">####</div>
+                  <div class="label">Uptime %</div>
+                </div>
+              </div>
+              <div class="ui inverted horizontal divider">Structures</div>
+              <div class="ui two column grid">
+                <div class="column">
+                  <div class="ui inverted horizontal divider">Forts</div>
+                  <div class="ui three inverted tiny blue statistics">
+                    <div class="statistic" name="forts-destroyed">
+                      <div class="value">####</div>
+                      <div class="label">Destroyed</div>
+                    </div>
+                    <div class="statistic" name="first-fort">
+                      <div class="value">####</div>
+                      <div class="label">First Destroyed</div>
+                    </div>
+                    <div class="statistic" name="forts-lost">
+                      <div class="value">####</div>
+                      <div class="label">Lost</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="ui inverted horizontal divider">Keeps</div>
+                  <div class="ui three inverted tiny blue statistics">
+                    <div class="statistic" name="keeps-destroyed">
+                      <div class="value">####</div>
+                      <div class="label">Destroyed</div>
+                    </div>
+                    <div class="statistic" name="first-keep">
+                      <div class="value">####</div>
+                      <div class="label">First Destroyed</div>
+                    </div>
+                    <div class="statistic" name="keeps-lost">
+                      <div class="value">####</div>
+                      <div class="label">Lost</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="ui inverted horizontal divider">Wells</div>
+                  <div class="ui three inverted tiny blue statistics">
+                    <div class="statistic" name="wells-destroyed">
+                      <div class="value">####</div>
+                      <div class="label">Destroyed</div>
+                    </div>
+                    <div class="statistic" name="first-well">
+                      <div class="value">####</div>
+                      <div class="label">First Destroyed</div>
+                    </div>
+                    <div class="statistic" name="wells-lost">
+                      <div class="value">####</div>
+                      <div class="label">Lost</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="ui inverted horizontal divider">Towers</div>
+                  <div class="ui three inverted tiny blue statistics">
+                    <div class="statistic" name="towers-destroyed">
+                      <div class="value">####</div>
+                      <div class="label">Destroyed</div>
+                    </div>
+                    <div class="statistic" name="first-tower">
+                      <div class="value">####</div>
+                      <div class="label">First Destroyed</div>
+                    </div>
+                    <div class="statistic" name="towers-lost">
+                      <div class="value">####</div>
+                      <div class="label">Lost</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="ui eight wide column">
-            <div class="ui inverted segment">
+            <div class="ui inverted segment" id="match-detail-red-team-stats">
               <div class="ui top attached label">Red Team Stats</div>
+              <div class="ui four inverted red statistics">
+                <div class="statistic" name="team-kda">
+                  <div class="value">###</div>
+                  <div class="label">Team KDA</div>
+                </div>
+                <div class="statistic" name="team-ppk">
+                  <div class="value">###</div>
+                  <div class="label">Team PPK</div>
+                </div>
+                <div class="statistic" name="team-time-to-10">
+                  <div class="value">###</div>
+                  <div class="label">Time To 10</div>
+                </div> 
+                <div class="statistic" name="team-time-to-20">
+                  <div class="value">###</div>
+                  <div class="label">Time To 20</div>
+                </div> 
+              </div>
+              <div class="ui inverted horizontal divider">Mercenaries</div>
+              <div class="ui three inverted red statistics">
+                <div class="statistic" name="merc-capture">
+                  <div class="value">####</div>
+                  <div class="label">Captures</div>
+                </div>
+                <div class="statistic" name="merc-uptime">
+                  <div class="value">####</div>
+                  <div class="label">Uptime</div>
+                </div>
+                <div class="statistic" name="merc-uptime-pct">
+                  <div class="value">####</div>
+                  <div class="label">Uptime %</div>
+                </div>
+              </div>
+              <div class="ui inverted horizontal divider">Structures</div>
+              <div class="ui two column grid">
+                <div class="column">
+                  <div class="ui inverted horizontal divider">Forts</div>
+                  <div class="ui three inverted tiny red statistics">
+                    <div class="statistic" name="forts-destroyed">
+                      <div class="value">####</div>
+                      <div class="label">Destroyed</div>
+                    </div>
+                    <div class="statistic" name="first-fort">
+                      <div class="value">####</div>
+                      <div class="label">First Destroyed</div>
+                    </div>
+                    <div class="statistic" name="forts-lost">
+                      <div class="value">####</div>
+                      <div class="label">Lost</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="ui inverted horizontal divider">Keeps</div>
+                  <div class="ui three inverted tiny red statistics">
+                    <div class="statistic" name="keeps-destroyed">
+                      <div class="value">####</div>
+                      <div class="label">Destroyed</div>
+                    </div>
+                    <div class="statistic" name="first-keep">
+                      <div class="value">####</div>
+                      <div class="label">First Destroyed</div>
+                    </div>
+                    <div class="statistic" name="keeps-lost">
+                      <div class="value">####</div>
+                      <div class="label">Lost</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="ui inverted horizontal divider">Wells</div>
+                  <div class="ui three inverted tiny red statistics">
+                    <div class="statistic" name="wells-destroyed">
+                      <div class="value">####</div>
+                      <div class="label">Destroyed</div>
+                    </div>
+                    <div class="statistic" name="first-well">
+                      <div class="value">####</div>
+                      <div class="label">First Destroyed</div>
+                    </div>
+                    <div class="statistic" name="wells-lost">
+                      <div class="value">####</div>
+                      <div class="label">Lost</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="ui inverted horizontal divider">Towers</div>
+                  <div class="ui three inverted tiny red statistics">
+                    <div class="statistic" name="towers-destroyed">
+                      <div class="value">####</div>
+                      <div class="label">Destroyed</div>
+                    </div>
+                    <div class="statistic" name="first-tower">
+                      <div class="value">####</div>
+                      <div class="label">First Destroyed</div>
+                    </div>
+                    <div class="statistic" name="towers-lost">
+                      <div class="value">####</div>
+                      <div class="label">Lost</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

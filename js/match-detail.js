@@ -160,14 +160,14 @@ function initMatchDetailPage() {
         label: 'Blue Team',
         borderColor: '#2185d0',
         backgroundColor: '#2185d0',
-        borderWidth: 7,
+        borderWidth: 4,
         fill: false,
         cubicInterpolationMode: 'monotone'
       }, {
         label: 'Red Team',
         borderColor: '#db2828',
         backgroundColor: '#db2828',
-        borderWidth: 7,
+        borderWidth: 4,
         fill: false,
         cubicInterpolationMode: 'monotone'
       }]
@@ -1435,6 +1435,7 @@ function initTeamStatGraphs() {
 
 function loadTeamStats() {
   drawTeamStatGraphs();
+  updateTeamStats();
 }
 
 function drawTeamStatGraphs() {
@@ -1510,4 +1511,59 @@ function drawTeamStatGraphs() {
   teamOverallStatGraph.update();
   teamfightStatGraph.update();
   teamCCGraph.update();
+}
+
+function updateTeamStats() {
+  for (let t in [0, 1]) {
+    let stats = matchDetailMatch.teams[t].stats;
+
+    let elem = t === '0' ? $('#match-detail-blue-team-stats') : $('#match-detail-red-team-stats');
+
+    // team stats
+    updateTeamStat(elem, 'team-kda', stats.KDA.toFixed(2));
+    updateTeamStat(elem, 'team-ppk', stats.PPK.toFixed(2));
+
+    if ('timeTo10' in stats) {
+      updateTeamStat(elem, 'team-time-to-10', formatSeconds(stats.timeTo10));
+    }
+    else {
+      updateTeamStat(elem, 'team-time-to-10', 'N/A');
+    }
+
+    if ('timeTo20' in stats) {
+      updateTeamStat(elem, 'team-time-to-20', formatSeconds(stats.timeTo20));
+    }
+    else {
+      updateTeamStat(elem, 'team-time-to-20', 'N/A');
+    }
+
+    // mercs
+    updateTeamStat(elem, 'merc-capture', stats.mercCaptures);
+    updateTeamStat(elem, 'merc-uptime', formatSeconds(stats.mercUptime));
+    updateTeamStat(elem, 'merc-uptime-pct', (stats.mercUptimePercent * 100).toFixed(2) + '%');
+
+    updateTeamStat(elem, 'forts-destroyed', stats.structures.Fort.destroyed);
+    updateTeamStat(elem, 'forts-lost', stats.structures.Fort.lost);
+    updateTeamStat(elem, 'first-fort', stats.structures.Fort.destroyed === 0 ? 'N/A' : formatSeconds(stats.structures.Fort.first));
+
+    updateTeamStat(elem, 'keeps-destroyed', stats.structures.Keep.destroyed);
+    updateTeamStat(elem, 'keeps-lost', stats.structures.Keep.lost);
+    updateTeamStat(elem, 'first-keep', stats.structures.Keep.destroyed === 0 ? 'N/A' : formatSeconds(stats.structures.Keep.first));
+
+    updateTeamStat(elem, 'wells-destroyed', stats.structures['Fort Well'].destroyed + stats.structures['Keep Well'].destroyed);
+    updateTeamStat(elem, 'wells-lost', stats.structures['Fort Well'].lost + stats.structures['Keep Well'].lost);
+
+    let hideWellTime = (stats.structures['Fort Well'].destroyed + stats.structures['Keep Well'].destroyed) === 0
+    updateTeamStat(elem, 'first-well', hideWellTime ? 'N/A' : formatSeconds(Math.min(stats.structures['Fort Well'].first, stats.structures['Keep Well'].first)));
+
+    updateTeamStat(elem, 'towers-destroyed', stats.structures['Fort Tower'].destroyed + stats.structures['Keep Tower'].destroyed);
+    updateTeamStat(elem, 'towers-lost', stats.structures['Fort Tower'].lost + stats.structures['Keep Tower'].lost);
+
+    let hideTowerTime = (stats.structures['Fort Tower'].destroyed + stats.structures['Keep Tower'].destroyed) === 0;
+    updateTeamStat(elem, 'first-tower', hideTowerTime ? 'N/A' : formatSeconds(Math.min(stats.structures['Fort Tower'].first, stats.structures['Keep Tower'].first)));
+  }
+}
+
+function updateTeamStat(container, name, value) {
+  container.find('.statistic[name="' + name + '"] .value').text(value);
 }
