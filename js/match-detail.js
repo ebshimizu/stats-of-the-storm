@@ -13,6 +13,9 @@ var blueTeamXPGraph, blueTeamXPGraphData;
 var redTeamXPGraph, redTeamXPGraphData;
 var teamXPSoakGraph, teamXPSoakGraphData;
 var matchDetailTimeline;
+var teamOverallStatGraph, teamOverallStatGraphData;
+var teamfightStatGraph, teamfightStatGraphData;
+var teamCCGraph, teamCCGraphData;
 const xpBreakdownOpts = {
   responsive: true,
   tooltips: {
@@ -221,6 +224,8 @@ function initMatchDetailPage() {
   blueTeamXPGraph = new Chart($('#match-detail-blue-xpb'), blueTeamXPGraphData);
   teamXPSoakGraph = new Chart($('#match-detail-xp-soak'), teamXPSoakGraphData);
 
+  initTeamStatGraphs();
+
   // init buttons
   for (let g in matchDetailTimelineGroups) {
     if (matchDetailTimelineGroups[g].visible) {
@@ -233,7 +238,7 @@ function initMatchDetailPage() {
   });
 
   // DEBUG - LOAD SPECIFIC MATCH
-  //loadMatchData("oe6aEJHvQ78XjMK0", function() { console.log("done loading"); });
+  loadMatchData("RtTPtP5mHaBoFJW2", function() { console.log("done loading"); });
 }
 
 // retrieves the proper data and then renders to the page
@@ -276,6 +281,9 @@ function loadMatch(docs, doneLoadCallback) {
 
   // load timeline
   loadTimeline();
+
+  // summary graphs
+  loadTeamStats();
 
   $('#match-detail-details').scrollTop(0);
   doneLoadCallback();
@@ -517,12 +525,8 @@ function addTauntEntry(type, player, data) {
   $('#match-detail-taunt-table tbody').append(matchTauntEntryTemplate(context));
 }
 
-function graphXP() {
-  graphOverallXP();
-}
-
 // takes the total of all the xp values 
-function graphOverallXP() {
+function graphXP() {
   let team0XP = getTotalXPSet(0);
   let team1XP = getTotalXPSet(1);
 
@@ -1300,4 +1304,210 @@ function getWarheadEvents(items) {
       items.push(item);
     }
   }
+}
+
+function initTeamStatGraphs() {
+  // all the graphs are stacked so it's a little weird.
+  teamOverallStatGraphData = {
+    type: 'horizontalBar',
+    data: {
+      labels: ["Hero Damage", "Healing", "Self Healing", "Protection", "Damage Taken", "Siege Damage", "Minion Damage", "Creep Damage"]
+    },
+    options: {
+      tooltips: {
+        intersect: true,
+        mode: 'point'
+      },
+      responsive: true,
+      maintainAspectRatio: false,
+      legend: {
+        labels: {
+          fontColor: '#FFFFFF'
+        }
+      },
+      scales: {
+        xAxes: [{
+          stacked: true,
+          ticks: {
+            fontColor: '#FFFFFF'
+          },
+          gridLines: {
+            color: '#ababab'
+          }
+        }],
+        yAxes: [{
+          stacked: true,
+          ticks: {
+            fontColor: '#FFFFFF'
+          },
+          gridLines: {
+            display: false
+          }
+        }]
+      }
+    }
+  };
+
+  teamfightStatGraphData = {
+    type: 'horizontalBar',
+    data: {
+      labels: ["Hero Damage", "Healing", "Damage Taken"]
+    },
+    options: {
+      tooltips: {
+        intersect: true,
+        mode: 'point'
+      },
+      responsive: true,
+      maintainAspectRatio: false,
+      legend: {
+        labels: {
+          fontColor: '#FFFFFF'
+        }
+      },
+      scales: {
+        xAxes: [{
+          stacked: true,
+          ticks: {
+            fontColor: '#FFFFFF'
+          },
+          gridLines: {
+            color: '#ababab'
+          }
+        }],
+        yAxes: [{
+          stacked: true,
+          ticks: {
+            fontColor: '#FFFFFF'
+          },
+          gridLines: {
+            display: false
+          }
+        }]
+      }
+    }
+  };
+
+  teamCCGraphData = {
+    type: 'horizontalBar',
+    data: {
+      labels: ["CC", "Stuns", "Roots", "Silences", "Time Dead"]
+    },
+    options: {
+      tooltips: {
+        intersect: true,
+        mode: 'point'
+      },
+      responsive: true,
+      maintainAspectRatio: false,
+      legend: {
+        labels: {
+          fontColor: '#FFFFFF'
+        }
+      },
+      scales: {
+        xAxes: [{
+          stacked: true,
+          ticks: {
+            fontColor: '#FFFFFF'
+          },
+          gridLines: {
+            color: '#ababab'
+          }
+        }],
+        yAxes: [{
+          stacked: true,
+          ticks: {
+            fontColor: '#FFFFFF'
+          },
+          gridLines: {
+            display: false
+          }
+        }]
+      }
+    }
+  };
+
+  teamOverallStatGraph = new Chart($('#match-detail-team-numbers'), teamOverallStatGraphData);
+  teamfightStatGraph = new Chart($('#match-detail-teamfight-numbers'), teamfightStatGraphData);
+  teamCCGraph = new Chart($('#match-detail-team-cc'), teamCCGraphData);
+}
+
+function loadTeamStats() {
+  drawTeamStatGraphs();
+}
+
+function drawTeamStatGraphs() {
+  teamOverallStatGraphData.data.datasets = [];
+  teamfightStatGraphData.data.datasets = [];
+  teamCCGraphData.data.datasets = [];
+
+  // since it's stacked i can just kinda dump everything in the right plcae hopefully
+  var blueCt = 0;
+  var redCt = 0;
+  let blueColors = ['#021F34', '#093A60', '#125080', '#25699E', '#4486B9'];
+  let redColors = ['#230000', '#510000', '#8E0E0E', '#BE2323', '#EB4747']
+  for (let t in matchDetailMatch.teams) {
+    for (let i in matchDetailMatch.teams[t].ids) {
+      let p = matchDetailPlayers[matchDetailMatch.teams[t].ids[i]];
+      let color;
+      if (p.team === 0) {
+        color = blueColors[blueCt];
+        blueCt += 1;
+      } 
+      else {
+        color = redColors[redCt];
+        redCt += 1;
+      }
+
+      let stack = p.team === 0 ? 'blue' : 'red';
+
+      let teamStat = {
+        label: p.hero,
+        backgroundColor: color,
+        stack,
+        data: [
+          p.gameStats.HeroDamage,
+          p.gameStats.Healing,
+          p.gameStats.SelfHealing,
+          p.gameStats.ProtectionGivenToAllies,
+          p.gameStats.DamageTaken,
+          p.gameStats.SiegeDamage,
+          p.gameStats.MinionDamage,
+          p.gameStats.CreepDamage
+        ]
+      };
+      teamOverallStatGraphData.data.datasets.push(teamStat);
+
+      let teamfightStat = {
+        label: p.hero,
+        backgroundColor: color,
+        stack,
+        data: [
+          p.gameStats.TeamfightHeroDamage,
+          p.gameStats.TeamfightHealingDone,
+          p.gameStats.TeamfightDamageTaken
+        ]
+      };
+      teamfightStatGraphData.data.datasets.push(teamfightStat);
+
+      let ccStat = {
+        label: p.hero,
+        backgroundColor: color,
+        stack,
+        data: [
+          p.gameStats.TimeCCdEnemyHeroes,
+          p.gameStats.TimeStunningEnemyHeroes,
+          p.gameStats.TimeRootingEnemyHeroes,
+          p.gameStats.TimeSilencingEnemyHeroes,
+          p.gameStats.TimeSpentDead
+        ]
+      };
+      teamCCGraphData.data.datasets.push(ccStat);
+    }
+  }
+
+  teamOverallStatGraph.update();
+  teamfightStatGraph.update();
+  teamCCGraph.update();
 }

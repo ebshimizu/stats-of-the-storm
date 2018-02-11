@@ -43,7 +43,7 @@
 #match-detail-bans {
   height: 110px;
   width: 450px;
-  margin: 0 auto;
+  margin: 10px auto;
 }
 
 #match-detail-bans.hidden {
@@ -151,6 +151,18 @@
   margin-top: 24px;
   width: 100%;
   height: 300px;
+}
+
+#match-detail-summary canvas {
+  margin-top: 24px;
+}
+
+#match-detail-team-members-container {
+  height: 580px;
+}
+
+.match-detail-sub-graph-container {
+  height: 250px;
 }
 
 #match-detail-timeline-wrapper {

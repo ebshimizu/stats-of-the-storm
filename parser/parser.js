@@ -1614,7 +1614,8 @@ function collectTeamStats(match, players) {
       'TimeCCdEnemyHeroes' : 0,
       'TimeRootingEnemyHeroes' : 0,
       'TimeSpentDead' : 0,
-      'TimeStunningEnemyHeroes' : 0
+      'TimeStunningEnemyHeroes' : 0,
+      'TimeSilencingEnemyHeroes' : 0
     };
     for (let p in players) {
       let player = players[p];

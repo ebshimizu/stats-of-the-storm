@@ -65,7 +65,7 @@
               <th class="center aligned">Assists</th>
               <th class="center aligned">Deaths</th>
               <th class="center aligned">Hero Damage</th>
-              <th class="center aligned">Seige Damage</th>
+              <th class="center aligned">Siege Damage</th>
               <th class="center aligned">Healing</th>
               <th class="center aligned">Damage Taken</th>
               <th class="center aligned">XP Contribution</th>
@@ -93,6 +93,46 @@
             <div class="ui red rounded image" ban-slot="1-2">
               <img src="">
               <div class="ui red floating circular label">2</div>
+            </div>
+          </div>
+        </div>
+        <div class="ui column grid">
+          <div class="ui eight wide column">
+            <div class="ui inverted segment">
+              <div id="match-detail-team-members-container">
+                <div class="ui top attached label">Overall Stats</div>
+                <canvas id="match-detail-team-numbers"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="ui eight wide column">
+            <div class="ui one column grid">
+              <div class="ui column">
+                <div class="ui inverted segment">
+                  <div class="match-detail-sub-graph-container">
+                    <div class="ui top attached label">Teamfight Stats</div>
+                    <canvas id="match-detail-teamfight-numbers"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="ui column">
+                <div class="ui inverted segment">
+                  <div class="match-detail-sub-graph-container">
+                    <div class="ui top attached label">CC Time</div>
+                    <canvas id="match-detail-team-cc"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ui eight wide column">
+            <div class="ui inverted segment">
+              <div class="ui top attached label">Blue Team Stats</div>
+            </div>
+          </div>
+          <div class="ui eight wide column">
+            <div class="ui inverted segment">
+              <div class="ui top attached label">Red Team Stats</div>
             </div>
           </div>
         </div>
