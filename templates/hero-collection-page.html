@@ -18,10 +18,10 @@
     </div>
     <div id="hero-collection-body">
       <div class="ui secondary inverted pointing menu" id="hero-collection-submenu">
-        <a class="active item" data-tab="hero-collection-overall">Overall</a>
-        <a class="item" data-tab="hero-collection-hero">Hero Details</a>
+        <a class="item" data-tab="hero-collection-overall">Overall</a>
+        <a class="active item" data-tab="hero-collection-hero">Hero Details</a>
       </div>
-      <div class="ui active tab hero-collection-wrapper" data-tab="hero-collection-overall" id="hero-collection-summary">
+      <div class="ui tab hero-collection-wrapper" data-tab="hero-collection-overall" id="hero-collection-summary">
         <div class="table-wrapper">
           <table class="ui sortable compact selectable inverted table">
             <thead>
@@ -37,6 +37,150 @@
 
             </tbody>
           </table>
+        </div>
+      </div>
+      <div class="ui active tab" data-tab="hero-collection-hero" id="hero-collection-hero">
+        <div id="hero-collection-hero-header">
+          <h2 class="ui inverted header">[Select a Hero]</h2>
+          <div class="ui search selection dropdown" id="hero-collection-hero-select-menu">
+            <i class="dropdown icon"></i>
+            <div class="default text">Select a Hero</div>
+            <div class="menu">
+
+            </div>
+          </div>
+        </div>
+        <div class="hero-collection-wrapper">
+          <div class="ui grid">
+            <div class="ten wide column">
+              <div class="ui inverted segment" id="hero-collection-detail-hero-talent">
+                <div class="ui top attached label">Talents</div>
+                <div class="table-wrapper">
+                  <table class="ui selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Talent</th>
+                        <th class="center aligned">Win %</th>
+                        <th class="center aligned">Games</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="four wide column">
+              <div class="ui inverted segment" id="hero-collection-detail-map-summary">
+                <div class="ui top attached label">Map Summary</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Map</th>
+                        <th>Win %</th>
+                        <th>Games</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="two wide column">
+              <div class="ui inverted segment" id="hero-collection-detail-misc-summary">
+                <div class="ui top attached label">Overall Stats</div>
+                <div class="ui horizontal small inverted statistics">
+                  <div class="statistic" name="overallWin">
+                    <div class="value">###</div>
+                    <div class="label">Win</div>
+                  </div>
+                  <div class="statistic" name="overallGames">
+                    <div class="value">###</div>
+                    <div class="label">Games</div>
+                  </div>
+                  <div class="statistic" name="overallTD">
+                    <div class="value">###</div>
+                    <div class="label">Avg. TDs</div>
+                  </div>
+                  <div class="statistic" name="overallDeaths">
+                    <div class="value">###</div>
+                    <div class="label">Avg. Deaths</div>
+                  </div>
+                  <div class="statistic" name="overallKDA">
+                    <div class="value">###</div>
+                    <div class="label">Avg. KDA</div>
+                  </div>
+                  <div class="statistic" name="overallMVP">
+                    <div class="value">###</div>
+                    <div class="label">MVP</div>
+                  </div>
+                  <div class="statistic" name="overallAward">
+                    <div class="value">###</div>
+                    <div class="label">Award</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="five wide column">
+              <div class="ui inverted segment player-win" id="hero-collection-detail-with-summary">
+                <div class="ui top attached label">Win Rate With Hero</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Hero</th>
+                        <th>Win %</th>
+                        <th>Games</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="five wide column">
+              <div class="ui inverted segment player-win" id="hero-collection-detail-against-summary">
+                <div class="ui top attached label">Win Rate Against Hero</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Hero</th>
+                        <th>Win %</th>
+                        <th>Games</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="six wide column">
+              <div class="ui inverted segment player-win" id="hero-collection-award-summary">
+                <div class="ui top attached label">Awards</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Award</th>
+                        <th>Award %</th>
+                        <th>Games</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

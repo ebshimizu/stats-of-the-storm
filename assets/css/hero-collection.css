@@ -1,4 +1,5 @@
-#hero-collection-summary {
+#hero-collection-summary,
+#hero-collection-hero {
   height: calc(100% - 40px);
 }
 
@@ -12,4 +13,35 @@
 
 #hero-collection-summary tbody {
   font-size: 14pt;
+}
+
+#hero-collection-detail-hero-talent,
+#hero-collection-detail-map-summary
+{
+  height: 650px;
+}
+
+#hero-collection-hero .hero-collection-wrapper {
+  height: calc(100% - 60px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#hero-collection-hero-header {
+  height: 60px;
+  position: relative;
+}
+
+#hero-collection-hero-select-menu {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#hero-collection-hero .player-win {
+  height: 600px;
+}
+
+#hero-collection-hero .player-win {
+  font-size: 11pt;
 }

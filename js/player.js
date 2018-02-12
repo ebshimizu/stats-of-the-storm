@@ -254,31 +254,17 @@ function initPlayerPage() {
   });
 
   $('#player-detail-submenu .item').tab();
-  $('#player-detail-hero-submenu .item').tab();
-
-  $('a[data-tab="player-summary"]').click(function() {
-    $('#player-detail-map-summary table').floatThead('reflow');
-    $('#player-detail-hero-summary table').floatThead('reflow');
-    $('#player-detail-friend-summary table').floatThead('reflow');
-    $('#player-detail-rival-summary table').floatThead('reflow');
-    $('#player-detail-with-summary table').floatThead('reflow');
-    $('#player-detail-against-summary table').floatThead('reflow');
-    $('#player-detail-hero-talent table').floatThead('reflow');
-    $('#player-detail-skin-summary table').floatThead('reflow');
-    $('#player-detail-award-summary table').floatThead('reflow');
+  $('#player-detail-submenu .item').click(function() {
+    $('#player-detail-body table').floatThead('reflow');
   });
 
-  $('a[data-tab="player-hero-detail"]').click(function() {
-    $('#player-hero-detail-stats table').floatThead('reflow');
-  })
-  
   $('#player-hero-select-menu').dropdown({
     action: 'activate',
     onChange: showHeroDetails
   });
 
   $('#players-filter-button').popup({
-    popup: '#filter-popup-widget',
+    popup: '.filter-popup-widget[widget-name="player-filter"]',
     on: 'click',
     variation: 'fluid',
     closable: false
@@ -289,6 +275,13 @@ function initPlayerPage() {
   $('#progression-interval-menu div.dropdown').dropdown({
     onChange: updateGraphInterval
   });
+
+  // filter popup
+  let playerWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
+  playerWidget.attr('widget-name', 'player-filter');
+  
+  $('#filter-widget').append(playerWidget);
+  initPopup(playerWidget);
 
   // graphs
   progressionWinRateGraphData = {
@@ -604,13 +597,13 @@ function renderPlayerSummary() {
   }
 
   // individual stats
-  $('.statistic[name="overallWin"] .value').text((playerDetailStats.wins / playerDetailStats.games * 100).toFixed(2) + '%');
-  $('.statistic[name="overallGames"] .value').text(playerDetailStats.games);
-  $('.statistic[name="overallTD"] .value').text(playerDetailStats.totalTD);
-  $('.statistic[name="overallDeaths"] .value').text(playerDetailStats.totalDeaths);
-  $('.statistic[name="overallKDA"] .value').text((playerDetailStats.totalTD / Math.max(playerDetailStats.totalDeaths, 1)).toFixed(2));
-  $('.statistic[name="overallMVP"] .value').text((playerDetailStats.totalMVP / Math.max(playerDetailStats.games, 1) * 100).toFixed(1) + '%');
-  $('.statistic[name="overallAward"] .value').text((playerDetailStats.totalAward / Math.max(playerDetailStats.games) * 100).toFixed(1) + '%');
+  $('#player-detail-misc-summary .statistic[name="overallWin"] .value').text((playerDetailStats.wins / playerDetailStats.games * 100).toFixed(2) + '%');
+  $('#player-detail-misc-summary .statistic[name="overallGames"] .value').text(playerDetailStats.games);
+  $('#player-detail-misc-summary .statistic[name="overallTD"] .value').text(playerDetailStats.totalTD);
+  $('#player-detail-misc-summary .statistic[name="overallDeaths"] .value').text(playerDetailStats.totalDeaths);
+  $('#player-detail-misc-summary .statistic[name="overallKDA"] .value').text((playerDetailStats.totalTD / Math.max(playerDetailStats.totalDeaths, 1)).toFixed(2));
+  $('#player-detail-misc-summary .statistic[name="overallMVP"] .value').text((playerDetailStats.totalMVP / Math.max(playerDetailStats.games, 1) * 100).toFixed(1) + '%');
+  $('#player-detail-misc-summary .statistic[name="overallAward"] .value').text((playerDetailStats.totalAward / Math.max(playerDetailStats.games) * 100).toFixed(1) + '%');
 
   // taunts
   setTauntStats('bstep', playerDetailStats.taunts.bsteps);
@@ -659,8 +652,8 @@ function renderPlayerHeroDetail() {
 }
 
 function showPlayerFilter() {
-  bindFilterButton(updatePlayerFilter);
-  bindFilterResetButton(resetPlayerFilter);
+  bindFilterButton($('.filter-popup-widget[widget-name="player-filter"]'), updatePlayerFilter);
+  bindFilterResetButton($('.filter-popup-widget[widget-name="player-filter"]'), resetPlayerFilter);
 }
 
 function updatePlayerFilter(mapQ, heroQ) {

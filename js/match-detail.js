@@ -1550,17 +1550,32 @@ function updateTeamStats() {
     updateTeamStat(elem, 'keeps-lost', stats.structures.Keep.lost);
     updateTeamStat(elem, 'first-keep', stats.structures.Keep.destroyed === 0 ? 'N/A' : formatSeconds(stats.structures.Keep.first));
 
-    updateTeamStat(elem, 'wells-destroyed', stats.structures['Fort Well'].destroyed + stats.structures['Keep Well'].destroyed);
-    updateTeamStat(elem, 'wells-lost', stats.structures['Fort Well'].lost + stats.structures['Keep Well'].lost);
+    if (matchDetailMatch.map === ReplayTypes.MapType.Towers) {
+      updateTeamStat(elem, 'wells-destroyed', stats.structures['Fort Well'].destroyed);
+      updateTeamStat(elem, 'wells-lost', stats.structures['Fort Well'].lost);
 
-    let hideWellTime = (stats.structures['Fort Well'].destroyed + stats.structures['Keep Well'].destroyed) === 0
-    updateTeamStat(elem, 'first-well', hideWellTime ? 'N/A' : formatSeconds(Math.min(stats.structures['Fort Well'].first, stats.structures['Keep Well'].first)));
+      let hideWellTime = stats.structures['Fort Well'].destroyed === 0
+      updateTeamStat(elem, 'first-well', hideWellTime ? 'N/A' : formatSeconds(stats.structures['Fort Well'].first));
 
-    updateTeamStat(elem, 'towers-destroyed', stats.structures['Fort Tower'].destroyed + stats.structures['Keep Tower'].destroyed);
-    updateTeamStat(elem, 'towers-lost', stats.structures['Fort Tower'].lost + stats.structures['Keep Tower'].lost);
+      updateTeamStat(elem, 'towers-destroyed', stats.structures['Fort Tower'].destroyed);
+      updateTeamStat(elem, 'towers-lost', stats.structures['Fort Tower'].lost);
 
-    let hideTowerTime = (stats.structures['Fort Tower'].destroyed + stats.structures['Keep Tower'].destroyed) === 0;
-    updateTeamStat(elem, 'first-tower', hideTowerTime ? 'N/A' : formatSeconds(Math.min(stats.structures['Fort Tower'].first, stats.structures['Keep Tower'].first)));
+      let hideTowerTime = stats.structures['Fort Tower'].destroyed === 0;
+      updateTeamStat(elem, 'first-tower', hideTowerTime ? 'N/A' : formatSeconds(stats.structures['Fort Tower'].first));
+    }
+    else {
+      updateTeamStat(elem, 'wells-destroyed', stats.structures['Fort Well'].destroyed + stats.structures['Keep Well'].destroyed);
+      updateTeamStat(elem, 'wells-lost', stats.structures['Fort Well'].lost + stats.structures['Keep Well'].lost);
+
+      let hideWellTime = (stats.structures['Fort Well'].destroyed + stats.structures['Keep Well'].destroyed) === 0
+      updateTeamStat(elem, 'first-well', hideWellTime ? 'N/A' : formatSeconds(Math.min(stats.structures['Fort Well'].first, stats.structures['Keep Well'].first)));
+
+      updateTeamStat(elem, 'towers-destroyed', stats.structures['Fort Tower'].destroyed + stats.structures['Keep Tower'].destroyed);
+      updateTeamStat(elem, 'towers-lost', stats.structures['Fort Tower'].lost + stats.structures['Keep Tower'].lost);
+
+      let hideTowerTime = (stats.structures['Fort Tower'].destroyed + stats.structures['Keep Tower'].destroyed) === 0;
+      updateTeamStat(elem, 'first-tower', hideTowerTime ? 'N/A' : formatSeconds(Math.min(stats.structures['Fort Tower'].first, stats.structures['Keep Tower'].first)));
+    }
   }
 }
 

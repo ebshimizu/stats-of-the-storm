@@ -1,8 +1,6 @@
 var popupWidgetResetCallback = null;
 
-function initPopup() {
-  let elem = $('#filter-popup-widget');
-
+function initPopup(elem) {
   // modes
   elem.find('.filter-widget-mode').dropdown({
     action: 'activate',
@@ -25,12 +23,12 @@ function initPopup() {
   elem.find('.filter-widget-season').dropdown({
     onChange: function(value, text, $item) {
       if (value !== '0' && value !== '') {
-        $('#filter-popup-widget .filter-widget-start-date').datepicker('setDate', ReplayTypes.SeasonDates[text].start);
-        $('#filter-popup-widget .filter-widget-end-date').datepicker('setDate', ReplayTypes.SeasonDates[text].end);
+        elem.find('.filter-widget-start-date').datepicker('setDate', ReplayTypes.SeasonDates[text].start);
+        elem.find('.filter-widget-end-date').datepicker('setDate', ReplayTypes.SeasonDates[text].end);
       }
       else {
-        $('#filter-popup-widget .filter-widget-start-date').datepicker('setDate', new Date('1-1-2012'));
-        $('#filter-popup-widget .filter-widget-end-date').datepicker('setDate', new Date());
+        elem.find('.filter-widget-start-date').datepicker('setDate', new Date('1-1-2012'));
+        elem.find('.filter-widget-end-date').datepicker('setDate', new Date());
       }
     }
   });
@@ -61,43 +59,45 @@ function initPopup() {
 // callback signature:
 // function(mapQuery, heroQuery) {} where mapQuery is a NeDB query for match objects,
 // and heroQuery is a NeDB query for heroData objects
-function bindFilterButton(callback) {
-  $('#filter-popup-widget').find('.filter-widget-search').off();
+function bindFilterButton(elem, callback) {
+  elem.find('.filter-widget-search').off();
 
-  $('#filter-popup-widget').find('.filter-widget-search').click(function() {
-    let queries = getPopupQuery();
+  elem.find('.filter-widget-search').click(function() {
+    let queries = getPopupQuery(elem);
     callback(queries.map, queries.hero);
   });
 }
 
-function bindFilterResetButton(callback) {
-  popupWidgetResetCallback = callback;
+function bindFilterResetButton(elem, callback) {
+  elem.find('.filter-widget-reset').off();
+
+  elem.find('.filter-widget-reset').click(function() {
+    resetFilterWidget(elem);
+    callback();
+  });
 }
 
-function resetFilterWidget() {
-  $('#filter-popup-widget').find('.dropdown').dropdown('restore defaults');
+function resetFilterWidget(elem) {
+  elem.find('.dropdown').dropdown('restore defaults');
 
-  $('#filter-popup-widget .filter-widget-start-date').datepicker('setDate', new Date('1-1-2012'));
-  $('#filter-popup-widget .filter-widget-end-date').datepicker('setDate', new Date()); 
-
-  if (popupWidgetResetCallback)
-    popupWidgetResetCallback();
+  elem.find('.filter-widget-start-date').datepicker('setDate', new Date('1-1-2012'));
+  elem.find('.filter-widget-end-date').datepicker('setDate', new Date()); 
 }
 
-function getPopupQuery() {
+function getPopupQuery(elem) {
   // mode
-  let modes = $('#filter-popup-widget').find('.filter-widget-mode').dropdown('get value').split(',');
+  let modes = elem.find('.filter-widget-mode').dropdown('get value').split(',');
   for (let m in modes) {
     if (modes[m] !== "")
       modes[m] = parseInt(modes[m]);
   }
 
   // dates
-  let start = $('#filter-popup-widget').find('.filter-widget-start-date').datepicker('getDate');
-  let end = $('#filter-popup-widget').find('.filter-widget-end-date').datepicker('getDate');
+  let start = elem.find('.filter-widget-start-date').datepicker('getDate');
+  let end = elem.find('.filter-widget-end-date').datepicker('getDate');
 
   // hero type
-  let types = $('#filter-popup-widget .filter-widget-hero-type').dropdown('get value').split(',')
+  let types = elem.find('.filter-widget-hero-type').dropdown('get value').split(',')
   for (let t in types) {
     if (types[t] !== "") {
       if (types[t].split(' ').length === 1) {
@@ -116,10 +116,10 @@ function getPopupQuery() {
   }
 
   // maps
-  let maps = $('#filter-popup-widget').find('.filter-widget-map').dropdown('get value').split(',');
+  let maps = elem.find('.filter-widget-map').dropdown('get value').split(',');
 
   // patches
-  let patches = $('#filter-popup-widget .filter-widget-patch').dropdown('get value').split(',');
+  let patches = elem.find('.filter-widget-patch').dropdown('get value').split(',');
 
   for (let p in patches) {
     if (patches[p] !== "")

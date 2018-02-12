@@ -190,9 +190,6 @@ function initGlobalUIHandlers() {
   $('#section-menu-back-button').click(function() {
     changeSection(prevSections.pop());
   });
-
-  $('#filter-widget').append(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
-  initPopup();
 }
 
 function loadSections() {

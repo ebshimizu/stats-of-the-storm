@@ -25,6 +25,11 @@ function initHeroCollectionPage() {
     return parseFloat(td.text());
   });
 
+  $('#hero-collection-submenu .item').tab();
+  $('#hero-collection-submenu .item').click(function() {
+    $('#hero-collection-body table').floatThead('reflow');
+  })
+
   loadOverallHeroCollectionData();
 }
 

@@ -61,7 +61,7 @@ body {
 }
 
 .table-wrapper {
-    height: calc(100% - 2rem);
-    overflow: auto;
-    margin-top: 2rem!important;
-  }
+height: calc(100% - 2rem);
+overflow: auto;
+margin-top: 2rem!important;
+}
