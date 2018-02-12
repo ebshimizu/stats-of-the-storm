@@ -1,0 +1,61 @@
+<script src="../js/hero-collection.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/css/hero-collection.css">
+
+<template id="hero-collection-page">
+  <div id="hero-collection-page-content" class="is-page transition hidden" section-name="hero-collection">
+    <div id="hero-collection-page-header">
+      <div class="ui grid">
+        <div class="fourteen wide column">
+          <h1 class="ui inverted header">Hero Statistics</h1>
+        </div>
+        <div class="two wide column">
+          <button class="ui labeled right floated green icon button" id="hero-collection-filter-button" data-variation="very wide">
+            <i class="filter icon"></i>
+            Filter Matches
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="hero-collection-body">
+      <div class="ui secondary inverted pointing menu" id="hero-collection-submenu">
+        <a class="active item" data-tab="hero-collection-overall">Overall</a>
+        <a class="item" data-tab="hero-collection-hero">Hero Details</a>
+      </div>
+      <div class="ui active tab hero-collection-wrapper" data-tab="hero-collection-overall" id="hero-collection-summary">
+        <div class="table-wrapper">
+          <table class="ui sortable compact selectable inverted table">
+            <thead>
+              <tr>
+                <th>Hero</th>
+                <th class="center alligned stat">Win %</th>
+                <th class="center alligned stat">Ban %</th>
+                <th class="center alligned stat">Popularity</th>
+                <th class="center alligned stat">Games</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="hero-collection-hero-summary-row-template">
+  <tr class="hero-collection-hero-summary-row">
+    <td data-sort-value="{{heroName}}">
+      <h3 class="ui image inverted header">
+        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui rounded image">
+        <div class="content">
+          {{heroName}}
+        </div>
+      </h3>
+    </td>
+    <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
+    <td class="center aligned" data-sort-value="{{banPercent}}">{{formatBanPercent}}</td>
+    <td class="center aligned" data-sort-value="{{popPercent}}">{{formatPopPercent}}</td>
+    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
+  </tr>
+</template>

@@ -179,7 +179,7 @@ function initGlobalUIHandlers() {
   $('#main-menu').sidebar('setting', 'transition', 'uncover').
     sidebar('attach events', '#show-sidebar-button');
 
-  $('#main-menu .item').each(function(idx, elem) {
+  $('#main-menu a.item').each(function(idx, elem) {
     let sectionName = $(elem).attr('section-name');
     $(elem).click(function() {
       changeSection(sectionName);
@@ -209,14 +209,18 @@ function loadSections() {
   $('#main-content').append(getTemplate('player', '#player-page'));
   initPlayerPage();
 
+  $('#main-content').append(getTemplate('hero-collection', '#hero-collection-page'));
+  initHeroCollectionPage();
+
   // register sections
   sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false };
   sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false };
   sections['match-detail'] = {id: '#match-detail-page-content', title: 'Match Details', showBack: true};
   sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false};
+  sections['hero-collection'] = {id: '#hero-collection-page-content', title: 'Heroes', showBack: false };
 
   // DEBUG: SHOWING SPECIFIC SECTION ON LOAD FOR TESTING
-  showSection('match-detail');
+  showSection('hero-collection');
 }
 
 // returns the template contained in an import

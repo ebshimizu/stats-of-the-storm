@@ -53,3 +53,15 @@ body {
 .filter-popup-widget {
     width: 550px;
 }
+
+.secondary.pointing.menu {
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+}
+
+.table-wrapper {
+    height: calc(100% - 2rem);
+    overflow: auto;
+    margin-top: 2rem!important;
+  }

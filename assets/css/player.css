@@ -22,12 +22,6 @@
   height: 100%;
 }
 
-.table-wrapper {
-  height: calc(100% - 2rem);
-  overflow: auto;
-  margin-top: 2rem!important;
-}
-
 #player-detail-summary .grid .table-wrapper table {
   margin-top: 0!important;
 }
@@ -36,20 +30,14 @@
   vertical-align: middle;
 }
 
-#player-detail-body .secondary.pointing.menu {
-  border-top: 0;
-  border-right: 0;
-  border-left: 0;
+#player-detail-summary .player-detail-wrapper {
+  height: calc(100% - 110px);
 }
 
 .player-detail-wrapper {
   height: calc(100% - 40px);
   overflow-y: auto;
   overflow-x: hidden;
-}
-
-#player-detail-summary .player-detail-wrapper {
-  height: calc(100% - 110px);
 }
 
 #player-detail-summary-header {

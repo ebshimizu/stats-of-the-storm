@@ -380,6 +380,62 @@ class Database {
     return talentStats;
   }
 
+  // this returns an object containing hero name and various pick
+  // and win stats for the given collection of matches
+  // need a heroes talents instance to process the bans
+  summarizeMatchData(docs, HeroesTalents) {
+    let data = {};
+    data.totalMatches = docs.length;
+    data.totalBans = 0;
+    for (let match of docs) {
+      let winner = match.winner;
+
+      for (let t in [0, 1]) {
+        let teamHeroes = match.teams[t].heroes;
+
+        for (let h in teamHeroes) {
+          let hero = teamHeroes[h];
+
+          if (!(hero in data)) {
+            data[hero] = { wins: 0, bans: 0, games: 0, involved: 0 };
+          }
+
+          data[hero].games += 1;
+          data[hero].involved += 1;
+          if (parseInt(t) === winner) {
+            data[hero].wins += 1;
+          }
+        }        
+      }
+
+      for (let t in match.bans) {
+        for (let b in match.bans[t]) {
+          try {
+            // typically this means they didn't ban
+            if (match.bans[t][b].hero === '') {
+              continue;
+            }
+
+            let hero = HeroesTalents.heroNameFromAttr(match.bans[t][b].hero);
+
+            if (!(hero in data)) {
+              data[hero] = { wins: 0, bans: 0, games: 0, involved: 0 };
+            }
+
+            data[hero].involved += 1;
+            data[hero].bans += 1;
+            data.totalBans += 1;
+          }
+          catch (e) {
+            console.log(e);
+          }
+        }
+      }
+    }
+
+    return data;
+  }
+
   // returns a list of versions in the database along with
   // a formatted string for each of them.
   getVersions(callback) {

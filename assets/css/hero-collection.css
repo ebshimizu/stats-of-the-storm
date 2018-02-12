@@ -1,0 +1,15 @@
+#hero-collection-summary {
+  height: calc(100% - 40px);
+}
+
+#hero-collection-summary .floatThead-wrapper {
+  height: 100%;
+}
+
+#hero-collection-body {
+  height: calc(100% - 40px);
+}
+
+#hero-collection-summary tbody {
+  font-size: 14pt;
+}
