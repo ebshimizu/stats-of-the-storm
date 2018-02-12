@@ -28,7 +28,26 @@ function initHeroCollectionPage() {
   $('#hero-collection-submenu .item').tab();
   $('#hero-collection-submenu .item').click(function() {
     $('#hero-collection-body table').floatThead('reflow');
-  })
+  });
+
+  // filter popup
+  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
+  filterWidget.attr('widget-name', 'hero-collection-filter');
+  
+  $('#filter-widget').append(filterWidget);
+  initPopup(filterWidget);
+
+  $('#hero-collection-filter-button').popup({
+    popup: '.filter-popup-widget[widget-name="hero-collection-filter"]',
+    on: 'click',
+    variation: 'fluid',
+    closable: false
+  });
+
+  // initialize the filter
+  for (let m in heroCollectionHeroDataFilter.mode.$in) {
+    filterWidget.find('.filter-widget-mode').dropdown('set selected', heroCollectionHeroDataFilter.mode.$in[m]);
+  }
 
   loadOverallHeroCollectionData();
 }

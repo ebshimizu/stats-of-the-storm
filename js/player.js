@@ -269,8 +269,6 @@ function initPlayerPage() {
     variation: 'fluid',
     closable: false
   });
-  // ensure proper callback on click
-  $('#players-filter-button').click(showPlayerFilter);
 
   $('#progression-interval-menu div.dropdown').dropdown({
     onChange: updateGraphInterval
@@ -282,6 +280,9 @@ function initPlayerPage() {
   
   $('#filter-widget').append(playerWidget);
   initPopup(playerWidget);
+
+  bindFilterButton($('.filter-popup-widget[widget-name="player-filter"]'), updatePlayerFilter);
+  bindFilterResetButton($('.filter-popup-widget[widget-name="player-filter"]'), resetPlayerFilter);
 
   // graphs
   progressionWinRateGraphData = {
@@ -649,11 +650,6 @@ function renderPlayerHeroDetail() {
 
   $('#player-hero-detail-stats table').floatThead('reflow');
   $('#player-hero-detail-stats td').popup();
-}
-
-function showPlayerFilter() {
-  bindFilterButton($('.filter-popup-widget[widget-name="player-filter"]'), updatePlayerFilter);
-  bindFilterResetButton($('.filter-popup-widget[widget-name="player-filter"]'), resetPlayerFilter);
 }
 
 function updatePlayerFilter(mapQ, heroQ) {
