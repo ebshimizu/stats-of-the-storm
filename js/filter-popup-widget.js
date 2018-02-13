@@ -53,7 +53,7 @@ function initPopup(elem) {
   });
 
   // the buttons get rebound depending on the page
-  elem.find('.filter-widget-reset').click(resetFilterWidget);
+  elem.find('.filter-widget-reset').click(function() { resetFilterWidget(elem) });
 }
 
 // callback signature:

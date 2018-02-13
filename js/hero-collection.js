@@ -21,6 +21,35 @@ function initHeroCollectionPage() {
     scrollContainer: closestWrapper,
     autoReflow: true
   });
+  $('#hero-collection-detail-hero-talent table').floatThead({
+    scrollContainer: closestWrapper,
+    autoReflow: true
+  });
+
+  $('#hero-collection-detail-map-summary table').tablesort();
+  $('#hero-collection-detail-map-summary table').floatThead({
+    scrollContainer: closestWrapper,
+    autoReflow: true
+  });
+
+  $('#hero-collection-detail-with-summary table').tablesort();
+  $('#hero-collection-detail-with-summary table').floatThead({
+    scrollContainer: closestWrapper,
+    autoReflow: true
+  });
+
+  $('#hero-collection-detail-against-summary table').tablesort();
+  $('#hero-collection-detail-against-summary table').floatThead({
+    scrollContainer: closestWrapper,
+    autoReflow: true
+  });
+
+  $('#hero-collection-award-summary table').tablesort();
+  $('#hero-collection-award-summary table').floatThead({
+    scrollContainer: closestWrapper,
+    autoReflow: true
+  });
+
   $('#hero-collection-summary table th.stat').data('sortBy', function(th, td, tablesort) {
     return parseFloat(td.text());
   });
@@ -48,6 +77,12 @@ function initHeroCollectionPage() {
   for (let m in heroCollectionHeroDataFilter.mode.$in) {
     filterWidget.find('.filter-widget-mode').dropdown('set selected', heroCollectionHeroDataFilter.mode.$in[m]);
   }
+
+  $('#hero-collection-hero-select-menu').dropdown({
+    onChange: loadHeroCollectionData
+  });
+  addHeroMenuOptions($('#hero-collection-hero-select-menu'));
+  $('#hero-collection-hero-select-menu').dropdown('refresh');
 
   loadOverallHeroCollectionData();
 }
@@ -79,4 +114,35 @@ function loadOverallHeroCollectionData() {
       $('#hero-collection-summary tbody').append(heroCollectionSummaryRowTemplate(context));
     }
   })
+}
+
+// many of the functions here are borrowed from player.js
+function loadHeroCollectionData(value, text, $elem) {
+  let query = Object.assign({}, heroCollectionHeroDataFilter);
+  query.hero = value;
+  DB.getHeroData(query, function(err, docs) {
+    let stats = DB.summarizeHeroData(docs);
+
+    updateHeroTitle($('#hero-collection-hero-header'), value);
+
+    // talents
+    renderHeroTalentsTo(query.hero, $('#hero-collection-detail-hero-talent'), docs);
+
+    // map stats
+    renderMapStatsTo($('#hero-collection-detail-map-summary'), stats);
+
+    renderHeroVsStatsTo($('#hero-collection-detail-with-summary'), stats.withHero);
+    renderHeroVsStatsTo($('#hero-collection-detail-against-summary'), stats.againstHero);
+
+    renderAwardsTo($('#hero-collection-award-summary'), stats);
+
+    // these are annoying
+    $('#hero-collection-detail-misc-summary .statistic[name="overallWin"] .value').text((stats.wins / stats.games * 100).toFixed(2) + '%');
+    $('#hero-collection-detail-misc-summary .statistic[name="overallGames"] .value').text(stats.games);
+    $('#hero-collection-detail-misc-summary .statistic[name="overallTD"] .value').text((stats.totalTD / stats.games).toFixed(2));
+    $('#hero-collection-detail-misc-summary .statistic[name="overallDeaths"] .value').text((stats.totalDeaths / stats.games).toFixed(2));
+    $('#hero-collection-detail-misc-summary .statistic[name="overallKDA"] .value').text((stats.totalTD / Math.max(stats.totalDeaths, 1)).toFixed(2));
+    $('#hero-collection-detail-misc-summary .statistic[name="overallMVP"] .value').text((stats.totalMVP / Math.max(stats.games, 1) * 100).toFixed(1) + '%');
+    $('#hero-collection-detail-misc-summary .statistic[name="overallAward"] .value').text((stats.totalAward / Math.max(stats.games) * 100).toFixed(1) + '%');
+  });
 }

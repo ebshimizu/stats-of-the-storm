@@ -67,7 +67,7 @@
                   </table>
                 </div>
               </div>
-              <div class="ui inverted segment is-hidden" id="player-detail-hero-talent">
+              <div class="ui inverted segment is-hidden talent-detail-table" id="player-detail-hero-talent">
                 <div class="ui top attached label">Talents</div>
                 <div class="table-wrapper">
                   <table class="ui selectable inverted table">
@@ -75,6 +75,7 @@
                       <tr>
                         <th>Talent</th>
                         <th class="center aligned">Win %</th>
+                        <th class="center aligned">Popularity</th>
                         <th class="center aligned">Games</th>
                       </tr>
                     </thead>
@@ -472,6 +473,7 @@
       </div>
     </td>
     <td class="center aligned talent-stat">{{formatWinPercent}}</td>
+    <td class="center aligned talent-stat">{{formatPop}}</td>
     <td class="center aligned talent-stat">{{games}}</td>
   </tr>
 </template>

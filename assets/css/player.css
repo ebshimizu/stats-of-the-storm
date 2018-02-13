@@ -88,22 +88,22 @@
   font-size: 11pt;
 }
 
-#player-detail-hero-talent .item .header,
-#player-detail-hero-talent .item .description {
-  color: #FFFFFF;
+.talent-detail-table .item .header,
+.talent-detail-table .item .description {
+  color: #FFFFFF!important;
 }
 
-#player-detail-hero-talent .talent-stat {
+.talent-detail-table .talent-stat {
   font-size: 14pt;
 }
 
-#player-detail-hero-talent tr.level-header {
+.talent-detail-table tr.level-header {
   font-size: 14pt;
   font-weight: bold;
 }
 
-#player-detail-hero-talent tr.level-header:hover,
-#player-detail-hero-talent tr.level-header td:hover {
+.talent-detail-table tr.level-header:hover,
+.talent-detail-table tr.level-header td:hover {
   background-color: #333;
 }
 

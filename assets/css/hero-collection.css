@@ -3,7 +3,8 @@
   height: calc(100% - 40px);
 }
 
-#hero-collection-summary .floatThead-wrapper {
+#hero-collection-summary .floatThead-wrapper,
+#hero-collection-hero .floatThead-wrapper {
   height: 100%;
 }
 

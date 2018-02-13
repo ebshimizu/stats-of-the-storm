@@ -391,7 +391,7 @@ function updatePlayerPage(err, doc) {
     playerDetailInfo = doc[0];
     $('#player-page-header .header.player-name').text(playerDetailInfo.name);
     $('#player-hero-select-menu').dropdown('set text', 'All Heroes');
-    updateHeroTitle('all');
+    updateHeroTitle($('#player-detail-summary-header'), 'all');
 
     // then do the big query
     // depending on filters, this may get increasingly complicated
@@ -446,16 +446,16 @@ function showHeroDetails(value, text, $selectedItem) {
     });
   }
 
-  updateHeroTitle(value);
+  updateHeroTitle($('#player-detail-summary-header'), value);
 }
 
-function updateHeroTitle(value) {
+function updateHeroTitle(container, value) {
   if (value === 'all') {
-    $('#player-detail-summary-header h2').html('All Hero Summary');
+    container.find('h2').html('All Hero Summary');
   }
   else {
     let elem = '<img class="ui large rounded image" src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(value) + '">' + value + '</div>';
-    $('#player-detail-summary-header h2').html(elem);
+    container.find('h2').html(elem);
   }
 }
 
@@ -486,44 +486,44 @@ function renderAllHeroSummary() {
 function renderHeroTalents(hero) {
   $('#player-detail-hero-summary').addClass('is-hidden');
   $('#player-detail-hero-talent').removeClass('is-hidden');
-  
+
+  renderHeroTalentsTo(hero, $('#player-detail-hero-talent'), playerDetailStats.rawDocs);
+}
+
+function renderHeroTalentsTo(hero, container, docs) {
   // summarize talent data
-  let data = DB.summarizeTalentData(playerDetailStats.rawDocs);
+  let data = DB.summarizeTalentData(docs);
   data = data[hero];
 
-  $('#player-detail-hero-talent tbody').html('');
+  container.find('tbody').html('');
   for (let tier in data) {
-    $('#player-detail-hero-talent tbody').append('<tr class="level-header"><td colspan="3">Level ' + tierToLevel[tier] + '</td></tr>');
+    container.find('tbody').append('<tr class="level-header"><td colspan="4">Level ' + tierToLevel[tier] + '</td></tr>');
+    let total = 0;
+    for (let talent in data[tier]) {
+      total += data[tier][talent].games;
+    }
+
     for (let talent in data[tier]) {
       let context = {};
       context.icon = Heroes.talentIcon(talent);
       context.description = Heroes.talentDesc(talent);
       context.name = Heroes.talentName(talent);
       context.games = data[tier][talent].games;
+      context.formatPop = ((data[tier][talent].games / total) * 100).toFixed(2) + '%';
       context.formatWinPercent = ((data[tier][talent].wins / context.games) * 100).toFixed(2) + '%';
 
-      $('#player-detail-hero-talent tbody').append(heroTalentRowTemplate(context));
+      container.find('tbody').append(heroTalentRowTemplate(context));
     }
   }
 }
 
 function renderPlayerSummary() {
-  $('#player-detail-map-summary tbody').html('');
   $('#player-detail-friend-summary tbody').html('');
   $('#player-detail-rival-summary tbody').html('');
-  $('#player-detail-with-summary tbody').html('');
-  $('#player-detail-against-summary tbody').html('');
   $('#player-detail-skin-summary tbody').html('');
   $('#player-detail-award-summary tbody').html('');
 
-  for (let m in playerDetailStats.maps) {
-    let context = playerDetailStats.maps[m];
-    context.mapName = m;
-    context.winPct = context.wins / context.games;
-    context.formatWinPct = (context.winPct* 100).toFixed(2) + '%';
-
-    $('#player-detail-map-summary tbody').append(playerDetailMapSummaryRowTemplate(context));
-  }
+  renderMapStatsTo($('#player-detail-map-summary'), playerDetailStats);
 
   // friends / rivals / hero matchups
   for (let d in playerDetailStats.withPlayer) {
@@ -553,23 +553,8 @@ function renderPlayerSummary() {
     $('#player-detail-rival-summary tbody').append(playerWinRateRowTemplate(context));
   }
 
-  for (let h in playerDetailStats.withHero) {
-    let context = playerDetailStats.withHero[h];
-    context.winPercent = context.wins / context.games;
-    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
-    context.heroImg = Heroes.heroIcon(context.name);
-
-    $('#player-detail-with-summary tbody').append(heroWinRateRowTemplate(context));
-  }
-
-  for (let h in playerDetailStats.againstHero) {
-    let context = playerDetailStats.againstHero[h];
-    context.winPercent = context.defeated / context.games;
-    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
-    context.heroImg = Heroes.heroIcon(context.name);
-
-    $('#player-detail-against-summary tbody').append(heroWinRateRowTemplate(context));
-  }
+  renderHeroVsStatsTo($('#player-detail-with-summary'), playerDetailStats.withHero);
+  renderHeroVsStatsTo($('#player-detail-against-summary'), playerDetailStats.againstHero);
 
   // skins
   for (let s in playerDetailStats.skins) {
@@ -587,15 +572,7 @@ function renderPlayerSummary() {
   }
 
   // awards
-  for (let a in playerDetailStats.awards) {
-    let context = Heroes.awardInfo(a);
-
-    context.games = playerDetailStats.awards[a];
-    context.winPercent = context.games / playerDetailStats.games;
-    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
-
-    $('#player-detail-award-summary tbody').append(playerAwardRowTemplate(context));
-  }
+  renderAwardsTo($('#player-detail-award-summary'), playerDetailStats);
 
   // individual stats
   $('#player-detail-misc-summary .statistic[name="overallWin"] .value').text((playerDetailStats.wins / playerDetailStats.games * 100).toFixed(2) + '%');
@@ -618,6 +595,54 @@ function renderPlayerSummary() {
 
   $('#player-detail-hero-summary table').floatThead('reflow');
   $('#player-detail-map-summary table').floatThead('reflow');
+}
+
+// expects stats to be from DB.summarizeHeroData(docs).maps
+function renderMapStatsTo(container, stats) {
+  container.find('tbody').html('');
+
+  for (let m in stats.maps) {
+    let context = stats.maps[m];
+    context.mapName = m;
+    context.winPct = context.wins / context.games;
+    context.formatWinPct = (context.winPct* 100).toFixed(2) + '%';
+
+    container.find('tbody').append(playerDetailMapSummaryRowTemplate(context));
+  }
+}
+
+// expects stats to be from DB.summarizeHeroData(docs).withHero / againstHero
+function renderHeroVsStatsTo(container, stats) {
+  container.find('tbody').html('');
+
+  for (let h in stats) {
+    let context = stats[h];
+
+    if ('defeated' in context) {
+      context.winPercent = context.defeated / context.games;
+    }
+    else {
+      context.winPercent = context.wins / context.games;
+    }
+    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
+    context.heroImg = Heroes.heroIcon(context.name);
+
+    container.find('tbody').append(heroWinRateRowTemplate(context));
+  }
+}
+
+function renderAwardsTo(container, stats) {
+  container.find('tbody').html('');
+
+  for (let a in stats.awards) {
+    let context = Heroes.awardInfo(a);
+
+    context.games = stats.awards[a];
+    context.winPercent = context.games / stats.games;
+    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
+
+    container.find('tbody').append(playerAwardRowTemplate(context));
+  }
 }
 
 function setTauntStats(name, obj) {
