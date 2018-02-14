@@ -15,7 +15,7 @@ const playerHeroDetailRowTemplateContent = `<tr>
   </td>
   {{#each stat}}
     <td class="center aligned" data-sort-value="{{avg}}" data-position="left center" data-variation="wide" data-html='<h4 class="ui image header"><img class="ui rounded image" src="assets/heroes-talents/images/heroes/{{../heroImg}}"><div class="content">{{../heroName}}<div class="ui sub header">{{name}}</div></div></h4>'>
-      {{avg}}
+      {{render}}
     </td>
   {{/each}}
  </tr>`;
@@ -586,6 +586,10 @@ function renderPlayerSummary() {
   $('#player-detail-misc-summary .statistic[name="overallKDA"] .value').text((playerDetailStats.totalTD / Math.max(playerDetailStats.totalDeaths, 1)).toFixed(2));
   $('#player-detail-misc-summary .statistic[name="overallMVP"] .value').text((playerDetailStats.totalMVP / Math.max(playerDetailStats.games, 1) * 100).toFixed(1) + '%');
   $('#player-detail-misc-summary .statistic[name="overallAward"] .value').text((playerDetailStats.totalAward / Math.max(playerDetailStats.games) * 100).toFixed(1) + '%');
+  $('#player-detail-misc-summary .statistic[name="timeDead"] .value').text(formatSeconds(playerDetailStats.totalTimeDead / playerDetailStats.games));
+  $('#player-detail-misc-summary .statistic[name="votes"] .value').text(playerDetailStats.totalVotes);
+  $('#player-detail-misc-summary .statistic[name="pctTimeDead"] .value').text((playerDetailStats.avgTimeDeadPct * 100).toFixed(2) + '%');
+
 
   // taunts
   setTauntStats('bstep', playerDetailStats.taunts.bsteps);
@@ -667,10 +671,14 @@ function renderPlayerHeroDetail() {
 
     for (let s in allDetailStats) {
       if (allDetailStats[s] in avgData) {
-        context.stat.push({ avg: avgData[allDetailStats[s]].toFixed(2), name: DetailStatString[allDetailStats[s]] });
+        context.stat.push({
+          avg: avgData[allDetailStats[s]].toFixed(2),
+          name: DetailStatString[allDetailStats[s]],
+          render: formatStat(allDetailStats[s], avgData[allDetailStats[s]], true)
+        });
       }
       else {
-        context.stat.push({avg: '', name: DetailStatString[allDetailStats[s]]});
+        context.stat.push({avg: '', name: DetailStatString[allDetailStats[s]], render: ''});
       }
     }
 

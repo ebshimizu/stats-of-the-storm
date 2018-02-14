@@ -220,7 +220,7 @@ class Database {
       playerDetailStats.heroes[match.hero].totalTime += match.length;
       playerDetailStats.games += 1;
       playerDetailStats.heroes[match.hero].games += 1;
-      playerDetailStats.votes += match.votes;
+      playerDetailStats.heroes[match.hero].votes += match.votes;
 
       if (!(match.map in playerDetailStats.maps))
         playerDetailStats.maps[match.map] = { games: 0, wins: 0 };
@@ -337,6 +337,8 @@ class Database {
     playerDetailStats.totalAward = 0;
     playerDetailStats.totalTimeDead = 0;
     playerDetailStats.totalMatchLength = 0;
+    playerDetailStats.totalVotes = 0;
+    playerDetailStats.avgTimeDeadPct = 0;
 
     for (let h in playerDetailStats.heroes) {
       playerDetailStats.averages[h] = {};
@@ -359,7 +361,10 @@ class Database {
       playerDetailStats.totalTD += playerDetailStats.heroes[h].stats.Takedowns;
       playerDetailStats.totalTimeDead += playerDetailStats.heroes[h].stats.TimeSpentDead;
       playerDetailStats.totalMatchLength += playerDetailStats.heroes[h].totalTime;
+      playerDetailStats.totalVotes += playerDetailStats.heroes[h].votes;
+      playerDetailStats.avgTimeDeadPct += playerDetailStats.heroes[h].stats.timeDeadPct;
     }
+    playerDetailStats.avgTimeDeadPct /= playerDetailStats.games;
 
     return playerDetailStats;
   }
