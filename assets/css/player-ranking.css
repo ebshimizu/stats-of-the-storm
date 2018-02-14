@@ -1,0 +1,7 @@
+#player-ranking-body {
+  height: calc(100% - 20px);
+}
+
+#player-ranking-body .floatThead-wrapper {
+  height: calc(100% - 20px);
+}

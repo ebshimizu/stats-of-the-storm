@@ -7,10 +7,10 @@ var heroCollectionMapDataFilter;
 function initHeroCollectionPage() {
   // by default this screen containrs games played in official modes with bans
   heroCollectionHeroDataFilter = {
-    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague ]}
+    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague]}
   }
   heroCollectionMapDataFilter = {
-    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague ]}
+    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague]}
   }  
 
   heroCollectionSummaryRowTemplate = Handlebars.compile(getTemplate('hero-collection', '#hero-collection-hero-summary-row-template').
@@ -101,10 +101,10 @@ function updateCollectionFilter(map, hero) {
 
 function resetCollectionFilter() {
   heroCollectionHeroDataFilter = {
-    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague ]}
+    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague]}
   }
   heroCollectionMapDataFilter = {
-    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague ]}
+    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague]}
   }
 
   let filterWidget = $('.filter-popup-widget[widget-name="hero-collection-filter"]');

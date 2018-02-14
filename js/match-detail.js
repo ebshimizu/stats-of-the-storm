@@ -238,7 +238,7 @@ function initMatchDetailPage() {
   });
 
   // DEBUG - LOAD SPECIFIC MATCH
-  loadMatchData("RtTPtP5mHaBoFJW2", function() { console.log("done loading"); });
+  //loadMatchData("RtTPtP5mHaBoFJW2", function() { console.log("done loading"); });
 }
 
 // retrieves the proper data and then renders to the page

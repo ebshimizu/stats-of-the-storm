@@ -209,15 +209,19 @@ function loadSections() {
   $('#main-content').append(getTemplate('hero-collection', '#hero-collection-page'));
   initHeroCollectionPage();
 
+  $('#main-content').append(getTemplate('player-ranking', '#player-ranking-page'));
+  initPlayerRankingPage();
+
   // register sections
   sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false };
   sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false };
   sections['match-detail'] = {id: '#match-detail-page-content', title: 'Match Details', showBack: true};
   sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false};
-  sections['hero-collection'] = {id: '#hero-collection-page-content', title: 'Heroes', showBack: false };
+  sections['hero-collection'] = {id: '#hero-collection-page-content', title: 'Heroe Statistics', showBack: false };
+  sections['player-ranking'] = {id: '#player-ranking-page-content', title: 'Player Statistics', showBack: false };
 
   // DEBUG: SHOWING SPECIFIC SECTION ON LOAD FOR TESTING
-  showSection('hero-collection');
+  showSection('player-ranking');
 }
 
 // returns the template contained in an import
@@ -293,13 +297,17 @@ function formatSeconds(val) {
   return (invert ? '-' : '') + (minutes < 1 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 }
 
-function formatStat(field, val) {
+function formatStat(field, val, allFixed = false) {
   if (field === 'KillParticipation')
     return (val * 100).toFixed(2) + '%';
   else if (field === 'KDA')
     return val.toFixed(2);
   else if (field.startsWith('Time') || field === 'OnFireTimeOnFire')
     return formatSeconds(val);
+
+  if (allFixed) {
+    return val.toFixed(2);
+  }
 
   return val;
 }
