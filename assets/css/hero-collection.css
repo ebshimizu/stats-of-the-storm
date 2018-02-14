@@ -3,7 +3,10 @@
   height: calc(100% - 40px);
 }
 
-#hero-collection-summary .floatThead-wrapper,
+#hero-collection-summary .floatThead-wrapper {
+  height: calc(100% - 20px);
+}
+
 #hero-collection-hero .floatThead-wrapper {
   height: 100%;
 }
@@ -20,6 +23,17 @@
 #hero-collection-detail-map-summary
 {
   height: 650px;
+}
+
+#hero-collection-summary .hero-collection-wrapper {
+  height: calc(100% - 40px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#hero-collection-summary .table-wrapper {
+  margin-top: 20px!important;
+  height: calc(100% - 20px);
 }
 
 #hero-collection-hero .hero-collection-wrapper {

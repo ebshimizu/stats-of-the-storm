@@ -18,28 +18,36 @@
     </div>
     <div id="hero-collection-body">
       <div class="ui secondary inverted pointing menu" id="hero-collection-submenu">
-        <a class="item" data-tab="hero-collection-overall">Overall</a>
-        <a class="active item" data-tab="hero-collection-hero">Hero Details</a>
+        <a class="active item" data-tab="hero-collection-overall">Overall</a>
+        <a class="item" data-tab="hero-collection-hero">Hero Details</a>
       </div>
-      <div class="ui tab hero-collection-wrapper" data-tab="hero-collection-overall" id="hero-collection-summary">
-        <div class="table-wrapper">
-          <table class="ui sortable compact selectable inverted table">
-            <thead>
-              <tr>
-                <th>Hero</th>
-                <th class="center alligned stat">Win %</th>
-                <th class="center alligned stat">Ban %</th>
-                <th class="center alligned stat">Popularity</th>
-                <th class="center alligned stat">Games</th>
-              </tr>
-            </thead>
-            <tbody>
+      <div class="ui active tab" data-tab="hero-collection-overall" id="hero-collection-summary">
+        <div class="four ui buttons">
+          <div class="ui red button">Assassin</div>
+          <div class="ui blue button">Warrior</div>
+          <div class="ui teal button">Support</div>
+          <div class="ui violet button">Specialist</div>
+        </div>
+        <div class="hero-collection-wrapper">
+          <div class="table-wrapper">
+            <table class="ui sortable compact selectable inverted table">
+              <thead>
+                <tr>
+                  <th>Hero</th>
+                  <th class="center alligned stat">Win %</th>
+                  <th class="center alligned stat">Ban %</th>
+                  <th class="center alligned stat">Popularity</th>
+                  <th class="center alligned stat">Games</th>
+                </tr>
+              </thead>
+              <tbody>
 
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-      <div class="ui active tab" data-tab="hero-collection-hero" id="hero-collection-hero">
+      <div class="ui tab" data-tab="hero-collection-hero" id="hero-collection-hero">
         <div id="hero-collection-hero-header">
           <h2 class="ui inverted header">[Select a Hero]</h2>
           <div class="ui search selection dropdown" id="hero-collection-hero-select-menu">
@@ -189,7 +197,7 @@
 </template>
 
 <template id="hero-collection-hero-summary-row-template">
-  <tr class="hero-collection-hero-summary-row">
+  <tr class="hero-collection-hero-summary-row {{heroRole}}">
     <td data-sort-value="{{heroName}}">
       <h3 class="ui image inverted header">
         <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui rounded image">

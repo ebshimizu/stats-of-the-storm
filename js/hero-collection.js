@@ -84,6 +84,8 @@ function initHeroCollectionPage() {
   addHeroMenuOptions($('#hero-collection-hero-select-menu'));
   $('#hero-collection-hero-select-menu').dropdown('refresh');
 
+  $('#hero-collection-summary .button').click(toggleHeroCollectionType);
+
   loadOverallHeroCollectionData();
 }
 
@@ -110,10 +112,60 @@ function loadOverallHeroCollectionData() {
       context.popPercent = hero.involved / overallStats.totalMatches;
       context.formatPopPercent = (context.popPercent * 100).toFixed(2) + '%';
       context.games = hero.games;
+      context.heroRole = Heroes.role(h);
 
       $('#hero-collection-summary tbody').append(heroCollectionSummaryRowTemplate(context));
     }
   })
+}
+
+function toggleHeroCollectionType() {
+  let type = $(this).text();
+
+  let hide = false;
+  if (type === "Assassin") {
+    if ($(this).hasClass('red')) {
+      hide = true;
+      $(this).removeClass('red');
+    }
+    else {
+      $(this).addClass('red');
+    }
+  }
+  if (type === "Warrior") {
+    if ($(this).hasClass('blue')) {
+      hide = true;
+      $(this).removeClass('blue');
+    }
+    else {
+      $(this).addClass('blue');
+    }
+  }
+  if (type === "Support") {
+    if ($(this).hasClass('teal')) {
+      hide = true;
+      $(this).removeClass('teal');
+    }
+    else {
+      $(this).addClass('teal');
+    }
+  }
+  if (type === "Specialist") {
+    if ($(this).hasClass('violet')) {
+      hide = true;
+      $(this).removeClass('violet');
+    }
+    else {
+      $(this).addClass('violet');
+    }
+  }
+
+  if (hide) {
+    $('#hero-collection-summary table').find('.' + type).addClass('is-hidden');
+  }
+  else {
+    $('#hero-collection-summary table').find('.' + type).removeClass('is-hidden');
+  }
 }
 
 // many of the functions here are borrowed from player.js

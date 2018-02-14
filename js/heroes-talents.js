@@ -104,6 +104,14 @@ class HeroesTalents {
     return this._roles[data.role].all;
   }
 
+  role(name) {
+    if (name in this._heroes) {
+      return this._heroes[name].role;
+    }
+
+    return '';
+  }
+
   heroNameFromAttr(attr) {
     if (attr in this._heroAttr)
       return this._heroAttr[attr];
