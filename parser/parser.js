@@ -243,6 +243,7 @@ function processReplay(file, opts = {}) {
       players[id].mount = p.m_mount;
       players[id].silenced = p.m_hasSilencePenalty;
       playerLobbyID[p.m_userId] = id;
+      players[id].length = match.length;
     }
 
     console.log("Cosmetic use data collection complete");
@@ -1626,6 +1627,7 @@ function collectTeamStats(match, players) {
       }
     }
     totals.avgTimeSpentDead = totals.TimeSpentDead / 5;
+    totals.timeDeadPct = totals.avgTimeSpentDead / match.length;
     match.teams[t].stats.totals = totals;
   }
 }

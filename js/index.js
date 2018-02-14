@@ -304,6 +304,8 @@ function formatStat(field, val, allFixed = false) {
     return val.toFixed(2);
   else if (field.startsWith('Time') || field === 'OnFireTimeOnFire')
     return formatSeconds(val);
+  else if (field === 'timeDeadPct')
+    return (val * 100).toFixed(2) + '%';
 
   if (allFixed) {
     return val.toFixed(2);

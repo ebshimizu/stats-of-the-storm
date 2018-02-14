@@ -1,7 +1,15 @@
+#player-ranking-page-header {
+  margin-bottom: 20px;
+}
+
 #player-ranking-body {
   height: calc(100% - 20px);
 }
 
 #player-ranking-body .floatThead-wrapper {
-  height: calc(100% - 20px);
+  height: calc(100% - 80px);
+}
+
+#player-ranking-body .section {
+  height: 100%;
 }

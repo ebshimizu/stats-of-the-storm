@@ -206,11 +206,21 @@ class Database {
 
       // hero stuff
       if (!(match.hero in playerDetailStats.heroes)) {
-        playerDetailStats.heroes[match.hero] = { games: 0, wins: 0, totalAwards: 0, stats: {}, awards: {} };
+        playerDetailStats.heroes[match.hero] = {
+          games: 0,
+          wins: 0,
+          totalAwards: 0,
+          stats: { timeDeadPct : 0 },
+          awards: {},
+          totalTime: 0,
+          votes: 0
+        };
       }
 
+      playerDetailStats.heroes[match.hero].totalTime += match.length;
       playerDetailStats.games += 1;
       playerDetailStats.heroes[match.hero].games += 1;
+      playerDetailStats.votes += match.votes;
 
       if (!(match.map in playerDetailStats.maps))
         playerDetailStats.maps[match.map] = { games: 0, wins: 0 };
@@ -224,6 +234,7 @@ class Database {
         
         playerDetailStats.heroes[match.hero].stats[statName] += match.gameStats[statName];
       }
+      playerDetailStats.heroes[match.hero].stats.timeDeadPct += match.gameStats.TimeSpentDead / match.length;
 
       // you only ever get 1 but just in case...
       // ALSO custom games don't get counted here since you can't get awards
@@ -324,6 +335,8 @@ class Database {
     playerDetailStats.totalDeaths = 0;
     playerDetailStats.totalMVP = 0;
     playerDetailStats.totalAward = 0;
+    playerDetailStats.totalTimeDead = 0;
+    playerDetailStats.totalMatchLength = 0;
 
     for (let h in playerDetailStats.heroes) {
       playerDetailStats.averages[h] = {};
@@ -344,6 +357,8 @@ class Database {
       playerDetailStats.totalAward += playerDetailStats.heroes[h].totalAwards;
       playerDetailStats.totalDeaths += playerDetailStats.heroes[h].stats.Deaths;
       playerDetailStats.totalTD += playerDetailStats.heroes[h].stats.Takedowns;
+      playerDetailStats.totalTimeDead += playerDetailStats.heroes[h].stats.TimeSpentDead;
+      playerDetailStats.totalMatchLength += playerDetailStats.heroes[h].totalTime;
     }
 
     return playerDetailStats;
@@ -394,7 +409,9 @@ class Database {
         playerDetailStats[match.ToonHandle] = {
           games: 0,
           wins: 0,
-          stats: {},
+          stats: {
+            timeDeadPct: 0
+          },
           name: match.name,
           awards: {},
           totalAwards : 0,
@@ -404,11 +421,15 @@ class Database {
             sprays: { count: 0, takedowns: 0, deaths: 0 },
             taunts: { count: 0, takedowns: 0, deaths: 0 },
             voiceLines: { count: 0, takedowns: 0, deaths: 0 }
-          }
+          },
+          totalTime: 0,
+          votes: 0
         }
       }
 
       playerDetailStats[match.ToonHandle].games += 1;
+      playerDetailStats[match.ToonHandle].totalTime += match.length;
+      playerDetailStats[match.ToonHandle].votes += match.votes;
 
       for (let s in statList) {
         let statName = statList[s];
@@ -417,6 +438,7 @@ class Database {
         
         playerDetailStats[match.ToonHandle].stats[statName] += match.gameStats[statName];
       }
+      playerDetailStats[match.ToonHandle].stats.timeDeadPct += match.gameStats.TimeSpentDead / match.length;
 
       // you only ever get 1 but just in case...
       // ALSO custom games don't get counted here since you can't get awards
@@ -434,7 +456,7 @@ class Database {
       }
 
       // taunts
-      for (let t in playerDetailStats.taunts) {
+      for (let t in playerDetailStats[match.ToonHandle].taunts) {
         let bm = match[t];
 
         for (let j = 0; j < bm.length; j++) {
@@ -460,6 +482,8 @@ class Database {
       playerDetailStats[p].totalDeaths = 0;
       playerDetailStats[p].totalMVP = 0;
       playerDetailStats[p].totalAward = 0;
+      playerDetailStats[p].totalMatchLength = 0;
+      playerDetailStats[p].totalTimeDead = 0;
 
       for (let s in playerDetailStats[p].stats) {
         playerDetailStats[p].averages[s] = playerDetailStats[p].stats[s] / playerDetailStats[p].games;
@@ -478,6 +502,8 @@ class Database {
       playerDetailStats[p].totalAward += playerDetailStats[p].totalAwards;
       playerDetailStats[p].totalDeaths += playerDetailStats[p].stats.Deaths;
       playerDetailStats[p].totalTD += playerDetailStats[p].stats.Takedowns;
+      playerDetailStats[p].totalMatchLength += playerDetailStats[p].totalTime;
+      playerDetailStats[p].totalTimeDead += playerDetailStats[p].stats.TimeSpentDead;
     }
 
     return playerDetailStats;

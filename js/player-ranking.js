@@ -2,11 +2,15 @@ var playerRankingsHeroFilter = {};
 // this might not actually need to be used
 var playerRankingsMapFilter = {};
 var playerRankingGeneralTemplate;
+var playerRankingTeamfightTemplate;
+var playerRankingMiscTemplate;
 
 
 function initPlayerRankingPage() {
   // templates
   playerRankingGeneralTemplate = Handlebars.compile(getTemplate('player-ranking', '#player-ranking-row-template').find('tr')[0].outerHTML);
+  playerRankingTeamfightTemplate = Handlebars.compile(getTemplate('player-ranking', '#player-ranking-teamfight-row-template').find('tr')[0].outerHTML);
+  playerRankingMiscTemplate = Handlebars.compile(getTemplate('player-ranking', '#player-ranking-misc-row-template').find('tr')[0].outerHTML);
 
   // filter popup
   let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
@@ -37,6 +41,20 @@ function initPlayerRankingPage() {
     scrollContainer: closestWrapper,
     autoReflow: true
   });
+
+  $('#player-ranking-teamfight-table').tablesort();
+  $('#player-ranking-teamfight-table').floatThead({
+    scrollContainer: closestWrapper,
+    autoReflow: true
+  });
+
+  $('#player-ranking-misc-table').tablesort();
+  $('#player-ranking-misc-table').floatThead({
+    scrollContainer: closestWrapper,
+    autoReflow: true
+  });
+
+  $('#player-ranking-body .buttons .button').click(togglePlayerRankingSection);
 
   $('#player-ranking-body table th.stat').data('sortBy', function(th, td, tablesort) {
     return parseFloat(td.text());
@@ -69,6 +87,20 @@ function updateHeroFilter(value, text, $elem) {
   loadPlayerRankings();
 }
 
+function togglePlayerRankingSection() {
+  let section = $(this).text();
+  
+  if ($(this).hasClass('violet')) {
+    return;
+  }
+
+  $('#player-ranking-body .buttons .button').removeClass('violet');
+  $('#player-ranking-body .section').addClass('is-hidden');
+  $('#player-ranking-body .section[table-name="' + section + '"]').removeClass('is-hidden');
+  $(this).addClass('violet');
+  $('#player-ranking-body table').floatThead('reflow');
+}
+
 function loadPlayerRankings() {
   // this can take a long time so we don't do this on load, the user must hit the search button
   DB.getHeroData(playerRankingsHeroFilter, function(err, docs) {
@@ -86,12 +118,22 @@ function loadPlayerRankings() {
       context.totalKDA = player.totalKDA;
       context.value.games = player.games;
       context.games = player.games
+      context.votes = player.votes;
 
       for (let v in context.value) {
         context[v] = formatStat(v, context.value[v], true);
       }
 
+      context.totalAwards = player.totalAwards;
+      context.value.awardPct = context.totalAwards / player.games;
+      context.awardPct = (context.value.awardPct * 100).toFixed(2) + '%';
+      context.value.MVPPct = player.totalMVP / player.games;
+      context.MVPPct = (context.value.MVPPct * 100).toFixed(2) + '%';
+      context.taunts = player.taunts;
+
       $('#player-ranking-general-table').append(playerRankingGeneralTemplate(context));
+      $('#player-ranking-teamfight-table').append(playerRankingTeamfightTemplate(context));
+      $('#player-ranking-misc-table').append(playerRankingMiscTemplate(context));
     }
   });
 }
