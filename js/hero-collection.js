@@ -187,6 +187,15 @@ function toggleHeroCollectionType() {
       $(this).addClass('violet');
     }
   }
+  if (type === "Multiclass") {
+    if ($(this).hasClass('purple')) {
+      hide = true;
+      $(this).removeClass('purple');
+    }
+    else {
+      $(this).addClass('purple');
+    }
+  }
 
   if (hide) {
     $('#hero-collection-summary table').find('.' + type).addClass('is-hidden');
