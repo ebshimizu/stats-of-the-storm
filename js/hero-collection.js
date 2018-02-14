@@ -77,6 +77,8 @@ function initHeroCollectionPage() {
   for (let m in heroCollectionHeroDataFilter.mode.$in) {
     filterWidget.find('.filter-widget-mode').dropdown('set selected', heroCollectionHeroDataFilter.mode.$in[m]);
   }
+  bindFilterButton(filterWidget, updateCollectionFilter);
+  bindFilterResetButton(filterWidget, resetCollectionFilter);
 
   $('#hero-collection-hero-select-menu').dropdown({
     onChange: loadHeroCollectionData
@@ -87,6 +89,30 @@ function initHeroCollectionPage() {
   $('#hero-collection-summary .button').click(toggleHeroCollectionType);
 
   loadOverallHeroCollectionData();
+}
+
+function updateCollectionFilter(map, hero) {
+  heroCollectionHeroDataFilter = hero;
+  heroCollectionMapDataFilter = map;
+
+  loadOverallHeroCollectionData();
+  loadHeroCollectionData($('#hero-collection-hero-select-menu').dropdown('get value'), null, null);
+}
+
+function resetCollectionFilter() {
+  heroCollectionHeroDataFilter = {
+    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague ]}
+  }
+  heroCollectionMapDataFilter = {
+    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague ]}
+  }
+
+  let filterWidget = $('.filter-popup-widget[widget-name="hero-collection-filter"]');
+  for (let m in heroCollectionHeroDataFilter.mode.$in) {
+    filterWidget.find('.filter-widget-mode').dropdown('set selected', heroCollectionHeroDataFilter.mode.$in[m]);
+  }
+
+  updateCollectionFilter(heroCollectionMapDataFilter, heroCollectionHeroDataFilter);
 }
 
 function loadOverallHeroCollectionData() {
