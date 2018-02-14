@@ -77,6 +77,40 @@ class Database {
     });
   }
 
+  // teams are stored in settings
+  addTeam(players, name, callback) {
+    this._db.settings.insert({ players, name, type: 'team' }, callback);
+  }
+
+  // need to query by id, teams are allowed to have the same name 
+  deleteTeam(id, callback) {
+    this._db.settings.remove({ _id: id }, callback);
+  }
+
+  changeTeamName(id, name, callback) {
+    this._db.settings.update({ _id: id} , { name }, {}, callback);
+  }
+
+  updateTeamPlayers(id, players, callback) {
+    this._db.settings.update({ _id: id}, { players }, {}, callback);
+  }
+
+  addPlayerToTeam(id, player, callback) {
+    this._db.settings.update({_id: id}, { $addToSet: { players: player }}, {}, callback);
+  }
+
+  removePlayerFromTeam(id, player, callback) {
+    this._db.settings.update({_id:id}, { $pull: { players: player}}, {}, callback)
+  }
+
+  getAllTeams(callback) {
+    this._db.settings.find({type: 'team'}, callback);
+  }
+
+  getTeam(id, callback) {
+    this._db.settings.find({_id: id}, callback);
+  }
+
   checkDuplicate(file, callback) {
     let data = Parser.parse(file, [Parser.ReplayDataType.header, Parser.ReplayDataType.details]);
     let search = {};

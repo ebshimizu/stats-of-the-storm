@@ -212,6 +212,9 @@ function loadSections() {
   $('#main-content').append(getTemplate('player-ranking', '#player-ranking-page'));
   initPlayerRankingPage();
 
+  $('#main-content').append(getTemplate('teams', '#teams-page'));
+  initTeamsPage();
+
   // register sections
   sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false };
   sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false };
@@ -219,9 +222,10 @@ function loadSections() {
   sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false};
   sections['hero-collection'] = {id: '#hero-collection-page-content', title: 'Heroe Statistics', showBack: false };
   sections['player-ranking'] = {id: '#player-ranking-page-content', title: 'Player Statistics', showBack: false };
+  sections.teams = {id: '#teams-page-content', title: 'Teams', showBack: false };
 
   // DEBUG: SHOWING SPECIFIC SECTION ON LOAD FOR TESTING
-  showSection('player-ranking');
+  showSection('teams');
 }
 
 // returns the template contained in an import
