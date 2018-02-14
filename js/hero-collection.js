@@ -138,6 +138,8 @@ function loadOverallHeroCollectionData() {
       context.popPercent = hero.involved / overallStats.totalMatches;
       context.formatPopPercent = (context.popPercent * 100).toFixed(2) + '%';
       context.games = hero.games;
+      context.win = hero.wins;
+      context.loss = hero.games - hero.wins;
       context.heroRole = Heroes.role(h);
 
       $('#hero-collection-summary tbody').append(heroCollectionSummaryRowTemplate(context));
