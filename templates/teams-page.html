@@ -27,6 +27,181 @@
       </div>
     </div>
     <div id="team-detail-body">
+      <div class="ui secondary inverted pointing menu" id="teams-submenu">
+        <a class="active item" data-tab="team-overall-stats">Overall</a>
+        <a class="item" data-tab="team-roster-stats">Roster Stats</a>
+        <a class="item" data-tab="team-rankings-stats">Ranking</a>
+        <a class="item" data-tab="team-match-history"><i class="external icon"></i>Match History</a>
+      </div>
+      <div class="ui active tab" data-tab="team-overall-stats" id="team-overall-stats">
+        <div class="team-page-wrapper">
+          <div class="ui grid">
+            <div class="nine wide column">
+              <div class="ui inverted segment" id="team-hero-summary">
+                <div class="ui top attached label">Picks</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Hero</th>
+                        <th class="center aligned stat">Win %</th>
+                        <th class="center aligned stat">Pick %</th>
+                        <th class="center aligned stat">Games</th>
+                        <th class="center aligned stat">Takedowns</th>
+                        <th class="center aligned stat">Deaths</th>
+                        <th class="center aligned stat">KDA</th>
+                        <th class="center aligned stat">Time Dead</th>
+                        <th class="center aligned stat">% Dead</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="five wide column">
+              <div class="ui inverted segment player-win" id="team-ban-summary">
+                <div class="ui top attached label">Bans</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Hero</th>
+                        <th class="center aligned stat">Ban %</th>
+                        <th class="center aligned stat">Bans</th>
+                        <th class="center aligned stat">1st Ban %</th>
+                        <th class="center aligned stat">1st Bans</th>
+                        <th class="center aligned stat">2nd Ban %</th>
+                        <th class="center aligned stat">2nd Bans</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="two wide column">
+              <div class="ui inverted segment" id="team-summary-stats">
+                <div class="ui top attached label">Stats</div>
+                <div class="ui horizontal mini inverted statistics">
+                  <div class="statistic" name="overallWin">
+                    <div class="value">###</div>
+                    <div class="label">Win</div>
+                  </div>
+                  <div class="statistic" name="overallGames">
+                    <div class="value">###</div>
+                    <div class="label">Games</div>
+                  </div>
+                  <div class="statistic" name="heroesPlayed">
+                    <div class="value">###</div>
+                    <div class="label">Heroes Played</div>
+                  </div>
+                  <div class="statistic" name="heroesPct">
+                    <div class="value">###</div>
+                    <div class="label">% Played</div>
+                  </div>
+                  <div class="statistic" name="overallTD">
+                    <div class="value">###</div>
+                    <div class="label">TDs</div>
+                  </div>
+                  <div class="statistic" name="overallDeaths">
+                    <div class="value">###</div>
+                    <div class="label">Deaths</div>
+                  </div>
+                  <div class="statistic" name="overallKDA">
+                    <div class="value">###</div>
+                    <div class="label">KDA</div>
+                  </div>
+                  <div class="statistic" name="timeDead">
+                    <div class="value">###</div>
+                    <div class="label">Avg. Time Dead</div>
+                  </div>
+                  <div class="statistic" name="pctTimeDead">
+                    <div class="value">###</div>
+                    <div class="label">Avg. % Dead</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="four wide column">
+                <div class="ui inverted segment" id="team-map-summary">
+                  <div class="ui top attached label">Map Summary</div>
+                  <div class="table-wrapper">
+                    <table class="ui sortable selectable inverted table">
+                      <thead>
+                        <tr>
+                          <th>Map</th>
+                          <th>Win %</th>
+                          <th>Games</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+  
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            <div class="four wide column">
+              <div class="ui inverted segment player-win" id="team-with-summary">
+                <div class="ui top attached label">Win Rate With Hero</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Hero</th>
+                        <th>Win %</th>
+                        <th>Games</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="four wide column">
+              <div class="ui inverted segment player-win" id="team-against-summary">
+                <div class="ui top attached label">Win Rate Against Hero</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Hero</th>
+                        <th>Win %</th>
+                        <th>Games</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="ui four wide column">
+              <div class="ui inverted segment" id="team-detail-stats">
+                <div class="ui top attached label">Detailed Stats</div>
+                <div class="ui two inverted statistics">
+                  <div class="statistic" name="team-time-to-10">
+                    <div class="value">###</div>
+                    <div class="label">Time To 10</div>
+                  </div> 
+                  <div class="statistic" name="team-time-to-20">
+                    <div class="value">###</div>
+                    <div class="label">Time To 20</div>
+                  </div> 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -100,7 +100,7 @@ class Database {
   }
 
   removePlayerFromTeam(id, player, callback) {
-    this._db.settings.update({_id:id}, { $pull: { players: player}}, {}, callback)
+    this._db.settings.update({_id:id}, { $pull: { players: player}}, {}, callback);
   }
 
   getAllTeams(callback) {
@@ -108,7 +108,7 @@ class Database {
   }
 
   getTeam(id, callback) {
-    this._db.settings.find({_id: id}, callback);
+    this._db.settings.findOne({_id: id}, callback);
   }
 
   checkDuplicate(file, callback) {
@@ -179,6 +179,15 @@ class Database {
 
   getHeroData(query, callback) {
     this._db.heroData.find(query, callback);
+  }
+
+  getHeroDataForMatches(ids, query, callback) {
+    query.$or = [];
+    for (let i in ids) {
+      query.$or.push({ matchID : ids[i]});
+    }
+
+    this.getHeroData(query, callback);
   }
 
   getPlayers(query, callback, opts = {}) {
@@ -551,6 +560,7 @@ class Database {
   // this returns an object containing hero name and various pick
   // and win stats for the given collection of matches
   // need a heroes talents instance to process the bans
+  // it also returns various team related stats
   summarizeMatchData(docs, HeroesTalents) {
     let data = {};
     data.totalMatches = docs.length;
@@ -599,6 +609,145 @@ class Database {
           }
         }
       }
+    }
+
+    return data;
+  }
+
+  // special version of summarize match data that only pulls stats from one of the teams
+  summarizeTeamData(team, docs, HeroesTalents) {
+    let data = {};
+    data.totalMatches = docs.length;
+    data.totalBans = 0;
+    data.heroes = {};
+    data.stats = {
+      average: {},
+      total: {}
+    };
+    data.level10Games = 0;
+    data.level20Games = 0;
+    data.structures = {};
+    for (let match of docs) {
+      let winner = match.winner;
+
+      // determine what team we want
+      let t;
+      let count = 0;
+      for (let i in match.teams[0].ids) {
+        if (team.players.indexOf(match.teams[0].ids[i]) >= 0)
+          count += 1;
+      }
+
+      if (count === 5)
+        t = 0;
+      else {
+        count = 0;
+        for (let i in match.teams[1].ids) {
+          if (team.players.indexOf(match.teams[1].ids[i]) >= 0)
+            count += 1;
+        }
+
+        if (count === 5)
+          t = 1;
+        else
+          continue;
+      }
+
+      let teamHeroes = match.teams[t].heroes;
+
+      for (let h in teamHeroes) {
+        let hero = teamHeroes[h];
+
+        if (!(hero in data.heroes)) {
+          data.heroes[hero] = { first: 0, second: 0, wins: 0, bans: 0, games: 0, involved: 0 };
+        }
+
+        data.heroes[hero].games += 1;
+        data.heroes[hero].involved += 1;
+        if (t === winner) {
+          data.heroes[hero].wins += 1;
+        }
+      }        
+
+      for (let b in match.bans[t]) {
+        try {
+          // typically this means they didn't ban
+          if (match.bans[t][b].hero === '') {
+            continue;
+          }
+
+          let hero = HeroesTalents.heroNameFromAttr(match.bans[t][b].hero);
+
+          if (!(hero in data.heroes)) {
+            data.heroes[hero] = { first: 0, second: 0, wins: 0, bans: 0, games: 0, involved: 0 };
+          }
+
+          data.heroes[hero].involved += 1;
+          data.heroes[hero].bans += 1;
+          data.totalBans += 1;
+
+          if (match.bans[t][b].order === 1) {
+            data.heroes[hero].first += 1;
+          }
+          else if (match.bans[t][b].order === 2) {
+            data.heroes[hero].second += 1;
+          }
+        }
+        catch (e) {
+          console.log(e);
+        }
+      }
+
+      // stat aggregation
+      for (let stat in match.teams[t].stats) {
+        if (stat === 'structures') {
+          for (let struct in match.teams[t].stats.structures) {
+            if (!(struct in data.structures)) {
+              data.structures[struct] = {
+                destroyed: 0,
+                first: 0,
+                lost: 0,
+                gamesWithFirst: 0
+              }
+            }
+
+            data.structures[struct].destroyed += match.teams[t].stats.structures[struct].destroyed;
+            data.structures[struct].lost += match.teams[t].stats.structures[struct].lost;
+
+            if (match.teams[t].stats.structures[struct].destroyed > 0) {
+              data.structures[struct].first += match.teams[t].stats.structures[struct].first;
+              data.structures[struct].gamesWithFirst += 1;
+            }
+          }
+        }
+        else if (stat === 'totals') {
+          for (let total in match.teams[t].stats.totals) {
+            if (!(total in data.stats.total))
+              data.stats.total[total] = 0;
+            data.stats.total[total] += match.teams[t].stats.totals[total];
+          }
+        }
+        else {
+          if (!(stat in data.stats.total))
+            data.stats.total[stat] = 0;
+          data.stats.total[stat] += match.teams[t].stats[stat];
+        }
+
+        if (stat === 'timeTo10')
+          data.level10Games += 1;
+        
+        if (stat === 'timeTo20')
+          data.level20Games += 1;
+      }
+    }
+
+    for (let stat in data.stats.total) {
+      if (stat === 'timeTo10')
+        data.stats.average[stat] = data.stats.total[stat] / data.level10Games;
+      else if (stat === 'timeTo20')
+        data.stats.average[stat] = data.stats.total[stat] / data.level20Games;
+      else
+        data.stats.average[stat] = data.stats.total[stat] / data.totalMatches;
     }
 
     return data;

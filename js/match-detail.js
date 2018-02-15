@@ -1582,3 +1582,9 @@ function updateTeamStats() {
 function updateTeamStat(container, name, value) {
   container.find('.statistic[name="' + name + '"] .value').text(value);
 }
+
+function addNewTeamFromMatch(teamID, name) {
+  if (matchDetailMatch) {
+    DB.addTeam(matchDetailMatch.teams[teamID].ids, name);
+  }
+}

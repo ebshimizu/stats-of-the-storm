@@ -406,3 +406,13 @@ function addPatchMenuOptions(elem, callback) {
     callback();
   });
 }
+
+function populateTeamMenu(elem) {
+  DB.getAllTeams(function(err, docs) {
+    elem.find('.menu').html('');
+    
+    for (let d in docs) {
+      elem.find('.menu').append('<div class="item" data-value="' + docs[d]._id + '">' + docs[d].name + '</div>');
+    }
+  });
+}
