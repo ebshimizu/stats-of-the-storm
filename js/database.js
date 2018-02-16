@@ -618,15 +618,20 @@ class Database {
   summarizeTeamData(team, docs, HeroesTalents) {
     let data = {};
     data.totalMatches = docs.length;
+    data.wins = 0;
     data.totalBans = 0;
     data.heroes = {};
     data.stats = {
       average: {},
       total: {}
     };
+    data.maps = {};
     data.level10Games = 0;
     data.level20Games = 0;
     data.structures = {};
+    data.takedowns = 0;
+    data.deaths = 0;
+    data.avgLength = 0;
     for (let match of docs) {
       let winner = match.winner;
 
@@ -653,13 +658,26 @@ class Database {
           continue;
       }
 
+      if (!(match.map in data.maps)) {
+        data.maps[match.map] = { games: 0, wins: 0 };
+      }
+      data.maps[match.map].games += 1;
+      if (t === winner) {
+        data.maps[match.map].wins += 1;
+        data.wins += 1;
+      }
+      data.avgLength += match.length;
+
+      data.takedowns += match.teams[t].takedowns;
+      data.deaths += t === 0 ? match.teams[1].takedowns : match.teams[0].takedowns;
+
       let teamHeroes = match.teams[t].heroes;
 
       for (let h in teamHeroes) {
         let hero = teamHeroes[h];
 
         if (!(hero in data.heroes)) {
-          data.heroes[hero] = { first: 0, second: 0, wins: 0, bans: 0, games: 0, involved: 0 };
+          data.heroes[hero] = { first: 0, second: 0, wins: 0, bans: 0, games: 0, involved: 0, gamesAgainst: 0, defeated: 0 };
         }
 
         data.heroes[hero].games += 1;
@@ -667,7 +685,19 @@ class Database {
         if (t === winner) {
           data.heroes[hero].wins += 1;
         }
-      }        
+      }
+
+      let otherTeamHeroes = (t === 0) ? match.teams[1].heroes : match.teams[0].heroes;
+      for (let h in otherTeamHeroes) {
+        let hero = otherTeamHeroes[h];
+        if (!(hero in data.heroes)) {
+          data.heroes[hero] = { first: 0, second: 0, wins: 0, bans: 0, games: 0, involved: 0, gamesAgainst: 0, defeated: 0 };
+        }
+        data.heroes[hero].gamesAgainst += 1;
+        if (t === winner) {
+          data.heroes[hero].defeated += 1;
+        }
+      }
 
       for (let b in match.bans[t]) {
         try {
@@ -679,7 +709,7 @@ class Database {
           let hero = HeroesTalents.heroNameFromAttr(match.bans[t][b].hero);
 
           if (!(hero in data.heroes)) {
-            data.heroes[hero] = { first: 0, second: 0, wins: 0, bans: 0, games: 0, involved: 0 };
+            data.heroes[hero] = { first: 0, second: 0, wins: 0, bans: 0, games: 0, involved: 0, gamesAgainst: 0, defeated: 0 };
           }
 
           data.heroes[hero].involved += 1;
@@ -749,6 +779,7 @@ class Database {
       else
         data.stats.average[stat] = data.stats.total[stat] / data.totalMatches;
     }
+    data.avgLength /= data.totalMatches;
 
     return data;
   }

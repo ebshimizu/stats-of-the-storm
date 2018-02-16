@@ -1,0 +1,34 @@
+#team-detail-body {
+  height: calc(100% - 40px);
+}
+
+#team-detail-body .tab {
+  height: 100%;
+}
+
+.team-page-wrapper {
+  height: calc(100% - 40px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#team-detail-body .floatThead-wrapper {
+  height: 100%;
+}
+
+#team-detail-body .player-win {
+  height: 600px;
+}
+
+#team-detail-body .player-win tbody td {
+  font-size: 12pt;
+}
+
+#team-hero-summary tbody td {
+  font-size: 12pt;
+}
+
+#team-map-summary,
+#team-hero-summary {
+  height: 600px;
+}

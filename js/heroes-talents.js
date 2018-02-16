@@ -89,6 +89,10 @@ class HeroesTalents {
     return Object.keys(this._heroes);
   }
 
+  get heroCount() {
+    return Object.keys(this._heroes).length;
+  }
+
   heroRole(data) {
     if (!data.role) {
       let result = [];

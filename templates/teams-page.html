@@ -36,7 +36,7 @@
       <div class="ui active tab" data-tab="team-overall-stats" id="team-overall-stats">
         <div class="team-page-wrapper">
           <div class="ui grid">
-            <div class="nine wide column">
+            <div class="ten wide column">
               <div class="ui inverted segment" id="team-hero-summary">
                 <div class="ui top attached label">Picks</div>
                 <div class="table-wrapper">
@@ -50,8 +50,8 @@
                         <th class="center aligned stat">Takedowns</th>
                         <th class="center aligned stat">Deaths</th>
                         <th class="center aligned stat">KDA</th>
-                        <th class="center aligned stat">Time Dead</th>
-                        <th class="center aligned stat">% Dead</th>
+                        <th class="center aligned stat">Avg. Time Dead</th>
+                        <th class="center aligned stat">Avg. % Dead</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -61,24 +61,20 @@
                 </div>
               </div>
             </div>
-            <div class="five wide column">
-              <div class="ui inverted segment player-win" id="team-ban-summary">
-                <div class="ui top attached label">Bans</div>
+            <div class="four wide column">
+              <div class="ui inverted segment" id="team-map-summary">
+                <div class="ui top attached label">Map Summary</div>
                 <div class="table-wrapper">
                   <table class="ui sortable selectable inverted table">
                     <thead>
                       <tr>
-                        <th>Hero</th>
-                        <th class="center aligned stat">Ban %</th>
-                        <th class="center aligned stat">Bans</th>
-                        <th class="center aligned stat">1st Ban %</th>
-                        <th class="center aligned stat">1st Bans</th>
-                        <th class="center aligned stat">2nd Ban %</th>
-                        <th class="center aligned stat">2nd Bans</th>
+                        <th>Map</th>
+                        <th>Win %</th>
+                        <th>Games</th>
                       </tr>
                     </thead>
                     <tbody>
-                      
+
                     </tbody>
                   </table>
                 </div>
@@ -124,38 +120,31 @@
                     <div class="value">###</div>
                     <div class="label">Avg. % Dead</div>
                   </div>
-                </div>
-              </div>
-            </div>
-            <div class="four wide column">
-                <div class="ui inverted segment" id="team-map-summary">
-                  <div class="ui top attached label">Map Summary</div>
-                  <div class="table-wrapper">
-                    <table class="ui sortable selectable inverted table">
-                      <thead>
-                        <tr>
-                          <th>Map</th>
-                          <th>Win %</th>
-                          <th>Games</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-  
-                      </tbody>
-                    </table>
+                  <div class="statistic" name="avgLength">
+                    <div class="value">###</div>
+                    <div class="label">Avg. Length</div>
+                  </div>
+                  <div class="statistic" name="PPK">
+                    <div class="value">###</div>
+                    <div class="label">PPK</div>
                   </div>
                 </div>
               </div>
-            <div class="four wide column">
-              <div class="ui inverted segment player-win" id="team-with-summary">
-                <div class="ui top attached label">Win Rate With Hero</div>
+            </div>
+            <div class="six wide column">
+              <div class="ui inverted segment player-win" id="team-ban-summary">
+                <div class="ui top attached label">Bans</div>
                 <div class="table-wrapper">
                   <table class="ui sortable selectable inverted table">
                     <thead>
                       <tr>
                         <th>Hero</th>
-                        <th>Win %</th>
-                        <th>Games</th>
+                        <th class="center aligned stat">Ban %</th>
+                        <th class="center aligned stat">Bans</th>
+                        <th class="center aligned stat">1st Ban %</th>
+                        <th class="center aligned stat">1st Bans</th>
+                        <th class="center aligned stat">2nd Ban %</th>
+                        <th class="center aligned stat">2nd Bans</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -184,17 +173,191 @@
                 </div>
               </div>
             </div>
-            <div class="ui four wide column">
+            <div class="ui six wide column">
               <div class="ui inverted segment" id="team-detail-stats">
                 <div class="ui top attached label">Detailed Stats</div>
-                <div class="ui two inverted statistics">
+                <div class="ui four inverted small statistics">
                   <div class="statistic" name="team-time-to-10">
                     <div class="value">###</div>
                     <div class="label">Time To 10</div>
                   </div> 
+                  <div class="statistic" name="team-times-at-10">
+                    <div class="value">###</div>
+                    <div class="label">Times Reached 10</div>
+                  </div> 
                   <div class="statistic" name="team-time-to-20">
                     <div class="value">###</div>
                     <div class="label">Time To 20</div>
+                  </div> 
+                  <div class="statistic" name="team-times-at-20">
+                    <div class="value">###</div>
+                    <div class="label">Times Reached 20</div>
+                  </div> 
+                </div>
+                <div class="ui inverted horizontal divider">Mercenaries</div>
+                <div class="ui three inverted small statistics">
+                  <div class="statistic" name="merc-captures">
+                    <div class="value">###</div>
+                    <div class="label">Captures</div>
+                  </div> 
+                  <div class="statistic" name="merc-uptime">
+                    <div class="value">###</div>
+                    <div class="label">Uptime</div>
+                  </div> 
+                  <div class="statistic" name="merc-uptime-percent">
+                    <div class="value">###</div>
+                    <div class="label">Uptime %</div>
+                  </div> 
+                </div>
+                <div class="ui inverted horizontal divider">Structures</div>
+                <div class="ui two column grid">
+                  <div class="column">
+                    <div class="ui inverted horizontal divider">Forts</div>
+                    <div class="ui three horizontal inverted mini statistics">
+                      <div class="statistic" name="forts-destroyed">
+                        <div class="value">####</div>
+                        <div class="label">Destroyed</div>
+                      </div>
+                      <div class="statistic" name="first-fort">
+                        <div class="value">####</div>
+                        <div class="label">First Destroyed</div>
+                      </div>
+                      <div class="statistic" name="forts-lost">
+                        <div class="value">####</div>
+                        <div class="label">Lost</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="ui inverted horizontal divider">Keeps</div>
+                    <div class="ui three horizontal inverted mini statistics">
+                      <div class="statistic" name="keeps-destroyed">
+                        <div class="value">####</div>
+                        <div class="label">Destroyed</div>
+                      </div>
+                      <div class="statistic" name="first-keep">
+                        <div class="value">####</div>
+                        <div class="label">First Destroyed</div>
+                      </div>
+                      <div class="statistic" name="keeps-lost">
+                        <div class="value">####</div>
+                        <div class="label">Lost</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="ui inverted horizontal divider">Wells</div>
+                    <div class="ui three horizontal inverted mini statistics">
+                      <div class="statistic" name="wells-destroyed">
+                        <div class="value">####</div>
+                        <div class="label">Destroyed</div>
+                      </div>
+                      <div class="statistic" name="first-well">
+                        <div class="value">####</div>
+                        <div class="label">First Destroyed</div>
+                      </div>
+                      <div class="statistic" name="wells-lost">
+                        <div class="value">####</div>
+                        <div class="label">Lost</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="ui inverted horizontal divider">Towers</div>
+                    <div class="ui three horizontal inverted mini statistics">
+                      <div class="statistic" name="towers-destroyed">
+                        <div class="value">####</div>
+                        <div class="label">Destroyed</div>
+                      </div>
+                      <div class="statistic" name="first-tower">
+                        <div class="value">####</div>
+                        <div class="label">First Destroyed</div>
+                      </div>
+                      <div class="statistic" name="towers-lost">
+                        <div class="value">####</div>
+                        <div class="label">Lost</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ui eight wide column">
+              <div class="ui inverted segment" id="team-damage-stats">
+                <div class="ui top attached label">Avg. Role Stats</div>
+                <div class="ui four inverted tiny statistics">
+                  <div class="statistic" name="hero-damage">
+                    <div class="value">###</div>
+                    <div class="label">Hero Damage</div>
+                  </div> 
+                  <div class="statistic" name="siege-damage">
+                    <div class="value">###</div>
+                    <div class="label">Siege Damage</div>
+                  </div> 
+                  <div class="statistic" name="creep-damage">
+                    <div class="value">###</div>
+                    <div class="label">Creep Damage</div>
+                  </div> 
+                  <div class="statistic" name="minion-damage">
+                    <div class="value">###</div>
+                    <div class="label">Minion Damage</div>
+                  </div>
+                </div>
+                <div class="ui horizontal divider"></div>
+                <div class="ui four inverted tiny statistics">
+                  <div class="statistic" name="healing">
+                    <div class="value">###</div>
+                    <div class="label">Healing</div>
+                  </div> 
+                  <div class="statistic" name="self-healing">
+                    <div class="value">###</div>
+                    <div class="label">Self Healing</div>
+                  </div> 
+                  <div class="statistic" name="shields">
+                    <div class="value">###</div>
+                    <div class="label">Protection</div>
+                  </div> 
+                  <div class="statistic" name="damage-taken">
+                    <div class="value">###</div>
+                    <div class="label">Damage Taken</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ui eight wide column">
+              <div class="ui inverted segment" id="team-teamfight-stats">
+                <div class="ui top attached label">Avg. Team Fight Stats</div>
+                <div class="ui three inverted tiny statistics">
+                  <div class="statistic" name="hero-damage">
+                    <div class="value">###</div>
+                    <div class="label">Team Fight Hero Damage</div>
+                  </div> 
+                  <div class="statistic" name="damage-taken">
+                    <div class="value">###</div>
+                    <div class="label">Team Fight Damage Taken</div>
+                  </div> 
+                  <div class="statistic" name="healing">
+                    <div class="value">###</div>
+                    <div class="label">Team Fight Healing</div>
+                  </div>
+                </div>
+                <div class="ui horizontal divider"></div>
+                <div class="ui four inverted tiny statistics">
+                  <div class="statistic" name="cc">
+                    <div class="value">###</div>
+                    <div class="label">CC Time</div>
+                  </div> 
+                  <div class="statistic" name="root">
+                    <div class="value">###</div>
+                    <div class="label">Root Time</div>
+                  </div> 
+                  <div class="statistic" name="silence">
+                    <div class="value">###</div>
+                    <div class="label">Silence Time</div>
+                  </div> 
+                  <div class="statistic" name="stun">
+                    <div class="value">###</div>
+                    <div class="label">Stun Time</div>
                   </div> 
                 </div>
               </div>
@@ -204,4 +367,44 @@
       </div>
     </div>
   </div>
+</template>
+
+<template id="team-hero-summary-row">
+  <tr>
+    <td>
+      <h3 class="ui image inverted header">
+        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui rounded image">
+        <div class="content">
+          {{heroName}}
+        </div>
+      </h3>
+    </td>
+    <td class="center aligned" data-sort-value="{{value.winPercent}}">{{winPercent}}</td>
+    <td class="center aligned" data-sort-value="{{value.pickPercent}}">{{pickPercent}}</td>
+    <td class="center aligned" data-sort-value="{{value.games}}">{{games}}</td>
+    <td class="center aligned" data-sort-value="{{value.Takedowns}}">{{Takedowns}}</td>
+    <td class="center aligned" data-sort-value="{{value.Deaths}}">{{Deaths}}</td>
+    <td class="center aligned" data-sort-value="{{value.KDA}}">{{KDA}}</td>
+    <td class="center aligned" data-sort-value="{{value.TimeSpentDead}}">{{TimeSpentDead}}</td>
+    <td class="center aligned" data-sort-value="{{value.timeDeadPct}}">{{timeDeadPct}}</td>
+  </tr>
+</template>
+
+<template id="team-hero-ban-row">
+  <tr>
+    <td>
+      <h3 class="ui image inverted header">
+        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui rounded image">
+        <div class="content">
+          {{heroName}}
+        </div>
+      </h3>
+    </td>
+    <td class="center aligned" data-sort-value="{{value.banPercent}}">{{banPercent}}</td>
+    <td class="center aligned" data-sort-value="{{bans}}">{{bans}}</td>
+    <td class="center aligned" data-sort-value="{{value.ban1Percent}}">{{ban1Percent}}</td>
+    <td class="center aligned" data-sort-value="{{ban1}}">{{ban1}}</td>
+    <td class="center aligned" data-sort-value="{{value.ban2Percent}}">{{ban2Percent}}</td>
+    <td class="center aligned" data-sort-value="{{ban2}}">{{ban2}}</td>
+  </tr>
 </template>
