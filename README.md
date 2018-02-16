@@ -15,7 +15,7 @@ Folders will be moved at will, breaking changes will probably be in every commit
   * XP Contribution and Soak graphs
   * As detailed as possible timeline with takedowns, levels, level advantage, objectives, merc captures, and merc unit lifespan listed
   * Chat and Taunt log (including bsteps)
-  * [Planned] Team statistics including structures destroyed, merc captures, merc uptime, total damage/healing per team
+  * Team statistics including structures destroyed, merc captures, merc uptime, total damage/healing per team
 
 * Individual Stats
   * Hero Win Rate, KDA, MVP, and Award stats
@@ -34,11 +34,11 @@ Folders will be moved at will, breaking changes will probably be in every commit
 * Collection Statistics
   * Overall hero win/pick/ban/popularity rates
   * Overall map win rates
-  * Player Rankings (per hero and overall)
-  * [Planned] Teams
-    * [Planned] Assign two or more players to a team to track statistics for matches where those players are present
-    * [Planned] Teams can have an arbitrary number of players on them
-    * [Planned] Team statistics page listing the combined individual stats for the team and additional team statistics from the match summary
+  * Player Stats List (warning: performance impact if using large database)
+  * Teams
+    * Assign two or more players to a team to track statistics for matches where those players are present
+    * Teams can have an arbitrary number of players on them
+    * Team statistics page including pick/ban stats
     * [Planned] Team rankings based on overall team statistics
 
 * [Planned] League Tracking (Collections)
@@ -50,7 +50,7 @@ Folders will be moved at will, breaking changes will probably be in every commit
   * [Planned] HotsAPI and HotsLogs uploader
 
 ## Setup
-External Requirements:
+Development Requirements:
 * Node
 * Python 2 in your PATH
 * Don't forget to initialize the submodules
