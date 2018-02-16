@@ -39,6 +39,8 @@ function initTeamsPage() {
   $('#team-detail-body th.stat').data('sortBy', function(th, td, tablesort) {
     return parseFloat(td.text());
   });
+
+  $('#teams-submenu .item').tab();
 }
 
 function updateTeamsFilter(hero, map) {

@@ -470,6 +470,7 @@ class Database {
             taunts: { count: 0, takedowns: 0, deaths: 0 },
             voiceLines: { count: 0, takedowns: 0, deaths: 0 }
           },
+          heroes: { },
           totalTime: 0,
           votes: 0
         }
@@ -478,6 +479,10 @@ class Database {
       playerDetailStats[match.ToonHandle].games += 1;
       playerDetailStats[match.ToonHandle].totalTime += match.length;
       playerDetailStats[match.ToonHandle].votes += match.votes;
+
+      if (!(match.hero in playerDetailStats[match.ToonHandle].heroes))
+        playerDetailStats[match.ToonHandle].heroes[match.hero] = 0;
+      playerDetailStats[match.ToonHandle].heroes[match.hero] += 1;
 
       for (let s in statList) {
         let statName = statList[s];
