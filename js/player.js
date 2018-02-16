@@ -420,8 +420,6 @@ function processPlayerData(err, docs) {
   renderPlayerSummary();
   renderPlayerHeroDetail();
   renderProgression();
-
-  delete playerDetailStats;
 }
 
 // callback for hero select menu
@@ -432,7 +430,6 @@ function showHeroDetails(value, text, $selectedItem) {
       renderAllHeroSummary();
       renderPlayerSummary();
       renderProgression();
-      delete playerDetailStats;
     });
   }
   else {
@@ -446,7 +443,6 @@ function showHeroDetails(value, text, $selectedItem) {
       renderHeroTalents(value);
       renderPlayerSummary();
       renderProgression();
-      delete playerDetailStats;
     });
   }
 
