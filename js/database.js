@@ -88,7 +88,7 @@ class Database {
   }
 
   changeTeamName(id, name, callback) {
-    this._db.settings.update({ _id: id} , { name }, {}, callback);
+    this._db.settings.update({ _id: id} , { $set : { name: name } }, {}, callback);
   }
 
   updateTeamPlayers(id, players, callback) {
@@ -705,8 +705,8 @@ class Database {
         }
       }
 
-      for (let b in match.bans[t]) {
-        try {
+      try {
+        for (let b in match.bans[t]) {
           // typically this means they didn't ban
           if (match.bans[t][b].hero === '') {
             continue;
@@ -729,9 +729,10 @@ class Database {
             data.heroes[hero].second += 1;
           }
         }
-        catch (e) {
-          console.log(e);
-        }
+      }
+      catch (e) {
+        // usually thrown for quick match. if picks aren't being recorded, uncomment this.
+        //console.log(e);
       }
 
       // stat aggregation

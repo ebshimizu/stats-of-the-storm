@@ -59,10 +59,13 @@ function initTeamsPage() {
     }
   });
 
-  $('#team-delete-user').modal({
+  $('#team-confirm-action-user').modal({
     closable: false
   });
   $('#team-add-user').modal({
+    closable: false
+  });
+  $('#team-text-input').modal({
     closable: false
   });
   $('#team-add-player-button').click(addPlayerToTeam);
@@ -115,6 +118,9 @@ function updateTeamData(value, text, $elem) {
     if (team.players.length <= 5) {
       // need to match length of players array
       query.$where = function() {
+        if (player.length === 0)
+          return false;
+
         let boundWhere = oldWhere.bind(this);
         let t0 = this.teams[0].ids;
         let count = 0;
@@ -142,6 +148,9 @@ function updateTeamData(value, text, $elem) {
     else {
       // basically we need a match 5 of the players and then we're ok 
       query.$where = function() {
+        if (player.length === 0)
+          return false;
+
         let boundWhere = oldWhere.bind(this);
         let t0 = this.teams[0].ids;
         let count = 0;
@@ -271,67 +280,73 @@ function loadTeamData(team, matches, heroData) {
   }
 
   // other stats
-  $('#team-summary-stats .statistic[name="overallWin"] .value').text((teamStats.wins / teamStats.totalMatches * 100).toFixed(2) + '%');
-  $('#team-summary-stats .statistic[name="overallGames"] .value').text(teamStats.totalMatches);
-  $('#team-summary-stats .statistic[name="overallTD"] .value').text(teamStats.takedowns);
-  $('#team-summary-stats .statistic[name="overallDeaths"] .value').text(teamStats.deaths);
-  $('#team-summary-stats .statistic[name="overallKDA"] .value').text((teamStats.takedowns / Math.max(1, teamStats.deaths)).toFixed(2));
-  $('#team-summary-stats .statistic[name="timeDead"] .value').text(formatSeconds(teamStats.stats.average.avgTimeSpentDead));
-  $('#team-summary-stats .statistic[name="pctTimeDead"] .value').text((teamStats.stats.average.timeDeadPct * 100).toFixed(2) + '%');
-  $('#team-summary-stats .statistic[name="heroesPlayed"] .value').text(picked);
-  $('#team-summary-stats .statistic[name="heroesPct"] .value').text((picked / Heroes.heroCount * 100).toFixed(2) + '%');
-  $('#team-summary-stats .statistic[name="avgLength"] .value').text(formatSeconds(teamStats.avgLength));
-  $('#team-summary-stats .statistic[name="PPK"] .value').text(teamStats.stats.average.PPK.toFixed(2));
+  try {
+    $('#team-summary-stats .statistic[name="overallWin"] .value').text((teamStats.wins / teamStats.totalMatches * 100).toFixed(2) + '%');
+    $('#team-summary-stats .statistic[name="overallGames"] .value').text(teamStats.totalMatches);
+    $('#team-summary-stats .statistic[name="overallTD"] .value').text(teamStats.takedowns);
+    $('#team-summary-stats .statistic[name="overallDeaths"] .value').text(teamStats.deaths);
+    $('#team-summary-stats .statistic[name="overallKDA"] .value').text((teamStats.takedowns / Math.max(1, teamStats.deaths)).toFixed(2));
+    $('#team-summary-stats .statistic[name="timeDead"] .value').text(formatSeconds(teamStats.stats.average.avgTimeSpentDead));
+    $('#team-summary-stats .statistic[name="pctTimeDead"] .value').text((teamStats.stats.average.timeDeadPct * 100).toFixed(2) + '%');
+    $('#team-summary-stats .statistic[name="heroesPlayed"] .value').text(picked);
+    $('#team-summary-stats .statistic[name="heroesPct"] .value').text((picked / Heroes.heroCount * 100).toFixed(2) + '%');
+    $('#team-summary-stats .statistic[name="avgLength"] .value').text(formatSeconds(teamStats.avgLength));
+    $('#team-summary-stats .statistic[name="PPK"] .value').text(teamStats.stats.average.PPK.toFixed(2));
 
-  $('#team-detail-stats .statistic[name="team-time-to-10"] .value').text(formatSeconds(teamStats.stats.average.timeTo10));
-  $('#team-detail-stats .statistic[name="team-times-at-10"] .value').text(teamStats.level10Games);
-  $('#team-detail-stats .statistic[name="team-time-to-20"] .value').text(formatSeconds(teamStats.stats.average.timeTo20));
-  $('#team-detail-stats .statistic[name="team-times-at-20"] .value').text(teamStats.level20Games);
+    $('#team-detail-stats .statistic[name="team-time-to-10"] .value').text(formatSeconds(teamStats.stats.average.timeTo10));
+    $('#team-detail-stats .statistic[name="team-times-at-10"] .value').text(teamStats.level10Games);
+    $('#team-detail-stats .statistic[name="team-time-to-20"] .value').text(formatSeconds(teamStats.stats.average.timeTo20));
+    $('#team-detail-stats .statistic[name="team-times-at-20"] .value').text(teamStats.level20Games);
 
-  $('#team-detail-stats .statistic[name="merc-captures"] .value').text(teamStats.stats.average.mercCaptures.toFixed(2));
-  $('#team-detail-stats .statistic[name="merc-uptime"] .value').text(formatSeconds(teamStats.stats.average.mercUptime));
-  $('#team-detail-stats .statistic[name="merc-uptime-percent"] .value').text((teamStats.stats.average.mercUptimePercent * 100).toFixed(2) + '%');
+    $('#team-detail-stats .statistic[name="merc-captures"] .value').text(teamStats.stats.average.mercCaptures.toFixed(2));
+    $('#team-detail-stats .statistic[name="merc-uptime"] .value').text(formatSeconds(teamStats.stats.average.mercUptime));
+    $('#team-detail-stats .statistic[name="merc-uptime-percent"] .value').text((teamStats.stats.average.mercUptimePercent * 100).toFixed(2) + '%');
 
-  let elem = $('#team-detail-stats');
-  updateTeamStat(elem, 'forts-destroyed', teamStats.structures.Fort.destroyed);
-  updateTeamStat(elem, 'forts-lost', teamStats.structures.Fort.lost);
-  updateTeamStat(elem, 'first-fort', teamStats.structures.Fort.destroyed === 0 ? 'N/A' : formatSeconds(teamStats.structures.Fort.first / teamStats.structures.Fort.gamesWithFirst));
+    let elem = $('#team-detail-stats');
+    updateTeamStat(elem, 'forts-destroyed', teamStats.structures.Fort.destroyed);
+    updateTeamStat(elem, 'forts-lost', teamStats.structures.Fort.lost);
+    updateTeamStat(elem, 'first-fort', teamStats.structures.Fort.destroyed === 0 ? 'N/A' : formatSeconds(teamStats.structures.Fort.first / teamStats.structures.Fort.gamesWithFirst));
 
-  updateTeamStat(elem, 'keeps-destroyed', teamStats.structures.Keep.destroyed);
-  updateTeamStat(elem, 'keeps-lost', teamStats.structures.Keep.lost);
-  updateTeamStat(elem, 'first-keep', teamStats.structures.Keep.destroyed === 0 ? 'N/A' : formatSeconds(teamStats.structures.Keep.first / teamStats.structures.Keep.gamesWithFirst));
+    updateTeamStat(elem, 'keeps-destroyed', teamStats.structures.Keep.destroyed);
+    updateTeamStat(elem, 'keeps-lost', teamStats.structures.Keep.lost);
+    updateTeamStat(elem, 'first-keep', teamStats.structures.Keep.destroyed === 0 ? 'N/A' : formatSeconds(teamStats.structures.Keep.first / teamStats.structures.Keep.gamesWithFirst));
 
-  updateTeamStat(elem, 'wells-destroyed', teamStats.structures['Fort Well'].destroyed + teamStats.structures['Keep Well'].destroyed);
-  updateTeamStat(elem, 'wells-lost', teamStats.structures['Fort Well'].lost + teamStats.structures['Keep Well'].lost);
+    updateTeamStat(elem, 'wells-destroyed', teamStats.structures['Fort Well'].destroyed + teamStats.structures['Keep Well'].destroyed);
+    updateTeamStat(elem, 'wells-lost', teamStats.structures['Fort Well'].lost + teamStats.structures['Keep Well'].lost);
 
-  let hideWellTime = (teamStats.structures['Fort Well'].destroyed + teamStats.structures['Keep Well'].destroyed) === 0
-  updateTeamStat(elem, 'first-well', hideWellTime ? 'N/A' : formatSeconds(Math.min(teamStats.structures['Fort Well'].first / teamStats.structures['Fort Well'].gamesWithFirst, teamStats.structures['Keep Well'].first / teamStats.structures['Keep Well'].gamesWithFirst)));
+    let hideWellTime = (teamStats.structures['Fort Well'].destroyed + teamStats.structures['Keep Well'].destroyed) === 0
+    updateTeamStat(elem, 'first-well', hideWellTime ? 'N/A' : formatSeconds(Math.min(teamStats.structures['Fort Well'].first / teamStats.structures['Fort Well'].gamesWithFirst, teamStats.structures['Keep Well'].first / teamStats.structures['Keep Well'].gamesWithFirst)));
 
-  updateTeamStat(elem, 'towers-destroyed', teamStats.structures['Fort Tower'].destroyed + teamStats.structures['Keep Tower'].destroyed);
-  updateTeamStat(elem, 'towers-lost', teamStats.structures['Fort Tower'].lost + teamStats.structures['Keep Tower'].lost);
+    updateTeamStat(elem, 'towers-destroyed', teamStats.structures['Fort Tower'].destroyed + teamStats.structures['Keep Tower'].destroyed);
+    updateTeamStat(elem, 'towers-lost', teamStats.structures['Fort Tower'].lost + teamStats.structures['Keep Tower'].lost);
 
-  let hideTowerTime = (teamStats.structures['Fort Tower'].destroyed + teamStats.structures['Keep Tower'].destroyed) === 0;
-  updateTeamStat(elem, 'first-tower', hideTowerTime ? 'N/A' : formatSeconds(Math.min(teamStats.structures['Fort Tower'].first / teamStats.structures['Fort Tower'].gamesWithFirst, teamStats.structures['Keep Tower'].first / teamStats.structures['Keep Tower'].gamesWithFirst)));
+    let hideTowerTime = (teamStats.structures['Fort Tower'].destroyed + teamStats.structures['Keep Tower'].destroyed) === 0;
+    updateTeamStat(elem, 'first-tower', hideTowerTime ? 'N/A' : formatSeconds(Math.min(teamStats.structures['Fort Tower'].first / teamStats.structures['Fort Tower'].gamesWithFirst, teamStats.structures['Keep Tower'].first / teamStats.structures['Keep Tower'].gamesWithFirst)));
 
-  elem = $('#team-damage-stats');
-  updateTeamStat(elem, 'hero-damage', teamStats.stats.average.HeroDamage.toFixed(0));
-  updateTeamStat(elem, 'siege-damage', teamStats.stats.average.SiegeDamage.toFixed(0));
-  updateTeamStat(elem, 'creep-damage', teamStats.stats.average.CreepDamage.toFixed(0));
-  updateTeamStat(elem, 'minion-damage', teamStats.stats.average.MinionDamage.toFixed(0));
-  updateTeamStat(elem, 'healing', teamStats.stats.average.Healing.toFixed(0));
-  updateTeamStat(elem, 'self-healing', teamStats.stats.average.SelfHealing.toFixed(0));
-  updateTeamStat(elem, 'shields', teamStats.stats.average.ProtectionGivenToAllies.toFixed(0));
-  updateTeamStat(elem, 'damage-taken', teamStats.stats.average.DamageTaken.toFixed(0));
+    elem = $('#team-damage-stats');
+    updateTeamStat(elem, 'hero-damage', teamStats.stats.average.HeroDamage.toFixed(0));
+    updateTeamStat(elem, 'siege-damage', teamStats.stats.average.SiegeDamage.toFixed(0));
+    updateTeamStat(elem, 'creep-damage', teamStats.stats.average.CreepDamage.toFixed(0));
+    updateTeamStat(elem, 'minion-damage', teamStats.stats.average.MinionDamage.toFixed(0));
+    updateTeamStat(elem, 'healing', teamStats.stats.average.Healing.toFixed(0));
+    updateTeamStat(elem, 'self-healing', teamStats.stats.average.SelfHealing.toFixed(0));
+    updateTeamStat(elem, 'shields', teamStats.stats.average.ProtectionGivenToAllies.toFixed(0));
+    updateTeamStat(elem, 'damage-taken', teamStats.stats.average.DamageTaken.toFixed(0));
 
-  elem = $('#team-teamfight-stats');
-  updateTeamStat(elem, 'hero-damage', teamStats.stats.average.TeamfightHeroDamage.toFixed(0));
-  updateTeamStat(elem, 'damage-taken', teamStats.stats.average.TeamfightDamageTaken.toFixed(0));
-  updateTeamStat(elem, 'healing', teamStats.stats.average.TeamfightHealingDone.toFixed(0));
-  updateTeamStat(elem, 'cc', formatSeconds(teamStats.stats.average.TimeCCdEnemyHeroes));
-  updateTeamStat(elem, 'root', formatSeconds(teamStats.stats.average.TimeRootingEnemyHeroes));
-  updateTeamStat(elem, 'silence', formatSeconds(teamStats.stats.average.TimeSilencingEnemyHeroes));
-  updateTeamStat(elem, 'stun', formatSeconds(teamStats.stats.average.TimeStunningEnemyHeroes));
-
+    elem = $('#team-teamfight-stats');
+    updateTeamStat(elem, 'hero-damage', teamStats.stats.average.TeamfightHeroDamage.toFixed(0));
+    updateTeamStat(elem, 'damage-taken', teamStats.stats.average.TeamfightDamageTaken.toFixed(0));
+    updateTeamStat(elem, 'healing', teamStats.stats.average.TeamfightHealingDone.toFixed(0));
+    updateTeamStat(elem, 'cc', formatSeconds(teamStats.stats.average.TimeCCdEnemyHeroes));
+    updateTeamStat(elem, 'root', formatSeconds(teamStats.stats.average.TimeRootingEnemyHeroes));
+    updateTeamStat(elem, 'silence', formatSeconds(teamStats.stats.average.TimeSilencingEnemyHeroes));
+    updateTeamStat(elem, 'stun', formatSeconds(teamStats.stats.average.TimeStunningEnemyHeroes));
+  }
+  catch (e) {
+    // basically if a team has no people this will likely throw an exception.
+    // instead of actually handling it, i'm just going to ignore it because a team with 0 people
+    // is useless and you should just go to the roster and add people.
+  }
   loadTeamRoster(playerStats);
 
   $('#team-detail-body table').floatThead('reflow');
@@ -374,7 +389,7 @@ function loadTeamRoster(playerStats) {
       });
 
       for (let i = 0; i < 3; i++) {
-        if (i > heroes.length)
+        if (i >= heroes.length)
           break;
         let img = '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(heroes[i].hero) + '">';
         $('#team-roster-stats .top-three[player-id="' + id + '"] .images').append(img);
@@ -406,10 +421,10 @@ function loadTeamRoster(playerStats) {
 // handles individual player action stuff
 function handleTeamPlayerCallback(action, id, name) {
   if (action === 'remove') {
-    $('#team-delete-user .player-delete-id').text(name);
-    $('#team-delete-user .team-delete-id').text(currentTeam.name);
+    $('#team-confirm-action-user .header').text('Confirm Delete Player');
+    $('#team-confirm-action-user .action').text('remove ' + name + ' from ' + currentTeam.name);
 
-    $('#team-delete-user').modal({
+    $('#team-confirm-action-user').modal({
       onApprove: function() {
         DB.removePlayerFromTeam(currentTeam._id, id, function() {
           updateTeamData($('#team-set-team').dropdown('get value'), $('#team-set-team').dropdown('get text'));
@@ -443,5 +458,57 @@ function addPlayerToTeam() {
 }
 
 function handleTeamMenuCallback(action) {
+  if (action === "new") {
+    $('#team-text-input .header').text('Create New Team');
+    $('#team-text-input .input .label').text('Team Name');
+    $('#team-text-input input').val('');
 
+    $('#team-text-input').modal({
+      onApprove: function() {
+        let name = $('#team-text-input input').val();
+        DB.addTeam([], name, function() {
+          populateTeamMenu($('#team-set-team'));
+          $('#team-set-team').dropdown('refresh');
+        });
+      }
+    }).
+    modal('show');
+  }
+  else if (action === "rename") {
+    if (currentTeam) {
+      $('#team-text-input .header').text('Rename ' + currentTeam.name);
+      $('#team-text-input .input .label').text('Team Name');
+      $('#team-text-input input').val('');
+
+      $('#team-text-input').modal({
+        onApprove: function() {
+          let name = $('#team-text-input input').val();
+          DB.changeTeamName(currentTeam._id, name, function() {
+            populateTeamMenu($('#team-set-team'));
+            $('#team-set-team').dropdown('refresh');
+            $('#teams-page-header .team-name').text(name);
+            $('#team-set-team').dropdown('set text', name);
+          });
+        }
+      }).
+      modal('show');
+    }
+  }
+  else if (action === "delete") {
+    $('#team-confirm-action-user .header').text('Delete ' + currentTeam.name);
+    $('#team-confirm-action-user .action').text('delete the team ' + currentTeam.name);
+
+    $('#team-confirm-action-user').modal({
+      onApprove: function() {
+        DB.deleteTeam(currentTeam._id, function() {
+          currentTeam = null;
+          populateTeamMenu($('#team-set-team'));
+          $('#team-set-team').dropdown('refresh');
+          $('#teams-page-header .team-name').text('');
+          $('#team-set-team').dropdown('set text', '');
+        })
+      }
+    }).
+    modal('show');
+  }
 }
