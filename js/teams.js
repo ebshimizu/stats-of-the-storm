@@ -2,6 +2,7 @@ var teamsHeroDataFilter = {};
 var teamsMapDataFilter = {};
 var teamHeroSummaryRowTemplate;
 var teamBanSummaryRowTemplate;
+var teamRosterRowTemplate;
 
 function initTeamsPage() {
   $('#team-set-team').dropdown({
@@ -12,6 +13,7 @@ function initTeamsPage() {
 
   teamHeroSummaryRowTemplate = Handlebars.compile(getTemplate('teams', '#team-hero-summary-row').find('tr')[0].outerHTML);
   teamBanSummaryRowTemplate = Handlebars.compile(getTemplate('teams', '#team-hero-ban-row').find('tr')[0].outerHTML);
+  teamRosterRowTemplate = Handlebars.compile(getTemplate('teams', '#team-roster-row').find('tr')[0].outerHTML);
 
   // filter popup
   let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
@@ -37,10 +39,13 @@ function initTeamsPage() {
   });
 
   $('#team-detail-body th.stat').data('sortBy', function(th, td, tablesort) {
-    return parseFloat(td.text());
+    return parseFloat(td.attr('data-sort-value'));
   });
 
   $('#teams-submenu .item').tab();
+  $('#teams-submenu .item').click(function() {
+    $('#team-detail-body table').floatThead('reflow');
+  });
 }
 
 function updateTeamsFilter(hero, map) {
@@ -150,7 +155,7 @@ function updateTeamData(value, text, $elem) {
       DB.getHeroDataForMatches(matchIDs, query2, function(err, heroData) {
         // and now finally load the team data
         loadTeamData(team, matches, heroData);
-      })
+      });
     });
   });
 }
@@ -300,5 +305,73 @@ function loadTeamData(team, matches, heroData) {
   updateTeamStat(elem, 'root', formatSeconds(teamStats.stats.average.TimeRootingEnemyHeroes));
   updateTeamStat(elem, 'silence', formatSeconds(teamStats.stats.average.TimeSilencingEnemyHeroes));
   updateTeamStat(elem, 'stun', formatSeconds(teamStats.stats.average.TimeStunningEnemyHeroes));
+
+  loadTeamRoster(playerStats);
+
   $('#team-detail-body table').floatThead('reflow');
+}
+
+function loadTeamRoster(playerStats) {
+  $('#team-roster-stats tbody').html('');
+  for (let id in playerStats) {
+    let player = playerStats[id];
+
+    let context = {};
+    context.name = player.name;
+    context.id = id;
+    context.value = player.averages;
+    context.value.totalKDA = player.totalKDA;
+
+    for (let v in context.value) {
+      context[v] = formatStat(v, context.value[v], true);
+    }
+    context.value.games = player.games;
+    context.games = player.games;
+
+    $('#team-roster-stats tbody').append(teamRosterRowTemplate(context));
+
+    // fill in the most played heroes
+    let heroes = [];
+    for (let h in player.heroes) {
+      heroes.push({hero: h, games: player.heroes[h]});
+    }
+    heroes.sort(function(a, b) {
+      if (a.games < b.games)
+        return 1;
+      else if (a.games > b.games)
+        return -1;
+      
+      return 0;
+    });
+
+    for (let i = 0; i < 3; i++) {
+      if (i > heroes.length)
+        break;
+      let img = '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(heroes[i].hero) + '">';
+      $('#team-roster-stats .top-three[player-id="' + id + '"] .images').append(img);
+    }
+  }
+
+  $('#team-roster-stats .dropdown.button').dropdown({
+    onChange: function(value, text, $elem) {
+      handleTeamPlayerCallback(value, $elem.attr('player-id'));
+    }
+  });
+
+  $('#team-roster-stats tbody').append('<tr><td colspan="18"><div class="ui labeled icon button add-player"><i class="add user icon"></i>Add Player</div></td></tr>');
+  $('#team-roster-stats tbody .add-player.button').click(addPlayerToTeam);
+}
+
+// handles individual player action stuff
+function handleTeamPlayerCallback(action, id) {
+  if (action === 'remove') {
+
+  }
+  else if (action === 'profile') {
+
+  }
+}
+
+function addPlayerToTeam() {
+  // brings up a modal to add players to the currently selected team
 }

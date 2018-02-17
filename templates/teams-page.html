@@ -365,7 +365,40 @@
         </div>
       </div>
       <div class="ui active tab" data-tab="team-roster-stats" id="team-roster-stats">
+        <div class="team-page-wrapper">
+          <div class="ui inverted segment">
+            <div class="ui top attached label">Avg. Roster Stats</div>
+            <div class="table-wrapper">
+              <table class="ui sortable inverted selectable table">
+                <thead>
+                  <tr>
+                    <th>Player</th>
+                    <th class="center aligned">Most Played</th>
+                    <th class="center aligned stat">Games</th>
+                    <th class="center aligned stat">KDA</th>
+                    <th class="center aligned stat">TD</th>
+                    <th class="center aligned stat">KP</th>
+                    <th class="center aligned stat">Deaths</th>
+                    <th class="center aligned stat">Gank Deaths</th>
+                    <th class="center aligned stat">Time Dead</th>
+                    <th class="center aligned stat">% Dead</th>
+                    <th class="center aligned stat">Hero Damage</th>
+                    <th class="center aligned stat">Siege Damage</th>
+                    <th class="center aligned stat">Minion Damage</th>
+                    <th class="center aligned stat">Creep Damage</th>
+                    <th class="center aligned stat">Healing</th>
+                    <th class="center aligned stat">Clutch Heals</th>
+                    <th class="center aligned stat">Damage Taken</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
 
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -408,5 +441,38 @@
     <td class="center aligned" data-sort-value="{{ban1}}">{{ban1}}</td>
     <td class="center aligned" data-sort-value="{{value.ban2Percent}}">{{ban2Percent}}</td>
     <td class="center aligned" data-sort-value="{{ban2}}">{{ban2}}</td>
+  </tr>
+</template>
+
+<template id="team-roster-row">
+  <tr>
+    <td><h3 class="ui inverted header">{{name}}</h3></td>
+    <td class="center aligned top-three" player-id="{{id}}">
+      <div class="ui mini rounded images"></div>
+    </td>
+    <td class="center aligned" data-sort-value="{{value.games}}">{{games}}</td>
+    <td class="center aligned" data-sort-value="{{value.totalKDA}}">{{totalKDA}}</td>
+    <td class="center aligned" data-sort-value="{{value.Takedowns}}">{{Takedowns}}</td>
+    <td class="center aligned" data-sort-value="{{value.KillParticipation}}">{{KillParticipation}}</td>
+    <td class="center aligned" data-sort-value="{{value.Deaths}}">{{Deaths}}</td>
+    <td class="center aligned" data-sort-value="{{value.OutnumberedDeaths}}">{{OutnumberedDeaths}}</td>
+    <td class="center aligned" data-sort-value="{{value.TimeSpentDead}}">{{TimeSpentDead}}</td>
+    <td class="center aligned" data-sort-value="{{value.timeDeadPct}}">{{timeDeadPct}}</td>
+    <td class="center aligned" data-sort-value="{{value.HeroDamage}}">{{HeroDamage}}</td>
+    <td class="center aligned" data-sort-value="{{value.SiegeDamage}}">{{SiegeDamage}}</td>
+    <td class="center aligned" data-sort-value="{{value.MinionDamage}}">{{MinionDamage}}</td>
+    <td class="center aligned" data-sort-value="{{value.CreepDamage}}">{{CreepDamage}}</td>
+    <td class="center aligned" data-sort-value="{{value.Healing}}">{{Healing}}</td>
+    <td class="center aligned" data-sort-value="{{value.ClutchHealsPerformed}}">{{ClutchHealsPerformed}}</td>
+    <td class="center aligned" data-sort-value="{{value.DamageTaken}}">{{DamageTaken}}</td>
+    <td>
+      <div class="ui mini icon floating dropdown button" player-id="{{id}}">
+        <i class="setting icon"></i>
+        <div class="menu">
+          <div class="item" player-id="{{id}}" data-value="remove">Remove From Team</div>
+          <div class="item" player-id="{{id}}" data-value="profile">See Profile</div>
+        </div>
+      </div>
+    </td>
   </tr>
 </template>

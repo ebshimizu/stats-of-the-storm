@@ -24,6 +24,7 @@
   font-size: 12pt;
 }
 
+#team-roster-stats tbody td,
 #team-hero-summary tbody td {
   font-size: 13pt;
 }
