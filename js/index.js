@@ -420,5 +420,7 @@ function populateTeamMenu(elem) {
     for (let d in docs) {
       elem.find('.menu').append('<div class="item" data-value="' + docs[d]._id + '">' + docs[d].name + '</div>');
     }
+
+    elem.dropdown('refresh');
   });
 }

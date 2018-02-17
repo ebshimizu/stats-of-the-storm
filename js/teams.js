@@ -9,8 +9,7 @@ function initTeamsPage() {
   $('#team-set-team').dropdown({
     onChange: updateTeamData
   });
-  populateTeamMenu($('#team-set-team'));
-  $('#team-set-team').dropdown('refresh');
+  populateTeamMenu($('.team-menu'));
 
   $('#team-add-player-menu').dropdown({
     action: 'activate',
@@ -459,7 +458,7 @@ function addPlayerToTeam() {
 
 function handleTeamMenuCallback(action) {
   if (action === "new") {
-    $('#team-text-input .header').text('Create New Team');
+    $('#team-text-input .header').text('Create New Team')
     $('#team-text-input .input .label').text('Team Name');
     $('#team-text-input input').val('');
 
@@ -467,7 +466,7 @@ function handleTeamMenuCallback(action) {
       onApprove: function() {
         let name = $('#team-text-input input').val();
         DB.addTeam([], name, function() {
-          populateTeamMenu($('#team-set-team'));
+          populateTeamMenu($('.team-menu'));
           $('#team-set-team').dropdown('refresh');
         });
       }
@@ -484,7 +483,7 @@ function handleTeamMenuCallback(action) {
         onApprove: function() {
           let name = $('#team-text-input input').val();
           DB.changeTeamName(currentTeam._id, name, function() {
-            populateTeamMenu($('#team-set-team'));
+            populateTeamMenu($('.team-menu'));
             $('#team-set-team').dropdown('refresh');
             $('#teams-page-header .team-name').text(name);
             $('#team-set-team').dropdown('set text', name);
@@ -502,7 +501,7 @@ function handleTeamMenuCallback(action) {
       onApprove: function() {
         DB.deleteTeam(currentTeam._id, function() {
           currentTeam = null;
-          populateTeamMenu($('#team-set-team'));
+          populateTeamMenu($('.team-menu'));
           $('#team-set-team').dropdown('refresh');
           $('#teams-page-header .team-name').text('');
           $('#team-set-team').dropdown('set text', '');
