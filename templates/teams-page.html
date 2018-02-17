@@ -397,9 +397,36 @@
                 </tbody>
               </table>
             </div>
+          <div class="ui labeled icon button" id="team-add-player-button"><i class="add user icon"></i>Add Player</div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="ui modal" id="team-delete-user">
+    <div class="header">Delete User From Team</div>
+    <div class="content">
+      <p>Are you sure you want to remove <span class="player-delete-id"></span> from <span class="team-delete-id"></span>?</p>
+    </div>
+    <div class="actions">
+      <div class="ui green approve button">Yes</div>
+      <div class="ui red deny button">No</div>
+    </div>
+  </div>
+  <div class="ui modal" id="team-add-user">
+    <div class="header">Add User To <span class="team-name">Team</span></div>
+    <div class="content">
+      <div class="ui fluid search selection dropdown player-menu" id="team-add-player-menu">
+        <i class="dropdown icon"></i>
+        <span class="text">Player ID</span>
+        <div class="menu">
+
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui green approve button">Add</div>
+      <div class="ui red deny button">Cancel</div>
     </div>
   </div>
 </template>
@@ -469,8 +496,8 @@
       <div class="ui mini icon floating dropdown button" player-id="{{id}}">
         <i class="setting icon"></i>
         <div class="menu">
-          <div class="item" player-id="{{id}}" data-value="remove">Remove From Team</div>
-          <div class="item" player-id="{{id}}" data-value="profile">See Profile</div>
+          <div class="item" player-id="{{id}}" player-name="{{name}}" data-value="remove">Remove From Team</div>
+          <div class="item" player-id="{{id}}" player-name="{{name}}" data-value="profile">Profile</div>
         </div>
       </div>
     </td>

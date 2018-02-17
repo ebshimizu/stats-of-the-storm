@@ -374,6 +374,10 @@ function createDetailTableHeader() {
   }
 }
 
+function preloadPlayerID(id) {
+  $('#players-set-player').dropdown('set exactly', id);
+}
+
 function updatePlayerDetailID(value, text, $item) {
   // only do this if the player id actually changes
   if (playerDetailID === value)

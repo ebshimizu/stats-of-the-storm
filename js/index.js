@@ -222,10 +222,10 @@ function loadSections() {
   sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false};
   sections['hero-collection'] = {id: '#hero-collection-page-content', title: 'Heroe Statistics', showBack: false };
   sections['player-ranking'] = {id: '#player-ranking-page-content', title: 'Player Statistics', showBack: false };
-  sections.teams = {id: '#teams-page-content', title: 'Teams', showBack: false };
+  sections.teams = {id: '#teams-page-content', title: 'Teams', showBack: false, onShow: teamShowSection };
 
   // DEBUG: SHOWING SPECIFIC SECTION ON LOAD FOR TESTING
-  showSection('teams');
+  changeSection('teams');
 }
 
 // returns the template contained in an import
@@ -243,14 +243,14 @@ function createBGWindow() {
   bgWindow.loadURL(bgPath);
 }
 
-function changeSection(to) {
+function changeSection(to, overrideBack) {
   // if it's already being shown, do nothing
   if (!$(sections[to].id).hasClass('hidden'))
     return;
 
   // this should only trigger for the visible section
   // if the back button is visible, we should store a little history
-  if (sections[to].showBack) {
+  if (sections[to].showBack || overrideBack === true) {
     prevSections.push($('.is-page.visible').attr('section-name'));
   }
   else {
@@ -261,14 +261,20 @@ function changeSection(to) {
   for (let s in sections)
     hideSection(s);
 
-  showSection(to);
+  // ok wait also hide the menu cause that changes from section to section
+  $('#section-menu .section-submenu').addClass('is-hidden');
+
+  showSection(to, overrideBack);
+  if (sections[to].onShow) {
+    sections[to].onShow();
+  }
 }
 
-function showSection(name) {
+function showSection(name, overrideBack) {
   if ($(sections[name].id).hasClass('hidden'))
     $(sections[name].id).transition('fade right');
 
-  setMenuTitle(sections[name].title, sections[name].showBack);
+  setMenuTitle(sections[name].title, sections[name].showBack || overrideBack);
 }
 
 function hideSection(name) {

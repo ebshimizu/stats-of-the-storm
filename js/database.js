@@ -643,12 +643,13 @@ class Database {
       // determine what team we want
       let t;
       let count = 0;
+      let required = team.players.length > 5 ? 5 : team.players.length;
       for (let i in match.teams[0].ids) {
         if (team.players.indexOf(match.teams[0].ids[i]) >= 0)
           count += 1;
       }
 
-      if (count === 5)
+      if (count === required)
         t = 0;
       else {
         count = 0;
@@ -657,7 +658,7 @@ class Database {
             count += 1;
         }
 
-        if (count === 5)
+        if (count === required)
           t = 1;
         else
           continue;

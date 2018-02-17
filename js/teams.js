@@ -3,6 +3,7 @@ var teamsMapDataFilter = {};
 var teamHeroSummaryRowTemplate;
 var teamBanSummaryRowTemplate;
 var teamRosterRowTemplate;
+var currentTeam;
 
 function initTeamsPage() {
   $('#team-set-team').dropdown({
@@ -10,6 +11,11 @@ function initTeamsPage() {
   });
   populateTeamMenu($('#team-set-team'));
   $('#team-set-team').dropdown('refresh');
+
+  $('#team-add-player-menu').dropdown({
+    action: 'activate',
+    fullTextSearch: true
+  });
 
   teamHeroSummaryRowTemplate = Handlebars.compile(getTemplate('teams', '#team-hero-summary-row').find('tr')[0].outerHTML);
   teamBanSummaryRowTemplate = Handlebars.compile(getTemplate('teams', '#team-hero-ban-row').find('tr')[0].outerHTML);
@@ -46,6 +52,25 @@ function initTeamsPage() {
   $('#teams-submenu .item').click(function() {
     $('#team-detail-body table').floatThead('reflow');
   });
+
+  $('#team-edit-menu').dropdown({
+    onChange: function(value, text, $elem) {
+      handleTeamMenuCallback(value);
+    }
+  });
+
+  $('#team-delete-user').modal({
+    closable: false
+  });
+  $('#team-add-user').modal({
+    closable: false
+  });
+  $('#team-add-player-button').click(addPlayerToTeam);
+}
+
+function teamShowSection() {
+  // basically just expose the proper menu options here
+  $('#team-edit-menu').removeClass('is-hidden');
 }
 
 function updateTeamsFilter(hero, map) {
@@ -76,6 +101,7 @@ function updateTeamData(value, text, $elem) {
   DB.getTeam(value, function(err, team) {
     // get the match data
     let query = Object.assign({}, teamsMapDataFilter);
+    currentTeam = team;
 
     // im sure this will 100% murder performace but eh
     let oldWhere = function() { return true; };
@@ -313,65 +339,109 @@ function loadTeamData(team, matches, heroData) {
 
 function loadTeamRoster(playerStats) {
   $('#team-roster-stats tbody').html('');
-  for (let id in playerStats) {
-    let player = playerStats[id];
+  for (let p in currentTeam.players) {
+    let id = currentTeam.players[p];
 
-    let context = {};
-    context.name = player.name;
-    context.id = id;
-    context.value = player.averages;
-    context.value.totalKDA = player.totalKDA;
+    if (id in playerStats) {
+      let player = playerStats[id];
 
-    for (let v in context.value) {
-      context[v] = formatStat(v, context.value[v], true);
+      let context = {};
+      context.name = player.name;
+      context.id = id;
+      context.value = player.averages;
+      context.value.totalKDA = player.totalKDA;
+
+      for (let v in context.value) {
+        context[v] = formatStat(v, context.value[v], true);
+      }
+      context.value.games = player.games;
+      context.games = player.games;
+
+      $('#team-roster-stats tbody').append(teamRosterRowTemplate(context));
+
+      // fill in the most played heroes
+      let heroes = [];
+      for (let h in player.heroes) {
+        heroes.push({hero: h, games: player.heroes[h]});
+      }
+      heroes.sort(function(a, b) {
+        if (a.games < b.games)
+          return 1;
+        else if (a.games > b.games)
+          return -1;
+        
+        return 0;
+      });
+
+      for (let i = 0; i < 3; i++) {
+        if (i > heroes.length)
+          break;
+        let img = '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(heroes[i].hero) + '">';
+        $('#team-roster-stats .top-three[player-id="' + id + '"] .images').append(img);
+      }
     }
-    context.value.games = player.games;
-    context.games = player.games;
+    else {
+      DB.getPlayer(id, function(err, doc) {
+        let context = {};
+        context.name = doc[0].name;
+        context.id = doc[0]._id;
+        $('#team-roster-stats tbody').append(teamRosterRowTemplate(context));
 
-    $('#team-roster-stats tbody').append(teamRosterRowTemplate(context));
-
-    // fill in the most played heroes
-    let heroes = [];
-    for (let h in player.heroes) {
-      heroes.push({hero: h, games: player.heroes[h]});
-    }
-    heroes.sort(function(a, b) {
-      if (a.games < b.games)
-        return 1;
-      else if (a.games > b.games)
-        return -1;
-      
-      return 0;
-    });
-
-    for (let i = 0; i < 3; i++) {
-      if (i > heroes.length)
-        break;
-      let img = '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(heroes[i].hero) + '">';
-      $('#team-roster-stats .top-three[player-id="' + id + '"] .images').append(img);
+        $('#team-roster-stats .dropdown.button[player-id="' + doc[0]._id + '"]').dropdown({
+          onChange: function(value, text, $elem) {
+            handleTeamPlayerCallback(value, $elem.attr('player-id'), $elem.attr('player-name'));
+          }
+        });
+      });
     }
   }
 
   $('#team-roster-stats .dropdown.button').dropdown({
     onChange: function(value, text, $elem) {
-      handleTeamPlayerCallback(value, $elem.attr('player-id'));
+      handleTeamPlayerCallback(value, $elem.attr('player-id'), $elem.attr('player-name'));
     }
   });
-
-  $('#team-roster-stats tbody').append('<tr><td colspan="18"><div class="ui labeled icon button add-player"><i class="add user icon"></i>Add Player</div></td></tr>');
-  $('#team-roster-stats tbody .add-player.button').click(addPlayerToTeam);
 }
 
 // handles individual player action stuff
-function handleTeamPlayerCallback(action, id) {
+function handleTeamPlayerCallback(action, id, name) {
   if (action === 'remove') {
+    $('#team-delete-user .player-delete-id').text(name);
+    $('#team-delete-user .team-delete-id').text(currentTeam.name);
 
+    $('#team-delete-user').modal({
+      onApprove: function() {
+        DB.removePlayerFromTeam(currentTeam._id, id, function() {
+          updateTeamData($('#team-set-team').dropdown('get value'), $('#team-set-team').dropdown('get text'));
+        })
+      }
+    }).
+    modal('show');
   }
   else if (action === 'profile') {
-
+    // load and then immediately switch to player profile
+    preloadPlayerID(id);
+    changeSection('player', true);
   }
 }
 
 function addPlayerToTeam() {
   // brings up a modal to add players to the currently selected team
+  if (currentTeam) {
+    $('#team-add-user .team-name').text(currentTeam.name);
+
+    $('#team-add-user').modal({
+      onApprove: function() {
+        let id = $('#team-add-player-menu').dropdown('get value');
+        DB.addPlayerToTeam(currentTeam._id, id, function() {
+          updateTeamData($('#team-set-team').dropdown('get value'), $('#team-set-team').dropdown('get text'));
+        });
+      }
+    }).
+    modal('show');
+  }
+}
+
+function handleTeamMenuCallback(action) {
+
 }
