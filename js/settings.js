@@ -77,6 +77,10 @@ function initSettingsPage() {
   }
 }
 
+function showSettingsPage() {
+  $('#settings-page-content table').floatThead('reflow');
+}
+
 function setReplayFolder() {
   dialog.showOpenDialog({
     defaultPath: settings.get('replayPath'),
@@ -216,7 +220,13 @@ function parseReplaysAsync(replay) {
 function loadReplay(data) {
   console.log('Replay ' + data.idx + ' returned with status ' + data.status);
   if (data.status === Parser.ReplayStatus.OK) {
-    DB.insertReplay(data.match, data.players);
+    let collection = null;
+
+    if ($('#settings-collection-import').dropdown('get value') !== '') {
+      collection = $('#settings-collection-import').dropdown('get value');
+    }
+
+    DB.insertReplay(data.match, data.players, collection);
     $('tr[replay-id="' + listedReplays[data.idx].id + '"] .replay-status').
       text('Success').
       addClass('positive');

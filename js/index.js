@@ -225,7 +225,7 @@ function loadSections() {
   initTeamRankingPage();
 
   // register sections
-  sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false };
+  sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false, onShow: showSettingsPage };
   sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false, reset: resetMatchesPage, onShow: showMatchesPage };
   sections['match-detail'] = {id: '#match-detail-page-content', title: 'Match Details', showBack: true, onShow: matchDetailsShowSection };
   sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false, reset: resetPlayerPage};
@@ -454,6 +454,9 @@ function updateCollectionMenu() {
       $('#collection-switch-menu .menu').append(elem);
       $('.collection-menu .menu').append(elem);
     }
+
+    // uhhhhh yeah special case (probably bad but i'm doing it anyway)
+    $('#settings-collection-import .menu').prepend('<div class="item" data-value="">[No Collection]</div>');
 
     $('#collection-switch-menu').dropdown('refresh');
     $('.collection-menu').dropdown('refresh');

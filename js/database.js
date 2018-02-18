@@ -93,8 +93,12 @@ class Database {
     }
   }
 
-  insertReplay(match, players) {
+  insertReplay(match, players, collection) {
     var self = this;
+
+    if (collection) {
+      match.collection = [collection];
+    }
 
     this._db.matches.update({ 'map' : match.map, 'date' : match.date, 'loopLength' : match.loopLength }, match, {upsert: true}, function (err, numReplaced, newDoc) {
       if (!newDoc) {
