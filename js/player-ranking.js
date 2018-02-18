@@ -33,6 +33,14 @@ function initPlayerRankingPage() {
     onChange: updateHeroFilter
   });
   addHeroMenuOptions($('#player-ranking-hero-filter-menu'));
+
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="ui divider"></div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Multiclass">Multiclass</div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Specialist">Specialist</div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Support">Support</div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Warrior">Warrior</div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Assassin">Assassin</div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="ui divider"></div>');
   $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="all">All Heroes</div>');
   $('#player-ranking-hero-filter-menu').dropdown('refresh');
 
@@ -79,6 +87,10 @@ function resetPlayerRankingsFilter() {
 function updateHeroFilter(value, text, $elem) {
   if (value === "" || value === 'all') {
     delete playerRankingsHeroFilter.hero;
+  }
+  else if (value === "Assassin" || value === "Warrior" || value === "Support" || value === "Specialist" || value === "Multiclass") {
+    let heroes = Heroes.heroRole({ role: value });
+    playerRankingsHeroFilter.hero = { $in: heroes };
   }
   else {
     playerRankingsHeroFilter.hero = value;
