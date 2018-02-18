@@ -78,6 +78,13 @@ function initMatchesPage() {
   $('#match-search-button').click(selectMatches);
   $('#match-search-reset-button').click(resetMatchFilters);
 
+  $('#matches-collection').dropdown({
+    action: 'hide',
+    onChange: handleMatchesCollectionAction
+  });
+
+  $('#matches-collection-select').modal();
+
   // initial settings
   getMatchCount();
 
@@ -90,6 +97,10 @@ function resetMatchesPage() {
   resetMatchFilters();
   getMatchCount();
   selectMatches();
+}
+
+function showMatchesPage() {
+  $('#matches-collection').removeClass('is-hidden');
 }
 
 function getMatchCount() {
@@ -421,4 +432,46 @@ function initSeasonMenu() {
       }
     }
   })
+}
+
+function handleMatchesCollectionAction(action, text, $elem) {
+  if (action === 'add-current') {
+    $('#matches-collection-select .header').text('Add Matches to Collection')
+    $('#matches-collection-select p.text').text('All all of the currently selected matches to the spcified collection. Matches can be added to multiple collections.');
+  
+    $('#matches-collection-select').modal({
+      onApprove: function() {
+        let collectionID = $('#matches-collection-select .collection-menu').dropdown('get value');
+
+        for (let i in selectedMatches) {
+          DB.addMatchToCollection(selectedMatches[i]._id, collectionID);
+        }
+
+        if (collectionID === DB.getCollection())
+          resetAllSections();
+      }
+    }).
+    modal('show');
+  }
+  if (action === 'remove-current') {
+    if (DB.getCollection() !== null) {
+      $('#matches-collection-select .header').text('Remove Matches to Collection')
+      $('#matches-collection-select p.text').text('Removes all of the currently selected matches from the spcified collection.');
+      $('#matches-collection-select .collection-menu').dropdown('set exactly', DB.getCollection());
+
+      $('#matches-collection-select').modal({
+        onApprove: function() {
+          let collectionID = $('#matches-collection-select .collection-menu').dropdown('get value');
+
+          for (let i in selectedMatches) {
+            DB.removeMatchFromCollection(selectedMatches[i]._id, collectionID);
+          }
+
+          if (collectionID === DB.getCollection())
+            resetAllSections();
+        }
+      }).
+      modal('show');
+    }
+  }
 }

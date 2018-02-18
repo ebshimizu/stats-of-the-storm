@@ -105,6 +105,7 @@ function setDBFolder() {
       let path = files[0];
       settings.set('dbPath', path);
       loadDatabase();
+      resetAllSections();
       $('#settings-set-db-folder input').val(path);
     }
   });

@@ -226,7 +226,7 @@ function loadSections() {
 
   // register sections
   sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false };
-  sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false, reset: resetMatchesPage };
+  sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false, reset: resetMatchesPage, onShow: showMatchesPage };
   sections['match-detail'] = {id: '#match-detail-page-content', title: 'Match Details', showBack: true, onShow: matchDetailsShowSection };
   sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false, reset: resetPlayerPage};
   sections['hero-collection'] = {id: '#hero-collection-page-content', title: 'Heroe Statistics', showBack: false, reset: resetHeroCollection, onShow: heroCollectionShowSection };
@@ -236,7 +236,7 @@ function loadSections() {
 
   // Matches should be the default view of the app.
   // this can be changed for development to test specific pages of course.
-  changeSection('settings');
+  changeSection('matches');
 }
 
 // returns the template contained in an import
@@ -348,7 +348,7 @@ function globalDBUpdate() {
 
   addPatchMenuOptions($('#match-patch-select'), function() {
     $('#match-patch-select').dropdown('refresh');
-  })
+  });
 }
 
 function updatePlayerMenus(err, players) {
@@ -441,7 +441,10 @@ function updateCollectionMenu() {
   // add the proper options n stuff
   DB.getCollections(function(err, collections) {
     $('#collection-switch-menu .menu').html('');
-    $('#collection-switch-menu .menu').append('<div class="item" data-value="none">Reset</div>');
+
+    // generic collection menus do not get the clear option
+    $('.collection-menu .menu').html('');
+    $('#collection-switch-menu .menu').append('<div class="item" data-value="none">All Matches</div>');
     $('#collection-switch-menu .menu').append('<div class="ui divider"></div>');
     
     for (let c in collections) {
@@ -449,9 +452,11 @@ function updateCollectionMenu() {
 
       let elem = '<div class="item" data-value="' + collection._id + '">' + collection.name + '</div>';
       $('#collection-switch-menu .menu').append(elem);
+      $('.collection-menu .menu').append(elem);
     }
 
     $('#collection-switch-menu').dropdown('refresh');
+    $('.collection-menu').dropdown('refresh');
   });
 }
 

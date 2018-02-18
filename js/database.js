@@ -70,6 +70,10 @@ class Database {
     this._collection = collectionID;
   }
 
+  getCollection() {
+    return this._collection;
+  }
+
   // this should have a GUI warning, this code sure won't stop you.
   deleteDB() {
     fs.unlinkSync(this._path + '/matches.db');
