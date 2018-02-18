@@ -366,6 +366,10 @@ function processReplay(file, opts = {}) {
     else if (match.map === ReplayTypes.MapType.Blackheart) {
       // hopefully something goes here eventually
     }
+    else if (match.map === ReplayTypes.MapType.OldHanamura) {
+      // couldn't find much data here, not too worried since it's old
+      // can't wait till i have to detect which version of the map this is
+    }
     else {
       // unsupported map
       console.log('Map ' + match.map + ' is not supported');

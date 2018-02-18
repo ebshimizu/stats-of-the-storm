@@ -152,7 +152,8 @@ const ScoreEventNames = {
   EndOfMatchAwardMostTimePushingBoolean: 'Most Time Pushing Award',
   EndOfMatchAwardMostTimeOnPointBoolean: 'Most Time on Point Award',
   TimeOnPoint: 'Time On Point',
-  TimeInTemple: 'Time In Temple'
+  TimeInTemple: 'Time In Temple',
+  TimeOnPayload: 'Time on Payload'
   // I skip the "Wins___" categories, they appear to be used for daily quest completion checks
 };
 
@@ -169,7 +170,8 @@ const MapType = {
   Tomb: 'Tomb of the Spider Queen',
   Volskaya: 'Volskaya Foundry',
   Warhead: 'Warhead Junction',
-  Braxis: 'Braxis Holdout'
+  Braxis: 'Braxis Holdout',
+  OldHanamura: 'Hanamura'
 };
 
 const MessageType = {
