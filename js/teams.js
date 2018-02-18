@@ -370,6 +370,7 @@ function loadTeamRoster(playerStats) {
       }
       context.value.games = player.games;
       context.games = player.games;
+      context.highestStreak = player.highestStreak;
 
       $('#team-roster-stats tbody').append(teamRosterRowTemplate(context));
 

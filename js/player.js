@@ -589,7 +589,7 @@ function renderPlayerSummary() {
   $('#player-detail-misc-summary .statistic[name="timeDead"] .value').text(formatSeconds(playerDetailStats.totalTimeDead / playerDetailStats.games));
   $('#player-detail-misc-summary .statistic[name="votes"] .value').text(playerDetailStats.totalVotes);
   $('#player-detail-misc-summary .statistic[name="pctTimeDead"] .value').text((playerDetailStats.avgTimeDeadPct * 100).toFixed(2) + '%');
-
+  $('#player-detail-misc-summary .statistic[name="highestStreak"] .value').text(playerDetailStats.highestStreak);
 
   // taunts
   setTauntStats('bstep', playerDetailStats.taunts.bsteps);

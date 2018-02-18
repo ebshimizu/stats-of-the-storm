@@ -71,6 +71,10 @@ function initMatchesPage() {
   // season menu tho that has some stuff
   initSeasonMenu();
 
+  $('#match-search-clear-team').click(function() {
+    $('#match-search-team').dropdown('restore defaults');
+  });
+
   $('#match-search-button').click(selectMatches);
   $('#match-search-reset-button').click(resetMatchFilters);
 
@@ -132,6 +136,9 @@ function selectMatches() {
   // patches
   let patches = $('#match-patch-select').dropdown('get value').split(',');
 
+  // team
+  let team = $('#match-search-team').dropdown('get value');
+
   for (let p in patches) {
     if (patches[p] !== "")
       patches[p] = parseInt(patches[p]);
@@ -187,8 +194,85 @@ function selectMatches() {
     }
   }
 
-  currentPage = 0;
-  DB.getMatches(query, updateSelectedMatches, {projection: summaryProjection, sort: {'date' : -1}});
+  // ok teams suck
+  if (team !== "") {
+    // get the team, then run the query as normal
+    DB.getTeam(team, function(err, team) {
+      let oldWhere = function() { return true; };
+      let player = team.players;
+      if ('$where' in query) {
+        oldWhere = query.$where;
+      }
+
+      if (team.players.length <= 5) {
+        // need to match length of players array
+        query.$where = function() {
+          if (player.length === 0)
+            return false;
+  
+          let boundWhere = oldWhere.bind(this);
+          let t0 = this.teams[0].ids;
+          let count = 0;
+          for (let i in t0) {
+            if (player.indexOf(t0[i]) >= 0)
+              count += 1;
+          }
+  
+          if (count === player.length)
+            return boundWhere();
+          
+          count = 0;
+          let t1 = this.teams[1].ids;
+          for (let i in t1) {
+            if (player.indexOf(t1[i]) >= 0)
+              count += 1;
+          }
+  
+          if (count === player.length)
+            return boundWhere();
+          
+          return false;
+        }
+      }
+      else {
+        // basically we need a match 5 of the players and then we're ok 
+        query.$where = function() {
+          if (player.length === 0)
+            return false;
+  
+          let boundWhere = oldWhere.bind(this);
+          let t0 = this.teams[0].ids;
+          let count = 0;
+          for (let i in t0) {
+            if (player.indexOf(t0[i]) >= 0)
+              count += 1;
+          }
+  
+          if (count === 5)
+            return boundWhere();
+          
+          count = 0;
+          let t1 = this.teams[1].ids;
+          for (let i in t1) {
+            if (player.indexOf(t1[i]) >= 0)
+              count += 1;
+          }
+  
+          if (count === 5)
+            return boundWhere();
+          
+          return false;
+        }
+      }
+
+      currentPage = 0;
+      DB.getMatches(query, updateSelectedMatches, {projection: summaryProjection, sort: {'date' : -1}});
+    });
+  }
+  else {
+    currentPage = 0;
+    DB.getMatches(query, updateSelectedMatches, {projection: summaryProjection, sort: {'date' : -1}});
+  }
 }
 
 function updateSelectedMatches(err, docs) {

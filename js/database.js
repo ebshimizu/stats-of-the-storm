@@ -235,6 +235,7 @@ class Database {
     playerDetailStats.takedownHistogram = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
     playerDetailStats.skins = {};
     playerDetailStats.awards = {};
+    playerDetailStats.highestStreak = 0;
     playerDetailStats.taunts = { 
       bsteps: { count: 0, duration: 0, takedowns: 0, deaths: 0 },
       dances: { count: 0, takedowns: 0, deaths: 0 },
@@ -256,7 +257,8 @@ class Database {
           stats: { timeDeadPct : 0 },
           awards: {},
           totalTime: 0,
-          votes: 0
+          votes: 0,
+          highestStreak: 0
         };
       }
 
@@ -278,6 +280,8 @@ class Database {
         playerDetailStats.heroes[match.hero].stats[statName] += match.gameStats[statName];
       }
       playerDetailStats.heroes[match.hero].stats.timeDeadPct += match.gameStats.TimeSpentDead / match.length;
+      playerDetailStats.heroes[match.hero].stats.highestStreak = Math.max(match.gameStats.HighestKillStreak, playerDetailStats.heroes[match.hero].stats.highestStreak);
+      playerDetailStats.highestStreak = Math.max(playerDetailStats.highestStreak, match.gameStats.HighestKillStreak);
 
       // you only ever get 1 but just in case...
       // ALSO custom games don't get counted here since you can't get awards
@@ -472,7 +476,8 @@ class Database {
           },
           heroes: { },
           totalTime: 0,
-          votes: 0
+          votes: 0,
+          highestStreak: 0
         }
       }
 
@@ -492,6 +497,7 @@ class Database {
         playerDetailStats[match.ToonHandle].stats[statName] += match.gameStats[statName];
       }
       playerDetailStats[match.ToonHandle].stats.timeDeadPct += match.gameStats.TimeSpentDead / match.length;
+      playerDetailStats[match.ToonHandle].highestStreak = Math.max(match.gameStats.HighestKillStreak, playerDetailStats[match.ToonHandle].highestStreak);
 
       // you only ever get 1 but just in case...
       // ALSO custom games don't get counted here since you can't get awards
