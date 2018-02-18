@@ -69,6 +69,10 @@ function initPlayerRankingPage() {
   });
 }
 
+function resetPlayerRankingPage() {
+  resetPlayerRankingsFilter();
+}
+
 function updatePlayerRankingsFilter(map, hero) {
   playerRankingsHeroFilter = hero;
   playerRankingsMapFilter = map;

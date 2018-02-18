@@ -190,6 +190,12 @@ function initGlobalUIHandlers() {
   $('#section-menu-back-button').click(function() {
     changeSection(prevSections.pop());
   });
+
+  $('#collection-switch-menu').dropdown({
+    action: 'activate',
+    onChange: setAppCollection
+  });
+  updateCollectionMenu();
 }
 
 function loadSections() {
@@ -220,17 +226,17 @@ function loadSections() {
 
   // register sections
   sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false };
-  sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false };
+  sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false, reset: resetMatchesPage };
   sections['match-detail'] = {id: '#match-detail-page-content', title: 'Match Details', showBack: true, onShow: matchDetailsShowSection };
-  sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false};
-  sections['hero-collection'] = {id: '#hero-collection-page-content', title: 'Heroe Statistics', showBack: false, onShow: heroCollectionShowSection };
-  sections['player-ranking'] = {id: '#player-ranking-page-content', title: 'Player Statistics', showBack: false };
-  sections.teams = {id: '#teams-page-content', title: 'Teams', showBack: false, onShow: teamShowSection };
-  sections['team-ranking'] = {id: '#team-ranking-page-content', title: 'Team Statistics', showBack: false };
+  sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false, reset: resetPlayerPage};
+  sections['hero-collection'] = {id: '#hero-collection-page-content', title: 'Heroe Statistics', showBack: false, reset: resetHeroCollection, onShow: heroCollectionShowSection };
+  sections['player-ranking'] = {id: '#player-ranking-page-content', title: 'Player Statistics', showBack: false, reset: resetPlayerRankingPage };
+  sections.teams = {id: '#teams-page-content', title: 'Teams', showBack: false, reset: resetTeamsPage, onShow: teamShowSection };
+  sections['team-ranking'] = {id: '#team-ranking-page-content', title: 'Team Statistics', reset: resetTeamRankingPage, showBack: false };
 
   // Matches should be the default view of the app.
   // this can be changed for development to test specific pages of course.
-  changeSection('matches');
+  changeSection('settings');
 }
 
 // returns the template contained in an import
@@ -429,4 +435,46 @@ function populateTeamMenu(elem) {
 
     elem.dropdown('refresh');
   });
+}
+
+function updateCollectionMenu() {
+  // add the proper options n stuff
+  DB.getCollections(function(err, collections) {
+    $('#collection-switch-menu .menu').html('');
+    $('#collection-switch-menu .menu').append('<div class="item" data-value="none">Reset</div>');
+    $('#collection-switch-menu .menu').append('<div class="ui divider"></div>');
+    
+    for (let c in collections) {
+      let collection = collections[c];
+
+      let elem = '<div class="item" data-value="' + collection._id + '">' + collection.name + '</div>';
+      $('#collection-switch-menu .menu').append(elem);
+    }
+
+    $('#collection-switch-menu').dropdown('refresh');
+  });
+}
+
+function setAppCollection(value, text, $elem) {
+  if (value === 'none') {
+    $('#collection-switch-menu .collection-name').text('None');
+    DB.setCollection(null);
+  }
+  else {
+    $('#collection-switch-menu .collection-name').text(text);
+    DB.setCollection(value);
+  }
+  resetAllSections();
+}
+
+function resetAllSections() {
+  // this should be called after a database reload
+  // sections will register a reset function (if any) that will be called here
+  DB.getPlayers({}, updatePlayerMenus, {sort: {'matches' : -1}});
+
+  for (s in sections) {
+    if (sections[s].reset) {
+      sections[s].reset();
+    }
+  }
 }

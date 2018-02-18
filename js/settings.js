@@ -1,5 +1,6 @@
 var settingsRowTemplate;
 var replayQueue;
+var collectionRowTemplate;
 
 // used by the parser
 var listedReplays;
@@ -7,6 +8,8 @@ var listedReplays;
 function initSettingsPage() {
   // templates
   settingsRowTemplate = Handlebars.compile(getTemplate('settings', '#replay-row-template').find('tr')[0].outerHTML);
+  collectionRowTemplate = Handlebars.compile(getTemplate('settings', '#collection-row-template').find('tr')[0].outerHTML);
+
   let date = settings.get('lastReplayDate');
   if (!date)
     date = new Date(2012, 1, 1);
@@ -54,6 +57,19 @@ function initSettingsPage() {
     onChange: updateSelectedUser
   });
   $('#settings-set-player').dropdown('set selected', selectedPlayerID);
+
+  $('#settings-submenu .item').tab();
+  $('#settings-submenu .item').click(function() {
+    $('#settings-page-content table').floatThead('reflow');
+  });
+  $('#settings-new-collection-button').click(addNewCollection);
+
+  $('#settings-page-content table').floatThead({
+    scrollContainer: closestWrapper,
+    autoReflow: true
+  });
+
+  loadCollections();
 
   if (replayPath) {
     // load the directory
@@ -234,4 +250,72 @@ function updateLastDate(date) {
 
 function updateSelectedUser(value, text, $item) {
   settings.set('selectedPlayerID', value);
+}
+
+function addNewCollection() {
+  // again i'm shamelessly copying things from other parts of the codebase
+  $('#team-text-input .header').text('Add New Collection')
+  $('#team-text-input .input .label').text('Collection Name');
+  $('#team-text-input input').val('');
+
+  $('#team-text-input').modal({
+    onApprove: function() {
+      let name = $('#team-text-input input').val();
+      DB.addCollection(name, function() {
+        updateCollectionMenu();
+        loadCollections();
+      });
+    }
+  }).
+  modal('show');
+}
+
+function loadCollections() {
+  DB.getCollections(function(err, collections) {
+    $('#collection-list tbody').html('');
+    for (let c in collections) {
+      $('#collection-list tbody').append(collectionRowTemplate(collections[c]));
+    }
+
+    // bindings
+    $('#collection-list .button').click(function() {
+      handleCollectionAction($(this).attr('collection-id'), $(this).attr('collection-name'), $(this).attr('action'));
+    });
+  });
+}
+
+function handleCollectionAction(id, name, action) {
+  if (action === 'delete') {
+    $('#team-confirm-action-user .header').text('Delete Collection ' + name);
+    $('#team-confirm-action-user .action').text('delete ' + name);
+
+    $('#team-confirm-action-user').modal({
+      onApprove: function() {
+        DB.deleteCollection(id, function() {
+          updateCollectionMenu();
+          loadCollections();
+        });
+      }
+    }).
+    modal('show');
+  }
+  else if (action === 'rename') {
+    $('#team-text-input .header').text('Rename Collection ' + name)
+    $('#team-text-input .input .label').text('Collection Name');
+    $('#team-text-input input').val('');
+    $('#team-text-input .actions .approve').text('Rename');
+  
+    $('#team-text-input').modal({
+      onApprove: function() {
+        let name = $('#team-text-input input').val();
+        DB.renameCollection(id, name, function() {
+          // uh changing back to defaults here
+          $('#team-text-input .actions .approve').text('Add');
+          updateCollectionMenu();
+          loadCollections();
+        });
+      }
+    }).
+    modal('show');
+  }
 }

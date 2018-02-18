@@ -4,4 +4,24 @@
 
 .settings-table-wrapper {
     overflow-y: auto;
+    height: 100%;
+}
+
+#settings-submenu {
+    position: absolute;
+    height: 40px;
+}
+
+#settings-layout .tab {
+    height: calc(100% - 50px);
+    margin-top: 50px;
+}
+
+#settings-page-content .floatThead-wrapper {
+    height: 100%;
+}
+
+#settings-page-content .table-wrapper {
+    margin-top: 0px!important;
+    height: 100%;
 }

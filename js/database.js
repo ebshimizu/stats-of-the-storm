@@ -62,6 +62,10 @@ class Database {
     this._db.heroData.update({ matchID: matchID }, { $pull: { collection: collectionID }}, { multi: true });
   }
 
+  renameCollection(collectionID, name, onComplete) {
+    this._db.settings.update({_id: collectionID}, { $set: {name: name}}, onComplete);
+  }
+
   setCollection(collectionID) {
     this._collection = collectionID;
   }

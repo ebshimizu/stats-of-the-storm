@@ -65,3 +65,8 @@ body {
     overflow: auto;
     margin-top: 2rem!important;
 }
+
+#section-menu .collection-name {
+    margin-left: 5px;
+    font-weight: bold;
+}

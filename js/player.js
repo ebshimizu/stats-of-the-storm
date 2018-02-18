@@ -358,6 +358,10 @@ function initPlayerPage() {
   progressionAwardsGraph = new Chart($('#player-progression-awards'), progressionAwardsGraphData);
 }
 
+function resetPlayerPage() {
+  DB.getPlayer(playerDetailID, updatePlayerPage);
+}
+
 function closestWrapper($table) {
   return $table.closest('.table-wrapper');
 }

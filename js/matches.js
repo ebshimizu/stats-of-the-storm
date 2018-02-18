@@ -85,6 +85,13 @@ function initMatchesPage() {
   selectAllMatches();
 }
 
+function resetMatchesPage() {
+  currentPage = 0;
+  resetMatchFilters();
+  getMatchCount();
+  selectMatches();
+}
+
 function getMatchCount() {
   DB.countMatches({}, function(err, count) {
     $('#matches-in-database-stat').text(count);

@@ -44,6 +44,10 @@ function initTeamRankingPage() {
   });
 }
 
+function resetTeamRankingPage() {
+  resetTeamRankingsFilter();
+}
+
 function updateTeamRankingFilter(map, hero) {
   teamRankingMatchFilter = map;
   teamRankingHeroFilter = hero;
@@ -159,6 +163,10 @@ function updateTeamRanking() {
 
       // execute
       DB.getMatches(query, function(err, matches) {
+        // skip teams with no data
+        if (matches.length === 0)
+          return;
+
         // at this point we might have all the data we need?
         let teamStats = DB.summarizeTeamData(team, matches, Heroes);
         teamStats.name = team.name;

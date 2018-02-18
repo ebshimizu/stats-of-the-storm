@@ -74,6 +74,10 @@ function initTeamsPage() {
   $('#team-add-player-button').click(addPlayerToTeam);
 }
 
+function resetTeamsPage() {
+  resetTeamsFilter();
+}
+
 function teamShowSection() {
   // basically just expose the proper menu options here
   $('#team-edit-menu').removeClass('is-hidden');
@@ -96,6 +100,10 @@ function resetTeamsFilter() {
 }
 
 function updateTeamData(value, text, $elem) {
+  // lol that's the null team don't do this
+  if (value === '')
+    return;
+    
   $('#teams-page-header .team-name').text(text);
 
   // ok so matches get a special version of where for ids and here's how it works:
