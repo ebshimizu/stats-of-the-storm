@@ -91,6 +91,10 @@ function initHeroCollectionPage() {
   loadOverallHeroCollectionData();
 }
 
+function heroCollectionShowSection() {
+  $('#hero-collection-body table').floatThead('reflow');
+}
+
 function updateCollectionFilter(map, hero) {
   heroCollectionHeroDataFilter = hero;
   heroCollectionMapDataFilter = map;

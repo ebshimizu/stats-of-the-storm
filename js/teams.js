@@ -52,6 +52,9 @@ function initTeamsPage() {
   $('#teams-submenu .item').click(function() {
     $('#team-detail-body table').floatThead('reflow');
   });
+  $('#teams-submenu .external-match-history').click(function() {
+    showMatchHistory();
+  });
 
   $('#team-edit-menu').dropdown({
     onChange: function(value, text, $elem) {
@@ -511,5 +514,14 @@ function handleTeamMenuCallback(action) {
       }
     }).
     modal('show');
+  }
+}
+
+function showMatchHistory() {
+  if (currentTeam) {
+    resetMatchFilters();
+    $('#match-search-team').dropdown('set exactly', currentTeam._id);
+    selectMatches();
+    changeSection('matches', true);
   }
 }

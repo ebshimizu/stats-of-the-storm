@@ -218,9 +218,9 @@ function loadSections() {
   // register sections
   sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false };
   sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false };
-  sections['match-detail'] = {id: '#match-detail-page-content', title: 'Match Details', showBack: true};
+  sections['match-detail'] = {id: '#match-detail-page-content', title: 'Match Details', showBack: true, onShow: matchDetailsShowSection };
   sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false};
-  sections['hero-collection'] = {id: '#hero-collection-page-content', title: 'Heroe Statistics', showBack: false };
+  sections['hero-collection'] = {id: '#hero-collection-page-content', title: 'Heroe Statistics', showBack: false, onShow: heroCollectionShowSection };
   sections['player-ranking'] = {id: '#player-ranking-page-content', title: 'Player Statistics', showBack: false };
   sections.teams = {id: '#teams-page-content', title: 'Teams', showBack: false, onShow: teamShowSection };
 
@@ -253,7 +253,8 @@ function changeSection(to, overrideBack) {
   if (sections[to].showBack || overrideBack === true) {
     prevSections.push($('.is-page.visible').attr('section-name'));
   }
-  else {
+  // uh wait yeah if this is length 0 then it already is [] ... ?
+  else if (prevSections.length === 0) {
     // clear the history
     prevSections = [];
   }
@@ -264,7 +265,7 @@ function changeSection(to, overrideBack) {
   // ok wait also hide the menu cause that changes from section to section
   $('#section-menu .section-submenu').addClass('is-hidden');
 
-  showSection(to, overrideBack);
+  showSection(to, overrideBack || prevSections.length > 0);
   if (sections[to].onShow) {
     sections[to].onShow();
   }

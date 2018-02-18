@@ -37,3 +37,8 @@
 #team-add-player-button {
   margin-top: 10px;
 }
+
+#teams-page-content .table-wrapper-xy {
+  overflow: auto;
+  height: calc(100% - 16px);
+}

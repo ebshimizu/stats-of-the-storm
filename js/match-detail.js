@@ -236,9 +236,52 @@ function initMatchDetailPage() {
   $('#match-detail-timeline-buttons .button').click(function() {
     toggleGroup(parseInt($(this).attr('button-id')));
   });
+  
+  $('#match-detail-teams').dropdown({
+    onChange: function(value, text, $elem) {
+      matchDetailTeamAction(value); 
+    }
+  });
+
+  $('#match-detail-existing-team').modal();
 
   // DEBUG - LOAD SPECIFIC MATCH
   //loadMatchData("RtTPtP5mHaBoFJW2", function() { console.log("done loading"); });
+}
+
+function matchDetailsShowSection() {
+  $('#match-detail-teams').removeClass('is-hidden');
+}
+
+function matchDetailTeamAction(action) {
+  if (action === 'new-from-blue' || action === 'new-from-red') {
+    // uh maybe it's bad practice (?) but i'm totally stealing existing modals
+    $('#team-text-input .header').text('Create New Team')
+    $('#team-text-input .input .label').text('Team Name');
+    $('#team-text-input input').val('');
+
+    $('#team-text-input').modal({
+      onApprove: function() {
+        let name = $('#team-text-input input').val();
+        let teamID = action === 'new-from-blue' ? 0 : 1;
+
+        addNewTeamFromMatch(teamID, name);
+      }
+    }).
+    modal('show');
+  }
+  else if (action === 'add-existing-blue' || action === 'add-existing-red') {
+    $('#match-detail-existing-team').modal({
+      onApprove: function() {
+        let team = $('#match-detail-existing-team .team-menu').dropdown('get value');
+        let teamID = action === 'add-existing-blue' ? 0 : 1;
+        for (let p in matchDetailMatch.teams[teamID].ids) {
+          DB.addPlayerToTeam(team, matchDetailMatch.teams[teamID].ids[p]);
+        }
+      }
+    }).
+    modal('show');
+  }
 }
 
 // retrieves the proper data and then renders to the page
@@ -1586,5 +1629,7 @@ function updateTeamStat(container, name, value) {
 function addNewTeamFromMatch(teamID, name) {
   if (matchDetailMatch) {
     DB.addTeam(matchDetailMatch.teams[teamID].ids, name);
+    populateTeamMenu($('.team-menu'));
+    $('#team-set-team').dropdown('refresh');
   }
 }
