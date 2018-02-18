@@ -238,9 +238,15 @@ function initMatchDetailPage() {
   });
   
   $('#match-detail-teams').dropdown({
+    action: 'hide',
     onChange: function(value, text, $elem) {
       matchDetailTeamAction(value); 
     }
+  });
+
+  $('#match-detail-collection').dropdown({
+    action: 'hide',
+    onChange: matchDetailCollectionAction
   });
 
   $('#match-detail-existing-team').modal();
@@ -251,6 +257,7 @@ function initMatchDetailPage() {
 
 function matchDetailsShowSection() {
   $('#match-detail-teams').removeClass('is-hidden');
+  $('#match-detail-collection').removeClass('is-hidden');
 }
 
 function matchDetailTeamAction(action) {
@@ -1631,5 +1638,46 @@ function addNewTeamFromMatch(teamID, name) {
     DB.addTeam(matchDetailMatch.teams[teamID].ids, name);
     populateTeamMenu($('.team-menu'));
     $('#team-set-team').dropdown('refresh');
+  }
+}
+
+function matchDetailCollectionAction(value, text, $elem) {
+  if (value ==='add') {
+    $('#matches-collection-select .header').text('Add Current Match To Collection')
+    $('#matches-collection-select p.text').text('Add the current match to the spcified collection. Matches can be added to multiple collections.');
+  
+    $('#matches-collection-select').modal({
+      onApprove: function() {
+        let collectionID = $('#matches-collection-select .collection-menu').dropdown('get value');
+        // adding to null collection is not allowed
+        if (collectionID === '')
+          return;
+
+        DB.addMatchToCollection(matchDetailMatch._id, collectionID);
+
+        if (collectionID === DB.getCollection())
+          resetAllSections();
+      }
+    }).
+    modal('show');
+  }
+  else if (value === 'remove') {
+    $('#matches-collection-select .header').text('Remove Current Match From Collection')
+    $('#matches-collection-select p.text').text('Remove the current match from the spcified collection.');
+  
+    $('#matches-collection-select').modal({
+      onApprove: function() {
+        let collectionID = $('#matches-collection-select .collection-menu').dropdown('get value');
+        // adding to null collection is not allowed
+        if (collectionID === '')
+          return;
+
+        DB.removeMatchFromCollection(matchDetailMatch._id, collectionID);
+
+        if (collectionID === DB.getCollection())
+          resetAllSections();
+      }
+    }).
+    modal('show');
   }
 }

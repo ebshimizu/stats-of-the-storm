@@ -442,6 +442,9 @@ function handleMatchesCollectionAction(action, text, $elem) {
     $('#matches-collection-select').modal({
       onApprove: function() {
         let collectionID = $('#matches-collection-select .collection-menu').dropdown('get value');
+        // adding to null collection is not allowed
+        if (collectionID === '')
+          return;
 
         for (let i in selectedMatches) {
           DB.addMatchToCollection(selectedMatches[i]._id, collectionID);
@@ -462,6 +465,9 @@ function handleMatchesCollectionAction(action, text, $elem) {
       $('#matches-collection-select').modal({
         onApprove: function() {
           let collectionID = $('#matches-collection-select .collection-menu').dropdown('get value');
+          // removing from null collection also not allowed (and also impossible)
+          if (collectionID === '')
+            return;
 
           for (let i in selectedMatches) {
             DB.removeMatchFromCollection(selectedMatches[i]._id, collectionID);
