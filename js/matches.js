@@ -122,6 +122,7 @@ function resetMatchFilters() {
   $('#match-search-heroes').dropdown('restore defaults');
   $('#match-search-heroes-mode').dropdown('restore defaults');
   $('#match-map-select').dropdown('restore defaults');
+  $('#match-search-team').dropdown('restore defaults');
 
   $('#match-search-start-date').datepicker('setDate', new Date('1-1-2012'));
   $('#match-search-end-date').datepicker('setDate', new Date());

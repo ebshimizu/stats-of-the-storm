@@ -479,6 +479,8 @@ function resetAllSections() {
   // this should be called after a database reload
   // sections will register a reset function (if any) that will be called here
   DB.getPlayers({}, updatePlayerMenus, {sort: {'matches' : -1}});
+  updateCollectionMenu();
+  DB.setCollection(null);
 
   for (s in sections) {
     if (sections[s].reset) {
