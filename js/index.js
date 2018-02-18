@@ -176,7 +176,7 @@ function loadDatabase() {
 
 function initGlobalUIHandlers() {
   // sidebar
-  $('#main-menu').sidebar('setting', 'transition', 'uncover').
+  $('#main-menu').sidebar('setting', 'transition', 'overlay').
     sidebar('attach events', '#show-sidebar-button');
 
   $('#main-menu a.item').each(function(idx, elem) {
@@ -215,6 +215,9 @@ function loadSections() {
   $('#main-content').append(getTemplate('teams', '#teams-page'));
   initTeamsPage();
 
+  $('#main-content').append(getTemplate('team-ranking', '#team-ranking-page'))
+  initTeamRankingPage();
+
   // register sections
   sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false };
   sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false };
@@ -223,9 +226,10 @@ function loadSections() {
   sections['hero-collection'] = {id: '#hero-collection-page-content', title: 'Heroe Statistics', showBack: false, onShow: heroCollectionShowSection };
   sections['player-ranking'] = {id: '#player-ranking-page-content', title: 'Player Statistics', showBack: false };
   sections.teams = {id: '#teams-page-content', title: 'Teams', showBack: false, onShow: teamShowSection };
+  sections['team-ranking'] = {id: '#team-ranking-page-content', title: 'Team Statistics', showBack: false };
 
   // DEBUG: SHOWING SPECIFIC SECTION ON LOAD FOR TESTING
-  changeSection('teams');
+  changeSection('team-ranking');
 }
 
 // returns the template contained in an import
@@ -313,9 +317,9 @@ function formatStat(field, val, allFixed = false) {
     return (val * 100).toFixed(2) + '%';
   else if (field === 'KDA')
     return val.toFixed(2);
-  else if (field.startsWith('Time') || field === 'OnFireTimeOnFire')
+  else if (field.startsWith('Time') || field === 'OnFireTimeOnFire' || field === 'timeTo10' || field === 'timeTo20' || field === 'mercUptime')
     return formatSeconds(val);
-  else if (field === 'timeDeadPct')
+  else if (field === 'timeDeadPct' || field === 'mercUptimePercent')
     return (val * 100).toFixed(2) + '%';
 
   if (allFixed) {

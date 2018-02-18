@@ -65,7 +65,7 @@ function initPlayerRankingPage() {
   $('#player-ranking-body .buttons .button').click(togglePlayerRankingSection);
 
   $('#player-ranking-body table th.stat').data('sortBy', function(th, td, tablesort) {
-    return parseFloat(td.text());
+    return parseFloat(td.attr('data-sort-value'));
   });
 }
 

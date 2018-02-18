@@ -12,7 +12,7 @@ function initTeamsPage() {
   populateTeamMenu($('.team-menu'));
 
   $('#team-add-player-menu').dropdown({
-    action: 'activate',
+    action: 'hide',
     fullTextSearch: true
   });
 

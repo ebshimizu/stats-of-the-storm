@@ -1,0 +1,20 @@
+/*
+I know someone is going to yell at me about the fact that i literally copied the
+literally copying the player-ranking css file and renamed all the IDS but in 
+my defense maybe this page will someday be completely different?
+*/
+#team-ranking-page-header {
+  margin-bottom: 20px;
+}
+
+#team-ranking-body {
+  height: calc(100% - 20px);
+}
+
+#team-ranking-body .floatThead-wrapper {
+  height: calc(100% - 80px);
+}
+
+#team-ranking-body .section {
+  height: 100%;
+}
