@@ -38,6 +38,7 @@ function initSettingsPage() {
   // initial settings
   let path = settings.get('dbPath');
   $('#settings-set-db-folder input').val(path);
+  $('#settings-set-db-folder .button').click(setDBFolder);
 
   let replayPath = settings.get('replayPath');
   $('#settings-set-replay-folder input').val(replayPath);
@@ -73,6 +74,22 @@ function setReplayFolder() {
       $('#settings-set-replay-folder input').val(path);
 
       startReplayScan();
+    }
+  });
+}
+
+function setDBFolder() {
+  dialog.showOpenDialog({
+    defaultPath: settings.get('dbPath'),
+    title: 'Set Database Folder',
+    properties: ['openDirectory', 'createDirectory']
+  }, function(files) {
+    if (files) {
+      // 1 dir
+      let path = files[0];
+      settings.set('dbPath', path);
+      loadDatabase();
+      $('#settings-set-db-folder input').val(path);
     }
   });
 }
