@@ -9,6 +9,10 @@ const fs = require('fs');
 // databases are loaded from the specified folder when the database object is created
 var Datastore = require('nedb');
 
+// ok so you should never call raw db ops on the _db object unless you are debugging.
+// the Database is able to restrict results to a specified collection, allowing multiple views
+// of the same data. This is automatically handled by the database if you use the DB.query ops
+// and not the _db objects
 class Database {
   constructor(databasePath) {
     this._path = databasePath;
@@ -22,6 +26,44 @@ class Database {
 
     this._db.matches.ensureIndex({ fieldName: 'map' });
     this._db.players.ensureIndex({ fieldName: 'hero' });
+
+    this._collection = null;
+  }
+
+  getCollections(callback) {
+    this._db.settings.find({type: 'collection'}, callback);
+  }
+
+  addCollection(name, onComplete) {
+    this._db.settings.insert({
+      type: 'collection',
+      name: name
+    }, onComplete);
+  }
+  
+  deleteCollection(collectionID, onComplete) {
+    var self = this;
+    this._db.settings.remove({ _id: collectionID }, {}, function(err, removed) {
+      self._db.matches.update({collection: collectionID}, { $pull: { collection: collectionID }}, function(err) {
+        self._db.heroData.update({collection: collectionID}, { $pull: { collection: collectionID }}, {multi: true}, onComplete);
+      });
+    });
+  }
+
+  // i don't think the next two need callbacks but if so i guess i'll have to add it
+  addMatchToCollection(matchID, collectionID) {
+    // this actually needs to modify two databases to ensure proper data aggregation
+    this._db.matches.update({ _id: matchID }, { $addToSet: { collection: collectionID }});
+    this._db.heroData.update({ matchID: matchID }, { $addToSet: { collection: collectionID }}, { multi: true });
+  }
+
+  removeMatchFromCollection(matchID, collectionID) {
+    this._db.matches.update({ _id: matchID }, { $pull: { collection: collectionID }});
+    this._db.heroData.update({ matchID: matchID }, { $pull: { collection: collectionID }}, { multi: true });
+  }
+
+  setCollection(collectionID) {
+    this._collection = collectionID;
   }
 
   // this should have a GUI warning, this code sure won't stop you.
@@ -119,6 +161,7 @@ class Database {
     search.map = data.details[0].m_title;
     search.rawDate = data.details[0].m_timeUTC;
 
+    // this is the one raw call that is not preprocessed by collections for what should be somewhat obvious reasons
     this._db.matches.find(search, function(err, docs) {
       callback(docs.length > 0);
     });
@@ -126,11 +169,22 @@ class Database {
 
   // counts the given matches
   countMatches(query, callback) {
+    this.preprocessQuery(query);
     this._db.matches.count(query, callback);
+  }
+
+  // collections basically add an additional requirement to all player and match related
+  // queries.
+  preprocessQuery(query) {
+    if (this._collection) {
+      query.collection = this._collection;
+    }
   }
 
   // retrieves a match from the database using the given query
   getMatches(query, callback, opts = {}) {
+    this.preprocessQuery(query);
+
     if ('sort' in opts) {
       let cursor;
       if ('projection' in opts)
@@ -162,22 +216,29 @@ class Database {
 
   getHeroDataForID(matchID, callback) {
     let query = {matchID: matchID};
+
+    this.preprocessQuery(query);
     this._db.heroData.find(query, callback);
   }
 
   // returns all hero data entries for the given player id
   getHeroDataForPlayer(playerID, callback) {
     let query = {ToonHandle: playerID};
+
+    this.preprocessQuery(query);
     this._db.heroData.find(query, callback);
   }
 
   getHeroDataForPlayerWithFilter(playerID, filter, callback) {
     let query = Object.assign({}, filter);
     query.ToonHandle = playerID;
+
+    this.preprocessQuery(query);
     this._db.heroData.find(query, callback);
   }
 
   getHeroData(query, callback) {
+    this.preprocessQuery(query);
     this._db.heroData.find(query, callback);
   }
 
@@ -187,6 +248,7 @@ class Database {
       query.$or.push({ matchID : ids[i]});
     }
 
+    this.preprocessQuery(query);
     this.getHeroData(query, callback);
   }
 
@@ -211,6 +273,8 @@ class Database {
   }
 
   // gets a single player from the players table
+  // note that players are not part of the collection, so uh, i guess the UI should just not show
+  // players with 0 things in the database?
   getPlayer(id, callback) {
     this.getPlayers({_id: id}, callback);
   }
@@ -800,7 +864,9 @@ class Database {
   // returns a list of versions in the database along with
   // a formatted string for each of them.
   getVersions(callback) {
-    this._db.matches.find({}, {version: 1}, function(err, docs) {
+    let query = {};
+    this.preprocessQuery(query);
+    this._db.matches.find(query, {version: 1}, function(err, docs) {
       let versions = {}
 
       for (let doc of docs) {
