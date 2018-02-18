@@ -228,8 +228,9 @@ function loadSections() {
   sections.teams = {id: '#teams-page-content', title: 'Teams', showBack: false, onShow: teamShowSection };
   sections['team-ranking'] = {id: '#team-ranking-page-content', title: 'Team Statistics', showBack: false };
 
-  // DEBUG: SHOWING SPECIFIC SECTION ON LOAD FOR TESTING
-  changeSection('team-ranking');
+  // Matches should be the default view of the app.
+  // this can be changed for development to test specific pages of course.
+  changeSection('matches');
 }
 
 // returns the template contained in an import
