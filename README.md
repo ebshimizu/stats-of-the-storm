@@ -43,9 +43,9 @@ is placed in future replay protocols, you'll have to re-import to get that new d
     * Team statistics page including pick/ban stats
     * Overall Team statistics summary
 
-* [Planned] League Tracking (Collections)
-  * [Planned] Create Collections of matches to track statistics for a league
-  * [Planned] All previously listed features are avaialble, and simply restricted to matches within a specific collection
+* League Tracking (Collections)
+  * Create Collections of matches to track statistics for a league
+  * All previously listed features are avaialble, and simply restricted to matches within a specific collection
 
 * Other
   * Movable Database - Don't want to parse matches yourself? You can load someone else's database instead of your own.
