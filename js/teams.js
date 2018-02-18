@@ -23,6 +23,7 @@ function initTeamsPage() {
   // filter popup
   let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
   filterWidget.attr('widget-name', 'teams-filter');
+  filterWidget.find('.filter-widget-team').addClass('is-hidden');
   
   $('#filter-widget').append(filterWidget);
   initPopup(filterWidget);

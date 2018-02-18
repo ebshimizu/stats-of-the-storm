@@ -277,6 +277,7 @@ function initPlayerPage() {
   // filter popup
   let playerWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
   playerWidget.attr('widget-name', 'player-filter');
+  playerWidget.find('.filter-widget-team').addClass('is-hidden');
   
   $('#filter-widget').append(playerWidget);
   initPopup(playerWidget);
