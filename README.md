@@ -6,7 +6,9 @@ Provides the ability to track individual stats, team stats in a league, and over
 for a league.
 
 This application is in the very early development stage.
-Folders will be moved at will, breaking changes will probably be in every commit.
+This means that the parser could change and you'll have to re-import all of your matches.
+The full releases of this project will try to avoid this scenario, however if additional information
+is placed in future replay protocols, you'll have to re-import to get that new data.
 
 ## Features
 * Match Summary
@@ -39,7 +41,7 @@ Folders will be moved at will, breaking changes will probably be in every commit
     * Assign two or more players to a team to track statistics for matches where those players are present
     * Teams can have an arbitrary number of players on them
     * Team statistics page including pick/ban stats
-    * [Planned] Team rankings based on overall team statistics
+    * Overall Team statistics summary
 
 * [Planned] League Tracking (Collections)
   * [Planned] Create Collections of matches to track statistics for a league
