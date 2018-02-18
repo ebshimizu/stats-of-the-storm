@@ -249,12 +249,13 @@ const MercUnitType = {
   JungleGraveGolemLaner: 'JungleGraveGolemLaner',
   MercLanerSiegeGiant: 'MercLanerSiegeGiant',
   MercGoblinSapperLaner: 'MercGoblinSapperLaner',
-  MercSeigeTrooperLaner: 'MercSiegeTrooperLaner',
+  MercSiegeTrooperLaner: 'MercSiegeTrooperLaner',
   MercSummonerLaner: 'MercSummonerLaner',
   MercLanerRangedOgre: 'MercLanerRangedOgre',
   MercLanerMeleeOgre: 'MercLanerMeleeOgre',
   MercLanerMeleeKnight: 'MercLanerMeleeKnight',
   MercLanerRangedMage: 'MercLanerRangedMage'
+  //MercSummonerLanerMinionDummy: 'MercSummonerLanerMinionDummy' -- this is cool but the amount of data it spits out is frankly absurd
 }
 
 const MercUnitString = {
@@ -266,12 +267,13 @@ const MercUnitString = {
   JungleGraveGolemLaner: 'Grave Golem Boss',
   MercLanerSiegeGiant: 'Siege Giant',
   MercGoblinSapperLaner: 'Goblin Sapper',
-  MercSeigeTrooperLaner: 'Siege Trooper',
+  MercSiegeTrooperLaner: 'Siege Trooper',
   MercSummonerLaner: 'Summoner',
   MercLanerRangedOgre: 'Ranged Ogre',
   MercLanerMeleeOgre: 'Melee Ogre',
   MercLanerMeleeKnight: 'Melee Knight',
-  MercLanerRangedMage: 'Ranged Mage'
+  MercLanerRangedMage: 'Ranged Mage',
+  MercSummonerLanerMinionDummy: 'Summoned Merc'
 }
 
 const MinionXP = {
