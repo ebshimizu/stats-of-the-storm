@@ -1110,7 +1110,7 @@ function getTowersEvents(items) {
 
       let item = {};
       item.start = altar.time;
-      item.className = t === 0 ? 'blue' : 'red';
+      item.className = t === '0' ? 'blue' : 'red';
       item.group = 5;
 
       let pop = "<h3 class='ui header'><div class='content'>Altar Captured<div class='sub header'>" + altar.damage + " Core Damage</div></div></h3>";
@@ -1592,11 +1592,11 @@ function updateTeamStats() {
     updateTeamStat(elem, 'merc-uptime', formatSeconds(stats.mercUptime));
     updateTeamStat(elem, 'merc-uptime-pct', (stats.mercUptimePercent * 100).toFixed(2) + '%');
 
-    updateTeamStat(elem, 'forts-destroyed', stats.structures.Fort.destroyed);
+    updateTeamStat(elem, 'forts-destroyed', stats.structures.Fort.destroyed ? stats.structures.Fort.destroyed : '0');
     updateTeamStat(elem, 'forts-lost', stats.structures.Fort.lost);
     updateTeamStat(elem, 'first-fort', stats.structures.Fort.destroyed === 0 ? 'N/A' : formatSeconds(stats.structures.Fort.first));
 
-    updateTeamStat(elem, 'keeps-destroyed', stats.structures.Keep.destroyed);
+    updateTeamStat(elem, 'keeps-destroyed', stats.structures.Keep.destroyed ? stats.structures.Keep.destroyed : '0');
     updateTeamStat(elem, 'keeps-lost', stats.structures.Keep.lost);
     updateTeamStat(elem, 'first-keep', stats.structures.Keep.destroyed === 0 ? 'N/A' : formatSeconds(stats.structures.Keep.first));
 

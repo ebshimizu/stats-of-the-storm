@@ -180,6 +180,8 @@ function updateTeamRanking() {
           teamStats[s] = formatStat(s, teamStats.stats.average[s], true);
         }
 
+        teamStats.structures.Fort.first /= Math.max(1, teamStats.structures.Fort.gamesWithFirst);
+        teamStats.structures.Keep.first /= Math.max(1, teamStats.structures.Keep.gamesWithFirst);
         teamStats.structures.Fort.formatFirst = formatSeconds(teamStats.structures.Fort.first);
         teamStats.structures.Keep.formatFirst = formatSeconds(teamStats.structures.Keep.first);
 
