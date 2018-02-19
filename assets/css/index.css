@@ -70,3 +70,12 @@ body {
     margin-left: 5px;
     font-weight: bold;
 }
+
+#about-page-content .segment {
+    height: 100%;
+}
+
+.about-wrapper {
+    height: calc(100% - 100px);
+    overflow-y: auto;    
+}

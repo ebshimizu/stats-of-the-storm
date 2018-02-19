@@ -139,8 +139,6 @@ $(document).ready(initApp);
 var bgWindow;
 
 function initApp() {
-  $('.app-version-number').text(app.getVersion());
-
   // initialization for the entire app
   // we'll probably want to pop up a loading thing here while all the things
   // happen.
@@ -155,6 +153,7 @@ function initApp() {
 
   // sections
   loadSections();
+  $('.app-version-number').text(app.getVersion());
 
   // populate some menus
   globalDBUpdate();
@@ -224,6 +223,8 @@ function loadSections() {
   $('#main-content').append(getTemplate('team-ranking', '#team-ranking-page'))
   initTeamRankingPage();
 
+  $('#main-content').append(getTemplate('about', '#about-page'));
+
   // register sections
   sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false, onShow: showSettingsPage };
   sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false, reset: resetMatchesPage, onShow: showMatchesPage };
@@ -233,6 +234,7 @@ function loadSections() {
   sections['player-ranking'] = {id: '#player-ranking-page-content', title: 'Player Statistics', showBack: false, reset: resetPlayerRankingPage };
   sections.teams = {id: '#teams-page-content', title: 'Teams', showBack: false, reset: resetTeamsPage, onShow: teamShowSection };
   sections['team-ranking'] = {id: '#team-ranking-page-content', title: 'Team Statistics', reset: resetTeamRankingPage, showBack: false };
+  sections.about = { id: '#about-page-content', title: 'About', showBack: false };
 
   // Matches should be the default view of the app.
   // this can be changed for development to test specific pages of course.
@@ -481,6 +483,7 @@ function resetAllSections() {
   DB.getPlayers({}, updatePlayerMenus, {sort: {'matches' : -1}});
   updateCollectionMenu();
   DB.setCollection(null);
+  populateTeamMenu($('.team-menu'));
 
   for (s in sections) {
     if (sections[s].reset) {
