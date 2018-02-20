@@ -8,6 +8,7 @@ const Parser = require('./parser/parser.js');
 const HeroesTalents = require('./js/heroes-talents.js');
 const app = require('electron').remote.app;
 const dialog = require('electron').remote.dialog;
+const shell = require('electron').shell;
 const Handlebars = require('handlebars');
 const fs = require('fs');
 const cp = require('child_process');
@@ -195,6 +196,12 @@ function initGlobalUIHandlers() {
     onChange: setAppCollection
   });
   updateCollectionMenu();
+
+  //open links externally by default
+  $(document).on('click', 'a[href^="http"]', function(event) {
+      event.preventDefault();
+      shell.openExternal(this.href);
+  });
 }
 
 function loadSections() {

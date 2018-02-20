@@ -63,9 +63,11 @@ npm install
 
 ## Third-Party Libraries
 * [heroprotocol](https://github.com/Blizzard/heroprotocol)
+* [heroes-talents](https://github.com/heroespatchnotes/heroes-talents)
 * [NeDB](https://github.com/louischatriot/nedb)
 * [Semantic UI](https://semantic-ui.com/)
 * [datepicker](https://github.com/fengyuanchen/datepicker)
 * [jquery.floatThead](https://github.com/mkoryak/floatThead)
-* jquery
-* electron
+* [jquery.tablesort](https://github.com/kylefox/jquery-tablesort)
+* [jquery](https://jquery.com/)
+* [electron](https://electronjs.org/)
