@@ -11,8 +11,56 @@ function initSettingsPage() {
   collectionRowTemplate = Handlebars.compile(getTemplate('settings', '#collection-row-template').find('tr')[0].outerHTML);
 
   let date = settings.get('lastReplayDate');
-  if (!date)
+  if (!date) {
     date = new Date(2012, 1, 1);
+    settings.set('lastReplayDate', date);
+  }
+
+  let uploadToHotsAPI = settings.get('uploadToHotsAPI');
+  if (!uploadToHotsAPI) {
+    uploadToHotsAPI = false;
+    settings.set('uploadToHotsAPI', uploadToHotsAPI);
+  }
+
+  let sendCopyToHotsLogs = settings.get('sendCopyToHotsLogs');
+  if (!sendCopyToHotsLogs) {
+    sendCopyToHotsLogs = false;
+    settings.set('sendCopyToHotsLogs', sendCopyToHotsLogs);
+  }
+
+  $('#settings-hots-api-button').checkbox({
+    onChecked: function() {
+      settings.set('uploadToHotsAPI', true);
+      $('#settings-hots-logs-button').checkbox('enable');
+    },
+    onUnchecked: function() {
+      settings.set('uploadToHotsAPI', false);
+      $('#settings-hots-logs-button').checkbox('disable');
+    }
+  });
+
+  if (uploadToHotsAPI) {
+    $('#settings-hots-api-button').checkbox('check');
+  }
+  else {
+    $('#settings-hots-api-button').checkbox('uncheck');
+    $('#settings-hots-logs-button').checkbox('disable');
+  }
+
+  $('#settings-hots-logs-button').checkbox({
+    onChecked : function() {
+      settings.set('sendCopyToHotsLogs', true);
+    },
+    onUnchecked: function() {
+      settings.set('sendCopyToHotsLogs', false);
+    }
+  });
+
+  if (sendCopyToHotsLogs) {
+    $('#settings-hots-logs-button').checkbox('set checked');
+  }
+
+  $('#settings-hots-logs-button input').popup();
 
   // handlers
   $('#settings-set-replay-folder button').click(setReplayFolder);
@@ -23,6 +71,10 @@ function initSettingsPage() {
   $('#stop-process-button').click(stopParse);
   $('#rescan-replays-button').click(startReplayScan);
   $('#replay-file-start').datepicker();
+  $('#replay-file-start').on('hide.datepicker', function(e) {
+    settings.set('latReplayDate', e.date);
+    startReplayScan();
+  });
   $('#replay-file-start').datepicker('setDate', date);
   $('#delete-db-button').click(function() {
     $('#confirm-db-delete-modal').modal({
@@ -67,6 +119,11 @@ function initSettingsPage() {
   $('#settings-page-content table').floatThead({
     scrollContainer: closestWrapper,
     autoReflow: true
+  });
+
+  $('#settings-reset-focus-player').click(function() {
+    settings.set('selectedPlayerID', null);
+    $('#settings-set-player').dropdown('restore defaults');
   });
 
   loadCollections();
@@ -120,6 +177,7 @@ function startReplayScan() {
   // lists the files in the folder
   console.log("Listing replay files...");
   let currentDate = $('#replay-file-start').datepicker('getDate');
+  settings.set('lastReplayDate', currentDate);
 
   $('#replay-file-list tbody').html('');
   let path = settings.get('replayPath');
@@ -192,14 +250,47 @@ function parseReplays() {
     i += 1;
   }
 
-  if (replayQueue.length > 0)
+  if (replayQueue.length > 0) {
+    // ui status
+    disableParsingUI();
     parseReplaysAsync(replayQueue.shift());
+  }
+}
+
+function disableParsingUI() {
+  $('#start-process-button').addClass('loading disabled');
+  $('#rescan-replays-button').addClass('disabled');
+  $('#settings-hots-api-button').checkbox('disable');
+  $('#settings-hots-logs-button').checkbox('disable');
+  $('#settings-replay-file-start').addClass('disabled');
+  $('#settings-collection-import').addClass('disabled');
+  $('#settings-set-db-folder .button').addClass('disabled');
+  $('#settings-set-replay-folder .button').addClass('disabled');
+  $('#delete-db-button').addClass('disabled');
+}
+
+function enableParsingUI() {
+  $('#start-process-button').removeClass('loading disabled');
+  $('#rescan-replays-button').removeClass('disabled');
+  $('#settings-hots-api-button').checkbox('enable');
+  $('#settings-hots-logs-button').checkbox('enable');
+  $('#settings-replay-file-start').removeClass('disabled');
+  $('#settings-collection-import').removeClass('disabled');
+  $('#settings-set-db-folder .button').removeClass('disabled');
+  $('#settings-set-replay-folder .button').removeClass('disabled');
+  $('#delete-db-button').removeClass('disabled');
 }
 
 function parseReplaysAsync(replay) {
   // attempts to spawn a child process, parse the replays in there,
   // then hand back to the main thread to actually insert into the database
   $('tr[replay-id="' + replay.id + '"] .replay-status').text('Processing...');
+
+  // upload maybe
+  if (settings.get('uploadToHotsAPI') === true) {
+    uploadReplayToHotsAPI(replay.id, replay.path);
+  }
+
   DB.checkDuplicate(replay.path, function(result) {
     if (result === false) {
       bgWindow.webContents.send('parseReplay', replay.path, replay.idx, BrowserWindow.getAllWindows()[0].id);
@@ -213,6 +304,9 @@ function parseReplaysAsync(replay) {
 
       if (replayQueue.length > 0) {
         parseReplaysAsync(replayQueue.shift());
+      }
+      else {
+        enableParsingUI();
       }
     }
   });
@@ -248,6 +342,36 @@ function loadReplay(data) {
   if (replayQueue.length > 0) {
     parseReplaysAsync(replayQueue.shift());
   }
+  else {
+    enableParsingUI();
+  }
+}
+
+function uploadReplayToHotsAPI(id, path) {
+  $('tr[replay-id="' + id + '"] .upload-status').text('Uploading...');
+  let requestUrl = 'http://hotsapi.net/api/v1/replays?uploadToHotslogs=' + (settings.get('sendCopyToHotsLogs') === true ? 'true' : 'false')
+
+  let form = new FormData();
+  form.append('file', fs.createReadStream(path));
+  form.append('uploadToHotslogs', settings.get('sendCopyToHotsLogs') === true ? 'true' : 'false');
+
+  form.submit(requestUrl, function(err, res) {
+    let body = '';
+    res.on('readable', function() {
+      body += res.read();
+    });
+    res.on('end', function() {
+      let resp = JSON.parse(body);
+      $('tr[replay-id="' + id + '"] .upload-status').text(resp.status);
+
+      if (resp.status === 'Success') {
+        $('tr[replay-id="' + id + '"] .upload-status').addClass('positive');
+      }
+      else {
+        $('tr[replay-id="' + id + '"] .upload-status').addClass('warning');
+      }
+    });
+  });
 }
 
 function stopParse() {

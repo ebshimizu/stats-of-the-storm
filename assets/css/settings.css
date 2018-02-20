@@ -25,3 +25,7 @@
     margin-top: 0px!important;
     height: 100%;
 }
+
+#settings-page-content .checkbox label {
+    color: #FFF!important;
+}

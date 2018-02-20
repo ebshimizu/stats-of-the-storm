@@ -18,6 +18,7 @@
                                     <th>Filename</th>
                                     <th>Date</th>
                                     <th>Status</th>
+                                    <th>Upload Status</th>
                                 </tr></thead> 
                                 <tbody>
                                     <!-- i think it's time to get handlebars and use templates to fill out the rows -->
@@ -65,7 +66,7 @@
                             </div>
                             <div class="four wide column"><div class="item">File Start Date</div></div>
                             <div class="twelve wide column">
-                                <div class="ui inverted fluid action input">
+                                <div class="ui inverted fluid action input" id="settings-replay-file-start">
                                     <input type="text" value="" id="replay-file-start">
                                 </div>
                             </div>
@@ -89,6 +90,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="eight wide column">
+                                <div class="ui toggle checkbox" id="settings-hots-api-button">
+                                    <input type="checkbox" name="hotsapi">
+                                    <label>Upload to HotsAPI</label>
+                                </div>
+                            </div>
+                            <div class="eight wide column">
+                                <div class="ui toggle checkbox" id="settings-hots-logs-button">
+                                    <input type="checkbox" name="hotslogs" data-content="Only available if uploading to HotsAPI">
+                                    <label>Upload to HotsLogs</label>
+                                </div>
+                            </div>
                             <div class="four wide column"><div class="item">Database</div></div>
                             <div class="eight wide column"><div class="item"></div></div>
                             <div class="four wide column"><div class="item">
@@ -104,8 +117,8 @@
                             <div class="four wide column">
                                 <div class="ui fluid button" id="settings-new-collection-button">New</div>
                             </div>
-                            <div class="four wide column"><div class="item">My ID</div></div>
-                            <div class="twelve wide column">
+                            <div class="three wide column"><div class="item">My ID</div></div>
+                            <div class="nine wide column">
                                 <div class="ui search selection dropdown fluid player-menu" id="settings-set-player">
                                     <input type="hidden" name="player">
                                     <i class="dropdown icon"></i>
@@ -113,6 +126,9 @@
                                     <div class="menu">
                                     </div>
                                 </div>
+                            </div>
+                            <div class="four wide column">
+                                <div class="ui fluid button" id="settings-reset-focus-player">Reset ID</div>
                             </div>
                         </div>
                     </div>
@@ -137,6 +153,7 @@
         <td class="replay-filename">{{filename}}</td>
         <td class="replay-date">{{date}}</td>
         <td class="replay-status">{{status}}</td>
+        <td class="upload-status">{{upload}}</td>
     </tr>
 </template>
 

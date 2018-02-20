@@ -17,6 +17,7 @@ const ipcRenderer = require('electron').ipcRenderer
 const path = require('path');
 const ReplayTypes = require('./parser/constants.js');
 const moment = require('moment');
+const FormData = require('form-data');
 
 const DetailStatList = [
   'Takedowns',
@@ -245,7 +246,7 @@ function loadSections() {
 
   // Matches should be the default view of the app.
   // this can be changed for development to test specific pages of course.
-  changeSection('matches');
+  changeSection('settings');
 }
 
 // returns the template contained in an import
