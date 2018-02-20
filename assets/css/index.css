@@ -87,3 +87,7 @@ body {
     height: calc(100% - 100px);
     overflow-y: auto;    
 }
+
+#app-quit-button:hover {
+    background-color: #db2828;
+}

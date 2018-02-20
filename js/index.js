@@ -261,7 +261,7 @@ function loadSections() {
 
   // Matches should be the default view of the app.
   // this can be changed for development to test specific pages of course.
-  changeSection('settings');
+  changeSection('matches');
 }
 
 // returns the template contained in an import
