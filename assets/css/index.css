@@ -66,6 +66,14 @@ body {
     margin-top: 2rem!important;
 }
 
+#section-menu {
+    -webkit-app-region: drag;
+}
+
+#section-menu .item {
+    -webkit-app-region: no-drag;
+}
+
 #section-menu .collection-name {
     margin-left: 5px;
     font-weight: bold;

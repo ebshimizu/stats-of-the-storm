@@ -203,6 +203,21 @@ function initGlobalUIHandlers() {
       event.preventDefault();
       shell.openExternal(this.href);
   });
+
+  $('#app-maximize-button').click(function() {
+    if (BrowserWindow.getFocusedWindow().isMaximized()) {
+      BrowserWindow.getFocusedWindow().unmaximize();
+    }
+    else {
+      BrowserWindow.getFocusedWindow().maximize();
+    }
+  });
+  $('#app-minimize-button').click(function() {
+    BrowserWindow.getFocusedWindow().minimize();
+  });
+  $('#app-quit-button').click(function() {
+    app.quit();
+  });
 }
 
 function loadSections() {
