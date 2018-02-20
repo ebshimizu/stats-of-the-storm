@@ -59,7 +59,6 @@ function parse(file, requestedData, opts) {
     rawData = rawData.replace(/\]\r?\n\{/g, '],\n{');
     
     rawData = '[' + rawData + ']';
-    rawData = decodeURIComponent(escape(rawData));
 
     replay[requestedData[i]] = JSON.parse(rawData);
   }
