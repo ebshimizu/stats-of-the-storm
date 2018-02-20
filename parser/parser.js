@@ -52,13 +52,14 @@ function parse(file, requestedData, opts) {
       maxBuffer: 500000*1024    // if anyone asks why it's 500MB it's because gameevents is huge
     });
 
-    var rawData = `${script.stdout}`;
+    var rawData = script.stdout.toString('utf8');
 
     // each line is a new json object
     rawData = rawData.replace(/\}\r?\n\{/g, '},\n{');
     rawData = rawData.replace(/\]\r?\n\{/g, '],\n{');
-
+    
     rawData = '[' + rawData + ']';
+    rawData = decodeURIComponent(escape(rawData));
 
     replay[requestedData[i]] = JSON.parse(rawData);
   }
@@ -151,10 +152,11 @@ function processReplay(file, opts = {}) {
       // collect data
       pdoc.hero = pdata.m_hero;
       // some uh, unicode issues here
+      // we're gonna use the NA hero name
       if (pdoc.hero === "LÃºcio")
         pdoc.hero = "Lucio";
 
-      pdoc.name = pdata.m_name;
+      pdoc.name = decodeURIComponent(escape(pdata.m_name));
       pdoc.uuid = pdata.m_toon.m_id;
       pdoc.region = pdata.m_toon.m_region;
       pdoc.realm = pdata.m_toon.m_realm;
@@ -1381,11 +1383,11 @@ function processTauntData(players, takedowns, playerBSeq) {
         bStep.kills = 0;
         bStep.deaths = 0;
 
-        let min = bStep.start - 160;
-        let max = bStep.stop + 160;
+        let min = bStep.start - 80;
+        let max = bStep.stop + 80;
 
         // scan the takedowns array to see if anything interesting happened
-        // range is +/- 10 seconds (160 loops)
+        // range is +/- 5 seconds (80 loops)
         for (let j = 0; j < takedowns.length; j++) {
           let td = takedowns[j];
           let time = td.loop;
@@ -1416,7 +1418,7 @@ function processTauntData(players, takedowns, playerBSeq) {
         let td = takedowns[j];
         let time = td.loop;
 
-        if (Math.abs(tauntTime - time) <= 160) {
+        if (Math.abs(tauntTime - time) <= 80) {
           // check involved players
           if (td.victim.player === id)
             player.taunts[i].deaths += 1;
@@ -1435,7 +1437,7 @@ function processTauntData(players, takedowns, playerBSeq) {
         let td = takedowns[j];
         let time = td.loop;
 
-        if (Math.abs(tauntTime - time) <= 160) {
+        if (Math.abs(tauntTime - time) <= 80) {
           // check involved players
           if (td.victim.player === id)
             player.voiceLines[i].deaths += 1;
@@ -1454,7 +1456,7 @@ function processTauntData(players, takedowns, playerBSeq) {
         let td = takedowns[j];
         let time = td.loop;
 
-        if (Math.abs(tauntTime - time) <= 160) {
+        if (Math.abs(tauntTime - time) <= 80) {
           // check involved players
           if (td.victim.player === id)
             player.sprays[i].deaths += 1;
@@ -1472,7 +1474,7 @@ function processTauntData(players, takedowns, playerBSeq) {
           let td = takedowns[j];
           let time = td.loop;
 
-          if (Math.abs(tauntTime - time) <= 160) {
+          if (Math.abs(tauntTime - time) <= 80) {
             // check involved players
             if (td.victim.player === id)
               player.dances[i].deaths += 1;
