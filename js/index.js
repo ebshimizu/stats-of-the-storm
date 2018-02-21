@@ -141,6 +141,16 @@ var prevSections = [];
 $(document).ready(initApp);
 var bgWindow;
 
+// update functions
+ipcRenderer.on('updateReady', function(event, message) {
+  console.log(message);
+  // display a popup message to alert people
+});
+
+ipcRenderer.on('updateStatus', function(event, message) {
+  console.log(message);
+});
+
 function initApp() {
   showLoader();
 

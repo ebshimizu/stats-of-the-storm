@@ -1,10 +1,21 @@
 const {app, BrowserWindow} = require('electron')
 const path = require('path')
 const url = require('url')
+const { autoUpdater } = require('electron-updater');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
+
+autoUpdater.on('checking-for-update', function() {
+  win.webContents.send('updateStatus', 'Checking for Update...');
+});
+autoUpdater.on('update-available', function() {
+  win.webContents.send('updateStatus', 'Update Available');
+});
+autoUpdater.on('update-downloaded', function(info) {
+  win.webContents.send('updateReady', 'Restart to Install Update');
+});
 
 function createWindow () {
   // Create the browser window.
@@ -37,7 +48,9 @@ function createWindow () {
     for (let w in allWindows) {
       allWindows[w].close();
     }
-  })
+  });
+
+  autoUpdater.checkForUpdatesAndNotify();
 }
 
 // This method will be called when Electron has finished
