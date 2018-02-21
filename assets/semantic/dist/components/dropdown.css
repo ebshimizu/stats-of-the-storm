@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.2.13 - Dropdown
+ * # Semantic UI 2.3.0 - Dropdown
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -168,7 +168,7 @@
   height: 0em;
   margin: 0.5em 0em;
 }
-.ui.dropdown .menu > .input {
+.ui.dropdown.dropdown .menu > .input {
   width: auto;
   display: -webkit-box;
   display: -ms-flexbox;
