@@ -91,3 +91,18 @@ body {
 #app-quit-button:hover {
     background-color: #db2828;
 }
+
+#message-container {
+    position: absolute;
+    right: 14px;
+    top: 60px;
+}
+
+#message-container .message {
+    width: 500px;
+}
+
+#message-container .update-restart-link {
+    font-weight: bolder;
+    cursor: pointer;
+}

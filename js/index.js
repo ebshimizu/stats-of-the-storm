@@ -143,8 +143,11 @@ var bgWindow;
 
 // update functions
 ipcRenderer.on('updateReady', function(event, message) {
-  console.log(message);
   // display a popup message to alert people
+  let text = `An update has been downloaded and will be installed automatically
+    when the application restarts. If you can't wait, you can <a class="update-restart-link">
+    restart the app now</a> to get the latest features.`
+  showMessage('Update Ready!', text, { class: 'positive', sticky: true, updateLink: true });
 });
 
 ipcRenderer.on('updateStatus', function(event, message) {
@@ -194,6 +197,7 @@ function resumeInitApp() {
   // sections
   setLoadMessage('Loading Sections');
   loadSections();
+  $('.app-version-number').text(app.getVersion());
 
   // populate some menus
   setLoadMessage('Populating Menus');
@@ -568,4 +572,52 @@ function showLoader() {
 
 function removeLoader() {
   $('#main-app-loader').dimmer('hide');
+}
+
+function showMessage(title, text, opts) {
+  let elem = '<div class="ui message transition hidden">'
+  elem += '<div class="header">' + title + '</div>';
+  elem += '<p>' + text + '</p>';
+  elem += '</div>';
+
+  elem = $(elem);
+
+  if (opts.class) {
+    elem.find('.message').addClass(opts.class);
+  }
+
+  if (opts.updateLink) {
+    // uh ok a bit of a special case but it'll only happen once I swear
+    elem.find('a.update-restart-link').click(function() {
+      app.relaunch();
+      app.quit();
+    });
+  }
+
+  if (opts.sticky) {
+    elem.prepend('<i class="close icon"></i>');
+    elem.find('i').click(function() {
+      $(this).parent().transition('fade left', 500, function() {
+        elem.remove();
+      });
+    });
+    $('#message-container').append(elem);
+    elem.transition('fade left');
+  }
+  else {
+    $('#message-container').append(elem);
+    elem.transition({
+      animation: 'fade left',
+      onComplete: function () {
+        setTimeout(function () {
+          elem.transition({
+            animation: 'fade left',
+            onComplete: function () {
+              elem.remove();
+            }
+          });
+        }, 3000)
+      }
+    });
+  }
 }
