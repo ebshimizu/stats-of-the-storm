@@ -12,7 +12,7 @@ function createWindow () {
     width: 1920,
     height: 1080,
     frame: false,
-    backgroundColor: '#5d5d5d'
+    backgroundColor: '#1b1c1d'
   });
 
   // and load the index.html of the app.

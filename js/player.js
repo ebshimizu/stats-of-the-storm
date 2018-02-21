@@ -359,6 +359,10 @@ function initPlayerPage() {
   progressionAwardsGraph = new Chart($('#player-progression-awards'), progressionAwardsGraphData);
 }
 
+function showPlayerPage() {
+  $('#player-page-content table').floatThead('reflow');
+}
+
 function resetPlayerPage() {
   DB.getPlayer(playerDetailID, updatePlayerPage);
 }

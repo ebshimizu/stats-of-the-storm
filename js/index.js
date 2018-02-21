@@ -142,6 +142,8 @@ $(document).ready(initApp);
 var bgWindow;
 
 function initApp() {
+  showLoader();
+
   // initial ui event bindings
   // this should happen first just in case someone needs to exit and
   // the script dies in a fire
@@ -159,28 +161,35 @@ function initApp() {
   $('#app-quit-button').click(function() {
     app.quit();
   });
+  $('.app-version-number').text(app.getVersion());
 
   // initialization for the entire app
   // we'll probably want to pop up a loading thing here while all the things
   // happen.
   // create background window
+  setLoadMessage('Setting up Parser');
   createBGWindow();
 
   // load database
+  setLoadMessage('Loading Database');
   loadDatabase();
 }
 
 // there's a functional break here as the database gets its version checked async
 function resumeInitApp() {
   // this needs the db to exist
+  setLoadMessage('Initializing Handlers');
   initGlobalUIHandlers();
 
   // sections
+  setLoadMessage('Loading Sections');
   loadSections();
-  $('.app-version-number').text(app.getVersion());
 
   // populate some menus
+  setLoadMessage('Populating Menus');
   globalDBUpdate();
+
+  removeLoader();
 }
 
 function loadDatabase() {
@@ -207,6 +216,7 @@ function checkDBVersion(dbVer) {
     // here's where database migrations go, if any
   //}
 
+  setLoadMessage('Database and Parser Version ' + dbVer);
   resumeInitApp();
 }
 
@@ -272,8 +282,8 @@ function loadSections() {
   sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false, onShow: showSettingsPage };
   sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false, reset: resetMatchesPage, onShow: showMatchesPage };
   sections['match-detail'] = {id: '#match-detail-page-content', title: 'Match Details', showBack: true, onShow: matchDetailsShowSection };
-  sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false, reset: resetPlayerPage};
-  sections['hero-collection'] = {id: '#hero-collection-page-content', title: 'Heroe Statistics', showBack: false, reset: resetHeroCollection, onShow: heroCollectionShowSection };
+  sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false, onShow: showPlayerPage, reset: resetPlayerPage};
+  sections['hero-collection'] = {id: '#hero-collection-page-content', title: 'Hero Statistics', showBack: false, reset: resetHeroCollection, onShow: heroCollectionShowSection };
   sections['player-ranking'] = {id: '#player-ranking-page-content', title: 'Player Statistics', showBack: false, reset: resetPlayerRankingPage };
   sections.teams = {id: '#teams-page-content', title: 'Teams', showBack: false, reset: resetTeamsPage, onShow: teamShowSection };
   sections['team-ranking'] = {id: '#team-ranking-page-content', title: 'Team Statistics', reset: resetTeamRankingPage, showBack: false };
@@ -409,7 +419,7 @@ function updatePlayerMenus(err, players) {
 
     for (let p in players) {
       // in non-collection mode players with less than 1 game are hidden
-      if (players[p].matches === 1)
+      if (DB.getCollection() === null && players[p].matches === 1)
         continue;
 
       let elem = '<div class="item" data-value="' + players[p]._id + '">';
@@ -491,7 +501,9 @@ function updateCollectionMenu() {
     // generic collection menus do not get the clear option
     $('.collection-menu .menu').html('');
     $('#collection-switch-menu .menu').append('<div class="item" data-value="none">All Matches</div>');
-    $('#collection-switch-menu .menu').append('<div class="ui divider"></div>');
+
+    if (collections.length > 0)
+      $('#collection-switch-menu .menu').append('<div class="ui divider"></div>');
     
     for (let c in collections) {
       let collection = collections[c];
@@ -534,4 +546,16 @@ function resetAllSections() {
       sections[s].reset();
     }
   }
+}
+
+function setLoadMessage(msg) {
+  $('.load-status').text(msg);
+}
+
+function showLoader() {
+  $('#main-app-loader').dimmer('show');
+}
+
+function removeLoader() {
+  $('#main-app-loader').dimmer('hide');
 }
