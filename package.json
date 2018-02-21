@@ -2,18 +2,30 @@
   "name": "hots-analyzer",
   "version": "0.1.0-alpha",
   "main": "main.js",
-  "description": "An experimental hots replay analysis app",
+  "description": "A Heroes of the Storm stat tracking application.",
   "bugs": "falindrith@gmail.com",
   "author": "Falindrith",
+  "license": "MIT",
   "files": [
     "main.js",
-    "index.html"
+    "index.html",
+    "background.html",
+    "parser/heroprotocol/dist/heroprotocol",
+    "parser/parser.js",
+    "parser/constants.js",
+    "templates",
+    "js",
+    "assets"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebshimizu/hots-analysis.git"
+  },
   "dependencies": {
     "@fengyuanchen/datepicker": "^0.6.4",
     "chart.js": "^2.7.1",
-    "electron": "^1.7.10",
     "electron-settings": "^3.1.4",
+    "electron-util": "^0.6.0",
     "floatthead": "^2.0.3",
     "form-data": "^2.3.2",
     "handlebars": "^4.0.11",
@@ -28,6 +40,25 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-standard": "^3.0.1"
+    "eslint-plugin-standard": "^3.0.1",
+    "electron-builder": "^20.0.7"
+  },
+  "scripts": {
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.stats-of-the-storm.app",
+    "productName": "Stats of the Storm",
+    "asar": true,
+    "asarUnpack": [
+      "parser/heroprotocol/dist/heroprotocol"
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "private": true
+      }
+    ]
   }
 }

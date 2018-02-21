@@ -1,6 +1,8 @@
 <html>
   <script type="text/javascript">
-    const Parser = require('./parser/parser.js');
+    const path = require('path');
+    const { is, fixPathForAsarUnpack } = require('electron-util');
+    const Parser = require(path.join(__dirname, 'parser/parser.js'));
     const ipc = require('electron').ipcRenderer;
     const BrowserWindow = require('electron').remote.BrowserWindow;
     const app = require('electron').remote.app;

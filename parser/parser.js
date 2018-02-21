@@ -1,6 +1,6 @@
 const cp = require('child_process');
 const fs = require('fs');
-const ReplayTypes = require('./constants.js');
+const ReplayTypes = require(path.join(__dirname, 'constants.js'));
 
 const ReplayDataType = {
   game: "gameevents",
@@ -48,7 +48,7 @@ function parse(file, requestedData, opts) {
   for (var i in requestedData) {
     console.log("Retrieving " + requestedData[i]);
 
-    const script = cp.spawnSync('python', ['./parser/heroprotocol/heroprotocol.py','--json', '--' + requestedData[i], file], {
+    const script = cp.spawnSync(fixPathForAsarUnpack(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe')), ['--json', '--' + requestedData[i], file], {
       maxBuffer: 500000*1024    // if anyone asks why it's 500MB it's because gameevents is huge
     });
 

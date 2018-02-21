@@ -63,3 +63,6 @@ app/.vs/*
 parser/test_data/*
 test.js
 .vscode/settings.json
+dist/*
+parser/heroprotocol/dist/*
+parser/heroprotocol.spec
