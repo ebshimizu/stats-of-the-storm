@@ -11,7 +11,7 @@ autoUpdater.on('checking-for-update', function() {
   win.webContents.send('updateStatus', 'Checking for Update...');
 });
 autoUpdater.on('update-available', function() {
-  win.webContents.send('updateStatus', 'Update Available');
+  win.webContents.send('updateNotify', 'Update Available');
 });
 autoUpdater.on('update-downloaded', function(info) {
   win.webContents.send('updateReady', 'Restart to Install Update');

@@ -5,10 +5,11 @@ A flexible stat tracker for Heroes of the Storm.
 Provides the ability to track individual stats, team stats in a league, and overall statistics
 for a league.
 
-This application is in the very early development stage.
-This means that the parser could change and you'll have to re-import all of your matches.
-The full releases of this project will try to avoid this scenario, however if additional information
-is placed in future replay protocols, you'll have to re-import to get that new data.
+## Installation
+Stats of the Storm has only been tested and built for Windows 10 systems.
+If you'd like to help get this to run on OS X and Linux, check out the Development section below.
+
+Check out the [Releases Page](https://github.com/ebshimizu/hots-analysis/releases) to downloadthe latest installer.
 
 ## Features
 * Match Summary
@@ -49,17 +50,23 @@ is placed in future replay protocols, you'll have to re-import to get that new d
 
 * Other
   * Movable Database - Don't want to parse matches yourself? You can load someone else's database instead of your own.
-  * [Planned] HotsAPI and HotsLogs uploader
+  * HotsAPI and HotsLogs uploader
 
-## Setup
-Development Requirements:
-* Node
-* Python 2 in your PATH
-* Don't forget to initialize the submodules
+## Development
+Here's what you'll need to develop the app.
 
-```
-npm install
-```
+* Install node
+* Install Python 2 (must be 2, and you should also put it in your path)
+* Install [pyinstaller](http://www.pyinstaller.org/)
+* Install electron globally: `npm install -g electron`
+* Clone the repository and initialize the submodules
+* Run `npm install`
+* To package the parser, navigate to the `./parser/heroprotocol` folder and run `node ../package_parser.js`
+
+### Why is PyInstaller Required?
+Stats of the Storm doesn't assume that users have Python installed on their system. Additionally,
+there are issues with running python files from the Electron ASAR archives, and it is easier
+to package the parser as a single executable file.
 
 ## Third-Party Libraries
 * [heroprotocol](https://github.com/Blizzard/heroprotocol)
