@@ -325,7 +325,9 @@ function showPage(pageNum) {
     // determine what to show
     let show = Array.from(new Array(5), (x, i) => i - 2 + currentPage);
     // first, we always have the first page
-    let elems = '<a class="icon item prev"><i class="left chevron icon"></i></a>';
+    let elems = '';
+    if (currentPage > 0)
+      elems += '<a class="icon item prev"><i class="left chevron icon"></i></a>';
     elems += '<a class="item" page="1">1</a>';
 
     if (show[0] >= 2)
@@ -343,12 +345,20 @@ function showPage(pageNum) {
     if (show[show.length - 1] < maxPages - 2)
       elems += '<a class="item disabled">...</a>';
     
-    elems += '<a class="item" page="' + maxPages + '">' + maxPages + '</a>';
-    elems += '<a class="icon item next"><i class="right chevron icon"></i></a>';
+    if (maxPages > 1) {
+      elems += '<a class="item" page="' + maxPages + '">' + maxPages + '</a>';
+    }
+
+    if (currentPage < maxPages - 1)
+      elems += '<a class="icon item next"><i class="right chevron icon"></i></a>';
+
     $('#match-list-page-menu').html(elems);
     $('#match-list-page-menu .item[page="' + (currentPage + 1) + '"]').addClass('active');
 
     $('#match-list-page-menu .item').click(function() {
+      if ($(this).hasClass('disabled'))
+        return;
+
       if ($(this).hasClass('next'))
         showPage(currentPage + 1);
       else if ($(this).hasClass('prev'))
