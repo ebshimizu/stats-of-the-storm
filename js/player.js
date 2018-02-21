@@ -168,7 +168,8 @@ function initPlayerPage() {
     fullTextSearch: true,
     onChange: updatePlayerDetailID
   });
-  $('#players-set-player').dropdown('set selected', selectedPlayerID);
+  // this takes a bit too long at app load
+  //$('#players-set-player').dropdown('set selected', selectedPlayerID);
 
   // templates
   playerDetailHeroSummaryRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-hero-summary-row').find('tr')[0].outerHTML);

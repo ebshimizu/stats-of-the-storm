@@ -1,6 +1,7 @@
 const cp = require('child_process');
 const fs = require('fs');
 const ReplayTypes = require(path.join(__dirname, 'constants.js'));
+const PARSER_VERSION = 1.0;
 
 const ReplayDataType = {
   game: "gameevents",
@@ -1690,3 +1691,4 @@ exports.AllReplayData = AllReplayData;
 exports.processReplay = processReplay;
 exports.ReplayStatus = ReplayStatus;
 exports.StatusString = StatusString;
+exports.VERSION = PARSER_VERSION;

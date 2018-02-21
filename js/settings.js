@@ -84,7 +84,8 @@ function initSettingsPage() {
       },
       onApprove: function() {
         DB.deleteDB();
-        loadDatabase();
+        app.relaunch();
+        app.quit();
         return true;
       }
     }).modal('show');
@@ -168,10 +169,8 @@ function setDBFolder() {
       // 1 dir
       let path = files[0];
       settings.set('dbPath', path);
-      loadDatabase();
-      loadCollections();
-      resetAllSections();
-      $('#settings-set-db-folder input').val(path);
+      app.relaunch();
+      app.quit();
     }
   });
 }
@@ -180,10 +179,8 @@ function resetDBFolder() {
   $('#confirm-db-reset-modal').modal({
     onApprove: function() {
       settings.set('dbPath', app.getPath('userData'));
-      loadDatabase();
-      loadCollections();
-      resetAllSections();
-      $('#settings-set-db-folder input').val(app.getPath('userData'));
+      app.relaunch();
+      app.quit();
     }
   }).modal('show');
 }
@@ -391,6 +388,7 @@ function uploadReplayToHotsAPI(id, path) {
 
 function stopParse() {
   console.log("Parser will stop after next replay");
+  enableParsingUI();
   replayQueue = [];
 }
 
