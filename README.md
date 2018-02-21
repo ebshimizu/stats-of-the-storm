@@ -62,6 +62,7 @@ Here's what you'll need to develop the app.
 * Clone the repository and initialize the submodules
 * Run `npm install`
 * To package the parser, navigate to the `./parser/heroprotocol` folder and run `node ../package_parser.js`
+* Launch the Electron application from the repository root by running `electron .`
 
 ### Why is PyInstaller Required?
 Stats of the Storm doesn't assume that users have Python installed on their system. Additionally,
