@@ -9,7 +9,7 @@ for a league.
 Stats of the Storm has only been tested and built for Windows 10 systems.
 If you'd like to help get this to run on OS X and Linux, check out the Development section below.
 
-Check out the [Releases Page](https://github.com/ebshimizu/hots-analysis/releases) to downloadthe latest installer.
+Check out the [Releases Page](https://github.com/ebshimizu/hots-analysis/releases) to download the latest installer.
 
 ## Features
 * Match Summary
