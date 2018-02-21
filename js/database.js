@@ -888,6 +888,32 @@ class Database {
       callback(versions);
     });
   }
+
+  // the DB is versioned based on the parser's current version number.
+  getDBVersion(callback) {
+    var self = this;
+    this._db.settings.findOne({type: 'version'}, function(err, ver) {
+      if (!ver) {
+        // non-existence of version is assumed to mean a new database
+        // initialize with current version
+        self._db.settings.insert({type: 'version', version: Parser.VERSION }, function(err, inserted) {
+          callback(inserted.version);
+        });
+      }
+      else {
+        callback(ver.version);
+      }
+    });
+  }
+
+  // this may turn into upgrade functions eventually but for now we'll just do this
+  setDBVersion(version, callback) {
+    this._db.settings.update({type: 'version', version: version }, function(err, updated) {
+      // basically an on complete callback
+      if (callback)
+        callback();
+    });
+  }
 }
 
 exports.HeroesDatabase = Database;

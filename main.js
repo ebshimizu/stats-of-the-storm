@@ -8,7 +8,12 @@ let win;
 
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({width: 1920, height: 1080, frame: false})
+  win = new BrowserWindow({
+    width: 1920,
+    height: 1080,
+    frame: false,
+    backgroundColor: '#5d5d5d'
+  });
 
   // and load the index.html of the app.
   win.loadURL(url.format({
@@ -26,6 +31,12 @@ function createWindow () {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     win = null
+
+    // attempt to close all windows when main closes so the app quits
+    let allWindows = BrowserWindow.getAllWindows();
+    for (let w in allWindows) {
+      allWindows[w].close();
+    }
   })
 }
 

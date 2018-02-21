@@ -142,6 +142,24 @@ $(document).ready(initApp);
 var bgWindow;
 
 function initApp() {
+  // initial ui event bindings
+  // this should happen first just in case someone needs to exit and
+  // the script dies in a fire
+  $('#app-maximize-button').click(function() {
+    if (BrowserWindow.getFocusedWindow().isMaximized()) {
+      BrowserWindow.getFocusedWindow().unmaximize();
+    }
+    else {
+      BrowserWindow.getFocusedWindow().maximize();
+    }
+  });
+  $('#app-minimize-button').click(function() {
+    BrowserWindow.getFocusedWindow().minimize();
+  });
+  $('#app-quit-button').click(function() {
+    app.quit();
+  });
+
   // initialization for the entire app
   // we'll probably want to pop up a loading thing here while all the things
   // happen.
@@ -150,8 +168,11 @@ function initApp() {
 
   // load database
   loadDatabase();
+}
 
-  // initial ui event bindings, section loading
+// there's a functional break here as the database gets its version checked async
+function resumeInitApp() {
+  // this needs the db to exist
   initGlobalUIHandlers();
 
   // sections
@@ -174,6 +195,19 @@ function loadDatabase() {
 
   // load the heroes talents database
   Heroes = new HeroesTalents.HeroesTalents(__dirname + '/assets/heroes-talents');
+
+  // check database version
+  DB.getDBVersion(checkDBVersion);
+}
+
+function checkDBVersion(dbVer) {
+  console.log('Database and Parser version: ' + dbVer);
+
+  //if (dbVer !== Parser.VERSION) {
+    // here's where database migrations go, if any
+  //}
+
+  resumeInitApp();
 }
 
 function initGlobalUIHandlers() {
@@ -203,21 +237,6 @@ function initGlobalUIHandlers() {
   $(document).on('click', 'a[href^="http"]', function(event) {
       event.preventDefault();
       shell.openExternal(this.href);
-  });
-
-  $('#app-maximize-button').click(function() {
-    if (BrowserWindow.getFocusedWindow().isMaximized()) {
-      BrowserWindow.getFocusedWindow().unmaximize();
-    }
-    else {
-      BrowserWindow.getFocusedWindow().maximize();
-    }
-  });
-  $('#app-minimize-button').click(function() {
-    BrowserWindow.getFocusedWindow().minimize();
-  });
-  $('#app-quit-button').click(function() {
-    app.quit();
   });
 }
 
@@ -278,7 +297,7 @@ function createBGWindow() {
   let bgPath = 'file://' + path.join(__dirname, './background.html');
   bgWindow = new BrowserWindow({width: 400, hegith: 400, show: false});
   bgWindow.loadURL(bgPath);
-  bgWindow.webContents.openDevTools();
+  //bgWindow.webContents.openDevTools();
 }
 
 function changeSection(to, overrideBack) {
