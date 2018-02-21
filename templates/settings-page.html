@@ -58,10 +58,15 @@
                             <div class="twelve wide column">
                                 <div class="ui inverted fluid action input" id="settings-set-db-folder">
                                     <input type="text" value="" disabled>
-                                    <button class="ui blue right labeled icon button">
-                                        <i class="folder icon"></i>
-                                        Set
-                                    </button>
+                                    <div class="ui icon buttons">
+                                        <button class="ui blue right labeled icon button" id="settings-set-db-folder-button">
+                                            <i class="folder icon"></i>
+                                            Set
+                                        </button>
+                                        <button class="ui icon button" id="settings-reset-db-folder-button">
+                                            <i class="undo icon"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="four wide column"><div class="item">File Start Date</div></div>
@@ -139,6 +144,19 @@
             <div class="header">Confirm Database Delete</div>
             <div class="content">
                 <div class="description">Are you sure you want to delete the current database? This action cannot be undone.</div>
+            </div>
+            <div class="actions">
+                <div class="ui red approve button">Yes</div>
+                <div class="ui green cancel button">No</div>
+            </div>
+        </div>
+        <div class="ui modal" id="confirm-db-reset-modal">
+            <div class="header">Reset Database Location?</div>
+            <div class="content">
+                <div class="description">
+                    This will reset the database location to its initial location.
+                    The existing database will not be deleted.
+                </div>
             </div>
             <div class="actions">
                 <div class="ui red approve button">Yes</div>

@@ -90,10 +90,13 @@ function initSettingsPage() {
     }).modal('show');
   });
 
+  $('#confirm-db-reset-modal').modal();
+
   // initial settings
   let path = settings.get('dbPath');
   $('#settings-set-db-folder input').val(path);
-  $('#settings-set-db-folder .button').click(setDBFolder);
+  $('#settings-set-db-folder-button').click(setDBFolder);
+  $('#settings-reset-db-folder-button').click(resetDBFolder);
 
   let replayPath = settings.get('replayPath');
   $('#settings-set-replay-folder input').val(replayPath);
@@ -171,6 +174,18 @@ function setDBFolder() {
       $('#settings-set-db-folder input').val(path);
     }
   });
+}
+
+function resetDBFolder() {
+  $('#confirm-db-reset-modal').modal({
+    onApprove: function() {
+      settings.set('dbPath', app.getPath('userData'));
+      loadDatabase();
+      loadCollections();
+      resetAllSections();
+      $('#settings-set-db-folder input').val(app.getPath('userData'));
+    }
+  }).modal('show');
 }
 
 function startReplayScan() {

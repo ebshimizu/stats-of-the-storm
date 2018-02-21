@@ -49,7 +49,7 @@ function parse(file, requestedData, opts) {
     console.log("Retrieving " + requestedData[i]);
 
     const script = cp.spawnSync(fixPathForAsarUnpack(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe')), ['--json', '--' + requestedData[i], file], {
-      maxBuffer: 500000*1024    // if anyone asks why it's 500MB it's because gameevents is huge
+      maxBuffer: 300000*1024    // if anyone asks why it's 300MB it's because gameevents is huge
     });
 
     var rawData = script.stdout.toString('utf8');
