@@ -145,9 +145,13 @@ var bgWindow;
 ipcRenderer.on('updateReady', function(event, message) {
   // display a popup message to alert people
   let text = `An update has been downloaded and will be installed automatically
-    when the application restarts. If you can't wait, you can <a class="update-restart-link">
-    restart the app now</a> to get the latest features.`
-  showMessage('Update Ready!', text, { class: 'positive', sticky: true, updateLink: true });
+    when the application closes. If you can't wait, you can close and re-open the
+    app to get the latest features.`
+  showMessage('Update Ready!', text, { class: 'positive', sticky: true });
+});
+
+ipcRenderer.on('updateNotify', function(event, message) {
+  showMessage(message, 'Downloading Update...', { class: 'positive' });
 });
 
 ipcRenderer.on('updateStatus', function(event, message) {
@@ -584,14 +588,6 @@ function showMessage(title, text, opts) {
 
   if (opts.class) {
     elem.find('.message').addClass(opts.class);
-  }
-
-  if (opts.updateLink) {
-    // uh ok a bit of a special case but it'll only happen once I swear
-    elem.find('a.update-restart-link').click(function() {
-      app.relaunch();
-      app.quit();
-    });
   }
 
   if (opts.sticky) {

@@ -1,6 +1,6 @@
 {
   "name": "stats-of-the-storm",
-  "version": "0.1.0-alpha",
+  "version": "0.1.0",
   "main": "main.js",
   "description": "A Heroes of the Storm stat tracking application.",
   "bugs": "falindrith@gmail.com",
@@ -61,6 +61,10 @@
         "provider": "github",
         "private": true
       }
-    ]
+    ],
+    "nsis" : {
+      "oneClick" : true,
+      "installerIcon" : "build/icon.ico"
+    }
   }
 }

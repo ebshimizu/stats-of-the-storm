@@ -34,7 +34,8 @@ function createWindow () {
   }));
 
   // Open the DevTools.
-  win.webContents.openDevTools()
+  // REMEMBER TO COMMENT THIS OUT FOR RELEASES
+  //win.webContents.openDevTools()
 
   // Emitted when the window is closed.
   win.on('closed', () => {

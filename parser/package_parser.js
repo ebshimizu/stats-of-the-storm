@@ -13,13 +13,15 @@ fs.readdir('./', function(err, items) {
     }
   }
 
-  console.log(cmd);
+  console.log('Running command:');
+  console.log(cmd + ' ' + args.join(' '));
+
   let sp = cp.spawn(cmd, args);
   sp.stdout.on('data', (data) => {
     console.log(data);
   });
   sp.stderr.on('data', (data) => {
-    console.log(`stderr: ${data}`);
+    console.log(`${data}`);
   });
   sp.on('close', (code) => {
     console.log('complete');
