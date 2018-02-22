@@ -8,7 +8,7 @@ A typical filter panel is shown above. If the button is green, that means a filt
 As an example, we can use the filters to create a player profile summary from Hero League games only.
 We do this by selecting `Hero League` from the `Mode` menu, and then clicking search.
 
-** Filters are not applied until you click search.**
+**Filters are not applied until you click search.**
 Note also that each filter button is __separate__ and does not affect results app-wide.
 
 Here's what the filter options are:
