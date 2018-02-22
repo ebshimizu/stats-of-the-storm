@@ -1,5 +1,5 @@
 # Parser
-The Stats of the Storm parser is the [heroprotocol](https://github.com/Blizzard/heroprotocol)
+Stats of the Storm loads replay data using the [heroprotocol](https://github.com/Blizzard/heroprotocol)
 library from Blizzard. Stats of the Storm makes use of a bundled version of the parsing script,
 so having python on your computer to run the parser is not required.
 
@@ -8,11 +8,13 @@ clicking on the three-line icon in the top left of the application. On the right
 this set of controls: 
 
 ![Parser Settings]({{ "/images/parser-settings.png" | absolute_url }})
+
 To start parsing, first set the replay folder to your Heroes of the Storm
 replay folder by clicking on the blue Set button. Then specify the date you'd
 like to start parsing at, dismiss the date picker, and click start. Replays found
 will show up on the left side of the screen. If you ever see a replay with a status
-of `Error: Internal Exception`, please file a bug report!
+of `Error: Internal Exception`, please file a bug report and include the replay file
+that caused the error!
 
 Other settings:
 * Database Folder - Set or reset the database location. You can load [external databases](external-db.md)
@@ -27,3 +29,5 @@ You can't just upload to HotsLogs though, so make sure the HotsAPI option is che
 
 You can also set a player ID to focus on with the My ID setting. This will highlight that player when
 browsing through matches.
+
+[Back](https://ebshimizu.github.io/stats-of-the-storm/)
