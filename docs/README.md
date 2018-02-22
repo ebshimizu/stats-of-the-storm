@@ -132,7 +132,7 @@ be waiting for the app to respond for a long time.**
 
 Displays overall individual player stats. Filterable by hero.
 
-# <a href="upload"></a>Built-in HotsAPI Upload
+# <a href="uploader"></a>Built-in HotsAPI Upload
 
 ![Built In Uploader]({{ "/images/uploader.png" | absolute_url }})
 Upload your matches to HotsAPI (and HotsLogs if you like) automatically
