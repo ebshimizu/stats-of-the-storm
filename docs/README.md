@@ -1,13 +1,13 @@
 # Stats of the Storm
 Stats of the Storm is a Heroes of the Storm replay parser that uses a local database to
-create detailed match summary reports, player performance reports, and overall
-hero statistics for your database. 
+create detailed [match summary](#matchDetails) reports, [player performance](#playerDetails) reports, and overall
+[hero statistics](#collection) for your database. 
 
-Stats of the Storm can also be used to create reports detailing team performance (with
-a team defined as 2 or more players), and organize matches into collections to represent
+Stats of the Storm can also be used to create reports detailing [team performance](#teamDetails),
+and organize matches into [collections](collections.md) to represent
 different divisions in a league.
 
-It also comes with a HotsAPI/HotsLogs uploader built in.
+It also comes with a [HotsAPI](http://hotsapi.net/)/[HotsLogs](https://www.hotslogs.com/) uploader built in.
 
 ## Features
 * [Match Database](#matchDB)
@@ -23,6 +23,7 @@ It also comes with a HotsAPI/HotsLogs uploader built in.
 * [Load an External Database](external-db.md)
 * [Use Filters](filters.md)
 * [Use Collections](collections.md)
+* [Do a Clean Uninstall](uninstall.md)
 
 ## Download
 Stats of the Storm is a Windows-only application right now. You can download the latest build
@@ -132,7 +133,7 @@ be waiting for the app to respond for a long time.**
 
 Displays overall individual player stats. Filterable by hero.
 
-# <a href="uploader"></a>Built-in HotsAPI Upload
+# <a name="uploader"></a>Built-in HotsAPI Upload
 
 ![Built In Uploader]({{ "/images/uploader.png" | absolute_url }})
 Upload your matches to HotsAPI (and HotsLogs if you like) automatically

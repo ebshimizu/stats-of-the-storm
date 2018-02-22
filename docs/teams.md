@@ -1,7 +1,7 @@
 # Teams
 
 Teams are a way to track stats for multiple players playing on the same side. Team consist
-of at least two players, and have no maximum number of players.
+of any number of players.
 
 There are two ways to create teams in Stats of the Storm.
 
