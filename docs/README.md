@@ -14,7 +14,15 @@ It also comes with a HotsAPI/HotsLogs uploader built in.
 * [Match Details](#matchDetails)
 * [Player Details](#playerDetails)
 * [Team Details](#teamDetails)
-* [Parsing Your Matches](#parser)
+* [Collection Stats](#collection)
+* [Uploader](#uploader)
+
+## How To
+* [Parse Replays](parser.md)
+* [Make a Team](teams.md)
+* [Load an External Database](external-db.md)
+* [Use Filters](filters.md)
+* [Use Collections](collections.md)
 
 ## Download
 Stats of the Storm is a Windows-only application right now. You can download the latest build
@@ -96,3 +104,37 @@ month, week, patch, and season.
 In order to use teams, you first need to define who's on a team.
 See [Team Building Instructions](teams.md) for more details.
 
+The team hero summary, and team map summary provide the same info as
+the player details.
+
+![Team Stats]({{ "/images/team-details-01.png" | absolute_url }})
+Team stats also include bans, win rate against hero, average time to levels 10 and 20,
+average mercenary stats, total structure stats, and average team-wide damage stats.
+
+![Roster Stats]({{ "/images/team-details-02.png" | absolute_url }})
+Average roster stats summary with link to the player's profile for more details.
+
+# <a name="collection"></a>Collection Stats
+Aggregated data over the entire database (or current collection).
+
+![Overall Hero Stats]({{ "/images/collection-01.png" | absolute_url }})
+Hero statistics including win, ban, and popularity rates. Filterable by
+role. Can also view detailed average stats (across all players) in the
+Hero Details tab.
+
+![Overall Team Stats]({{ "/images/collection-02.png" | absolute_url }})
+Rank teams by their average stats. Provides four categories to browse through.
+
+![Overall Player Stats]({{ "/images/collection-03.png" | absolute_url }})
+**IMPORTANT: If you are using large databases (more than 500 players)
+you should set filters on your query before running, otherwise you will
+be waiting for the app to respond for a long time.**
+
+Displays overall individual player stats. Filterable by hero.
+
+# <a href="upload"></a>Built-in HotsAPI Upload
+
+![Built In Uploader]({{ "/images/uploader.png" | absolute_url }})
+Upload your matches to HotsAPI (and HotsLogs if you like) automatically
+when you import a match. Stats of the Storm does not actively monitor your replay
+folder at the moment, so you'll have to remember to upload them manually for now.
