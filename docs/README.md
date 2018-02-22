@@ -22,5 +22,5 @@ Phase 1 of the 2018 HGC, and instructions can be found [here](external-db.md).
 Want to help develop? Found a bug? Check out the [project repository](https://github.com/ebshimizu/stats-of-the-storm/).
 
 # <a href="matchDetails"></a>Match Details
-![Match Summary](images/match-details-01.png)
+![Match Summary]({{ "/images/match-details-01.png" | absolute_url }})
 Standard End of Match statistics, bans, and award details.
