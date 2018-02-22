@@ -556,7 +556,6 @@ function resetAllSections() {
   // sections will register a reset function (if any) that will be called here
   DB.getPlayers({}, updatePlayerMenus, {sort: {'matches' : -1}});
   updateCollectionMenu();
-  DB.setCollection(null);
   populateTeamMenu($('.team-menu'));
 
   for (s in sections) {

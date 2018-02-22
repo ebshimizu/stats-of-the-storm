@@ -55,6 +55,13 @@ Set up the development environment as detailed on the repository readme and then
 take a look at the open [issues](https://github.com/ebshimizu/stats-of-the-storm/issues) and try fixing
 or implementing one! When you're ready, submit a pull request and we'll get the feature in there.
 
+**Why doesn't this run on OS X?**
+Theoretically there is no problem and it already runs on OS X.
+However, I can't build an installer for OS X because I don't have a Mac to run this on.
+The other (and probably larger problem) is that the parser I use must be packaged
+with [PyInstaller](http://www.pyinstaller.org/) using OS X every time the heroprotocol library updates.
+If you would like to maintain this, let me know.
+
 # Features
 
 ## <a name="matchDB"></a>Match Database
