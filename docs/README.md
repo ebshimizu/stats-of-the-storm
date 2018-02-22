@@ -8,7 +8,8 @@ a team defined as 2 or more players), and organize matches into collections to r
 different divisions in a league.
 
 Check out what Stats of the Storm can do:
-* [Match Details](#matchDetails) 
+* [Match Details](#matchDetails)
+* [Match Database](#matchDB)
 * [Parsing Your Matches](#parser)
 
 ## Download
@@ -56,3 +57,7 @@ Team (and all if it's a custom game) chat, along with every spray,
 dance, taunt, voice line, and of course, bstep, used in the match,
 along with a count of takedowns or deaths that happened during the taunt.
  
+# <a name="matchDB"></a>Match Database
+![Match DB]({{ "/images/matches.png" | absolute_url }})
+Search for matches by mode, map, patch, season, hero presence,
+player presence, or team.
