@@ -21,6 +21,38 @@ Phase 1 of the 2018 HGC, and instructions can be found [here](external-db.md).
 
 Want to help develop? Found a bug? Check out the [project repository](https://github.com/ebshimizu/stats-of-the-storm/).
 
-# <a href="matchDetails"></a>Match Details
-![Match Summary]({{ "/images/match-details-01.png" | absolute_url }})
-Standard End of Match statistics, bans, and award details.
+# <a name="matchDetails"></a>Match Details
+![Match Summary]({{ "/images/match-details-01.PNG" | absolute_url }})
+Standard End of Match statistics, bans, award details, and talents.
+
+![Stat Graphs]({{ "/images/match-details-02.png" | absolute_url }})
+Interactive charts for overall team damage/healing, teamfight damage/healing, and CC time
+
+![Team Stats]({{ "/images/match-details-03.png" | absolute_url }})
+Combined team statistics for levels 10 and 20, mercenaries, and structures.
+
+![Detailed Stats]({{ "/images/match-details-04.png" | absolute_url }})
+Detailed stats table (including hidden replay statistics such as clutch heals and escapes)
+
+## XP Graphs
+![Team XP]({{ "/images/match-details-07.png" | absolute_url }})
+Total Team XP
+
+![Minion XP]({{ "/images/match-details-05.png" | absolute_url }})
+Team minion soak versus theoretical maximum possible minion xp on the map
+
+![Detailed Stats]({{ "/images/match-details-06.png" | absolute_url }})
+XP contribution graph
+
+## Full Match Timeline
+![Match Timeline]({{ "/images/match-details-08.png" | absolute_url }})
+Lists the times of major match events including team takedowns, levels,
+level advantage, structures destroyed, objectives, mercenary captures,
+and also how long each mercenary unit was active.
+
+## Taunts and Chat
+![Taunts and Chat]({{ "/images/match-details-09.png" | absolute_url }})
+Team (and all if it's a custom game) chat, along with every spray,
+dance, taunt, voice line, and of course, bstep, used in the match,
+along with a count of takedowns or deaths that happened during the taunt.
+ 
