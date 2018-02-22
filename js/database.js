@@ -110,6 +110,11 @@ class Database {
         // update and insert players
         for (var i in players) {
           players[i].matchID = newDoc._id;
+
+          if (collection) {
+            players[i].collection = [collection];
+          }
+
           self._db.heroData.insert(players[i]);
 
           // log unique players in the player database
