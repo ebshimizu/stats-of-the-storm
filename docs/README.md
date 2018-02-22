@@ -1,4 +1,4 @@
-# Features
+# Stats of the Storm
 Stats of the Storm is a Heroes of the Storm replay parser that uses a local database to
 create detailed match summary reports, player performance reports, and overall
 hero statistics for your database. 
@@ -7,9 +7,11 @@ Stats of the Storm can also be used to create reports detailing team performance
 a team defined as 2 or more players), and organize matches into collections to represent
 different divisions in a league.
 
-Check out what Stats of the Storm can do:
-* [Match Details](#matchDetails)
+It also comes with a HotsAPI/HotsLogs uploader built in.
+
+## Features
 * [Match Database](#matchDB)
+* [Match Details](#matchDetails)
 * [Parsing Your Matches](#parser)
 
 ## Download
@@ -21,6 +23,11 @@ a database created by someone else. An example of this has been created for
 Phase 1 of the 2018 HGC, and instructions can be found [here](external-db.md).
 
 Want to help develop? Found a bug? Check out the [project repository](https://github.com/ebshimizu/stats-of-the-storm/).
+ 
+# <a name="matchDB"></a>Match Database
+![Match DB]({{ "/images/matches.png" | absolute_url }})
+Search for matches by mode, map, patch, season, hero presence,
+player presence, or team.
 
 # <a name="matchDetails"></a>Match Details
 ![Match Summary]({{ "/images/match-details-01.PNG" | absolute_url }})
@@ -56,8 +63,3 @@ and also how long each mercenary unit was active.
 Team (and all if it's a custom game) chat, along with every spray,
 dance, taunt, voice line, and of course, bstep, used in the match,
 along with a count of takedowns or deaths that happened during the taunt.
- 
-# <a name="matchDB"></a>Match Database
-![Match DB]({{ "/images/matches.png" | absolute_url }})
-Search for matches by mode, map, patch, season, hero presence,
-player presence, or team.
