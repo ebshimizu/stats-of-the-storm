@@ -39,6 +39,10 @@ function initSettingsPage() {
     }
   });
 
+  if (sendCopyToHotsLogs) {
+    $('#settings-hots-logs-button').checkbox('set checked');
+  }
+
   if (uploadToHotsAPI) {
     $('#settings-hots-api-button').checkbox('check');
   }
@@ -55,10 +59,6 @@ function initSettingsPage() {
       settings.set('sendCopyToHotsLogs', false);
     }
   });
-
-  if (sendCopyToHotsLogs) {
-    $('#settings-hots-logs-button').checkbox('set checked');
-  }
 
   $('#settings-hots-logs-button input').popup();
 

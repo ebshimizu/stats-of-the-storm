@@ -6,3 +6,5 @@ either reset and delete the database before uninstalling, or after uninstalling,
 `/Users/[your username]/AppData/Roaming` and delete the `stats-of-the-storm` folder. Be careful
 not to accidentally delete anything else in there, as it might be needed by a different application
 on your computer.
+
+[Back](https://ebshimizu.github.io/stats-of-the-storm/)

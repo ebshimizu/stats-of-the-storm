@@ -17,7 +17,10 @@ If you select a folder that already has these four existing database files, Stat
 the data from that database instead of creating a new one in that folder.
 
 Try it out! You can download this database of matches from Phase 1 Part 1 of the HGC, including
-NA, EU, KR, and CN regions, from here. Extract the directory and set your database path to the
+NA and EU regions, from here. Extract the directory and set your database path to the
 extracted folder. Congrats! You're now a HGC stats wizard.
+
+If you're looking for HGC KR and CN, sorry but I can't parse all of those replays yet!
+I'm considering solutions to localized replays, so stay tuned.
 
 [Back](https://ebshimizu.github.io/stats-of-the-storm/)

@@ -25,3 +25,17 @@ function normally otherwise.
 You may see some teams that have no matches in the collection still displayed in
 some dropdown menus. Clicking on them will have no effect. This will hopefully 
 be addressed in a future version.
+
+To add matches to a collection, you have three options.
+
+1. Import matches to a collection automatically with the Import to Collection
+option in settings
+2. In the Matches page, use the Collection menu to add all of the currently selected
+matches to a collection. Note that if a match is selecetd and not displayed, it will
+still be added to the collection.
+3. Add individual matches in the Match Detail pages by also using the Collection Menu.
+
+Matches can also be removed from collections by using the Collection menu on the Matches
+and Match Details pages.
+
+[Back](https://ebshimizu.github.io/stats-of-the-storm/)

@@ -9,6 +9,9 @@ different divisions in a league.
 
 It also comes with a [HotsAPI](http://hotsapi.net/)/[HotsLogs](https://www.hotslogs.com/) uploader built in.
 
+**Important Note**: Right now the parser only supports replays made using an English version of
+Heroes of the Storm. I hope to address this in a future update.
+
 ## Features
 * [Match Database](#matchDB)
 * [Match Details](#matchDetails)
@@ -61,6 +64,12 @@ However, I can't build an installer for OS X because I don't have a Mac to run t
 The other (and probably larger problem) is that the parser I use must be packaged
 with [PyInstaller](http://www.pyinstaller.org/) using OS X every time the heroprotocol library updates.
 If you would like to maintain this, let me know.
+
+**Why doesn't this work with non-English Replays?**
+The parser looks for a map that it recognizes and then parses. Since the map names are not in English,
+they don't match any keys that the parser looks for. Additionally, hero names will be in their
+localized versions, so the data won't match up there either. I hope to add localization support
+in a future update.
 
 # Features
 
