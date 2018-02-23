@@ -20,6 +20,13 @@ const moment = require('moment');
 const FormData = require('form-data');
 const { is, fixPathForAsarUnpack } = require('electron-util');
 
+const RegionString = {
+  1: 'NA',
+  2: 'EU',
+  3: 'Asia',
+  98: 'PTR/TR'
+}
+
 const DetailStatList = [
   'Takedowns',
   'SoloKill',
@@ -446,7 +453,7 @@ function updatePlayerMenus(err, players) {
 
       let elem = '<div class="item" data-value="' + players[p]._id + '">';
       elem += '<div class="ui horizontal label"><i class="file outline icon"></i>' + players[p].matches + '</div>';
-      elem += players[p].name + ' (' + players[p]._id + ')</div>';
+      elem += players[p].name + ' (' + RegionString[players[p].region] + ')</div>';
 
       opts.append(elem);
     }
