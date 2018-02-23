@@ -1,6 +1,6 @@
 {
   "name": "stats-of-the-storm",
-  "version": "0.1.0",
+  "version": "0.2.0-dev",
   "main": "main.js",
   "description": "A Heroes of the Storm stat tracking application.",
   "bugs": "falindrith@gmail.com",
@@ -38,7 +38,7 @@
     "vis": "^4.21.0"
   },
   "devDependencies": {
-    "electron-builder": "^20.0.7",
+    "electron-builder": "^20.0.9",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-node": "^5.2.1",
@@ -62,9 +62,9 @@
         "private": true
       }
     ],
-    "nsis" : {
-      "oneClick" : true,
-      "installerIcon" : "build/icon.ico"
+    "nsis": {
+      "oneClick": true,
+      "installerIcon": "build/icon.ico"
     }
   }
 }
