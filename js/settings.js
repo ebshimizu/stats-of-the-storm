@@ -130,6 +130,16 @@ function initSettingsPage() {
     $('#settings-set-player').dropdown('restore defaults');
   });
 
+  // player match threshold
+  let threshold = settings.get('playerThreshold');
+  if (threshold !== 0 && !threshold) {
+    settings.set('playerThreshold', 5);
+    threshold = 5;
+  }
+
+  $('#player-menu-thresh-input input').val(threshold);
+  $('#player-menu-thresh-input button').click(setPlayerMenuThreshold);
+
   loadCollections();
 
   if (replayPath) {
@@ -467,4 +477,9 @@ function handleCollectionAction(id, name, action) {
     }).
     modal('show');
   }
+}
+
+function setPlayerMenuThreshold() {
+  settings.set('playerThreshold', parseInt($('#player-menu-thresh-input input').val()));
+  runPlayerMenuUpdate();
 }

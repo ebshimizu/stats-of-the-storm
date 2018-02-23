@@ -62,6 +62,11 @@ function initPlayerRankingPage() {
     autoReflow: true
   });
 
+  $('#player-ranking-match-thresh input').val(settings.get('playerThreshold'));
+  $('#player-ranking-match-thresh input').popup({
+    on: 'focus'
+  });
+
   $('#player-ranking-body .buttons .button').click(togglePlayerRankingSection);
 
   $('#player-ranking-body table th.stat').data('sortBy', function(th, td, tablesort) {
@@ -78,6 +83,8 @@ function updatePlayerRankingsFilter(map, hero) {
   playerRankingsMapFilter = map;
   $('#player-ranking-filter-button').addClass('green');
   updateHeroFilter($('#player-ranking-hero-filter-menu').dropdown('get value'), null, null);
+
+  loadPlayerRankings();
 }
 
 function resetPlayerRankingsFilter() {
@@ -100,7 +107,7 @@ function updateHeroFilter(value, text, $elem) {
     playerRankingsHeroFilter.hero = value;
   }
 
-  loadPlayerRankings();
+  // don't update until search happens since you can definitely accidentally query to much stuff
 }
 
 function togglePlayerRankingSection() {
@@ -121,10 +128,14 @@ function loadPlayerRankings() {
   // this can take a long time so we don't do this on load, the user must hit the search button
   DB.getHeroData(playerRankingsHeroFilter, function(err, docs) {
     let data = DB.summarizePlayerData(docs);
+    let threshold = parseInt($('#player-ranking-match-thresh input').val());
     $('#player-ranking-body tbody').html('');
 
     for (let p in data) {
       let player = data[p];
+
+      if (player.games < threshold)
+        continue;
 
       let context = {value: player.averages};
       context.name = player.name;

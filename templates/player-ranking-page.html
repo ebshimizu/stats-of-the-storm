@@ -5,8 +5,16 @@
   <div id="player-ranking-page-content" class="is-page transition hidden" section-name="player-ranking">
     <div id="player-ranking-page-header">
       <div class="ui grid">
-        <div class="twelve wide column">
+        <div class="ten wide column">
           <h1 class="ui inverted header">Player Statistics</h1>
+        </div>
+        <div class="two wide column">
+          <div class="ui fluid labeled input" id="player-ranking-match-thresh">
+            <div class="ui label">
+              Required Matches
+            </div>
+            <input type="text" data-content="A player needs this many matches to show up in the table">
+          </div>
         </div>
         <div class="two wide column">
           <div class="ui fluid search selection dropdown" id="player-ranking-hero-filter-menu">
@@ -18,7 +26,7 @@
           </div>
         </div>
         <div class="two wide column">
-          <button class="ui labeled right floated icon button" id="player-ranking-filter-button" data-variation="very wide">
+          <button class="ui labeled fluid icon button" id="player-ranking-filter-button" data-variation="very wide">
             <i class="filter icon"></i>
             Filter Matches
           </button>

@@ -412,8 +412,7 @@ function formatStat(field, val, allFixed = false) {
 
 // updates certain elements based on a new replay inserted into the database
 function globalDBUpdate() {
-  // populate user selection dropdowns with new entries.
-  DB.getPlayers({}, updatePlayerMenus, {sort: {'matches' : -1}});
+  runPlayerMenuUpdate();
 
   // patch update
   addPatchMenuOptions($('#filter-popup-widget .filter-widget-patch'), function() {
@@ -423,6 +422,11 @@ function globalDBUpdate() {
   addPatchMenuOptions($('#match-patch-select'), function() {
     $('#match-patch-select').dropdown('refresh');
   });
+}
+
+function runPlayerMenuUpdate() {
+  // populate user selection dropdowns with new entries.
+  DB.getPlayers({}, updatePlayerMenus, {sort: {'matches' : -1}});
 }
 
 function updatePlayerMenus(err, players) {
@@ -437,7 +441,7 @@ function updatePlayerMenus(err, players) {
 
     for (let p in players) {
       // in non-collection mode players with less than 1 game are hidden
-      if (DB.getCollection() === null && players[p].matches === 1)
+      if (DB.getCollection() === null && players[p].matches < settings.get('playerThreshold'))
         continue;
 
       let elem = '<div class="item" data-value="' + players[p]._id + '">';
