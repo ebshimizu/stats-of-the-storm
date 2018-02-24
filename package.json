@@ -59,7 +59,7 @@
     "publish": [
       {
         "provider": "github",
-        "private": true
+        "private": false
       }
     ],
     "nsis": {
