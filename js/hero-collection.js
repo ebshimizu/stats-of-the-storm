@@ -17,35 +17,15 @@ function initHeroCollectionPage() {
     find('.hero-collection-hero-summary-row')[0].outerHTML);
 
   $('#hero-collection-summary table').tablesort();
-  $('#hero-collection-summary table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-  $('#hero-collection-detail-hero-talent table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
   $('#hero-collection-detail-map-summary table').tablesort();
-  $('#hero-collection-detail-map-summary table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
   $('#hero-collection-detail-with-summary table').tablesort();
-  $('#hero-collection-detail-with-summary table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
   $('#hero-collection-detail-against-summary table').tablesort();
-  $('#hero-collection-detail-against-summary table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
   $('#hero-collection-award-summary table').tablesort();
-  $('#hero-collection-award-summary table').floatThead({
+  $('#hero-collection-detail-hero-talent .talent-build table').tablesort();
+  $('#hero-collection-detail-hero-talent .talent-build table').on('tablesort:complete', function(event, tablesort) {
+    $('#hero-collection-detail-hero-talent .talent-build img').popup();
+  });
+  $('#hero-collection-body table').floatThead({
     scrollContainer: closestWrapper,
     autoReflow: true
   });
@@ -87,6 +67,7 @@ function initHeroCollectionPage() {
   $('#hero-collection-hero-select-menu').dropdown('refresh');
 
   $('#hero-collection-summary .button').click(toggleHeroCollectionType);
+  $('#hero-collection-detail-hero-talent .menu .item').tab();
 
   loadOverallHeroCollectionData();
 }

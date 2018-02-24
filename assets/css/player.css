@@ -22,7 +22,8 @@
   height: 100%;
 }
 
-#player-detail-summary .grid .table-wrapper table {
+#player-detail-summary .grid .table-wrapper table,
+#player-detail-hero-talent .table-wrapper {
   margin-top: 0!important;
 }
 
@@ -51,8 +52,9 @@
   top: 0;
 }
 
-#player-detail-hero-talent {
+#player-detail-hero-talent .talent-detail-table {
   margin-top: 0;
+  height: 650px;
 }
 
 #player-detail-hero-summary td {
@@ -93,8 +95,13 @@
   color: #FFFFFF!important;
 }
 
-.talent-detail-table .talent-stat {
+.talent-detail-table .talent-stat,
+.talent-build table td {
   font-size: 14pt;
+}
+
+.talent-build table td {
+  text-align: center!important;
 }
 
 .talent-detail-table tr.level-header {

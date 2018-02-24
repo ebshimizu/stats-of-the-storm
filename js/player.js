@@ -184,62 +184,19 @@ function initPlayerPage() {
 
   // plugins and callbacks
   $('#player-detail-hero-summary table').tablesort();
-  $('#player-detail-hero-summary table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
+
   $('#player-detail-hero-summary table th.stat').data('sortBy', function(th, td, tablesort) {
     return parseFloat(td.text());
   });
 
   $('#player-detail-map-summary table').tablesort();
-  $('#player-detail-map-summary table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
   $('#player-detail-friend-summary table').tablesort();
-  $('#player-detail-friend-summary table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
   $('#player-detail-rival-summary table').tablesort();
-  $('#player-detail-rival-summary table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
   $('#player-detail-with-summary table').tablesort();
-  $('#player-detail-with-summary table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
   $('#player-detail-against-summary table').tablesort();
-  $('#player-detail-against-summary table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
   $('#player-detail-hero-talent table').tablesort();
-  $('#player-detail-hero-talent table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
   $('#player-detail-skin-summary table').tablesort();
-  $('#player-detail-skin-summary table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
   $('#player-detail-award-summary table').tablesort();
-  $('#player-detail-award-summary table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
   $('#player-hero-detail-stats table').tablesort();
   $('#player-hero-detail-stats table th.stat').data('sortBy', function(th, td, tablesort) {
     return parseFloat(td.text());
@@ -275,6 +232,17 @@ function initPlayerPage() {
     onChange: updateGraphInterval
   });
 
+  $('#player-detail-hero-talent .menu .item').tab();
+  $('#player-detail-hero-talent .talent-build table').tablesort();
+  $('#player-detail-hero-talent .talent-build table').on('tablesort:complete', function(event, tablesort) {
+    $('#player-detail-hero-talent .talent-build img').popup();
+  });
+
+  // this apparently has to go after tablesort
+  $('#player-detail-body table').floatThead({
+    scrollContainer: closestWrapper,
+    autoReflow: true
+  });
   // filter popup
   let playerWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
   playerWidget.attr('widget-name', 'player-filter');
@@ -506,12 +474,14 @@ function renderHeroTalents(hero) {
 
 function renderHeroTalentsTo(hero, container, docs) {
   // summarize talent data
-  let data = DB.summarizeTalentData(docs);
-  data = data[hero];
+  let talentData = DB.summarizeTalentData(docs);
+  let data = talentData.talentStats[hero];
 
   container.find('tbody').html('');
+
+  // picks
   for (let tier in data) {
-    container.find('tbody').append('<tr class="level-header"><td colspan="4">Level ' + tierToLevel[tier] + '</td></tr>');
+    container.find('.talent-pick tbody').append('<tr class="level-header"><td colspan="4">Level ' + tierToLevel[tier] + '</td></tr>');
     let total = 0;
     for (let talent in data[tier]) {
       total += data[tier][talent].games;
@@ -523,12 +493,50 @@ function renderHeroTalentsTo(hero, container, docs) {
       context.description = Heroes.talentDesc(talent);
       context.name = Heroes.talentName(talent);
       context.games = data[tier][talent].games;
-      context.formatPop = ((data[tier][talent].games / total) * 100).toFixed(2) + '%';
-      context.formatWinPercent = ((data[tier][talent].wins / context.games) * 100).toFixed(2) + '%';
+      context.formatPop = (data[tier][talent].games / total * 100).toFixed(2) + '%';
+      context.formatWinPercent = (data[tier][talent].wins / context.games * 100).toFixed(2) + '%';
 
-      container.find('tbody').append(heroTalentRowTemplate(context));
+      container.find('.talent-pick tbody').append(heroTalentRowTemplate(context));
     }
   }
+
+  let builds = talentData.buildStats[hero];
+  let total = 0;
+  // total games
+  for (let b in builds)
+    total += builds[b].games;
+
+  // builds
+  for (let b in builds) {
+    let build = builds[b];
+    let row = $('<tr></tr>');
+
+    let keys = Object.keys(build.talents);
+    for (let i = 0; i < 7; i++) {
+      // this should theoretically be in order
+      let context = {};
+  
+      if (i < keys.length) {
+        context.img = Heroes.talentIcon(build.talents[keys[i]]);
+        context.description = Heroes.talentDesc(build.talents[keys[i]]);
+        context.name = Heroes.talentName(build.talents[keys[i]]);
+        row.append(matchTalentRowCellTemplate(context));
+      }
+      else {
+        row.append('<td></td>');
+      }
+    }
+
+    let winPct = build.wins / build.games;
+    let pop = build.games / total;
+    row.append('<td data-sort-value="' + winPct + '">' + (winPct * 100).toFixed(2) + '%</td>');
+    row.append('<td data-sort-value="' + build.games + '">' + build.games + '</td>');
+    row.append('<td data-sort-value="' + pop + '">' + (pop * 100).toFixed(2) + '%</td>');
+
+    container.find('.talent-build tbody').append(row);
+  }
+
+  $('.talent-build img').popup();
 }
 
 function renderPlayerSummary() {

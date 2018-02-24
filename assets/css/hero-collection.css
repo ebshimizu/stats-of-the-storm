@@ -19,10 +19,19 @@
   font-size: 14pt;
 }
 
-#hero-collection-detail-hero-talent,
 #hero-collection-detail-map-summary
 {
   height: 650px;
+}
+
+#hero-collection-detail-hero-talent .talent-detail-table {
+  height: 650px;
+  margin-top: 0;
+}
+
+#hero-collection-detail-hero-talent .table-wrapper {
+  margin-top: 0!important;
+  height: 100%;
 }
 
 #hero-collection-summary .hero-collection-wrapper {

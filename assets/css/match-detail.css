@@ -110,12 +110,14 @@
   height: 100%;
 }
 
-#match-detail-talents .tiny.image {
+#match-detail-talents .tiny.image,
+.talent-build table .tiny.image {
   width: 50px;
   border: 2px solid #000;
 }
 
-#match-detail-talents .tiny.image:hover {
+#match-detail-talents .tiny.image:hover,
+.talent-build table .tiny.image:hover {
   cursor: pointer;
   border-color: #FFF;
 }

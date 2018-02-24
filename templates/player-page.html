@@ -67,21 +67,48 @@
                   </table>
                 </div>
               </div>
-              <div class="ui inverted segment is-hidden talent-detail-table" id="player-detail-hero-talent">
-                <div class="ui top attached label">Talents</div>
-                <div class="table-wrapper">
-                  <table class="ui selectable inverted table">
-                    <thead>
-                      <tr>
-                        <th>Talent</th>
-                        <th class="center aligned">Win %</th>
-                        <th class="center aligned">Popularity</th>
-                        <th class="center aligned">Games</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
+              <div class="is-hidden" id="player-detail-hero-talent">
+                <div class="ui top attached small menu">
+                  <a class="active item" data-tab="player-talent-pick">Talents</a>
+                  <a class="item" data-tab="player-talent-builds">Builds</a>
+                </div>
+                <div class="ui active tab inverted attached segment talent-detail-table talent-pick" data-tab="player-talent-pick">
+                  <div class="table-wrapper">
+                    <table class="ui selectable inverted table">
+                      <thead>
+                        <tr>
+                          <th>Talent</th>
+                          <th class="center aligned">Win %</th>
+                          <th class="center aligned">Popularity</th>
+                          <th class="center aligned">Games</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="ui tab inverted attached segment talent-detail-table talent-build" data-tab="player-talent-builds">
+                  <div class="table-wrapper">
+                    <table class="ui selectable inverted sortable table">
+                      <thead>
+                        <tr>
+                          <th class="center aligned">1</th>
+                          <th class="center aligned">4</th>
+                          <th class="center aligned">7</th>
+                          <th class="center aligned">10</th>
+                          <th class="center aligned">13</th>
+                          <th class="center aligned">16</th>
+                          <th class="center aligned">20</th>
+                          <th class="center aligned stat">Win %</th>
+                          <th class="center aligned stat">Games</th>
+                          <th class="center aligned stat">Popularity</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
