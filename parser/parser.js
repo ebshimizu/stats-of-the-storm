@@ -1,5 +1,6 @@
 const cp = require('child_process');
 const fs = require('fs');
+const path = require('path');
 const ReplayTypes = require(path.join(__dirname, 'constants.js'));
 const PARSER_VERSION = 1.0;
 
@@ -49,6 +50,8 @@ function parse(file, requestedData, opts) {
   for (var i in requestedData) {
     console.log("Retrieving " + requestedData[i]);
 
+    // debug version for independent testing
+    //const script = cp.spawnSync(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe'), ['--json', '--' + requestedData[i], file], {
     const script = cp.spawnSync(fixPathForAsarUnpack(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe')), ['--json', '--' + requestedData[i], file], {
       maxBuffer: 300000*1024    // if anyone asks why it's 300MB it's because gameevents is huge
     });
@@ -255,6 +258,7 @@ function processReplay(file, opts = {}) {
         match.mode === ReplayTypes.GameMode.TeamLeague || match.mode === ReplayTypes.GameMode.Custom) {
       console.log("Gathering draft data...");
       match.bans = {0: [], 1: []};
+      match.picks = {0: [], 1: []};
 
       let attr = data.attributeevents[0].scopes["16"];
       for (let a in attr) {
@@ -275,6 +279,18 @@ function processReplay(file, opts = {}) {
         else if (obj.attrid === 4030) {
           // team 1 ban 2
           match.bans[1].push({hero: obj.value, order: 2});
+        }
+      }
+
+      // picks
+      for (let e in data.trackerevents) {
+        let msg = data.trackerevents[e];
+
+        if (msg._event === 'NNet.Replay.Tracker.SHeroPickedEvent') {
+          let player = players[playerLobbyID[msg.m_controllingPlayer]];
+
+          // conveniently we just need which player picks and then we have the hero name yay
+          match.picks[player.team].push(player.hero);
         }
       }
 
