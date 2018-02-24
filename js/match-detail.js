@@ -18,6 +18,7 @@ var teamfightStatGraph, teamfightStatGraphData;
 var teamCCGraph, teamCCGraphData;
 var timePerTierGraphData, timePerTierGraph;
 const xpBreakdownOpts = {
+  maintainAspectRatio: false,
   responsive: true,
   tooltips: {
     position: 'nearest',
@@ -50,6 +51,7 @@ const xpBreakdownOpts = {
   }
 }
 const xpSoakOpts = {
+  maintainAspectRatio: false,
   responsive: true,
   tooltips: {
     position: 'nearest',
@@ -175,6 +177,7 @@ function initMatchDetailPage() {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       tooltips: {
         position: 'nearest',
         mode: 'index',
@@ -1524,7 +1527,7 @@ function initTeamStatGraphs() {
   teamOverallStatGraph = new Chart($('#match-detail-team-numbers'), teamOverallStatGraphData);
   teamfightStatGraph = new Chart($('#match-detail-teamfight-numbers'), teamfightStatGraphData);
   teamCCGraph = new Chart($('#match-detail-team-cc'), teamCCGraphData);
-  timePerTierGraph = new Chart($('#match-detail-time-per-tier'), timePerTierGraph);
+  timePerTierGraph = new Chart($('#match-detail-time-per-tier'), timePerTierGraphData);
 }
 
 function loadTeamStats() {
@@ -1607,15 +1610,47 @@ function drawTeamStatGraphs() {
 
   let team0Levels = matchDetailMatch.levelTimes[0];
   let team1Levels = matchDetailMatch.levelTimes[1];
+  timePerTierGraphData.data.datasets.push({
+    label: 'Blue Team',
+    backgroundColor: '#2185d0',
+    data: []
+  });
+  timePerTierGraphData.data.datasets.push({
+    label: 'Red Team',
+    backgroundColor: '#db2828',
+    data: []
+  });
+
   for (let i in intervals) {
     let interval = intervals[i];
 
+    if (interval[1] in team0Levels) {
+      timePerTierGraphData.data.datasets[0].data.push(team0Levels[interval[1]].time - team0Levels[interval[0]].time);
+    }
+    else if (interval[0] in team0Levels && !(interval[1] in team0Levels)) {
+      // end of game
+      timePerTierGraph.data.datasets[0].data.push(matchDetailMatch.length - team0Levels[interval[0]].time);
+    }
+    else {
+      timePerTierGraphData.data.datasets[0].data.push(0);
+    }
 
+    if (interval[1] in team1Levels) {
+      timePerTierGraphData.data.datasets[1].data.push(team1Levels[interval[1]].time - team1Levels[interval[0]].time);
+    }
+    else if (interval[0] in team1Levels && !(interval[1] in team1Levels)) {
+      // end of game
+      timePerTierGraph.data.datasets[1].data.push(matchDetailMatch.length - team1Levels[interval[0]].time);
+    }
+    else {
+      timePerTierGraphData.data.datasets[1].data.push(0);
+    }
   }
 
   teamOverallStatGraph.update();
   teamfightStatGraph.update();
   teamCCGraph.update();
+  timePerTierGraph.update();
 }
 
 function updateTeamStats() {
