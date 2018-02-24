@@ -40,30 +40,28 @@
   border-left: 0;
 }
 
-#match-detail-bans {
-  height: 110px;
-  width: 450px;
+#match-detail-draft {
   margin: 10px auto;
 }
 
-#match-detail-bans.hidden {
+#match-detail-draft.hidden {
   display: none;
 }
 
-#match-detail-bans .images {
+#match-detail-draft .images {
   margin-left: 40px;
   margin-top: 0.5rem!important;
 }
 
-#match-detail-bans .images .image {
+#match-detail-draft .images .image {
   margin-right: 10px;
 }
 
-#match-detail-bans .images .blue.image img {
+#match-detail-draft .images .blue.image img {
   border: 2px solid #2185d0;
 }
 
-#match-detail-bans .images .red.image img {
+#match-detail-draft .images .red.image img {
   border: 2px solid #db2828;
 }
 

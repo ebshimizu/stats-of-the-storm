@@ -237,9 +237,10 @@ function loadDatabase() {
 function checkDBVersion(dbVer) {
   console.log('Database and Parser version: ' + dbVer);
 
-  //if (dbVer !== Parser.VERSION) {
+  if (dbVer !== Parser.VERSION) {
     // here's where database migrations go, if any
-  //}
+    console.log('Updating database from version ' + dbVer + ' to version ' + Parser.VERSION);
+  }
 
   setLoadMessage('Database and Parser Version ' + dbVer);
   resumeInitApp();
@@ -317,10 +318,10 @@ function loadSections() {
   // Matches should be the default view of the app.
   // this can be changed for development to test specific pages of course.
   // this is the dev setting.
-  changeSection('player');
+  //changeSection('player');
 
   // this is the release default
-  //changeSection('matches');
+  changeSection('matches');
 }
 
 // returns the template contained in an import
@@ -601,7 +602,7 @@ function showMessage(title, text, opts) {
   elem = $(elem);
 
   if (opts.class) {
-    elem.find('.message').addClass(opts.class);
+    elem.addClass(opts.class);
   }
 
   if (opts.sticky) {

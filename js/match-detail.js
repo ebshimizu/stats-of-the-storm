@@ -366,16 +366,49 @@ function updateBasicInfo() {
 
   // bans
   if (matchDetailMatch.mode !== ReplayTypes.GameMode.QuickMatch) {
-    $('#match-detail-bans').removeClass('hidden');
+    $('#match-detail-draft').removeClass('hidden');
+
+    // ok parser version 2 supports this so we'll go back and make 1 compatible
+    let first = 0;
+    if ('picks' in matchDetailMatch)
+      first = matchDetailMatch.picks.first;
+    else {
+      showMessage('Outdated Replay!', 'Draft Picks have been added to version 0.2.0 but you will need to re-import your replays to see the pick order.', { class: 'negative', sticky: true});
+    }
+
     for (let t in matchDetailMatch.bans) {
       let bans = matchDetailMatch.bans[t];
       for (let b in bans) {
         let h = bans[b];
-        let slot = t + '-' + h.order;
+        let slot = (parseInt(t) === first ? 'first' : 'second') + '-' + h.order;
         let icon = Heroes.heroIcon(Heroes.heroNameFromAttr(h.hero));
         $('div[ban-slot="' + slot + '"] img').attr('src', 'assets/heroes-talents/images/heroes/' + icon);
       }
     }
+
+    if ('picks' in matchDetailMatch) {
+      for (let t in [0, 1]) {
+        let picks = matchDetailMatch.picks[t];
+        for (let p = 0; p < picks.length; p++) {
+          let h = picks[p];
+          let slot = (parseInt(t) === first ? 'first' : 'second') + '-' + (p + 1);
+          let icon = Heroes.heroIcon(h);
+          $('div[pick-slot="' + slot + '"] img').attr('src','assets/heroes-talents/images/heroes/' + icon);
+        }
+      }
+    }
+
+    let firstClass = first === 0 ? 'blue' : 'red';
+    let secondClass = first === 0? 'red' : 'blue';
+
+    $('div[pick-slot^="first"]').removeClass(secondClass).addClass(firstClass);
+    $('div[pick-slot^="first"] .label').removeClass(secondClass).addClass(firstClass);
+    $('div[pick-slot^="second"]').removeClass(firstClass).addClass(secondClass);
+    $('div[pick-slot^="second"] .label').removeClass(firstClass).addClass(secondClass);
+    $('div[ban-slot^="first"]').removeClass(secondClass).addClass(firstClass);
+    $('div[ban-slot^="first"] .label').removeClass(secondClass).addClass(firstClass);
+    $('div[ban-slot^="second"]').removeClass(firstClass).addClass(secondClass);
+    $('div[ban-slot^="second"] .label').removeClass(firstClass).addClass(secondClass);
   }
   else {
     $('#match-detail-bans').addClass('hidden');

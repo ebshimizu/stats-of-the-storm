@@ -2,7 +2,7 @@ const cp = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const ReplayTypes = require(path.join(__dirname, 'constants.js'));
-const PARSER_VERSION = 1.0;
+const PARSER_VERSION = 2;
 
 const ReplayDataType = {
   game: "gameevents",
@@ -288,6 +288,9 @@ function processReplay(file, opts = {}) {
 
         if (msg._event === 'NNet.Replay.Tracker.SHeroPickedEvent') {
           let player = players[playerLobbyID[msg.m_controllingPlayer]];
+
+          if (!('first' in match.picks))
+            match.picks.first = player.team;
 
           // conveniently we just need which player picks and then we have the hero name yay
           match.picks[player.team].push(player.hero);
