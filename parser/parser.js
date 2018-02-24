@@ -480,7 +480,7 @@ function processReplay(file, opts = {}) {
             }
             else if (entry.m_key === "KillingPlayer") {
               let tdo = {};
-              if (entry.m_value === 0 || entry.m_value === 11 || entry.m_value === 12) {
+              if (!(entry.m_value in playerIDMap)) {
                 // this poor person died to a creep
                 tdo.player = "0";
                 tdo.hero = "Nexus Forces"
@@ -489,7 +489,6 @@ function processReplay(file, opts = {}) {
                 tdo = { player: playerIDMap[entry.m_value], hero: players[playerIDMap[entry.m_value]].hero };
               }
               
-                
               killers.push(playerIDMap[entry.m_value]);
               tData.killers.push(tdo);
             }
