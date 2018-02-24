@@ -16,6 +16,7 @@ var matchDetailTimeline;
 var teamOverallStatGraph, teamOverallStatGraphData;
 var teamfightStatGraph, teamfightStatGraphData;
 var teamCCGraph, teamCCGraphData;
+var timePerTierGraphData, timePerTierGraph;
 const xpBreakdownOpts = {
   responsive: true,
   tooltips: {
@@ -726,6 +727,10 @@ function getTeamXPSoakData() {
   return {data, labels};
 }
 
+function getTeamTimePerTier() {
+
+}
+
 function loadTimeline() {
   $('#match-detail-timeline-wrapper').html('');
   let items = [];
@@ -1398,6 +1403,44 @@ function initTeamStatGraphs() {
     }
   };
 
+  timePerTierGraphData = {
+    type: 'bar',
+    data: {
+      labels: ["Level 1", "Level 4", "Level 7", "Level 10", "Level 13", "Level 16", "Level 20"]
+    },
+    options: {
+      tooltips: {
+        intersect: true,
+        mode: 'point'
+      },
+      responsive: true,
+      maintainAspectRatio: false,
+      legend: {
+        labels: {
+          fontColor: '#FFFFFF'
+        }
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
+            fontColor: '#FFFFFF'
+          },
+          gridLines: {
+            color: '#ababab'
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            fontColor: '#FFFFFF'
+          },
+          gridLines: {
+            display: false
+          }
+        }]
+      }
+    }
+  }
+
   teamfightStatGraphData = {
     type: 'horizontalBar',
     data: {
@@ -1481,6 +1524,7 @@ function initTeamStatGraphs() {
   teamOverallStatGraph = new Chart($('#match-detail-team-numbers'), teamOverallStatGraphData);
   teamfightStatGraph = new Chart($('#match-detail-teamfight-numbers'), teamfightStatGraphData);
   teamCCGraph = new Chart($('#match-detail-team-cc'), teamCCGraphData);
+  timePerTierGraph = new Chart($('#match-detail-time-per-tier'), timePerTierGraph);
 }
 
 function loadTeamStats() {
@@ -1492,6 +1536,7 @@ function drawTeamStatGraphs() {
   teamOverallStatGraphData.data.datasets = [];
   teamfightStatGraphData.data.datasets = [];
   teamCCGraphData.data.datasets = [];
+  timePerTierGraphData.data.datasets = [];
 
   // since it's stacked i can just kinda dump everything in the right plcae hopefully
   var blueCt = 0;
@@ -1556,6 +1601,16 @@ function drawTeamStatGraphs() {
       };
       teamCCGraphData.data.datasets.push(ccStat);
     }
+  }
+
+  let intervals = [[1, 4], [4, 7], [7, 10], [10, 13], [13, 16], [16, 20]];
+
+  let team0Levels = matchDetailMatch.levelTimes[0];
+  let team1Levels = matchDetailMatch.levelTimes[1];
+  for (let i in intervals) {
+    let interval = intervals[i];
+
+
   }
 
   teamOverallStatGraph.update();
