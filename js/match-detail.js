@@ -397,6 +397,10 @@ function updateBasicInfo() {
         }
       }
     }
+    else {
+      $('div[pick-slot^="first"] img').attr('src', '');
+      $('div[pick-slot^="second"] img').attr('src', '');
+    }
 
     let firstClass = first === 0 ? 'blue' : 'red';
     let secondClass = first === 0? 'red' : 'blue';

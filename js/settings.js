@@ -1,6 +1,7 @@
 var settingsRowTemplate;
 var replayQueue;
 var collectionRowTemplate;
+var importDuplicates = false;
 
 // used by the parser
 var listedReplays;
@@ -60,7 +61,16 @@ function initSettingsPage() {
     }
   });
 
-  $('#settings-hots-logs-button input').popup();
+  $('#settings-hots-logs-button').popup();
+
+  $('#settings-force-duplicate').checkbox({
+    onChecked: function() {
+      importDuplicates = true;
+    },
+    onUnchecked: function() {
+      importDuplicates = false;
+    }
+  });
 
   // handlers
   $('#settings-set-replay-folder button').click(setReplayFolder);
@@ -314,7 +324,7 @@ function parseReplaysAsync(replay) {
   }
 
   DB.checkDuplicate(replay.path, function(result) {
-    if (result === false) {
+    if (importDuplicates === true || result === false) {
       bgWindow.webContents.send('parseReplay', replay.path, replay.idx, BrowserWindow.getAllWindows()[0].id);
     }
     else {
