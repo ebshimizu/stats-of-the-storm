@@ -326,6 +326,7 @@ function loadTeamData(team, matches, heroData) {
     $('#team-summary-stats .statistic[name="avgLength"] .value').text(formatSeconds(teamStats.avgLength));
     $('#team-summary-stats .statistic[name="PPK"] .value').text(teamStats.stats.average.PPK.toFixed(2));
 
+    let elem = $('#team-detail-stats');
     $('#team-detail-stats .statistic[name="team-time-to-10"] .value').text(formatSeconds(teamStats.stats.average.timeTo10));
     $('#team-detail-stats .statistic[name="team-times-at-10"] .value').text(teamStats.level10Games);
     $('#team-detail-stats .statistic[name="team-time-to-20"] .value').text(formatSeconds(teamStats.stats.average.timeTo20));
@@ -335,7 +336,14 @@ function loadTeamData(team, matches, heroData) {
     $('#team-detail-stats .statistic[name="merc-uptime"] .value').text(formatSeconds(teamStats.stats.average.mercUptime));
     $('#team-detail-stats .statistic[name="merc-uptime-percent"] .value').text((teamStats.stats.average.mercUptimePercent * 100).toFixed(2) + '%');
 
-    let elem = $('#team-detail-stats');
+    updateTeamStat(elem, 'T1', formatSeconds(teamStats.tierTimes.T1.average));
+    updateTeamStat(elem, 'T2', formatSeconds(teamStats.tierTimes.T2.average));
+    updateTeamStat(elem, 'T3', formatSeconds(teamStats.tierTimes.T3.average));
+    updateTeamStat(elem, 'T4', formatSeconds(teamStats.tierTimes.T4.average));
+    updateTeamStat(elem, 'T5', formatSeconds(teamStats.tierTimes.T5.average));
+    updateTeamStat(elem, 'T6', formatSeconds(teamStats.tierTimes.T6.average));
+
+    elem = $('#team-structure-stats');
     updateTeamStat(elem, 'forts-destroyed', teamStats.structures.Fort.destroyed);
     updateTeamStat(elem, 'forts-lost', teamStats.structures.Fort.lost);
     updateTeamStat(elem, 'first-fort', teamStats.structures.Fort.destroyed === 0 ? 'N/A' : formatSeconds(teamStats.structures.Fort.first / teamStats.structures.Fort.gamesWithFirst));
@@ -347,7 +355,7 @@ function loadTeamData(team, matches, heroData) {
     updateTeamStat(elem, 'wells-destroyed', teamStats.structures['Fort Well'].destroyed + teamStats.structures['Keep Well'].destroyed);
     updateTeamStat(elem, 'wells-lost', teamStats.structures['Fort Well'].lost + teamStats.structures['Keep Well'].lost);
 
-    let hideWellTime = (teamStats.structures['Fort Well'].destroyed + teamStats.structures['Keep Well'].destroyed) === 0
+    let hideWellTime = teamStats.structures['Fort Well'].destroyed + teamStats.structures['Keep Well'].destroyed === 0
     updateTeamStat(elem, 'first-well', hideWellTime ? 'N/A' : formatSeconds(Math.min(teamStats.structures['Fort Well'].first / teamStats.structures['Fort Well'].gamesWithFirst, teamStats.structures['Keep Well'].first / teamStats.structures['Keep Well'].gamesWithFirst)));
 
     updateTeamStat(elem, 'towers-destroyed', teamStats.structures['Fort Tower'].destroyed + teamStats.structures['Keep Tower'].destroyed);

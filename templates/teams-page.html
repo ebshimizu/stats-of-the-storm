@@ -232,75 +232,31 @@
                     <div class="label">Uptime %</div>
                   </div> 
                 </div>
-                <div class="ui inverted horizontal divider">Structures</div>
-                <div class="ui two column grid">
-                  <div class="column">
-                    <div class="ui inverted horizontal divider">Forts</div>
-                    <div class="ui three horizontal inverted mini statistics">
-                      <div class="statistic" name="forts-destroyed">
-                        <div class="value">####</div>
-                        <div class="label">Destroyed</div>
-                      </div>
-                      <div class="statistic" name="first-fort">
-                        <div class="value">####</div>
-                        <div class="label">First Destroyed</div>
-                      </div>
-                      <div class="statistic" name="forts-lost">
-                        <div class="value">####</div>
-                        <div class="label">Lost</div>
-                      </div>
-                    </div>
+                <div class="ui inverted horizontal divider">Avg. Time Per Talent Tier</div>
+                <div class="ui six inverted small statistics">
+                  <div class="statistic" name="T1">
+                    <div class="value">###</div>
+                    <div class="label">Level 1</div>
                   </div>
-                  <div class="column">
-                    <div class="ui inverted horizontal divider">Keeps</div>
-                    <div class="ui three horizontal inverted mini statistics">
-                      <div class="statistic" name="keeps-destroyed">
-                        <div class="value">####</div>
-                        <div class="label">Destroyed</div>
-                      </div>
-                      <div class="statistic" name="first-keep">
-                        <div class="value">####</div>
-                        <div class="label">First Destroyed</div>
-                      </div>
-                      <div class="statistic" name="keeps-lost">
-                        <div class="value">####</div>
-                        <div class="label">Lost</div>
-                      </div>
-                    </div>
+                  <div class="statistic" name="T2">
+                    <div class="value">###</div>
+                    <div class="label">Level 4</div>
                   </div>
-                  <div class="column">
-                    <div class="ui inverted horizontal divider">Wells</div>
-                    <div class="ui three horizontal inverted mini statistics">
-                      <div class="statistic" name="wells-destroyed">
-                        <div class="value">####</div>
-                        <div class="label">Destroyed</div>
-                      </div>
-                      <div class="statistic" name="first-well">
-                        <div class="value">####</div>
-                        <div class="label">First Destroyed</div>
-                      </div>
-                      <div class="statistic" name="wells-lost">
-                        <div class="value">####</div>
-                        <div class="label">Lost</div>
-                      </div>
-                    </div>
+                  <div class="statistic" name="T3">
+                    <div class="value">###</div>
+                    <div class="label">Level 7</div>
                   </div>
-                  <div class="column">
-                    <div class="ui inverted horizontal divider">Towers</div>
-                    <div class="ui three horizontal inverted mini statistics">
-                      <div class="statistic" name="towers-destroyed">
-                        <div class="value">####</div>
-                        <div class="label">Destroyed</div>
-                      </div>
-                      <div class="statistic" name="first-tower">
-                        <div class="value">####</div>
-                        <div class="label">First Destroyed</div>
-                      </div>
-                      <div class="statistic" name="towers-lost">
-                        <div class="value">####</div>
-                        <div class="label">Lost</div>
-                      </div>
-                    </div>
+                  <div class="statistic" name="T4">
+                    <div class="value">###</div>
+                    <div class="label">Level 10</div>
+                  </div>
+                  <div class="statistic" name="T5">
+                    <div class="value">###</div>
+                    <div class="label">Level 13</div>
+                  </div>
+                  <div class="statistic" name="T6">
+                    <div class="value">###</div>
+                    <div class="label">Level 16</div>
                   </div>
                 </div>
               </div>
@@ -382,6 +338,81 @@
                     <div class="value">###</div>
                     <div class="label">Stun Time</div>
                   </div> 
+                </div>
+              </div>
+            </div>
+            <div class="ui six wide column">
+              <div class="ui inverted segment" id="team-structure-stats">
+                <div class="ui top attached label">Structures</div>
+                <div class="ui two column grid">
+                  <div class="column">
+                    <div class="ui inverted horizontal divider">Forts</div>
+                    <div class="ui three horizontal inverted mini statistics">
+                      <div class="statistic" name="forts-destroyed">
+                        <div class="value">####</div>
+                        <div class="label">Destroyed</div>
+                      </div>
+                      <div class="statistic" name="first-fort">
+                        <div class="value">####</div>
+                        <div class="label">First Destroyed</div>
+                      </div>
+                      <div class="statistic" name="forts-lost">
+                        <div class="value">####</div>
+                        <div class="label">Lost</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="ui inverted horizontal divider">Keeps</div>
+                    <div class="ui three horizontal inverted mini statistics">
+                      <div class="statistic" name="keeps-destroyed">
+                        <div class="value">####</div>
+                        <div class="label">Destroyed</div>
+                      </div>
+                      <div class="statistic" name="first-keep">
+                        <div class="value">####</div>
+                        <div class="label">First Destroyed</div>
+                      </div>
+                      <div class="statistic" name="keeps-lost">
+                        <div class="value">####</div>
+                        <div class="label">Lost</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="ui inverted horizontal divider">Wells</div>
+                    <div class="ui three horizontal inverted mini statistics">
+                      <div class="statistic" name="wells-destroyed">
+                        <div class="value">####</div>
+                        <div class="label">Destroyed</div>
+                      </div>
+                      <div class="statistic" name="first-well">
+                        <div class="value">####</div>
+                        <div class="label">First Destroyed</div>
+                      </div>
+                      <div class="statistic" name="wells-lost">
+                        <div class="value">####</div>
+                        <div class="label">Lost</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="ui inverted horizontal divider">Towers</div>
+                    <div class="ui three horizontal inverted mini statistics">
+                      <div class="statistic" name="towers-destroyed">
+                        <div class="value">####</div>
+                        <div class="label">Destroyed</div>
+                      </div>
+                      <div class="statistic" name="first-tower">
+                        <div class="value">####</div>
+                        <div class="label">First Destroyed</div>
+                      </div>
+                      <div class="statistic" name="towers-lost">
+                        <div class="value">####</div>
+                        <div class="label">Lost</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

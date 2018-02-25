@@ -809,6 +809,14 @@ class Database {
     data.takedowns = 0;
     data.deaths = 0;
     data.avgLength = 0;
+    data.tierTimes = {
+      T1: { total: 0, count: 0 },
+      T2: { total: 0, count: 0 },
+      T3: { total: 0, count: 0 },
+      T4: { total: 0, count: 0 },
+      T5: { total: 0, count: 0 },
+      T6: { total: 0, count: 0 }
+    };
     for (let match of docs) {
       let winner = match.winner;
 
@@ -1008,6 +1016,24 @@ class Database {
         if (stat === 'timeTo20')
           data.level20Games += 1;
       }
+
+      // time per talent tier
+      let intervals = [[1, 4], [4, 7], [7, 10], [10, 13], [13, 16], [16, 20]];
+      let levels = match.levelTimes[t];
+      for (let i = 0; i < intervals.length; i++) {
+        let ikey = 'T' + (i + 1);
+        let interval = intervals[i];
+
+        if (interval[1] in levels) {
+          data.tierTimes[ikey].total += (levels[interval[1]].time - levels[interval[0]].time);
+          data.tierTimes[ikey].count += 1;
+        }
+        else if (interval[0] in levels && !(interval[1] in levels)) {
+          // end of game
+          data.tierTimes[ikey].total += match.length - levels[interval[0]].time;
+          data.tierTimes[ikey].count += 1;
+        }
+      }
     }
 
     for (let stat in data.stats.total) {
@@ -1019,6 +1045,10 @@ class Database {
         data.stats.average[stat] = data.stats.total[stat] / data.totalMatches;
     }
     data.avgLength /= data.totalMatches;
+
+    for (let tier in data.tierTimes) {
+      data.tierTimes[tier].average = data.tierTimes[tier].total / Math.max(data.tierTimes[tier].count, 1);
+    }
 
     return data;
   }

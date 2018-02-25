@@ -1446,7 +1446,7 @@ function initTeamStatGraphs() {
   timePerTierGraphData = {
     type: 'bar',
     data: {
-      labels: ["Level 1", "Level 4", "Level 7", "Level 10", "Level 13", "Level 16", "Level 20"]
+      labels: ["Level 1", "Level 4", "Level 7", "Level 10", "Level 13", "Level 16"]
     },
     options: {
       tooltips: {
