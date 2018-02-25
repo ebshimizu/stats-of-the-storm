@@ -173,10 +173,10 @@ class Database {
   checkDuplicate(file, callback) {
     let data = Parser.parse(file, [Parser.ReplayDataType.header, Parser.ReplayDataType.details]);
     let search = {};
-    search.type = data.header[0].m_type;
-    search.loopLength = data.header[0].m_elapsedGameLoops;
-    search.map = data.details[0].m_title;
-    search.rawDate = data.details[0].m_timeUTC;
+    search.type = data.header.m_type;
+    search.loopLength = data.header.m_elapsedGameLoops;
+    search.map = data.details.m_title;
+    search.rawDate = data.details.m_timeUTC;
 
     // this is the one raw call that is not preprocessed by collections for what should be somewhat obvious reasons
     this._db.matches.find(search, function(err, docs) {
