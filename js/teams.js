@@ -56,6 +56,8 @@ function initTeamsPage() {
     showMatchHistory();
   });
 
+  $('#team-hero-summary .menu .item').tab();
+
   $('#team-edit-menu').dropdown({
     onChange: function(value, text, $elem) {
       handleTeamMenuCallback(value);
@@ -227,7 +229,7 @@ function loadTeamData(team, matches, heroData) {
   renderMapStatsTo($('#team-map-summary'), teamStats)
   renderHeroVsStatsTo($('#team-against-summary'), against);
 
-  $('#team-hero-summary tbody').html('');
+  $('#team-hero-summary-table tbody').html('');
   let picked = 0;
   for (let h in heroStats.heroes) {
     let hero = heroStats.heroes[h];
@@ -261,7 +263,7 @@ function loadTeamData(team, matches, heroData) {
     context.heroName = h;
 
     picked += 1;
-    $('#team-hero-summary tbody').append(teamHeroSummaryRowTemplate(context));
+    $('#team-hero-summary-table tbody').append(teamHeroSummaryRowTemplate(context));
   }
 
   // bans
@@ -344,10 +346,9 @@ function loadTeamData(team, matches, heroData) {
     updateTeamStat(elem, 'shields', teamStats.stats.average.ProtectionGivenToAllies.toFixed(0));
     updateTeamStat(elem, 'damage-taken', teamStats.stats.average.DamageTaken.toFixed(0));
 
-    elem = $('#team-teamfight-stats');
-    updateTeamStat(elem, 'hero-damage', teamStats.stats.average.TeamfightHeroDamage.toFixed(0));
-    updateTeamStat(elem, 'damage-taken', teamStats.stats.average.TeamfightDamageTaken.toFixed(0));
-    updateTeamStat(elem, 'healing', teamStats.stats.average.TeamfightHealingDone.toFixed(0));
+    updateTeamStat(elem, 'hero-damage-tf', teamStats.stats.average.TeamfightHeroDamage.toFixed(0));
+    updateTeamStat(elem, 'damage-taken-tf', teamStats.stats.average.TeamfightDamageTaken.toFixed(0));
+    updateTeamStat(elem, 'healing-tf', teamStats.stats.average.TeamfightHealingDone.toFixed(0));
     updateTeamStat(elem, 'cc', formatSeconds(teamStats.stats.average.TimeCCdEnemyHeroes));
     updateTeamStat(elem, 'root', formatSeconds(teamStats.stats.average.TimeRootingEnemyHeroes));
     updateTeamStat(elem, 'silence', formatSeconds(teamStats.stats.average.TimeSilencingEnemyHeroes));
