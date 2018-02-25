@@ -45,6 +45,9 @@ function initHeroCollectionPage() {
   $('#hero-collection-submenu .item').click(function() {
     $('#hero-collection-body table').floatThead('reflow');
   });
+  $('#hero-collection-detail-hero-talent .item').click(function() {
+    $('#hero-collection-body table').floatThead('reflow');
+  });
 
   // filter popup
   let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);

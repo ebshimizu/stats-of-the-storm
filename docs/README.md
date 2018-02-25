@@ -82,6 +82,9 @@ player presence, or team.
 ![Match Summary]({{ "/images/match-details-01.PNG" | absolute_url }})
 Standard End of Match statistics, bans, award details, and talents.
 
+![Full Draft]({{ "/images/match-details-10.png" | absolute_url }})
+Full match draft, not just bans.
+
 ![Stat Graphs]({{ "/images/match-details-02.png" | absolute_url }})
 Interactive charts for overall team damage/healing, teamfight damage/healing, and CC time
 
@@ -120,7 +123,10 @@ Stats of the Storm generates reports for each player found in the database.
 Hero summary, map summary, and aggregate data for each player.
 
 ![Player Hero Details]({{ "/images/player-details-02.png" | absolute_url }})
-Hero details and talent selection per-player. Builds are coming soon!
+Hero details and talent selection per-player.
+
+![Player Hero Builds]({{ "/images/player-details-02.png" | absolute_url }})
+Talent builds overall and per-player.
 
 ![Hero Synergy]({{ "/images/player-details-03.png" | absolute_url }})
 With and against hero win rates.
@@ -147,6 +153,9 @@ the player details.
 ![Team Stats]({{ "/images/team-details-01.png" | absolute_url }})
 Team stats also include bans, win rate against hero, average time to levels 10 and 20,
 average mercenary stats, total structure stats, and average team-wide damage stats.
+
+![Team Draft Priority]({{ "/images/team-details-03.png" | absolute_url }})
+Team draft priority, including picks, and bans.
 
 ![Roster Stats]({{ "/images/team-details-02.png" | absolute_url }})
 Average roster stats summary with link to the player's profile for more details.
