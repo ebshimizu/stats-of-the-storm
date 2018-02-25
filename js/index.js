@@ -240,6 +240,11 @@ function checkDBVersion(dbVer) {
   if (dbVer !== Parser.VERSION) {
     // here's where database migrations go, if any
     console.log('Updating database from version ' + dbVer + ' to version ' + Parser.VERSION);
+    if (dbVer === 1) {
+      migrateVersion1ToVersion2();
+      // migrate will call back to check DB version after updating the version
+      return;
+    }
   }
 
   setLoadMessage('Database and Parser Version ' + dbVer);
@@ -631,4 +636,15 @@ function showMessage(title, text, opts) {
       }
     });
   }
+}
+
+// DATABASE MIGRATIONS
+function migrateVersion1ToVersion2() {
+  let text = `The parser has been updated to version 2, which means that you will need to
+  re-import your matches to use the latest features. You can force the database to re-import duplicate
+  matches by using the Import Duplicates option, or you can delete the database and just re-import everything.
+  Note that importing duplicates will reset their membership in collections, so if you use that feature,
+  remember to set the Import to Collection option accordingly.`
+  showMessage('Parser Updated to Version 2', text, { sticky: true });
+  DB.setDBVersion(2, checkDBVersion(2));
 }

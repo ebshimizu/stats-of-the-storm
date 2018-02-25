@@ -931,7 +931,7 @@ class Database {
 
   // this may turn into upgrade functions eventually but for now we'll just do this
   setDBVersion(version, callback) {
-    this._db.settings.update({type: 'version', version: version }, function(err, updated) {
+    this._db.settings.update({type: 'version'}, { $set: {version: version} }, {}, function(err, updated) {
       // basically an on complete callback
       if (callback)
         callback();
