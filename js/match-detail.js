@@ -1066,42 +1066,44 @@ function getBraxisEvents(items) {
     let item0 = {};
     let item1 = {};
 
-    item0.start = wave.startTime;
-    item1.start = wave.startTime;
-    item0.end = wave.endTime[0];
-    item1.end = wave.endTime[1];
+    if ('startTime' in wave) {
+      item0.start = wave.startTime;
+      item1.start = wave.startTime;
+      item0.end = wave.endTime[0];
+      item1.end = wave.endTime[1];
 
-    item0.className = 'blue';
-    item1.className = 'red';
+      item0.className = 'blue';
+      item1.className = 'red';
 
-    let t0 = (wave.startScore[0] * 100).toFixed(2) + '% Zerg Wave';
-    let t1 = (wave.startScore[1] * 100).toFixed(2) + '% Zerg Wave';
+      let t0 = (wave.startScore[0] * 100).toFixed(2) + '% Zerg Wave';
+      let t1 = (wave.startScore[1] * 100).toFixed(2) + '% Zerg Wave';
 
-    let pop0 = "<h3 class='ui header'>";
-    pop0 += "<div class='content'>" + t0 + "<div class='sub header'>Spawned at: " + formatSeconds(item0.start) + ", Duration: " + formatSeconds(item0.end - item0.start);
-    pop0 += "</div></div></h3>";
+      let pop0 = "<h3 class='ui header'>";
+      pop0 += "<div class='content'>" + t0 + "<div class='sub header'>Spawned at: " + formatSeconds(item0.start) + ", Duration: " + formatSeconds(item0.end - item0.start);
+      pop0 += "</div></div></h3>";
 
-    let pop1 = "<h3 class='ui header'>";
-    pop1 += "<div class='content'>" + t1 + "<div class='sub header'>Spawned at: " + formatSeconds(item1.start) + ", Duration: " + formatSeconds(item1.end - item1.start);
-    pop1 += "</div></div></h3>";
+      let pop1 = "<h3 class='ui header'>";
+      pop1 += "<div class='content'>" + t1 + "<div class='sub header'>Spawned at: " + formatSeconds(item1.start) + ", Duration: " + formatSeconds(item1.end - item1.start);
+      pop1 += "</div></div></h3>";
 
-    item0.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop0 + '">' + t0 + '</div>';
-    item1.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop1 + '">' + t1 + '</div>';
+      item0.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop0 + '">' + t0 + '</div>';
+      item1.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop1 + '">' + t1 + '</div>';
 
-    item0.group = 54
-    item1.group = 5;
+      item0.group = 54
+      item1.group = 5;
 
-    items.push(item0);
-    items.push(item1);
+      items.push(item0);
+      items.push(item1);
 
-    // spawns
-    sitem = {};
-    sitem.start = wave.initTime;
-    sitem.content = "Beacons Active";
-    sitem.type = 'background';
-    sitem.group = 5;
-    sitem.end = wave.startTime;
-    items.push(sitem);
+      // spawns
+      sitem = {};
+      sitem.start = wave.initTime;
+      sitem.content = "Beacons Active";
+      sitem.type = 'background';
+      sitem.group = 5;
+      sitem.end = wave.startTime;
+      items.push(sitem);
+    }
   }
 }
 
