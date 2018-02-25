@@ -83,7 +83,7 @@ player presence, or team.
 Standard End of Match statistics, bans, award details, and talents.
 
 ![Full Draft]({{ "/images/match-details-10.png" | absolute_url }})
-Full match draft, not just bans.
+Full match draft, not just bans. Available for replays from HotS 2.0 or newer (v2.25.0).
 
 ![Stat Graphs]({{ "/images/match-details-02.png" | absolute_url }})
 Interactive charts for overall team damage/healing, teamfight damage/healing, and CC time

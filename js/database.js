@@ -730,11 +730,17 @@ class Database {
         }
 
         if ('picks' in match) {
-          for (let p = 0; p < match.picks[t].length; p++) {
-            data[match.picks[t][p]].picks['p' + (p + 1)].count += 1;
+          if (match.picks[t].length !== 5) {
+            // some older replays do not have draft data, so we just skip
+            //console.log('Pick data missing, continuing...');
+          }
+          else {
+            for (let p = 0; p < match.picks[t].length; p++) {
+              data[match.picks[t][p]].picks['p' + (p + 1)].count += 1;
 
-            if (parseInt(t) === winner) {
-              data[match.picks[t][p]].picks['p' + (p + 1)].wins += 1;
+              if (parseInt(t) === winner) {
+                data[match.picks[t][p]].picks['p' + (p + 1)].wins += 1;
+              }
             }
           }
         }

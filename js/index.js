@@ -598,7 +598,7 @@ function removeLoader() {
   $('#main-app-loader').dimmer('hide');
 }
 
-function showMessage(title, text, opts) {
+function showMessage(title, text, opts = {}) {
   let elem = '<div class="ui message transition hidden">'
   elem += '<div class="header">' + title + '</div>';
   elem += '<p>' + text + '</p>';
@@ -632,7 +632,7 @@ function showMessage(title, text, opts) {
               elem.remove();
             }
           });
-        }, 3000)
+        }, 4000)
       }
     });
   }

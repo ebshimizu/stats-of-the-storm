@@ -51,8 +51,8 @@ function parse(file, requestedData, opts) {
     console.log("Retrieving " + requestedData[i]);
 
     // debug version for independent testing
-    //const script = cp.spawnSync(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe'), ['--json', '--' + requestedData[i], file], {
-    const script = cp.spawnSync(fixPathForAsarUnpack(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe')), ['--json', '--' + requestedData[i], file], {
+    const script = cp.spawnSync(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe'), ['--json', '--' + requestedData[i], file], {
+    //const script = cp.spawnSync(fixPathForAsarUnpack(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe')), ['--json', '--' + requestedData[i], file], {
       maxBuffer: 300000*1024    // if anyone asks why it's 300MB it's because gameevents is huge
     });
 
@@ -301,7 +301,12 @@ function processReplay(file, opts = {}) {
             match.picks.first = player.team;
 
           // conveniently we just need which player picks and then we have the hero name yay
-          match.picks[player.team].push(player.hero);
+          if (match.picks[player.team].indexOf(player.hero) < 0) {
+            match.picks[player.team].push(player.hero);
+          }
+          else {
+            console.log("[PARSER WARNING] Match has invalid pick data, recovering as much data as possible.");
+          }
         }
       }
 
