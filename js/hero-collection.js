@@ -1,4 +1,5 @@
 var heroCollectionSummaryRowTemplate;
+var heroCollectionPickRowTemplate;
 
 // by default this screen containrs games played in official modes with bans
 var heroCollectionHeroDataFilter;
@@ -15,8 +16,11 @@ function initHeroCollectionPage() {
 
   heroCollectionSummaryRowTemplate = Handlebars.compile(getTemplate('hero-collection', '#hero-collection-hero-summary-row-template').
     find('.hero-collection-hero-summary-row')[0].outerHTML);
+  heroCollectionPickRowTemplate = Handlebars.compile(getTemplate('hero-collection', '#hero-collection-hero-pick-row-template').
+    find('.hero-collection-hero-summary-row')[0].outerHTML);
 
   $('#hero-collection-summary table').tablesort();
+  $('#hero-collection-picks table').tablesort();
   $('#hero-collection-detail-map-summary table').tablesort();
   $('#hero-collection-detail-with-summary table').tablesort();
   $('#hero-collection-detail-against-summary table').tablesort();
@@ -31,7 +35,10 @@ function initHeroCollectionPage() {
   });
 
   $('#hero-collection-summary table th.stat').data('sortBy', function(th, td, tablesort) {
-    return parseFloat(td.text());
+    return parseFloat(td.attr('data-sort-value'));
+  });
+  $('#hero-collection-picks table th.stat').data('sortBy', function(th, td, tablesort) {
+    return parseFloat(td.attr('data-sort-value'));
   });
 
   $('#hero-collection-submenu .item').tab();
@@ -66,7 +73,13 @@ function initHeroCollectionPage() {
   addHeroMenuOptions($('#hero-collection-hero-select-menu'));
   $('#hero-collection-hero-select-menu').dropdown('refresh');
 
-  $('#hero-collection-summary .button').click(toggleHeroCollectionType);
+  $('#hero-collection-summary .button').click(function() {
+    toggleHeroCollectionType('#hero-collection-summary', $(this));
+  });
+
+  $('#hero-collection-picks .button').click(function() {
+    toggleHeroCollectionType('#hero-collection-picks', $(this));
+  });
   $('#hero-collection-detail-hero-talent .menu .item').tab();
 
   loadOverallHeroCollectionData();
@@ -90,10 +103,10 @@ function updateCollectionFilter(map, hero) {
 
 function resetCollectionFilter() {
   heroCollectionHeroDataFilter = {
-    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague]}
+    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague, ReplayTypes.GameMode.Custom]}
   }
   heroCollectionMapDataFilter = {
-    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague]}
+    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague, ReplayTypes.GameMode.Custom]}
   }
 
   let filterWidget = $('.filter-popup-widget[widget-name="hero-collection-filter"]');
@@ -112,6 +125,7 @@ function loadOverallHeroCollectionData() {
     let overallStats = DB.summarizeMatchData(docs, Heroes);
 
     $('#hero-collection-summary tbody').html('');
+    $('#hero-collection-picks tbody').html('');
     for (let h in overallStats) {
       if (h === 'totalMatches' || h === 'totalBans')
         continue;
@@ -122,75 +136,100 @@ function loadOverallHeroCollectionData() {
       context.heroImg = Heroes.heroIcon(h);
       context.winPercent = hero.wins / hero.games;
       context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
-      context.banPercent = hero.bans / overallStats.totalMatches;
+      context.banPercent = hero.bans.total / overallStats.totalMatches;
       context.formatBanPercent = (context.banPercent * 100).toFixed(2) + '%';
       context.popPercent = hero.involved / overallStats.totalMatches;
       context.formatPopPercent = (context.popPercent * 100).toFixed(2) + '%';
       context.games = hero.games;
       context.win = hero.wins;
       context.loss = hero.games - hero.wins;
+      context.bans = hero.bans.total;
       context.heroRole = Heroes.role(h);
 
       $('#hero-collection-summary tbody').append(heroCollectionSummaryRowTemplate(context));
+
+      let banContext = {};
+      banContext.format = {};
+      banContext.games = hero.games;
+      banContext.heroName = h;
+      banContext.heroImg = context.heroImg;
+      banContext.heroRole = context.heroRole;
+      banContext.winPercent = context.winPercent;
+      banContext.format.winPercent = context.formatWinPercent;
+      banContext.banPercent = context.banPercent;
+      banContext.format.banPercent = context.formatBanPercent;
+      banContext.bans = hero.bans;
+      banContext.firstBanPercent = hero.bans.first / overallStats.totalMatches;
+      banContext.format.firstBanPercent = (banContext.firstBanPercent * 100).toFixed(2) + '%';
+      banContext.secondBanPercent = hero.bans.second / overallStats.totalMatches;
+      banContext.format.secondBanPercent = (banContext.secondBanPercent * 100).toFixed(2) + '%';
+      banContext.picks = hero.picks;
+
+      for (let p in banContext.picks) {
+        banContext.picks[p].pct = banContext.picks[p].count / overallStats.totalMatches;
+        banContext.picks[p].formatPct = (banContext.picks[p].pct * 100).toFixed(2) + '%';
+      }
+
+      $('#hero-collection-picks tbody').append(heroCollectionPickRowTemplate(banContext));
     }
   })
 }
 
-function toggleHeroCollectionType() {
-  let type = $(this).text();
+function toggleHeroCollectionType(tableID, elem) {
+  let type = elem.text();
 
   let hide = false;
   if (type === "Assassin") {
-    if ($(this).hasClass('red')) {
+    if (elem.hasClass('red')) {
       hide = true;
-      $(this).removeClass('red');
+      elem.removeClass('red');
     }
     else {
-      $(this).addClass('red');
+      elem.addClass('red');
     }
   }
   if (type === "Warrior") {
-    if ($(this).hasClass('blue')) {
+    if (elem.hasClass('blue')) {
       hide = true;
-      $(this).removeClass('blue');
+      elem.removeClass('blue');
     }
     else {
-      $(this).addClass('blue');
+      elem.addClass('blue');
     }
   }
   if (type === "Support") {
-    if ($(this).hasClass('teal')) {
+    if (elem.hasClass('teal')) {
       hide = true;
-      $(this).removeClass('teal');
+      elem.removeClass('teal');
     }
     else {
-      $(this).addClass('teal');
+      elem.addClass('teal');
     }
   }
   if (type === "Specialist") {
-    if ($(this).hasClass('violet')) {
+    if (elem.hasClass('violet')) {
       hide = true;
-      $(this).removeClass('violet');
+      elem.removeClass('violet');
     }
     else {
-      $(this).addClass('violet');
+      elem.addClass('violet');
     }
   }
   if (type === "Multiclass") {
-    if ($(this).hasClass('purple')) {
+    if (elem.hasClass('purple')) {
       hide = true;
-      $(this).removeClass('purple');
+      elem.removeClass('purple');
     }
     else {
-      $(this).addClass('purple');
+      elem.addClass('purple');
     }
   }
 
   if (hide) {
-    $('#hero-collection-summary table').find('.' + type).addClass('is-hidden');
+    $(tableID + ' table').find('.' + type).addClass('is-hidden');
   }
   else {
-    $('#hero-collection-summary table').find('.' + type).removeClass('is-hidden');
+    $(tableID + ' table').find('.' + type).removeClass('is-hidden');
   }
 }
 

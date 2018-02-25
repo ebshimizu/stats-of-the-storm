@@ -19,9 +19,10 @@
     <div id="hero-collection-body">
       <div class="ui secondary inverted pointing menu" id="hero-collection-submenu">
         <a class="active item" data-tab="hero-collection-overall">Overall</a>
+        <a class="item" data-tab="hero-collection-picks">Picks and Bans</a>
         <a class="item" data-tab="hero-collection-hero">Hero Details</a>
       </div>
-      <div class="ui active tab" data-tab="hero-collection-overall" id="hero-collection-summary">
+      <div class="ui tab" data-tab="hero-collection-overall" id="hero-collection-summary">
         <div class="five ui buttons">
           <div class="ui red button">Assassin</div>
           <div class="ui blue button">Warrior</div>
@@ -35,12 +36,59 @@
               <thead>
                 <tr>
                   <th>Hero</th>
-                  <th class="center alligned stat">Win %</th>
-                  <th class="center alligned stat">Ban %</th>
-                  <th class="center alligned stat">Popularity</th>
-                  <th class="center alligned stat">Win</th>
-                  <th class="center alligned stat">Loss</th>
-                  <th class="center alligned stat">Games</th>
+                  <th class="center aligned stat">Win %</th>
+                  <th class="center aligned stat">Ban %</th>
+                  <th class="center aligned stat">Popularity</th>
+                  <th class="center aligned stat">Win</th>
+                  <th class="center aligned stat">Loss</th>
+                  <th class="center aligned stat">Games</th>
+                  <th class="center aligned stat">Bans</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="ui active tab" data-tab="hero-collection-picks" id="hero-collection-picks">
+        <div class="five ui buttons">
+          <div class="ui red button">Assassin</div>
+          <div class="ui blue button">Warrior</div>
+          <div class="ui teal button">Support</div>
+          <div class="ui violet button">Specialist</div>
+          <div class="ui purple button">Multiclass</div>
+        </div>
+        <div class="hero-collection-wrapper">
+          <div class="table-wrapper">
+            <table class="ui sortable compact selectable inverted table">
+              <thead>
+                <tr>
+                  <th>Hero</th>
+                  <th class="center aligned stat">Games</th> 
+                  <th class="center aligned stat">Win %</th>
+                  <th class="center aligned stat">Bans</th>
+                  <th class="center aligned stat">Ban %</th>
+                  <th class="center aligned stat">1st Ban</th>
+                  <th class="center aligned stat">1st Ban %</th>
+                  <th class="center aligned stat">2nd Ban</th>
+                  <th class="center aligned stat">2nd Ban %</th>
+                  <th class="center aligned stat">1st</th>
+                  <th class="center aligned stat">1st %</th>
+                  <th class="center aligned stat">1st Wins</th>
+                  <th class="center aligned stat">2nd</th>
+                  <th class="center aligned stat">2nd %</th>
+                  <th class="center aligned stat">2nd Wins</th>
+                  <th class="center aligned stat">3rd</th>
+                  <th class="center aligned stat">3rd %</th>
+                  <th class="center aligned stat">3rd Wins</th>
+                  <th class="center aligned stat">4th</th>
+                  <th class="center aligned stat">4th %</th>
+                  <th class="center aligned stat">4th Wins</th>
+                  <th class="center aligned stat">5th</th>
+                  <th class="center aligned stat">5th %</th>
+                  <th class="center aligned stat">5th Wins</th>
                 </tr>
               </thead>
               <tbody>
@@ -242,5 +290,42 @@
     <td class="center aligned" data-sort-value="{{win}}">{{win}}</td>
     <td class="center aligned" data-sort-value="{{loss}}">{{loss}}</td>
     <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
+    <td class="center aligned" data-sort-value="{{bans}}">{{bans}}</td>
+  </tr>
+</template>
+
+<template id="hero-collection-hero-pick-row-template">
+  <tr class="hero-collection-hero-summary-row {{heroRole}}">
+    <td data-sort-value="{{heroName}}">
+      <h3 class="ui image inverted header">
+        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui rounded image">
+        <div class="content">
+          {{heroName}}
+        </div>
+      </h3>
+    </td>
+    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
+    <td class="center aligned" data-sort-value="{{winPercent}}">{{format.winPercent}}</td>
+    <td class="center aligned" data-sort-value="{{bans.total}}">{{bans.total}}</td>
+    <td class="center aligned" data-sort-value="{{banPercent}}">{{format.banPercent}}</td>
+    <td class="center aligned" data-sort-value="{{bans.first}}">{{bans.first}}</td>
+    <td class="center aligned" data-sort-value="{{firstBanPercent}}">{{format.firstBanPercent}}</td>
+    <td class="center aligned" data-sort-value="{{bans.second}}">{{bans.first}}</td>
+    <td class="center aligned" data-sort-value="{{secondBanPercent}}">{{format.secondBanPercent}}</td>
+    <td class="center aligned" data-sort-value="{{picks.p1.count}}">{{picks.p1.count}}</td>
+    <td class="center aligned" data-sort-value="{{picks.p1.pct}}">{{picks.p1.formatPct}}</td>
+    <td class="center aligned" data-sort-value="{{picks.p1.wins}}">{{picks.p1.wins}}</td>
+    <td class="center aligned" data-sort-value="{{picks.p2.count}}">{{picks.p2.count}}</td>
+    <td class="center aligned" data-sort-value="{{picks.p2.pct}}">{{picks.p2.formatPct}}</td>
+    <td class="center aligned" data-sort-value="{{picks.p2.wins}}">{{picks.p2.wins}}</td>
+    <td class="center aligned" data-sort-value="{{picks.p3.count}}">{{picks.p3.count}}</td>
+    <td class="center aligned" data-sort-value="{{picks.p3.pct}}">{{picks.p3.formatPct}}</td>
+    <td class="center aligned" data-sort-value="{{picks.p3.wins}}">{{picks.p3.wins}}</td>
+    <td class="center aligned" data-sort-value="{{picks.p4.count}}">{{picks.p4.count}}</td>
+    <td class="center aligned" data-sort-value="{{picks.p4.pct}}">{{picks.p4.formatPct}}</td>
+    <td class="center aligned" data-sort-value="{{picks.p4.wins}}">{{picks.p4.wins}}</td>
+    <td class="center aligned" data-sort-value="{{picks.p5.count}}">{{picks.p5.count}}</td>
+    <td class="center aligned" data-sort-value="{{picks.p5.pct}}">{{picks.p5.formatPct}}</td>
+    <td class="center aligned" data-sort-value="{{picks.p5.wins}}">{{picks.p5.wins}}</td>
   </tr>
 </template>
