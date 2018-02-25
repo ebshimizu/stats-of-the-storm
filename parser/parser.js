@@ -51,8 +51,8 @@ function parse(file, requestedData, opts) {
     console.log("Retrieving " + requestedData[i]);
 
     // debug version for independent testing
-    const script = cp.spawnSync(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe'), ['--json', '--' + requestedData[i], file], {
-    //const script = cp.spawnSync(fixPathForAsarUnpack(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe')), ['--json', '--' + requestedData[i], file], {
+    //const script = cp.spawnSync(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe'), ['--json', '--' + requestedData[i], file], {
+    const script = cp.spawnSync(fixPathForAsarUnpack(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe')), ['--json', '--' + requestedData[i], file], {
       maxBuffer: 300000*1024    // if anyone asks why it's 300MB it's because gameevents is huge
     });
 
