@@ -28,6 +28,9 @@ Heroes of the Storm. I hope to address this in a future update.
 * [Use Collections](collections.md)
 * [Do a Clean Uninstall](uninstall.md)
 
+## Replay Reference
+* [Replay File Format Reference](hots-replay-data.md)
+
 ## Download
 Stats of the Storm is a Windows-only application right now. You can download the latest build
 from the [Releases](https://github.com/ebshimizu/stats-of-the-storm/releases) page.

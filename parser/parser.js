@@ -247,6 +247,10 @@ function processReplay(file, opts = {}) {
       players[id].announcer = p.m_announcerPack;
       players[id].mount = p.m_mount;
       players[id].silenced = p.m_hasSilencePenalty;
+      
+      if ('m_hasVoiceSilencePenalty' in p)
+        players[id].voiceSilenced = p.m_hasVoiceSilencePenalty;
+
       playerLobbyID[p.m_userId] = id;
       players[id].length = match.length;
     }
