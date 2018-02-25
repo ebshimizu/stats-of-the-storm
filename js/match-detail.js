@@ -419,7 +419,7 @@ function updateBasicInfo() {
     $('div[ban-slot^="second"] .label').removeClass(firstClass).addClass(secondClass);
   }
   else {
-    $('#match-detail-bans').addClass('hidden');
+    $('#match-detail-draft').addClass('hidden');
   }
 }
 

@@ -10,7 +10,6 @@
     "main.js",
     "index.html",
     "background.html",
-    "parser/heroprotocol/dist/heroprotocol",
     "parser/parser.js",
     "parser/constants.js",
     "templates",
@@ -54,9 +53,6 @@
     "appId": "com.stats-of-the-storm.app",
     "productName": "Stats of the Storm",
     "asar": true,
-    "asarUnpack": [
-      "parser/heroprotocol/dist/heroprotocol"
-    ],
     "publish": [
       {
         "provider": "github",
