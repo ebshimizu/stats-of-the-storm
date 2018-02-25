@@ -855,7 +855,23 @@ class Database {
         let hero = teamHeroes[h];
 
         if (!(hero in data.heroes)) {
-          data.heroes[hero] = { first: 0, second: 0, wins: 0, bans: 0, games: 0, involved: 0, gamesAgainst: 0, defeated: 0 };
+          data.heroes[hero] = {
+            first: 0,
+            second: 0,
+            wins: 0,
+            bans: 0,
+            games: 0,
+            involved: 0,
+            gamesAgainst: 0,
+            defeated: 0,
+            picks: {
+              'p1': { count: 0, wins: 0 },
+              'p2': { count: 0, wins: 0 },
+              'p3': { count: 0, wins: 0 },
+              'p4': { count: 0, wins: 0 },
+              'p5': { count: 0, wins: 0 }
+            }
+          };
         }
 
         data.heroes[hero].games += 1;
@@ -865,11 +881,39 @@ class Database {
         }
       }
 
+      // pick order
+      if ('picks' in match) {
+        let picks = match.picks[t];
+        for (let p = 0; p < picks.length; p++) {
+          data.heroes[picks[p]].picks['p' + (p + 1)].count += 1;
+
+          if (t === winner) {
+            data.heroes[picks[p]].picks['p' + (p + 1)].wins += 1;
+          }
+        }
+      }
+
       let otherTeamHeroes = t === 0 ? match.teams[1].heroes : match.teams[0].heroes;
       for (let h in otherTeamHeroes) {
         let hero = otherTeamHeroes[h];
         if (!(hero in data.heroes)) {
-          data.heroes[hero] = { first: 0, second: 0, wins: 0, bans: 0, games: 0, involved: 0, gamesAgainst: 0, defeated: 0 };
+          data.heroes[hero] = {
+            first: 0,
+            second: 0,
+            wins: 0,
+            bans: 0,
+            games: 0,
+            involved: 0,
+            gamesAgainst: 0,
+            defeated: 0,
+            picks: {
+              'p1': { count: 0, wins: 0 },
+              'p2': { count: 0, wins: 0 },
+              'p3': { count: 0, wins: 0 },
+              'p4': { count: 0, wins: 0 },
+              'p5': { count: 0, wins: 0 }
+            }
+          };
         }
         data.heroes[hero].gamesAgainst += 1;
         if (t === winner) {
@@ -887,7 +931,23 @@ class Database {
           let hero = HeroesTalents.heroNameFromAttr(match.bans[t][b].hero);
 
           if (!(hero in data.heroes)) {
-            data.heroes[hero] = { first: 0, second: 0, wins: 0, bans: 0, games: 0, involved: 0, gamesAgainst: 0, defeated: 0 };
+            data.heroes[hero] = {
+              first: 0,
+              second: 0,
+              wins: 0,
+              bans: 0,
+              games: 0,
+              involved: 0,
+              gamesAgainst: 0,
+              defeated: 0,
+              picks: {
+                'p1': { count: 0, wins: 0 },
+                'p2': { count: 0, wins: 0 },
+                'p3': { count: 0, wins: 0 },
+                'p4': { count: 0, wins: 0 },
+                'p5': { count: 0, wins: 0 }
+              }
+            };
           }
 
           data.heroes[hero].involved += 1;

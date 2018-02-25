@@ -3,6 +3,7 @@ var teamsMapDataFilter = {};
 var teamHeroSummaryRowTemplate;
 var teamBanSummaryRowTemplate;
 var teamRosterRowTemplate;
+var teamHeroPickRowTemplate;
 var currentTeam;
 
 function initTeamsPage() {
@@ -19,6 +20,7 @@ function initTeamsPage() {
   teamHeroSummaryRowTemplate = Handlebars.compile(getTemplate('teams', '#team-hero-summary-row').find('tr')[0].outerHTML);
   teamBanSummaryRowTemplate = Handlebars.compile(getTemplate('teams', '#team-hero-ban-row').find('tr')[0].outerHTML);
   teamRosterRowTemplate = Handlebars.compile(getTemplate('teams', '#team-roster-row').find('tr')[0].outerHTML);
+  teamHeroPickRowTemplate = Handlebars.compile(getTemplate('teams', '#team-hero-pick-row').find('tr')[0].outerHTML);
 
   // filter popup
   let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
@@ -52,6 +54,10 @@ function initTeamsPage() {
   $('#teams-submenu .item').click(function() {
     $('#team-detail-body table').floatThead('reflow');
   });
+  $('#team-hero-summary .item').click(function() {
+    $('#team-detail-body table').floatThead('reflow');
+  });
+
   $('#teams-submenu .external-match-history').click(function() {
     showMatchHistory();
   });
@@ -266,8 +272,9 @@ function loadTeamData(team, matches, heroData) {
     $('#team-hero-summary-table tbody').append(teamHeroSummaryRowTemplate(context));
   }
 
-  // bans
+  // picks and bans
   $('#team-ban-summary tbody').html('');
+  $('#team-draft-table tbody').html('');
   for (let h in teamStats.heroes) {
     let hero = teamStats.heroes[h];
     if (hero.bans === 0)
@@ -290,6 +297,19 @@ function loadTeamData(team, matches, heroData) {
     context.ban2Percent = (context.value.ban2Percent * 100).toFixed(2) + '%';
 
     $('#team-ban-summary tbody').append(teamBanSummaryRowTemplate(context));
+
+    // picks
+    // uhhhh yeah ok let's use the same context
+    context.value.picks = hero.picks;
+    context.value.winPercent = hero.wins / hero.games;
+    context.winPercent = (context.value.winPercent * 100).toFixed(2) + '%';
+    context.value.games = hero.games;
+    context.games = hero.games;
+    for (let p in context.value.picks) {
+      context[p + 'Percent'] = (context.value.picks[p].count / teamStats.totalMatches * 100).toFixed(2) + '%';
+    }
+
+    $('#team-draft-table tbody').append(teamHeroPickRowTemplate(context));
   }
 
   // other stats
