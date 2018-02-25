@@ -51,8 +51,8 @@ function parse(file, requestedData, opts) {
     console.log("Retrieving " + requestedData[i]);
 
     // debug version for independent testing
-    //const script = cp.spawnSync(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe'), ['--json', '--' + requestedData[i], file], {
-    const script = cp.spawnSync(fixPathForAsarUnpack(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe')), ['--json', '--' + requestedData[i], file], {
+    const script = cp.spawnSync(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe'), ['--json', '--' + requestedData[i], file], {
+    //const script = cp.spawnSync(fixPathForAsarUnpack(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe')), ['--json', '--' + requestedData[i], file], {
       maxBuffer: 300000*1024    // if anyone asks why it's 300MB it's because gameevents is huge
     });
 
@@ -251,6 +251,14 @@ function processReplay(file, opts = {}) {
       players[id].length = match.length;
     }
 
+    let playerList = data.details[0].m_playerList;
+    var playerWorkingSlotID = {};
+    for (let i = 0; i < playerList.length; i++) {
+      let pl = playerList[i];
+      let toon = pl.m_toon.m_region + '-Hero-' + pl.m_toon.m_realm + '-' + pl.m_toon.m_id;
+      playerWorkingSlotID[pl.m_workingSetSlotId] = toon;
+    }
+
     console.log("Cosmetic use data collection complete");
 
     // draft bans check
@@ -287,7 +295,7 @@ function processReplay(file, opts = {}) {
         let msg = data.trackerevents[e];
 
         if (msg._event === 'NNet.Replay.Tracker.SHeroPickedEvent') {
-          let player = players[playerLobbyID[msg.m_controllingPlayer]];
+          let player = players[playerWorkingSlotID[msg.m_controllingPlayer]];
 
           if (!('first' in match.picks))
             match.picks.first = player.team;
@@ -1252,7 +1260,7 @@ function processReplay(file, opts = {}) {
       if (!(message._userid.m_userId in playerLobbyID))
         continue;
 
-      msg.player = playerLobbyID[message._userid.m_userId];
+      msg.player = playerWorkingSlotID[message._userid.m_userId];
       msg.team = players[msg.player].team;
       msg.recipient = message.m_recipient;
       msg.loop = message._gameloop;
