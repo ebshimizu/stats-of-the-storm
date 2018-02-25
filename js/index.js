@@ -326,7 +326,7 @@ function loadSections() {
   //changeSection('player');
 
   // this is the release default
-  changeSection('teams');
+  changeSection('matches');
 }
 
 // returns the template contained in an import

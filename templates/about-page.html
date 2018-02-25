@@ -16,6 +16,19 @@
           gets talent and hero information and images from <a href="https://github.com/heroespatchnotes/heroes-talents">heroes-talents</a>.
         </p>
         <div class="ui inverted horizontal divider">Change Log</div>
+        <h3 class="ui inverted dividing header">Version 0.2.0</h3>
+        <p>
+          Version 0.2.0 brings talent builds and the full draft data to Stats of the Storm, along
+          with a few changes that improve the general performance of the app. Since the draft data is contained
+          in the replay file itself, you'll have to re-import your replays to use the new features. Unfortunately you'll
+          have to do that any time the parser backend changes, so I'll try to keep those changes to a minimum.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/92">#92</a> Parser: Added draft order. Parser is now at Version 2. Note: To use this feature you have to re-import your matches. Pick order stats are now shown on team summary pages and the Collection Stats: Heroes page. Thanks to /u/SlapJack1337 on Reddit for showing me where this data is.</p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/93">#93</a> Allow re-import of duplicate</p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/87">#87</a> Match Details: Shows time per talent tier for each team. Additionally, team summaries show average time per talent tier.</p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/59">#59</a> Heroes: Added build stats, which display talent combinations and win rates. Available on Player summary pages and overall hero stat pages.</p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/88">#88</a> App: Any menu that lets you select a player now has a threshold of required matches in the database. This improves the general performance of the app. This is adjustable in settings.</p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/91">#91</a> Collection Stats: Players: Changing the focued hero data requires users to click the search button in the filters tab. Accidentally changing that menu's values could lead to an app hang with large databases.</p>
         <h3 class="ui inverted dividing header">Version 0.1.2</h3>
         <p>Parser: Corrected an issue where kills were incorrectly attributed to "Nexus Forces" (and also corrected an occasional crash).</p>
         <h3 class="ui inverted dividing header">Version 0.1.1</h3>
