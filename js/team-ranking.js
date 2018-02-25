@@ -180,6 +180,10 @@ function updateTeamRanking() {
           teamStats[s] = formatStat(s, teamStats.stats.average[s], true);
         }
 
+        for (let t in teamStats.tierTimes) {
+          teamStats[t] = formatSeconds(teamStats.tierTimes[t].average);
+        }
+
         teamStats.structures.Fort.first /= Math.max(1, teamStats.structures.Fort.gamesWithFirst);
         teamStats.structures.Keep.first /= Math.max(1, teamStats.structures.Keep.gamesWithFirst);
         teamStats.structures.Fort.formatFirst = formatSeconds(teamStats.structures.Fort.first);
