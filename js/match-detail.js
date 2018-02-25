@@ -386,7 +386,7 @@ function updateBasicInfo() {
       }
     }
 
-    if ('picks' in matchDetailMatch) {
+    if ('picks' in matchDetailMatch && matchDetailMatch.picks[0].length === 5 && matchDetailMatch.picks[1].length === 5) {
       for (let t in [0, 1]) {
         let picks = matchDetailMatch.picks[t];
         for (let p = 0; p < picks.length; p++) {
@@ -400,6 +400,10 @@ function updateBasicInfo() {
     else {
       $('div[pick-slot^="first"] img').attr('src', '');
       $('div[pick-slot^="second"] img').attr('src', '');
+
+      if ('picks' in matchDetailMatch) {
+        showMessage('Older Replays Missing Draft Data', 'Earlier versions of the replay files didn\'t store draft picks, so no draft data is available');
+      }
     }
 
     let firstClass = first === 0 ? 'blue' : 'red';

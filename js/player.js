@@ -553,7 +553,7 @@ function renderPlayerSummary() {
       continue;
 
     // more than 1 game, filters out a lot of useless data
-    if (playerDetailStats.withPlayer[d].games === 1)
+    if (playerDetailStats.withPlayer[d].games < settings.get('playerThreshold'))
       continue;
 
     let context = playerDetailStats.withPlayer[d];
@@ -564,7 +564,7 @@ function renderPlayerSummary() {
   }
 
   for (let d in playerDetailStats.againstPlayer) {
-    if (playerDetailStats.againstPlayer[d].games === 1)
+    if (playerDetailStats.againstPlayer[d].games < settings.get('playerThreshold'))
       continue;
 
     // can't really be vs yourself huh
