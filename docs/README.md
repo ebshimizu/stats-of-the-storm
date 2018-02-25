@@ -125,7 +125,7 @@ Hero summary, map summary, and aggregate data for each player.
 ![Player Hero Details]({{ "/images/player-details-02.png" | absolute_url }})
 Hero details and talent selection per-player.
 
-![Player Hero Builds]({{ "/images/player-details-02.png" | absolute_url }})
+![Player Hero Builds]({{ "/images/player-details-07.png" | absolute_url }})
 Talent builds overall and per-player.
 
 ![Hero Synergy]({{ "/images/player-details-03.png" | absolute_url }})
@@ -154,7 +154,7 @@ the player details.
 Team stats also include bans, win rate against hero, average time to levels 10 and 20,
 average mercenary stats, total structure stats, and average team-wide damage stats.
 
-![Team Draft Priority]({{ "/images/team-details-03.png" | absolute_url }})
+![Team Draft Priority]({{ "/images/teams-03.png" | absolute_url }})
 Team draft priority, including picks, and bans.
 
 ![Roster Stats]({{ "/images/team-details-02.png" | absolute_url }})
