@@ -23,6 +23,15 @@ function loopsToGameSeconds(loops) {
 ### fixedData
 Data stored in `m_fixedData` fields are fixed precision integers. Divide by 4096 to get the actual value.
 
+### Reserved Tracker PlayerIDs
+The events in `trackerevents` are usually associated with a PlayerID. These are typically the human
+controlled players in the game, however the system reserves PlayerIDs 11 and 12 for internal use.
+PlayerID 11 is the Blue Team's AI player, which manages minions, buildings, and any non-player controlled units
+associated with the blue team. Likewise, PlayerID 12 is the Red Team's AI player.
+
+Human players should never get assigned to these IDs. If your match has observers in them, they could have
+IDs 13+, but will not conflict with the reserved IDs.
+
 ## Match Basics
 
 ### Version
@@ -232,9 +241,45 @@ Events will have additional fields depending on the value of the `_eventid` fiel
 is a textual version of `_eventid` so it's probably faster to just use `_eventid` to case on events.
 In this section, the event object will be referred to as `event`.
 
+May of the maps have tracker events that detail who won the objective, however there are some notable exceptions.
+Maps which either lack or have complex ways to detect objectives:
+
+* Blackheart's Bay - Other parsers reference a `GhostShipCaptured` event, however I have not seen that
+event in my own files. So right now I have no idea how to determine when a team turns in enough coins.
+* Braxis Holdout - There is no tracker event for when a wave spawns, but there are ways to figure out
+when it spawns, and how strong each side is. This is a complicaed method and is detailed in a [separate
+section](#braxisWaveDetection).
+* Warhead Junction - As far as I can tell, nuke spawn time isn't tracked. It's possible to track
+when a nuke gets dropped and whether or not the cast gets interrupted though. See [this section](#warheadNukes)
+for details.
+* Volskaya Foundry - The control point score is not saved I think. You can detect when the Triglav spawns
+and which team controls it though. See [this section](#volskayaTriglav) for details.
+* Hanamura Version 1 - I couldn't find any objective data on this one, but since it's also not really
+in the game anymore, I didn't look too hard at it.
+
 ### Stat Events (NNet.Replay.Tracker.SStatGameEvent), _eventid 10
 Stat events all have an additional `m_eventName` parameter which determines what data they contain.
 A list of relevant game events follows. For all of these objects, `_eventid = 10`.
+
+#### Player Init
+Event Name: `PlayerInit`
+
+Every player that controls a Hero in the game is initialized here. Observers do not show up.
+The ID value referenced here is used in future Stat Events and can be assodicated with a ToonHandle
+to uniquely identify players.
+
+Contents: 
+
+* Tracker PlayerID: `event.m_intData[0].m_value`
+* ToonHandle: `event.m_intData[1].m_value`
+
+#### Gates Open
+Event Name: `GatesOpen`
+
+This event marks match time 0:00. So far, every single match has started 610 loops after loading,
+but if that value changes, use this event to determine which loop is at 0:00.
+
+No relevant contents. Use `_gameloop` to access the match start loop.
 
 #### End of Game Talent Choices
 Event Name: `EndOfGameTalentChoices`
@@ -277,3 +322,150 @@ Contents:
 * Tracker PlayerID: `event.m_intData[0].m_value`
 
 For some reason this isn't attached to teams and instead is written per-player. As far as I can tell, this is the same for every player.
+
+#### Player Death
+Event Name: `PlayerDeath`
+
+Contents:
+
+* Killed Tracker Player ID: `event.m_intData[0].m_value` - The player that died is always at index 0.
+* Killing Player Tracker IDs: `event.m_intData[1+].m_value` - This is a variable length array. The `m_key` value
+for killing players is `KillingPlayer` if you want to make sure you have the right data.
+* X Location: `event.m_fixedData[0].m_value` - Fixed data, divide by 4096
+* Y Location: `event.m_fixedData[1].m_value` - Fixed data, divide by 4096
+
+#### Regen Globe Picked Up
+
+
+#### Level Up
+
+#### Mercenary Camp Captured
+
+#### End of Game Upvote
+
+#### Spray Used
+Event Name: `LootSprayUsed`
+
+Contents:
+
+* ToonHandle: `event.m_stringData[1].m_value`
+* Kind: `event.m_stringData[2].m_value` - Spray internal ID
+* X Location: `event.m_fixedData[0].m_value`
+* Y Location: `event.m_fixedData[1].m_value`
+
+#### Voice Line Used
+Event Name: `LootVoiceLineUsed`
+
+Contents:
+
+* ToonHandle: `event.m_stringData[1].m_value`
+* Kind: `event.m_stringData[2].m_value` - Voice Line internal ID
+* X Location: `event.m_fixedData[0].m_value`
+* Y Location: `event.m_fixedData[1].m_value`
+
+#### Sky Temple: Shot Fired
+Event Name: `SkyTempleShotsFired`
+
+The event name says shots but it's really just 1 as far as I can tell.
+
+Contents: 
+
+* Team: `event.m_intData[2].m_value` - 1: blue, 2: red
+* Damage: `event.m_fixedData[0].m_value`
+
+#### Sky Temple: Temple Captured
+Event Name: `SkyTempleCaptured`
+
+I don't actually use this one so I forget what's in it.
+
+#### Towers of Doom: Altar Captured
+Event Name: `Altar Captured`
+
+Yes there is a space in the event name. Yes it is inconsistent with most of the
+other event names. This is the event that indicates when a tower gets captured on
+the Towers of Doom map.
+
+Contents:
+
+* Team: `event.m_intData[0].m_value` - 1: blue, 2: red
+* Owned: `event.m_intData[1].m_value` - This is the number of forts controlled by the capturing team.
+The amount of damage dealt is this value +1 as each team does at least 1 damage baseline.
+
+#### Towers of Doom: Six Town Event Start
+Event Name: `Six Town Event Start`
+
+This event indicates that one team owns all six forts on the map.
+This marks the beginning of such an event.
+Note that the tracker does not track core shots fired during the six town event.
+
+Contents:
+
+* Team: `event.m_intData[0].m_value` - 1: blue, 2: red
+
+#### Towers of Doom: Six Town Event End
+Event Name: `Six Town Event End`
+
+This is the matching event for Six Town Event Start.
+It may sometimes not actually show up in the replay. This may occur due to
+the game ending before the other team can recapture a fort.
+
+Contents: 
+
+* Team: `event.m_intData[0].m_value` - 1: blue, 2: red
+
+#### Towers of Doom: Fort Captured
+Event Name: `Town Captured`
+
+Emitted when a team captures a fort.
+
+Contents: 
+
+* ownedBy: `event.m_intData[0].m_value` - Team AI player that now controls the building. Subtract by 10 to get team 1 (blue)
+or team 2 (red) as normal.
+
+#### Battlefield of Eternity: Immortal Defeated
+Event Name: `Immortal Defeated`
+
+This title is a bit misleading, as it indicates when the immortal fight completes,
+rather than when the immortal summoned by a team dies.
+
+Contents:
+
+* winner: `event.m_intData[1].m_value` - Team ID. 1: blue, 2: red
+* duration: `event.m_intData[2].m_value` - How long the immortals were up for
+* power: `event.m_fixedData[0].m_value` - Amount of shielding the Immortal has on spawn
+
+#### Cursed Hollow: Tribute Collected
+Event Name: `TributeCollected`
+
+Pretty self explanatory here. For some reason the team is stored as a fixed precision int,
+so do the whole divide by 4096 to resolve.
+I think location is also in here but I don't use it, so I forget if that's true.
+
+Contents: 
+
+* team: `event.m_fixedData[0].m_value` - Team in **fixed integer** format. 1: blue, 2: red after resolving.
+
+#### Dragon Shire: Dragon Knight Activated
+
+#### Garden of Terror: Garden Terror Activated
+
+#### Infernal Shrines: Shrine Captured
+
+#### Infernal shrines: Punisher Defeated
+
+#### Tomb of the Spider Queen: Webweaver Spawn
+
+### Unit Born, _eventid = 1
+
+### Unit Died, _eventid = 2
+
+## Special Cases for Map Objectives
+Sometimes the tracker doesn't have the data, but other places do.
+
+### <a name="braxisWaveDetection"></a>Braxis Holdout
+This one's a doozy. 
+
+### <a name="warheadNukes"></a> Warhead Junction
+
+### <a name="volskayaTriglav"></a> Volskaya Foundry
