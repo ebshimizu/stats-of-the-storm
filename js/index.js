@@ -9,6 +9,7 @@ const Parser = require(path.join(__dirname, './parser/parser.js'));
 const HeroesTalents = require(path.join(__dirname, './js/heroes-talents.js'));
 const app = require('electron').remote.app;
 const dialog = require('electron').remote.dialog;
+const remote = require('electron').remote;
 const shell = require('electron').shell;
 const Handlebars = require('handlebars');
 const fs = require('fs');

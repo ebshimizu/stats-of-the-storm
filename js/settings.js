@@ -150,6 +150,14 @@ function initSettingsPage() {
   $('#player-menu-thresh-input input').val(threshold);
   $('#player-menu-thresh-input button').click(setPlayerMenuThreshold);
 
+  $('#show-app-dev-tools').click(function() {
+    remote.getCurrentWindow().toggleDevTools();
+  });
+
+  $('#show-parser-dev-tools').click(function() {
+    bgWindow.webContents.openDevTools();
+  });
+
   loadCollections();
 
   if (replayPath) {

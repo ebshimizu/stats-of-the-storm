@@ -29,3 +29,10 @@
 #settings-page-content .checkbox label {
     color: #FFF!important;
 }
+
+.settings-db-wrapper {
+    height: calc(100% - 24px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-left: 3px;
+}
