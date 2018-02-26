@@ -297,9 +297,17 @@ function loadTeamData(team, matches, heroData) {
     context.ban2Percent = (context.value.ban2Percent * 100).toFixed(2) + '%';
 
     $('#team-ban-summary tbody').append(teamBanSummaryRowTemplate(context));
+  }
 
-    // picks
-    // uhhhh yeah ok let's use the same context
+  for (let h in teamStats.heroes) {
+    let hero = teamStats.heroes[h];
+    if (hero.games === 0)
+      continue;
+
+    let context = {};
+    context.value = {};
+    context.heroName = h;
+    context.heroImg = Heroes.heroIcon(h);
     context.value.picks = hero.picks;
     context.value.winPercent = hero.wins / hero.games;
     context.winPercent = (context.value.winPercent * 100).toFixed(2) + '%';
