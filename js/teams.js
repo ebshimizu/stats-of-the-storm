@@ -8,7 +8,8 @@ var currentTeam;
 
 function initTeamsPage() {
   $('#team-set-team').dropdown({
-    onChange: updateTeamData
+    onChange: updateTeamData,
+    fullTextSearch: true
   });
   populateTeamMenu($('.team-menu'));
 

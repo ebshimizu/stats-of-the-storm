@@ -1,8 +1,5 @@
 # Heroes of the Storm Complete Replay Data Reference
-This document details the location and type of every useful piece of data in the Hereos of the Storm replay files to the best of the community's knowledge.
-
-Note: exact access methods may be a slightly different than the js implementation right now as I am working off of my hacked
-together python parsing script -Falindrith
+This document details the location and type of every useful piece of data in the Hereos of the Storm replay files to the best of the my knowledge. - Falindrith
 
 ## Common Elements
 In this document, fields with `[]` at the end indicate that the element in question is an array,
@@ -72,7 +69,7 @@ function winFileTimeToDate(filetime) {
 ```
 
 ### Mode
-Location: `initdata[1].m_syncLobbyState.m_gameDescription.m_gameOptions.m_ammId`
+Location: `initdata.m_syncLobbyState.m_gameDescription.m_gameOptions.m_ammId`
 
 Value: An integer.
 ```json
@@ -138,12 +135,12 @@ this ID anywhere else results in errors where players can't be mapped back to a 
 See the Draft section for more details.
 
 #### Lobby ID
-Location: `initdata[1].m_syncLobbyState.m_lobbyState.m_slots[].m_userId`
+Location: `initdata.m_syncLobbyState.m_lobbyState.m_slots[].m_userId`
 
 Value: int
 
 Used by `gameevents` and `messageevents` to determine actions and messages sent by players.
-ToonHandle is accessible in this array with `initdata[1].m_syncLobbyState.m_lobbyState.m_slots[].m_toonHandle`.
+ToonHandle is accessible in this array with `initdata.m_syncLobbyState.m_lobbyState.m_slots[].m_toonHandle`.
 
 ### Name
 Location: `details.m_playerList[].m_name`
@@ -158,12 +155,12 @@ Value: _Localized_ hero name.
 Note: For Lucio, it actually includes the accent over the u, so make sure your hero keys are set properly, otherwise you'll have issues identifying that one.
 
 ### Silence Penalty
-Location: `initdata[1].m_syncLobbyState.m_lobbyState.m_slots[].m_hasSilencePenalty`
+Location: `initdata.m_syncLobbyState.m_lobbyState.m_slots[].m_hasSilencePenalty`
 
 Value: bool
 
 ### Voice Silence Penalty
-Location: `initdata[1].m_syncLobbyState.m_lobbyState.m_slots[].m_hasVoiceSilencePenalty`
+Location: `initdata.m_syncLobbyState.m_lobbyState.m_slots[].m_hasVoiceSilencePenalty`
 
 Value: bool.
 
@@ -173,22 +170,22 @@ May not exist pre-build 62424.
 Contained in the lobby state slots.
 
 #### Skin
-Location: `initdata[1].m_syncLobbyState.m_lobbyState.m_slots[].m_skin`
+Location: `initdata.m_syncLobbyState.m_lobbyState.m_slots[].m_skin`
 
 Value: String. Internal Skin ID.
 
 #### Announcer
-Location: `initdata[1].m_syncLobbyState.m_lobbyState.m_slots[].m_announcerPack`
+Location: `initdata.m_syncLobbyState.m_lobbyState.m_slots[].m_announcerPack`
 
 Value: String. Internal Announcer ID.
 
 #### Mount
-Location: `initdata[1].m_syncLobbyState.m_lobbyState.m_slots[].m_mount`
+Location: `initdata.m_syncLobbyState.m_lobbyState.m_slots[].m_mount`
 
 Value: String. Internal Mount ID.
 
 #### Spray
-Location: `initdata[1].m_syncLobbyState.m_lobbyState.m_slots[].m_spray`
+Location: `initdata.m_syncLobbyState.m_lobbyState.m_slots[].m_spray`
 
 Value: bool
 

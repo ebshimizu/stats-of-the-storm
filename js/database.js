@@ -136,6 +136,16 @@ class Database {
     });
   }
 
+  // deletes a match and the associated hero data.
+  deleteReplay(matchID, callback) {
+    var self = this;
+    this._db.matches.remove({ _id: matchID }, {}, function(err, numRemoved) {
+      self._db.heroData.remove({ matchID: matchID }, { multi: true }, function(err, numRemoved) {
+        callback();
+      });
+    });
+  }
+
   // teams are stored in settings
   addTeam(players, name, callback) {
     this._db.settings.insert({ players, name, type: 'team' }, callback);

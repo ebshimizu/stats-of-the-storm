@@ -22,7 +22,7 @@ var matchRowTemplate;
 function initMatchesPage() {
   // player menu init
   let selectedPlayerID = settings.get('selectedPlayerID');
-  $('#match-search-player').dropdown({
+  $('#match-search-players').dropdown({
     action: 'activate',
     fullTextSearch: true
     // on change isn't actually necessary here. the search button handles all options
@@ -73,6 +73,10 @@ function initMatchesPage() {
 
   $('#match-search-clear-team').click(function() {
     $('#match-search-team').dropdown('restore defaults');
+  });
+
+  $('#match-search-team').dropdown({
+    fullTextSearch: true
   });
 
   $('#match-search-button').click(selectMatches);
