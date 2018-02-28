@@ -891,22 +891,43 @@ class Database {
     data.heroes = {};
     data.stats = {
       average: {},
+      min: {},
+      max: {},
+      median: {},
+      medianTmp: {},
       total: {}
     };
     data.maps = {};
     data.level10Games = 0;
     data.level20Games = 0;
     data.structures = {};
-    data.takedowns = 0;
-    data.deaths = 0;
-    data.avgLength = 0;
+    data.takedowns = {
+      average: 0,
+      total: 0,
+      min: 1e10,
+      max: 0,
+      medianTmp: []
+    };
+    data.deaths = { 
+      average: 0,
+      total: 0,
+      min: 1e10,
+      max: 0,
+      medianTmp: []
+    }
+    data.matchLength = {
+      total: 0,
+      min: 1e10,
+      max: 0,
+      medianTmp: []
+    };
     data.tierTimes = {
-      T1: { total: 0, count: 0 },
-      T2: { total: 0, count: 0 },
-      T3: { total: 0, count: 0 },
-      T4: { total: 0, count: 0 },
-      T5: { total: 0, count: 0 },
-      T6: { total: 0, count: 0 }
+      T1: { total: 0, min: 1e10, max: 0, medianTmp: [], count: 0 },
+      T2: { total: 0, min: 1e10, max: 0, medianTmp: [], count: 0 },
+      T3: { total: 0, min: 1e10, max: 0, medianTmp: [], count: 0 },
+      T4: { total: 0, min: 1e10, max: 0, medianTmp: [], count: 0 },
+      T5: { total: 0, min: 1e10, max: 0, medianTmp: [], count: 0 },
+      T6: { total: 0, min: 1e10, max: 0, medianTmp: [], count: 0 }
     };
     for (let match of docs) {
       let winner = match.winner;
@@ -943,10 +964,22 @@ class Database {
         data.maps[match.map].wins += 1;
         data.wins += 1;
       }
-      data.avgLength += match.length;
 
-      data.takedowns += match.teams[t].takedowns;
-      data.deaths += t === 0 ? match.teams[1].takedowns : match.teams[0].takedowns;
+      data.matchLength.total += match.length;
+      data.matchLength.min = Math.min(data.matchLength.min, match.length);
+      data.matchLength.max = Math.max(data.matchLength.max, match.length);
+      data.matchLength.medianTmp.push(match.length);
+
+      data.takedowns.total += match.teams[t].takedowns;
+      data.takedowns.min = Math.min(match.teams[t].takedowns, data.takedowns.min);
+      data.takedowns.max = Math.max(match.teams[t].takedowns, data.takedowns.max);
+      data.takedowns.medianTmp.push(match.teams[t].takedowns);
+
+      let deaths = t === 0 ? match.teams[1].takedowns : match.teams[0].takedowns;
+      data.deaths.total += deaths;
+      data.deaths.min = Math.min(deaths, data.deaths.min);
+      data.deaths.max = Math.max(deaths, data.deaths.max);
+      data.deaths.medianTmp.push(deaths);
 
       let teamHeroes = match.teams[t].heroes;
 
@@ -1090,22 +1123,42 @@ class Database {
         }
         else if (stat === 'totals') {
           for (let total in match.teams[t].stats.totals) {
-            if (!(total in data.stats.total))
+            if (!(total in data.stats.total)) {
               data.stats.total[total] = 0;
+              data.stats.min[total] = match.teams[t].stats.totals[total];
+              data.stats.max[total] = match.teams[t].stats.totals[total];
+              data.stats.medianTmp[total] = [];
+            }
+
             data.stats.total[total] += match.teams[t].stats.totals[total];
+
+            data.stats.min[total] = Math.min(data.stats.min[total], match.teams[t].stats.totals[total]);
+            data.stats.max[total] = Math.max(data.stats.max[total], match.teams[t].stats.totals[total]);
+            data.stats.medianTmp[total].push(match.teams[t].stats.totals[total]);
           }
         }
         else {
-          if (!(stat in data.stats.total))
+          if (!(stat in data.stats.total)) {
             data.stats.total[stat] = 0;
+
+            data.stats.min[stat] = match.teams[t].stats[stat];
+            data.stats.max[stat] = match.teams[t].stats[stat];
+            data.stats.medianTmp[stat] = [];
+          
+          }
           data.stats.total[stat] += match.teams[t].stats[stat];
+          data.stats.min[stat] = Math.min(data.stats.min[stat], match.teams[t].stats[stat]);
+          data.stats.max[stat] = Math.max(data.stats.max[stat], match.teams[t].stats[stat]);
+          data.stats.medianTmp[stat].push(match.teams[t].stats[stat]);
         }
 
-        if (stat === 'timeTo10')
+        if (stat === 'timeTo10') {
           data.level10Games += 1;
+        }
         
-        if (stat === 'timeTo20')
+        if (stat === 'timeTo20') {
           data.level20Games += 1;
+        }
       }
 
       // time per talent tier
@@ -1114,14 +1167,23 @@ class Database {
       for (let i = 0; i < intervals.length; i++) {
         let ikey = 'T' + (i + 1);
         let interval = intervals[i];
+        let time;
 
         if (interval[1] in levels) {
-          data.tierTimes[ikey].total += (levels[interval[1]].time - levels[interval[0]].time);
+          time = levels[interval[1]].time - levels[interval[0]].time;
+          data.tierTimes[ikey].total += time;
+          data.tierTimes[ikey].min = Math.min(time, data.tierTimes[ikey].min);
+          data.tierTimes[ikey].max = Math.max(time, data.tierTimes[ikey].max);
+          data.tierTimes[ikey].medianTmp.push(time);
           data.tierTimes[ikey].count += 1;
         }
         else if (interval[0] in levels && !(interval[1] in levels)) {
           // end of game
-          data.tierTimes[ikey].total += match.length - levels[interval[0]].time;
+          time = match.length - levels[interval[0]].time;
+          data.tierTimes[ikey].total += time;
+          data.tierTimes[ikey].min = Math.min(time, data.tierTimes[ikey].min);
+          data.tierTimes[ikey].max = Math.max(time, data.tierTimes[ikey].max);
+          data.tierTimes[ikey].medianTmp.push(time);
           data.tierTimes[ikey].count += 1;
         }
       }
@@ -1134,13 +1196,25 @@ class Database {
         data.stats.average[stat] = data.stats.total[stat] / data.level20Games;
       else
         data.stats.average[stat] = data.stats.total[stat] / data.totalMatches;
+
+      // median
+      data.stats.median[stat] = median(data.stats.medianTmp[stat]);
     }
-    data.avgLength /= data.totalMatches;
+    data.matchLength.average = data.matchLength.total / data.totalMatches;
+    data.matchLength.median = median(data.matchLength.medianTmp);
 
     for (let tier in data.tierTimes) {
       data.tierTimes[tier].average = data.tierTimes[tier].total / Math.max(data.tierTimes[tier].count, 1);
+
+      // median
+      data.tierTimes[tier].median = median(data.tierTimes[tier].medianTmp);
     }
 
+    data.takedowns.median = median(data.takedowns.medianTmp);
+    data.takedowns.average = data.takedowns.total / data.totalMatches;
+
+    data.deaths.median = median(data.deaths.medianTmp);
+    data.deaths.average = data.deaths.total / data.totalMatches;
     return data;
   }
 
@@ -1185,6 +1259,16 @@ class Database {
         callback();
     });
   }
+}
+
+function median(arr) {
+  let len = arr.length;
+
+  if (len % 2 === 0) {
+    return arr[len / 2 - 1] + arr[len / 2];
+  }
+
+  return arr[(len - 1) / 2];
 }
 
 exports.HeroesDatabase = Database;

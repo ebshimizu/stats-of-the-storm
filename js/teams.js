@@ -325,14 +325,14 @@ function loadTeamData(team, matches, heroData) {
   try {
     $('#team-summary-stats .statistic[name="overallWin"] .value').text((teamStats.wins / teamStats.totalMatches * 100).toFixed(2) + '%');
     $('#team-summary-stats .statistic[name="overallGames"] .value').text(teamStats.totalMatches);
-    $('#team-summary-stats .statistic[name="overallTD"] .value').text(teamStats.takedowns);
-    $('#team-summary-stats .statistic[name="overallDeaths"] .value').text(teamStats.deaths);
-    $('#team-summary-stats .statistic[name="overallKDA"] .value').text((teamStats.takedowns / Math.max(1, teamStats.deaths)).toFixed(2));
+    $('#team-summary-stats .statistic[name="overallTD"] .value').text(teamStats.takedowns.total);
+    $('#team-summary-stats .statistic[name="overallDeaths"] .value').text(teamStats.deaths.total);
+    $('#team-summary-stats .statistic[name="overallKDA"] .value').text((teamStats.takedowns.total / Math.max(1, teamStats.deaths.total)).toFixed(2));
     $('#team-summary-stats .statistic[name="timeDead"] .value').text(formatSeconds(teamStats.stats.average.avgTimeSpentDead));
     $('#team-summary-stats .statistic[name="pctTimeDead"] .value').text((teamStats.stats.average.timeDeadPct * 100).toFixed(2) + '%');
     $('#team-summary-stats .statistic[name="heroesPlayed"] .value').text(picked);
     $('#team-summary-stats .statistic[name="heroesPct"] .value').text((picked / Heroes.heroCount * 100).toFixed(2) + '%');
-    $('#team-summary-stats .statistic[name="avgLength"] .value').text(formatSeconds(teamStats.avgLength));
+    $('#team-summary-stats .statistic[name="avgLength"] .value').text(formatSeconds(teamStats.matchLength.average));
     $('#team-summary-stats .statistic[name="PPK"] .value').text(teamStats.stats.average.PPK.toFixed(2));
 
     let elem = $('#team-detail-stats');
