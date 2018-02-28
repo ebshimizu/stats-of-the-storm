@@ -335,6 +335,12 @@ class Database {
       voiceLines: { count: 0, takedowns: 0, deaths: 0 }
     };
 
+    playerDetailStats.averages = {};
+    playerDetailStats.max = {};
+    playerDetailStats.min = {};
+    playerDetailStats.median = {};
+    let medianTemp = {};
+
     for (let i = 0; i < docs.length; i++) {
       let match = docs[i];
       let statList = DetailStatList.concat(PerMapStatList[match.map]);
@@ -351,6 +357,9 @@ class Database {
           votes: 0,
           highestStreak: 0
         };
+        playerDetailStats.max[match.hero] = { timeDeadPct: 0 };
+        playerDetailStats.min[match.hero] = { timeDeadPct: 100 };
+        medianTemp[match.hero] = { timeDeadPct: []};
       }
 
       playerDetailStats.heroes[match.hero].totalTime += match.length;
@@ -365,14 +374,36 @@ class Database {
 
       for (let s in statList) {
         let statName = statList[s];
-        if (!(statName in playerDetailStats.heroes[match.hero].stats))
+        if (!(statName in playerDetailStats.heroes[match.hero].stats)) {
           playerDetailStats.heroes[match.hero].stats[statName] = 0;
+          playerDetailStats.max[match.hero][statName] = match.gameStats[statName];
+          playerDetailStats.min[match.hero][statName] = match.gameStats[statName];
+          medianTemp[match.hero][statName] = [];
+        }
         
         playerDetailStats.heroes[match.hero].stats[statName] += match.gameStats[statName];
+        medianTemp[match.hero][statName].push(match.gameStats[statName]);
+
+        if (match.gameStats[statName] > playerDetailStats.max[match.hero][statName])
+          playerDetailStats.max[match.hero][statName] = match.gameStats[statName];
+        
+        if (match.gameStats[statName] < playerDetailStats.min[match.hero][statName])
+          playerDetailStats.min[match.hero][statName] = match.gameStats[statName];
       }
-      playerDetailStats.heroes[match.hero].stats.timeDeadPct += match.gameStats.TimeSpentDead / match.length;
-      playerDetailStats.heroes[match.hero].stats.highestStreak = Math.max(match.gameStats.HighestKillStreak, playerDetailStats.heroes[match.hero].stats.highestStreak);
-      playerDetailStats.highestStreak = Math.max(playerDetailStats.highestStreak, match.gameStats.HighestKillStreak);
+
+      // some extra stats that aren't in the list
+      let tdp = match.gameStats.TimeSpentDead / match.length
+      playerDetailStats.heroes[match.hero].stats.timeDeadPct += tdp;
+      medianTemp[match.hero].timeDeadPct.push(tdp);
+
+      if (tdp > playerDetailStats.max[match.hero].timeDeadPct)
+        playerDetailStats.max[match.hero].timeDeadPct = tdp;
+      
+      if (tdp < playerDetailStats.min[match.hero].timeDeadPct)
+        playerDetailStats.min[match.hero].timeDeadPct = tdp;
+
+      //playerDetailStats.heroes[match.hero].stats.highestStreak = Math.max(match.gameStats.HighestKillStreak, playerDetailStats.heroes[match.hero].stats.highestStreak);
+      playerDetailStats.highestStreak = Math.max(playerDetailStats.max[match.hero].HighestKillStreak, match.gameStats.HighestKillStreak);
 
       // you only ever get 1 but just in case...
       // ALSO custom games don't get counted here since you can't get awards
@@ -468,7 +499,6 @@ class Database {
     }
 
     // averages
-    playerDetailStats.averages = {};
     playerDetailStats.totalTD = 0;
     playerDetailStats.totalDeaths = 0;
     playerDetailStats.totalMVP = 0;
@@ -480,8 +510,19 @@ class Database {
 
     for (let h in playerDetailStats.heroes) {
       playerDetailStats.averages[h] = {};
+      playerDetailStats.median[h] = {};
+
       for (let s in playerDetailStats.heroes[h].stats) {
         playerDetailStats.averages[h][s] = playerDetailStats.heroes[h].stats[s] / playerDetailStats.heroes[h].games;
+
+        medianTemp[h][s].sort();
+        let len = medianTemp[h][s].length;
+        if (len % 2 === 0) {
+          playerDetailStats.median[h][s] = (medianTemp[h][s][len / 2 - 1] + medianTemp[h][s][len / 2]) / 2;
+        }
+        else {
+          playerDetailStats.median[h][s] = medianTemp[h][s][(len - 1) / 2];
+        }
       }
       playerDetailStats.heroes[h].stats.totalKDA = playerDetailStats.heroes[h].stats.Takedowns / Math.max(playerDetailStats.heroes[h].stats.Deaths, 1);
 
@@ -586,7 +627,10 @@ class Database {
           heroes: { },
           totalTime: 0,
           votes: 0,
-          highestStreak: 0
+          highestStreak: 0,
+          min: { timeDeadPct: 100 },
+          max: { timeDeadPct: 0 },
+          medianTmp: { timeDeadPct: [] }
         }
       }
 
@@ -600,12 +644,32 @@ class Database {
 
       for (let s in statList) {
         let statName = statList[s];
-        if (!(statName in playerDetailStats[match.ToonHandle].stats))
+        if (!(statName in playerDetailStats[match.ToonHandle].stats)) {
           playerDetailStats[match.ToonHandle].stats[statName] = 0;
+          playerDetailStats[match.ToonHandle].max[statName] = match.gameStats[statName];
+          playerDetailStats[match.ToonHandle].min[statName] = match.gameStats[statName];
+          playerDetailStats[match.ToonHandle].medianTmp[statName] = [];
+        }
         
         playerDetailStats[match.ToonHandle].stats[statName] += match.gameStats[statName];
+        playerDetailStats[match.ToonHandle].medianTmp[statName].push(match.gameStats[statName]);
+
+        if (match.gameStats[statName] > playerDetailStats[match.ToonHandle].max[statName])
+          playerDetailStats[match.ToonHandle].max[statName] = match.gameStats[statName];
+        
+        if (match.gameStats[statName] < playerDetailStats[match.ToonHandle].min[statName])
+          playerDetailStats[match.ToonHandle].min[statName] = match.gameStats[statName];
       }
-      playerDetailStats[match.ToonHandle].stats.timeDeadPct += match.gameStats.TimeSpentDead / match.length;
+      let tdp = match.gameStats.TimeSpentDead / match.length;
+      playerDetailStats[match.ToonHandle].stats.timeDeadPct += tdp;
+      playerDetailStats[match.ToonHandle].medianTmp.timeDeadPct.push(tdp);
+
+      if (tdp > playerDetailStats[match.ToonHandle].max.timeDeadPct)
+        playerDetailStats[match.ToonHandle].max.timeDeadPct = tdp;
+
+      if (tdp < playerDetailStats[match.ToonHandle].min.timeDeadPct)
+        playerDetailStats[match.ToonHandle].min.timeDeadPct = tdp;
+
       playerDetailStats[match.ToonHandle].highestStreak = Math.max(match.gameStats.HighestKillStreak, playerDetailStats[match.ToonHandle].highestStreak);
 
       // you only ever get 1 but just in case...
@@ -646,6 +710,7 @@ class Database {
     // averages
     for (let p in playerDetailStats) {
       playerDetailStats[p].averages = {};
+      playerDetailStats[p].median = {};
       playerDetailStats[p].totalTD = 0;
       playerDetailStats[p].totalDeaths = 0;
       playerDetailStats[p].totalMVP = 0;
@@ -655,6 +720,16 @@ class Database {
 
       for (let s in playerDetailStats[p].stats) {
         playerDetailStats[p].averages[s] = playerDetailStats[p].stats[s] / playerDetailStats[p].games;
+
+        playerDetailStats[p].medianTmp[s].sort();
+        let len = playerDetailStats[p].medianTmp[s].length;
+        if (len % 2 === 0) {
+          playerDetailStats[p].median[s] = (playerDetailStats[p].medianTmp[s][len / 2 - 1] + playerDetailStats[p].medianTmp[s][len / 2]) / 2;
+        }
+        else {
+          playerDetailStats[p].median[s] = playerDetailStats[p].medianTmp[s][(len - 1) / 2];
+        }
+        
       }
       playerDetailStats[p].totalKDA = playerDetailStats[p].stats.Takedowns / Math.max(playerDetailStats[p].stats.Deaths, 1);
 

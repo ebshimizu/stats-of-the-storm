@@ -15,6 +15,7 @@ function initPlayerRankingPage() {
   // filter popup
   let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
   filterWidget.attr('widget-name', 'player-ranking-filter');
+  filterWidget.find('.filter-widget-hero').addClass('is-hidden');
   
   $('#filter-widget').append(filterWidget);
   initPopup(filterWidget);
@@ -36,10 +37,10 @@ function initPlayerRankingPage() {
 
   $('#player-ranking-hero-filter-menu .menu').prepend('<div class="ui divider"></div>');
   $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Multiclass">Multiclass</div>');
-  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Specialist">Specialist</div>');
-  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Support">Support</div>');
-  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Warrior">Warrior</div>');
-  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Assassin">Assassin</div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Specialist"><div class="ui avatar image"><img class="ui avatar image" src="./assets/images/role_specialist.png"></div>Specialist</div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Support"><div class="ui avatar image"><img class="ui avatar image" src="./assets/images/role_support.png"></div>Support</div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Warrior"><div class="ui avatar image"><img class="ui avatar image" src="./assets/images/role_warrior.png"></div>Warrior</div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Assassin"><div class="ui avatar image"><img class="ui avatar image" src="./assets/images/role_assassin.png"></div>Assassin</div>');
   $('#player-ranking-hero-filter-menu .menu').prepend('<div class="ui divider"></div>');
   $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="all">All Heroes</div>');
   $('#player-ranking-hero-filter-menu').dropdown('refresh');
