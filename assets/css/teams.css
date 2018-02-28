@@ -16,6 +16,10 @@
   margin-top: 0!important;
 }
 
+#team-detail-body #team-roster-stats .floatThead-wrapper {
+  height: calc(100% - 65px);
+}
+
 .team-page-wrapper {
   height: calc(100% - 40px);
   overflow-y: auto;
@@ -39,13 +43,13 @@
   font-size: 13pt;
 }
 
+#team-roster-stats .segment {
+  height: calc(100% - 60px);
+}
+
 #team-map-summary,
 #team-hero-summary {
   height: 600px;
-}
-
-#team-add-player-button {
-  margin-top: 10px;
 }
 
 #teams-page-content .table-wrapper-xy {
