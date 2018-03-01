@@ -5,6 +5,7 @@ var teamBanSummaryRowTemplate;
 var teamRosterRowTemplate;
 var teamHeroPickRowTemplate;
 var currentTeam;
+var teamPlayerStats;
 
 function initTeamsPage() {
   $('#team-set-team').dropdown({
@@ -69,6 +70,10 @@ function initTeamsPage() {
     onChange: function(value, text, $elem) {
       handleTeamMenuCallback(value);
     }
+  });
+
+  $('#team-roster-stats .top.attached.menu .item').click(function() {
+    toggleTeamRosterMode(this);
   });
 
   $('#team-confirm-action-user').modal({
@@ -218,8 +223,11 @@ function updateTeamData(value, text, $elem) {
 function loadTeamData(team, matches, heroData) {
   // compute hero stats
   let heroStats = DB.summarizeHeroData(heroData);
-  let playerStats = DB.summarizePlayerData(heroData);
+  teamPlayerStats = DB.summarizePlayerData(heroData);
   let teamStats = DB.summarizeTeamData(team, matches, Heroes);
+
+  // i'm uh, kind of lazy
+  let playerStats = teamPlayerStats;
 
   // also lifting a little bit from player.js
   // team with stats are uh, a little useless? like it's all in the picks stats...
@@ -401,8 +409,16 @@ function loadTeamData(team, matches, heroData) {
   $('#team-detail-body table').floatThead('reflow');
 }
 
+function toggleTeamRosterMode(elem) {
+  $('#team-roster-stats .top.attached.menu .item').removeClass('active');
+  $(elem).addClass('active');
+  loadTeamRoster(teamPlayerStats);
+}
+
 function loadTeamRoster(playerStats) {
   $('#team-roster-stats tbody').html('');
+  let mode = $('#team-roster-stats .top.attached.menu .active.item').attr('data-mode');
+
   for (let p in currentTeam.players) {
     let id = currentTeam.players[p];
 
@@ -412,15 +428,18 @@ function loadTeamRoster(playerStats) {
       let context = {};
       context.name = player.name;
       context.id = id;
-      context.value = player.averages;
-      context.value.totalKDA = player.totalKDA;
+      context.value = player[mode];
+      context.value.totalKDA = player[mode].KDA;
+
+      if (mode === 'total' || mode === 'averages')
+        context.value.totalKDA = player.totalKDA;
 
       for (let v in context.value) {
         context[v] = formatStat(v, context.value[v], true);
       }
       context.value.games = player.games;
       context.games = player.games;
-      context.highestStreak = player.highestStreak;
+      context.highestStreak = player[mode].HighestKillStreak.toFixed(2);
 
       $('#team-roster-stats tbody').append(teamRosterRowTemplate(context));
 

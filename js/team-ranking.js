@@ -174,7 +174,7 @@ function updateTeamRanking() {
         teamStats.formatWinPercent = (teamStats.winPercent * 100).toFixed(2) + '%';
         teamStats.stats.total.totalKDA = teamStats.takedowns.total / teamStats.deaths.total;
         teamStats.totalKDA = teamStats.stats.total.totalKDA.toFixed(2);
-        teamStats.formatAverageLength = formatSeconds(teamStats.avgLength);
+        teamStats.formatAverageLength = formatSeconds(teamStats.matchLength.total);
 
         for (let s in teamStats.stats.average) {
           teamStats[s] = formatStat(s, teamStats.stats.average[s], true);

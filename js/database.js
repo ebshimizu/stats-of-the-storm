@@ -652,11 +652,12 @@ class Database {
           playerDetailStats[match.ToonHandle].stats[statName] = 0;
           playerDetailStats[match.ToonHandle].max[statName] = match.gameStats[statName];
           playerDetailStats[match.ToonHandle].min[statName] = match.gameStats[statName];
+          playerDetailStats[match.ToonHandle].total[statName] = match.gameStats[statName];
           playerDetailStats[match.ToonHandle].medianTmp[statName] = [];
         }
         
         playerDetailStats[match.ToonHandle].stats[statName] += match.gameStats[statName];
-        playerDetailStats[match.ToonHandle].total += match.gameStats[statName];
+        playerDetailStats[match.ToonHandle].total[statName] += match.gameStats[statName];
         playerDetailStats[match.ToonHandle].medianTmp[statName].push(match.gameStats[statName]);
 
         if (match.gameStats[statName] > playerDetailStats[match.ToonHandle].max[statName])
@@ -726,15 +727,7 @@ class Database {
 
       for (let s in playerDetailStats[p].stats) {
         playerDetailStats[p].averages[s] = playerDetailStats[p].stats[s] / playerDetailStats[p].games;
-
-        playerDetailStats[p].medianTmp[s].sort();
-        let len = playerDetailStats[p].medianTmp[s].length;
-        if (len % 2 === 0) {
-          playerDetailStats[p].median[s] = (playerDetailStats[p].medianTmp[s][len / 2 - 1] + playerDetailStats[p].medianTmp[s][len / 2]) / 2;
-        }
-        else {
-          playerDetailStats[p].median[s] = playerDetailStats[p].medianTmp[s][(len - 1) / 2];
-        }
+        playerDetailStats[p].median[s] = median(playerDetailStats[p].medianTmp[s]);
         
       }
       playerDetailStats[p].totalKDA = playerDetailStats[p].stats.Takedowns / Math.max(playerDetailStats[p].stats.Deaths, 1);
@@ -1269,6 +1262,7 @@ class Database {
 
 function median(arr) {
   let len = arr.length;
+  arr.sort();
 
   if (len % 2 === 0) {
     return arr[len / 2 - 1] + arr[len / 2];
