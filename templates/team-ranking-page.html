@@ -23,115 +23,129 @@
         <div class="ui button">Team Fight and CC</div>
         <div class="ui button">Structures</div>
       </div>
-      <div table-name="General" class="section">
-        <div class="table-wrapper">
-          <table class="ui inverted sortable selectable table" id="team-ranking-general-table">
-            <thead>
-              <tr>
-                <th>Team</th>
-                <th class="center alligned stat">Win %</th>
-                <th class="center alligned stat">Games</th>
-                <th class="center alligned stat">KDA</th>
-                <th class="center alligned stat">PPK</th>
-                <th class="center alligned stat">Time Dead</th>
-                <th class="center alligned stat">Time Dead %</th>
-                <th class="center alligned stat">Hero Damage</th>
-                <th class="center alligned stat">Siege Damage</th>
-                <th class="center alligned stat">Minion Damage</th>
-                <th class="center alligned stat">Creep Damage</th>
-                <th class="center alligned stat">Damage Taken</th>
-                <th class="center alligned stat">Healing</th>
-                <th class="center alligned stat">Self Healing</th>
-                <th class="center alligned stat">Shields</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="17">Use the Search button in the Filter Matches menu to load team data.</td>
-              </tr>
-            </tbody>
-          </table>
+      <div class="section-wrapper">
+        <div class="ui top attached small menu">
+          <a class="active item" data-mode="average">Average</a>
+          <a class="item" data-mode="total">Total</a>
+          <a class="item" data-mode="min">Minimum</a>
+          <a class="item" data-mode="max">Maximum</a>
+          <a class="item" data-mode="median">Median</a>
         </div>
-      </div>
-      <div table-name="Match Stats" class="section is-hidden">
-        <div class="table-wrapper">
-          <table class="ui inverted sortable selectable table" id="team-ranking-match-table">
-            <thead>
-              <tr>
-                <th>Team</th>
-                <th class="center alligned stat">Win %</th>
-                <th class="center alligned stat">Games</th>
-                <th class="center alligned stat">Avg. Length</th>
-                <th class="center alligned stat">Time to 10</th>
-                <th class="center alligned stat">Games at 10</th>
-                <th class="center alligned stat">Time to 20</th>
-                <th class="center alligned stat">Games at 20</th>
-                <th class="center alligned stat">Time @ Level 1</th>
-                <th class="center alligned stat">Time @ Level 4</th>
-                <th class="center alligned stat">Time @ Level 7</th>
-                <th class="center alligned stat">Time @ Level 10</th>
-                <th class="center alligned stat">Time @ Level 13</th>
-                <th class="center alligned stat">Time @ Level 16</th>
-                <th class="center alligned stat">Merc Captures</th>
-                <th class="center alligned stat">Merc Uptime</th>
-                <th class="center alligned stat">Merc Uptime %</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="17">Use the Search button in the Filter Matches menu to load team data.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div table-name="Team Fight and CC" class="section is-hidden">
-        <div class="table-wrapper">
-          <table class="ui inverted sortable selectable table" id="team-ranking-cc-table">
-            <thead>
-              <tr>
-                <th>Team</th>
-                <th class="center alligned stat">Win %</th>
-                <th class="center alligned stat">Games</th>
-                <th class="center alligned stat">Team Fight Hero Damage</th>
-                <th class="center alligned stat">Team Fight Damage Taken</th>
-                <th class="center alligned stat">Team Fight Healing</th>
-                <th class="center alligned stat">CC Time</th>
-                <th class="center alligned stat">Root Time</th>
-                <th class="center alligned stat">Silence Time</th>
-                <th class="center alligned stat">Stun Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="17">Use the Search button in the Filter Matches menu to load team data.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div table-name="Structures" class="section is-hidden">
-        <div class="table-wrapper">
-          <table class="ui inverted sortable selectable table" id="team-ranking-structure-table">
-            <thead>
-              <tr>
-                <th>Team</th>
-                <th class="center alligned stat">Win %</th>
-                <th class="center alligned stat">Games</th>
-                <th class="center alligned stat">Forts Destroyed</th>
-                <th class="center alligned stat">Time to First Fort</th>
-                <th class="center alligned stat">Forts Lost</th>
-                <th class="center alligned stat">Keeps Destroyed</th>
-                <th class="center alligned stat">Time to First Keep</th>
-                <th class="center alligned stat">Keeps Lost</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="17">Use the Search button in the Filter Matches menu to load team data.</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="ui attached inverted segment">
+          <div table-name="General" class="section">
+            <div class="table-wrapper">
+              <table class="ui inverted sortable selectable table" id="team-ranking-general-table">
+                <thead>
+                  <tr>
+                    <th>Team</th>
+                    <th class="center alligned stat">Win %</th>
+                    <th class="center alligned stat">Games</th>
+                    <th class="center alligned stat">KDA</th>
+                    <th class="center alligned stat">TD</th>
+                    <th class="center alligned stat">Deaths</th>
+                    <th class="center alligned stat">Hero Pool</th>
+                    <th class="center alligned stat">PPK</th>
+                    <th class="center alligned stat">Time Dead</th>
+                    <th class="center alligned stat">Time Dead %</th>
+                    <th class="center alligned stat">Hero Damage</th>
+                    <th class="center alligned stat">Siege Damage</th>
+                    <th class="center alligned stat">Minion Damage</th>
+                    <th class="center alligned stat">Creep Damage</th>
+                    <th class="center alligned stat">Damage Taken</th>
+                    <th class="center alligned stat">Healing</th>
+                    <th class="center alligned stat">Self Healing</th>
+                    <th class="center alligned stat">Shields</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="17">Use the Search button in the Filter Matches menu to load team data.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div table-name="Match Stats" class="section is-hidden">
+            <div class="table-wrapper">
+              <table class="ui inverted sortable selectable table" id="team-ranking-match-table">
+                <thead>
+                  <tr>
+                    <th>Team</th>
+                    <th class="center alligned stat">Win %</th>
+                    <th class="center alligned stat">Games</th>
+                    <th class="center alligned stat">Length</th>
+                    <th class="center alligned stat">Time to 10</th>
+                    <th class="center alligned stat">Games at 10</th>
+                    <th class="center alligned stat">Time to 20</th>
+                    <th class="center alligned stat">Games at 20</th>
+                    <th class="center alligned stat">Time @ Level 1</th>
+                    <th class="center alligned stat">Time @ Level 4</th>
+                    <th class="center alligned stat">Time @ Level 7</th>
+                    <th class="center alligned stat">Time @ Level 10</th>
+                    <th class="center alligned stat">Time @ Level 13</th>
+                    <th class="center alligned stat">Time @ Level 16</th>
+                    <th class="center alligned stat">Merc Captures</th>
+                    <th class="center alligned stat">Merc Uptime</th>
+                    <th class="center alligned stat">Merc Uptime %</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="17">Use the Search button in the Filter Matches menu to load team data.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div table-name="Team Fight and CC" class="section is-hidden">
+            <div class="table-wrapper">
+              <table class="ui inverted sortable selectable table" id="team-ranking-cc-table">
+                <thead>
+                  <tr>
+                    <th>Team</th>
+                    <th class="center alligned stat">Win %</th>
+                    <th class="center alligned stat">Games</th>
+                    <th class="center alligned stat">Team Fight Hero Damage</th>
+                    <th class="center alligned stat">Team Fight Damage Taken</th>
+                    <th class="center alligned stat">Team Fight Healing</th>
+                    <th class="center alligned stat">CC Time</th>
+                    <th class="center alligned stat">Root Time</th>
+                    <th class="center alligned stat">Silence Time</th>
+                    <th class="center alligned stat">Stun Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="17">Use the Search button in the Filter Matches menu to load team data.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div table-name="Structures" class="section is-hidden">
+            <div class="table-wrapper">
+              <table class="ui inverted sortable selectable table" id="team-ranking-structure-table">
+                <thead>
+                  <tr>
+                    <th>Team</th>
+                    <th class="center alligned stat">Win %</th>
+                    <th class="center alligned stat">Games</th>
+                    <th class="center alligned stat">Forts Destroyed</th>
+                    <th class="center alligned stat">Time to First Fort</th>
+                    <th class="center alligned stat">Forts Lost</th>
+                    <th class="center alligned stat">Keeps Destroyed</th>
+                    <th class="center alligned stat">Time to First Keep</th>
+                    <th class="center alligned stat">Keeps Lost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="17">Use the Search button in the Filter Matches menu to load team data.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -144,6 +158,9 @@
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
     <td class="center aligned" data-sort-value="{{totalMatches}}">{{totalMatches}}</td>
     <td class="center aligned" data-sort-value="{{stats.total.totalKDA}}">{{totalKDA}}</td>
+    <td class="center aligned" data-sort-value="{{stats.takedowns}}">{{takedowns}}</td>
+    <td class="center aligned" data-sort-value="{{stats.deaths}}">{{deaths}}</td>
+    <td class="center aligned" data-sort-value="{{heroesPlayed}}">{{heroesPlayed}}</td>
     <td class="center aligned" data-sort-value="{{stats.average.PPK}}">{{PPK}}</td>
     <td class="center aligned" data-sort-value="{{stats.average.TimeSpentDead}}">{{TimeSpentDead}}</td>
     <td class="center aligned" data-sort-value="{{stats.average.timeDeadPct}}">{{timeDeadPct}}</td>
@@ -163,7 +180,7 @@
     <td data-sort-value="{{name}}"><h3 class="ui inverted header">{{name}}</h3></td>
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
     <td class="center aligned" data-sort-value="{{totalMatches}}">{{totalMatches}}</td>
-    <td class="center aligned" data-sort-value="{{avgLength}}">{{formatAverageLength}}</td>
+    <td class="center aligned" data-sort-value="{{matchLength.val}}">{{matchLength.format}}</td>
     <td class="center aligned" data-sort-value="{{stats.average.timeTo10}}">{{timeTo10}}</td>
     <td class="center aligned" data-sort-value="{{level10Games}}">{{level10Games}}</td>
     <td class="center aligned" data-sort-value="{{stats.average.timeTo20}}">{{timeTo20}}</td>

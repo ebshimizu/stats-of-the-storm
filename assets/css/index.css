@@ -106,3 +106,7 @@ body {
     font-weight: bolder;
     cursor: pointer;
 }
+
+.floatThead-wrapper .center.alligned {
+    text-align: center;
+}

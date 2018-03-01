@@ -517,7 +517,7 @@ class Database {
       for (let s in playerDetailStats.heroes[h].stats) {
         playerDetailStats.total[h][s] = playerDetailStats.heroes[h].stats[s];
         playerDetailStats.averages[h][s] = playerDetailStats.heroes[h].stats[s] / playerDetailStats.heroes[h].games;
-        playerDetailStats.median[h][s] = median(playerDetailStats.medianTemp[h][s]);
+        playerDetailStats.median[h][s] = median(medianTemp[h][s]);
       }
       playerDetailStats.heroes[h].stats.totalKDA = playerDetailStats.heroes[h].stats.Takedowns / Math.max(playerDetailStats.heroes[h].stats.Deaths, 1);
 
@@ -1206,6 +1206,14 @@ class Database {
 
     data.deaths.median = median(data.deaths.medianTmp);
     data.deaths.average = data.deaths.total / data.totalMatches;
+
+    // hero count
+    data.heroesPlayed = 0;
+    for (let h in data.heroes) {
+      if (data.heroes[h].games > 0)
+        data.heroesPlayed += 1;
+    }
+
     return data;
   }
 
