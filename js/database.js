@@ -517,15 +517,7 @@ class Database {
       for (let s in playerDetailStats.heroes[h].stats) {
         playerDetailStats.total[h][s] = playerDetailStats.heroes[h].stats[s];
         playerDetailStats.averages[h][s] = playerDetailStats.heroes[h].stats[s] / playerDetailStats.heroes[h].games;
-
-        medianTemp[h][s].sort();
-        let len = medianTemp[h][s].length;
-        if (len % 2 === 0) {
-          playerDetailStats.median[h][s] = (medianTemp[h][s][len / 2 - 1] + medianTemp[h][s][len / 2]) / 2;
-        }
-        else {
-          playerDetailStats.median[h][s] = medianTemp[h][s][(len - 1) / 2];
-        }
+        playerDetailStats.median[h][s] = median(playerDetailStats.medianTemp[h][s]);
       }
       playerDetailStats.heroes[h].stats.totalKDA = playerDetailStats.heroes[h].stats.Takedowns / Math.max(playerDetailStats.heroes[h].stats.Deaths, 1);
 
@@ -1262,10 +1254,10 @@ class Database {
 
 function median(arr) {
   let len = arr.length;
-  arr.sort();
+  arr.sort(function(a,b) { return a - b; });
 
   if (len % 2 === 0) {
-    return arr[len / 2 - 1] + arr[len / 2];
+    return (arr[len / 2 - 1] + arr[len / 2]) / 2;
   }
 
   return arr[(len - 1) / 2];

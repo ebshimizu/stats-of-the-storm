@@ -73,6 +73,10 @@ function initPlayerRankingPage() {
   $('#player-ranking-body table th.stat').data('sortBy', function(th, td, tablesort) {
     return parseFloat(td.attr('data-sort-value'));
   });
+
+  $('#player-ranking-body .top.attached.menu .item').click(function() {
+    togglePlayerRankingMode(this);
+  });
 }
 
 function resetPlayerRankingPage() {
@@ -125,6 +129,12 @@ function togglePlayerRankingSection() {
   $('#player-ranking-body table').floatThead('reflow');
 }
 
+function togglePlayerRankingMode(elem) {
+  $('#player-ranking-body .top.attached.menu .item').removeClass('active');
+  $(elem).addClass('active');
+  loadPlayerRankings();
+}
+
 function loadPlayerRankings() {
   // this can take a long time so we don't do this on load, the user must hit the search button
   DB.getHeroData(playerRankingsHeroFilter, function(err, docs) {
@@ -132,18 +142,28 @@ function loadPlayerRankings() {
     let threshold = parseInt($('#player-ranking-match-thresh input').val());
     $('#player-ranking-body tbody').html('');
 
+    let mode = $('#player-ranking-body .top.attached.menu .active.item').attr('data-mode');
+
     for (let p in data) {
       let player = data[p];
 
       if (player.games < threshold)
         continue;
 
-      let context = {value: player.averages};
+      let context = {value: player[mode]};
       context.name = player.name;
       context.value.winPercent = player.wins / player.games;
       context.formatWinPercent = (context.value.winPercent * 100).toFixed(2) + '%';
-      context.value.totalKDA = player.totalKDA;
-      context.totalKDA = player.totalKDA;
+
+      if (mode === 'total' || mode === 'averages') {
+        context.value.totalKDA = player.totalKDA;
+        context.totalKDA = player.totalKDA;
+      }
+      else {
+        context.value.totalKDA = player[mode].KDA;
+        context.totalKda = context.value.totalKDA.toFixed(2);
+      }
+      
       context.value.games = player.games;
       context.games = player.games
       context.votes = player.votes;

@@ -7,9 +7,23 @@
 }
 
 #player-ranking-body .floatThead-wrapper {
-  height: calc(100% - 80px);
+  height: 100%;
 }
 
 #player-ranking-body .section {
+  height: 100%;
+}
+
+#player-ranking-body .section-wrapper {
+  height: calc(100% - 90px);
+  margin-top: 10px;
+}
+
+#player-ranking-body .section-wrapper .segment {
+  height: calc(100% - 30px);
+}
+
+#player-ranking-body .table-wrapper {
+  margin-top: 0!important;
   height: 100%;
 }
