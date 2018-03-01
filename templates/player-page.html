@@ -386,17 +386,25 @@
         </div>
       </div>
       <div class="ui tab player-detail-wrapper" data-tab="player-hero-detail" id="player-detail-hero">
-        <div class="ui inverted segment" id="player-hero-detail-stats" data-tab="player-hero-detail-stats">
-          <div class="ui top attached label">Detailed Average Stats</div>
-          <div class="table-wrapper-xy">
-            <table class="ui sortable selectable celled inverted table">
-              <thead>
-                <tr>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
+        <div id="player-hero-detail-stats" data-tab="player-hero-detail-stats">
+          <div class="ui top attached small menu">
+            <a class="active item" data-mode="averages">Average</a>
+            <a class="item" data-mode="total">Total</a>
+            <a class="item" data-mode="min">Minimum</a>
+            <a class="item" data-mode="max">Maximum</a>
+            <a class="item" data-mode="median">Median</a>
+          </div>
+          <div class="ui attached inverted segment">
+            <div class="table-wrapper-xy">
+              <table class="ui sortable selectable celled inverted table">
+                <thead>
+                  <tr>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

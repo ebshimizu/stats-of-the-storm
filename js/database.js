@@ -507,12 +507,15 @@ class Database {
     playerDetailStats.totalMatchLength = 0;
     playerDetailStats.totalVotes = 0;
     playerDetailStats.avgTimeDeadPct = 0;
+    playerDetailStats.total = {};
 
     for (let h in playerDetailStats.heroes) {
       playerDetailStats.averages[h] = {};
+      playerDetailStats.total[h] = {};
       playerDetailStats.median[h] = {};
 
       for (let s in playerDetailStats.heroes[h].stats) {
+        playerDetailStats.total[h][s] = playerDetailStats.heroes[h].stats[s];
         playerDetailStats.averages[h][s] = playerDetailStats.heroes[h].stats[s] / playerDetailStats.heroes[h].games;
 
         medianTemp[h][s].sort();
@@ -630,6 +633,7 @@ class Database {
           highestStreak: 0,
           min: { timeDeadPct: 100 },
           max: { timeDeadPct: 0 },
+          total: { timeDeadPct: 0 },
           medianTmp: { timeDeadPct: [] }
         }
       }
@@ -652,6 +656,7 @@ class Database {
         }
         
         playerDetailStats[match.ToonHandle].stats[statName] += match.gameStats[statName];
+        playerDetailStats[match.ToonHandle].total += match.gameStats[statName];
         playerDetailStats[match.ToonHandle].medianTmp[statName].push(match.gameStats[statName]);
 
         if (match.gameStats[statName] > playerDetailStats[match.ToonHandle].max[statName])
@@ -662,6 +667,7 @@ class Database {
       }
       let tdp = match.gameStats.TimeSpentDead / match.length;
       playerDetailStats[match.ToonHandle].stats.timeDeadPct += tdp;
+      playerDetailStats[match.ToonHandle].total.timeDeadPct += tdp; // ??
       playerDetailStats[match.ToonHandle].medianTmp.timeDeadPct.push(tdp);
 
       if (tdp > playerDetailStats[match.ToonHandle].max.timeDeadPct)

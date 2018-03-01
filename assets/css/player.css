@@ -72,9 +72,13 @@
   height: calc(100% - 90px);
 }
 
+#player-hero-detail-stats .segment {
+  height: 100%;
+}
+
 #player-hero-detail-stats .table-wrapper-xy {
   overflow: auto;
-  height: calc(100% - 16px);
+  height: 100%;
 }
 
 #player-hero-detail-stats tbody td {

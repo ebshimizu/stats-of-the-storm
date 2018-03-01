@@ -254,6 +254,10 @@ function initPlayerPage() {
   bindFilterButton($('.filter-popup-widget[widget-name="player-filter"]'), updatePlayerFilter);
   bindFilterResetButton($('.filter-popup-widget[widget-name="player-filter"]'), resetPlayerFilter);
 
+  $('#player-hero-detail-stats .menu .item').click(function() {
+    togglePlayerDetailMode(this);
+  });
+
   // graphs
   progressionWinRateGraphData = {
     type: 'line',
@@ -347,6 +351,7 @@ function createDetailTableHeader() {
 
   // add the headings n stuff
   $('#player-hero-detail-stats thead tr').append('<th style="width: 500px;">Hero</th>');
+  $('#player-hero-detail-stats thead tr').append('<th>Games</th>');
   for (let i in allDetailStats) {
     $('#player-hero-detail-stats thead tr').append('<th class="stat">' + DetailStatString[allDetailStats[i]] + '</th>');
   }
@@ -680,19 +685,28 @@ function setTauntStats(name, obj) {
 function renderPlayerHeroDetail() {
   $('#player-hero-detail-stats tbody').html('');
 
-  for (let h in playerDetailStats.averages) {
-    let avgData = playerDetailStats.averages[h];
+  // active selected menu option
+  let mode = $('#player-hero-detail-stats .menu .active.item').attr('data-mode');
+
+  for (let h in playerDetailStats[mode]) {
+    let statData = playerDetailStats[mode][h];
     let context = {};
     context.heroName = h;
     context.heroImg = Heroes.heroIcon(h);
     context.stat = [];
 
+    context.stat.push({
+      avg: playerDetailStats.heroes[h].games,
+      name: 'Games',
+      render: playerDetailStats.heroes[h].games
+    });
+
     for (let s in allDetailStats) {
-      if (allDetailStats[s] in avgData) {
+      if (allDetailStats[s] in statData) {
         context.stat.push({
-          avg: avgData[allDetailStats[s]].toFixed(2),
+          avg: statData[allDetailStats[s]].toFixed(2),
           name: DetailStatString[allDetailStats[s]],
-          render: formatStat(allDetailStats[s], avgData[allDetailStats[s]], true)
+          render: formatStat(allDetailStats[s], statData[allDetailStats[s]], true)
         });
       }
       else {
@@ -705,6 +719,14 @@ function renderPlayerHeroDetail() {
 
   $('#player-hero-detail-stats table').floatThead('reflow');
   $('#player-hero-detail-stats td').popup();
+}
+
+function togglePlayerDetailMode(elem) {
+  $('#player-hero-detail-stats .menu .item').removeClass('active');
+  $(elem).addClass('active');
+
+  if (playerDetailStats)
+    renderPlayerHeroDetail();
 }
 
 function updatePlayerFilter(mapQ, heroQ) {
