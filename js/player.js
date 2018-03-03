@@ -258,6 +258,11 @@ function initPlayerPage() {
     togglePlayerDetailMode(this);
   });
 
+  $('#player-export-menu').dropdown({
+    action: 'hide',
+    onChange: handlePlayerExportAction
+  });
+
   // graphs
   progressionWinRateGraphData = {
     type: 'line',
@@ -333,6 +338,7 @@ function initPlayerPage() {
 
 function showPlayerPage() {
   $('#player-page-content table').floatThead('reflow');
+  $('#player-export-menu').removeClass('is-hidden');
 }
 
 function resetPlayerPage() {
@@ -891,4 +897,36 @@ function hashInterval(date, mode) {
   
   //listen if you call this with an invalid mode i hope it crashes
   return [null, null];
+}
+
+function handlePlayerExportAction(action, text, $elem) {
+  if (action === 'player') {
+    if (!playerDetailID)
+      return;
+
+    dialog.showSaveDialog({
+      title: 'Export Player',
+      filters: [{ name: 'JSON', extensions: ['.json'] }]
+    }, function(filename) {
+      if (filename) {
+        exportPlayer(playerDetailID, filename);
+      }
+    });
+  }
+  else if (action === 'all-players') {
+    dialog.showOpenDialog({
+      title: 'Select Export Folder',
+      properties: ["openDirectory", "createDirectory"]
+    }, function(files) {
+      if (files) {
+        // pick the first, should only be 1 dir
+        let path = files[0];
+        DB.getPlayers({}, function(err, docs) {
+          for (let i in docs) {
+            exportPlayer(docs[i]._id, path + '/' + docs[i].name + '-' + docs[i]._id + '.json');
+          }
+        });
+      }
+    })
+  }
 }

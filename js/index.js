@@ -639,6 +639,40 @@ function showMessage(title, text, opts = {}) {
   }
 }
 
+function exportMatch(id, filename) {
+  DB.getMatchesByID([id], function(err, docs) {
+    let match = docs[0];
+    DB.getHeroDataForID(id, function(err, docs) {
+      let matchExport = {
+        match: match,
+        players: docs
+      };
+      fs.writeFile(filename, JSON.stringify(matchExport, null, 2), function(err) {
+        if (err) {
+          showMessage('Export Error', err, { class: 'negative' });
+        }
+        else {
+          showMessage('Export Complete', 'Match ' + id + ' saved to ' + filename);
+        }
+      });
+    })
+  })
+}
+
+function exportPlayer(id, filename) {
+  DB.getHeroDataForPlayer(id, function(err, docs) {
+    let data = DB.summarizeHeroData(docs);
+    fs.writeFile(filename, JSON.stringify(data, null, 2), function(err) {
+      if (err) {
+        showMessage('Export Error', err, { class: 'negative' });
+      }
+      else {
+        showMessage('Export Complete', 'Player ' + id + ' saved to ' + filename);
+      }
+    });
+  });
+}
+
 // DATABASE MIGRATIONS
 function migrateVersion1ToVersion2() {
   let text = `The parser has been updated to version 2, which means that you will need to

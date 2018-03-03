@@ -86,6 +86,10 @@ function initMatchesPage() {
     action: 'hide',
     onChange: handleMatchesCollectionAction
   });
+  $('#matches-export-menu').dropdown({
+    action: 'hide',
+    onChange: handleMatchesExportAction
+  });
 
   $('#matches-collection-select').modal();
 
@@ -105,6 +109,7 @@ function resetMatchesPage() {
 
 function showMatchesPage() {
   $('#matches-collection').removeClass('is-hidden');
+  $('#matches-export-menu').removeClass('is-hidden');
 }
 
 function getMatchCount() {
@@ -494,5 +499,22 @@ function handleMatchesCollectionAction(action, text, $elem) {
       }).
       modal('show');
     }
+  }
+}
+
+function handleMatchesExportAction(action, text, $elem) {
+  if (action === 'match') {
+    dialog.showOpenDialog({
+      title: 'Select Export Folder',
+      properties: ["openDirectory", "createDirectory"]
+    }, function(files) {
+      if (files) {
+        // pick the first, should only be 1 dir
+        let path = files[0];
+        for (let i in selectedMatches) {
+          exportMatch(selectedMatches[i]._id, path + '/' + selectedMatches[i]._id + '.json');
+        }
+      }
+    })
   }
 }

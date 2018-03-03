@@ -253,6 +253,11 @@ function initMatchDetailPage() {
     onChange: matchDetailCollectionAction
   });
 
+  $('#match-detail-export-menu').dropdown({
+    action: 'hide',
+    onChange: matchDetailExportAction
+  });
+
   $('#match-detail-existing-team').modal();
 
   // DEBUG - LOAD SPECIFIC MATCH
@@ -262,6 +267,7 @@ function initMatchDetailPage() {
 function matchDetailsShowSection() {
   $('#match-detail-teams').removeClass('is-hidden');
   $('#match-detail-collection').removeClass('is-hidden');
+  $('#match-detail-export-menu').removeClass('is-hidden');
 }
 
 function matchDetailTeamAction(action) {
@@ -1816,5 +1822,18 @@ function matchDetailCollectionAction(value, text, $elem) {
       }
     }).
     modal('show');
+  }
+}
+
+function matchDetailExportAction(value, text, $elem) {
+  if (value === 'match') {
+    dialog.showSaveDialog({
+      title: 'Export Match',
+      filters: [ {name: 'JSON', extensions: ['.json']} ]
+    }, function(filename) {
+      if (filename) {
+        exportMatch(matchDetailMatch._id, filename);
+      }
+    });
   }
 }
