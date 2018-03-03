@@ -19,6 +19,7 @@ Heroes of the Storm. I hope to address this in a future update.
 * [Team Details](#teamDetails)
 * [Collection Stats](#collection)
 * [Uploader](#uploader)
+* [Export Data](#exporter)
 
 ## How To
 * [Parse Replays](parser.md)
@@ -64,15 +65,18 @@ or implementing one! When you're ready, submit a pull request and we'll get the 
 **Why doesn't this run on OS X?**
 Theoretically there is no problem and it already runs on OS X.
 However, I can't build an installer for OS X because I don't have a Mac to run this on.
-The other (and probably larger problem) is that the parser I use must be packaged
-with [PyInstaller](http://www.pyinstaller.org/) using OS X every time the heroprotocol library updates.
-If you would like to maintain this, let me know.
 
 **Why doesn't this work with non-English Replays?**
 The parser looks for a map that it recognizes and then parses. Since the map names are not in English,
 they don't match any keys that the parser looks for. Additionally, hero names will be in their
 localized versions, so the data won't match up there either. I hope to add localization support
 in a future update.
+
+**Why don't I see all the players in the Player Details page?**
+Personal databases have a lot of players that only show up once or twice. In order to keep the
+app responsive, players with fewer than 5 matches in the database are excluded from the Player
+Details page. You can change this threshold in the Settings page with the Player Menu Threshold
+option.
 
 # Features
 
@@ -140,7 +144,7 @@ takedowns near taunt, and deaths near taunt. Also shows award stats.
 
 ![Player Hero Details]({{ "/images/player-details-05.png" | absolute_url }})
 Detailed average stats table for all heroes played by a player. Includes
-replay-only hidden statistics.
+replay-only hidden statistics. View average, min, max, median, and total stats.
 
 ![Player Progression]({{ "/images/player-details-06.png" | absolute_url }})
 Win rate, KDA, and award rate over time graphs. Available intervals include
@@ -187,3 +191,9 @@ Displays overall individual player stats. Filterable by hero.
 Upload your matches to HotsAPI (and HotsLogs if you like) automatically
 when you import a match. Stats of the Storm does not actively monitor your replay
 folder at the moment, so you'll have to remember to upload them manually for now.
+
+## <a name="exporter"></a>Exporter
+
+Export data from the app in JSON format. You can export match data, and
+player data right now, with team data to come in a future update. Have data you
+want exported that's not in one of these categories? Let me know!

@@ -16,12 +16,13 @@ as Stats of the Storm is unable to recover missing data from a corrupted databas
 If you select a folder that already has these four existing database files, Stats of the Storm will load
 the data from that database instead of creating a new one in that folder.
 
-Try it out! You can download this database of matches from Phase 1 Part 1 of the HGC, including
-NA and EU regions, from [here](https://www.dropbox.com/s/57jx8c699nznij1/2018HGC_NA_EU.zip?dl=0).
-Extract the directory and set your database path to the
-extracted folder. Congrats! You're now a HGC stats wizard.
+Try it out! Below are some databases created for Stats of the Storm.
 
-If you're looking for HGC KR and CN, sorry but I can't parse all of those replays yet!
-I'm considering solutions to localized replays, so stay tuned.
+* [HGC NA/EU Phase 1 Part 1](https://www.dropbox.com/s/57jx8c699nznij1/2018HGC_NA_EU.zip?dl=0)
+* [NGS Season 3](https://www.dropbox.com/s/302ll6d7l4lqpti/NGS_Season3.zip?dl=0) - The Nexus Gaming Series is a NA community
+league. Find out more at their website: [Nexus Gaming Series](https://nexusgamingseries.com).
+
+Extract the directory and set your database path to the
+extracted folder. Congrats! You're now a stats wizard.
 
 [Back](https://ebshimizu.github.io/stats-of-the-storm/)
