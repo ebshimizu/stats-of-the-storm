@@ -968,42 +968,42 @@ function loadTimeline() {
   }
 
   // objectives...
-  if (matchDetailMatch.map === ReplayTypes.MapType.SkyTemple) {
+  if (matchDetailMatch.map === ReplayTypes.MapType.ControlPoints) {
     getSkyTempleEvents(items);
   }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.Towers) {
+  else if (matchDetailMatch.map === ReplayTypes.MapType.TowersOfDoom) {
     getTowersEvents(items);
   }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.Mines) {
+  else if (matchDetailMatch.map === ReplayTypes.MapType.HauntedMines) {
     getMinesEvents(items);
   } 
-  else if (matchDetailMatch.map === ReplayTypes.MapType.BOE) {
+  else if (matchDetailMatch.map === ReplayTypes.MapType.BattlefieldOfEternity) {
     getBOEEvents(items);
   }
   // NOTE: Blackheart's bay has no discernable objective data so it's not listed here right now
   // i hope one day we find it.
-  else if (matchDetailMatch.map === ReplayTypes.MapType.Cursed) {
+  else if (matchDetailMatch.map === ReplayTypes.MapType.CursedHollow) {
     getCursedEvents(items);
   }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.Dragon) {
+  else if (matchDetailMatch.map === ReplayTypes.MapType.DragonShire) {
     getDragonEvents(items);
   }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.Garden) {
+  else if (matchDetailMatch.map === ReplayTypes.MapType.HauntedWoods) {
     getGardenEvents(items);
   }
   else if (matchDetailMatch.map === ReplayTypes.MapType.Shrines) {
     getShrinesEvents(items);
   }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.Tomb) {
+  else if (matchDetailMatch.map === ReplayTypes.MapType.Crypts) {
     getTombEvents(items);
   }
   else if (matchDetailMatch.map === ReplayTypes.MapType.Volskaya) {
     getVolskayaEvents(items);
   }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.Warhead) {
+  else if (matchDetailMatch.map === ReplayTypes.MapType['Warhead Junction']) {
     getWarheadEvents(items);
   }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.Braxis) {
+  else if (matchDetailMatch.map === ReplayTypes.MapType.BraxisHoldout) {
     getBraxisEvents(items);
   }
 
@@ -1735,7 +1735,7 @@ function updateTeamStats() {
     updateTeamStat(elem, 'forts-lost', stats.structures.Fort.lost);
     updateTeamStat(elem, 'first-fort', stats.structures.Fort.destroyed === 0 ? 'N/A' : formatSeconds(stats.structures.Fort.first));
 
-    if (matchDetailMatch.map === ReplayTypes.MapType.Towers) {
+    if (matchDetailMatch.map === ReplayTypes.MapType.TowersOfDoom) {
       updateTeamStat(elem, 'wells-destroyed', stats.structures['Fort Well'].destroyed);
       updateTeamStat(elem, 'wells-lost', stats.structures['Fort Well'].lost);
 

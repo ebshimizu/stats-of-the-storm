@@ -202,13 +202,14 @@ Value: Object containing a number of cryptic keys.
 
 Relevant data:
 
-* `attributeevents.scopes["16"]["4023"].value` - Blue Team Ban 1
-* `attributeevents.scopes["16"]["4025"].value` - Blue Team Ban 2
-* `attributeevents.scopes["16"]["4028"].value` - Red Team Ban 1
-* `attributeevents.scopes["16"]["4030"].value` - Red Team Ban 2
+* `attributeevents.scopes["16"]["4023"][0].value` - Blue Team Ban 1
+* `attributeevents.scopes["16"]["4025"][0].value` - Blue Team Ban 2
+* `attributeevents.scopes["16"]["4028"][0].value` - Red Team Ban 1
+* `attributeevents.scopes["16"]["4030"][0].value` - Red Team Ban 2
 
 Each of these objects returns a hero Attribute value (typically the first 4 letters of the hero's internal name, which doesn't
 usually match up with the display name). Recommended to use heroes-talents to resolve these names.
+Note that in attribute events, `scopes` is an object, but the numeric key is an array of size 1 with an object in it.
 
 Alternate Location: Events in `trackerevents` with `_event` value `NNet.Replay.Tracker.SHeroBannedEvent`. This event
 contains the hero banned in `event._m_hero` and the team that banned it in `event.m_controllingTeam`. Blue is 1, Red is 2.
@@ -223,6 +224,14 @@ Relevant data:
 
 * `event.m_controllingPlayer` - This maps to the player's Working Set Slot ID. Using any other ID may result in incorrect pick data.
 * `event.m_hero` - Internal hero name. If you mapped Working Set Slot ID to ToonHandle you can resolve this to displayed hero name easily.
+
+### Atrribute Hero Name
+Localized hero names and internal hero IDs are used in many places of the replay. To resolve issues with this,
+use the attribute ID located in `attributeevents`.
+
+Location: `attributeevents.scopes[{Player Tracker ID}]["4002"][0].value`
+
+Use the heroes-talents repository data to resolve attribute id to hero name. 
 
 ## Tracker Events
 Tracker events are stored in the `trackerevents` array. This is a long array of individual event objects.

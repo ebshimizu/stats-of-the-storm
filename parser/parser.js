@@ -93,7 +93,8 @@ function parse(file, requestedData, opts) {
 }
 
 // processes a replay file and adds it to the database
-function processReplay(file, opts = {}) {
+// the parser now requires a heroes talents instance to function.
+function processReplay(file, HeroesTalents, opts = {}) {
   // options
   if (!('getBMData' in opts))
     opts.getBMData = true;
@@ -124,18 +125,11 @@ function processReplay(file, opts = {}) {
     match.loopLength = data.header.m_elapsedGameLoops;
     match.filename = file;
 
-    // map details
-    match.map = details.m_title;
-    match.date = winFileTimeToDate(details.m_timeUTC);
-    match.rawDate = details.m_timeUTC;
-
     // game mode
     match.mode = data.initdata.m_syncLobbyState.m_gameDescription.m_gameOptions.m_ammId;
 
     if (match.mode === null)
       match.mode = -1;
-
-    console.log("Processing " + ReplayTypes.GameModeStrings[match.mode]  + " game on " + match.map + " at " + match.date);
 
     // check for supported mode
     if (match.mode === ReplayTypes.GameMode.Brawl) {
@@ -143,7 +137,33 @@ function processReplay(file, opts = {}) {
       return { status: ReplayStatus.Unsupported };
     }
 
-    // ai n stuff is ok, we can just filter it out of the database
+    // map details
+    // for localization reasons we need the internal map name from the EndOfGameTalentChoices event
+    var tracker = data.trackerevents;
+    for (let i in tracker) {
+      let event = tracker[i];
+
+      // case on event type
+      if (event._eventid === ReplayTypes.TrackerEvent.Stat) {
+        if (event.m_eventName === ReplayTypes.StatEventType.EndOfGameTalentChoices) {
+          let internalMap = event.m_stringData[2].m_value;
+          if (internalMap in ReplayTypes.MapType) {
+            match.map = ReplayTypes.MapType[event.m_stringData[2].m_value];
+            break;
+          }
+          else {
+            console.log('Unrecognized internal map name: ' + internalMap);
+            return { status: ReplayStats.UnsupportedMap };
+          }
+        }
+      }
+    }
+    // match.map = details.m_title;
+
+    console.log("Processing " + ReplayTypes.GameModeStrings[match.mode]  + " game on " + match.map + " at " + match.date);
+
+    match.date = winFileTimeToDate(details.m_timeUTC);
+    match.rawDate = details.m_timeUTC;
 
     // check for duplicate matches somewhere else, this function executes without async calls
     // until insertion. Should have a processReplays function that does the de-duplication.
@@ -210,9 +230,8 @@ function processReplay(file, opts = {}) {
 
     console.log("Preliminary Player Processing Complete");
     console.log("Matching Tracker Player ID to handles...");
-    // construct identfier map for player handle to internal player object id
-    var tracker = data.trackerevents;
 
+    // construct identfier map for player handle to internal player object id
     // maps player id in the Tracker data to the proper player object
     var playerIDMap = {};
     match.loopGameStart = 0; // fairly sure this is always 610 but just in case look for the "GatesOpen" event
@@ -229,6 +248,7 @@ function processReplay(file, opts = {}) {
           }
 
           playerIDMap[event.m_intData[0].m_value] = event.m_stringData[1].m_value;
+          players[event.m_stringData[1].m_value].hero = HeroesTalents.heroNameFromAttr(data.attributeevents.scopes[event.m_intData[0].m_value]['4002'][0].value);
 
           console.log("Player " + event.m_stringData[1].m_value + " has tracker ID " + event.m_intData[0].m_value);
         }
@@ -342,23 +362,23 @@ function processReplay(file, opts = {}) {
     match.objective = { type: match.map };
 
     // objective object initialization (per-map)
-    if (match.map === ReplayTypes.MapType.SkyTemple) {
+    if (match.map === ReplayTypes.MapType.ControlPoints) {
       match.objective[0] = { count: 0, damage: 0, events: [] };
       match.objective[1] = { count: 0, damage: 0, events: [] };
     }
-    else if (match.map === ReplayTypes.MapType.Towers) {
+    else if (match.map === ReplayTypes.MapType.TowersOfDoom) {
       match.objective.sixTowerEvents = [];
       // this is a special case for towers, other matches will have a general 'structures' object in the root
       match.objective.structures = [];
       match.objective[0] = { count: 0, damage: 0, events: [] };
       match.objective[1] = { count: 0, damage: 0, events: [] };
     }
-    else if (match.map === ReplayTypes.MapType.Cursed) {
+    else if (match.map === ReplayTypes.MapType.CursedHollow) {
       match.objective.tributes = [];
       match.objective[0] = {count: 0, events: []};
       match.objective[1] = {count: 0, events: []};
     }
-    else if (match.map === ReplayTypes.MapType.Dragon) {
+    else if (match.map === ReplayTypes.MapType.DragonShire) {
       // it appears that we can track the status of the shrines based on owner changed events
       var moon = {};
       var sun = {};
@@ -367,12 +387,12 @@ function processReplay(file, opts = {}) {
       match.objective[0] = { count: 0, events: []};
       match.objective[1] = { count: 0, events: []};
     }
-    else if (match.map === ReplayTypes.MapType.Garden) {
+    else if (match.map === ReplayTypes.MapType.HauntedWoods) {
       var currentTerror = {0: {}, 1: {}};
       match.objective[0] = { count: 0, events: []};
       match.objective[1] = { count: 0, events: []};
     }
-    else if (match.map === ReplayTypes.MapType.Mines) {
+    else if (match.map === ReplayTypes.MapType.HauntedMines) {
       // unfortunately the mines map seems to be missing some older events that had the info about the golem spawns
       // the data would be... tricky to reconstruct due to ambiguity over who picks up the skull
       // we can track when these are summoned though and maybe how long they last
@@ -380,7 +400,7 @@ function processReplay(file, opts = {}) {
       match.objective[0] = [];
       match.objective[1] = [];
     }
-    else if (match.map === ReplayTypes.MapType.BOE) {
+    else if (match.map === ReplayTypes.MapType.BattlefieldOfEternity) {
       var immortal = {};
       match.objective.results = [];
     }
@@ -390,7 +410,7 @@ function processReplay(file, opts = {}) {
       match.objective[0] = { count: 0, events: []};
       match.objective[1] = { count: 0, events: []};
     }
-    else if (match.map === ReplayTypes.MapType.Tomb) {
+    else if (match.map === ReplayTypes.MapType.Crypts) {
       var currentSpiders = { units: {}, active: false };
       match.objective[0] = {count: 0, events: []};
       match.objective[1] = {count: 0, events: []};
@@ -400,24 +420,24 @@ function processReplay(file, opts = {}) {
       match.objective[0] = {count: 0, events: []};
       match.objective[1] = {count: 0, events: []};
     }
-    else if (match.map === ReplayTypes.MapType.Warhead) {
+    else if (match.map === ReplayTypes.MapType['Warhead Junction']) {
       var nukes = {};
       match.objective[0] = {count: 0, success: 0, events: []};
       match.objective[1] = {count: 0, success: 0, events: []};
       match.objective.warheads = [];
     
     }
-    else if (match.map === ReplayTypes.MapType.Braxis) {
+    else if (match.map === ReplayTypes.MapType.BraxisHoldout) {
       var waveUnits = {0: {}, 1: {}};
       var waveID = -1;
       var beacons = {};
       match.objective.beacons = [];
       match.objective.waves = [];
     }
-    else if (match.map === ReplayTypes.MapType.Blackheart) {
+    else if (match.map === ReplayTypes.MapType.BlackheartsBay) {
       // hopefully something goes here eventually
     }
-    else if (match.map === ReplayTypes.MapType.OldHanamura) {
+    else if (match.map === ReplayTypes.MapType.Hanamura) {
       // couldn't find much data here, not too worried since it's old
       // can't wait till i have to detect which version of the map this is
     }
@@ -690,7 +710,7 @@ function processReplay(file, opts = {}) {
           cap.time = loopsToSeconds(cap.loop - match.loopGameStart);
           match.mercs.captures.push(cap);
 
-          if (match.map === ReplayTypes.MapType.Towers) {
+          if (match.map === ReplayTypes.MapType.TowersOfDoom) {
             if (cap.type === "Boss Camp") {
               let bossEvent = { team: cap.team, loop: cap.loop, time: cap.time, type: 'boss', damage: 4};
               match.objective[cap.team].events.push(bossEvent);
@@ -753,7 +773,7 @@ function processReplay(file, opts = {}) {
 
           let xpVal = ReplayTypes.MinionXP[type][elapsedGameMinutes];
 
-          if (match.map === ReplayTypes.MapType.Tomb) {
+          if (match.map === ReplayTypes.MapType.Crypts) {
             xpVal = ReplayTypes.TombMinionXP[type][elapsedGameMinutes];
           }
           
@@ -917,7 +937,7 @@ function processReplay(file, opts = {}) {
         }
 
         // Haunted Mines - check for matching golem death
-        if (match.map === ReplayTypes.MapType.Mines) {
+        if (match.map === ReplayTypes.MapType.HauntedMines) {
           for (let g in golems) {
             let golem = golems[g];
 
@@ -934,7 +954,7 @@ function processReplay(file, opts = {}) {
             }
           }
         }
-        else if (match.map === ReplayTypes.MapType.Garden) {
+        else if (match.map === ReplayTypes.MapType.HauntedWoods) {
           // check plant death
           for (let t in currentTerror) {
             let terror = currentTerror[t];
@@ -952,7 +972,7 @@ function processReplay(file, opts = {}) {
             }
           }
         }
-        else if (match.map === ReplayTypes.MapType.Dragon) {
+        else if (match.map === ReplayTypes.MapType.DragonShire) {
           if (dragon && dragon.tag === tag && dragon.rtag === rtag) {
             // log duration
             let lastIdx = match.objective[dragon.team].events.length - 1;
@@ -963,7 +983,7 @@ function processReplay(file, opts = {}) {
             dragon = null;
           }
         }
-        else if (match.map === ReplayTypes.MapType.Tomb) {
+        else if (match.map === ReplayTypes.MapType.Crypts) {
           if (currentSpiders.active) {
             for (let s in currentSpiders.units) {
               let spider = currentSpiders.units[s];
@@ -999,7 +1019,7 @@ function processReplay(file, opts = {}) {
             console.log('[TRACKER] Triglav Protector destroyed');
           }
         }
-        else if (match.map === ReplayTypes.MapType.Warhead) {
+        else if (match.map === ReplayTypes.MapType['Warhead Junction']) {
           let id = tag + '-' + rtag;
 
           if (id in nukes) {
@@ -1008,7 +1028,7 @@ function processReplay(file, opts = {}) {
             console.log('[TRACKER] Nuclear Launch Detected');
           }
         }
-        else if (match.map === ReplayTypes.MapType.Braxis) {
+        else if (match.map === ReplayTypes.MapType.BraxisHoldout) {
           let id = tag + '-' + rtag;
 
           if (id in waveUnits[0]) {
@@ -1046,7 +1066,7 @@ function processReplay(file, opts = {}) {
             delete waveUnits[1][id];
           }
         }
-        else if (match.map === ReplayTypes.MapType.BOE) {
+        else if (match.map === ReplayTypes.MapType.BattlefieldOfEternity) {
           if ('tag' in immortal) {
             if (tag === immortal.tag && rtag === immortal.rtag) {
               // append duration to last result
@@ -1058,7 +1078,7 @@ function processReplay(file, opts = {}) {
         }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitOwnerChange) {
-        if (match.map === ReplayTypes.MapType.Dragon) {
+        if (match.map === ReplayTypes.MapType.DragonShire) {
           // dragon shire shrine control
           // actually you can probably track this on braxis too huh
           let tag = event.m_unitTagIndex;
@@ -1094,7 +1114,7 @@ function processReplay(file, opts = {}) {
             }
           }
         }
-        if (match.map === ReplayTypes.MapType.Garden) {
+        if (match.map === ReplayTypes.MapType.HauntedWoods) {
           let tag = event.m_unitTagIndex;
           let rtag = event.m_unitTagRecycle;
 
@@ -1106,7 +1126,7 @@ function processReplay(file, opts = {}) {
             }
           }
         }
-        if (match.map === ReplayTypes.MapType.Braxis) {
+        if (match.map === ReplayTypes.MapType.BraxisHoldout) {
           let tag = event.m_unitTagIndex;
           let rtag = event.m_unitTagRecycle;
           let id = tag + '-' + rtag;
@@ -1123,7 +1143,7 @@ function processReplay(file, opts = {}) {
     }
 
     // mines clean up
-    if (match.map === ReplayTypes.MapType.Mines) {
+    if (match.map === ReplayTypes.MapType.HauntedMines) {
       for (let g in golems) {
         let golem = golems[g];
 
@@ -1141,7 +1161,7 @@ function processReplay(file, opts = {}) {
       }
     }
     // garden clean up
-    else if (match.map === ReplayTypes.MapType.Garden) {
+    else if (match.map === ReplayTypes.MapType.HauntedWoods) {
       for (let t in currentTerror) {
         let terror = currentTerror[t];
 
@@ -1158,7 +1178,7 @@ function processReplay(file, opts = {}) {
         }
       }
     }
-    else if (match.map === ReplayTypes.MapType.Dragon) {
+    else if (match.map === ReplayTypes.MapType.DragonShire) {
       // turns out a dragon can spawn well after the game ends,
       // it isn't assigned to a team by the parser if this is the case, so skip it
       if (dragon && (dragon.team === 0 || dragon.team === 1)) {
@@ -1171,7 +1191,7 @@ function processReplay(file, opts = {}) {
         dragon = null;
       }
     }
-    else if (match.map === ReplayTypes.MapType.Tomb) {
+    else if (match.map === ReplayTypes.MapType.Crypts) {
       if (currentSpiders.active === true) {
         let spider = currentSpiders.units[Object.keys(currentSpiders.units)[0]];
         match.objective[currentSpiders.team].events[currentSpiders.eventIdx].duration = loopsToSeconds(match.loopDuration - spider.loop);
@@ -1185,7 +1205,7 @@ function processReplay(file, opts = {}) {
         match.objective[currentProtector.team].events[currentProtector.eventIdx].duration = duration;
       }
     }
-    else if (match.map === ReplayTypes.MapType.Warhead) {
+    else if (match.map === ReplayTypes.MapType['Warhead Junction']) {
       // nuke sorting
       for (let id in nukes) {
         let nuke = nukes[id];
@@ -1197,7 +1217,7 @@ function processReplay(file, opts = {}) {
           match.objective[nuke.team].success += 1;
       }
     }
-    else if (match.map === ReplayTypes.MapType.BOE) {
+    else if (match.map === ReplayTypes.MapType.BattlefieldOfEternity) {
       if ('tag' in immortal) {
         let res = match.objective.results.length - 1;
         match.objective.results[res].immortalDuration = loopsToSeconds(match.loopLength - immortal.start);

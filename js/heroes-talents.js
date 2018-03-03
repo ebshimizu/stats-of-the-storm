@@ -58,6 +58,7 @@ class HeroesTalents {
     this._talents = {};
     this._roles = {};
     this._heroAttr = {};
+    this._lcAttr = {};
 
     let files = fs.readdirSync(this._heroPath);
 
@@ -70,6 +71,7 @@ class HeroesTalents {
       // sort everything, some data is replicated but that's ok
       this._heroes[data.name] = data;
       this._heroAttr[data.attributeId] = data.name;
+      this._lcAttr[data.attributeId.toLowerCase()] = data.name;
 
       for (let tier in data.talents) {
         for (let t in data.talents[tier]) {
@@ -120,6 +122,14 @@ class HeroesTalents {
     if (attr in this._heroAttr)
       return this._heroAttr[attr];
     
+    return 'NotFound';
+  }
+
+  heroNameFromLCAttr(attr) {
+    if (attr in this._lcAttr) {
+      return this._lcAttr[attr];
+    }
+
     return 'NotFound';
   }
 

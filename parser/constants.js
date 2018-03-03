@@ -158,20 +158,20 @@ const ScoreEventNames = {
 };
 
 const MapType = {
-  SkyTemple: 'Sky Temple',
-  Towers: 'Towers of Doom',
-  Mines: 'Haunted Mines',
-  BOE: 'Battlefield of Eternity',
-  Blackheart: "Blackheart's Bay",
-  Cursed: 'Cursed Hollow',
-  Dragon: 'Dragon Shire',
-  Garden: 'Garden of Terror',
+  ControlPoints: 'Sky Temple',
+  TowersOfDoom: 'Towers of Doom',
+  HauntedMines: 'Haunted Mines',
+  BattlefieldOfEternity: 'Battlefield of Eternity',
+  BlackheartsBay: "Blackheart's Bay",
+  CursedHollow: 'Cursed Hollow',
+  DragonShire: 'Dragon Shire',
+  HauntedWoods: 'Garden of Terror',
   Shrines: 'Infernal Shrines',
-  Tomb: 'Tomb of the Spider Queen',
+  Crypts: 'Tomb of the Spider Queen',
   Volskaya: 'Volskaya Foundry',
-  Warhead: 'Warhead Junction',
-  Braxis: 'Braxis Holdout',
-  OldHanamura: 'Hanamura'
+  'Warhead Junction': 'Warhead Junction',
+  BraxisHoldout: 'Braxis Holdout',
+  Hanamura: 'Hanamura'
 };
 
 const MessageType = {
