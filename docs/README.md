@@ -9,9 +9,6 @@ different divisions in a league.
 
 It also comes with a [HotsAPI](http://hotsapi.net/)/[HotsLogs](https://www.hotslogs.com/) uploader built in.
 
-**Important Note**: Right now the parser only supports replays made using an English version of
-Heroes of the Storm. I hope to address this in a future update.
-
 ## Features
 * [Match Database](#matchDB)
 * [Match Details](#matchDetails)
@@ -40,7 +37,8 @@ opening the menu in the top left corner of the app.
 
 Once you install the program, you can start parsing your own matches, or explore
 a database created by someone else. An example of this has been created for
-Phase 1 of the 2018 HGC, and instructions can be found [here](external-db.md).
+Phase 1 of the 2018 HGC, and Season 3 of the [NGS](https://nexusgamingseries.com),
+and instructions can be found [here](external-db.md).
 
 Want to help develop? Found a bug? Check out the [project repository](https://github.com/ebshimizu/stats-of-the-storm/).
 
@@ -65,12 +63,6 @@ or implementing one! When you're ready, submit a pull request and we'll get the 
 **Why doesn't this run on OS X?**
 Theoretically there is no problem and it already runs on OS X.
 However, I can't build an installer for OS X because I don't have a Mac to run this on.
-
-**Why doesn't this work with non-English Replays?**
-The parser looks for a map that it recognizes and then parses. Since the map names are not in English,
-they don't match any keys that the parser looks for. Additionally, hero names will be in their
-localized versions, so the data won't match up there either. I hope to add localization support
-in a future update.
 
 **Why don't I see all the players in the Player Details page?**
 Personal databases have a lot of players that only show up once or twice. In order to keep the
