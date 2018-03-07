@@ -553,6 +553,7 @@ to a player's tracker ID.
 The following list is non-exhasutive, but it should contain most of the units of interest.
 
 **General Units**
+
 | Unit Type ID | Notes |
 | ------------ | ----- |
 | `FootmanMinion` | Melee Minion |
@@ -561,6 +562,7 @@ The following list is non-exhasutive, but it should contain most of the units of
 
 
 **Mercenaries**
+
 | Unit Type ID | Notes |
 | ------------ | ----- |
 | `TerranHellbat` | Hellbat Merc Camp |
