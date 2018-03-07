@@ -341,13 +341,46 @@ for killing players is `KillingPlayer` if you want to make sure you have the rig
 * Y Location: `event.m_fixedData[1].m_value` - Fixed data, divide by 4096
 
 #### Regen Globe Picked Up
+Event Name: `RegenGlobePickedUp`
 
+Contents:
+
+* Tracker PlayerID: `event.m_intData[0].m_value`
 
 #### Level Up
+Event Name: `LevelUp`
+
+This is fired once per player. So every time a team levels, up, you'll get like 5 of these events.
+
+Contents:
+
+* Level: `event.m_intData[1].m_value`
+* Tracker PlayerID: `event.m_intData[0].m_value`
 
 #### Mercenary Camp Captured
+Event Name: `JungleCampCapture`
+
+Fired when a team captures any mercenary camp.
+
+Contents:
+
+* Team: `event.m_fixedData[0].m_value` - Team in **fixed integer** format. 1: blue, 2: red after resolving.
+* Camp Type: `event.m_stringData[0].m_value` - Camp type. Usually not particularly useful (says stuff like `siege` or `bruiser`).
+
+Special note for Towers of Doom: If the Camp Type is `Boss Camp` on that map, that's the boss that fires 4 shots
+at the core.
 
 #### End of Game Upvote
+Event Name: `EndOfGameUpVotesCollected`
+
+This keeps a running tally of the number of upvotes each player got.
+You can use it to identify both who got the vote and who gave the vote.
+
+Contents:
+
+* Upvoted Tracker PlayerID: `event.m_intData[0].m_value`
+* Voter Tracker PlayerID: `event.m_intData[1].m_value`
+* Number of Current Votes: `event.m_intData[2].m_value`
 
 #### Spray Used
 Event Name: `LootSprayUsed`
@@ -453,16 +486,105 @@ Contents:
 * team: `event.m_fixedData[0].m_value` - Team in **fixed integer** format. 1: blue, 2: red after resolving.
 
 #### Dragon Shire: Dragon Knight Activated
+Event Name: `DragonKnightActivated`
+
+It is possible to identify who controlled the Dragon Knight and the Garden Terror,
+but it is not stored in the event. See the section about [determining vehicle control](#vehicles).
+
+Contents: 
+
+* Team: `event.m_fixedData[0].m_value` - Team in **fixed integer** format. 1: blue, 2: red after resolving.
 
 #### Garden of Terror: Garden Terror Activated
+Event Name: `GardenTerrorActivated`
+
+It is possible to identify who controlled the Dragon Knight and the Garden Terror,
+but it is not stored in the event. See the section about [determining vehicle control](#vehicles).
+
+* Team: `event.m_fixedData[0].m_value` - Team in **fixed integer** format. 1: blue, 2: red after resolving.
 
 #### Infernal Shrines: Shrine Captured
+Event Name: `Infernal Shrine Captured`
+
+Contents:
+
+* Winning Team: `event.m_intData[1].m_value`, 1: blue, 2: red
+* Winning Team Score: `event.m_intData[2].m_value`
+* Losing Team Score: `event.m_intData[3].m_value`
 
 #### Infernal shrines: Punisher Defeated
+Event Name: `Punisher Killed`
+
+Contents:
+
+* Punisher's Team: `event.m_intData[1].m_value` - 1: blue, 2: red
+* Punisher Type: `event.m_stringData[0].m_value` - One of `Arcane`, `Frozen`, `Mortar` if I remember right.
+* Duration: `event.m_intData[2].m_value` - How long the punisher was alive for in seconds.
+* Siege Damage: `event.m_fixedData[0].m_value` - Siege damage done in fixed integer format. This is suspect, it seems too low all the time.
+* Hero Damage: `event.m_fixedData[1].m_value` - Hero damage done in fixed integer format. This is also suspect.
 
 #### Tomb of the Spider Queen: Webweaver Spawn
+Event Name: `SpidersSpawned`
+
+Contents: 
+
+* Team: `event.m_fixedData[0].m_value` - Team in **fixed integer** format. 1: blue, 2: red after resolving.
+* Score: `event.m_intData[1].m_value` - Number of gems required for the current spawn.
 
 ### Unit Born, _eventid = 1
+Shows up when a unit spawns. These events all have basically the same info.
+
+Contents:
+
+* Spawn Game Loop: `event._gameloop`
+* Unit Type Name: `event.m_unitTypeName`
+* Unit Tag Index: `event.m_unitTagIndex`
+* Unit Recycle Tag: `event.m_unitTagRecycle` - The recycle tag and unit tag can be used to
+uniquely identify a unit. Can use something as simple as `m_unitTagIndex-m_unitTagRecycle` to identify units.
+These tags are the only things used to tell which units have died, so save them in this event
+if you need them later.
+* Upkeep Player ID: `event.m_upkeepPlayerId` - This is also a tracker ID. If this is `11`, then the unit
+is a Blue Team unit. If this is `12`, it is a Red Team unit. If it's something else, it should correspond
+to a player's tracker ID.
+* X Position: `event.m_x`
+* Y Position: `event.m_y`
+
+#### Useful Unit Type Names
+The following list is non-exhasutive, but it should contain most of the units of interest.
+
+**General Units**
+| Unit Type ID | Notes |
+| ------------ | ----- |
+| `FootmanMinion` | Melee Minion |
+| `RangedMinion` | |
+| `WizardMinion` | The one that drops a regen globe |
+
+
+**Mercenaries**
+| Unit Type ID | Notes |
+| ------------ | ----- |
+| `TerranHellbat` | Hellbat Merc Camp |
+
+#### Minion XP Tables
+Just going to copy the minion XP arrays from the code.
+Tomb of the Spider Queen apparently has a different XP table for everything except
+catapults.
+
+```javascript
+const MinionXP = {
+  FootmanMinion:  [70, 71, 72, 73, 74, 76, 77, 78, 79, 80, 82, 83, 84, 85, 86, 88, 89, 90, 91, 92, 94, 95, 96, 97, 98, 100, 101, 102, 103, 104, 106],
+  WizardMinion:   [62, 64, 66, 67, 69, 71, 73, 75, 76, 78, 80, 82, 84, 85, 87, 89, 91, 93, 94, 96, 98, 100, 102, 103, 105, 107, 109, 111, 112, 114, 116],
+  RangedMinion:   [60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 110, 112, 114, 116, 118, 120],
+  CatapultMinion: [1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 29, 30, 31, 32, 33, 35, 36, 37]
+};
+
+const TombMinionXP = {
+  FootmanMinion: [55, 56, 57, 58, 59, 61, 62, 63, 64, 65, 67, 68, 69, 70, 71, 73, 74, 75, 76, 77 ,79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 90, 92],
+  WizardMinion:  [51, 53, 55, 56, 58, 60, 62, 64, 65, 67, 69, 71, 73, 74, 76, 78, 80, 82, 83, 85, 87, 89, 91, 92, 94, 96, 98, 100, 101, 103, 105],
+  RangedMinion:  [51, 53, 55, 57, 59, 61, 63, 65, 67, 69, 71, 73, 75, 77, 79, 81, 83, 85, 87, 89, 91, 93, 95, 97, 99, 101, 103, 105, 107, 109, 111],
+  CatapultMinion: [1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 29, 30, 31, 32, 33, 35, 36, 37]
+};
+```
 
 ### Unit Died, _eventid = 2
 
@@ -475,3 +597,5 @@ This one's a doozy.
 ### <a name="warheadNukes"></a> Warhead Junction
 
 ### <a name="volskayaTriglav"></a> Volskaya Foundry
+
+### <a name="vehicles"></a> Determining Vehicle Control
