@@ -1,4 +1,4 @@
-# Heroes of the Storm Complete Replay Data Reference
+# Heroes of the Storm Replay Data Reference
 This document details the location and type of every useful piece of data in the Hereos of the Storm replay files to the best of the my knowledge. - Falindrith
 
 ## Common Elements
@@ -570,7 +570,9 @@ The following list is non-exhasutive, but it should contain most of the units of
 #### Minion XP Tables
 Just going to copy the minion XP arrays from the code.
 Tomb of the Spider Queen apparently has a different XP table for everything except
-catapults.
+catapults. Maxes out at 30 minutes.
+Minions are assigned XP values at Unit Born time (not when they die, so you can't like stack
+up minions and get bonus XP).
 
 ```javascript
 const MinionXP = {

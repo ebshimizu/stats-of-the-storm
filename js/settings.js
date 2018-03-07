@@ -335,6 +335,20 @@ function parseReplaysAsync(replay) {
     if (importDuplicates === true || result === false) {
       bgWindow.webContents.send('parseReplay', replay.path, replay.idx, BrowserWindow.getAllWindows()[0].id);
     }
+    else if (result === 'Internal Exception') {
+      console.log(replay.id + ' Parser error');
+
+      $('tr[replay-id="' + replay.id + '"] .replay-status').text('Error: Internal Exception').addClass('negative');
+      listedReplays[replay.idx].processed = true;
+      updateLastDate(listedReplays[replay.idx].date);
+
+      if (replayQueue.length > 0) {
+        parseReplaysAsync(replayQueue.shift());
+      }
+      else {
+        enableParsingUI();
+      }
+    }
     else {
       console.log(replay.id + ' is a duplicate');
       listedReplays[replay.idx].duplicate = true;
