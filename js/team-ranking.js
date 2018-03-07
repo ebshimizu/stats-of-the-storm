@@ -88,18 +88,14 @@ function toggleTeamRankingMode(elem) {
   updateTeamRanking();
 }
 
-function updateTeamRanking() {
-  $('#team-ranking-body tbody').html('');
-
-  // this is going to be... some shenanigans
-  // first get the list of all the teams in the database
+function getAllTeamData(filter, callback) {
   DB.getAllTeams(function(err, teams) {
     for (let t in teams) {
       let team = teams[t];
       // ok for all the teams in order, we'll need to get a bunch of data
       // this may or may not include all the hero data but we'll see.
       // turns out past me included total stats for teams?
-      let query = Object.assign({}, teamRankingMatchFilter);
+      let query = Object.assign({}, filter);
 
       // im sure this will 100% murder performace but eh
       let oldWhere = function() { return true; };
@@ -172,55 +168,65 @@ function updateTeamRanking() {
       }
 
       // execute
-      DB.getMatches(query, function(err, matches) {
-        // skip teams with no data
-        if (matches.length === 0)
-          return;
-
-        let mode = $('#team-ranking-body .top.attached.menu .active.item').attr('data-mode');
-
-        // at this point we might have all the data we need?
-        let teamStats = DB.summarizeTeamData(team, matches, Heroes);
-        teamStats.name = team.name;
-        teamStats.winPercent = teamStats.wins / teamStats.totalMatches;
-        teamStats.formatWinPercent = (teamStats.winPercent * 100).toFixed(2) + '%';
-
-        if (mode === 'averages' || mode === 'total') {
-          teamStats.stats.total.totalKDA = teamStats.takedowns.total / teamStats.deaths.total;
-        }
-        else {
-          teamStats.stats.total.totalKDA = teamStats.stats[mode].KDA;
-        }
-        teamStats.totalKDA = teamStats.stats.total.totalKDA.toFixed(2);
-
-        teamStats.matchLength.format = formatSeconds(teamStats.matchLength[mode]);
-        teamStats.matchLength.val = teamStats.matchLength[mode];
-
-        for (let s in teamStats.stats[mode]) {
-          teamStats[s] = formatStat(s, teamStats.stats[mode][s], true);
-        }
-
-        for (let t in teamStats.tierTimes) {
-          teamStats[t] = formatSeconds(teamStats.tierTimes[t][mode]);
-          teamStats.tierTimes[t].average = teamStats.tierTimes[t][mode];
-        }
-
-        teamStats.average = teamStats.stats[mode];
-        teamStats.stats.takedowns = teamStats.takedowns[mode];
-        teamStats.stats.deaths = teamStats.deaths[mode];
-        teamStats.takedowns = teamStats.stats.takedowns.toFixed(2);
-        teamStats.deaths = teamStats.stats.deaths.toFixed(2);
-
-        teamStats.structures.Fort.first /= Math.max(1, teamStats.structures.Fort.gamesWithFirst);
-        teamStats.structures.Keep.first /= Math.max(1, teamStats.structures.Keep.gamesWithFirst);
-        teamStats.structures.Fort.formatFirst = formatSeconds(teamStats.structures.Fort.first);
-        teamStats.structures.Keep.formatFirst = formatSeconds(teamStats.structures.Keep.first);
-
-        $('#team-ranking-general-table tbody').append(teamRankingGeneralTemplate(teamStats));
-        $('#team-ranking-match-table tbody').append(teamRankingMatchTemplate(teamStats));
-        $('#team-ranking-cc-table tbody').append(teamRankingCCTemplate(teamStats));
-        $('#team-ranking-structure-table tbody').append(teamRankingStructureTemplate(teamStats));
-      });
+      DB.getMatches(query, function(err, docs) { callback(err, docs, team); });
     }
   });
+}
+
+function updateTeamRanking() {
+  $('#team-ranking-body tbody').html('');
+
+  // this is going to be... some shenanigans
+  // first get the list of all the teams in the database
+  getAllTeamData(teamRankingMatchFilter, updateTeamRankingData);
+}
+
+function updateTeamRankingData(err, matches, team) {
+  // skip teams with no data
+  if (matches.length === 0)
+    return;
+
+  let mode = $('#team-ranking-body .top.attached.menu .active.item').attr('data-mode');
+
+  // at this point we might have all the data we need?
+  let teamStats = DB.summarizeTeamData(team, matches, Heroes);
+  teamStats.name = team.name;
+  teamStats.winPercent = teamStats.wins / teamStats.totalMatches;
+  teamStats.formatWinPercent = (teamStats.winPercent * 100).toFixed(2) + '%';
+
+  if (mode === 'averages' || mode === 'total') {
+    teamStats.stats.total.totalKDA = teamStats.takedowns.total / teamStats.deaths.total;
+  }
+  else {
+    teamStats.stats.total.totalKDA = teamStats.stats[mode].KDA;
+  }
+  teamStats.totalKDA = teamStats.stats.total.totalKDA.toFixed(2);
+
+  teamStats.matchLength.format = formatSeconds(teamStats.matchLength[mode]);
+  teamStats.matchLength.val = teamStats.matchLength[mode];
+
+  for (let s in teamStats.stats[mode]) {
+    teamStats[s] = formatStat(s, teamStats.stats[mode][s], true);
+  }
+
+  for (let t in teamStats.tierTimes) {
+    teamStats[t] = formatSeconds(teamStats.tierTimes[t][mode]);
+    teamStats.tierTimes[t].average = teamStats.tierTimes[t][mode];
+  }
+
+  teamStats.average = teamStats.stats[mode];
+  teamStats.stats.takedowns = teamStats.takedowns[mode];
+  teamStats.stats.deaths = teamStats.deaths[mode];
+  teamStats.takedowns = teamStats.stats.takedowns.toFixed(2);
+  teamStats.deaths = teamStats.stats.deaths.toFixed(2);
+
+  teamStats.structures.Fort.first /= Math.max(1, teamStats.structures.Fort.gamesWithFirst);
+  teamStats.structures.Keep.first /= Math.max(1, teamStats.structures.Keep.gamesWithFirst);
+  teamStats.structures.Fort.formatFirst = formatSeconds(teamStats.structures.Fort.first);
+  teamStats.structures.Keep.formatFirst = formatSeconds(teamStats.structures.Keep.first);
+
+  $('#team-ranking-general-table tbody').append(teamRankingGeneralTemplate(teamStats));
+  $('#team-ranking-match-table tbody').append(teamRankingMatchTemplate(teamStats));
+  $('#team-ranking-cc-table tbody').append(teamRankingCCTemplate(teamStats));
+  $('#team-ranking-structure-table tbody').append(teamRankingStructureTemplate(teamStats));
 }

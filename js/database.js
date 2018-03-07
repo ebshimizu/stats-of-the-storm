@@ -1258,6 +1258,57 @@ class Database {
         callback();
     });
   }
+
+  // given a collection ID, returnes the cached heroData summary for the collection.
+  // If the cached item does not exist or is out of date, this function will create it,
+  // cache it, then execute the specified callback
+  // Cached data is over the entire database, and is not modifiable for now
+  getCachedCollectionHeroStats(collectionID, callback) {
+    // check for existence and consistency
+    let query = {};
+    if (collectionID) {
+      query.collection = collectionID;
+    }
+
+    // get the data
+    var self = this;
+    this._db.heroData.count(query, function(err, heroDataCount) {
+      let cid = collectionID ? collectionID : 'all';
+
+      self._db.settings.find({ type: 'cache', collectionID: cid }, function(err, docs) {
+        if (docs.length === 0 || docs[0].docLength !== heroDataCount) {
+          // no docs exist or data is out of date, recompute
+          self._db.heroData.find(query, function(err, heroData) {
+            console.log('recaching for collection ' + cid);
+
+            let hdata = self.summarizeHeroData(heroData);
+            
+            // don't save these
+            delete hdata.rawDocs;
+            let cache = {};
+
+            // NeDB doesn't allow fields with '.' in it which is a problem for E.T.C. and others, so i will
+            // just live with the knowledge that I wrote this line and will have to live with my sins
+            cache.heroData = JSON.stringify(hdata);
+            cache.docLength = heroDataCount;
+            cache.type = 'cache';
+            cache.collectionID = cid;
+
+            self._db.settings.update({ type: 'cache', collectionID: cid }, cache, { upsert: true }, function(err, num, up) {
+              cache.heroData = JSON.parse(cache.heroData);
+              callback(cache);
+            });
+          });
+        }
+        else {
+          let cache = docs[0];
+          cache.heroData = JSON.parse(cache.heroData);
+
+          callback(cache);
+        }
+      });
+    });
+  }
 }
 
 function median(arr) {

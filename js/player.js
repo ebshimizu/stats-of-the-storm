@@ -243,6 +243,7 @@ function initPlayerPage() {
     scrollContainer: closestWrapper,
     autoReflow: true
   });
+
   // filter popup
   let playerWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
   playerWidget.attr('widget-name', 'player-filter');
@@ -334,6 +335,28 @@ function initPlayerPage() {
   progressionWinRateGraph = new Chart($('#player-progression-win-rate'), progressionWinRateGraphData);
   progressionKDAGraph = new Chart($('#player-progression-kda'), progressionKDAGraphData);
   progressionAwardsGraph = new Chart($('#player-progression-awards'), progressionAwardsGraphData);
+
+  // collection averages
+  $('#player-compare-collection').dropdown({
+    action: 'activate',
+    onChange: updatePlayerCollectionCompare
+  })
+  populatePlayerCollectionMenu();
+}
+
+function populatePlayerCollectionMenu() {
+  $('#player-compare-collection .menu').html('');
+  $('#player-compare-collection .menu').append('<div class="item" data-value="all">All Matches</div>');
+  $('#player-compare-collection .menu').append('<div class="ui divider"></div>');
+
+  DB.getCollections(function(err, collections) {
+    for (let c in collections) {
+      let col = collections[c];
+      $('#player-compare-collection .menu').append('<div class="item" data-value="' + col._id + '">' + col.name + '</div>');
+    }
+
+    $('#player-compare-collection').dropdown('refresh');
+  });
 }
 
 function showPlayerPage() {
@@ -929,4 +952,15 @@ function handlePlayerExportAction(action, text, $elem) {
       }
     })
   }
+}
+
+function updatePlayerCollectionCompare(value, text, $elem) {
+  $('#player-compare-collection').addClass('loading disabled');
+
+  let cid = value === 'all' ? null : value;
+
+  DB.getCachedCollectionHeroStats(cid, function(cache) {
+    console.log(cache);
+    $('#player-compare-collection').removeClass('loading disabled');
+  });
 }
