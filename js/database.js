@@ -374,6 +374,11 @@ class Database {
 
       for (let s in statList) {
         let statName = statList[s];
+
+        // older replays may have missing stats
+        if (!(statName in match.gameStats))
+          continue;
+
         if (!(statName in playerDetailStats.heroes[match.hero].stats)) {
           playerDetailStats.heroes[match.hero].stats[statName] = 0;
           playerDetailStats.max[match.hero][statName] = match.gameStats[statName];
@@ -660,6 +665,11 @@ class Database {
 
       for (let s in statList) {
         let statName = statList[s];
+
+        // older replays may be missing stats
+        if (!(statName in match.gameStats))
+          continue;
+
         if (!(statName in playerDetailStats[match.ToonHandle].stats)) {
           playerDetailStats[match.ToonHandle].stats[statName] = 0;
           playerDetailStats[match.ToonHandle].max[statName] = match.gameStats[statName];
