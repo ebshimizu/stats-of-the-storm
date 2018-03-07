@@ -168,7 +168,12 @@ function getAllTeamData(filter, callback) {
       }
 
       // execute
-      DB.getMatches(query, function(err, docs) { callback(err, docs, team); });
+      if (query.collection) {
+        DB.getMatches(query, function(err, docs) { callback(err, docs, team); }, { collectionOverride: true });
+      }
+      else {
+        DB.getMatches(query, function(err, docs) { callback(err, docs, team); });
+      }
     }
   });
 }

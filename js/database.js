@@ -215,7 +215,9 @@ class Database {
 
   // retrieves a match from the database using the given query
   getMatches(query, callback, opts = {}) {
-    this.preprocessQuery(query);
+    if (opts.collectionOverride !== true) {
+      this.preprocessQuery(query);
+    }
 
     if ('sort' in opts) {
       let cursor;

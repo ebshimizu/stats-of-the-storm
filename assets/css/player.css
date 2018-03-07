@@ -24,24 +24,32 @@
 
 #player-detail-summary .grid .table-wrapper table,
 #player-detail-hero-talent .table-wrapper,
-#player-compare-table .table-wrapper {
+#player-compare-table .table-wrapper,
+#team-compare-table .table-wrapper {
   margin-top: 0!important;
+}
+
+#player-detail-hero-talent .table-wrapper {
   height: 100%;
 }
 
-#player-compare-table .table-wrapper {
+#player-compare-table .table-wrapper,
+#team-compare-table .table-wrapper {
   height: 100%;
 }
 
-#player-compare-table {
+#player-compare-table,
+#team-compare-table {
   height: 558px;
 }
 
-#player-compare-table td {
+#player-compare-table td,
+#team-compare-table td {
   font-size: 14pt;
 }
 
-#player-compare-segment .right.menu {
+#player-compare-segment .right.menu,
+#team-compare-segment .right.menu {
   width: 300px;
 }
 

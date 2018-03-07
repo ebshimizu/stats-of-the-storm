@@ -5,7 +5,9 @@ var teamBanSummaryRowTemplate;
 var teamRosterRowTemplate;
 var teamHeroPickRowTemplate;
 var currentTeam;
-var teamPlayerStats;
+var teamPlayerStats, teamTeamStats;
+var teamAvgData;
+var teamAvgTracker;
 
 function initTeamsPage() {
   $('#team-set-team').dropdown({
@@ -86,6 +88,28 @@ function initTeamsPage() {
     closable: false
   });
   $('#team-add-player-button').click(addPlayerToTeam);
+
+  // collection averages
+  $('#team-compare-collection').dropdown({
+    action: 'activate',
+    onChange: updateTeamCollectionCompare
+  })
+  populateTeamCollectionMenu();
+}
+
+function populateTeamCollectionMenu() {
+  $('#team-compare-collection .menu').html('');
+  $('#team-compare-collection .menu').append('<div class="item" data-value="all">All Matches</div>');
+  $('#team-compare-collection .menu').append('<div class="ui divider"></div>');
+
+  DB.getCollections(function(err, collections) {
+    for (let c in collections) {
+      let col = collections[c];
+      $('#team-compare-collection .menu').append('<div class="item" data-value="' + col._id + '">' + col.name + '</div>');
+    }
+
+    $('#team-compare-collection').dropdown('refresh');
+  });
 }
 
 function resetTeamsPage() {
@@ -224,10 +248,11 @@ function loadTeamData(team, matches, heroData) {
   // compute hero stats
   let heroStats = DB.summarizeHeroData(heroData);
   teamPlayerStats = DB.summarizePlayerData(heroData);
-  let teamStats = DB.summarizeTeamData(team, matches, Heroes);
+  teamTeamStats = DB.summarizeTeamData(team, matches, Heroes);
 
   // i'm uh, kind of lazy
   let playerStats = teamPlayerStats;
+  let teamStats = teamTeamStats;
 
   // also lifting a little bit from player.js
   // team with stats are uh, a little useless? like it's all in the picks stats...
@@ -405,6 +430,9 @@ function loadTeamData(team, matches, heroData) {
     // is useless and you should just go to the roster and add people.
   }
   loadTeamRoster(playerStats);
+
+  // average comparison
+  updateTeamCollectionCompare($('#team-compare-collection').dropdown('get value'), null, null);
 
   $('#team-detail-body table').floatThead('reflow');
 }
@@ -589,4 +617,145 @@ function showMatchHistory() {
     selectMatches();
     changeSection('matches', true);
   }
+}
+
+function updateTeamCollectionCompare(value, text, $elem) {
+  if (!teamTeamStats)
+    return;
+
+  let cid = value === 'all' ? null : value;
+
+  $('#team-compare-collection').addClass('loading disabled');
+  loadTeamAverages(cid);
+}
+
+// this function is kinda terrible cause the teams come in async style
+function loadTeamAverages(collectionID) {
+  teamAvgData = {
+    wins: 0,
+    games: 0,
+    takedowns: 0,
+    deaths: 0,
+    matchLength: 0
+  };
+  teamAvgTracker = { target: 0, current: 0, actual: 0};
+
+  DB.getAllTeams(function(err, teams) {
+    teamAvgTracker.target = teams.length;
+
+    // kinda terrible double calls to this but eh
+    // unfiltered
+    let query = {};
+    if (collectionID)
+      query.collection = collectionID;
+    
+    getAllTeamData(query, processTeamAverages)
+  });
+}
+
+function processTeamAverages(err, matches, team) {
+  teamAvgTracker.current += 1;
+
+  if (matches.length === 0) {
+    if (teamAvgTracker.current === teamAvgTracker.target)
+      displayTeamAverages();
+
+    return;
+  }
+
+  teamAvgTracker.actual += 1;
+  let teamStats = DB.summarizeTeamData(team, matches, Heroes);
+
+  for (let s in teamStats.stats.total) {
+    if (!(s in teamAvgData))
+      teamAvgData[s] = 0;
+
+    teamAvgData[s] += teamStats.stats.average[s];
+  }
+
+  // specific stats
+  teamAvgData.wins += teamStats.wins;
+  teamAvgData.games += teamStats.totalMatches;
+  teamAvgData.takedowns += teamStats.takedowns.average;
+  teamAvgData.deaths += teamStats.deaths.average;
+  teamAvgData.matchLength += teamStats.matchLength.average;
+
+  // tiers
+  for (let t in teamStats.tierTimes) {
+    if (!(t in teamAvgData))
+      teamAvgData[t] = 0;
+    
+    teamAvgData[t] += teamStats.tierTimes[t].average;
+  }
+
+  // not sure about structures really, that's kinda just a fun fact
+  if (teamAvgTracker.current === teamAvgTracker.target)
+    displayTeamAverages();
+}
+
+function displayTeamAverages() {
+  // divide everything by number of teams (except games I guess)
+  for (let s in teamAvgData) {
+    if (s === 'games')
+      continue;
+
+    teamAvgData[s] /= teamAvgTracker.actual;
+  }
+
+  $('#team-compare-table tbody').html('');
+  for (let s in teamAvgData) {
+    let context = {};
+
+    // i kind of hate the sheer number of special cases that exist here
+    if (s === 'games' || s === 'wins') {
+      continue;
+    }
+    else if (s === 'takedowns') {
+      context.statName = 'Takedowns';
+      context.cmpDataSort = teamAvgData[s];
+      context.cmpData = formatStat(s, context.cmpDataSort, true);
+      context.pDataSort = teamTeamStats.takedowns.average;
+      context.pData = formatStat(s, context.pDataSort, true);
+    }
+    else if (s === 'deaths') {
+      context.statName = 'Deaths';
+      context.cmpDataSort = teamAvgData[s];
+      context.cmpData = formatStat(s, context.cmpDataSort, true);
+      context.pDataSort = teamTeamStats.deaths.average;
+      context.pData = formatStat(s, context.pDataSort, true);
+    }
+    else if (s === 'matchLength') {
+      context.statName = 'Match Length';
+      context.cmpDataSort = teamAvgData[s];
+      context.cmpData = formatSeconds(context.cmpDataSort);
+      context.pDataSort = teamTeamStats.matchLength.average;
+      context.pData = formatSeconds(context.pDataSort);
+    }
+    else if (s === 'T1' || s === 'T2' || s === 'T3' || s === 'T4' || s === 'T5' || s === 'T6') {
+      context.statName = DetailStatString[s];
+      context.cmpDataSort = teamAvgData[s];
+      context.cmpData = formatSeconds(context.cmpDataSort);
+      context.pDataSort = teamTeamStats.tierTimes[s].average;
+      context.pData = formatSeconds(context.pDataSort);
+    }
+    else {
+      context.statName = DetailStatString[s];
+      context.cmpDataSort = teamAvgData[s];
+      context.cmpData = formatStat(s, context.cmpDataSort, true);
+      context.pDataSort = teamTeamStats.stats.average[s];
+      context.pData = formatStat(s, context.pDataSort, true);
+    }
+
+    if (context.cmpDataSort === 0)
+      context.pctDiff = 0;
+    else
+      context.pctDiff = (context.pDataSort - context.cmpDataSort) / context.cmpDataSort;
+
+    context.pctDiffFormat = (context.pctDiff * 100).toFixed(2) + '%';
+
+    $('#team-compare-table tbody').append(playerCompareRowTemplate(context));
+  }
+
+  $('#team-compare-collection').removeClass('loading disabled');
+  $('#team-compare-table table').floatThead('reflow');
 }

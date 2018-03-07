@@ -139,7 +139,20 @@ const DetailStatString = {
   'TimeInTemple' : 'Time On Temple',
   'DamageDoneToZerg' : 'Damage Done to Zerg',
   'KDA' : 'KDA',
-  'timeDeadPct' : 'Time Dead %'
+  'timeDeadPct' : 'Time Dead %',
+  'PPK' : 'People Per Kill',
+  'mercCaptures' : 'Mercenary Captures',
+  'mercUptime' : 'Mercenary Uptime',
+  'mercUptimePercent' : 'Mercenary Uptime %',
+  'timeTo10' : 'Time to Level 10',
+  'timeTo20' : 'Time to Level 20',
+  'avgTimeSpentDead' : 'Average Time Spent Dead',
+  'T1' : 'Time at Level 1',
+  'T2' : 'Time at Level 4',
+  'T3' : 'Time at Level 7',
+  'T4' : 'Time at Level 10',
+  'T5' : 'Time at Level 13',
+  'T6' : 'Time at Level 16'
 };
 
 var DB;
@@ -325,7 +338,7 @@ function loadSections() {
   // Matches should be the default view of the app.
   // this can be changed for development to test specific pages of course.
   // this is the dev setting.
-  changeSection('player');
+  changeSection('teams');
 
   // this is the release default
   //changeSection('matches');
@@ -420,7 +433,8 @@ function formatStat(field, val, allFixed = false) {
     return (val * 100).toFixed(2) + '%';
   else if (field === 'KDA')
     return val.toFixed(2);
-  else if (field.startsWith('Time') || field === 'OnFireTimeOnFire' || field === 'timeTo10' || field === 'timeTo20' || field === 'mercUptime')
+  else if (field.startsWith('Time') || field === 'OnFireTimeOnFire' || field === 'timeTo10' ||
+    field === 'timeTo20' || field === 'mercUptime' || field === 'avgTimeSpentDead')
     return formatSeconds(val);
   else if (field === 'timeDeadPct' || field === 'mercUptimePercent')
     return (val * 100).toFixed(2) + '%';

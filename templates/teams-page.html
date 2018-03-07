@@ -181,7 +181,7 @@
               <div class="ui inverted segment player-win" id="team-against-summary">
                 <div class="ui top attached label">Win Rate Against Hero</div>
                 <div class="table-wrapper">
-                  <table class="ui sortable selectable inverted table">
+                  <table class="ui sortable compact selectable inverted table">
                     <thead>
                       <tr>
                         <th>Hero</th>
@@ -196,68 +196,35 @@
                 </div>
               </div>
             </div>
-            <div class="ui six wide column">
-              <div class="ui inverted segment" id="team-detail-stats">
-                <div class="ui top attached label">Detailed Stats</div>
-                <div class="ui four inverted small statistics">
-                  <div class="statistic" name="team-time-to-10">
-                    <div class="value">###</div>
-                    <div class="label">Time To 10</div>
-                  </div> 
-                  <div class="statistic" name="team-times-at-10">
-                    <div class="value">###</div>
-                    <div class="label">Times Reached 10</div>
-                  </div> 
-                  <div class="statistic" name="team-time-to-20">
-                    <div class="value">###</div>
-                    <div class="label">Time To 20</div>
-                  </div> 
-                  <div class="statistic" name="team-times-at-20">
-                    <div class="value">###</div>
-                    <div class="label">Times Reached 20</div>
-                  </div> 
+            <div class="ui six wide column" id="team-compare-segment">
+              <div class="ui top attached menu">
+                <div class="header item">
+                  Compare To Collection Average
                 </div>
-                <div class="ui inverted horizontal divider">Mercenaries</div>
-                <div class="ui three inverted small statistics">
-                  <div class="statistic" name="merc-captures">
-                    <div class="value">###</div>
-                    <div class="label">Captures</div>
-                  </div> 
-                  <div class="statistic" name="merc-uptime">
-                    <div class="value">###</div>
-                    <div class="label">Uptime</div>
-                  </div> 
-                  <div class="statistic" name="merc-uptime-percent">
-                    <div class="value">###</div>
-                    <div class="label">Uptime %</div>
-                  </div> 
+                <div class="right menu">
+                  <div class="ui fluid search selection dropdown" id="team-compare-collection">
+                    <i class="dropdown icon"></i>
+                    <span class="default text">All Matches</span>
+                    <div class="menu">
+
+                    </div>
+                  </div>
                 </div>
-                <div class="ui inverted horizontal divider">Avg. Time Per Talent Tier</div>
-                <div class="ui six inverted small statistics">
-                  <div class="statistic" name="T1">
-                    <div class="value">###</div>
-                    <div class="label">Level 1</div>
-                  </div>
-                  <div class="statistic" name="T2">
-                    <div class="value">###</div>
-                    <div class="label">Level 4</div>
-                  </div>
-                  <div class="statistic" name="T3">
-                    <div class="value">###</div>
-                    <div class="label">Level 7</div>
-                  </div>
-                  <div class="statistic" name="T4">
-                    <div class="value">###</div>
-                    <div class="label">Level 10</div>
-                  </div>
-                  <div class="statistic" name="T5">
-                    <div class="value">###</div>
-                    <div class="label">Level 13</div>
-                  </div>
-                  <div class="statistic" name="T6">
-                    <div class="value">###</div>
-                    <div class="label">Level 16</div>
-                  </div>
+              </div>
+              <div class="ui attached inverted segment" id="team-compare-table">
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Stat</th>
+                        <th class="center aligned stat" name="player">Team</th>
+                        <th class="center aligned stat">Diff</th>
+                        <th class="center aligned stat">Average</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -342,9 +309,74 @@
               </div>
             </div>
             <div class="ui six wide column">
+              <div class="ui inverted segment" id="team-detail-stats">
+                <div class="ui top attached label">Detailed Stats</div>
+                <div class="ui four inverted small statistics">
+                  <div class="statistic" name="team-time-to-10">
+                    <div class="value">###</div>
+                    <div class="label">Time To 10</div>
+                  </div> 
+                  <div class="statistic" name="team-times-at-10">
+                    <div class="value">###</div>
+                    <div class="label">Times Reached 10</div>
+                  </div> 
+                  <div class="statistic" name="team-time-to-20">
+                    <div class="value">###</div>
+                    <div class="label">Time To 20</div>
+                  </div> 
+                  <div class="statistic" name="team-times-at-20">
+                    <div class="value">###</div>
+                    <div class="label">Times Reached 20</div>
+                  </div> 
+                </div>
+                <div class="ui inverted horizontal divider">Mercenaries</div>
+                <div class="ui three inverted small statistics">
+                  <div class="statistic" name="merc-captures">
+                    <div class="value">###</div>
+                    <div class="label">Captures</div>
+                  </div> 
+                  <div class="statistic" name="merc-uptime">
+                    <div class="value">###</div>
+                    <div class="label">Uptime</div>
+                  </div> 
+                  <div class="statistic" name="merc-uptime-percent">
+                    <div class="value">###</div>
+                    <div class="label">Uptime %</div>
+                  </div> 
+                </div>
+                <div class="ui inverted horizontal divider">Avg. Time Per Talent Tier</div>
+                <div class="ui six inverted small statistics">
+                  <div class="statistic" name="T1">
+                    <div class="value">###</div>
+                    <div class="label">Level 1</div>
+                  </div>
+                  <div class="statistic" name="T2">
+                    <div class="value">###</div>
+                    <div class="label">Level 4</div>
+                  </div>
+                  <div class="statistic" name="T3">
+                    <div class="value">###</div>
+                    <div class="label">Level 7</div>
+                  </div>
+                  <div class="statistic" name="T4">
+                    <div class="value">###</div>
+                    <div class="label">Level 10</div>
+                  </div>
+                  <div class="statistic" name="T5">
+                    <div class="value">###</div>
+                    <div class="label">Level 13</div>
+                  </div>
+                  <div class="statistic" name="T6">
+                    <div class="value">###</div>
+                    <div class="label">Level 16</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ui ten wide column">
               <div class="ui inverted segment" id="team-structure-stats">
                 <div class="ui top attached label">Structures</div>
-                <div class="ui two column grid">
+                <div class="ui four column grid">
                   <div class="column">
                     <div class="ui inverted horizontal divider">Forts</div>
                     <div class="ui three horizontal inverted mini statistics">
