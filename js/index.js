@@ -138,7 +138,8 @@ const DetailStatString = {
   'CurseDamageDone' : 'Curse Damage',
   'TimeInTemple' : 'Time On Temple',
   'DamageDoneToZerg' : 'Damage Done to Zerg',
-  'KDA' : 'KDA'
+  'KDA' : 'KDA',
+  'timeDeadPct' : 'Time Dead %'
 };
 
 var DB;
@@ -412,6 +413,9 @@ function formatSeconds(val) {
 }
 
 function formatStat(field, val, allFixed = false) {
+  if (val === undefined)
+    return 0;
+
   if (field === 'KillParticipation')
     return (val * 100).toFixed(2) + '%';
   else if (field === 'KDA')

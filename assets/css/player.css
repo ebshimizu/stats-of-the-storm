@@ -14,7 +14,7 @@
 #player-detail-summary .grid #player-detail-hero-summary,
 #player-detail-summary .grid #player-detail-map-summary,
 #player-detail-summary .grid #player-detail-hero-talent {
-  height: 650px;
+  height: 692px;
 }
 
 #player-detail-summary .floatThead-wrapper,
@@ -26,6 +26,7 @@
 #player-detail-hero-talent .table-wrapper,
 #player-compare-table .table-wrapper {
   margin-top: 0!important;
+  height: 100%;
 }
 
 #player-compare-table .table-wrapper {
@@ -34,6 +35,10 @@
 
 #player-compare-table {
   height: 558px;
+}
+
+#player-compare-table td {
+  font-size: 14pt;
 }
 
 #player-compare-segment .right.menu {
@@ -104,7 +109,7 @@
 }
 
 #player-detail-body .player-win {
-  font-size: 11pt;
+  font-size: 12pt;
 }
 
 .talent-detail-table .item .header,

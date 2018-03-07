@@ -6,6 +6,7 @@ var playerDetailMapSummaryRowTemplate;
 var allDetailStats;
 var playerHeroDetailRowTemplate;
 var playerAwardRowTemplate;
+var playerCompareRowTemplate;
 const playerHeroDetailRowTemplateContent = `<tr>
   <td data-sort-value="{{heroName}}">
     <h3 class="ui inverted header">
@@ -178,6 +179,7 @@ function initPlayerPage() {
   heroWinRateRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-hero-win-row').find('tr')[0].outerHTML);
   heroTalentRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-talent-row').find('tr')[0].outerHTML);
   playerAwardRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-hero-award-row').find('tr')[0].outerHTML);
+  playerCompareRowTemplate = Handlebars.compile(getTemplate('player', '#player-compare-table-row').find('tr')[0].outerHTML);
   playerHeroDetailRowTemplate = Handlebars.compile(playerHeroDetailRowTemplateContent);
 
   createDetailTableHeader();
@@ -198,8 +200,9 @@ function initPlayerPage() {
   $('#player-detail-skin-summary table').tablesort();
   $('#player-detail-award-summary table').tablesort();
   $('#player-hero-detail-stats table').tablesort();
+  $('#player-compare-table table').tablesort();
   $('#player-hero-detail-stats table th.stat').data('sortBy', function(th, td, tablesort) {
-    return parseFloat(td.text());
+    return parseFloat(td.attr('data-sort-value'));
   });
   $('#player-hero-detail-stats table').on('tablesort:complete', function(event, tablesort) {
     $('#player-hero-detail-stats td').popup();
@@ -407,6 +410,7 @@ function updatePlayerPage(err, doc) {
     playerDetailInfo = doc[0];
     $('#player-page-header .header.player-name').text(playerDetailInfo.name);
     $('#player-hero-select-menu').dropdown('set text', 'All Heroes');
+    $('#player-hero-select-menu').dropdown('set value', 'all');
     updateHeroTitle($('#player-detail-summary-header'), 'all');
 
     // then do the big query
@@ -436,6 +440,7 @@ function processPlayerData(err, docs) {
   renderPlayerSummary();
   renderPlayerHeroDetail();
   renderProgression();
+  updatePlayerCollectionCompare($('#player-compare-collection').dropdown('get value'), null, null);
 }
 
 // callback for hero select menu
@@ -463,6 +468,7 @@ function showHeroDetails(value, text, $selectedItem) {
   }
 
   updateHeroTitle($('#player-detail-summary-header'), value);
+  updatePlayerCollectionCompare($('#player-compare-collection').dropdown('get value'), null, null);
 }
 
 function updateHeroTitle(container, value) {
@@ -955,12 +961,94 @@ function handlePlayerExportAction(action, text, $elem) {
 }
 
 function updatePlayerCollectionCompare(value, text, $elem) {
+  if (playerDetailID === undefined)
+    return;
+
   $('#player-compare-collection').addClass('loading disabled');
 
   let cid = value === 'all' ? null : value;
 
   DB.getCachedCollectionHeroStats(cid, function(cache) {
-    console.log(cache);
+    $('#player-compare-table tbody').html('');
+    let activeHero = $('#player-hero-select-menu').dropdown('get value');
+    let cmpData;
+    let pData;
+
+    if (activeHero === 'all' || activeHero === '') {
+      cmpData = DB.allAverageHeroData(cache.heroData);
+      pData = DB.allAverageHeroData(playerDetailStats);
+    }
+    else {
+      cmpData = cache.heroData.averages[activeHero];
+      pData = playerDetailStats.averages[activeHero];
+    }
+
+    // special cases for
+    // wins, kda, length
+    let winCtx = {};
+    let okdaCtx = {};
+    let lengthCtx = {};
+    winCtx.statName = 'Win %';
+    okdaCtx.statName = 'Overall KDA';
+    lengthCtx.statName = 'Match Length';
+
+    if (activeHero === 'all' || activeHero === '') {
+      winCtx.pDataSort = playerDetailStats.wins / playerDetailStats.games;
+      winCtx.cmpDataSort = cache.heroData.wins / cache.heroData.games;
+      okdaCtx.pDataSort = playerDetailStats.totalTD / Math.max(playerDetailStats.totalDeaths, 1);
+      okdaCtx.cmpDataSort = cache.heroData.totalTD / Math.max(cache.heroData.totalDeaths, 1);
+      lengthCtx.pDataSort = playerDetailStats.totalMatchLength / playerDetailStats.games;
+      lengthCtx.cmpDataSort = cache.heroData.totalMatchLength / cache.heroData.games;
+    }
+    else {
+      winCtx.pDataSort = playerDetailStats.heroes[activeHero].wins / playerDetailStats.heroes[activeHero].games;
+      winCtx.cmpDataSort = cache.heroData.heroes[activeHero].wins / cache.heroData.heroes[activeHero].games;
+      okdaCtx.pDataSort = playerDetailStats.total[activeHero].Takedowns / Math.max(playerDetailStats.total[activeHero].Deaths, 1);
+      okdaCtx.cmpDataSort = cache.heroData.total[activeHero].Takedowns / Math.max(cache.heroData.total[activeHero].Deaths, 1);
+      lengthCtx.pDataSort = playerDetailStats.heroes[activeHero].totalTime / playerDetailStats.heroes[activeHero].games;
+      lengthCtx.cmpDataSort = cache.heroData.heroes[activeHero].totalTime / cache.heroData.heroes[activeHero].games;
+    }
+
+    winCtx.pData = (winCtx.pDataSort * 100).toFixed(2) + '%';
+    winCtx.cmpData = (winCtx.cmpDataSort * 100).toFixed(2) + '%';
+    winCtx.pctDiff = (winCtx.pDataSort - winCtx.cmpDataSort) / winCtx.cmpDataSort;
+    winCtx.pctDiffFormat = (winCtx.pctDiff * 100).toFixed(2) + '%';
+
+    okdaCtx.pData = okdaCtx.pDataSort.toFixed(2);
+    okdaCtx.cmpData = okdaCtx.cmpDataSort.toFixed(2);
+    okdaCtx.pctDiff = (okdaCtx.pDataSort - okdaCtx.cmpDataSort) / okdaCtx.cmpDataSort;
+    okdaCtx.pctDiffFormat = (okdaCtx.pctDiff * 100).toFixed(2) + '%';
+
+    lengthCtx.pData = formatSeconds(lengthCtx.pDataSort)
+    lengthCtx.cmpData = formatSeconds(lengthCtx.cmpDataSort);
+    lengthCtx.pctDiff = (lengthCtx.pDataSort - lengthCtx.cmpDataSort) / lengthCtx.cmpDataSort;
+    lengthCtx.pctDiffFormat = (lengthCtx.pctDiff * 100).toFixed(2) + '%';
+
+    $('#player-compare-table tbody').append(playerCompareRowTemplate(winCtx));
+    $('#player-compare-table tbody').append(playerCompareRowTemplate(okdaCtx));
+    $('#player-compare-table tbody').append(playerCompareRowTemplate(lengthCtx));
+
+    let keys = Object.keys(pData).sort();
+    for (let i in keys) {
+      let d = keys[i];
+      let context = {};
+      context.statName = DetailStatString[d];
+
+      if (cmpData[d] === 0)
+        context.pctDiff = 0;
+      else
+        context.pctDiff = (pData[d] - cmpData[d]) / cmpData[d];
+
+      context.pData = formatStat(d, pData[d], true);
+      context.pDataSort = pData[d];
+      context.pctDiffFormat = (context.pctDiff * 100).toFixed(2) + '%';
+      context.cmpData = formatStat(d, cmpData[d], true);
+      context.cmpDataSort = cmpData[d];
+
+      $('#player-compare-table tbody').append(playerCompareRowTemplate(context));
+    }
+
     $('#player-compare-collection').removeClass('loading disabled');
+    $('#player-compare-table table').floatThead('reflow');
   });
 }

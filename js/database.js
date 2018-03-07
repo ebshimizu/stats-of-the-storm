@@ -543,6 +543,26 @@ class Database {
     return playerDetailStats;
   }
 
+  // hero data is separated by hero, if you need the total stuff, use this function
+  // returns: all stats in the 'average' fields 
+  allAverageHeroData(data) {
+    let stats = {};
+    for (let h in data.total) {
+      for (let s in data.total[h]) {
+        if (!(s in stats))
+          stats[s] = 0;
+        
+        stats[s] += data.total[h][s];
+      }
+    }
+
+    for (let s in stats) {
+      stats[s] /= data.games;
+    }
+
+    return stats;
+  }
+
   // this is intended to be used with only one hero but can be used with multiple (?)
   summarizeTalentData(docs) {
     let talentStats = {};
