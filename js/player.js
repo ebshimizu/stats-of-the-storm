@@ -236,6 +236,9 @@ function initPlayerPage() {
   });
 
   $('#player-detail-hero-talent .menu .item').tab();
+  $('#player-detail-hero-talent .menu .item').click(function() {
+    $('#player-detail-body table').floatThead('reflow');
+  });
   $('#player-detail-hero-talent .talent-build table').tablesort();
   $('#player-detail-hero-talent .talent-build table').on('tablesort:complete', function(event, tablesort) {
     $('#player-detail-hero-talent .talent-build img').popup();
