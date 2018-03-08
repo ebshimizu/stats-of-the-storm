@@ -180,6 +180,10 @@ class Database {
     this._db.settings.findOne({_id: id}, callback);
   }
 
+  getPlayerTeams(id, callback) {
+    this._db.settings.find({ type: 'team', players: id }, callback);
+  }
+
   checkDuplicate(file, callback) {
     try {
       let data = Parser.parse(file, [Parser.ReplayDataType.header, Parser.ReplayDataType.details]);

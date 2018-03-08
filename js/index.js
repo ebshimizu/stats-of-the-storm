@@ -338,7 +338,7 @@ function loadSections() {
   // Matches should be the default view of the app.
   // this can be changed for development to test specific pages of course.
   // this is the dev setting.
-  changeSection('teams');
+  changeSection('player');
 
   // this is the release default
   //changeSection('matches');

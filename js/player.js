@@ -408,7 +408,18 @@ function updatePlayerDetailID(value, text, $item) {
 function updatePlayerPage(err, doc) {
   if (doc.length === 1) {
     playerDetailInfo = doc[0];
-    $('#player-page-header .header.player-name').text(playerDetailInfo.name);
+    $('#player-page-header h1.header .content .player-name').text(playerDetailInfo.name);
+
+    // check player teams
+    DB.getPlayerTeams(playerDetailInfo._id, function(err, teams) {
+      let teamNames = []
+      for (let t in teams) {
+        teamNames.push(teams[t].name);
+      }
+
+      $('#player-page-header h1.header .content .teams').text(teamNames.join(', '));
+    });
+
     $('#player-hero-select-menu').dropdown('set text', 'All Heroes');
     $('#player-hero-select-menu').dropdown('set value', 'all');
     updateHeroTitle($('#player-detail-summary-header'), 'all');
