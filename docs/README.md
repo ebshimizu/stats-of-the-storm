@@ -167,6 +167,7 @@ average mercenary stats, total structure stats, and average team-wide damage sta
 Team draft priority, including picks, and bans.
 
 ![Team vs Average Stats]({{ "/images/team-details-03.png" | absolute_url }})
+
 Comparison of average team stats across the entire database, or a specified collection.
 
 ![Roster Stats]({{ "/images/team-details-02.png" | absolute_url }})
