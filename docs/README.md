@@ -60,9 +60,15 @@ Set up the development environment as detailed on the repository readme and then
 take a look at the open [issues](https://github.com/ebshimizu/stats-of-the-storm/issues) and try fixing
 or implementing one! When you're ready, submit a pull request and we'll get the feature in there.
 
+**HotS updated, but the parser doesn't work?**
+The parser in this app is tied to Blizzard's [heroprotocol](https://github.com/Blizzard/heroprotocol) library.
+When this library updates, I will push an update for the app as soon as I can. It sometimes takes a few
+days for the heroprotocol repository to update.
+
 **Why doesn't this run on OS X?**
 Theoretically there is no problem and it already runs on OS X.
 However, I can't build an installer for OS X because I don't have a Mac to run this on.
+You can run it in development mode by following the instructions on the repository's readme.
 
 **Why don't I see all the players in the Player Details page?**
 Personal databases have a lot of players that only show up once or twice. In order to keep the
@@ -127,6 +133,10 @@ Hero details and talent selection per-player.
 ![Player Hero Builds]({{ "/images/player-details-07.png" | absolute_url }})
 Talent builds overall and per-player.
 
+![Player Comparison]({{ "/images/player-details-08.png" | absolute_url }})
+Comparison with the average for a wide range of stats across the entire database, or
+a specified collection.
+
 ![Hero Synergy]({{ "/images/player-details-03.png" | absolute_url }})
 With and against hero win rates.
 
@@ -156,6 +166,9 @@ average mercenary stats, total structure stats, and average team-wide damage sta
 ![Team Draft Priority]({{ "/images/teams-03.png" | absolute_url }})
 Team draft priority, including picks, and bans.
 
+![Team vs Average Stats]({{ "/images/team-details-03.png" | absolute_url }})
+Comparison of average team stats across the entire database, or a specified collection.
+
 ![Roster Stats]({{ "/images/team-details-02.png" | absolute_url }})
 Average roster stats summary with link to the player's profile for more details.
 
@@ -166,6 +179,9 @@ Aggregated data over the entire database (or current collection).
 Hero statistics including win, ban, and popularity rates. Filterable by
 role. Can also view detailed average stats (across all players) in the
 Hero Details tab.
+
+![Overall Hero Draft Stats]({{ "/images/hero-stats-01.png" | absolute_url }})
+Hero pick and ban rate stats for the entire collection.
 
 ![Overall Team Stats]({{ "/images/collection-02.png" | absolute_url }})
 Rank teams by their average stats. Provides four categories to browse through.
