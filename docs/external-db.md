@@ -23,6 +23,6 @@ Try it out! Below are some databases created for Stats of the Storm.
 league. Find out more at their website: [Nexus Gaming Series](https://nexusgamingseries.com).
 
 Extract the directory and set your database path to the
-extracted folder. Congrats! You're now a stats wizard.
+folder that has all of the `.db` files in it. Congrats! You're now a stats wizard.
 
 [Back](https://ebshimizu.github.io/stats-of-the-storm/)
