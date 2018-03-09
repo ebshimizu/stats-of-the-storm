@@ -35,7 +35,7 @@ IDs 13+, but will not conflict with the reserved IDs.
 Location: `header.m_version`
 
 Value: Object
-```json
+```
 {
     "m_baseBuild": [int],
     "m_minor": [int],
@@ -559,13 +559,67 @@ The following list is non-exhasutive, but it should contain most of the units of
 | `FootmanMinion` | Melee Minion |
 | `RangedMinion` | |
 | `WizardMinion` | The one that drops a regen globe |
-
+| `RegenGlobe` | |
+| `RegenGlobeNeutral` | These are the purple ones. |
+| `UnderworldSummonedBoss` | Haunted Mines golems. This is not the single boss in the shrines, it is the golems that spawn for each team. |
+| `RavenLordTribute` | Cursed Hollow Tribute |
+| `DragonShireShrineSun` | Sun Shrine. Can track which team controls. See [Beacon Control](#beacons). |
+| `DragonShireShrineMoon` | Moon Shrine. Can track which team controls. See [Beacon Control](#beacons) |
+| `VehiclePlantHorror` | Garden Terror |
+| `VehicleDragon` | Dragon Knight |
+| `SoulEater` | Webweaver |
+| `VolskayaVehicle` | Triglav Protector |
+| `NukeTargetMinimapIconUnit` | This appears to be the targeting circle that appears when a nuke is channeled. See [Warhead Junction](#warheadNukes) for details |
+| `ZergHiveControlBeacon` | One of the Braxis control points. Can track which team controls. See [Beacon Control](#beacons). |
+| `ZergPathDummy` | When the zerg wave spawns, this unit shows up in Unit Born events |
+| `BossDuelLanerHeaven` | Heaven Immortal |
+| `BossDuelLanerHell` | Hell Immortal |
+| `WarheadSingle` | A standard warhead spawn |
+| `WarheadDropped` | A warhead dropped by a player after they die. |
+| `HealingPulsePickup` | The healing pulse item on some of the newer maps |
+| `TurretPickup` | The turret item on some of the newer maps |
 
 **Mercenaries**
+
+Units listed here are the ones that spawn in lanes. There are different units for the
+neutral unit types that spawn at camps. Save the tag IDs to match up with
+death events to find out how long they were alive.
 
 | Unit Type ID | Notes |
 | ------------ | ----- |
 | `TerranHellbat` | Hellbat Merc Camp |
+| `TerranArchangelLaner` | Braxis boss |
+| `TerranGoliath` | Goliath Merc Camp
+| `SlimeBossLaner` | Warhead boss |
+| `JungleGraveGolemLaner` | Cursed/Sky/Tomb boss |
+| `MercLanerSiegeGiant` | Siege Camp |
+| `MercGoblicSapperLaner` | Goblin Sapper |
+| `MercSiegeTrooperLaner` | Bruiser Camp, on some of the maps |
+| `MercSummonerLaner` | Summoning Camp |
+| `MercSummonerLanerMinionDummy` | Summoning Camp summon, there are a lot of these |
+| `MercLanerRangedOgre` | Bruiser Camp unit (i think?) |
+| `MercLanerMeleeOgre` | Bruiser Camp unit |
+| `MercLanerMeleeKnight` | Knight Camp Unit |
+| `MercLanerRangedMage` | Knight Camp Mage Unit |
+
+**Structures**
+| Unit Type ID | Notes |
+| ------------ | ----- |
+| `TownTownHallL2` | Fort (L2) |
+| `TownMoonwellL2` | Fort Well (L2) |
+| `TownCannonTowerL2` | Fort Tower (L2) |
+| `TownTownHallL3` | Keep (L3) |
+| `TownMoonwellL3` | Keep Well (L3) |
+| `TownCannonTowerL3` | Keep Tower (L3) |
+
+**Braxis Units**
+| Unit Type ID | Notes |
+| ------------ | ----- |
+| `ZergZergling` | Zergling | 
+| `ZergBaneling` | Baneling |
+| `ZergHydralisk` | Hydralisk |
+| `ZergGuardian` | Guardian | 
+| `ZergUltralisk` | Ultralisk |
 
 #### Minion XP Tables
 Just going to copy the minion XP arrays from the code.
@@ -591,6 +645,25 @@ const TombMinionXP = {
 ```
 
 ### Unit Died, _eventid = 2
+Fired when a unit dies. This includes structures, which are just units that don't move.
+
+Contents:
+
+* Death Game Loop: `event._gameloop`
+* Unit Tag Index: `event.m_unitTagIndex`
+* Unit Recycle Tag: `event.m_unitTagRecycle` - The recycle tag and unit tag can be used to
+uniquely identify a unit. Can use something as simple as `m_unitTagIndex-m_unitTagRecycle` to identify units.
+The tags are the only things that show up in the death event, so I hope you saved them.
+* Killer Tracker ID: `event.m_killerPlayerId` - Tracker ID for the person that killed the unit.
+It could be `null`, which happens in Braxis under really specific circumstances.
+
+### Unit Owner Change, _eventid = 3
+Fired when a unit gets controlled by a different player. Typically, this is used with
+vehicles (dragon knight, garden terror, protector, etc.).
+
+Contents:
+
+* 
 
 ## Special Cases for Map Objectives
 Sometimes the tracker doesn't have the data, but other places do.
@@ -603,3 +676,7 @@ This one's a doozy.
 ### <a name="volskayaTriglav"></a> Volskaya Foundry
 
 ### <a name="vehicles"></a> Determining Vehicle Control
+
+### <a name="mines"></a> Haunted Mines Golem Spawns
+
+### <a name="beacon"></a> Beacon Control (Dragon Shire, Braxis Holdout)
