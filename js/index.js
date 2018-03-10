@@ -237,13 +237,22 @@ function loadDatabase() {
     settings.set('dbPath', app.getPath('userData'));
   }
 
-  let path = settings.get('dbPath');
-  DB = new HeroesDB.HeroesDatabase(path);
-
-  console.log("Databse directory set to " + path);
-
+  console.log('Loading Heroes Talents database');
   // load the heroes talents database
   Heroes = new HeroesTalents.HeroesTalents(__dirname + '/assets/heroes-talents');
+
+  let path = settings.get('dbPath');
+  console.log("Databse loading from " + path);
+  DB = new HeroesDB.HeroesDatabase(path);
+  DB.load(loadDatabaseComplete, setLoadMessage);
+}
+
+function loadDatabaseComplete(err) {
+  if (err) {
+    showMessage('Database Load Error, Some App Functions May Not Work', 'Try restarting the app, and if the issue persists, please file a bug report with this message: "' + err + '"', { 'sticky' : true, 'class' : 'negative' })
+    console.log(err);
+    // the app actually continues the load here, the message should be waiting at the end
+  }
 
   // check database version
   DB.getDBVersion(checkDBVersion);

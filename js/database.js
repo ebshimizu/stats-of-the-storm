@@ -16,18 +16,49 @@ var Datastore = require('nedb');
 class Database {
   constructor(databasePath) {
     this._path = databasePath;
+  }
 
+  load(onComplete, progress) {
     // open the databases
     this._db = {};
-    this._db.matches = new Datastore({ filename: this._path + '/matches.db', autoload: true });
-    this._db.heroData = new Datastore({ filename: this._path + '/hero.db', autoload: true });
-    this._db.players = new Datastore({ filename: this._path + '/players.db', autoload: true });
-    this._db.settings = new Datastore({ filename: this._path + '/settings.db', autoload: true });
+    var self = this;
+    this._db.matches = new Datastore({ filename: this._path + '/matches.db' });
+    this._db.heroData = new Datastore({ filename: this._path + '/hero.db' });
+    this._db.players = new Datastore({ filename: this._path + '/players.db' });
+    this._db.settings = new Datastore({ filename: this._path + '/settings.db' });
 
     this._db.matches.ensureIndex({ fieldName: 'map' });
     this._db.players.ensureIndex({ fieldName: 'hero' });
 
     this._collection = null;
+
+    // actual load, tracking errors
+    // apologies in advange for these next few lines
+    progress('Loading Settings and Collections');
+    this._db.settings.loadDatabase(function(err) {
+      if (err)
+        onComplete(err);
+      else {
+        progress('Loading Player Index');
+        self._db.players.loadDatabase(function (err) {
+          if (err)
+            onComplete(err);
+          else {
+            progress('Loading Match Data');
+            self._db.matches.loadDatabase(function(err) {
+              if (err)
+                onComplete(err);
+              else {
+                progress('Loading Player and Hero Data');
+                self._db.heroData.loadDatabase(function(err) {
+                  onComplete(err);
+                });
+              }
+            });
+          }
+        });
+      }
+    });
   }
 
   getCollections(callback) {
