@@ -394,6 +394,12 @@ function createDetailTableHeader() {
 
 function preloadPlayerID(id) {
   $('#players-set-player').dropdown('set exactly', id);
+
+  if ($('#players-set-player').dropdown('get value') === '') {
+    // didn't actually load, force it here
+    updatePlayerDetailID(id);
+    $('#players-set-player').dropdown('set text', id);
+  }
 }
 
 function updatePlayerDetailID(value, text, $item) {
@@ -411,7 +417,7 @@ function updatePlayerDetailID(value, text, $item) {
 function updatePlayerPage(err, doc) {
   if (doc.length === 1) {
     playerDetailInfo = doc[0];
-    $('#player-page-header h1.header .content .player-name').text(playerDetailInfo.name);
+    $('#player-page-header h1.header .content .player').text(playerDetailInfo.name);
 
     // check player teams
     DB.getPlayerTeams(playerDetailInfo._id, function(err, teams) {

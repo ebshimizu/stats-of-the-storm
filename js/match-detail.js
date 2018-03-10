@@ -450,6 +450,11 @@ function loadPlayers() {
 
   $('#match-detail-summary table').tablesort();
   $('#match-detail-talents .tiny.image').popup();
+
+  // links to profiles
+  $('#match-detail-page-content .player-name').click(function() {
+    showPlayerProfile($(this).attr('playerID'));
+  });
 }
 
 function appendSummaryRow(color, id) {

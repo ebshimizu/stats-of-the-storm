@@ -513,6 +513,10 @@ function loadTeamRoster(playerStats) {
       handleTeamPlayerCallback(value, $elem.attr('player-id'), $elem.attr('player-name'));
     }
   });
+
+  $('#team-roster-stats .player-name').click(function() {
+    showPlayerProfile($(this).attr('playerID'));
+  })
 }
 
 // handles individual player action stuff
@@ -532,8 +536,7 @@ function handleTeamPlayerCallback(action, id, name) {
   }
   else if (action === 'profile') {
     // load and then immediately switch to player profile
-    preloadPlayerID(id);
-    changeSection('player', true);
+    showPlayerProfile(id);
   }
 }
 

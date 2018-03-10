@@ -151,6 +151,7 @@ function loadPlayerRankings() {
         continue;
 
       let context = {value: player[mode]};
+      context.id = p;
       context.name = player.name;
       context.value.winPercent = player.wins / player.games;
       context.formatWinPercent = (context.value.winPercent * 100).toFixed(2) + '%';
@@ -183,5 +184,9 @@ function loadPlayerRankings() {
       $('#player-ranking-teamfight-table').append(playerRankingTeamfightTemplate(context));
       $('#player-ranking-misc-table').append(playerRankingMiscTemplate(context));
     }
+
+    $('#player-ranking-body .player-name').click(function() {
+      showPlayerProfile($(this).attr('playerID'));
+    });
   });
 }

@@ -110,3 +110,11 @@ body {
 .floatThead-wrapper .center.alligned {
     text-align: center;
 }
+
+.player-name {
+    cursor: pointer;
+}
+
+.player-name:hover {
+    color: #ffe21f!important;
+}

@@ -289,7 +289,7 @@ function initGlobalUIHandlers() {
   });
 
   $('#section-menu-back-button').click(function() {
-    changeSection(prevSections.pop());
+    changeSection(prevSections.pop(), false, 'pop');
   });
 
   $('#collection-switch-menu').dropdown({
@@ -369,14 +369,14 @@ function createBGWindow() {
   //bgWindow.webContents.openDevTools();
 }
 
-function changeSection(to, overrideBack) {
+function changeSection(to, overrideBack, action) {
   // if it's already being shown, do nothing
   if (!$(sections[to].id).hasClass('hidden'))
     return;
 
   // this should only trigger for the visible section
   // if the back button is visible, we should store a little history
-  if (sections[to].showBack || overrideBack === true) {
+  if (action !== 'pop' && (sections[to].showBack || overrideBack === true)) {
     prevSections.push($('.is-page.visible').attr('section-name'));
   }
   // uh wait yeah if this is length 0 then it already is [] ... ?
@@ -698,6 +698,11 @@ function exportPlayer(id, filename) {
       }
     });
   });
+}
+
+function showPlayerProfile(id) {
+  preloadPlayerID(id);
+  changeSection('player', true);
 }
 
 // DATABASE MIGRATIONS
