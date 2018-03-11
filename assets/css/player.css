@@ -11,24 +11,30 @@
   position: relative;
 }
 
-#player-detail-summary .grid #player-detail-hero-summary,
 #player-detail-summary .grid #player-detail-map-summary,
 #player-detail-summary .grid #player-detail-hero-talent {
   height: 692px;
 }
 
+#player-detail-summary .grid #player-detail-hero-summary {
+  height: 654px;
+}
+
 #player-detail-summary .floatThead-wrapper,
+#player-detail-hero-summary .floatThead-wrapper,
 #player-hero-detail-stats .floatThead-wrapper {
   height: 100%;
 }
 
 #player-detail-summary .grid .table-wrapper table,
+#player-detail-hero-summary .table-wrapper,
 #player-detail-hero-talent .table-wrapper,
 #player-compare-table .table-wrapper,
 #team-compare-table .table-wrapper {
   margin-top: 0!important;
 }
 
+#player-detail-hero-summary .table-wrapper,
 #player-detail-hero-talent .table-wrapper {
   height: 100%;
 }
@@ -159,4 +165,23 @@
   position: absolute;
   right: 0;
   top: -45px;
+}
+
+#player-overall-hero-pool {
+  position: absolute;
+  right: 15px;
+  top: -8px;
+}
+
+#player-detail-hero-pool canvas {
+  width: 100%;
+  height: 299px;
+}
+
+#player-detail-hero-pool .column.graph {
+  height: 299px;
+}
+
+#player-detail-hero-pool {
+  height: 656px;
 }

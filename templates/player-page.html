@@ -50,26 +50,160 @@
         <div class="player-detail-wrapper">
           <div class="ui grid">
             <div class="ten wide column">
-              <div class="ui inverted segment" id="player-detail-hero-summary">
-                <div class="ui top attached label">Hero Summary</div>
-                <div class="table-wrapper">
-                  <table class="ui sortable selectable inverted table">
-                    <thead>
-                      <tr>
-                        <th>Hero</th>
-                        <th class="center aligned stat">Win %</th>
-                        <th class="center aligned stat">Games</th>
-                        <th class="center aligned stat">Takedowns</th>
-                        <th class="center aligned stat">Deaths</th>
-                        <th class="center aligned stat">KDA</th>
-                        <th class="center aligned stat">MVP %</th>
-                        <th class="center aligned stat">Award %</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      
-                    </tbody>
-                  </table>
+              <div class="" id="player-detail-hero-summary-segment">
+                <div class="ui top attached small menu">
+                  <a class="active item" data-tab="player-hero-summary">Hero Summary</a>
+                  <a class="item" data-tab="player-hero-pool">Hero Pool</a>
+                </div>
+                <div class="ui active tab inverted attached segment" data-tab="player-hero-summary" id="player-detail-hero-summary">
+                  <div class="table-wrapper">
+                    <table class="ui sortable selectable inverted table">
+                      <thead>
+                        <tr>
+                          <th>Hero</th>
+                          <th class="center aligned stat">Win %</th>
+                          <th class="center aligned stat">Games</th>
+                          <th class="center aligned stat">Takedowns</th>
+                          <th class="center aligned stat">Deaths</th>
+                          <th class="center aligned stat">KDA</th>
+                          <th class="center aligned stat">MVP %</th>
+                          <th class="center aligned stat">Award %</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="ui tab inverted attached segment" data-tab="player-hero-pool" id="player-detail-hero-pool">
+                  <h2 class="ui inverted dividing header">Hero Pool</h2>
+                  <div class="ui inverted tiny horizontal statistic" id="player-overall-hero-pool">
+                    <div class="value"></div>
+                    <div class="label">Heroes Played Overall</div>
+                  </div>
+                  <div class="ui five column grid">
+                    <div class="ui column" role="Assassin">
+                      <h3 class="ui dividing inverted red header">
+                        <img class="ui image" src="./assets/images/role_assassin.png">
+                        <div class="content">
+                          Assassin
+                        </div>
+                      </h3>
+                      <div class="ui horizontal mini inverted red statistics">
+                        <div class="ui statistic" name="games">
+                          <div class="value">###</div>
+                          <div class="label">Games</div>
+                        </div>
+                        <div class="ui statistic" name="win">
+                          <div class="value">###</div>
+                          <div class="label">Win</div>
+                        </div>
+                        <div class="ui statistic" name="pool">
+                          <div class="value">###</div>
+                          <div class="label">Heroes Played</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="ui column" role="Warrior">
+                      <h3 class="ui dividing inverted blue header">
+                        <img class="ui image" src="./assets/images/role_warrior.png">
+                        <div class="content">
+                          Warrior
+                        </div>
+                      </h3>
+                      <div class="ui horizontal mini inverted blue statistics">
+                        <div class="ui statistic" name="games">
+                          <div class="value">###</div>
+                          <div class="label">Games</div>
+                        </div>
+                        <div class="ui statistic" name="win">
+                          <div class="value">###</div>
+                          <div class="label">Win</div>
+                        </div>
+                        <div class="ui statistic" name="pool">
+                          <div class="value">###</div>
+                          <div class="label">Heroes Played</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="ui column" role="Support">
+                      <h3 class="ui dividing inverted teal header">
+                        <img class="ui image" src="./assets/images/role_support.png">
+                        <div class="content">
+                          Support
+                        </div>
+                      </h3>
+                      <div class="ui horizontal mini inverted teal statistics">
+                        <div class="ui statistic" name="games">
+                          <div class="value">###</div>
+                          <div class="label">Games</div>
+                        </div>
+                        <div class="ui statistic" name="win">
+                          <div class="value">###</div>
+                          <div class="label">Win</div>
+                        </div>
+                        <div class="ui statistic" name="pool">
+                          <div class="value">###</div>
+                          <div class="label">Heroes Played</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="ui column" role="Specialist">
+                      <h3 class="ui dividing inverted violet header">
+                        <img class="ui image" src="./assets/images/role_specialist.png">
+                        <div class="content">
+                          Specialist
+                        </div>
+                      </h3>
+                      <div class="ui horizontal mini inverted violet statistics">
+                        <div class="ui statistic" name="games">
+                          <div class="value">###</div>
+                          <div class="label">Games</div>
+                        </div>
+                        <div class="ui statistic" name="win">
+                          <div class="value">###</div>
+                          <div class="label">Win</div>
+                        </div>
+                        <div class="ui statistic" name="pool">
+                          <div class="value">###</div>
+                          <div class="label">Heroes Played</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="ui column" role="Multiclass">
+                      <h3 class="ui dividing inverted purple header">
+                        <img class="ui image" src="./assets/images/role_specialist.png">
+                        <div class="content">
+                          Multiclass
+                        </div>
+                      </h3>
+                      <div class="ui horizontal mini inverted purple statistics">
+                        <div class="ui statistic" name="games">
+                          <div class="value">###</div>
+                          <div class="label">Games</div>
+                        </div>
+                        <div class="ui statistic" name="win">
+                          <div class="value">###</div>
+                          <div class="label">Win</div>
+                        </div>
+                        <div class="ui statistic" name="pool">
+                          <div class="value">###</div>
+                          <div class="label">Heroes Played</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ui two column grid">
+                    <div class="ui column graph">
+                      <h3 class="ui inverted dividing header">Games Played by Role</h3>
+                      <canvas class="role-graph" id="player-hero-pool-games-graph"></canvas>
+                    </div>
+                    <div class="ui column graph">
+                      <h3 class="ui inverted dividing header">Games Won by Role</h3>
+                      <canvas class="role-graph" id="player-hero-pool-win-graph"></canvas>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="is-hidden" id="player-detail-hero-talent">

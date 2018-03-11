@@ -155,6 +155,14 @@ const DetailStatString = {
   'T6' : 'Time at Level 16'
 };
 
+const RoleColor = {
+  'Assassin' : '#db2828',
+  'Warrior' : '#2185d0',
+  'Support' : '#00b5ad',
+  'Specialist' : '#6435c9',
+  'Multiclass' : '#a333c8'
+}
+
 var DB;
 var Heroes;
 var sections = {};
@@ -347,10 +355,10 @@ function loadSections() {
   // Matches should be the default view of the app.
   // this can be changed for development to test specific pages of course.
   // this is the dev setting.
-  //changeSection('player');
+  changeSection('player');
 
   // this is the release default
-  changeSection('matches');
+  //changeSection('matches');
 }
 
 // returns the template contained in an import

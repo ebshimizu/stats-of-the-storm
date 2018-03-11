@@ -34,7 +34,8 @@ const ReplayStatus = {
   Failure: -2,
   UnsupportedMap: -3,
   ComputerPlayerFound: -4,
-  Incomplete: -5
+  Incomplete: -5,
+  TooOld: -6
 };
 
 const StatusString = {
@@ -44,7 +45,8 @@ const StatusString = {
   '-2' : 'Internal Exception',
   '-3' : 'Unsupported Map',
   '-4' : 'Computer Player Found',
-  '-5' : 'Incomplete'
+  '-5' : 'Incomplete',
+  '-6' : 'Too Old'
 }
 
 // it's everything except gameevents which is just a massive amount of data
@@ -440,6 +442,10 @@ function processReplay(file, HeroesTalents, opts = {}) {
     else if (match.map === ReplayTypes.MapType.Hanamura) {
       // couldn't find much data here, not too worried since it's old
       // can't wait till i have to detect which version of the map this is
+    }
+    else if (match.map === undefined) {
+      console.log('Map name not found. Replay too old?');
+      return { status: ReplayStatus.TooOld };
     }
     else {
       // unsupported map

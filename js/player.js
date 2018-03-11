@@ -43,6 +43,12 @@ const tierToLevel = {
   "Tier 7 Choice" : 20
 }
 
+var progressionWinRateGraphData, progressionWinRateGraph;
+var progressionKDAGraphData, progressionKDAGraph;
+var progressionAwardsGraphData, progressionAwardsGraph;
+var heroPoolGamesGraphData, heroPoolGamesGraph;
+var heroPoolWinsGraphData, heroPoolWinsGraph;
+
 var progressionGraphSettings = {
   responsive: true,
   tooltips: {
@@ -155,9 +161,40 @@ var progressionKDAGraphSettings = {
     }]
   }
 }
-var progressionWinRateGraphData, progressionWinRateGraph;
-var progressionKDAGraphData, progressionKDAGraph;
-var progressionAwardsGraphData, progressionAwardsGraph;
+
+heroPoolGamesGraphData = {
+  type: 'pie',
+  data: {
+    datasets: [],
+    labels: []
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    legend: {
+      labels: {
+        fontColor: 'white'
+      }
+    }
+  }
+};
+
+heroPoolWinsGraphData = {
+  type: 'pie',
+  data: {
+    datasets: [],
+    labels: []
+  },
+  options: {
+    legend: {
+      labels: {
+        fontColor: 'white'
+      }
+    },
+    maintainAspectRatio: false,
+    responsive: true
+  }
+}
 
 function initPlayerPage() {
   // player menu init
@@ -341,6 +378,8 @@ function initPlayerPage() {
   progressionWinRateGraph = new Chart($('#player-progression-win-rate'), progressionWinRateGraphData);
   progressionKDAGraph = new Chart($('#player-progression-kda'), progressionKDAGraphData);
   progressionAwardsGraph = new Chart($('#player-progression-awards'), progressionAwardsGraphData);
+  heroPoolGamesGraph = new Chart($('#player-hero-pool-games-graph'), heroPoolGamesGraphData);
+  heroPoolWinsGraph = new Chart($('#player-hero-pool-win-graph'), heroPoolWinsGraphData);
 
   // collection averages
   $('#player-compare-collection').dropdown({
@@ -348,6 +387,12 @@ function initPlayerPage() {
     onChange: updatePlayerCollectionCompare
   })
   populatePlayerCollectionMenu();
+
+  // hero pool
+  $('#player-detail-hero-summary-segment .top.menu .item').tab();
+  $('#player-detail-hero-summary-segment .top.menu .item').click(function() {
+    $('#player-detail-hero-summary-segment table').floatThead('reflow');
+  })
 }
 
 function populatePlayerCollectionMenu() {
@@ -504,8 +549,10 @@ function updateHeroTitle(container, value) {
 function renderAllHeroSummary() {
   $('#player-detail-hero-summary tbody').html('');
   $('#player-detail-hero-summary table').floatThead('reflow');
-  $('#player-detail-hero-summary').removeClass('is-hidden');
+  $('#player-detail-hero-summary-segment').removeClass('is-hidden');
   $('#player-detail-hero-talent').addClass('is-hidden');
+
+  let roleData = {};
 
   for (let h in playerDetailStats.heroes) {
     let context = {};
@@ -522,11 +569,66 @@ function renderAllHeroSummary() {
     context.stats.totalKDA = context.stats.totalKDA.toFixed(2);
 
     $('#player-detail-hero-summary tbody').append(playerDetailHeroSummaryRowTemplate(context));
+
+    // role collection
+    let role = Heroes.role(h);
+    if (!(role in roleData)) {
+      roleData[role] = { games: 0, wins: 0, count: 0 };
+    }
+
+    roleData[role].games += playerDetailStats.heroes[h].games;
+    roleData[role].wins += playerDetailStats.heroes[h].wins;
+    roleData[role].count += 1;
   }
+
+  // hero pool stats
+  // graph init
+  heroPoolGamesGraphData.data.datasets = [{
+    data: [],
+    backgroundColor: []
+  }];
+  heroPoolGamesGraphData.data.labels = [];
+  heroPoolWinsGraphData.data.datasets = [{
+    data: [],
+    backgroundColor: []
+  }];
+  heroPoolWinsGraphData.data.labels = [];
+
+  let idx = 0;
+  for (let r of Heroes.roles) {
+    let selector = $('#player-detail-hero-pool div[role="' + r + '"]');
+
+    if (!(r in roleData)) {
+      selector.find('div[name="games"] .value').text(0);
+      selector.find('div[name="win"] .value').text('---');
+      selector.find('div[name="pool"] .value').text('0 / ' + Heroes.heroRoleCount(r));
+
+      heroPoolGamesGraphData.data.datasets[0].data.push(0);
+      heroPoolWinsGraphData.data.datasets[0].data.push(0);
+    }
+    else {
+      selector.find('div[name="games"] .value').text(roleData[r].games);
+      selector.find('div[name="win"] .value').text((roleData[r].wins / roleData[r].games * 100).toFixed(1) + '%');
+      selector.find('div[name="pool"] .value').text(roleData[r].count + ' / ' + Heroes.heroRoleCount(r));
+
+      heroPoolGamesGraphData.data.datasets[0].data.push(roleData[r].games);
+      heroPoolWinsGraphData.data.datasets[0].data.push(roleData[r].wins);
+    }
+
+    heroPoolGamesGraphData.data.datasets[0].backgroundColor.push(RoleColor[r]);
+    heroPoolWinsGraphData.data.datasets[0].backgroundColor.push(RoleColor[r]);
+    heroPoolGamesGraphData.data.labels.push(r);
+    heroPoolWinsGraphData.data.labels.push(r);
+  }
+
+  heroPoolGamesGraph.update();
+  heroPoolWinsGraph.update();
+
+  $('#player-overall-hero-pool .value').text(Object.keys(playerDetailStats.heroes).length + ' / ' + Heroes.heroCount);
 }
 
 function renderHeroTalents(hero) {
-  $('#player-detail-hero-summary').addClass('is-hidden');
+  $('#player-detail-hero-summary-segment').addClass('is-hidden');
   $('#player-detail-hero-talent').removeClass('is-hidden');
 
   renderHeroTalentsTo(hero, $('#player-detail-hero-talent'), playerDetailStats.rawDocs);

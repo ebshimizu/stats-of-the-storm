@@ -110,6 +110,18 @@ class HeroesTalents {
     return this._roles[data.role].all;
   }
 
+  heroRoleCount(role) {
+    return this._roles[role].all.length;
+  }
+
+  get heroCount() {
+    return Object.keys(this._heroes).length;
+  }
+
+  get roles() {
+    return Object.keys(this._roles);
+  }
+
   role(name) {
     if (name in this._heroes) {
       return this._heroes[name].role;
