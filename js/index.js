@@ -355,7 +355,7 @@ function loadSections() {
   // Matches should be the default view of the app.
   // this can be changed for development to test specific pages of course.
   // this is the dev setting.
-  changeSection('player');
+  changeSection('matches');
 
   // this is the release default
   //changeSection('matches');
@@ -559,8 +559,21 @@ function addPatchMenuOptions(elem, callback) {
 function populateTeamMenu(elem) {
   DB.getAllTeams(function(err, docs) {
     elem.find('.menu').html('');
-    
+
+    let keys = [];
     for (let d in docs) {
+      keys.push({ index: d, value: docs[d].name });
+    }
+    keys = keys.sort(function(a, b) {
+      if (a.value < b.value)
+        return -1;
+      if (b.value < a.value)
+        return 1;
+      return 0;
+    });
+
+    for (let i of keys) {
+      let d = i.index;
       elem.find('.menu').append('<div class="item" data-value="' + docs[d]._id + '">' + docs[d].name + '</div>');
     }
 

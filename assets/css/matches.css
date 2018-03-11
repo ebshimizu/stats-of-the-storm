@@ -149,3 +149,9 @@
   height: calc(100% - 20px);
   overflow-y: auto;
 }
+
+#match-search-team {
+  width: calc(100% - 47px);
+  display: inline-block;
+  margin-right: 0;
+}

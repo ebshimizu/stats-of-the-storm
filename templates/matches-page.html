@@ -156,12 +156,23 @@
               </div>
             </div>
             <div class="three wide column">Player</div>
-            <div class="ten wide column">
+            <div class="seven wide column">
               <div class="ui fluid multiple search selection dropdown player-menu" id="match-search-players">
                 <i class="dropdown icon"></i>
                 <span class="default text">All Players</span>
                 <div class="menu">
     
+                </div>
+              </div>
+            </div>
+            <div class="three wide column">
+              <div class="ui fluid selection dropdown" id="match-search-players-win">
+                <i class="dropdown icon"></i>
+                <span class="default text">W/L</span>
+                <div class="menu">
+                  <div class="item" data-value="both">W/L</div>
+                  <div class="item" data-value="win">Win</div>
+                  <div class="item" data-value="loss">Loss</div>
                 </div>
               </div>
             </div>
@@ -176,7 +187,7 @@
               </div>
             </div>
             <div class="three wide column">Team</div>
-            <div class="nine wide column">
+            <div class="ten wide column">
               <div class="ui fluid search selection dropdown team-menu" id="match-search-team">
                 <i class="dropdown icon"></i>
                 <span class="default text">Team</span>
@@ -184,9 +195,20 @@
     
                 </div>
               </div>
+              <div class="ui right floated icon button" id="match-search-clear-team">
+                <i class="eraser icon"></i>
+              </div>
             </div>
-            <div class="four wide column">
-              <div class="ui fluid button" id="match-search-clear-team">Clear</div>
+            <div class="three wide column">
+              <div class="ui fluid selection dropdown" id="match-search-team-win">
+                <i class="dropdown icon"></i>
+                <span class="default text">W/L</span>
+                <div class="menu">
+                  <div class="item" data-value="both">W/L</div>
+                  <div class="item" data-value="win">Win</div>
+                  <div class="item" data-value="loss">Loss</div>
+                </div>
+              </div>
             </div>
             <!-- Planned features -->
             <!-- <div class="three wide column">Tags</div>

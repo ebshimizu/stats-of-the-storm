@@ -259,6 +259,9 @@ function initMatchDetailPage() {
   });
 
   $('#match-detail-existing-team').modal();
+  $('#match-detail-existing-team .team-menu').dropdown({
+    fullTextSearch: true
+  });
 
   // DEBUG - LOAD SPECIFIC MATCH
   //loadMatchData("RtTPtP5mHaBoFJW2", function() { console.log("done loading"); });

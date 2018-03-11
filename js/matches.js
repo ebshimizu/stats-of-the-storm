@@ -42,6 +42,9 @@ function initMatchesPage() {
   });
   $('#match-search-heroes-mode').dropdown();
 
+  $('#match-search-players-win').dropdown();
+  $('#match-search-team-win').dropdown();
+
   // again most of the things here don't actually need callbacks
   $('#match-search-heroes').dropdown({
     fullTextSearch: true
@@ -132,6 +135,8 @@ function resetMatchFilters() {
   $('#match-search-heroes-mode').dropdown('restore defaults');
   $('#match-map-select').dropdown('restore defaults');
   $('#match-search-team').dropdown('restore defaults');
+  $('#match-search-players-win').dropdown('restore defaults');
+  $('#match-search-team-win').dropdown('restore defaults');
 
   $('#match-search-start-date').datepicker('setDate', new Date('1-1-2012'));
   $('#match-search-end-date').datepicker('setDate', new Date());
@@ -153,6 +158,7 @@ function selectMatches() {
   // players
   let players = $('#match-search-players').dropdown('get value').split(',');
   let playerMode = $('#match-search-players-mode').dropdown('get value');
+  let playerWin = $('#match-search-players-win').dropdown('get value');
 
   // heroes
   let heroes = $('#match-search-heroes').dropdown('get value').split(',');
@@ -166,6 +172,7 @@ function selectMatches() {
 
   // team
   let team = $('#match-search-team').dropdown('get value');
+  let teamWin = $('#match-search-team-win').dropdown('get value');
 
   for (let p in patches) {
     if (patches[p] !== "")
@@ -214,11 +221,41 @@ function selectMatches() {
         query.$and = [];
       
       for (let p in players) {
-        query.$and.push({ 'playerIDs' : players[p] });
+        if (playerWin === 'win') {
+          query.$and.push({ 'winningPlayers' : players[p]});
+        }
+        else {
+          query.$and.push({ 'playerIDs' : players[p] });
+        }
+
+        if (playerWin === 'loss') {
+          query.$and.push({ '$where' : function() {
+            return this.winningPlayers.indexOf(players[p]) === -1
+          }});
+        }
       }
     }
-    else {
-      query.playerIDs = { $elemMatch: { $in: players } };
+    else if (playerMode === 'or' || playerMode === '') {
+      if (playerWin === 'win') {
+        query.winningPlayers = { $elemMatch: { $in: players }};
+      }
+      else if (playerWin === 'loss') {
+        if (!('$or' in query))
+          query.$or = [];
+        
+        for (let p in players) {
+          let q = { $and: []};
+          q.$and.push({ 'playerIDs' : players[p] });
+          q.$and.push({ '$where' : function() {
+            return this.winningPlayers.indexOf(players[p]) === -1;
+          }});
+
+          query.$or.push(q);
+        }
+      }
+      else {
+        query.playerIDs = { $elemMatch: { $in: players } };
+      }
     }
   }
 
@@ -246,8 +283,16 @@ function selectMatches() {
               count += 1;
           }
   
-          if (count === player.length)
+          if (count === player.length) {
+            if (teamWin === 'win') {
+              return this.winner === 0 && boundWhere();
+            }
+            else if (teamWin === 'loss') {
+              return this.winner !== 0 && boundWhere();
+            }
+
             return boundWhere();
+          }
           
           count = 0;
           let t1 = this.teams[1].ids;
@@ -256,8 +301,16 @@ function selectMatches() {
               count += 1;
           }
   
-          if (count === player.length)
+          if (count === player.length) {
+            if (teamWin === 'win') {
+              return this.winner === 1 && boundWhere();
+            }
+            else if (teamWin === 'loss') {
+              return this.winner !== 1 && boundWhere();
+            }
+
             return boundWhere();
+          }
           
           return false;
         }
@@ -276,8 +329,16 @@ function selectMatches() {
               count += 1;
           }
   
-          if (count === 5)
+          if (count === 5) {
+            if (teamWin === 'win') {
+              return this.winner === 0 && boundWhere();
+            }
+            else if (teamWin === 'loss') {
+              return this.winner !== 0 && boundWhere();
+            }
+            
             return boundWhere();
+          }
           
           count = 0;
           let t1 = this.teams[1].ids;
@@ -286,8 +347,16 @@ function selectMatches() {
               count += 1;
           }
   
-          if (count === 5)
+          if (count === 5) {
+            if (teamWin === 'win') {
+              return this.winner === 1 && boundWhere();
+            }
+            else if (teamWin === 'loss') {
+              return this.winner !== 1 && boundWhere();
+            }
+
             return boundWhere();
+          }
           
           return false;
         }
