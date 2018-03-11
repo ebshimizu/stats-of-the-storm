@@ -51,6 +51,13 @@ function initPopup(elem) {
   elem.find('.filter-widget-hero-type').dropdown({
     fullTextSearch: true
   });
+  
+  // team
+  elem.find('.filter-widget-team-menu').dropdown({
+    fullTextSearch: true
+  });
+
+  elem.find('.filter-widget-team-win').dropdown();
 
   elem.find('.filter-widget-clear-team').click(function() {
     $('.filter-widget-team-menu').dropdown('restore defaults');
@@ -129,6 +136,7 @@ function getPopupQuery(elem, callback) {
 
   // team
   let team = elem.find('.filter-widget-team-menu').dropdown('get value');
+  let teamWin = elem.find('.filter-widget-team-win').dropdown('get value');
 
   for (let p in patches) {
     if (patches[p] !== "")
@@ -201,8 +209,16 @@ function getPopupQuery(elem, callback) {
             count += 1;
         }
 
-        if (count === player.length)
+        if (count === player.length) {
+          if (teamWin === 'win') {
+            return this.winner === 0 && boundWhere();
+          }
+          else if (teamWin === 'loss') {
+            return this.winner !== 0 && boundWhere();
+          }
+
           return boundWhere();
+        }
         
         count = 0;
         let t1 = this.teams[1].ids;
@@ -211,8 +227,16 @@ function getPopupQuery(elem, callback) {
             count += 1;
         }
 
-        if (count === player.length)
+        if (count === player.length) {
+          if (teamWin === 'win') {
+            return this.winner === 1 && boundWhere();
+          }
+          else if (teamWin === 'loss') {
+            return this.winner !== 1 && boundWhere();
+          }
+
           return boundWhere();
+        }
         
         return false;
       }
@@ -231,8 +255,16 @@ function getPopupQuery(elem, callback) {
             count += 1;
         }
 
-        if (count === 5)
+        if (count === 5) {
+          if (teamWin === 'win') {
+            return this.winner === 0 && boundWhere();
+          }
+          else if (teamWin === 'loss') {
+            return this.winner !== 0 && boundWhere();
+          }
+
           return boundWhere();
+        }
         
         count = 0;
         let t1 = this.teams[1].ids;
@@ -241,8 +273,16 @@ function getPopupQuery(elem, callback) {
             count += 1;
         }
 
-        if (count === 5)
+        if (count === 5) {
+          if (teamWin === 'win') {
+            return this.winner === 1 && boundWhere();
+          }
+          else if (teamWin === 'loss') {
+            return this.winner !== 1 && boundWhere();
+          }
+
           return boundWhere();
+        }
         
         return false;
       }
@@ -250,6 +290,13 @@ function getPopupQuery(elem, callback) {
 
     // players for a team
     hero.ToonHandle = { $in: player };
+
+    if (teamWin === 'win') {
+      hero.win = true;
+    }
+    else if (teamWin === 'loss') {
+      hero.win = false;
+    }
 
     callback({map, hero});
   });

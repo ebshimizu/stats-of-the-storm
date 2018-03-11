@@ -54,6 +54,12 @@ body {
     width: 550px;
 }
 
+.filter-popup-widget .ui.fluid.dropdown.filter-widget-team-menu {
+    width: calc(100% - 47px);
+    margin-right: 0;
+    display: inline-block;
+}
+
 .secondary.pointing.menu {
     border-top: 0;
     border-right: 0;
