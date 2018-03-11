@@ -4,6 +4,7 @@ var heroCollectionPickRowTemplate;
 // by default this screen containrs games played in official modes with bans
 var heroCollectionHeroDataFilter;
 var heroCollectionMapDataFilter;
+var heroCollectionHeroMatchThresh = 0;
 
 function initHeroCollectionPage() {
   // by default this screen containrs games played in official modes with bans
@@ -86,6 +87,13 @@ function initHeroCollectionPage() {
   $('#hero-collection-detail-hero-talent .menu .item').tab();
 
   loadOverallHeroCollectionData();
+
+  // hero threshold
+  $('#hero-collection-hero-thresh input').popup({
+    on: 'focus'
+  });
+  $('#hero-collection-hero-thresh input').val(0);
+  $('#hero-collection-hero-thresh input').blur(loadOverallHeroCollectionData);
 }
 
 function heroCollectionShowSection() {
@@ -121,6 +129,8 @@ function resetCollectionFilter() {
 }
 
 function loadOverallHeroCollectionData() {
+  heroCollectionHeroMatchThresh = $('#hero-collection-hero-thresh input').val();
+
   // the summary only loads the hero pick/win details which are easily extracted
   // from the match data
   // check the hero details section for all that extra stuff.
@@ -134,10 +144,13 @@ function loadOverallHeroCollectionData() {
         continue;
 
       let hero = overallStats[h];
+      if (hero.involved < heroCollectionHeroMatchThresh)
+        continue;
+
       let context = {};
       context.heroName = h;
       context.heroImg = Heroes.heroIcon(h);
-      context.winPercent = hero.wins / hero.games;
+      context.winPercent = hero.games === 0 ? 0 : hero.wins / hero.games;
       context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
       context.banPercent = hero.bans.total / overallStats.totalMatches;
       context.formatBanPercent = (context.banPercent * 100).toFixed(2) + '%';

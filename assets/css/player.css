@@ -185,3 +185,11 @@
 #player-detail-hero-pool {
   height: 656px;
 }
+
+#player-hero-thresh {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  float: right;
+  width: 100%;
+}

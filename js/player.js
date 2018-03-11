@@ -24,6 +24,7 @@ var playerWinRateRowTemplate;
 var heroWinRateRowTemplate;
 var heroTalentRowTemplate;
 var playerDetailFilter = {};
+var playerHeroMatchThreshold = 0;
 
 const IntervalMode = {
   Month: 'month',
@@ -272,6 +273,16 @@ function initPlayerPage() {
     onChange: updateGraphInterval
   });
 
+  $('#player-hero-thresh input').popup({
+    on: 'focus'
+  });
+  $('#player-hero-thresh input').val(0);
+  $('#player-hero-thresh input').blur(function() {
+    if (playerDetailID) {
+      DB.getPlayer(playerDetailID, updatePlayerPage);
+    }
+  });
+
   $('#player-detail-hero-talent .menu .item').tab();
   $('#player-detail-hero-talent .menu .item').click(function() {
     $('#player-detail-body table').floatThead('reflow');
@@ -510,6 +521,8 @@ function processPlayerData(err, docs) {
 
 // callback for hero select menu
 function showHeroDetails(value, text, $selectedItem) {
+  playerHeroMatchThreshold = parseInt($('#player-hero-thresh input').val());
+  
   if (value === 'all') {
     DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, playerDetailFilter, function(err, docs) {
       playerDetailStats = DB.summarizeHeroData(docs);
@@ -568,7 +581,8 @@ function renderAllHeroSummary() {
     context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
     context.stats.totalKDA = context.stats.totalKDA.toFixed(2);
 
-    $('#player-detail-hero-summary tbody').append(playerDetailHeroSummaryRowTemplate(context));
+    if (context.games >= playerHeroMatchThreshold)
+      $('#player-detail-hero-summary tbody').append(playerDetailHeroSummaryRowTemplate(context));
 
     // role collection
     let role = Heroes.role(h);
@@ -737,8 +751,8 @@ function renderPlayerSummary() {
     $('#player-detail-rival-summary tbody').append(playerWinRateRowTemplate(context));
   }
 
-  renderHeroVsStatsTo($('#player-detail-with-summary'), playerDetailStats.withHero);
-  renderHeroVsStatsTo($('#player-detail-against-summary'), playerDetailStats.againstHero);
+  renderHeroVsStatsTo($('#player-detail-with-summary'), playerDetailStats.withHero, playerHeroMatchThreshold);
+  renderHeroVsStatsTo($('#player-detail-against-summary'), playerDetailStats.againstHero, playerHeroMatchThreshold);
 
   // skins
   for (let s in playerDetailStats.skins) {
@@ -800,7 +814,10 @@ function renderMapStatsTo(container, stats) {
 }
 
 // expects stats to be from DB.summarizeHeroData(docs).withHero / againstHero
-function renderHeroVsStatsTo(container, stats) {
+function renderHeroVsStatsTo(container, stats, threshold) {
+  if (threshold === undefined)
+    threshold = 0;
+
   container.find('tbody').html('');
 
   for (let h in stats) {
@@ -815,7 +832,8 @@ function renderHeroVsStatsTo(container, stats) {
     context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
     context.heroImg = Heroes.heroIcon(context.name);
 
-    container.find('tbody').append(heroWinRateRowTemplate(context));
+    if (context.games >= threshold)
+      container.find('tbody').append(heroWinRateRowTemplate(context));
   }
 }
 
@@ -871,7 +889,8 @@ function renderPlayerHeroDetail() {
       }
     }
 
-    $('#player-hero-detail-stats tbody').append(playerHeroDetailRowTemplate(context));
+    if (playerDetailStats.heroes[h].games >= playerHeroMatchThreshold)
+      $('#player-hero-detail-stats tbody').append(playerHeroDetailRowTemplate(context));
   }
 
   $('#player-hero-detail-stats table').floatThead('reflow');

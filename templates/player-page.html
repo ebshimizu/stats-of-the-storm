@@ -5,7 +5,7 @@
   <div id="player-page-content" class="is-page transition hidden" section-name="player">
     <div id="player-page-header">
       <div class="ui grid">
-        <div class="ten wide column">
+        <div class="eight wide column">
           <h1 class="ui inverted header">
             <div class="content">
               <span class="player">[Player Name]</span>
@@ -14,7 +14,15 @@
           </h1>
         </div>
         <div class="two wide column">
-          <button class="ui labeled icon button" id="players-filter-button" data-variation="very wide">
+          <div class="ui fluid labeled input" id="player-hero-thresh">
+            <div class="ui label">
+              Req. Hero Matches
+            </div>
+            <input type="text" data-content="A hero needs this many matches to show up in the hero tables">
+          </div>
+        </div>
+        <div class="two wide column">
+          <button class="ui fluid labeled icon button" id="players-filter-button" data-variation="very wide">
             <i class="filter icon"></i>
             Filter Matches
           </button>

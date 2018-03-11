@@ -8,6 +8,7 @@ var currentTeam;
 var teamPlayerStats, teamTeamStats;
 var teamAvgData;
 var teamAvgTracker;
+var teamHeroMatchThresh = 0;
 
 function initTeamsPage() {
   $('#team-set-team').dropdown({
@@ -95,6 +96,15 @@ function initTeamsPage() {
     onChange: updateTeamCollectionCompare
   })
   populateTeamCollectionMenu();
+
+  // threshold
+  $('#teams-hero-thresh input').popup({
+    on: 'focus'
+  });
+  $('#teams-hero-thresh input').val(0);
+  $('#teams-hero-thresh input').blur(function() {
+    updateTeamData($('#team-set-team').dropdown('get value'), $('#team-set-team').dropdown('get text'));
+  });
 }
 
 function populateTeamCollectionMenu() {
@@ -245,6 +255,8 @@ function updateTeamData(value, text, $elem) {
 }
 
 function loadTeamData(team, matches, heroData) {
+  teamHeroMatchThresh = parseInt($('#teams-hero-thresh input').val());
+
   // compute hero stats
   let heroStats = DB.summarizeHeroData(heroData);
   teamPlayerStats = DB.summarizePlayerData(heroData);
@@ -261,13 +273,13 @@ function loadTeamData(team, matches, heroData) {
   let against = {};
   for (let h in teamStats.heroes) {
     let hero = teamStats.heroes[h];
-    if (hero.gamesAgainst > 0) {
+    if (hero.gamesAgainst >= teamHeroMatchThresh && hero.gamesAgainst > 0) {
       against[h] = { name: h, games: hero.gamesAgainst, defeated: hero.defeated }
     }
   }
 
   renderMapStatsTo($('#team-map-summary'), teamStats)
-  renderHeroVsStatsTo($('#team-against-summary'), against);
+  renderHeroVsStatsTo($('#team-against-summary'), against, teamHeroMatchThresh);
 
   $('#team-hero-summary-table tbody').html('');
   let picked = 0;
@@ -303,7 +315,9 @@ function loadTeamData(team, matches, heroData) {
     context.heroName = h;
 
     picked += 1;
-    $('#team-hero-summary-table tbody').append(teamHeroSummaryRowTemplate(context));
+
+    if (hero.games >= teamHeroMatchThresh)
+      $('#team-hero-summary-table tbody').append(teamHeroSummaryRowTemplate(context));
   }
 
   // picks and bans
@@ -330,7 +344,8 @@ function loadTeamData(team, matches, heroData) {
     context.ban1Percent = (context.value.ban1Percent * 100).toFixed(2) + '%';
     context.ban2Percent = (context.value.ban2Percent * 100).toFixed(2) + '%';
 
-    $('#team-ban-summary tbody').append(teamBanSummaryRowTemplate(context));
+    if (hero.bans >= teamHeroMatchThresh)
+      $('#team-ban-summary tbody').append(teamBanSummaryRowTemplate(context));
   }
 
   for (let h in teamStats.heroes) {
@@ -351,7 +366,8 @@ function loadTeamData(team, matches, heroData) {
       context[p + 'Percent'] = (context.value.picks[p].count / teamStats.totalMatches * 100).toFixed(2) + '%';
     }
 
-    $('#team-draft-table tbody').append(teamHeroPickRowTemplate(context));
+    if (hero.games >= teamHeroMatchThresh)
+      $('#team-draft-table tbody').append(teamHeroPickRowTemplate(context));
   }
 
   // other stats
