@@ -421,10 +421,22 @@
       <div class="ui tab match-detail-wrapper" data-tab="match-detail-xp" id="match-detail-xp-graphs">
         <div class="ui grid">
           <div class="eight wide column">
-            <div class="ui inverted segment">
-              <div class="ui top attached label">Overall XP Graph</div>
-              <div class="team-xp-graph-segment">
-                <canvas id="match-detail-overall-xp"></canvas>
+            <div class="ui top attached tiny menu" id="match-detail-xp-graph-menu">
+              <a class="active item" data-tab="match-detail-overall-xp">Total XP vs Time</a>
+              <a class="item" data-tab="match-detail-levels-time">Levels vs Time</a>
+            </div>
+            <div class="ui active tab has-team-xp-menu" data-tab="match-detail-overall-xp">
+              <div class="ui bottom attached inverted segment">
+                <div class="team-xp-graph-segment">
+                  <canvas id="match-detail-overall-xp"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="ui tab has-team-xp-menu" data-tab="match-detail-levels-time">
+              <div class="ui bottom attached inverted segment">
+                <div class="team-xp-graph-segment">
+                  <canvas id="match-detail-levels-xp"></canvas>
+                </div>
               </div>
             </div>
           </div>

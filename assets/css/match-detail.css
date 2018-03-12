@@ -141,7 +141,6 @@
   overflow-y: auto;
 }
 
-#match-detail-overall-xp,
 #match-detail-red-xpb,
 #match-detail-blue-xpb,
 #match-detail-xp-soak,
@@ -153,6 +152,10 @@
 
 .team-xp-graph-segment {
   height: 400px;
+}
+
+.has-team-xp-menu .team-xp-graph-segment {
+  height: 390px;
 }
 
 #match-detail-summary canvas {

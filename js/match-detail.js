@@ -17,13 +17,19 @@ var teamOverallStatGraph, teamOverallStatGraphData;
 var teamfightStatGraph, teamfightStatGraphData;
 var teamCCGraph, teamCCGraphData;
 var timePerTierGraphData, timePerTierGraph;
+var overallLevelGraphData, overallLevelGraph;
 const xpBreakdownOpts = {
   maintainAspectRatio: false,
   responsive: true,
   tooltips: {
     position: 'nearest',
     mode: 'index',
-    intersect: false
+    intersect: false,
+    callbacks : {
+      title: function(tooltipItem, data) {
+        return formatSeconds(tooltipItem[0].xLabel);
+      }
+    }
   },
   legend: {
     labels: {
@@ -42,8 +48,12 @@ const xpBreakdownOpts = {
     }],
     xAxes: [{
       ticks: {
-        fontColor: '#FFFFFF'
+        fontColor: '#FFFFFF',
+        callback: function(value, index, values) {
+          return formatSeconds(value);
+        }
       },
+      type: 'linear',
       gridLines: {
         color: '#ababab'
       }
@@ -56,7 +66,12 @@ const xpSoakOpts = {
   tooltips: {
     position: 'nearest',
     mode: 'index',
-    intersect: false
+    intersect: false,
+    callbacks : {
+      title: function(tooltipItem, data) {
+        return formatSeconds(tooltipItem[0].xLabel);
+      }
+    }
   },
   legend: {
     labels: {
@@ -67,7 +82,8 @@ const xpSoakOpts = {
     yAxes: [{
       stacked: false,
       ticks: {
-        fontColor: '#FFFFFF'
+        fontColor: '#FFFFFF',
+        
       },
       gridLines: {
         color: '#ababab'
@@ -75,14 +91,145 @@ const xpSoakOpts = {
     }],
     xAxes: [{
       ticks: {
-        fontColor: '#FFFFFF'
+        fontColor: '#FFFFFF',
+        callback: function(value, index, values) {
+          return formatSeconds(value);
+        }
       },
+      type: 'linear',
       gridLines: {
         color: '#ababab'
       }
     }]
   }
 }
+
+overallLevelGraphData = {
+  type: 'line',
+  data: {
+    datasets: [{
+      label: 'Blue Team',
+      borderColor: '#2185d0',
+      backgroundColor: '#2185d0',
+      borderWidth: 4,
+      steppedLine: true,
+      fill: false,
+      cubicInterpolationMode: 'monotone'
+    }, {
+      label: 'Red Team',
+      borderColor: '#db2828',
+      backgroundColor: '#db2828',
+      steppedLine: true,
+      borderWidth: 4,
+      fill: false,
+      cubicInterpolationMode: 'monotone'
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    tooltips: {
+      position: 'nearest',
+      mode: 'nearest',
+      intersect: false,
+      callbacks : {
+        title: function(tooltipItem, data) {
+          return formatSeconds(tooltipItem[0].xLabel);
+        }
+      }
+    },
+    legend: {
+      labels: {
+        fontColor: 'white'
+      }
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          fontColor: '#FFFFFF'
+        },
+        gridLines: {
+          color: '#ababab'
+        }
+      }],
+      xAxes: [{
+        ticks: {
+          fontColor: '#FFFFFF',
+          callback: function(value, index, values) {
+            return formatSeconds(value);
+          }
+        },
+        type: 'linear',
+        gridLines: {
+          color: '#ababab'
+        }
+      }]
+    }
+  }
+};
+
+overallXPGraphData = {
+  type: 'line',
+  data: {
+    datasets: [{
+      label: 'Blue Team',
+      borderColor: '#2185d0',
+      backgroundColor: '#2185d0',
+      borderWidth: 4,
+      fill: false,
+      cubicInterpolationMode: 'monotone'
+    }, {
+      label: 'Red Team',
+      borderColor: '#db2828',
+      backgroundColor: '#db2828',
+      borderWidth: 4,
+      fill: false,
+      cubicInterpolationMode: 'monotone'
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    tooltips: {
+      position: 'nearest',
+      mode: 'index',
+      intersect: false,
+      callbacks : {
+        title: function(tooltipItem, data) {
+          return formatSeconds(tooltipItem[0].xLabel);
+        }
+      }
+    },
+    legend: {
+      labels: {
+        fontColor: 'white'
+      }
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          fontColor: '#FFFFFF'
+        },
+        gridLines: {
+          color: '#ababab'
+        }
+      }],
+      xAxes: [{
+        ticks: {
+          fontColor: '#FFFFFF',
+          callback: function(value, index, values) {
+            return formatSeconds(value);
+          }
+        },
+        type: 'linear',
+        gridLines: {
+          color: '#ababab'
+        }
+      }]
+    }
+  }
+}
+
 var matchDetailTimelineGroups = [
   {
     id: 1,
@@ -156,58 +303,7 @@ function initMatchDetailPage() {
     $('#match-detail-taunt-table').floatThead('reflow');
   });
 
-  overallXPGraphData = {
-    type: 'line',
-    data: {
-      datasets: [{
-        label: 'Blue Team',
-        borderColor: '#2185d0',
-        backgroundColor: '#2185d0',
-        borderWidth: 4,
-        fill: false,
-        cubicInterpolationMode: 'monotone'
-      }, {
-        label: 'Red Team',
-        borderColor: '#db2828',
-        backgroundColor: '#db2828',
-        borderWidth: 4,
-        fill: false,
-        cubicInterpolationMode: 'monotone'
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      tooltips: {
-        position: 'nearest',
-        mode: 'index',
-        intersect: false
-      },
-      legend: {
-        labels: {
-          fontColor: 'white'
-        }
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: '#FFFFFF'
-          },
-          gridLines: {
-            color: '#ababab'
-          }
-        }],
-        xAxes: [{
-          ticks: {
-            fontColor: '#FFFFFF'
-          },
-          gridLines: {
-            color: '#ababab'
-          }
-        }]
-      }
-    }
-  }
+  
   redTeamXPGraphData = {
     type: 'line',
     data: {},
@@ -227,6 +323,7 @@ function initMatchDetailPage() {
   redTeamXPGraph = new Chart($('#match-detail-red-xpb'), redTeamXPGraphData);
   blueTeamXPGraph = new Chart($('#match-detail-blue-xpb'), blueTeamXPGraphData);
   teamXPSoakGraph = new Chart($('#match-detail-xp-soak'), teamXPSoakGraphData);
+  overallLevelGraph = new Chart($('#match-detail-levels-xp'), overallLevelGraphData);
 
   initTeamStatGraphs();
 
@@ -262,6 +359,9 @@ function initMatchDetailPage() {
   $('#match-detail-existing-team .team-menu').dropdown({
     fullTextSearch: true
   });
+
+  // xp graph tabs
+  $('#match-detail-xp-graph-menu .item').tab();
 
   // DEBUG - LOAD SPECIFIC MATCH
   //loadMatchData("RtTPtP5mHaBoFJW2", function() { console.log("done loading"); });
@@ -639,20 +739,27 @@ function graphXP() {
   let team0XP = getTotalXPSet(0);
   let team1XP = getTotalXPSet(1);
 
-  overallXPGraphData.data.datasets[0].data = team0XP.data;
-  overallXPGraphData.data.datasets[1].data = team1XP.data;
-  overallXPGraphData.data.labels = team0XP.labels;
+  overallXPGraphData.data.datasets[0].data = team0XP;
+  overallXPGraphData.data.datasets[1].data = team1XP;
+  overallXPGraphData.options.scales.xAxes[0].ticks.max = matchDetailMatch.length;
   overallXPGraph.update();
+
+  let team0Levels = getLevelsXPSet(0);
+  let team1Levels = getLevelsXPSet(1);
+  overallLevelGraphData.data.datasets[0].data = team0Levels;
+  overallLevelGraphData.data.datasets[1].data = team1Levels;
+  overallLevelGraphData.options.scales.xAxes[0].ticks.max = matchDetailMatch.length;
+  overallLevelGraph.update();
 
   let team0xpb = getTeamXPBGraphData(0);
   let team1xpb = getTeamXPBGraphData(1);
 
-  blueTeamXPGraphData.data.datasets = team0xpb.data;
-  redTeamXPGraphData.data.datasets = team1xpb.data;
-  blueTeamXPGraphData.data.labels = team0xpb.labels;
-  redTeamXPGraphData.data.labels = team1xpb.labels;
+  blueTeamXPGraphData.data.datasets = team0xpb;
+  redTeamXPGraphData.data.datasets = team1xpb;
+  blueTeamXPGraphData.options.scales.xAxes[0].ticks.max = matchDetailMatch.length;
+  redTeamXPGraphData.options.scales.xAxes[0].ticks.max = matchDetailMatch.length;
 
-  let maxXp = Math.max(team0XP.data[team0XP.data.length - 1], team1XP.data[team1XP.data.length - 1]);
+  let maxXp = Math.max(team0XP[team0XP.length - 1].y, team1XP[team1XP.length - 1].y);
   maxXp = Math.ceil(maxXp / 10000) * 10000;
   blueTeamXPGraphData.options.scales.yAxes[0].ticks.max = maxXp;
   redTeamXPGraphData.options.scales.yAxes[0].ticks.max = maxXp;
@@ -660,32 +767,41 @@ function graphXP() {
   blueTeamXPGraph.update();
   redTeamXPGraph.update();
 
-  let teamsoak = getTeamXPSoakData();
-
-  teamXPSoakGraphData.data.datasets = teamsoak.data;
-  teamXPSoakGraphData.data.labels = teamsoak.labels;
-
+  teamXPSoakGraphData.data.datasets = getTeamXPSoakData();
+  teamXPSoakGraphData.options.scales.xAxes[0].ticks.max = matchDetailMatch.length;
   teamXPSoakGraph.update();
 }
 
 function getTotalXPSet(teamID) {
-  let data = [0];
-  let labels = [0];
+  let data = [{x: 0, y: 0}];
   for (let xp in matchDetailMatch.XPBreakdown) {
     let x = matchDetailMatch.XPBreakdown[xp];
 
     if (x.team === teamID) {
       // we want the total here. 
-
-      // game time is in seconds here, convert to minutes
-      labels.push(formatSeconds(x.time));
-
       let y = x.breakdown.CreepXP + x.breakdown.HeroXP + x.breakdown.MinionXP + x.breakdown.StructureXP + x.breakdown.TrickleXP
-      data.push(parseInt(y));
+      data.push({x: x.time, y: parseInt(y) });
     }
   }
 
-  return {data, labels};
+  return data;
+}
+
+function getLevelsXPSet(teamID) {
+  let data = [{x: 0, y: 1}];
+
+  let levels = matchDetailMatch.levelTimes[teamID];
+  for (let l in levels) {
+    let level = levels[l];
+    if (level.level === 1)
+      continue;
+    
+    data.push({ x: level.time, y: level.level });
+  }
+
+  data.push({ x: matchDetailMatch.length, y: matchDetailMatch.teams[teamID].level });
+
+  return data;
 }
 
 function getTeamXPBGraphData(teamID) {
@@ -695,53 +811,51 @@ function getTeamXPBGraphData(teamID) {
   // - creep
   // - minion
   // - hero
-  let labels = [0];
   let data = [{
     label: 'Trickle XP',
     borderColor: '#264653',
     backgroundColor: '#264653',
     cubicInterpolationMode: 'monotone',
-    data: [0]
+    data: [{x: 0, y: 0}]
   }, {
     label: 'Structure XP',
     borderColor: '#2A9D8F',
     backgroundColor: '#2A9D8F',
     cubicInterpolationMode: 'monotone',
-    data: [0]
+    data: [{x: 0, y: 0}]
   }, {
     label: 'Creep XP',
     borderColor: '#E9C46A',
     backgroundColor: '#E9C46A',
     cubicInterpolationMode: 'monotone',
-    data: [0]
+    data: [{x: 0, y: 0}]
   }, {
     label: 'Minion XP',
     borderColor: '#F4A261',
     backgroundColor: '#F4A261',
     cubicInterpolationMode: 'monotone',
-    data: [0]
+    data: [{x: 0, y: 0}]
   }, {
     label: 'Hero XP',
     borderColor: '#E76F51',
     backgroundColor: '#E76F51',
     cubicInterpolationMode: 'monotone',
-    data: [0]
+    data: [{x: 0, y: 0}]
   }];
 
   for (let xp in matchDetailMatch.XPBreakdown) {
     let x = matchDetailMatch.XPBreakdown[xp];
 
     if (x.team === teamID) {
-      data[0].data.push(x.breakdown.TrickleXP);
-      data[1].data.push(x.breakdown.StructureXP);
-      data[2].data.push(x.breakdown.CreepXP);
-      data[3].data.push(x.breakdown.MinionXP);
-      data[4].data.push(x.breakdown.HeroXP);
-      labels.push(formatSeconds(x.time));
+      data[0].data.push({ y: parseInt(x.breakdown.TrickleXP), x: x.time });
+      data[1].data.push({ y: parseInt(x.breakdown.StructureXP), x: x.time });
+      data[2].data.push({ y: parseInt(x.breakdown.CreepXP), x: x.time });
+      data[3].data.push({ y: parseInt(x.breakdown.MinionXP), x: x.time});
+      data[4].data.push({ y: parseInt(x.breakdown.HeroXP), x: x.time});
     }
   }
 
-  return {data, labels};
+  return data;
 }
 
 function getTeamXPSoakData() {
@@ -752,37 +866,36 @@ function getTeamXPSoakData() {
     borderColor: '#E9C46A',
     backgroundColor: '#E9C46A',
     cubicInterpolationMode: 'monotone',
-    data: [0]
+    data: [{x: 0, y: 0}]
   }, {
     label: 'Blue Team',
     fill: false,
     borderColor: '#2185d0',
     backgroundColor: '#2185d0',
     cubicInterpolationMode: 'monotone',
-    data: [0]
+    data: [{x: 0, y: 0}]
   }, {
     label: 'Red Team',
     fill: false,
     borderColor: '#db2828',
     backgroundColor: '#db2828',
     cubicInterpolationMode: 'monotone',
-    data: [0]
+    data: [{x: 0, y: 0}]
   }];
 
   for (let xp in matchDetailMatch.XPBreakdown) {
     let x = matchDetailMatch.XPBreakdown[xp];
 
     if (x.team === 0) {
-      data[0].data.push(x.theoreticalMinionXP);
-      data[1].data.push(x.breakdown.MinionXP);
-      labels.push(formatSeconds(x.time));
+      data[0].data.push({ x: x.time, y: x.theoreticalMinionXP });
+      data[1].data.push({ x: x.time, y: x.breakdown.MinionXP });
     }
     else if (x.team === 1) {
-      data[2].data.push(x.breakdown.MinionXP);
+      data[2].data.push({ x: x.time, y: x.breakdown.MinionXP });
     }
   }
 
-  return {data, labels};
+  return data;
 }
 
 function getTeamTimePerTier() {
