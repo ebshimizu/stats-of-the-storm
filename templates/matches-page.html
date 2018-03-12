@@ -16,58 +16,67 @@
     </div>
     <div class="ui grid" id="match-page-table">
       <div class="eleven wide column">
-        <table class="ui inverted selectable table" id="match-list">
-          <tbody>
-            <tr slot="0">
+        <div class="match-wrapper">
+          <table class="ui inverted selectable table" id="match-list">
+            <tbody>
+              <tr slot="0">
 
-            </tr>
-            <tr slot="1">
+              </tr>
+              <tr slot="1">
 
-            </tr>
-            <tr slot="2">
+              </tr>
+              <tr slot="2">
 
-            </tr>
-            <tr slot="3">
+              </tr>
+              <tr slot="3">
 
-            </tr>
-            <tr slot="4">
+              </tr>
+              <tr slot="4">
 
-            </tr>
-            <tr slot="5">
+              </tr>
+              <tr slot="5">
 
-            </tr>
-            <tr slot="6">
+              </tr>
+              <tr slot="6">
 
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr><th>
-              <div class="ui inverted tiny statistics">
-                  <div class="ui statistic">
-                    <div class="value" id="matches-selected">800</div>
-                    <div class="label">Selected</div>
-                  </div>
-                  <div class="ui statistic">
-                    <div class="value" id="matches-in-database-stat">0</div>
-                    <div class="label">Total</div>
-                  </div>
-                </div>
-              <div class="ui right floated inverted pagination menu" id="match-list-page-menu">
-                <a class="icon item prev"><i class="left chevron icon"></i></a>
-                <a class="item page-num">1</a>
-                <a class="item page-num">...</a>
-                <a class="item page-num">2</a>
-                <a class="item page-num">3</a>
-                <a class="item page-num">4</a>
-                <a class="item page-num">5</a>
-                <a class="item page-num">6</a>
-                <a class="item page-num">...</a>
-                <a class="item page-num">7</a>
-                <a class="icon item next"><i class="right chevron icon"></i></a>
-              </div>
-            </th></tr>
-          </tfoot>
-        </table>
+              </tr>
+              <tr slot="7">
+
+              </tr>
+              <tr slot="8">
+
+              </tr>
+              <tr slot="9">
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="match-navigation">
+          <div class="ui inverted tiny statistics">
+            <div class="ui statistic">
+              <div class="value" id="matches-selected">800</div>
+              <div class="label">Selected</div>
+            </div>
+            <div class="ui statistic">
+              <div class="value" id="matches-in-database-stat">0</div>
+              <div class="label">Total</div>
+            </div>
+          </div>
+          <div class="ui right floated pagination menu" id="match-list-page-menu">
+            <a class="icon item prev"><i class="left chevron icon"></i></a>
+            <a class="item page-num">1</a>
+            <a class="item page-num">...</a>
+            <a class="item page-num">2</a>
+            <a class="item page-num">3</a>
+            <a class="item page-num">4</a>
+            <a class="item page-num">5</a>
+            <a class="item page-num">6</a>
+            <a class="item page-num">...</a>
+            <a class="item page-num">7</a>
+            <a class="icon item next"><i class="right chevron icon"></i></a>
+          </div>
+        </div>
       </div>
       <div class="five wide column">
         <div class="ui inverted segment" id="match-search-segment">
@@ -242,32 +251,68 @@
 <template id="match-summary-row">
   <td>
     <div class="match-summary" match-id="{{id}}">
-      <div class="match-basic-info">
-        <div class="match-map-name"><h2 class="ui inverted header match-map-name">{{map}}</h2></div>
-        <div class="match-mode"><h4 class="ui inverted header match-mode">{{mode}}</h3></div>
-        <div class="match-team-winner"><h4 class="ui {{winClass}} header match-team-winner">{{winText}}</h3></div>
+      <div class="ui three column grid match-basic-info">
+        <div class="column match-map-name">
+          <h2 class="ui inverted header match-map-name">{{map}}</h2>
+        </div>
+        <div class="column match-team-winner">
+          <h3 class="ui {{winClass}} header match-team-winner">{{winText}}</h3>
+        </div>
+        <div class="column match-mode">
+          <h3 class="ui inverted header match-mode">{{mode}}</h3>
+          <div class="match-date">{{date}}</div>
+        </div>
       </div>
-      <div class="match-date">{{date}}</div>
-      <div class="match-details">
-        <div class="ui tiny circular images match-blue-heroes">
-          {{#each blueHeroes}}
-          <img class="ui image {{isFocus}}" src="assets/heroes-talents/images/heroes/{{heroImg}}" data-content="{{playerName}}" player-id="{{playerID}}" data-position="top center">
-          {{/each}}
-        </div>
-        <div class="ui tiny circular images match-red-heroes">
-          {{#each redHeroes}}
-          <img class="ui image {{isFocus}}" src="assets/heroes-talents/images/heroes/{{heroImg}}" data-content="{{playerName}}" player-id="{{playerID}}" data-position="top center">
-          {{/each}}
-        </div>
-        <div class="match-center-stats">
-          <div class="match-game-length">{{length}}</div>
-          <div class="match-takedown-score">
-            <div class="blue">{{takedowns.blue}}</div>
-            <div class="red">{{takedowns.red}}</div>
+      <div class="ui grid match-details">
+        <div class="ui two wide column blue-bans">
+          <div class="ui inverted blue horizontal divider {{hideBans}}">Blue Bans</div>
+          <div class="ui two column grid {{hideBans}}">
+            <div class="column">
+              <img class="ui circular blue-hero middle-align image" src="assets/heroes-talents/images/heroes/{{bban1Img}}">
+            </div>
+            <div class="column">
+              <img class="ui circular blue-hero middle-align image" src="assets/heroes-talents/images/heroes/{{bban2Img}}">
+            </div>
           </div>
-          <div class="match-levels">
-            <div class="blue">Level {{level.blue}}</div>
-            <div class="red">Level {{level.red}}</div>
+        </div>
+        {{#each blueHeroes}}
+        <div class="ui column">
+          <img class="ui circular blue-hero middle-align image {{isFocus}}" src="assets/heroes-talents/images/heroes/{{heroImg}}" data-content="{{playerName}}" player-id="{{playerID}}" data-position="top center">
+        </div>
+        {{/each}}
+        <div class="ui two wide column match-center-stats">
+          <div class="ui grid">
+            <div class="sixteen wide column no-bottom-pad">
+              <div class="match-game-length">{{length}}</div>
+            </div>
+            <div class="eight wide column no-bottom-pad">
+              <div class="blue match-takedown-score">{{takedowns.blue}}</div>
+            </div>
+            <div class="eight wide column no-bottom-pad">
+              <div class="red match-takedown-score">{{takedowns.red}}</div>
+            </div>
+            <div class="eight wide column no-right-pad">
+              <div class="blue match-levels">Level {{level.blue}}</div>
+            </div>
+            <div class="eight wide column no-left-pad">
+              <div class="red match-levels">Level {{level.red}}</div>
+            </div>
+          </div>
+        </div>
+        {{#each redHeroes}}
+        <div class="ui column">
+          <img class="ui circular red-hero middle-align image {{isFocus}}" src="assets/heroes-talents/images/heroes/{{heroImg}}" data-content="{{playerName}}" player-id="{{playerID}}" data-position="top center">
+        </div>
+        {{/each}}
+        <div class="ui two wide column red-bans">
+          <div class="ui inverted red horizontal divider {{hideBans}}">Red Bans</div>
+          <div class="ui two column grid {{hideBans}}">
+            <div class="column">
+              <img class="ui circular red-hero middle-align image" src="assets/heroes-talents/images/heroes/{{rban1Img}}">
+            </div>
+            <div class="column">
+              <img class="ui circular red-hero middle-align image" src="assets/heroes-talents/images/heroes/{{rban2Img}}">
+            </div>
           </div>
         </div>
       </div>

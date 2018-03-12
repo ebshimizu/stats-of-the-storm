@@ -2,8 +2,43 @@
   height: calc(100% - 20px);
 }
 
+#matches-page-content .match-navigation {
+  width: 100%;
+  height: 70px;
+  padding-top: 10px;
+  background-color: #1b1c1d;
+}
+
+#matches-page-content .match-navigation .statistics {
+  margin-left: 0;
+  float: left;
+}
+
+#match-list-page-menu {
+  float: right;
+  margin-right: 10px;
+}
+
 #match-list {
-  height: 98%;
+  width: 100%;
+}
+
+#match-list .middle-align {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#match-list .no-bottom-pad {
+  padding-bottom: 0!important;
+}
+
+#match-list .no-right-pad {
+  padding-right: 0!important;
+}
+
+#match-list .no-left-pad {
+  padding-left: 0!important;
 }
 
 #matches-page-header {
@@ -17,56 +52,66 @@
 }
 
 #match-list .match-summary {
-  display: block;
-  height: 100%;
-  width: 100%;
-  position: relative
-}
-
-#match-list .match-summary {
   cursor: pointer;
+  height: 170px;
 }
 
 #match-list .match-summary .match-basic-info {
-  display: block;
-  float: left;
-  width: 25%;
-  height: 100%;
+  height: 50px;
+  margin-bottom: 2px;
 }
 
 #match-list .match-map-name {
-  margin-bottom: 0.25em;
-}
-
-#match-list .match-mode {
   margin-bottom: 0.1em;
 }
 
+#match-list .match-mode {
+  text-align: right;
+}
+
+#match-list .match-mode h3 {
+  margin-bottom: 0.1em;
+}
+
+#matches-page-content .match-wrapper {
+  height: calc(100% - 90px);
+  overflow: auto;
+}
+
 #match-list .match-date {
-  position: absolute;
-  left: 0;
-  bottom: 0;
   font-size: 9pt;
+  text-align: right;
+  margin-top: -8px;
+}
+
+#match-list .match-team-winner {
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+#match-list .match-team-winner h3 {
+  margin: 0 auto;
+}
+
+#match-list .blue-bans .image,
+#match-list .red-bans .image {
+  filter: brightness(60%);
 }
 
 #match-list .match-summary .match-details {
-  display: block;
-  float: right;
-  width: 75%;
-  height: 100%;
-  position: relative;
+  margin-top: 0;
 }
 
-#match-list .match-summary .match-details .match-blue-heroes {
-  float: left;
-  width: 45%;
-  height: 100%;
+#match-list .ui.match-details.grid>.column:not(.row) {
+  padding: 0.5rem;
 }
 
-#match-list .match-summary .match-details .match-red-heroes {
-  float: right;
-  width: 45%;
-  height: 100%;
+#match-list .match-details .image {
+  max-width: 70px;
+  max-height: 70px;
+  width: 100%;
+  height: auto;
 }
 
 #match-list .match-hero-icon {
@@ -75,74 +120,40 @@
   margin: 0 2px;
 }
 
-#match-list .match-hero-icon .match-hero-player-name {
-  font-size: 0.9vmin;
-  width: 100%;
-  clear: both;
-  text-align: center;
-}
-
-#match-list .match-blue-heroes .match-hero-icon {
-  float: left;
-}
-
-#match-list .match-red-heroes .match-hero-icon {
-  float: right;
-}
-
-#match-list .match-summary .match-details .tiny.images .image {
-  width: 17%;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-#match-list .match-summary .match-details .tiny.images.match-blue-heroes .image {
+#match-list .match-summary .match-details .blue-hero.image {
   border: 3px solid #2185d0;
-  float: left;
 }
 
-#match-list .match-summary .match-details .tiny.images.match-red-heroes .image {
+#match-list .match-summary .match-details .red-hero.image{
   border: 3px solid #db2828;
   float: right;
 }
 
-#match-list .match-summary .match-details .tiny.images .image.focus-player {
-  border: 3px solid #ffd400;
-}
-
-#match-list .match-center-stats {
-  margin: 0 auto;
-  width: 15%;
-  height: 100%;
+#match-list .match-summary .match-details .focus-player.image {
+  border: 3px solid #ffd400!important;
 }
 
 #match-list .match-center-stats .blue {
   color: #2185d0;
-  float: left;
-  margin-left: -1.35vmin;
+  text-align: left;
 }
 
 #match-list .match-center-stats .red {
   color: #db2828;
-  float: right;
-  margin-right: -1.35vmin;
+  text-align: right;
 }
 
 #match-list .match-center-stats .match-game-length {
-  height: 30%;
-  font-size: 1.5vmin;
+  font-size: 16pt;
   text-align: center;
 }
 
 #match-list .match-center-stats .match-takedown-score {
-  font-size: 3vmin;
-  height: 40%;
+  font-size: 26pt;
 }
 
 #match-list .match-center-stats .match-levels {
-  font-size: 1.5vmin;
-  height: 30%;
+  font-size: 12pt;
 }
 
 #match-search-segment {

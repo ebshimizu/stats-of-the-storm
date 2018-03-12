@@ -9,11 +9,11 @@ const summaryProjection = {
   mode: 1,
   date: 1,
   winner: 1,
-  version: 1
+  version: 1,
+  bans: 1
 };
 
-// idk man it just kinda looks nice this way
-const matchesPerPage = 7;
+const matchesPerPage = 10;
 
 var displayedMatchIDs;
 var currentPage;
@@ -483,6 +483,16 @@ function renderToSlot(gameData, slot) {
     }
   }
   
+  if (!gameData.bans) {
+    context.hideBans = 'is-hidden';
+  }
+  else {
+    context.bban1Img = Heroes.heroIcon(Heroes.heroNameFromAttr(gameData.bans[0][0].hero));
+    context.bban2Img = Heroes.heroIcon(Heroes.heroNameFromAttr(gameData.bans[0][1].hero));
+    context.rban1Img = Heroes.heroIcon(Heroes.heroNameFromAttr(gameData.bans[1][0].hero));
+    context.rban2Img = Heroes.heroIcon(Heroes.heroNameFromAttr(gameData.bans[1][1].hero));
+  }
+
   context.date = new Date(gameData.date);
   context.date = context.date.toLocaleString('en-US') + ' (' + gameData.version.m_major + '.' + gameData.version.m_minor + '.' + gameData.version.m_revision + ')';
   context.length = formatSeconds(gameData.length);
