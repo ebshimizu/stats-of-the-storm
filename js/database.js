@@ -833,11 +833,9 @@ class Database {
       games: 0,
       involved: 0,
       picks: {
-        p1: { count: 0, wins: 0},
-        p2: { count: 0, wins: 0},
-        p3: { count: 0, wins: 0},
-        p4: { count: 0, wins: 0},
-        p5: { count: 0, wins: 0}
+        round1: { count: 0, wins: 0},
+        round2: { count: 0, wins: 0},
+        round3: { count: 0, wins: 0}
       }
     };
 
@@ -861,11 +859,9 @@ class Database {
               games: 0,
               involved: 0,
               picks: {
-                p1: { count: 0, wins: 0},
-                p2: { count: 0, wins: 0},
-                p3: { count: 0, wins: 0},
-                p4: { count: 0, wins: 0},
-                p5: { count: 0, wins: 0}
+                round1: { count: 0, wins: 0},
+                round2: { count: 0, wins: 0},
+                round3: { count: 0, wins: 0}
               }
             };
           }
@@ -876,21 +872,45 @@ class Database {
             data[hero].wins += 1;
           }
         }
+      }
 
-        if ('picks' in match) {
-          if (match.picks[t].length !== 5) {
-            // some older replays do not have draft data, so we just skip
-            //console.log('Pick data missing, continuing...');
+      if ('picks' in match) {
+        let pickData = match.picks;
+        
+        if (pickData[0].length === 5 && pickData[1].length === 5) {
+          let first = pickData.first;
+          let second = first === 0 ? 1 : 0;
+
+          // explicitly recreate pick order
+          data[pickData[first][0]].picks.round1.count += 1;
+          data[pickData[first][1]].picks.round2.count += 1;
+          data[pickData[first][2]].picks.round2.count += 1;
+          data[pickData[first][3]].picks.round3.count += 1;
+          data[pickData[first][4]].picks.round3.count += 1;
+
+          data[pickData[second][0]].picks.round1.count += 1;
+          data[pickData[second][1]].picks.round1.count += 1;
+          data[pickData[second][2]].picks.round2.count += 1;
+          data[pickData[second][3]].picks.round2.count += 1;
+          data[pickData[second][4]].picks.round3.count += 1;
+
+          if (first === winner) {
+            data[pickData[first][0]].picks.round1.wins += 1;
+            data[pickData[first][1]].picks.round2.wins += 1;
+            data[pickData[first][2]].picks.round2.wins += 1;
+            data[pickData[first][3]].picks.round3.wins += 1;
+            data[pickData[first][4]].picks.round3.wins += 1;
           }
           else {
-            for (let p = 0; p < match.picks[t].length; p++) {
-              data[match.picks[t][p]].picks['p' + (p + 1)].count += 1;
-
-              if (parseInt(t) === winner) {
-                data[match.picks[t][p]].picks['p' + (p + 1)].wins += 1;
-              }
-            }
+            data[pickData[second][0]].picks.round1.wins += 1;
+            data[pickData[second][1]].picks.round1.wins += 1;
+            data[pickData[second][2]].picks.round2.wins += 1;
+            data[pickData[second][3]].picks.round2.wins += 1;
+            data[pickData[second][4]].picks.round3.wins += 1;
           }
+        }
+        else {
+          console.log('Match ' + match._id + ' missing full pick order, excluding from results');
         }
       }
 
@@ -915,11 +935,9 @@ class Database {
                 games: 0,
                 involved: 0,
                 picks: {
-                  p1: { count: 0, wins: 0},
-                  p2: { count: 0, wins: 0},
-                  p3: { count: 0, wins: 0},
-                  p4: { count: 0, wins: 0},
-                  p5: { count: 0, wins: 0}
+                  round1: { count: 0, wins: 0},
+                  round2: { count: 0, wins: 0},
+                  round3: { count: 0, wins: 0}
                 }
               };
             }
@@ -1060,11 +1078,9 @@ class Database {
             gamesAgainst: 0,
             defeated: 0,
             picks: {
-              'p1': { count: 0, wins: 0 },
-              'p2': { count: 0, wins: 0 },
-              'p3': { count: 0, wins: 0 },
-              'p4': { count: 0, wins: 0 },
-              'p5': { count: 0, wins: 0 }
+              round1: { count: 0, wins: 0},
+              round2: { count: 0, wins: 0},
+              round3: { count: 0, wins: 0}
             }
           };
         }
@@ -1079,11 +1095,38 @@ class Database {
       // pick order
       if ('picks' in match) {
         let picks = match.picks[t];
-        for (let p = 0; p < picks.length; p++) {
-          data.heroes[picks[p]].picks['p' + (p + 1)].count += 1;
+        let first = match.picks.first === t;
 
-          if (t === winner) {
-            data.heroes[picks[p]].picks['p' + (p + 1)].wins += 1;
+        if (picks.length === 5) {
+          if (first) {
+            data.heroes[picks[0]].picks.round1.count += 1;
+            data.heroes[picks[1]].picks.round2.count += 1;
+            data.heroes[picks[2]].picks.round2.count += 1;
+            data.heroes[picks[3]].picks.round3.count += 1;
+            data.heroes[picks[4]].picks.round3.count += 1;
+
+            if (t === winner) {
+              data.heroes[picks[0]].picks.round1.wins += 1;
+              data.heroes[picks[1]].picks.round2.wins += 1;
+              data.heroes[picks[2]].picks.round2.wins += 1;
+              data.heroes[picks[3]].picks.round3.wins += 1;
+              data.heroes[picks[4]].picks.round3.wins += 1;
+            }
+          }
+          else {
+            data.heroes[picks[0]].picks.round1.count += 1;
+            data.heroes[picks[1]].picks.round1.count += 1;
+            data.heroes[picks[2]].picks.round2.count += 1;
+            data.heroes[picks[3]].picks.round2.count += 1;
+            data.heroes[picks[4]].picks.round3.count += 1;
+
+            if (t === winner) {
+              data.heroes[picks[0]].picks.round1.wins += 1;
+              data.heroes[picks[1]].picks.round1.wins += 1;
+              data.heroes[picks[2]].picks.round2.wins += 1;
+              data.heroes[picks[3]].picks.round2.wins += 1;
+              data.heroes[picks[4]].picks.round3.wins += 1;
+            }
           }
         }
       }
@@ -1102,11 +1145,9 @@ class Database {
             gamesAgainst: 0,
             defeated: 0,
             picks: {
-              'p1': { count: 0, wins: 0 },
-              'p2': { count: 0, wins: 0 },
-              'p3': { count: 0, wins: 0 },
-              'p4': { count: 0, wins: 0 },
-              'p5': { count: 0, wins: 0 }
+              round1: { count: 0, wins: 0},
+              round2: { count: 0, wins: 0},
+              round3: { count: 0, wins: 0}
             }
           };
         }
@@ -1136,11 +1177,9 @@ class Database {
               gamesAgainst: 0,
               defeated: 0,
               picks: {
-                'p1': { count: 0, wins: 0 },
-                'p2': { count: 0, wins: 0 },
-                'p3': { count: 0, wins: 0 },
-                'p4': { count: 0, wins: 0 },
-                'p5': { count: 0, wins: 0 }
+                round1: { count: 0, wins: 0},
+                round2: { count: 0, wins: 0},
+                round3: { count: 0, wins: 0}
               }
             };
           }

@@ -80,11 +80,9 @@
                           <th>Hero</th>
                           <th class="center aligned stat">Win %</th>
                           <th class="center aligned stat">Games</th>
-                          <th class="center aligned stat">1st Pick %</th>
-                          <th class="center aligned stat">2nd Pick %</th>
-                          <th class="center aligned stat">3rd Pick %</th>
-                          <th class="center aligned stat">4th Pick %</th>
-                          <th class="center aligned stat">5th Pick %</th>
+                          <th class="center aligned stat">Round 1 Pick %</th>
+                          <th class="center aligned stat">Round 2 Pick %</th>
+                          <th class="center aligned stat">Round 3 Pick %</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -579,11 +577,9 @@
     </td>
     <td class="center aligned" data-sort-value="{{value.winPercent}}">{{winPercent}}</td>
     <td class="center aligned" data-sort-value="{{value.games}}">{{games}}</td>
-    <td class="center aligned" data-sort-value="{{value.picks.p1.count}}">{{p1Percent}}</td>
-    <td class="center aligned" data-sort-value="{{value.picks.p2.count}}">{{p2Percent}}</td>
-    <td class="center aligned" data-sort-value="{{value.picks.p3.count}}">{{p3Percent}}</td>
-    <td class="center aligned" data-sort-value="{{value.picks.p4.count}}">{{p4Percent}}</td>
-    <td class="center aligned" data-sort-value="{{value.picks.p5.count}}">{{p5Percent}}</td>
+    <td class="center aligned" data-sort-value="{{value.picks.round1.count}}">{{round1Percent}}</td>
+    <td class="center aligned" data-sort-value="{{value.picks.round2.count}}">{{round2Percent}}</td>
+    <td class="center aligned" data-sort-value="{{value.picks.round3.count}}">{{round3Percent}}</td>
   </tr>
 </template>
 
