@@ -1,0 +1,75 @@
+#hero-trends-summary,
+#hero-trends-picks,
+#hero-trends-hero {
+  height: calc(100% - 40px);
+}
+
+#hero-trends-summary .floatThead-wrapper,
+#hero-trends-picks .floatThead-wrapper {
+  height: calc(100% - 20px);
+}
+
+#hero-trends-hero .floatThead-wrapper {
+  height: 100%;
+}
+
+#hero-trends-body {
+  height: calc(100% - 40px);
+}
+
+#hero-trends-summary tbody {
+  font-size: 14pt;
+}
+
+#hero-trends-detail-map-summary
+{
+  height: 650px;
+}
+
+#hero-trends-detail-hero-talent .talent-detail-table {
+  height: 650px;
+  margin-top: 0;
+}
+
+#hero-trends-detail-hero-talent .table-wrapper {
+  margin-top: 0!important;
+  height: 100%;
+}
+
+#hero-trends-summary .hero-trends-wrapper,
+#hero-trends-picks .hero-trends-wrapper {
+  height: calc(100% - 40px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#hero-trends-summary .table-wrapper,
+#hero-trends-picks .table-wrapper {
+  margin-top: 20px!important;
+  height: calc(100% - 20px);
+}
+
+#hero-trends-hero .hero-trends-wrapper {
+  height: calc(100% - 60px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#hero-trends-hero-header {
+  height: 60px;
+  position: relative;
+}
+
+#hero-trends-hero-select-menu {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#hero-trends-hero .player-win {
+  height: 600px;
+}
+
+#hero-trends-hero .player-win {
+  font-size: 11pt;
+}

@@ -1,0 +1,113 @@
+<script src="../js/hero-trends.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/css/hero-trends.css">
+
+<template id="hero-trends-page">
+  <div id="hero-trends-page-content" class="is-page transition hidden" section-name="hero-trends">
+    <div id="hero-trends-page-header">
+      <div class="ui grid">
+        <div class="twelve wide column">
+          <h1 class="ui inverted header">Hero Trends</h1>
+        </div>
+        <div class="two wide column">
+          <div class="ui fluid labeled input" id="hero-trends-hero-thresh">
+            <div class="ui label">
+              Req. Hero Matches
+            </div>
+            <input type="text" data-content="A hero needs this many involved matches (picks and bans) to show up in the hero tables">
+          </div>
+        </div>
+        <div class="two wide column">
+          <button class="ui labeled fluid right floated green icon button" id="hero-trends-filter-button" data-variation="very wide">
+            <i class="filter icon"></i>
+            Filter Matches
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="hero-trends-body">
+      <div class="ui secondary inverted pointing menu" id="hero-trends-submenu">
+        <a class="active item" data-tab="hero-trends-overall">Overall</a>
+        <a class="item" data-tab="hero-trends-picks">Picks</a>
+        <a class="item" data-tab="hero-trends-bans">Bans</a>
+      </div>
+      <div class="ui active tab" data-tab="hero-trends-overall" id="hero-trends-summary">
+        <div class="five ui buttons">
+          <div class="ui red button">Assassin</div>
+          <div class="ui blue button">Warrior</div>
+          <div class="ui teal button">Support</div>
+          <div class="ui violet button">Specialist</div>
+          <div class="ui purple button">Multiclass</div>
+        </div>
+        <div class="hero-trends-wrapper">
+          <div class="table-wrapper">
+            <table class="ui sortable compact selectable inverted table">
+              <thead>
+                <tr>
+                  <th>Hero</th>
+                  <th class="center aligned stat">[1] Win %</th>
+                  <th class="center aligned stat">[2] Win %</th>
+                  <th class="center aligned stat">Win % Delta</th>
+                  <th class="center aligned stat">[1] Popularity</th>
+                  <th class="center aligned stat">[2] Popularity</th>
+                  <th class="center aligned stat">Popularity Delta</th>
+                  <th class="center aligned stat">[1] Win</th>
+                  <th class="center aligned stat">[2] Win</th>
+                  <th class="center aligned stat">Win Delta</th>
+                  <th class="center aligned stat">[1] Loss</th>
+                  <th class="center aligned stat">[2] Loss</th>
+                  <th class="center aligned stat">Loss Delta</th>
+                  <th class="center aligned stat">[1] Games</th>
+                  <th class="center aligned stat">[2] Games</th>
+                  <th class="center aligned stat">Games Delta</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="ui tab" data-tab="hero-trends-picks" id="hero-trends-picks">
+        <div class="five ui buttons">
+          <div class="ui red button">Assassin</div>
+          <div class="ui blue button">Warrior</div>
+          <div class="ui teal button">Support</div>
+          <div class="ui violet button">Specialist</div>
+          <div class="ui purple button">Multiclass</div>
+        </div>
+        <div class="hero-trends-wrapper">
+          <div class="table-wrapper">
+            <table class="ui sortable compact selectable inverted table">
+              <thead>
+                <tr>
+                  <th>Hero</th>
+                  <th class="center aligned stat">Games</th> 
+                  <th class="center aligned stat">Win %</th>
+                  <th class="center aligned stat">Bans</th>
+                  <th class="center aligned stat">Ban %</th>
+                  <th class="center aligned stat">1st Ban</th>
+                  <th class="center aligned stat">1st Ban %</th>
+                  <th class="center aligned stat">2nd Ban</th>
+                  <th class="center aligned stat">2nd Ban %</th>
+                  <th class="center aligned stat">Round 1</th>
+                  <th class="center aligned stat">Round 1 %</th>
+                  <th class="center aligned stat">Round 1 Wins</th>
+                  <th class="center aligned stat">Round 2</th>
+                  <th class="center aligned stat">Round 2 %</th>
+                  <th class="center aligned stat">Round 2 Wins</th>
+                  <th class="center aligned stat">Round 3</th>
+                  <th class="center aligned stat">Round 3 %</th>
+                  <th class="center aligned stat">Round 3 Wins</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
