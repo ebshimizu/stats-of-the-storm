@@ -1,10 +1,17 @@
 # Heroes of the Storm Replay Data Reference
-This document details the location and type of every useful piece of data in the Hereos of the Storm replay files to the best of the my knowledge. - Falindrith
+This document details the location and type of every useful piece of data in the Hereos of the
+Storm replay files to the best of the my knowledge. Let me know if you find any errors. - Falindrith
 
 ## Common Elements
 In this document, fields with `[]` at the end indicate that the element in question is an array,
 and that any field named after the `[]` (`m_playerList[].m_toon` for instance) is assumed to
 exist for all elements in the array.
+
+### Containers
+Most of the locations reference a container object first (`header` for instance). These are the objects
+that are available from the parser. In whatever parser you choose to use, you should be able to
+specify the extraction of these containers. This document assumes that you are using the [heroprotocol.js](https://github.com/nydus/heroprotocol)
+parser.
 
 ### Game Loops to Game Time
 Almost every event time in the game is stored in terms of game loops.
@@ -28,6 +35,12 @@ associated with the blue team. Likewise, PlayerID 12 is the Red Team's AI player
 
 Human players should never get assigned to these IDs. If your match has observers in them, they could have
 IDs 13+, but will not conflict with the reserved IDs.
+
+### Hey were are the Quest Stacks?
+Not in the replay that's for sure. For whatever reason, the state of quests and quest completions
+are not stored in the replay. Some units may have `Upgrade` Tracker events associated with them, but they
+are very inconsistently used. So until Blizzard adds these events into the replay, the only way to reconstruct
+quest stacks is to simluate the game based on the input events in GameEvents and track the results. 
 
 ## Match Basics
 
@@ -61,7 +74,8 @@ Value: _Localized_ map name.
 ### Date
 Location: `details.m_timeUTC`
 
-Value: Date in _Windows File Time Format_. This is incredible for a number of reasons but the tl;dr version is to convert this with the following function:
+Value: Date in _Windows File Time Format_. This is incredible for a number of reasons but the tl;dr
+version is to convert this with the following javascript function:
 ```javascript
 function winFileTimeToDate(filetime) {
   return new Date(filetime / 10000 - 11644473600000);
@@ -263,7 +277,173 @@ and which team controls it though. See [this section](#volskayaTriglav) for deta
 * Hanamura Version 1 - I couldn't find any objective data on this one, but since it's also not really
 in the game anymore, I didn't look too hard at it.
 
-### Stat Events (NNet.Replay.Tracker.SStatGameEvent), _eventid 10
+**Tracker Event List**
+
+Events of interest are linked to the corresponding section
+
+| _eventID | Name | Notes |
+| -- | ---- | ----- |
+| 1 | [Unit Born](#tracker1) | |
+| 2 | [Unit Died](#tracker2) | |
+| 3 | [Unit Owner Change](#tracker3) | 
+| 4 | Unit Type Change | |
+| 5 | Upgrade | I think certain heroes get this event when a quest is complete? In my opinion this should be emitted every time part of a quest or the entire quest is completed but it is not. Blizz pls. |
+| 6 | Unit Init | |
+| 7 | Unit Done | |
+| 8 | Unit Positions | The [heroeprotocol](https://github.com/Blizzard/heroprotocol) repository has additional info about this event. |
+| 9 | Player Setup | This is different than the `Stat` `PlayerInit` event and is not used by my parser |
+| 10 | [Stat](#tracker10) | The majority of interesting data is stored in these events |
+| 11 | [Score](#tracker11) | |
+| 12 | Unit Revived | |
+| 13 | [Hero Banned](#tracker13) | |
+| 14 | [Hero Picked](#tracker14) | |
+| 15 | Hero Swapped | Indicates a swap. Not really necessary since `HeroPicked` has the right associated hero regardless of swaps |
+
+
+###<a name="tracker1"></a> Unit Born, _eventid = 1
+Shows up when a unit spawns. These events all have basically the same info.
+
+Contents:
+
+* Spawn Game Loop: `event._gameloop`
+* Unit Type Name: `event.m_unitTypeName`
+* Unit Tag Index: `event.m_unitTagIndex`
+* Unit Recycle Tag: `event.m_unitTagRecycle` - The recycle tag and unit tag can be used to
+uniquely identify a unit. Can use something as simple as `m_unitTagIndex-m_unitTagRecycle` to identify units.
+These tags are the only things used to tell which units have died, so save them in this event
+if you need them later.
+* Upkeep Player ID: `event.m_upkeepPlayerId` - This is also a tracker ID. If this is `11`, then the unit
+is a Blue Team unit. If this is `12`, it is a Red Team unit. If it's something else, it should correspond
+to a player's tracker ID.
+* X Position: `event.m_x`
+* Y Position: `event.m_y`
+
+#### Useful Unit Type Names
+The following list is non-exhasutive, but it should contain most of the units of interest.
+
+**General Units**
+
+| Unit Type ID | Notes |
+| ------------ | ----- |
+| `FootmanMinion` | Melee Minion |
+| `RangedMinion` | |
+| `WizardMinion` | The one that drops a regen globe |
+| `RegenGlobe` | |
+| `RegenGlobeNeutral` | These are the purple ones. |
+| `UnderworldSummonedBoss` | Haunted Mines golems. This is not the single boss in the shrines, it is the golems that spawn for each team. |
+| `RavenLordTribute` | Cursed Hollow Tribute |
+| `DragonShireShrineSun` | Sun Shrine. Can track which team controls. See [Beacon Control](#beacons). |
+| `DragonShireShrineMoon` | Moon Shrine. Can track which team controls. See [Beacon Control](#beacons) |
+| `VehiclePlantHorror` | Garden Terror |
+| `VehicleDragon` | Dragon Knight |
+| `SoulEater` | Webweaver |
+| `VolskayaVehicle` | Triglav Protector |
+| `NukeTargetMinimapIconUnit` | This appears to be the targeting circle that appears when a nuke is channeled. See [Warhead Junction](#warheadNukes) for details |
+| `ZergHiveControlBeacon` | One of the Braxis control points. Can track which team controls. See [Beacon Control](#beacons). |
+| `ZergPathDummy` | When the zerg wave spawns, this unit shows up in Unit Born events |
+| `BossDuelLanerHeaven` | Heaven Immortal |
+| `BossDuelLanerHell` | Hell Immortal |
+| `WarheadSingle` | A standard warhead spawn |
+| `WarheadDropped` | A warhead dropped by a player after they die. |
+| `HealingPulsePickup` | The healing pulse item on some of the newer maps |
+| `TurretPickup` | The turret item on some of the newer maps |
+
+**Mercenaries**
+
+Units listed here are the ones that spawn in lanes. There are different units for the
+neutral unit types that spawn at camps. Save the tag IDs to match up with
+death events to find out how long they were alive.
+
+| Unit Type ID | Notes |
+| ------------ | ----- |
+| `TerranHellbat` | Hellbat Merc Camp |
+| `TerranArchangelLaner` | Braxis boss |
+| `TerranGoliath` | Goliath Merc Camp
+| `SlimeBossLaner` | Warhead boss |
+| `JungleGraveGolemLaner` | Cursed/Sky/Tomb boss |
+| `MercLanerSiegeGiant` | Siege Camp |
+| `MercGoblicSapperLaner` | Goblin Sapper |
+| `MercSiegeTrooperLaner` | Bruiser Camp, on some of the maps |
+| `MercSummonerLaner` | Summoning Camp |
+| `MercSummonerLanerMinionDummy` | Summoning Camp summon, there are a lot of these |
+| `MercLanerRangedOgre` | Bruiser Camp unit (i think?) |
+| `MercLanerMeleeOgre` | Bruiser Camp unit |
+| `MercLanerMeleeKnight` | Knight Camp Unit |
+| `MercLanerRangedMage` | Knight Camp Mage Unit |
+
+**Structures**
+| Unit Type ID | Notes |
+| ------------ | ----- |
+| `TownTownHallL2` | Fort (L2) |
+| `TownMoonwellL2` | Fort Well (L2) |
+| `TownCannonTowerL2` | Fort Tower (L2) |
+| `TownTownHallL3` | Keep (L3) |
+| `TownMoonwellL3` | Keep Well (L3) |
+| `TownCannonTowerL3` | Keep Tower (L3) |
+
+**Braxis Units**
+| Unit Type ID | Notes |
+| ------------ | ----- |
+| `ZergZergling` | Zergling | 
+| `ZergBaneling` | Baneling |
+| `ZergHydralisk` | Hydralisk |
+| `ZergGuardian` | Guardian | 
+| `ZergUltralisk` | Ultralisk |
+
+#### Minion XP Tables
+Just going to copy the minion XP arrays from the code.
+Tomb of the Spider Queen apparently has a different XP table for everything except
+catapults. Maxes out at 30 minutes.
+Minions are assigned XP values at Unit Born time (not when they die, so you can't like stack
+up minions and get bonus XP).
+
+```javascript
+const MinionXP = {
+  FootmanMinion:  [70, 71, 72, 73, 74, 76, 77, 78, 79, 80, 82, 83, 84, 85, 86, 88, 89, 90, 91, 92, 94, 95, 96, 97, 98, 100, 101, 102, 103, 104, 106],
+  WizardMinion:   [62, 64, 66, 67, 69, 71, 73, 75, 76, 78, 80, 82, 84, 85, 87, 89, 91, 93, 94, 96, 98, 100, 102, 103, 105, 107, 109, 111, 112, 114, 116],
+  RangedMinion:   [60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 110, 112, 114, 116, 118, 120],
+  CatapultMinion: [1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 29, 30, 31, 32, 33, 35, 36, 37]
+};
+
+const TombMinionXP = {
+  FootmanMinion: [55, 56, 57, 58, 59, 61, 62, 63, 64, 65, 67, 68, 69, 70, 71, 73, 74, 75, 76, 77 ,79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 90, 92],
+  WizardMinion:  [51, 53, 55, 56, 58, 60, 62, 64, 65, 67, 69, 71, 73, 74, 76, 78, 80, 82, 83, 85, 87, 89, 91, 92, 94, 96, 98, 100, 101, 103, 105],
+  RangedMinion:  [51, 53, 55, 57, 59, 61, 63, 65, 67, 69, 71, 73, 75, 77, 79, 81, 83, 85, 87, 89, 91, 93, 95, 97, 99, 101, 103, 105, 107, 109, 111],
+  CatapultMinion: [1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 29, 30, 31, 32, 33, 35, 36, 37]
+};
+```
+
+### <a name="tracker2"></a> Unit Died, _eventid = 2
+Fired when a unit dies. This includes structures, which are just units that don't move.
+
+Contents:
+
+* Death Game Loop: `event._gameloop`
+* Unit Tag Index: `event.m_unitTagIndex`
+* Unit Recycle Tag: `event.m_unitTagRecycle` - The recycle tag and unit tag can be used to
+uniquely identify a unit. Can use something as simple as `m_unitTagIndex-m_unitTagRecycle` to identify units.
+The tags are the only things that show up in the death event, so I hope you saved them.
+* Killer Tracker ID: `event.m_killerPlayerId` - Tracker ID for the person that killed the unit.
+It could be `null`, which happens in Braxis under really specific circumstances.
+
+### <a name="tracker3"></a> Unit Owner Change, _eventid = 3
+Fired when a unit gets controlled by a different player. Typically, this is used with
+vehicles (dragon knight, garden terror, protector, etc.).
+
+Contents:
+
+* Event Loop: `event._gameloop`
+* Controlling Player: `even.m_controlPlayerId` - If this is 0, that means no player controls
+the unit. Player 11 is blue team, player 12 is red team. Otherwise this is the Tracker Player ID.
+* Unit Tag Index: `event.m_unitTagIndex`
+* Unit Recycle Tag: `event.m_unitTagRecycle` - The recycle tag and unit tag can be used to
+uniquely identify a unit. Can use something as simple as `m_unitTagIndex-m_unitTagRecycle` to identify units.
+The tags are the only things that show up in the death event, so I hope you saved them.
+
+This event can be used to determine who controls a vehicle (garden terror, dragon knight), or a beacon/shrine
+on Braxis/Dragon Shire. See the [Beacon Control](#beacon) for additional details.
+
+### <a name="tracker10"></a> Stat Events (NNet.Replay.Tracker.SStatGameEvent), _eventid 10
 Stat events all have an additional `m_eventName` parameter which determines what data they contain.
 A list of relevant game events follows. For all of these objects, `_eventid = 10`.
 
@@ -512,7 +692,7 @@ Contents:
 * Winning Team Score: `event.m_intData[2].m_value`
 * Losing Team Score: `event.m_intData[3].m_value`
 
-#### Infernal shrines: Punisher Defeated
+#### Infernal Shrines: Punisher Defeated
 Event Name: `Punisher Killed`
 
 Contents:
@@ -531,139 +711,145 @@ Contents:
 * Team: `event.m_fixedData[0].m_value` - Team in **fixed integer** format. 1: blue, 2: red after resolving.
 * Score: `event.m_intData[1].m_value` - Number of gems required for the current spawn.
 
-### Unit Born, _eventid = 1
-Shows up when a unit spawns. These events all have basically the same info.
+### <a name="tracker11"></a>Score, _eventid = 11
+This event contains the end of game stats (hero damage, xp contribution, etc.).
 
 Contents:
 
-* Spawn Game Loop: `event._gameloop`
-* Unit Type Name: `event.m_unitTypeName`
-* Unit Tag Index: `event.m_unitTagIndex`
-* Unit Recycle Tag: `event.m_unitTagRecycle` - The recycle tag and unit tag can be used to
-uniquely identify a unit. Can use something as simple as `m_unitTagIndex-m_unitTagRecycle` to identify units.
-These tags are the only things used to tell which units have died, so save them in this event
-if you need them later.
-* Upkeep Player ID: `event.m_upkeepPlayerId` - This is also a tracker ID. If this is `11`, then the unit
-is a Blue Team unit. If this is `12`, it is a Red Team unit. If it's something else, it should correspond
-to a player's tracker ID.
-* X Position: `event.m_x`
-* Y Position: `event.m_y`
+* Score Array: `event.m_instanceList` - A long array containing objects for each individual score
+component. Each score array object contains the following elements
+  * Field Name: `event.m_instanceList[].m_name` - ID of the score element
+  * Field Values: `event.m_instanceList[].m_values` - An array of value objects for each stat.
+  Stats in this array are indexed by the Player Tracker ID (as in TrackerID 1 has stats at index 1).
+  Obtain the value of the stat with `event.m_instanceList[].m_values[][0].m_value`. (The type of `m_values[]` is
+  an array with one object in it, thus the extra `[0]` access).
 
-#### Useful Unit Type Names
-The following list is non-exhasutive, but it should contain most of the units of interest.
+#### Useful Score IDs
+This is a non-exhaustive list. There are a lot of events that start with `Wins` that
+I skip because it appears to be used mostly for daily quest tracking. They are not listed
+in this table.
 
-**General Units**
+| Score ID | Formatted Name |  Notes |
+| -------- | -------------- | ------ |
+| `Takedowns` | Takedowns | `SoloKill` + `Assists` |
+| `Deaths` | Deaths | |
+| `TownKills` | Town Kills | Unclear what a 'Town Kill' is |
+| `SoloKill` | Solo Kills | This is the value that shows up in the "Kills" column of the in-game stats. It is not a list of kills where no one else assisted. |
+| `Assists` | Assists | |
+| `MetaExperience` | Team Experience | Overall Team XP |
+| `Level` | Level | |
+| `TeamTakedowns` | Team Takedowns | Total Team Takedowns |
+| `ExperienceContribution` | Experience Contribution | |
+| `Healing` | Healing | Usually 0 unless it's displayed on the scoreboard. Blaze is an exception to this. |
+| `SiegeDamage` | Seige Damage | |
+| `StructureDamage` | Structure Damage | Damage specifically to structures |
+| `MinionDamage` | Minion Damage | Damage to lane minions |
+| `HeroDamage` | Hero Damage | |
+| `MercCampCaptures` | Merc Camp Captures | |
+| `WatchTowerCaptures` | Watch Tower Captures | The "eyes" |
+| `SelfHealing` | Self Healing | This is a little weird because it doesn't count if you use a targeted healing ability (like Malf Q) on yourself. |
+| `TimeSpentDead` | Time Spent Dead | In seconds |
+| `TimeCCdEnemyHeroes` | CC Time | In seconds |
+| `CreepDamage` | Creep Damage | Merc Camp / non-lane minion damage |
+| `SummonDamage` | Summon Damage | I think this is damage done _to_ summoned units (like Anub's beetles) not damage done by summoned units |
+| `Tier1Talent` | Level 1 Talent  | Tier 1 internal talent ID |
+| `Tier2Talent` | Level 4 Talent  | Tier 2 internal talent ID |
+| `Tier3Talent` | Level 7 Talent  | Tier 3 internal talent ID |  
+| `Tier4Talent` | Heroic Talent   | Tier 4 internal talent ID |
+| `Tier5Talent` | Level 13 Talent | Tier 5 internal talent ID |
+| `Tier6Talent` | Level 16 Talent | Tier 6 internal talent ID |
+| `Tier7Talent` | Storm Talent    | Tier 7 internal talent ID |
+| `DamageTaken` | Damage Taken | This is non-zero only if Blizzard decided to classify the hero as a tank and store the stat. |
+| `Role` | Role | Role Stat, doesn't seem to be used right now? |
+| `KilledTreasureGoblin` | Killed Treasure Goblin | Remember the treasure goblin event |
+| `GameScore` | Game Score | I actually forget what this is |
+| `HighestKillStreak` | Highest Kill Streak | |
+| `TeamLevel` | Team Level | This should be the same as Level |
+| `ProtectionGivenToAllies` | Shielding | |
+| `TimeSilencingEnemyHeroes` | Silence Time | In seconds |
+| `TimeRootingEnemyHeroes` | Root Time | In seconds |
+| `TimeStunningEnemyHeroes` | Stun Time | In seconds |
+| `ClutchHealsPerformed` | Clutch Heals | |
+| `EscapesPerformed` | Escapes Performed | Dunno how it defines this |
+| `VengeancesPerformed` | Revenge Kills | |
+| `TeamfightEscapesPerformed` | Team Fight Escapes | |
+| `OutnumberedDeaths` | Deaths While Outnumbered | The "do you get ganked a lot and die" stat. |
+| `TeamfightHealingDone` | Team Fight Healing | |
+| `TeamfightDamageTaken` | Team Fight Damage Taken | The team fight version of this stat shows up for everyone |
+| `TeamfightHeroDamage` | Team Fight Hero Damage Dealt | |
+| `OnFireTimeOnFire` | Time On Fire | |
+| `LunarNewYearSuccesfulArtifactTurnIns` | Lunar New Year Event Turn Ins | |
+| `TimeOnPoint` | Time On Point | |
+| `TimeInTemple` | Time In Temple | |
+| `TimeOnPayload` | Time on Payload | |
 
-| Unit Type ID | Notes |
-| ------------ | ----- |
-| `FootmanMinion` | Melee Minion |
-| `RangedMinion` | |
-| `WizardMinion` | The one that drops a regen globe |
-| `RegenGlobe` | |
-| `RegenGlobeNeutral` | These are the purple ones. |
-| `UnderworldSummonedBoss` | Haunted Mines golems. This is not the single boss in the shrines, it is the golems that spawn for each team. |
-| `RavenLordTribute` | Cursed Hollow Tribute |
-| `DragonShireShrineSun` | Sun Shrine. Can track which team controls. See [Beacon Control](#beacons). |
-| `DragonShireShrineMoon` | Moon Shrine. Can track which team controls. See [Beacon Control](#beacons) |
-| `VehiclePlantHorror` | Garden Terror |
-| `VehicleDragon` | Dragon Knight |
-| `SoulEater` | Webweaver |
-| `VolskayaVehicle` | Triglav Protector |
-| `NukeTargetMinimapIconUnit` | This appears to be the targeting circle that appears when a nuke is channeled. See [Warhead Junction](#warheadNukes) for details |
-| `ZergHiveControlBeacon` | One of the Braxis control points. Can track which team controls. See [Beacon Control](#beacons). |
-| `ZergPathDummy` | When the zerg wave spawns, this unit shows up in Unit Born events |
-| `BossDuelLanerHeaven` | Heaven Immortal |
-| `BossDuelLanerHell` | Hell Immortal |
-| `WarheadSingle` | A standard warhead spawn |
-| `WarheadDropped` | A warhead dropped by a player after they die. |
-| `HealingPulsePickup` | The healing pulse item on some of the newer maps |
-| `TurretPickup` | The turret item on some of the newer maps |
+#### Awards
+The awards Booleans (the stats that end with `Boolean`) will be `true` if the player receieved the named
+award. `false` otherwise. These are all false in Custom games.
 
-**Mercenaries**
+| Score ID | Description |  In-game Award Name |
+| -------- | -------------- | ------ |
+| `EndOfMatchAwardMVPBoolean` | MVP | MVP |
+| `EndOfMatchAwardHighestKillStreakBoolean` | Highest Kill Streak Award | Dominator |
+| `EndOfMatchAwardMostVengeancesPerformedBoolean` | Revenge Kills Award | Avenger |
+| `EndOfMatchAwardMostDaredevilEscapesBoolean` | Most Daredevil Escapes Award | Daredevil |
+| `EndOfMatchAwardMostEscapesBoolean` | Escape Artist | Escape Artist |
+| `EndOfMatchAwardMostXPContributionBoolean` | XP Contribution Award | Experienced |
+| `EndOfMatchAwardMostHeroDamageDoneBoolean` | Most Hero Damage Award | Painbringer |
+| `EndOfMatchAwardMostKillsBoolean` | Most Kills Award | Finisher |
+| `EndOfMatchAwardHatTrickBoolean` | Hat Trick (first 3 kills of the match) | Hat Trick |
+| `EndOfMatchAwardClutchHealerBoolean` | Clutch Healer | Clutch Healer |
+| `EndOfMatchAwardMostProtectionBoolean` | Most Protection Award | Protector |
+| `EndOfMatchAward0DeathsBoolean` | No Deaths Award | Sole Survivor |
+| `EndOfMatchAwardMostSiegeDamageDoneBoolean` | Most Siege Damage Award | Siege Master |
+| `EndOfMatchAwardMostDamageTakenBoolean` | Most Damage Taken Award | Bulwark |
+| `EndOfMatchAward0OutnumberedDeathsBoolean` | No Deaths While Outnumbered Award | Team Player |
+| `EndOfMatchAwardMostHealingBoolean` | Most Healing Award | Main Healer |
+| `EndOfMatchAwardMostStunsBoolean` | Most Stuns Award | Stunner |
+| `EndOfMatchAwardMostRootsBoolean` | Most Roots Award | Trapper |
+| `EndOfMatchAwardMostSilencesBoolean` | Most Silences Award | Silencer |
+| `EndOfMatchAwardMostMercCampsCapturedBoolean` | Most Merc Camps Award | Headhunter |
+| `EndOfMatchAwardMapSpecificBoolean` | Objective Award, appears to be unused right now | Map Objective |
+| `EndOfMatchAwardMostDragonShrinesCapturedBoolean` | Most Dragon Shrines Captured Award | Shriner |
+| `EndOfMatchAwardMostCurseDamageDoneBoolean` | Most Curse Damage Done Award | Master of the Curse |
+| `EndOfMatchAwardMostCoinsPaidBoolean` | Most Coins Paid Award | Moneybags |
+| `EndOfMatchAwardMostImmortalDamageBoolean` | Most Immortal Damage Award | Immortal Slayer |
+| `EndOfMatchAwardMostDamageDoneToZergBoolean` | Most Damage Done To Zerg Award | Zerg Crusher |
+| `EndOfMatchAwardMostDamageToPlantsBoolean` | Most Damage Done To Plants Award | Garden Terror |
+| `EndOfMatchAwardMostDamageToMinionsBoolean` | Most Damage Done To Shrine Minions (Infernal Shrines) | Guardian Slayer |
+| `EndOfMatchAwardMostTimeInTempleBoolean` | Most Time In Temple Award | Temple Master |
+| `EndOfMatchAwardMostGemsTurnedInBoolean` | Most Gems Turned In Award | Jeweler |
+| `EndOfMatchAwardMostSkullsCollectedBoolean` | Most Skulls Collected Award | Skull Collector |
+| `EndOfMatchAwardMostAltarDamageDone` | Most Altar Damage Done Award (Towers of Doom) | Cannoneer |
+| `EndOfMatchAwardMostNukeDamageDoneBoolean` | Most Nuke Damage Done Award | Da Bomb |
+| `EndOfMatchAwardMostTeamfightDamageTakenBoolean` | Most Team Fight Damage Taken Award | Guardian |
+| `EndOfMatchAwardMostTeamfightHealingDoneBoolean` | Most Team Fight Healing Done Award | Combat Medic |
+| `EndOfMatchAwardMostTeamfightHeroDamageDoneBoolean` | Most Team Fight Hero Damage Done Award | Scrapper |
+| `EndOfMatchAwardGivenToNonwinner` | End of Match Award Given to Winner, internal | |
+| `EndOfMatchAwardMostTimePushingBoolean` | Most Time Pushing Award | Pusher |
+| `EndOfMatchAwardMostTimeOnPointBoolean` | Most Time on Point Award | Point Guard |
 
-Units listed here are the ones that spawn in lanes. There are different units for the
-neutral unit types that spawn at camps. Save the tag IDs to match up with
-death events to find out how long they were alive.
+### <a name="tracker13"></a> Hero Banned, _eventID = 13
+I don't actually use this event because it's easier to just pull from the `attributeevents` data,
+as that's in a fixed location.
+But it does exist. I forget the exact contents but the hero name is not in a useful format. It appears
+to be the internal hero name, which unless you want to manually build that index, is not something that
+is easily converted to an actual hero name.
 
-| Unit Type ID | Notes |
-| ------------ | ----- |
-| `TerranHellbat` | Hellbat Merc Camp |
-| `TerranArchangelLaner` | Braxis boss |
-| `TerranGoliath` | Goliath Merc Camp
-| `SlimeBossLaner` | Warhead boss |
-| `JungleGraveGolemLaner` | Cursed/Sky/Tomb boss |
-| `MercLanerSiegeGiant` | Siege Camp |
-| `MercGoblicSapperLaner` | Goblin Sapper |
-| `MercSiegeTrooperLaner` | Bruiser Camp, on some of the maps |
-| `MercSummonerLaner` | Summoning Camp |
-| `MercSummonerLanerMinionDummy` | Summoning Camp summon, there are a lot of these |
-| `MercLanerRangedOgre` | Bruiser Camp unit (i think?) |
-| `MercLanerMeleeOgre` | Bruiser Camp unit |
-| `MercLanerMeleeKnight` | Knight Camp Unit |
-| `MercLanerRangedMage` | Knight Camp Mage Unit |
-
-**Structures**
-| Unit Type ID | Notes |
-| ------------ | ----- |
-| `TownTownHallL2` | Fort (L2) |
-| `TownMoonwellL2` | Fort Well (L2) |
-| `TownCannonTowerL2` | Fort Tower (L2) |
-| `TownTownHallL3` | Keep (L3) |
-| `TownMoonwellL3` | Keep Well (L3) |
-| `TownCannonTowerL3` | Keep Tower (L3) |
-
-**Braxis Units**
-| Unit Type ID | Notes |
-| ------------ | ----- |
-| `ZergZergling` | Zergling | 
-| `ZergBaneling` | Baneling |
-| `ZergHydralisk` | Hydralisk |
-| `ZergGuardian` | Guardian | 
-| `ZergUltralisk` | Ultralisk |
-
-#### Minion XP Tables
-Just going to copy the minion XP arrays from the code.
-Tomb of the Spider Queen apparently has a different XP table for everything except
-catapults. Maxes out at 30 minutes.
-Minions are assigned XP values at Unit Born time (not when they die, so you can't like stack
-up minions and get bonus XP).
-
-```javascript
-const MinionXP = {
-  FootmanMinion:  [70, 71, 72, 73, 74, 76, 77, 78, 79, 80, 82, 83, 84, 85, 86, 88, 89, 90, 91, 92, 94, 95, 96, 97, 98, 100, 101, 102, 103, 104, 106],
-  WizardMinion:   [62, 64, 66, 67, 69, 71, 73, 75, 76, 78, 80, 82, 84, 85, 87, 89, 91, 93, 94, 96, 98, 100, 102, 103, 105, 107, 109, 111, 112, 114, 116],
-  RangedMinion:   [60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 110, 112, 114, 116, 118, 120],
-  CatapultMinion: [1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 29, 30, 31, 32, 33, 35, 36, 37]
-};
-
-const TombMinionXP = {
-  FootmanMinion: [55, 56, 57, 58, 59, 61, 62, 63, 64, 65, 67, 68, 69, 70, 71, 73, 74, 75, 76, 77 ,79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 90, 92],
-  WizardMinion:  [51, 53, 55, 56, 58, 60, 62, 64, 65, 67, 69, 71, 73, 74, 76, 78, 80, 82, 83, 85, 87, 89, 91, 92, 94, 96, 98, 100, 101, 103, 105],
-  RangedMinion:  [51, 53, 55, 57, 59, 61, 63, 65, 67, 69, 71, 73, 75, 77, 79, 81, 83, 85, 87, 89, 91, 93, 95, 97, 99, 101, 103, 105, 107, 109, 111],
-  CatapultMinion: [1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 29, 30, 31, 32, 33, 35, 36, 37]
-};
-```
-
-### Unit Died, _eventid = 2
-Fired when a unit dies. This includes structures, which are just units that don't move.
+### <a name="tracker14"></a> Hero Picked, _eventID = 14
+Indicates that a player picked a hero. These events will be in draft order, so the first one
+you see in the `trackerevents` is the first pick. I only use this event for pick order.
 
 Contents:
 
-* Death Game Loop: `event._gameloop`
-* Unit Tag Index: `event.m_unitTagIndex`
-* Unit Recycle Tag: `event.m_unitTagRecycle` - The recycle tag and unit tag can be used to
-uniquely identify a unit. Can use something as simple as `m_unitTagIndex-m_unitTagRecycle` to identify units.
-The tags are the only things that show up in the death event, so I hope you saved them.
-* Killer Tracker ID: `event.m_killerPlayerId` - Tracker ID for the person that killed the unit.
-It could be `null`, which happens in Braxis under really specific circumstances.
+* Controlling Player ID: `event.m_controllingPlayer` - Note that this is the one ID that is **NOT** the tracker ID!
+This is the Working Set Slot ID as described in the players section.
+* Hero Name: I don't use this and forgot what the fieldname is. It's the internal hero name, which is difficult to map back
+to a hero without manually building up that table. Hero attribute names can be retrieved from the `attributeevents` data, and
+the attribute names can be mapped back with the [heroes-talents](https://github.com/heroespatchnotes/heroes-talents) repository data.
 
-### Unit Owner Change, _eventid = 3
-Fired when a unit gets controlled by a different player. Typically, this is used with
-vehicles (dragon knight, garden terror, protector, etc.).
+## Game Events
 
-Contents:
-
-* 
 
 ## Special Cases for Map Objectives
 Sometimes the tracker doesn't have the data, but other places do.

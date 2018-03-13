@@ -8,7 +8,7 @@ const TrackerEvent = {
   UnitBorn: 1,
   UnitDied: 2,
   UnitOwnerChange: 3,
-  UnitTypeChane: 4,
+  UnitTypeChange: 4,
   Upgrade: 5,
   UnitInit: 6,
   UnitDone: 7,

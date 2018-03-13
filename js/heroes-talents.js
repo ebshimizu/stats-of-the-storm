@@ -15,7 +15,7 @@ const Awards = {
   EndOfMatchAwardClutchHealerBoolean: {name: 'Clutch Healer', subtitle: 'Clutch Healer', image: 'storm_ui_mvp_icons_rewards_clutchhealer.png'},
   EndOfMatchAwardMostProtectionBoolean: {name: 'Protector', subtitle: 'Most Protection/Shields', image: 'storm_ui_mvp_icons_rewards_protector.png'},
   EndOfMatchAward0DeathsBoolean: {name: 'Sole Survivor', subtitle: 'No Deaths', image: 'storm_ui_mvp_icons_rewards_solesurvivor.png'},
-  EndOfMatchAwardMostSiegeDamageDoneBoolean: {name: 'Seige Master', subtitle: 'Most Seige Damage Done', image: 'storm_ui_mvp_icons_rewards_siegemaster.png'},
+  EndOfMatchAwardMostSiegeDamageDoneBoolean: {name: 'Siege Master', subtitle: 'Most Seige Damage Done', image: 'storm_ui_mvp_icons_rewards_siegemaster.png'},
   EndOfMatchAwardMostDamageTakenBoolean: {name: 'Bulwark', subtitle: 'Most Damage Taken', image: 'storm_ui_mvp_icons_rewards_bulwark.png'},
   EndOfMatchAward0OutnumberedDeathsBoolean: {name: 'Team Player', subtitle: 'No Deaths While Outnumbered', image: 'storm_ui_mvp_icons_rewards_teamplayer.png'},
   EndOfMatchAwardMostHealingBoolean: {name: 'Main Healer', subtitle: 'Most Healing', image: 'storm_ui_mvp_icons_rewards_mainhealer.png'},

@@ -1115,7 +1115,7 @@ function processReplay(file, HeroesTalents, opts = {}) {
           }
           else if (dragon && dragon.tag === tag && dragon.rtag === rtag) {
             // player got it 
-            if (event.m_controlPlayerId > 0 && event.m_controlPlayerId < 11) {
+            if (event.m_controlPlayerId > 0 && event.m_controlPlayerId !== 11 && event.m_controlPlayerId !== 12) {
               dragon.player = playerIDMap[event.m_controlPlayerId];
             }
           }
