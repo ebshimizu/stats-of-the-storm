@@ -77,13 +77,10 @@ function initHeroCollectionPage() {
   addHeroMenuOptions($('#hero-collection-hero-select-menu'));
   $('#hero-collection-hero-select-menu').dropdown('refresh');
 
-  $('#hero-collection-summary .button').click(function() {
-    toggleHeroCollectionType('#hero-collection-summary', $(this));
+  $('#hero-collection-body .five.ui.buttons .button').click(function() {
+    toggleHeroCollectionType('#hero-collection-body', $(this), '#hero-collection-body');
   });
 
-  $('#hero-collection-picks .button').click(function() {
-    toggleHeroCollectionType('#hero-collection-picks', $(this));
-  });
   $('#hero-collection-detail-hero-talent .menu .item').tab();
 
   loadOverallHeroCollectionData();
@@ -191,12 +188,13 @@ function loadOverallHeroCollectionData() {
   })
 }
 
-function toggleHeroCollectionType(tableID, elem) {
-  let type = elem.text();
-
+function toggleHeroCollectionType(tableID, active, container) {
+  let type = active.text();
   let hide = false;
+  let elem = $(container).find('.button.' + type);
+
   if (type === "Assassin") {
-    if (elem.hasClass('red')) {
+    if (active.hasClass('red')) {
       hide = true;
       elem.removeClass('red');
     }
@@ -205,7 +203,7 @@ function toggleHeroCollectionType(tableID, elem) {
     }
   }
   if (type === "Warrior") {
-    if (elem.hasClass('blue')) {
+    if (active.hasClass('blue')) {
       hide = true;
       elem.removeClass('blue');
     }
@@ -214,7 +212,7 @@ function toggleHeroCollectionType(tableID, elem) {
     }
   }
   if (type === "Support") {
-    if (elem.hasClass('teal')) {
+    if (active.hasClass('teal')) {
       hide = true;
       elem.removeClass('teal');
     }
@@ -223,7 +221,7 @@ function toggleHeroCollectionType(tableID, elem) {
     }
   }
   if (type === "Specialist") {
-    if (elem.hasClass('violet')) {
+    if (active.hasClass('violet')) {
       hide = true;
       elem.removeClass('violet');
     }
@@ -232,7 +230,7 @@ function toggleHeroCollectionType(tableID, elem) {
     }
   }
   if (type === "Multiclass") {
-    if (elem.hasClass('purple')) {
+    if (active.hasClass('purple')) {
       hide = true;
       elem.removeClass('purple');
     }

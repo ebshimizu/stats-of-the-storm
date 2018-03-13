@@ -36,7 +36,7 @@ associated with the blue team. Likewise, PlayerID 12 is the Red Team's AI player
 Human players should never get assigned to these IDs. If your match has observers in them, they could have
 IDs 13+, but will not conflict with the reserved IDs.
 
-### Hey were are the Quest Stacks?
+### Hey where are the Quest Stacks?
 Not in the replay that's for sure. For whatever reason, the state of quests and quest completions
 are not stored in the replay. Some units may have `Upgrade` Tracker events associated with them, but they
 are very inconsistently used. So until Blizzard adds these events into the replay, the only way to reconstruct
@@ -300,7 +300,7 @@ Events of interest are linked to the corresponding section
 | 15 | Hero Swapped | Indicates a swap. Not really necessary since `HeroPicked` has the right associated hero regardless of swaps |
 
 
-###<a name="tracker1"></a> Unit Born, _eventid = 1
+### <a name="tracker1"></a> Unit Born, _eventid = 1
 Shows up when a unit spawns. These events all have basically the same info.
 
 Contents:
@@ -372,6 +372,7 @@ death events to find out how long they were alive.
 | `MercLanerRangedMage` | Knight Camp Mage Unit |
 
 **Structures**
+
 | Unit Type ID | Notes |
 | ------------ | ----- |
 | `TownTownHallL2` | Fort (L2) |
@@ -382,6 +383,7 @@ death events to find out how long they were alive.
 | `TownCannonTowerL3` | Keep Tower (L3) |
 
 **Braxis Units**
+
 | Unit Type ID | Notes |
 | ------------ | ----- |
 | `ZergZergling` | Zergling | 
@@ -844,9 +846,10 @@ Contents:
 
 * Controlling Player ID: `event.m_controllingPlayer` - Note that this is the one ID that is **NOT** the tracker ID!
 This is the Working Set Slot ID as described in the players section.
-* Hero Name: I don't use this and forgot what the fieldname is. It's the internal hero name, which is difficult to map back
-to a hero without manually building up that table. Hero attribute names can be retrieved from the `attributeevents` data, and
-the attribute names can be mapped back with the [heroes-talents](https://github.com/heroespatchnotes/heroes-talents) repository data.
+* Hero Name: `event.m_hero` - The internal hero name, which is difficult to map back
+to a hero without manually building up that table. I don't use this and instead retrieve hero attribute names
+from the `attributeevents` data, and
+map back to display hero name with the [heroes-talents](https://github.com/heroespatchnotes/heroes-talents) repository data.
 
 ## Game Events
 

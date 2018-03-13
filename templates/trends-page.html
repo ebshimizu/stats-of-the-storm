@@ -5,8 +5,40 @@
   <div id="hero-trends-page-content" class="is-page transition hidden" section-name="hero-trends">
     <div id="hero-trends-page-header">
       <div class="ui grid">
-        <div class="twelve wide column">
+        <div class="four wide column">
           <h1 class="ui inverted header">Hero Trends</h1>
+        </div>
+        <div class="two wide column">
+          <div class="ui fluid labeled input" id="hero-trends-1-start">
+            <div class="ui label">
+              [1] Start
+            </div>
+            <input type="text" class="trends-date" name="1-start" data-content="Comparison Period 1 Start Day">
+          </div>
+        </div>
+        <div class="two wide column">
+          <div class="ui fluid labeled input" id="hero-trends-1-end">
+            <div class="ui label">
+              [1] End
+            </div>
+            <input type="text" class="trends-date" name="1-end" data-content="Comparison Period 1 End Day">
+          </div>
+        </div>
+        <div class="two wide column">
+          <div class="ui fluid labeled input" id="hero-trends-2-start">
+            <div class="ui label">
+              [2] Start
+            </div>
+            <input type="text" class="trends-date" name="2-start" data-content="Comparison Period 2 Start Day">
+          </div>
+        </div>
+        <div class="two wide column">
+          <div class="ui fluid labeled input" id="hero-trends-2-end">
+            <div class="ui label">
+              [2] End
+            </div>
+            <input type="text" class="trends-date" name="2-end" data-content="Comparison Period 2 End Day">
+          </div>
         </div>
         <div class="two wide column">
           <div class="ui fluid labeled input" id="hero-trends-hero-thresh">
@@ -32,11 +64,11 @@
       </div>
       <div class="ui active tab" data-tab="hero-trends-overall" id="hero-trends-summary">
         <div class="five ui buttons">
-          <div class="ui red button">Assassin</div>
-          <div class="ui blue button">Warrior</div>
-          <div class="ui teal button">Support</div>
-          <div class="ui violet button">Specialist</div>
-          <div class="ui purple button">Multiclass</div>
+          <div class="ui Assassin red button">Assassin</div>
+          <div class="ui Warrior blue button">Warrior</div>
+          <div class="ui Support teal button">Support</div>
+          <div class="ui Specialist violet button">Specialist</div>
+          <div class="ui Multiclass purple button">Multiclass</div>
         </div>
         <div class="hero-trends-wrapper">
           <div class="table-wrapper">
@@ -46,19 +78,16 @@
                   <th>Hero</th>
                   <th class="center aligned stat">[1] Win %</th>
                   <th class="center aligned stat">[2] Win %</th>
-                  <th class="center aligned stat">Win % Delta</th>
+                  <th class="center aligned stat">Win % Δ</th>
+                  <th class="center aligned stat">[1] Ban %</th>
+                  <th class="center aligned stat">[2] Ban %</th>
+                  <th class="center aligned stat">Ban % Δ</th>
                   <th class="center aligned stat">[1] Popularity</th>
                   <th class="center aligned stat">[2] Popularity</th>
-                  <th class="center aligned stat">Popularity Delta</th>
-                  <th class="center aligned stat">[1] Win</th>
-                  <th class="center aligned stat">[2] Win</th>
-                  <th class="center aligned stat">Win Delta</th>
-                  <th class="center aligned stat">[1] Loss</th>
-                  <th class="center aligned stat">[2] Loss</th>
-                  <th class="center aligned stat">Loss Delta</th>
+                  <th class="center aligned stat">Popularity Δ</th>
                   <th class="center aligned stat">[1] Games</th>
                   <th class="center aligned stat">[2] Games</th>
-                  <th class="center aligned stat">Games Delta</th>
+                  <th class="center aligned stat">Games Δ</th>
                 </tr>
               </thead>
               <tbody>
@@ -70,11 +99,11 @@
       </div>
       <div class="ui tab" data-tab="hero-trends-picks" id="hero-trends-picks">
         <div class="five ui buttons">
-          <div class="ui red button">Assassin</div>
-          <div class="ui blue button">Warrior</div>
-          <div class="ui teal button">Support</div>
-          <div class="ui violet button">Specialist</div>
-          <div class="ui purple button">Multiclass</div>
+          <div class="ui Assassin red button">Assassin</div>
+          <div class="ui Warrior blue button">Warrior</div>
+          <div class="ui Support teal button">Support</div>
+          <div class="ui Specialist violet button">Specialist</div>
+          <div class="ui Multiclass purple button">Multiclass</div>
         </div>
         <div class="hero-trends-wrapper">
           <div class="table-wrapper">
@@ -82,23 +111,50 @@
               <thead>
                 <tr>
                   <th>Hero</th>
-                  <th class="center aligned stat">Games</th> 
-                  <th class="center aligned stat">Win %</th>
-                  <th class="center aligned stat">Bans</th>
-                  <th class="center aligned stat">Ban %</th>
-                  <th class="center aligned stat">1st Ban</th>
-                  <th class="center aligned stat">1st Ban %</th>
-                  <th class="center aligned stat">2nd Ban</th>
-                  <th class="center aligned stat">2nd Ban %</th>
-                  <th class="center aligned stat">Round 1</th>
-                  <th class="center aligned stat">Round 1 %</th>
-                  <th class="center aligned stat">Round 1 Wins</th>
-                  <th class="center aligned stat">Round 2</th>
-                  <th class="center aligned stat">Round 2 %</th>
-                  <th class="center aligned stat">Round 2 Wins</th>
-                  <th class="center aligned stat">Round 3</th>
-                  <th class="center aligned stat">Round 3 %</th>
-                  <th class="center aligned stat">Round 3 Wins</th>
+                  <th class="center aligned stat">[1] Games</th>
+                  <th class="center aligned stat">[2] Games</th>
+                  <th class="center aligned stat">Games Δ</th>
+                  <th class="center aligned stat">[1] Round 1</th>
+                  <th class="center aligned stat">[2] Round 1</th>
+                  <th class="center aligned stat">Round 1 Δ</th>
+                  <th class="center aligned stat">[1] Round 2</th>
+                  <th class="center aligned stat">[2] Round 2</th>
+                  <th class="center aligned stat">Round 2 Δ</th>
+                  <th class="center aligned stat">[1] Round 3 %</th>
+                  <th class="center aligned stat">[2] Round 3 %</th>
+                  <th class="center aligned stat">Round 3 Δ</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="ui tab" data-tab="hero-trends-bans" id="hero-trends-bans">
+        <div class="five ui buttons">
+          <div class="ui Assassin red button">Assassin</div>
+          <div class="ui Warrior blue button">Warrior</div>
+          <div class="ui Support teal button">Support</div>
+          <div class="ui Specialist violet button">Specialist</div>
+          <div class="ui Multiclass purple button">Multiclass</div>
+        </div>
+        <div class="hero-trends-wrapper">
+          <div class="table-wrapper">
+            <table class="ui sortable compact selectable inverted table">
+              <thead>
+                <tr>
+                  <th>Hero</th>
+                  <th class="center aligned stat">[1] Ban %</th>
+                  <th class="center aligned stat">[2] Ban %</th>
+                  <th class="center aligned stat">Ban % Δ</th>
+                  <th class="center aligned stat">[1] 1st Ban</th>
+                  <th class="center aligned stat">[2] 1st Ban</th>
+                  <th class="center aligned stat">1st Ban Δ</th>
+                  <th class="center aligned stat">[1] 2nd Ban</th>
+                  <th class="center aligned stat">[2] 2nd Ban</th>
+                  <th class="center aligned stat">2nd Ban Δ</th>
                 </tr>
               </thead>
               <tbody>
@@ -110,4 +166,76 @@
       </div>
     </div>
   </div>
+</template>
+
+<template id="trends-hero-summary-row-template">
+  <tr class="trends-hero-summary-row {{heroRole}}">
+    <td data-sort-value="{{heroName}}">
+      <h3 class="ui image inverted header">
+        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui rounded image">
+        <div class="content">
+          {{heroName}}
+        </div>
+      </h3>
+    </td>
+    <td class="center aligned" data-sort-value="{{period1.win.winPercent}}">{{period1.win.formatWinPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period2.win.winPercent}}">{{period2.win.formatWinPercent}}</td>
+    <td class="center aligned {{statSign.winPercent}}" data-sort-value="{{delta.winPercent}}">{{deltaFmt.winPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period1.win.banPercent}}">{{period1.win.formatBanPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period2.win.banPercent}}">{{period2.win.formatBanPercent}}</td>
+    <td class="center aligned {{statSign.banPercent}}" data-sort-value="{{delta.banPercent}}">{{deltaFmt.banPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period1.win.popPercent}}">{{period1.win.formatPopPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period2.win.popPercent}}">{{period2.win.formatPopPercent}}</td>
+    <td class="center aligned {{statSign.popPercent}}" data-sort-value="{{delta.popPercent}}">{{deltaFmt.popPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period1.win.games}}">{{period1.win.games}}</td>
+    <td class="center aligned" data-sort-value="{{period2.win.games}}">{{period2.win.games}}</td>
+    <td class="center aligned {{statSign.games}}" data-sort-value="{{delta.games}}">{{deltaFmt.games}}</td>
+  </tr>
+</template>
+
+<template id="trends-hero-pick-row-template">
+  <tr class="trends-hero-pick-row {{heroRole}}">
+    <td data-sort-value="{{heroName}}">
+      <h3 class="ui image inverted header">
+        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui rounded image">
+        <div class="content">
+          {{heroName}}
+        </div>
+      </h3>
+    </td>
+    <td class="center aligned" data-sort-value="{{period1.win.games}}">{{period1.win.games}}</td>
+    <td class="center aligned" data-sort-value="{{period2.win.games}}">{{period2.win.games}}</td>
+    <td class="center aligned {{statSign.games}}" data-sort-value="{{delta.games}}">{{deltaFmt.games}}</td>
+    <td class="center aligned" data-sort-value="{{period1.draft.picks.round1.pct}}">{{period1.draft.picks.round1.formatPct}}</td>
+    <td class="center aligned" data-sort-value="{{period2.draft.picks.round1.pct}}">{{period2.draft.picks.round1.formatPct}}</td>
+    <td class="center aligned {{statSign.r1}}" data-sort-value="{{delta.r1}}">{{deltaFmt.r1}}</td>
+    <td class="center aligned" data-sort-value="{{period1.draft.picks.round2.pct}}">{{period1.draft.picks.round2.formatPct}}</td>
+    <td class="center aligned" data-sort-value="{{period2.draft.picks.round2.pct}}">{{period2.draft.picks.round2.formatPct}}</td>
+    <td class="center aligned {{statSign.r2}}" data-sort-value="{{delta.r2}}">{{deltaFmt.r2}}</td>
+    <td class="center aligned" data-sort-value="{{period1.draft.picks.round3.pct}}">{{period1.draft.picks.round3.formatPct}}</td>
+    <td class="center aligned" data-sort-value="{{period2.draft.picks.round3.pct}}">{{period2.draft.picks.round3.formatPct}}</td>
+    <td class="center aligned {{statSign.r3}}" data-sort-value="{{delta.r3}}">{{deltaFmt.r3}}</td>
+  </tr>
+</template>
+
+<template id="trends-hero-pick-ban-template">
+  <tr class="trends-hero-ban-row {{heroRole}}">
+    <td data-sort-value="{{heroName}}">
+      <h3 class="ui image inverted header">
+        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui rounded image">
+        <div class="content">
+          {{heroName}}
+        </div>
+      </h3>
+    </td>
+    <td class="center aligned" data-sort-value="{{period1.win.banPercent}}">{{period1.win.formatBanPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period2.win.banPercent}}">{{period2.win.formatBanPercent}}</td>
+    <td class="center aligned {{statSign.banPercent}}" data-sort-value="{{delta.banPercent}}">{{deltaFmt.banPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period1.draft.firstBanPercent}}">{{period1.draft.format.firstBanPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period2.draft.firstBanPercent}}">{{period2.draft.format.firstBanPercent}}</td>
+    <td class="center aligned {{statSign.firstBanPercent}}" data-sort-value="{{delta.firstBanPercent}}">{{deltaFmt.firstBanPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period1.draft.secondBanPercent}}">{{period1.draft.format.secondBanPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period2.draft.secondBanPercent}}">{{period2.draft.format.secondBanPercent}}</td>
+    <td class="center aligned {{statSign.secondBanPercent}}" data-sort-value="{{delta.secondBanPercent}}">{{deltaFmt.secondBanPercent}}</td>
+  </tr>
 </template>
