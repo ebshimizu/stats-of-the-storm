@@ -211,6 +211,18 @@ class Database {
     this._db.settings.findOne({_id: id}, callback);
   }
 
+  // checks to see if all of the given players are on a team
+  getTeamByPlayers(players, callback) {
+    let query = { $and: []};
+    query.type = 'team';
+
+    for (let p of players) {
+      query.$and.push({ players: p });
+    }
+
+    this._db.settings.find(query, callback);
+  }
+
   getPlayerTeams(id, callback) {
     this._db.settings.find({ type: 'team', players: id }, callback);
   }

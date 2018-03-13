@@ -75,7 +75,8 @@
 
 #matches-page-content .match-wrapper {
   height: calc(100% - 90px);
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #match-list .match-date {
@@ -127,6 +128,26 @@
 #match-list .match-summary .match-details .red-hero.image{
   border: 3px solid #db2828;
   float: right;
+}
+
+#match-list .red-team-nameplate {
+  position: absolute;
+  width: 400px;
+  left: -415px;
+  text-align: right;
+  bottom: 0px;
+  color: #db2828;
+  font-size: 12pt;
+}
+
+#match-list .blue-team-nameplate {
+  position: absolute;
+  width: 400px;
+  right: -415px;
+  text-align: left;
+  bottom: 0px;
+  color: #2185d0;
+  font-size: 12pt;
 }
 
 #match-list .match-summary .match-details .focus-player.image {

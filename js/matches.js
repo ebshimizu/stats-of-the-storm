@@ -510,6 +510,30 @@ function renderToSlot(gameData, slot) {
 
   $('#match-list tr[slot="' + slot + '"]').html(matchRowTemplate(context));
   $('tr[slot="' + slot + '"] .match-details .ui.image').popup();
+
+  // team nameplates
+  populateTeamNameplate(gameData._id, 0, gameData.teams[0].ids, gameData.winner === 0);
+  populateTeamNameplate(gameData._id, 1, gameData.teams[1].ids, gameData.winner === 1);
+}
+
+function populateTeamNameplate(matchID, teamID, players, won) {
+  DB.getTeamByPlayers(players, function(err, docs) {
+    if (docs.length > 0) {
+      // take first team found, not room for all
+      let team = docs[0];
+      let elem = (teamID === 0 ? '.blue' : '.red') + '-team-nameplate';
+
+      $('.match-summary[match-id="' + matchID + '"]').find(elem).text(team.name);
+
+      if (won) {
+        let header = $('.match-summary[match-id="' + matchID + '"]').find('h3.match-team-winner');
+
+        if (header.text() !== 'Victory' && header.text() !== 'Defeat') {
+          header.text(team.name + ' Victory');
+        }
+      }
+    }
+  })
 }
 
 function initSeasonMenu() {
