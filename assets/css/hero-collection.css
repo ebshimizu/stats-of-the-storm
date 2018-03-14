@@ -1,6 +1,7 @@
 #hero-collection-summary,
 #hero-collection-picks,
-#hero-collection-hero {
+#hero-collection-hero,
+#hero-collection-pool {
   height: calc(100% - 40px);
 }
 
@@ -9,7 +10,8 @@
   height: calc(100% - 20px);
 }
 
-#hero-collection-hero .floatThead-wrapper {
+#hero-collection-hero .floatThead-wrapper,
+#hero-collection-pool .floatThead-wrapper {
   height: 100%;
 }
 
@@ -31,16 +33,30 @@
   margin-top: 0;
 }
 
-#hero-collection-detail-hero-talent .table-wrapper {
+#hero-collection-detail-hero-talent .table-wrapper,
+#hero-collection-pool .table-wrapper {
   margin-top: 0!important;
   height: 100%;
 }
 
 #hero-collection-summary .hero-collection-wrapper,
-#hero-collection-picks .hero-collection-wrapper {
+#hero-collection-picks .hero-collection-wrapper,
+#hero-collection-pool .hero-collection-wrapper {
   height: calc(100% - 40px);
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+#hero-collection-pool .hero-collection-not-played {
+  height: calc(100% - 280px);
+}
+
+#hero-collection-pool .hero-collection-not-played .grid {
+  height: 100%;
+}
+
+#hero-collection-pool .hero-collection-not-played .segment {
+  height: 100%;
 }
 
 #hero-collection-summary .table-wrapper,

@@ -136,11 +136,34 @@ function loadOverallHeroCollectionData() {
 
     $('#hero-collection-summary tbody').html('');
     $('#hero-collection-picks tbody').html('');
+    let roleData = {};
+    let totalCount = 0;
+    let totalBan = 0;
+
     for (let h in overallStats) {
       if (h === 'totalMatches' || h === 'totalBans')
         continue;
 
       let hero = overallStats[h];
+      let role = Heroes.role(h);
+      
+      if (!(role in roleData)) {
+        roleData[role] = { games: 0, bans: 0, wins: 0, count: 0 };
+      }
+
+      if (hero.games > 0) {
+        roleData[role].count += 1;
+        totalCount += 1;
+      }
+
+      if (hero.bans.total > 0) {
+        roleData[role].bans += 1;
+        totalBan += 1;
+      }
+
+      roleData[role].games += hero.games;
+      roleData[role].wins += hero.wins;
+
       if (hero.involved < heroCollectionHeroMatchThresh)
         continue;
 
@@ -185,6 +208,49 @@ function loadOverallHeroCollectionData() {
 
       $('#hero-collection-picks tbody').append(heroCollectionPickRowTemplate(banContext));
     }
+
+    // roles
+    for (let r of Heroes.roles) {
+      let selector = $('#hero-collection-pool div[role="' + r + '"]');
+  
+      if (!(r in roleData)) {
+        selector.find('div[name="pool"] .value').text('0 / ' + Heroes.heroRoleCount(r));
+        selector.find('div[name="games"] .value').text('0');
+        selector.find('div[name="ban"] .value').text('0');
+      }
+      else {
+        selector.find('div[name="pool"] .value').text(roleData[r].count + ' / ' + Heroes.heroRoleCount(r));
+        selector.find('div[name="games"] .value').text(roleData[r].games);
+        selector.find('div[name="ban"] .value').text(roleData[r].bans + ' / ' + Heroes.heroRoleCount(r));
+      }
+    }
+
+    $('#hero-collection-pool div[role="all"] div[name="pool"] .value').text(totalCount + ' / ' + Heroes.heroCount);
+    $('#hero-collection-pool div[role="all"] div[name="ban"] .value').text(totalBan + ' / ' + Heroes.heroCount);
+
+    $('#hero-collection-pool tbody').html('');
+
+    // not played
+    let names = Heroes.allHeroNames.sort();
+    for (let hero of names) {
+      let elem = '<tr><td><h3 class="ui image inverted header">'
+      elem += '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(hero) + '" class="ui rounded image">';
+      elem += '<div class="content">' + hero + '</div></h3></td></tr>';
+
+      if (!(hero in overallStats)) {
+        $('#hero-collection-zero-participation tbody').append(elem);
+        $('#hero-collection-zero-games tbody').append(elem);
+        $('#hero-collection-zero-bans tbody').append(elem);
+      }
+      else {
+        if (overallStats[hero].games === 0)
+          $('#hero-collection-zero-games tbody').append(elem);
+        if (overallStats[hero].bans.total === 0)
+          $('#hero-collection-zero-bans tbody').append(elem);
+      }
+    }
+
+    $('#hero-collection-pool table').floatThead('reflow');
   })
 }
 
