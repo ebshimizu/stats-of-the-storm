@@ -1399,7 +1399,7 @@ function processReplay(file, HeroesTalents, opts = {}) {
     console.log("[STATS] Setting Match Flags...");
 
     // did the first pick win the match
-    if (match.picks.first) {
+    if (match.picks) {
       match.firstPickWin = match.picks.first === match.winner;
     }
     else {
@@ -1765,48 +1765,47 @@ function combineIntervals(intervals) {
 }
 
 function getFirstObjectiveTeam(match) {
-  if (match.map === MapType.ControlPoints ||
-      match.map === MapType.TowersOfDoom ||
-      match.map === MapType.CursedHollow ||
-      match.map === MapType.DragonShire ||
-      match.map === MapType.HauntedWoods ||
-      match.map === MapType.Crypts ||
-      match.map === MapType.Volskaya ||
-      match.map === MapType['Warhead Junction']) {
+  if (match.map === ReplayTypes.MapType.ControlPoints ||
+      match.map === ReplayTypes.MapType.TowersOfDoom ||
+      match.map === ReplayTypes.MapType.CursedHollow ||
+      match.map === ReplayTypes.MapType.DragonShire ||
+      match.map === ReplayTypes.MapType.HauntedWoods ||
+      match.map === ReplayTypes.MapType.Crypts ||
+      match.map === ReplayTypes.MapType.Volskaya ||
+      match.map === ReplayTypes.MapType['Warhead Junction']) {
     // shutouts
     if (match.objective[0].events.length === 0 && match.objective[1].events.length > 0)
       return 1;
     if (match.objective[1].events.length === 0 && match.objective[0].events.length > 0)
       return 0;
-    if (match.objective[0].events[0].time === match.objective[0].events[1].time)
+    if (match.objective[0].events[0].time === match.objective[1].events[0].time)
       return null;
 
     return match.objective[0].events[0].time < match.objective[1].events[1].time ? 0 : 1;
   }
-  else if (match.map === MapType.BattlefieldOfEternity) {
+  else if (match.map === ReplayTypes.MapType.BattlefieldOfEternity) {
     if (match.objective.results.length > 0) {
       return match.objective.results[0].winner;
     }
 
     return null;
   }
-  else if (match.map === MapType.Shrines) {
+  else if (match.map === ReplayTypes.MapType.Shrines) {
     if (match.objective.shrines.length > 0) {
       return match.objective.shrines[0].team;
     }
 
     return null;
   }
-  else if (match.map === MapType.BraxisHoldout) {
-    if (match.obbjective.waves.length > 0) {
+  else if (match.map === ReplayTypes.MapType.BraxisHoldout) {
+    if (match.objective.waves.length > 0) {
       return match.objective.waves[0].startScore[0] > match.objective.waves[0].startScore[1] ? 0 : 1;
     }
 
-    return null;;
-  }
-  else if (match.map === MapType.HauntedMines) {
     return null;
   }
+  // haunted mines and blackhearts: unsure how to detect first objective
+  // (which honeslty for blackheart should be easy but isn't)
 
   return null;
 }
