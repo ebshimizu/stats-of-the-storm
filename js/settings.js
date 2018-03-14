@@ -513,5 +513,6 @@ function handleCollectionAction(id, name, action) {
 
 function setPlayerMenuThreshold() {
   settings.set('playerThreshold', parseInt($('#player-menu-thresh-input input').val()));
+  showMessage('Player Threshold Updated', 'Menus have been updated', { class: 'positive' });
   runPlayerMenuUpdate();
 }
