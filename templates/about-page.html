@@ -17,6 +17,55 @@
           gets talent and hero information and images from <a href="https://github.com/heroespatchnotes/heroes-talents">heroes-talents</a>.
         </p>
         <div class="ui inverted horizontal divider">Change Log</div>
+        <h3 class="ui inverted dividing header">Version 0.4.0</h3>
+        <p>
+          Version 0.4.0 brings another set of features, and takes the app closer to a full 1.0 release. Big changes in this update include
+          a re-designed matches list to help out with smaller screen sizes, a new trends section to see how pick and ban rates change
+          over time, player hero pool stats, and the ability to plot any average player stat over time. For a full list of changes,
+          check out the list below.
+
+          Thanks to AlexNewell and sakurinha on GitHub for suggesting some of the features in this release.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/89">#89</a>
+          New Feature: Trends. Specify two time spans and see changes in the win, pick, and ban rates of all heroes in the collection.
+          All standard filters are available, so you can see stats for specific maps as well.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/99">#99</a>
+          Player Details: Hero pool stats added. This is a new tab in the All Hero Summary view.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/109">#109</a>
+          Player Details: Progression tab now allows the graphing of any non-map-specific stat.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/95">#95</a>
+          Matches: Re-designed the match list. Matches now scroll, and text does not shrink. Should help
+          with viewing the match list on a small screen. Also added team nameplates (if there are any applicable teams).
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/110">#110</a>
+          Match Details: Team XP graph can be toggled between 'Total XP vs Time' mode and 'Levels vs Time' mode.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/108">#108</a>
+          Player Details, Team Details, Collection: Heroes: A threshold can be set to filter out heroes that have fewer games
+          than the specified threshold.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/111">#111</a>
+          Matches: Matches can be searched conditioned on the win/loss of a specified player or team.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/112">#112</a>
+          Heroes, Team Details: Pick stats have been changed to round based instead of the strict 1-5 order.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/103">#103</a>
+          App: Player names now link to their in-app profile.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/97">#97</a>
+          Player Details: Detailed stats table should no longer show NaN if a stat was missing from the replay.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/107">#107</a>
+          App: Database loading order has been changed in order to produce more detailed errors in case a database
+          fails to load. If you see one of these errors, please report it on GitHub.
+        </p>
+        <p>
+          Talent Descriptions: Updated heroes-talents to handle changes in most recent build 63070.
+        </p>
         <h3 class="ui inverted dividing header">Version 0.3.1</h3>
         <p>Parser update for build 63070.</p>
         <h3 class="ui inverted dividing header">Version 0.3.0</h3>

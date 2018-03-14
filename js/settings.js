@@ -82,7 +82,7 @@ function initSettingsPage() {
   $('#rescan-replays-button').click(startReplayScan);
   $('#replay-file-start').datepicker();
   $('#replay-file-start').on('hide.datepicker', function(e) {
-    settings.set('latReplayDate', e.date);
+    settings.set('lastReplayDate', e.date);
     startReplayScan();
   });
   $('#replay-file-start').datepicker('setDate', date);

@@ -67,7 +67,7 @@ function initTrendsPage() {
   $('#hero-trends-hero-thresh input').val(trendsHeroMatchThreshold);
 
   $('#hero-trends-page-header .trends-date').datepicker();
-  $('#hero-trends-page-header .trends-date').on('hide.datepicker', function(e) {
+  $('#hero-trends-page-header .trends-date').on('pick.datepicker', function(e) {
     trendsDateLimits[$(this).attr('name')] = e.date;
   });
 
@@ -115,13 +115,13 @@ function loadTrends() {
   let query1 = Object.assign({}, trendsMapDataFilter);
   query1.$where = function() {
     let d = new Date(this.date);
-    return trendsDateLimits['1-start'] <= d && d <= trendsDateLimits['1-end'];
+    return trendsDateLimits['1-start'] <= d && d < trendsDateLimits['1-end'];
   }
 
   let query2 = Object.assign({}, trendsMapDataFilter);
   query2.$where = function() {
     let d = new Date(this.date);
-    return trendsDateLimits['2-start'] <= d && d <= trendsDateLimits['2-end'];
+    return trendsDateLimits['2-start'] <= d && d < trendsDateLimits['2-end'];
   }
 
   DB.getMatches(query1, function(err, dp1) {
