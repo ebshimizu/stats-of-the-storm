@@ -1781,7 +1781,7 @@ function getFirstObjectiveTeam(match) {
     if (match.objective[0].events[0].time === match.objective[1].events[0].time)
       return null;
 
-    return match.objective[0].events[0].time < match.objective[1].events[1].time ? 0 : 1;
+    return match.objective[0].events[0].time < match.objective[1].events[0].time ? 0 : 1;
   }
   else if (match.map === ReplayTypes.MapType.BattlefieldOfEternity) {
     if (match.objective.results.length > 0) {
@@ -1827,4 +1827,5 @@ exports.AllReplayData = AllReplayData;
 exports.processReplay = processReplay;
 exports.ReplayStatus = ReplayStatus;
 exports.StatusString = StatusString;
+exports.getFirstObjectiveTeam = getFirstObjectiveTeam;
 exports.VERSION = PARSER_VERSION;

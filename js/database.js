@@ -285,6 +285,16 @@ class Database {
     }
   }
 
+  // updates the entire match
+  updateMatch(match, callback) {
+    if (callback) {
+      this._db.matches.update({ _id: match._id }, match, {}, callback);
+    }
+    else {
+      this._db.matches.update({ _id: match._id }, match, {});
+    }
+  }
+
   // retrieves matches by id
   getMatchesByID(ids, callback, opts = {}) {
     let query = {$or: []};

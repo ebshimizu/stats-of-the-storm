@@ -269,7 +269,7 @@ function loadDatabaseComplete(err) {
 function checkDBVersion(dbVer) {
   console.log('Database and Parser version: ' + dbVer);
 
-  if (dbVer !== Parser.VERSION) {
+  if (dbVer < Parser.VERSION) {
     // here's where database migrations go, if any
     console.log('Updating database from version ' + dbVer + ' to version ' + Parser.VERSION);
     if (dbVer === 1) {
@@ -277,6 +277,13 @@ function checkDBVersion(dbVer) {
       // migrate will call back to check DB version after updating the version
       return;
     }
+    else if (dbVer === 2) {
+      migrateVersion2ToVersion3();
+      return;
+    }
+  }
+  else if (dbVer > Parser.VERSION) {
+    showMessage('Warning: Loading Newer Database in Older App', 'The app should function normally, however the database is newer than the app, and some unexpected errors may occur.', { sticky: true });
   }
 
   setLoadMessage('Database and Parser Version ' + dbVer);
@@ -640,7 +647,7 @@ function resetAllSections() {
 }
 
 function setLoadMessage(msg) {
-  $('.load-status').text(msg);
+  $('.load-status').html(msg);
 }
 
 function showLoader() {
@@ -739,4 +746,50 @@ function migrateVersion1ToVersion2() {
   remember to set the Import to Collection option accordingly.`
   showMessage('Parser Updated to Version 2', text, { sticky: true });
   DB.setDBVersion(2, checkDBVersion(2));
+}
+
+function migrateVersion2ToVersion3() {
+  // this one we actually do work.
+  setLoadMessage('Updating DB Version 2 to Version 3');
+  DB.getMatches({}, function(err, docs) {
+    if (docs.length > 0)
+      updateMatchToVersion3(docs.pop(), docs);
+    else
+      finishVersion2To3Migration();
+  })
+}
+
+function updateMatchToVersion3(match, remaining) {
+  console.log('updating match ' + match._id);
+  setLoadMessage('Updating DB Version 2 to Version 3<br>' + remaining.length + ' matches left');
+
+  if (match.picks) {
+    match.firstPickWin = match.picks.first === match.winner;
+  }
+  else {
+    match.firstPickWin = false;
+  }
+
+  match.firstObjective = Parser.getFirstObjectiveTeam(match);
+  match.firstObjectiveWin = match.winner === match.firstObjective;
+
+  // update
+  DB.updateMatch(match, function() {
+    if (remaining.length === 0) {
+      finishVersion2To3Migration();
+    }
+    else {
+      updateMatchToVersion3(remaining.pop(), remaining);
+    }
+  });
+}
+
+function finishVersion2To3Migration() {
+  setLoadMessage('Version 3 Upgrade Complete');
+  showMessage(
+    'Parser Updated to Version 3',
+    'Additional database fields added. You do not need to re-import your matches.',
+    { sticky: true, class: 'positive' }
+  );
+  DB.setDBVersion(3, checkDBVersion(3));
 }
