@@ -5,11 +5,10 @@ var trendsOverallHeroRowTemplate;
 var trendsHeroPickTemplate;
 var trendsHeroBanTemplate;
 var trendsDateLimits = {
-  // DEBUG VALUES!!!
-  '1-start': new Date('2-1-2018'),
-  '1-end': new Date('2-8-2018'),
-  '2-start': new Date('2-8-2018'),
-  '2-end': new Date('2-15-2018')
+  '1-start': new Date(),
+  '1-end': new Date(),
+  '2-start': new Date(),
+  '2-end': new Date()
 };
 
 function initTrendsPage() {

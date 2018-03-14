@@ -44,14 +44,17 @@ const tierToLevel = {
   "Tier 7 Choice" : 20
 }
 
+const statColors = ['#DB2828', '#F2711C', '#FBBD08', '#B5CC18', '#21BA45', '#00B5AD', '#2185D0', '#6435C9', '#A333C8', '#E03997' ];
+
 var progressionWinRateGraphData, progressionWinRateGraph;
-var progressionKDAGraphData, progressionKDAGraph;
+var progressionStatGraphData, progressionStatGraph;
 var progressionAwardsGraphData, progressionAwardsGraph;
 var heroPoolGamesGraphData, heroPoolGamesGraph;
 var heroPoolWinsGraphData, heroPoolWinsGraph;
 
 var progressionGraphSettings = {
   responsive: true,
+  maintainAspectRatio: false,
   tooltips: {
     position: 'nearest',
     mode: 'index',
@@ -86,6 +89,7 @@ var progressionGraphSettings = {
 
 var progressionWinGraphSettings = {
   responsive: true,
+  maintainAspectRatio: false,
   tooltips: {
     position: 'nearest',
     mode: 'index',
@@ -130,8 +134,9 @@ var progressionWinGraphSettings = {
   }
 };
 
-var progressionKDAGraphSettings = {
+var progressionStatGraphSettings = {
   responsive: true,
+  maintainAspectRatio: false,
   tooltips: {
     position: 'nearest',
     mode: 'index',
@@ -145,12 +150,22 @@ var progressionKDAGraphSettings = {
   scales: {
     yAxes: [{
       ticks: {
-        fontColor: '#FFFFFF',
-        min: 0
+        fontColor: '#FFFFFF'
       },
+      position: 'left',
       gridLines: {
         color: '#ababab'
-      }
+      },
+      id: 'axis1'
+    }, {
+      position: 'right',
+      ticks: {
+        fontColor: '#FFFFFF'
+      },
+      gridLines: {
+        drawOnChartArea: 'false'
+      },
+      id: 'axis2'
     }],
     xAxes: [{
       ticks: {
@@ -342,19 +357,14 @@ function initPlayerPage() {
     },
     options: progressionWinGraphSettings
   };
-  progressionKDAGraphData = {
+  progressionStatGraphData = {
     type: 'line',
     data: {
       datasets: [{
-        label: 'KDA',
-        fill: 'false',
-        borderColor: '#21ba45',
-        backgroundColor: '#21ba45',
-        cubicInterpolationMode: 'monotone',
-        data: []
+        
       }]
     },
-    options: progressionKDAGraphSettings
+    options: progressionStatGraphSettings
   };
   progressionAwardsGraphData = {
     type: 'line',
@@ -381,16 +391,24 @@ function initPlayerPage() {
   progressionWinRateGraphData.options.scales.yAxes[0].ticks.max = 100;
   progressionWinRateGraphData.options.scales.yAxes[0].ticks.min = 0;
 
-  progressionKDAGraphData.options.scales.yAxes[0].ticks.min = 0;
+  progressionStatGraphData.options.scales.yAxes[0].ticks.min = 0;
 
   progressionAwardsGraphData.options.scales.yAxes[0].ticks.max = 100;
   progressionAwardsGraphData.options.scales.yAxes[0].ticks.min = 0;
 
   progressionWinRateGraph = new Chart($('#player-progression-win-rate'), progressionWinRateGraphData);
-  progressionKDAGraph = new Chart($('#player-progression-kda'), progressionKDAGraphData);
+  progressionStatGraph = new Chart($('#player-progression-kda'), progressionStatGraphData);
   progressionAwardsGraph = new Chart($('#player-progression-awards'), progressionAwardsGraphData);
   heroPoolGamesGraph = new Chart($('#player-hero-pool-games-graph'), heroPoolGamesGraphData);
   heroPoolWinsGraph = new Chart($('#player-hero-pool-win-graph'), heroPoolWinsGraphData);
+
+  // stat graph ui elements
+  $('#player-progression .player-detail-stat-graph .player-axis').popup({
+    inline: true,
+    on: 'click',
+    boundary: '#player-progression'
+  });
+  initPlayerStatGraphMenus();
 
   // collection averages
   $('#player-compare-collection').dropdown({
@@ -419,6 +437,21 @@ function populatePlayerCollectionMenu() {
 
     $('#player-compare-collection').dropdown('refresh');
   });
+}
+
+function initPlayerStatGraphMenus() {
+  for (let stat of DetailStatList) {
+    $('#player-progression .player-stat-menu .menu').append('<div class="item" data-value="' + stat + '">' + DetailStatString[stat] + '</div>');
+  }
+
+  $('#player-progression .player-stat-menu').dropdown({
+    fullTextSearch: true
+  });
+
+  $('.player-stat-menu[name="axis1"]').dropdown('set exactly', 'KDA');
+  $('.player-stat-menu[name="axis2"]').dropdown('set exactly', 'TimeSpentDead');
+
+  $('#player-progression .player-axis-settings .green.button').click(renderProgression);
 }
 
 function showPlayerPage() {
@@ -925,6 +958,18 @@ function updateGraphInterval(value, text, $item) {
 }
 
 function renderProgression() {
+  if (!playerDetailStats)
+    return;
+
+  let axis1Stats = $('.player-stat-menu[name="axis1"]').dropdown('get value').split(',');
+  let axis2Stats = $('.player-stat-menu[name="axis2"]').dropdown('get value').split(',');
+
+  if (axis1Stats[0] === '')
+    axis1Stats = [];
+  
+  if (axis2Stats[0] === '')
+    axis2Stats = [];
+
   // collect a few stats along the specified interval
   let data = {};
   for (let d in playerDetailStats.rawDocs) {
@@ -961,6 +1006,20 @@ function renderProgression() {
     data[hash[0]].award += doc.gameStats.awards.length;
     data[hash[0]].mvp += doc.gameStats.awards.indexOf('EndOfMatchAwardMVPBoolean') >= 0 ? 1 : 0;
     data[hash[0]].games += 1;
+
+    for (let stat of axis1Stats) {
+      if (!(stat in data[hash[0]]))
+        data[hash[0]][stat] = 0;
+
+      data[hash[0]][stat] += doc.gameStats[stat];
+    }
+
+    for (let stat of axis2Stats) {
+      if (!(stat in data[hash[0]]))
+        data[hash[0]][stat] = 0;
+
+      data[hash[0]][stat] += doc.gameStats[stat];
+    }
   }
 
   // stick objects in array then sort
@@ -1002,9 +1061,43 @@ function renderProgression() {
   let labels = [];
   progressionWinRateGraphData.data.datasets[0].data = [];
   progressionWinRateGraphData.data.datasets[1].data = [];
-  progressionKDAGraphData.data.datasets[0].data = [];
   progressionAwardsGraphData.data.datasets[0].data = [];
   progressionAwardsGraphData.data.datasets[1].data = [];
+  progressionStatGraphData.data.datasets = [];
+
+  let ci = 0;
+  for (let stat of axis1Stats) {
+    let ds = {
+      label: DetailStatString[stat],
+      fill: 'false',
+      borderColor: statColors[ci],
+      backgroundColor: statColors[ci],
+      cubicInterpolationMode: 'monotone',
+      data: [],
+      yAxisID: 'axis1'
+    }
+    ci += 1;
+    ci %= statColors.length;
+
+    progressionStatGraphData.data.datasets.push(ds);
+  }
+
+  for (let stat of axis2Stats) {
+    let ds = {
+      label: DetailStatString[stat],
+      fill: 'false',
+      borderColor: statColors[ci],
+      backgroundColor: statColors[ci],
+      cubicInterpolationMode: 'monotone',
+      data: [],
+      yAxisID: 'axis2'
+    }
+    ci += 1;
+    ci %= statColors.length;
+
+    progressionStatGraphData.data.datasets.push(ds);
+  }
+
   for (let i = 0; i < dataArr.length; i++) {
     let stat = dataArr[i];
 
@@ -1021,17 +1114,39 @@ function renderProgression() {
     }
     progressionWinRateGraphData.data.datasets[0].data.push((stat.wins / stat.games * 100).toFixed(2));
     progressionWinRateGraphData.data.datasets[1].data.push(stat.games);
-    progressionKDAGraphData.data.datasets[0].data.push((stat.takedowns / Math.max(stat.deaths, 1)).toFixed(2));
     progressionAwardsGraphData.data.datasets[0].data.push((stat.award / stat.games * 100).toFixed(2));
     progressionAwardsGraphData.data.datasets[1].data.push((stat.mvp / stat.games * 100).toFixed(2));
+
+    let idx = 0;
+    for (let s of axis1Stats) {
+      if (s === 'KDA') {
+        progressionStatGraphData.data.datasets[idx].data.push((stat.takedowns / Math.max(stat.deaths, 1)).toFixed(2));
+      }
+      else {
+        progressionStatGraphData.data.datasets[idx].data.push((stat[s] / stat.games).toFixed(2));
+      }
+
+      idx += 1;
+    }
+
+    for (let s of axis2Stats) {
+      if (s === 'KDA') {
+        progressionStatGraphData.data.datasets[idx].data.push((stat.takedowns / Math.max(stat.deaths, 1)).toFixed(2));
+      }
+      else {
+        progressionStatGraphData.data.datasets[idx].data.push((stat[s] / stat.games).toFixed(2));
+      }
+
+      idx += 1;
+    }
   }
 
   progressionWinRateGraphData.data.labels = labels;
-  progressionKDAGraphData.data.labels = labels;
+  progressionStatGraphData.data.labels = labels;
   progressionAwardsGraphData.data.labels = labels;
 
   progressionWinRateGraph.update();
-  progressionKDAGraph.update();
+  progressionStatGraph.update();
   progressionAwardsGraph.update();
 }
 

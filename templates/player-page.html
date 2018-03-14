@@ -605,21 +605,66 @@
         <div class="player-detail-wrapper">
           <div class="ui two column grid">
             <div class="column">
-              <div class="ui inverted segment">
+              <div class="ui inverted segment player-progression-segment">
                 <div class="ui top attached label">Win %</div>
-                <canvas id="player-progression-win-rate"></canvas>
+                <div class="player-detail-graph-container">
+                  <canvas id="player-progression-win-rate"></canvas>
+                </div>
               </div>
             </div>
             <div class="column">
-              <div class="ui inverted segment">
-                <div class="ui top attached label">KDA</div>
-                <canvas id="player-progression-kda"></canvas>
+              <div class="player-detail-graph-container player-detail-stat-graph">
+                <div class="ui top attached mini menu">
+                  <div class="header item">Average Stats</div>
+                  <div class="right menu">
+                    <a class="item player-axis" data-variation="very wide">
+                      <i class="chart line icon"></i> Select Stats
+                    </a>
+                    <div class="ui popup player-axis-settings">
+                      <div class="header">Select Stats</div>
+                      <div class="content">
+                        <div class="ui grid">
+                          <div class="three wide column">Axis 1</div>
+                          <div class="thirteen wide column">
+                            <div class="ui fluid multiple search selection dropdown player-stat-menu" name="axis1">
+                              <i class="dropdown icon"></i>
+                              <div class="default text">Select Stats</div>
+                              <div class="menu">
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="three wide column">Axis 2</div>
+                          <div class="thirteen wide column">
+                            <div class="ui fluid multiple search selection dropdown player-stat-menu" name="axis2">
+                              <i class="dropdown icon"></i>
+                              <div class="default text">Select Stats</div>
+                              <div class="menu">
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="sixteen wide column">
+                            <div class="ui fluid small green button">
+                              Graph
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="ui bottom attached inverted segment">
+                  <canvas id="player-progression-kda"></canvas>
+                </div>
               </div>
             </div>
             <div class="column">
-              <div class="ui inverted segment">
+              <div class="ui inverted segment player-progression-segment">
                 <div class="ui top attached label">Awards</div>
-                <canvas id="player-progression-awards"></canvas>
+                <div class="player-detail-graph-container">
+                  <canvas id="player-progression-awards"></canvas>
+                </div>
               </div>
             </div>
           </div>

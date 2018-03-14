@@ -150,10 +150,40 @@
   background-color: #333;
 }
 
-#player-progression canvas {
+.player-detail-graph-container {
+  height: 477px;
+}
+
+.player-detail-graph-container .segment {
+  height: 100%;
+}
+
+.player-detail-graphs-container canvas {
+  height: 100%;
+}
+
+.player-detail-graph-container.player-detail-stat-graph {
+  height: 500px;
+}
+
+.player-detail-graph-container.player-detail-stat-graph .segment {
+  height: 100%;
+}
+
+.player-detail-graph-container.player-detail-stat-graph canvas {
+  margin-top: 0;
+}
+
+.player-axis-settings {
+  width: 700px;
+}
+
+#player-progression .player-progression-segment {
+  height: 532px;
+}
+
+.player-detail-graph-container canvas {
   margin-top: 24px;
-  width: 100%;
-  height: 400px;
 }
 
 #player-progression .player-detail-wrapper {
