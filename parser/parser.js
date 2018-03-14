@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const ReplayTypes = require(path.join(__dirname, 'constants.js'));
 const heroprotocol = require('heroprotocol');
-const PARSER_VERSION = 2;
+const PARSER_VERSION = 3;
 
 const ReplayDataType = {
   game: "gameevents",
@@ -1396,6 +1396,22 @@ function processReplay(file, HeroesTalents, opts = {}) {
     
     console.log("[STATS] Team stat collection complete");
 
+    console.log("[STATS] Setting Match Flags...");
+
+    // did the first pick win the match
+    if (match.picks.first) {
+      match.firstPickWin = match.picks.first === match.winner;
+    }
+    else {
+      // QM will show up as false here
+      match.firstPickWin = false;
+    }
+
+    match.firstObjective = getFirstObjectiveTeam(match);
+    match.firstObjectiveWin = match.winner === match.firstObjective;
+
+    console.log('[STATS] Match Flags set.');
+
     return { match, players, status : ReplayStatus.OK };
   }
   catch (err) {
@@ -1746,6 +1762,53 @@ function combineIntervals(intervals) {
 
   result.push(prev);
   return result;
+}
+
+function getFirstObjectiveTeam(match) {
+  if (match.map === MapType.ControlPoints ||
+      match.map === MapType.TowersOfDoom ||
+      match.map === MapType.CursedHollow ||
+      match.map === MapType.DragonShire ||
+      match.map === MapType.HauntedWoods ||
+      match.map === MapType.Crypts ||
+      match.map === MapType.Volskaya ||
+      match.map === MapType['Warhead Junction']) {
+    // shutouts
+    if (match.objective[0].events.length === 0 && match.objective[1].events.length > 0)
+      return 1;
+    if (match.objective[1].events.length === 0 && match.objective[0].events.length > 0)
+      return 0;
+    if (match.objective[0].events[0].time === match.objective[0].events[1].time)
+      return null;
+
+    return match.objective[0].events[0].time < match.objective[1].events[1].time ? 0 : 1;
+  }
+  else if (match.map === MapType.BattlefieldOfEternity) {
+    if (match.objective.results.length > 0) {
+      return match.objective.results[0].winner;
+    }
+
+    return null;
+  }
+  else if (match.map === MapType.Shrines) {
+    if (match.objective.shrines.length > 0) {
+      return match.objective.shrines[0].team;
+    }
+
+    return null;
+  }
+  else if (match.map === MapType.BraxisHoldout) {
+    if (match.obbjective.waves.length > 0) {
+      return match.objective.waves[0].startScore[0] > match.objective.waves[0].startScore[1] ? 0 : 1;
+    }
+
+    return null;;
+  }
+  else if (match.map === MapType.HauntedMines) {
+    return null;
+  }
+
+  return null;
 }
 
 // general parsing utilities, not db specific
