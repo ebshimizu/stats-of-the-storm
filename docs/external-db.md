@@ -18,7 +18,7 @@ the data from that database instead of creating a new one in that folder.
 
 Try it out! Below are some databases created for Stats of the Storm.
 
-* [HGC NA/EU Phase 1 Part 1](https://www.dropbox.com/s/57jx8c699nznij1/2018HGC_NA_EU.zip?dl=0)
+* [2018 HGC](https://www.dropbox.com/s/6oib7or3n6oknev/HGC_2018.zip?dl=0) - Includes all regions, regular season play games, and tournament games. Updated as replays become available.
 * [NGS Season 3](https://www.dropbox.com/s/302ll6d7l4lqpti/NGS_Season3.zip?dl=0) - The Nexus Gaming Series is a NA community
 league. Find out more at their website: [Nexus Gaming Series](https://nexusgamingseries.com).
 

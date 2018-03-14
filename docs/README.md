@@ -130,6 +130,9 @@ Hero summary, map summary, and aggregate data for each player.
 ![Player Hero Details]({{ "/images/player-details-02.png" | absolute_url }})
 Hero details and talent selection per-player.
 
+![Player Hero Pool]({{ "/images/player-details-09.png" | absolute_url }})
+Hero pool details for each player.
+
 ![Player Hero Builds]({{ "/images/player-details-07.png" | absolute_url }})
 Talent builds overall and per-player.
 
@@ -187,6 +190,9 @@ Hero pick and ban rate stats for the entire collection.
 ![Overall Team Stats]({{ "/images/collection-02.png" | absolute_url }})
 Rank teams by their average stats. Provides four categories to browse through.
 
+![Overall Hero Trends]({{ "/images/trends-01.png" | absolute_url }})
+See win, pick, and ban rates for each hero over two specified intervals.
+
 ![Overall Player Stats]({{ "/images/collection-03.png" | absolute_url }})
 **IMPORTANT: If you are using large databases (more than 500 players)
 you should set filters on your query before running, otherwise you will
@@ -194,7 +200,7 @@ be waiting for the app to respond for a long time.**
 
 Displays overall individual player stats. Filterable by hero.
 
-## <a name="uploader"></a>Built-in HotsAPI Upload
+## <a name="uploader"></a>Built-in HotsAPI Uploader
 
 ![Built In Uploader]({{ "/images/uploader.png" | absolute_url }})
 Upload your matches to HotsAPI (and HotsLogs if you like) automatically
