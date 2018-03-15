@@ -864,12 +864,66 @@ These consist of pings and text messages sent through the game interface.
 Team chat is recorded for your team (so no you can't see the other team's chat in the replay).
 Party chat is not included if you were in a party.
 
-Contents:
+Common Contents:
 ```
 {
-  
+  _eventid: [int],
+  _event: [string],
+  _gameloop: [int],
+  _userid: {
+    m_userId: [int]
+  }
 }
 ```
+All message events have the above contents. The user ID is the Lobby ID as described in the Players section.
+`_eventid` will be one of the following and is used to identify what kind of message the event is. `_event` contains
+a string representation of the event.
+
+| `_eventid` | Name | Notes |
+| ---------- | ---- | ----- |
+| 0 | [Chat](#chat) | Chat message |
+| 1 | [Ping](#ping) | Ping | 
+| 2 | Loading Progress | You can use this to figure out who's loading the slowest I guess. |
+| 3 | Server Ping | Not sure what this does really. |
+| 4 | Reconnect Notify | Can use to determine who DC'd |
+| 5 | [Player Announce](#playerAnnounce) | An announcement ping (health, mana, etc.) |
+
+### <a name="chat"></a> Chat, _eventid = 0
+A text message sent to an in-game channel.
+
+Contents: 
+
+* Message Contents: `m_string`
+* Message Scope: `m_recipient` - Integer. Relevant values are 0 (All), 1 (Allies/Team), 4 (Observers)
+
+### <a name="ping"></a> Ping, _eventid = 1
+A map ping.
+
+Contents:
+
+* Location: `m_point` - contains fields `x` and `y` in what appears to be fixed integer format
+* Message Scope: `m_recipient` - Integer. Relevant value are 0 (All), 1 (Allies/Team), 4 (Observers)
+
+### <a name="playerAnnounce"></a> Player Announce, _eventid = 5
+A player announcment (health, mana, etc.)
+
+Contents:
+
+* Type: `m_announcement` - Announcement type. An object containing the type and target of the announcement.
+Not explored too much of this. Known values for this field are detailed in the table below.
+* Link: `m_announceLink` - Not sure what this field is.
+* Unit Tags?: `m_unitTag` and `m_otherUnitTag` - Appaear to also be in some sort of fixed integer format. Presumably
+links up with the unit tag from the tracker events, but this is untested.
+
+#### Announcement Types
+Keys are string keys for an object.
+
+| Key | Value | Notes |
+| --- | ----- | ----- |
+| `"None"` | | Not sure really what this does |
+| `"Ability"` | ? | This indicates the cooldown of the selected ability. I think the contents are the ability ID, but haven't checked recently |
+| `"Behavior"` | ? | Unknown |
+| `"Vitals"` | Integer | 0 = Health, 2 = Mana, 1 = ??? |
 
 ## Game Events
 
