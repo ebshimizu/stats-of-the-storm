@@ -22,33 +22,34 @@
   },
   "dependencies": {
     "@fengyuanchen/datepicker": "^0.6.4",
-    "chart.js": "^2.7.1",
+    "chart.js": "^2.7.2",
     "electron-settings": "^3.1.4",
-    "electron-updater": "^2.20.1",
+    "electron-updater": "^2.21.1",
     "electron-util": "^0.6.0",
-    "floatthead": "^2.1.0",
+    "floatthead": "^2.1.1",
     "form-data": "^2.3.2",
     "handlebars": "^4.0.11",
     "heroprotocol": "^1.0.1",
     "jquery": "^3.3.1",
     "jquery-tablesort": "0.0.11",
-    "moment": "^2.20.1",
+    "moment": "^2.21.0",
     "nedb": "^1.8.0",
     "semantic-ui": "^2.3.0",
     "vis": "^4.21.0"
   },
   "devDependencies": {
-    "electron-builder": "^20.0.9",
+    "electron-builder": "^20.5.1",
     "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-node": "^5.2.1",
-    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1"
   },
   "scripts": {
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "publish" : "electron-builder --publish always"
+    "mac-dist": "electron-builder -m",
+    "publish": "electron-builder --publish always"
   },
   "build": {
     "appId": "com.stats-of-the-storm.app",
