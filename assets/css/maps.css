@@ -1,0 +1,17 @@
+#maps-page-header {
+  margin-bottom: 10px;
+}
+
+#maps-page-content .maps-page-wrapper {
+  height: calc(100% - 50px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#map-individual-stats {
+  height: calc(100% - 150px);
+}
+
+#map-individual-stats .segment {
+  height: 100%;
+}

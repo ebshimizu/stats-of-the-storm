@@ -1,0 +1,82 @@
+<script src="../js/maps.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/css/maps.css">
+
+<template id="maps-page">
+  <div id="maps-page-content" class="is-page transition hidden" section-name="maps">
+    <div id="maps-page-header">
+      <div class="ui grid">
+        <div class="fourteen wide column">
+          <h1 class="ui inverted header">Map and Misc Stats</h1>
+        </div>
+        <div class="two wide column">
+          <button class="ui labeled fluid right floated green icon button" id="maps-filter-button" data-variation="very wide">
+            <i class="filter icon"></i>
+            Filter Matches
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="maps-page-wrapper">
+      <div class="ui inverted segment" id="map-overall-stats">
+        <div class="ui top attached label">Match Statistics</div>
+        <div class="ui eight inverted statistics">
+          <div class="statistic" name="average">
+            <div class="value">###</div>
+            <div class="label">Average Length</div>
+          </div>
+          <div class="statistic" name="median">
+            <div class="value">###</div>
+            <div class="label">Median Length</div>
+          </div>
+          <div class="statistic" name="min">
+            <div class="value">###</div>
+            <div class="label">Shortest Game</div>
+          </div>
+          <div class="statistic" name="max">
+            <div class="value">###</div>
+            <div class="label">Longest Game</div>
+          </div>
+          <div class="statistic" name="firstPickWin">
+            <div class="value">###</div>
+            <div class="label">First Pick Wins</div>
+          </div>
+          <div class="statistic" name="firstObjectiveWins">
+            <div class="value">###</div>
+            <div class="label">First Objective Wins</div>
+          </div>
+          <div class="blue statistic" name="blueWin">
+            <div class="value">###</div>
+            <div class="label">Blue Side Wins</div>
+          </div>
+          <div class="red statistic" name="redWin">
+            <div class="value">###</div>
+            <div class="label">Red Side Wins</div>
+          </div>
+        </div>
+      </div>
+      <div id="map-individual-stats">
+        <div class="ui inverted segment">
+          <div class="ui top attached label">Stats Per Map</div>
+          <div class="table-wrapper">
+            <table class="ui sortable selectable inverted table">
+              <thead>
+                <tr>
+                  <th>Map Name</th>
+                  <th class="center aligned stat">Games</th>
+                  <th class="center aligned stat">Average Length</th>
+                  <th class="center aligned stat">Median Length</th>
+                  <th class="center aligned stat">Shortest</th>
+                  <th class="center aligned stat">Longest</th>
+                  <th class="center aligned stat">First Pick Wins</th>
+                  <th class="center aligned stat">First Objective Wins</th>
+                  <th class="center aligned stat">Blue Side Wins</th>
+                  <th class="center aligned stat">Red Side Wins</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
