@@ -926,7 +926,11 @@ Keys are string keys for an object.
 | `"Vitals"` | Integer | 0 = Health, 2 = Mana, 1 = ??? |
 
 ## Game Events
+Every action executed by all players in the match. The results of said actions can only be
+fully resolved by running the game in a game client with the same version as the replay (which
+is why HotS downloads the required files and launches a different client when viewing older replays).
 
+The only thing I use this for right now is b-step detection.
 
 ## Special Cases for Map Objectives
 Sometimes the tracker doesn't have the data, but other places do.
