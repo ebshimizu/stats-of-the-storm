@@ -766,13 +766,13 @@ in this table.
 | `TimeCCdEnemyHeroes` | CC Time | In seconds |
 | `CreepDamage` | Creep Damage | Merc Camp / non-lane minion damage |
 | `SummonDamage` | Summon Damage | I think this is damage done _to_ summoned units (like Anub's beetles) not damage done by summoned units |
-| `Tier1Talent` | Level 1 Talent  | Tier 1 internal talent ID |
-| `Tier2Talent` | Level 4 Talent  | Tier 2 internal talent ID |
-| `Tier3Talent` | Level 7 Talent  | Tier 3 internal talent ID |  
-| `Tier4Talent` | Heroic Talent   | Tier 4 internal talent ID |
-| `Tier5Talent` | Level 13 Talent | Tier 5 internal talent ID |
-| `Tier6Talent` | Level 16 Talent | Tier 6 internal talent ID |
-| `Tier7Talent` | Storm Talent    | Tier 7 internal talent ID |
+| `Tier1Talent` | Level 1 Talent  | Tier 1 internal talent ID (int) |
+| `Tier2Talent` | Level 4 Talent  | Tier 2 internal talent ID (int) |
+| `Tier3Talent` | Level 7 Talent  | Tier 3 internal talent ID (int) |  
+| `Tier4Talent` | Heroic Talent   | Tier 4 internal talent ID (int) |
+| `Tier5Talent` | Level 13 Talent | Tier 5 internal talent ID (int) |
+| `Tier6Talent` | Level 16 Talent | Tier 6 internal talent ID (int) |
+| `Tier7Talent` | Storm Talent    | Tier 7 internal talent ID (int) |
 | `DamageTaken` | Damage Taken | This is non-zero only if Blizzard decided to classify the hero as a tank and store the stat. |
 | `Role` | Role | Role Stat, doesn't seem to be used right now? |
 | `KilledTreasureGoblin` | Killed Treasure Goblin | Remember the treasure goblin event |
@@ -839,7 +839,7 @@ award. `false` otherwise. These are all false in Custom games.
 | `EndOfMatchAwardMostTeamfightDamageTakenBoolean` | Most Team Fight Damage Taken Award | Guardian |
 | `EndOfMatchAwardMostTeamfightHealingDoneBoolean` | Most Team Fight Healing Done Award | Combat Medic |
 | `EndOfMatchAwardMostTeamfightHeroDamageDoneBoolean` | Most Team Fight Hero Damage Done Award | Scrapper |
-| `EndOfMatchAwardGivenToNonwinner` | End of Match Award Given to Winner, internal | |
+| `EndOfMatchAwardGivenToNonwinner` | End of Match Award Given to Non Winner, internal | |
 | `EndOfMatchAwardMostTimePushingBoolean` | Most Time Pushing Award | Pusher |
 | `EndOfMatchAwardMostTimeOnPointBoolean` | Most Time on Point Award | Point Guard |
 
