@@ -247,6 +247,14 @@ Location: `attributeevents.scopes[{Player Tracker ID}]["4002"][0].value`
 
 Use the heroes-talents repository data to resolve attribute id to hero name. 
 
+### Hero Level
+Location: `attributeevents.scopes[]["4008"][0].value`
+
+Blizzard never updated this after HotS 2.0, so we're currently stuck at hero level 20.
+
+### Other Attributes
+See [barrett777/Heroes.ReplayParser](https://github.com/barrett777/Heroes.ReplayParser/blob/master/Heroes.ReplayParser/MPQFiles/ReplayAttributeEvents.cs#L313) for a list of more attribute values.
+
 ## Tracker Events
 Tracker events are stored in the `trackerevents` array. This is a long array of individual event objects.
 Each tracker object must have the following fields:
@@ -850,6 +858,11 @@ This is the Working Set Slot ID as described in the players section.
 to a hero without manually building up that table. I don't use this and instead retrieve hero attribute names
 from the `attributeevents` data, and
 map back to display hero name with the [heroes-talents](https://github.com/heroespatchnotes/heroes-talents) repository data.
+
+## Message Events
+These consist of pings and text messages sent through the game interface.
+Team chat is recorded for your team (so no you can't see the other team's chat in the replay).
+Party chat is not included if you were in a party.
 
 ## Game Events
 
