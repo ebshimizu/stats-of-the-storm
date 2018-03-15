@@ -47,7 +47,8 @@
   },
   "scripts": {
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "publish" : "electron-builder --publish always"
   },
   "build": {
     "appId": "com.stats-of-the-storm.app",
