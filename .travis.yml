@@ -15,4 +15,4 @@ cache:
   - $HOME/.cache/electron-builder
 
 script:
-  - npm run mac-dist
+  - npm run publish
