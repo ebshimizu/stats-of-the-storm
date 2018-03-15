@@ -1,6 +1,7 @@
 #hero-trends-summary,
 #hero-trends-picks,
-#hero-trends-bans
+#hero-trends-bans,
+#hero-trends-comps
 {
   height: calc(100% - 40px);
 }
@@ -34,4 +35,15 @@
 #hero-trends-body .table-wrapper {
   margin-top: 20px!important;
   height: calc(100% - 20px);
+}
+
+#hero-trends-comps table tbody tr td .mini.image,
+#hero-trends-comps table tbody tr td .mini.image img {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+#hero-trends-comps table .ui.image>.ui.ribbon.label {
+  left: calc(.05rem - 0.1em);
 }

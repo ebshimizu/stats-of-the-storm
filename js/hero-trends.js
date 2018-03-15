@@ -129,8 +129,10 @@ function loadTrends() {
       $('#hero-trends-body tbody').html('');
 
       let stats = {};
-      stats.period1 = DB.summarizeMatchData(dp1, Heroes).data;
-      stats.period2 = DB.summarizeMatchData(dp2, Heroes).data;
+      let p1stats = DB.summarizeMatchData(dp1, Heroes);
+      let p2stats = DB.summarizeMatchData(dp2, Heroes);
+      stats.period1 = p1stats.data;
+      stats.period2 = p2stats.data;
 
       // should aggregate these since some heroes might not show up in both periods
       let aggr = {};
@@ -278,6 +280,53 @@ function loadTrends() {
         $('#hero-trends-summary tbody').append(trendsOverallHeroRowTemplate(context));
         $('#hero-trends-picks tbody').append(trendsHeroPickTemplate(context));
         $('#hero-trends-bans tbody').append(trendsHeroBanTemplate(context));
+      }
+
+      // composition aggregation
+      let comps = {};
+      for (let c in p1stats.compositions) {
+        let comp = p1stats.compositions[c];
+        
+        // nothing exists yet
+        comps[c] = {
+          p1Win: comp.wins / comp.games,
+          p1Pop: comp.games / (p1stats.data.totalMatches * 2),
+          p2Win: 0,
+          p2Pop: 0,
+          winDelta: -1,
+          popDelta: -1,
+          roles: comp.roles
+        }
+      }
+
+      for (let c in p2stats.compositions) {
+        let comp = p2stats.compositions[c];
+
+        if (!(c in comps)) {
+          comps[c] = {
+            p1Win: 0,
+            p1Pop: 0
+          }
+        }
+
+        comps[c].p2Win = comp.wins / comp.games;
+        comps[c].p2Pop = comp.games / (p2stats.data.totalMatches * 2);
+
+        comps[c].winDelta = (comps[c].p2Win - comps[c].p1Win) / comps[c].p1Win;
+        comps[c].popDelta = (comps[c].p2Pop - comps[c].p1Pop) / comps[c].p1Pop;
+      }
+
+      for (let c in comps) {
+        let comp = comps[c];
+        let row = '<tr><td class="center aligned" data-sort-value="' + c + '">' + getCompositionElement(comp.roles) + '</td>';
+        row += '<td class="center aligned" data-sort-value="' + comp.p1Win + '">' + (comp.p1Win * 100).toFixed(1) + ' %</td>';
+        row += '<td class="center aligned" data-sort-value="' + comp.p2Win + '">' + (comp.p2Win * 100).toFixed(1) + ' %</td>';
+        row += '<td class="center aligned ' + (comp.winDelta > 0 ? 'plus' : 'minus') + '" data-sort-value="' + comp.winDelta + '">' + (comp.winDelta > 0 ? '+' : '') + (comp.winDelta * 100).toFixed(1) + ' %</td>';
+        row += '<td class="center aligned" data-sort-value="' + comp.p1Pop + '">' + (comp.p1Pop * 100).toFixed(1) + ' %</td>';
+        row += '<td class="center aligned" data-sort-value="' + comp.p2Pop + '">' + (comp.p2Pop * 100).toFixed(1) + ' %</td>';
+        row += '<td class="center aligned ' + (comp.popDelta > 0 ? 'plus' : 'minus') + '" data-sort-value="' + comp.popDelta + '">' + (comp.popDelta > 0 ? '+' : '') + (comp.popDelta * 100).toFixed(1) + ' %</td></tr>';
+  
+        $('#hero-trends-comps tbody').append(row);
       }
 
       $('#hero-trends-body table').floatThead('reflow');
