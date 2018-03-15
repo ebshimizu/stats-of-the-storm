@@ -9,7 +9,7 @@
           <h1 class="ui inverted header">Battleground Stats</h1>
         </div>
         <div class="two wide column">
-          <button class="ui labeled fluid right floated green icon button" id="maps-filter-button" data-variation="very wide">
+          <button class="ui labeled fluid right floated icon button" id="maps-filter-button" data-variation="very wide">
             <i class="filter icon"></i>
             Filter Matches
           </button>
@@ -38,19 +38,19 @@
           </div>
           <div class="statistic" name="firstPickWin">
             <div class="value">###</div>
-            <div class="label">First Pick Wins</div>
+            <div class="label">First Pick Win %</div>
           </div>
           <div class="statistic" name="firstObjectiveWins">
             <div class="value">###</div>
-            <div class="label">First Objective Wins</div>
+            <div class="label">First Objective Win %</div>
           </div>
           <div class="blue statistic" name="blueWin">
             <div class="value">###</div>
-            <div class="label">Blue Side Wins</div>
+            <div class="label">Blue Side Win %</div>
           </div>
           <div class="red statistic" name="redWin">
             <div class="value">###</div>
-            <div class="label">Red Side Wins</div>
+            <div class="label">Red Side Win %</div>
           </div>
         </div>
       </div>
@@ -67,16 +67,34 @@
                   <th class="center aligned stat">Median Length</th>
                   <th class="center aligned stat">Shortest</th>
                   <th class="center aligned stat">Longest</th>
-                  <th class="center aligned stat">First Pick Wins</th>
-                  <th class="center aligned stat">First Objective Wins</th>
-                  <th class="center aligned stat">Blue Side Wins</th>
-                  <th class="center aligned stat">Red Side Wins</th>
+                  <th class="center aligned stat">First Pick Win %</th>
+                  <th class="center aligned stat">First Objective Win %</th>
+                  <th class="center aligned stat">Blue Side Win %</th>
+                  <th class="center aligned stat">Red Side Win %</th>
                 </tr>
               </thead>
+              <tbody>
+
+              </tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
   </div>
+</template>
+
+<template id="map-table-row-template">
+  <tr class="map-table-row">
+    <td><h3 class="ui inverted header">{{map}}</h3></td>
+    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
+    <td class="center aligned" data-sort-value="{{average}}">{{format.average}}</td>
+    <td class="center aligned" data-sort-value="{{median}}">{{format.median}}</td>
+    <td class="center aligned" data-sort-value="{{min}}" matchID="{{minID}}">{{format.min}}</td>
+    <td class="center aligned" data-sort-value="{{max}}" matchID="{{maxID}}">{{format.max}}</td>
+    <td class="center aligned" data-sort-value="{{firstPickWinPct}}">{{format.firstPickWinPct}}</td>
+    <td class="center aligned" data-sort-value="{{firstObjectiveWinsPct}}">{{format.firstObjectiveWinsPct}}</td>
+    <td class="center aligned" data-sort-value="{{blueWinPct}}">{{format.blueWinPct}}</td>
+    <td class="center aligned" data-sort-value="{{redWinPct}}">{{format.redWinPct}}</td>
+  </tr>
 </template>

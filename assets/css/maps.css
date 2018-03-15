@@ -15,3 +15,11 @@
 #map-individual-stats .segment {
   height: 100%;
 }
+
+#maps-page-content .floatThead-wrapper {
+  height: 100%;
+}
+
+#map-individual-stats td {
+  font-size: 14pt;
+}

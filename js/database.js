@@ -1384,7 +1384,8 @@ class Database {
           medianTmp: [],
           blueWin: 0,
           redWin: 0,
-          firstPickWin: 0
+          firstPickWin: 0,
+          draftGames: 0
         }
       }
 
@@ -1392,6 +1393,9 @@ class Database {
       stats[map].total += match.length;
       stats[map].medianTmp.push(match.length);
       
+      if (match.bans)
+        stats[map].draftGames += 1;
+
       // min/max
       if (match.length < stats[map].min) {
         stats[map].min = match.length;
@@ -1427,7 +1431,8 @@ class Database {
       medianTmp: [],
       blueWin: 0,
       redWin: 0,
-      firstPickWin: 0
+      firstPickWin: 0,
+      draftGames: 0
     };
 
     for (let map in stats) {
@@ -1446,6 +1451,7 @@ class Database {
 
       aggregate.total += stats[map].total;
       aggregate.games += stats[map].games;
+      aggregate.draftGames += stats[map].draftGames;
       aggregate.firstObjectiveWins += stats[map].firstObjectiveWins;
       aggregate.blueWin += stats[map].blueWin;
       aggregate.redWin += stats[map].redWin;
