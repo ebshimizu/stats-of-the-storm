@@ -308,7 +308,7 @@ Events of interest are linked to the corresponding section
 | 15 | Hero Swapped | Indicates a swap. Not really necessary since `HeroPicked` has the right associated hero regardless of swaps |
 
 
-### <a name="tracker1"></a> Unit Born, _eventid = 1
+### <a name="tracker1"></a> Unit Born (Nnet.Replay.Tracker.SUnitBornEvent), _eventid = 1
 Shows up when a unit spawns. These events all have basically the same info.
 
 Contents:
@@ -423,7 +423,7 @@ const TombMinionXP = {
 };
 ```
 
-### <a name="tracker2"></a> Unit Died, _eventid = 2
+### <a name="tracker2"></a> Unit Died (NNet.Replay.Tracker.SUnitDiedEvent), _eventid = 2
 Fired when a unit dies. This includes structures, which are just units that don't move.
 
 Contents:
@@ -436,7 +436,7 @@ The tags are the only things that show up in the death event, so I hope you save
 * Killer Tracker ID: `event.m_killerPlayerId` - Tracker ID for the person that killed the unit.
 It could be `null`, which happens in Braxis under really specific circumstances.
 
-### <a name="tracker3"></a> Unit Owner Change, _eventid = 3
+### <a name="tracker3"></a> Unit Owner Change (NNet.Replay.Tracker.SUnitOwnerChangeEvent), _eventid = 3
 Fired when a unit gets controlled by a different player. Typically, this is used with
 vehicles (dragon knight, garden terror, protector, etc.).
 
@@ -721,7 +721,7 @@ Contents:
 * Team: `event.m_fixedData[0].m_value` - Team in **fixed integer** format. 1: blue, 2: red after resolving.
 * Score: `event.m_intData[1].m_value` - Number of gems required for the current spawn.
 
-### <a name="tracker11"></a>Score, _eventid = 11
+### <a name="tracker11"></a>Score (NNet.Replay.Tracker.SScoreResultEvent), _eventid = 11
 This event contains the end of game stats (hero damage, xp contribution, etc.).
 
 Contents:
@@ -839,14 +839,14 @@ award. `false` otherwise. These are all false in Custom games.
 | `EndOfMatchAwardMostTimePushingBoolean` | Most Time Pushing Award | Pusher |
 | `EndOfMatchAwardMostTimeOnPointBoolean` | Most Time on Point Award | Point Guard |
 
-### <a name="tracker13"></a> Hero Banned, _eventID = 13
+### <a name="tracker13"></a> Hero Banned (NNet.Replay.Tracker.SHeroBannedEvent), _eventID = 13
 I don't actually use this event because it's easier to just pull from the `attributeevents` data,
 as that's in a fixed location.
 But it does exist. I forget the exact contents but the hero name is not in a useful format. It appears
 to be the internal hero name, which unless you want to manually build that index, is not something that
 is easily converted to an actual hero name.
 
-### <a name="tracker14"></a> Hero Picked, _eventID = 14
+### <a name="tracker14"></a> Hero Picked (NNet.Replay.Tracker.SHeroPickedEvent), _eventID = 14
 Indicates that a player picked a hero. These events will be in draft order, so the first one
 you see in the `trackerevents` is the first pick. I only use this event for pick order.
 
@@ -863,6 +863,13 @@ map back to display hero name with the [heroes-talents](https://github.com/heroe
 These consist of pings and text messages sent through the game interface.
 Team chat is recorded for your team (so no you can't see the other team's chat in the replay).
 Party chat is not included if you were in a party.
+
+Contents:
+```
+{
+  
+}
+```
 
 ## Game Events
 
