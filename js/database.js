@@ -861,11 +861,15 @@ class Database {
       }
     };
 
+    // keyed by a sorted concatenated string of hero roles
+    let compositions = {};
+
     for (let match of docs) {
       let winner = match.winner;
 
       for (let t in [0, 1]) {
         let teamHeroes = match.teams[t].heroes;
+        let comp = [];
 
         for (let h in teamHeroes) {
           let hero = teamHeroes[h];
@@ -887,6 +891,7 @@ class Database {
               }
             };
           }
+          comp.push(Heroes.role(hero));
 
           data[hero].games += 1;
           data[hero].involved += 1;
@@ -894,6 +899,16 @@ class Database {
             data[hero].wins += 1;
           }
         }
+
+        comp.sort();
+        let key = comp.join('-');
+        
+        if (!(key in compositions)) {
+          compositions[key] = { games: 0, wins: 0, roles: comp };
+        }
+
+        compositions[key].games += 1;
+        compositions[key].wins += parseInt(t) === winner ? 1 : 0;
       }
 
       if ('picks' in match) {
@@ -982,7 +997,7 @@ class Database {
       }
     }
 
-    return data;
+    return { data, compositions };
   }
 
   // special version of summarize match data that only pulls stats from one of the teams

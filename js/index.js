@@ -163,6 +163,14 @@ const RoleColor = {
   'Multiclass' : '#a333c8'
 }
 
+const RoleColorClass = {
+  'Assassin' : 'red',
+  'Warrior' : 'blue',
+  'Support' : 'teal',
+  'Specialist' : 'violet',
+  'Multiclass' : 'purple'
+}
+
 var DB;
 var Heroes;
 var sections = {};

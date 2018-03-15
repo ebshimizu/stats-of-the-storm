@@ -1,7 +1,8 @@
 #hero-collection-summary,
 #hero-collection-picks,
 #hero-collection-hero,
-#hero-collection-pool {
+#hero-collection-pool,
+#hero-collection-comps {
   height: calc(100% - 40px);
 }
 
@@ -11,7 +12,8 @@
 }
 
 #hero-collection-hero .floatThead-wrapper,
-#hero-collection-pool .floatThead-wrapper {
+#hero-collection-pool .floatThead-wrapper,
+#hero-collection-comps .floatThead-wrapper {
   height: 100%;
 }
 
@@ -19,7 +21,8 @@
   height: calc(100% - 40px);
 }
 
-#hero-collection-summary tbody {
+#hero-collection-summary tbody,
+#hero-collection-comps tbody {
   font-size: 14pt;
 }
 
@@ -34,17 +37,30 @@
 }
 
 #hero-collection-detail-hero-talent .table-wrapper,
-#hero-collection-pool .table-wrapper {
+#hero-collection-pool .table-wrapper,
+#hero-collection-comps .table-wrapper {
   margin-top: 0!important;
   height: 100%;
 }
 
 #hero-collection-summary .hero-collection-wrapper,
 #hero-collection-picks .hero-collection-wrapper,
-#hero-collection-pool .hero-collection-wrapper {
+#hero-collection-pool .hero-collection-wrapper,
+#hero-collection-comps .hero-collection-wrapper {
   height: calc(100% - 40px);
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+#hero-collection-comps table tbody tr td .mini.image,
+#hero-collection-comps table tbody tr td .mini.image img {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+#hero-collection-comps table .ui.image>.ui.ribbon.label {
+  left: calc(.05rem - 0.1em);
 }
 
 #hero-collection-pool .hero-collection-not-played {

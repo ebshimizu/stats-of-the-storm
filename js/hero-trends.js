@@ -129,8 +129,8 @@ function loadTrends() {
       $('#hero-trends-body tbody').html('');
 
       let stats = {};
-      stats.period1 = DB.summarizeMatchData(dp1, Heroes);
-      stats.period2 = DB.summarizeMatchData(dp2, Heroes);
+      stats.period1 = DB.summarizeMatchData(dp1, Heroes).data;
+      stats.period2 = DB.summarizeMatchData(dp2, Heroes).data;
 
       // should aggregate these since some heroes might not show up in both periods
       let aggr = {};

@@ -26,6 +26,7 @@ function initHeroCollectionPage() {
   $('#hero-collection-detail-with-summary table').tablesort();
   $('#hero-collection-detail-against-summary table').tablesort();
   $('#hero-collection-award-summary table').tablesort();
+  $('#hero-collection-comps table').tablesort();
   $('#hero-collection-detail-hero-talent .talent-build table').tablesort();
   $('#hero-collection-detail-hero-talent .talent-build table').on('tablesort:complete', function(event, tablesort) {
     $('#hero-collection-detail-hero-talent .talent-build img').popup();
@@ -132,7 +133,8 @@ function loadOverallHeroCollectionData() {
   // from the match data
   // check the hero details section for all that extra stuff.
   DB.getMatches(heroCollectionMapDataFilter, function(err, docs) {
-    let overallStats = DB.summarizeMatchData(docs, Heroes);
+    let matchData = DB.summarizeMatchData(docs, Heroes);
+    let overallStats = matchData.data;
 
     $('#hero-collection-summary tbody').html('');
     $('#hero-collection-picks tbody').html('');
@@ -229,6 +231,7 @@ function loadOverallHeroCollectionData() {
     $('#hero-collection-pool div[role="all"] div[name="ban"] .value').text(totalBan + ' / ' + Heroes.heroCount);
 
     $('#hero-collection-pool tbody').html('');
+    $('#hero-collection-comps tbody').html('');
 
     // not played
     let names = Heroes.allHeroNames.sort();
@@ -250,7 +253,21 @@ function loadOverallHeroCollectionData() {
       }
     }
 
+    // comps
+    for (let key in matchData.compositions) {
+      let comp = matchData.compositions[key];
+      let row = '<tr><td class="center aligned" data-sort-value="' + key + '">' + getCompositionElement(comp.roles) + '</td>';
+      row += '<td class="center aligned" data-sort-value="' + (comp.wins / comp.games) + '">' + (comp.wins / comp.games * 100).toFixed(1) + ' %</td>';
+      row += '<td class="center aligned" data-sort-value="' + (comp.games / (overallStats.totalMatches * 2)) + '">' + (comp.games / (overallStats.totalMatches * 2) * 100).toFixed(1) + ' %</td>';
+      row += '<td class="center aligned" data-sort-value="' + comp.wins + '">' + comp.wins + '</td>';
+      row += '<td class="center aligned" data-sort-value="' + (comp.games - comp.wins) + '">' + (comp.games - comp.wins) + '</td>';
+      row += '<td class="center aligned" data-sort-value="' + comp.games + '">' + comp.games + '</td></tr>';
+
+      $('#hero-collection-comps tbody').append(row);
+    }
+
     $('#hero-collection-pool table').floatThead('reflow');
+    $('#hero-collection-comps table').floatThead('reflow');
   })
 }
 
@@ -342,4 +359,25 @@ function loadHeroCollectionData(value, text, $elem) {
     $('#hero-collection-detail-misc-summary .statistic[name="overallMVP"] .value').text((stats.totalMVP / Math.max(stats.games, 1) * 100).toFixed(1) + '%');
     $('#hero-collection-detail-misc-summary .statistic[name="overallAward"] .value').text((stats.totalAward / Math.max(stats.games) * 100).toFixed(1) + '%');
   });
+}
+
+function getCompositionElement(roles) {
+  let elem = '<div class="ui five column grid">';
+  
+  for (let r of roles) {
+    elem += '<div class="column">';
+    elem += '<div class="ui mini image">';
+    elem += '<div class="ui small ' + RoleColorClass[r] + ' ribbon label">' + r + '</div>';
+
+    if (r === 'Multiclass') {
+      elem += '<img src="assets/images/role_specialist.png">'
+    }
+    else {
+      elem += '<img src="assets/images/role_' + r.toLowerCase() + '.png">';
+    }
+    elem += '</div></div>'
+  }
+
+  elem += '</div>';
+  return elem;
 }
