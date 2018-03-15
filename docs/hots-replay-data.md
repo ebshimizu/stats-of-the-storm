@@ -42,6 +42,10 @@ are not stored in the replay. Some units may have `Upgrade` Tracker events assoc
 are very inconsistently used. So until Blizzard adds these events into the replay, the only way to reconstruct
 quest stacks is to simluate the game based on the input events in GameEvents and track the results. 
 
+### Tracking Unit Positions
+Some events have positional data associated with them. You can use this to track where a unit
+is when the event happens. For more details, you should look at [barrett777's parser](https://github.com/barrett777/Heroes.ReplayParser/blob/1c7815245c9e7691ed30ef8f15d856e803f2788c/Heroes.ReplayParser/Unit.cs#L599).
+
 ## Match Basics
 
 ### Version
@@ -298,7 +302,7 @@ Events of interest are linked to the corresponding section
 | 5 | Upgrade | I think certain heroes get this event when a quest is complete? In my opinion this should be emitted every time part of a quest or the entire quest is completed but it is not. Blizz pls. |
 | 6 | Unit Init | |
 | 7 | Unit Done | |
-| 8 | Unit Positions | The [heroeprotocol](https://github.com/Blizzard/heroprotocol) repository has additional info about this event. |
+| 8 | Unit Positions | The [heroprotocol](https://github.com/Blizzard/heroprotocol) repository has additional info about this event. |
 | 9 | Player Setup | This is different than the `Stat` `PlayerInit` event and is not used by my parser |
 | 10 | [Stat](#tracker10) | The majority of interesting data is stored in these events |
 | 11 | [Score](#tracker11) | |
@@ -976,14 +980,71 @@ in the tracker events.
 Sometimes the tracker doesn't have the data, but other places do.
 
 ### <a name="braxisWaveDetection"></a>Braxis Holdout
-This one's a doozy. 
+Blizzard doesn't tell us what the wave strength actually is at any point in the replay file.
+But based on the units in the wave we can determine both who won (100%) and the practical percentage
+of the wave. There are cutoffs where a percent or two doesn't matter, as it doesn't end up spawning a new unit.
+Wave % values for each unit taken from the [Heroes of the Storm Gamepedia Wiki](https://heroesofthestorm.gamepedia.com/Zerg_Wave).
+
+#### Determining when the Beacons are Active
+As soon as a Braxis wave-specific unit shows up in `UnitBorn` after the game starts, the beacons are active. Typically these
+should be two ultralisk units for each team. Astute game observers will note that this is because the
+ultralisks are physically in cages during the beacon phase. We'll come back to those units later. This process can be
+repeated once all of the units spawned for this first wave die.
+
+#### Determining the Wave Strength
+When the beacons are active, 
+Track the `UnitBorn` events for Braxis Holdout unit types (listed in the table under `UnitBorn`).
+The controlling player should be 11 (blue) or 12 (red). This is the team's AI player.
+At any point while the beacons are active, the wave strength for each team is computed as shown
+in the following pseudocode:
+
+```javascript
+function braxisWaveStrength(units) {
+  let score = 0.05 * (units.Zerglings - 6) + (units.Banelings) * 0.05;
+  score = Math.max(score, units.Hydralisks * 0.14);
+  return Math.max(score, units.Guardians * 0.3);
+}
+```
+For a reference implementation, see the [braxisWaveStrength function](https://github.com/ebshimizu/stats-of-the-storm/blob/master/parser/parser.js#L1565) in the parser.
+Ultralisks are technically worth 50% each, but they are both present for both teams at all points
+during the beacon phase, so they're useless for determining wave strength.
+
+#### Determining Wave Start
+The most reliable way to find the start of a zerg wave that I've found, is to see when one team's ultralisks
+die. When an ultralisk is killed at the start of a wave, the `UnitDied` event has a very specific format.
+If the ultralisk was killed, and `m_killerPlayerId = null`, then the team controlling that ultralisk has
+lost the wave. One or both of the ultralisks may be killed, but there will never be two ultralisks on each team,
+since that'd be a 100-100 wave. Once this event happens, the wave starts. The wave ends when all zerg units
+on both teams have died. At this point, you can start watching for a new beacon phase again by monitoring the unit
+spawns for zerg units.
 
 ### <a name="warheadNukes"></a> Warhead Junction
+Credit to [barret777](https://github.com/barrett777/Heroes.ReplayParser/blob/1c7815245c9e7691ed30ef8f15d856e803f2788c/Heroes.ReplayParser/Statistics.cs#L100) for figuring this one out.
+
+We can distinguish a successful nuke launch from an unsuccessful one by tracking how long a certain unit has been active.
+When a nuke is going to drop, the `NukeTargetMinimapIconUnit` gets spawend, noted in `UnitBorn`. If this unit is alove for more
+than 1.5 seconds, the launch is successful. Otherwise, the launch was interrupted. The spawn location of this unit
+indicates the nuke drop position on the map.
 
 ### <a name="volskayaTriglav"></a> Volskaya Foundry
+The objective is complete when the Triglav Protector unit spawns. This unit has the
+type `VolskayaVehicle`, and when it dies the next objective can spawn afterwards.
+
+Tracking who's in this vehicle is a little difficult. `UnitOwnerChange` events will fire when
+someone gets in/out of the vehicle. Since there are two parts (technically two units) on it,
+and players are allowed to exit the vehicle, you'll have to identify which unit is the pilot and gunner
+and track that data. I don't track this as it's a lot of data of questionable utility. 
 
 ### <a name="vehicles"></a> Determining Vehicle Control
+When a single-player vehicle spawns, control can be determined by watching for `UnitOwnerChange` events
+after a vehicle spawns. The player ID of that event will be the Tracker Player ID for the player piloting
+the vehicle.
 
 ### <a name="mines"></a> Haunted Mines Golem Spawns
+I haven't been able to find skull count data for these, but when the `UnderworldSummonedBoss` units get spawned,
+the golem phase begins. One of these will spawn for each team, identified by IDs 11 and 12.
 
 ### <a name="beacon"></a> Beacon Control (Dragon Shire, Braxis Holdout)
+Track the tag and recycle tag of the beacon unit at the start of the game, then track `UnitOwnerChange` events
+over the course of the game. When not owned by either team, the ID may be 0. If you're indicating blue team with 0
+and red team with 1, you'll need a third value to indicate no team for this event.
