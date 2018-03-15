@@ -1338,9 +1338,12 @@ function processReplay(file, HeroesTalents, opts = {}) {
       for (let i = 0; i < gameLog.length; i++) {
         // the b action is likely of type 27 however i don't actually know how to interpret that data
         // working theory: eventid 27 abilLink 200 is b.
+        // this actually varies per-build, so while i missed a few builds, it should work at the moment.
         let event = gameLog[i];
         if (event._eventid === 27) {
-          if (event.m_abil && event.m_abil.m_abilLink === 200) {
+          if ((event.m_abil && match.version.m_build < 61872 && event.m_abil.m_abilLink === 200) ||
+              (event.m_abil && match.version.m_build >= 61872 && event.m_abil.m_abilLink === 119))
+          {
             // player ids are actually off by one here
             let playerID = event._userid.m_userId;
             let id = playerLobbyID[playerID];

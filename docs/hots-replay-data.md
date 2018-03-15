@@ -930,7 +930,47 @@ Every action executed by all players in the match. The results of said actions c
 fully resolved by running the game in a game client with the same version as the replay (which
 is why HotS downloads the required files and launches a different client when viewing older replays).
 
-The only thing I use this for right now is b-step detection.
+The only thing I use this for right now is b-step detection, taunts, and dances
+The game event IDs can change from build to build, so this will be to the best of my knowledge.
+Use the player Lobby ID to resolve `event._userid.m_userId` to a player.
+
+Common elements:
+```
+{
+  _userid: [Player Lobby ID (int)],
+  _eventid: int,
+}
+```
+
+There are a lot more events in here, but these are mostly very cryptic. Feel free to decompress
+these events and look manually, but be warned that it's going to be a ~100MB json file.
+
+### Player Back (b)
+A b-step is just a series of repeated b commands. My parser tracks these events and as long as the
+presses are fast enough (within 16 frames), it marks the series of presses as a b-step.
+`m_abil` may be null so check that before accessing.
+
+| `_eventid` | `m_abil.m_abilLink` | For Build |
+| ---------- | ------------------- | --------- |
+| 27 | 200 | <61872, this was around the first time I noticed it break so this period is a little iffy |
+| 27 | 119 | >= 61872 I think, if not that build number then definitely >= 63070 |
+
+### Player Taunt
+`m_abil` may be null so check that before accessing.
+
+| `_eventid` | `m_abil.m_abilLink` | `m_abilCmdIndex` | For Build |
+| ---------- | ------------------- | ---------------- | --------- |
+| 27 | 19 | 4 | <= Current |
+
+### Player Dance
+`m_abil` may be null so check that before accessing.
+I suspect that `m_abilCmdIndex` relates to the emote wheel, and that indices 1-2 may correspond
+to sprays, and voice lines. This is unconfimed and also unnecessary, as those events are stored
+in the tracker events.
+
+| `_eventid` | `m_abil.m_abilLink` | `m_abilCmdIndex` | For Build |
+| ---------- | ------------------- | ---------------- | --------- |
+| 27 | 19 | 3 | <= Current |
 
 ## Special Cases for Map Objectives
 Sometimes the tracker doesn't have the data, but other places do.
