@@ -67,6 +67,9 @@ function loadMapStats() {
     updateTeamStat(statContainer, 'blueWin', (mapData.aggregate.blueWin / mapData.aggregate.games * 100).toFixed(1) + '%');
     updateTeamStat(statContainer, 'redWin', (mapData.aggregate.redWin / mapData.aggregate.games * 100).toFixed(1) + '%');
 
+    $('#map-overall-stats .statistic[name="min"]').attr('matchID', mapData.aggregate.minId);
+    $('#map-overall-stats .statistic[name="max"]').attr('matchID', mapData.aggregate.maxId);
+
     // maps
     for (let map in mapData.stats) {
       let context = mapData.stats[map];
@@ -94,5 +97,15 @@ function loadMapStats() {
 
       $('#map-individual-stats tbody').append(mapsMapRowTemplate(context));
     }
+    
+    // link binding
+    $('#maps-page-content .match-link').off();
+    $('#maps-page-content .match-link').click(function() {
+      loadMatchData($(this).attr('matchId'), function() {
+        changeSection('match-detail');
+      });
+    });
+
+    $('#maps-page-content table').floatThead('reflow');
   });
 }

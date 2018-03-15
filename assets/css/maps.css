@@ -23,3 +23,12 @@
 #map-individual-stats td {
   font-size: 14pt;
 }
+
+#maps-page-content .match-link {
+  cursor: pointer;
+}
+
+#maps-page-content .match-link:hover,
+#maps-page-content .match-link .value:hover {
+  color: #ffe21f!important;
+}
