@@ -13,8 +13,12 @@
     ipc.on('parseReplay', function(event, file, id, fromWindowId) {
       let out = Parser.processReplay(file, Heroes);
       out.idx = id;
-      let fromWindow = BrowserWindow.fromId(fromWindowId);
-      fromWindow.webContents.send('replayParsed', out);
+
+      // you know what just broadcast it i don't care
+      let wins = BrowserWindow.getAllWindows();
+      for (let w in wins) {
+        wins[w].webContents.send('replayParsed', out);
+      }
     });
   </script>
 </html>
