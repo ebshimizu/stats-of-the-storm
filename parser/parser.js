@@ -237,6 +237,9 @@ function processReplay(file, HeroesTalents, opts = {}) {
     // maps player id in the Tracker data to the proper player object
     var playerIDMap = {};
     match.loopGameStart = 0; // fairly sure this is always 610 but just in case look for the "GatesOpen" event
+    
+    // the match length is actually incorrect. need to track core death events for actual match time.
+    var cores = {};
 
     for (let i = 0; i < tracker.length; i++) {
       let event = tracker[i];
@@ -257,6 +260,12 @@ function processReplay(file, HeroesTalents, opts = {}) {
         else if (event.m_eventName === ReplayTypes.StatEventType.GatesOpen) {
           match.loopGameStart = event._gameloop;
         }
+      }
+      else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {
+        let tag = event.m_unitTagIndex + '-' + event.m_unitTagRecycle;
+        cores[tag] = event;
+
+        console.log('Team ' + (event.m_upkeepPlayerId - 11) + ' core ' + tag + ' found');
       }
     }
 
@@ -926,8 +935,15 @@ function processReplay(file, HeroesTalents, opts = {}) {
         let tag = event.m_unitTagIndex;
         let rtag = event.m_unitTagRecycle;
 
-        // mercs, all maps
         let uid = tag + '-' + rtag;
+
+        // cores
+        if (uid in cores) {
+          match.loopLength = event._gameloop;
+          match.length = loopsToSeconds(match.loopLength - match.loopGameStart);
+        }
+
+        // mercs, all maps
         if (uid in match.mercs.units) {
           match.mercs.units[uid].duration = loopsToSeconds(event._gameloop - match.mercs.units[uid].loop);
 

@@ -231,7 +231,8 @@ const UnitType = {
   FortWell: 'TownMoonwellL2',
   KeepWell: 'TownMoonwellL3',
   FortTower: 'TownCannonTowerL2',
-  KeepTower: 'TownCannonTowerL3'
+  KeepTower: 'TownCannonTowerL3',
+  KingsCore: 'KingsCore'
 };
 
 const BraxisUnitType = {

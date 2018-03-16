@@ -68,7 +68,8 @@ Reconstruct game version: `m_major.m_minor.m_revision`
 ### Match Length
 Location: `header.m_elapsedGameLoops`
 
-Value: The total time of the game in elapsed game loops. 
+Value: The total time of the **REPLAY** in elapsed game loops. THIS IS NOT THE ACTUAL MATCH LENGTH.
+To properly determine match length, you will need to track when one of the team's cores dies.
 
 ### Map
 Location: `details.m_title`
@@ -337,6 +338,7 @@ The following list is non-exhasutive, but it should contain most of the units of
 
 | Unit Type ID | Notes |
 | ------------ | ----- |
+| `KingsCore` | The Core |
 | `FootmanMinion` | Melee Minion |
 | `RangedMinion` | |
 | `WizardMinion` | The one that drops a regen globe |

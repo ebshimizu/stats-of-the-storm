@@ -232,7 +232,7 @@ class Database {
       let data = Parser.parse(file, [Parser.ReplayDataType.header, Parser.ReplayDataType.details]);
       let search = {};
       search.type = data.header.m_type;
-      search.loopLength = data.header.m_elapsedGameLoops;
+      //search.loopLength = data.header.m_elapsedGameLoops;
       search.map = data.details.m_title;
       search.rawDate = data.details.m_timeUTC;
 
