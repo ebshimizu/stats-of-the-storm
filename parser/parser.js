@@ -262,10 +262,12 @@ function processReplay(file, HeroesTalents, opts = {}) {
         }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {
-        let tag = event.m_unitTagIndex + '-' + event.m_unitTagRecycle;
-        cores[tag] = event;
+        if (event.m_unitTypeName === ReplayTypes.UnitType.KingsCore) {
+          let tag = event.m_unitTagIndex + '-' + event.m_unitTagRecycle;
+          cores[tag] = event;
 
-        console.log('Team ' + (event.m_upkeepPlayerId - 11) + ' core ' + tag + ' found');
+          console.log('Team ' + (event.m_upkeepPlayerId - 11) + ' core ' + tag + ' found');
+        }
       }
     }
 

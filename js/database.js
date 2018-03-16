@@ -1565,6 +1565,64 @@ class Database {
       });
     });
   }
+
+  // dumps summarized hero data for each collection in the other database.
+  // requires a bit of memory...
+  cacheExternalDatabase(path, name, callback) {
+    // load
+    let self = this;
+    let tempDB = new Database(path);
+
+    tempDB.load(function() {
+      tempDB.getCollections(function(err, collections) {
+        tempDB.getHeroData({}, function(err, heroData) {
+          let hdata = tempDB.summarizeHeroData(heroData);
+
+          delete hdata.rawDocs;
+          let cache = {};
+          cache.dbName = name;
+          cache.name = name;
+          cache.type = 'externalCache';
+          cache.collectionID = 'all';
+          cache.heroData = JSON.stringify(hdata);
+
+          self._db.settings.update({ type: 'externalCache', dbName: cache.dbName, name: cache.name }, cache, { upsert: true }, function(err, num, up) {
+            if (collections.length > 0) {
+              self.processExternalCaches(collections.pop(), name, collections, tempDB, callback);
+            }
+            else {
+              callback();
+            }
+          })
+        });
+      });
+    }, function(log) { console.log(log) ; })
+  }
+
+  processExternalCaches(current, dbName, collections, tempDB, final) {
+    let self = this;
+    tempDB.getHeroData({collectionID: current._id}, function(err, heroData) {
+      let hdata = tempDB.summarizeHeroData(heroData);
+
+      delete hdata.rawDocs;
+      let cache = {};
+      cache.dbName = name;
+      cache.name = current.name;
+      cache.type = 'externalCache';
+      cache.collectionID = current._id;
+      cache.heroData = JSON.stringify(hdata);
+
+      self._db.settings.update({ type: 'externalCache', dbName: cache.dbName, name: cache.name }, cache, { upsert: true }, function(err, num, up) {
+        if (collections.length === 0) {
+          final();
+        }
+        else {
+          processExternalCaches(collections.pop(), dbName, collections, tempDB, final);
+        }
+      })
+    })
+
+  }
 }
 
 function median(arr) {
