@@ -450,6 +450,13 @@ class Database {
           playerDetailStats.min[match.hero][statName] = match.gameStats[statName];
           medianTemp[match.hero][statName] = [];
         }
+
+        // booooo blackheart's
+        if (statName === 'BlackheartDoubloonsCollected') {
+          // sometimes the replay freaks out and returns a huge integer. Set that to 0 if it happens
+          if (match.gameStats[statName] > 200)
+            match.gameStats[statName] = 0;
+        }
         
         playerDetailStats.heroes[match.hero].stats[statName] += match.gameStats[statName];
         medianTemp[match.hero][statName].push(match.gameStats[statName]);
