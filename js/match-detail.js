@@ -467,6 +467,7 @@ function updateBasicInfo() {
   $('#match-detail-mode').text(ReplayTypes.GameModeStrings[matchDetailMatch.mode]);
   let d = new Date(matchDetailMatch.date); 
   $('#match-detail-date').text(d.toLocaleString('en-US'));
+  $('#match-detail-file').text(matchDetailMatch.filename);
   $('#match-detail-blue-level').text(matchDetailMatch.teams[0].level);
   $('#match-detail-red-level').text(matchDetailMatch.teams[1].level);
   $('#match-detail-blue-takedowns').text(matchDetailMatch.teams[0].takedowns);

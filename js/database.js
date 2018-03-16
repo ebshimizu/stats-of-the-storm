@@ -131,7 +131,8 @@ class Database {
       match.collection = [collection];
     }
 
-    this._db.matches.update({ 'map' : match.map, 'date' : match.date, 'loopLength' : match.loopLength }, match, {upsert: true}, function (err, numReplaced, newDoc) {
+    // temporary relaxation of match length param for duplicate detection
+    this._db.matches.update({ 'map' : match.map, 'date' : match.date, 'type' : match.type }, match, {upsert: true}, function (err, numReplaced, newDoc) {
       if (!newDoc) {
         console.log("Duplicate match found, skipping player update");
       }

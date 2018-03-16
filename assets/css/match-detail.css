@@ -1,5 +1,5 @@
 #match-detail-page-header {
-  height: 110px;
+  height: 120px;
 }
 
 #match-detail-page-header .two.wide.column {
@@ -20,6 +20,14 @@
   margin-top: 0.5em;
 }
 
+#match-detail-file {
+  font-size: 9pt;
+  color: #FFF;
+  position: absolute;
+  width: 400%;
+  bottom: 0;
+}
+
 #match-detail-victor {
   position: relative;
   top: 50%;
@@ -27,7 +35,7 @@
 }
 
 #match-detail-body {
-  height: calc(100% - 110px);
+  height: calc(100% - 120px);
 }
 
 #match-detail-body .tab.segment {
