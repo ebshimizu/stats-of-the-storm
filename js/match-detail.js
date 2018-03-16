@@ -738,17 +738,18 @@ function addTauntEntry(type, player, data) {
 function graphXP() {
   let team0XP = getTotalXPSet(0);
   let team1XP = getTotalXPSet(1);
+  let graphXMax = team0XP[team0XP.length - 1].x;
 
   overallXPGraphData.data.datasets[0].data = team0XP;
   overallXPGraphData.data.datasets[1].data = team1XP;
-  overallXPGraphData.options.scales.xAxes[0].ticks.max = matchDetailMatch.length;
+  overallXPGraphData.options.scales.xAxes[0].ticks.max = graphXMax;
   overallXPGraph.update();
 
   let team0Levels = getLevelsXPSet(0);
   let team1Levels = getLevelsXPSet(1);
   overallLevelGraphData.data.datasets[0].data = team0Levels;
   overallLevelGraphData.data.datasets[1].data = team1Levels;
-  overallLevelGraphData.options.scales.xAxes[0].ticks.max = matchDetailMatch.length;
+  overallLevelGraphData.options.scales.xAxes[0].ticks.max = graphXMax;
   overallLevelGraph.update();
 
   let team0xpb = getTeamXPBGraphData(0);
@@ -756,8 +757,8 @@ function graphXP() {
 
   blueTeamXPGraphData.data.datasets = team0xpb;
   redTeamXPGraphData.data.datasets = team1xpb;
-  blueTeamXPGraphData.options.scales.xAxes[0].ticks.max = matchDetailMatch.length;
-  redTeamXPGraphData.options.scales.xAxes[0].ticks.max = matchDetailMatch.length;
+  blueTeamXPGraphData.options.scales.xAxes[0].ticks.max = graphXMax;
+  redTeamXPGraphData.options.scales.xAxes[0].ticks.max = graphXMax;
 
   let maxXp = Math.max(team0XP[team0XP.length - 1].y, team1XP[team1XP.length - 1].y);
   maxXp = Math.ceil(maxXp / 10000) * 10000;
@@ -768,7 +769,7 @@ function graphXP() {
   redTeamXPGraph.update();
 
   teamXPSoakGraphData.data.datasets = getTeamXPSoakData();
-  teamXPSoakGraphData.options.scales.xAxes[0].ticks.max = matchDetailMatch.length;
+  teamXPSoakGraphData.options.scales.xAxes[0].ticks.max = graphXMax;
   teamXPSoakGraph.update();
 }
 
