@@ -1325,7 +1325,7 @@ function processPlayerCollectionCompare(cache) {
     let context = {};
     context.statName = DetailStatString[d];
 
-    if (cmpData[d] === 0 || !(d in cmpData))
+    if (cmpData === undefined || cmpData[d] === 0 || !(d in cmpData))
       context.pctDiff = 0;
     else
       context.pctDiff = (pData[d] - cmpData[d]) / cmpData[d];
@@ -1333,9 +1333,11 @@ function processPlayerCollectionCompare(cache) {
     context.pData = formatStat(d, pData[d], true);
     context.pDataSort = pData[d];
     context.pctDiffFormat = (context.pctDiff * 100).toFixed(2) + '%';
-    context.cmpData = formatStat(d, cmpData[d], true);
-    context.cmpDataSort = cmpData[d];
 
+    if (cmpData) {
+      context.cmpData = formatStat(d, cmpData[d], true);
+      context.cmpDataSort = cmpData[d];
+    }
     $('#player-compare-table tbody').append(playerCompareRowTemplate(context));
   }
 
