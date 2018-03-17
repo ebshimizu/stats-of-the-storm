@@ -15,4 +15,4 @@ cache:
   - $HOME/.cache/electron-builder
 
 script:
-  - npm run publish
+  - npm run dist

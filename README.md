@@ -8,8 +8,7 @@ for a league.
 For a list of features and additional installation instructions, check out the [project page](https://ebshimizu.github.io/stats-of-the-storm/).
 
 ## Installation
-Stats of the Storm has only been tested and built for Windows 10 systems.
-If you'd like to help get this to run on OS X and Linux, check out the Development section below.
+Stats of the Storm is available for Windows and macOS (experimental).
 
 Check out the [Releases Page](https://github.com/ebshimizu/hots-analysis/releases) to download the latest installer.
 
