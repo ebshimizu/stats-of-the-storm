@@ -817,6 +817,14 @@ function updateMatchToVersion3(match, remaining) {
   match.firstObjective = Parser.getFirstObjectiveTeam(match);
   match.firstObjectiveWin = match.winner === match.firstObjective;
 
+  // update length!
+  // the offset from the end of the xp breakdown to the actual end of the match is 114 frames
+  // this may vary a little bit, but it should bring things in line with the current parser.
+  // users can of course re-import the matches if they desire.
+  let lastXP = match.XPBreakdown[match.XPBreakdown.length - 1];
+  match.loopLength = lastXP.loop - 114;
+  match.length = Parser.loopsToSeconds(match.loopLength - match.loopGameStart);
+
   // update
   DB.updateMatch(match, function() {
     if (remaining.length === 0) {
@@ -832,7 +840,7 @@ function finishVersion2To3Migration() {
   setLoadMessage('Version 3 Upgrade Complete');
   showMessage(
     'Parser Updated to Version 3',
-    'Additional database fields added. You do not need to re-import your matches.',
+    'Match length corrected to estimate from last XP Breakdown. Additional database fields added. You do not need to re-import your matches. However, if you feel that the match lengths are still incorrect, you may want to re-create (not re-import) the entire database.',
     { sticky: true, class: 'positive' }
   );
   DB.setDBVersion(3, checkDBVersion(3));

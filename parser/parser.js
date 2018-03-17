@@ -1842,6 +1842,7 @@ function loopsToSeconds(loops) {
 }
 
 exports.parse = parse;
+exports.loopsToSeconds = loopsToSeconds;
 exports.ReplayDataType = ReplayDataType;
 exports.CommonReplayData = CommonReplayData;
 exports.AllReplayData = AllReplayData;
