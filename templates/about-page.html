@@ -21,7 +21,46 @@
         <p>
           Version 0.5.0 brings overall map stats, team composition stats,
           and external database comparison support to Stats of the Storm. This version also corrects the match lengths
-          in the database.
+          in the database. You do not need to re-import your matches to get the extra stats in this version.
+          <br>
+          Thanks again to AlexNewell on GitHub for finding some bugs this time around. 
+        </p>
+        <p>
+          Version 0.5.0 is also the first version of Stats of the Storm available on Mac. This app
+          should be considered experimental on macOS, as I have only been able to test on a VM.
+          Let me know what problems you encounter with the app on macOS!
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/120">#120</a>
+          New Feature: Battlegrounds. Stats related to match outcomes and lengths for each map.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/116">#116</a>
+          New Feature: Team Compositions. See win rate and popularity for team compositions in the Hero Details
+          page, and see how those compositions change over time in the Trends page.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/118">#118</a>
+          Collection: Heroes: Now shows overall hero pool stats.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/114">#114</a>
+          App: Can load external databases and cache hero stats for comparison. See the new tabs in the Settings page,
+          and also the <a href="https://ebshimizu.github.io/stats-of-the-storm/external-db.html">Using External Databases</a>
+          docs page.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/125">#125</a>
+          Match Details: Import path is now shown for each replay.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/124">#124</a>
+          Parser: Corrected match lengths. Note that the graphs still extend past the match end. This is due 
+          to the last XP breakdown occuring after the game technically ends. For completeness, I have let the graphs
+          extend to this duration instead of clamping them.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/122">#122</a>
+          Parser: b-step detection corrected for newer builds. If you really want this stat, you'll have to re-import the matches.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/115">#115</a>
+          Settings: Setting the Player Threshold option now gives visual confirmation that something changed.
+        </p>
+        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/123">#123</a>
+          Bugfix: Blackheart's Bay Doubloons held at end stats showed unreasonable values due to bad data in replay.
         </p>
         <h3 class="ui inverted dividing header">Version 0.4.0</h3>
         <p>

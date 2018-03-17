@@ -17,10 +17,9 @@ Check out the [Releases Page](https://github.com/ebshimizu/hots-analysis/release
 Here's what you'll need to develop the app.
 
 * Install node
-* Install electron globally: `npm install -g electron`
 * Clone the repository and initialize the submodules
 * Run `npm install` inthe repository root (the one with `package.json` in it)
-* Launch the Electron application from the repository root by running `electron .`
+* From the root directory, run `npm run app`
 
 ## Third-Party Libraries
 * [heroprotocol.js](https://github.com/nydus/heroprotocol)
