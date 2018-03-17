@@ -1,6 +1,7 @@
 var settingsRowTemplate;
 var replayQueue;
 var collectionRowTemplate;
+var collectionCacheRowTemplate;
 var importDuplicates = false;
 
 // used by the parser
@@ -10,6 +11,7 @@ function initSettingsPage() {
   // templates
   settingsRowTemplate = Handlebars.compile(getTemplate('settings', '#replay-row-template').find('tr')[0].outerHTML);
   collectionRowTemplate = Handlebars.compile(getTemplate('settings', '#collection-row-template').find('tr')[0].outerHTML);
+  collectionCacheRowTemplate = Handlebars.compile(getTemplate('settings', '#collection-cache-row-template').find('tr')[0].outerHTML);
 
   let date = settings.get('lastReplayDate');
   if (!date) {
@@ -159,6 +161,30 @@ function initSettingsPage() {
   });
 
   loadCollections();
+  loadCachedCollections();
+
+  $('#settings-set-cache-import-folder').click(function() {
+    browseForFolder($(this), 'Select Database Folder');
+  });
+
+  $('#settings-new-cache-modal input').popup({
+    on: 'manual'
+  });
+
+  $('#settings-import-external-db').click(function() {
+    $('#settings-set-cache-name').removeClass('error');
+    $('#settings-set-cache-import-folder').removeClass('error');
+    $('#settings-new-cache-modal input').popup('hide');
+
+    $('#settings-new-cache-modal').modal({
+      closable: false,
+      onDeny: function() {
+        $('#settings-new-cache-modal input').popup('hide');
+        return true;
+      },
+      onApprove: cacheExternalDB
+    }).modal('show');
+  });
 
   if (replayPath) {
     // load the directory
@@ -183,6 +209,21 @@ function setReplayFolder() {
       $('#settings-set-replay-folder input').val(path);
 
       startReplayScan();
+    }
+  });
+}
+
+// this just sets the text for an element
+function browseForFolder(elem, title) {
+  dialog.showOpenDialog({
+    defaultPath: settings.get('replayPath'),
+    title: title,
+    properties: ["openDirectory", "createDirectory"]
+  }, function(files) {
+    if (files) {
+      // pick the first, should only be 1 dir
+      let path = files[0];
+      elem.find('input').val(path);
     }
   });
 }
@@ -475,6 +516,29 @@ function loadCollections() {
   });
 }
 
+function loadCachedCollections() {
+  DB.getExternalCacheCollections(function(err, collections) {
+    $('#collection-cache-list tbody').html('');
+    let combined = {};
+    for (let c of collections) {
+      if (!(c.dbName in combined)) {
+        combined[c.dbName] = { name: c.dbName, count: 0  };
+      }
+
+      combined[c.dbName].count += 1;
+    }
+
+    for (let c in combined) {
+      $('#collection-cache-list tbody').append(collectionCacheRowTemplate(combined[c]));
+    }
+
+    // bind
+    $('#collection-cache-list .button').click(function() {
+      handleCacheAction($(this).attr('collection-name'), $(this).attr('action'));
+    })
+  })
+}
+
 function handleCollectionAction(id, name, action) {
   if (action === 'delete') {
     $('#team-confirm-action-user .header').text('Delete Collection ' + name);
@@ -515,4 +579,75 @@ function setPlayerMenuThreshold() {
   settings.set('playerThreshold', parseInt($('#player-menu-thresh-input input').val()));
   showMessage('Player Threshold Updated', 'Menus have been updated', { class: 'positive' });
   runPlayerMenuUpdate();
+}
+
+function cacheExternalDB() {
+  let path = $('#settings-set-cache-import-folder input').val();
+  let name = $('#settings-set-cache-name input').val();
+
+  // little jank but the view is sync'd with the model...
+  if (name === '' || $('td[collection-name="' + name + '"]').length > 0) {
+    $('#settings-set-cache-name').addClass('error');
+    $('#settings-set-cache-name input').popup('show');
+    return false;
+  }
+
+  if (!fs.existsSync(path + '/hero.db')) {
+    $('#settings-set-cache-import-folder').addClass('error');
+    $('#settings-set-cache-import-folder input').popup('show');
+    return false;
+  }
+
+  showMessage('Caching External Database ' + name, 'Reading from ' + path);
+  $('#settings-import-external-db').addClass('disabled');
+  DB.cacheExternalDatabase(path, name, function() {
+    showMessage('External Database Load Complete', name + ': ' + path, { class: 'positive' });
+    $('#settings-import-external-db').removeClass('disabled');
+    loadCachedCollections();
+    populatePlayerCollectionMenu();
+  });
+
+  $('#settings-new-cache-modal input').popup('hide');
+  return true;
+}
+
+function handleCacheAction(dbName, action) {
+  if (action === 'delete') {
+    $('#settings-confirm-cache-delete-modal').modal({
+      onApprove: function() {
+        DB.deleteExternalCache(dbName, function() {
+          loadCachedCollections();
+          populatePlayerCollectionMenu();
+        });
+      }
+    }).
+    modal('show');
+  }
+  else if (action === 'update') {
+    dialog.showOpenDialog({
+      defaultPath: settings.get('replayPath'),
+      title: 'Select Database Location',
+      properties: ["openDirectory", "createDirectory"]
+    }, function(files) {
+      if (files) {
+        if (!fs.existsSync(files[0] + '/hero.db')) {
+          showMessage('Unable to Update Cache', 'Selected folder ' + files[0] + ' has no valid database.');
+
+          return;
+        }
+
+        // update is basically just delete then import
+        DB.deleteExternalCache(dbName, function() {
+          showMessage('Updating External Database ' + dbName, 'Reading from ' + files[0]);
+          $('#settings-import-external-db').addClass('disabled');
+          DB.cacheExternalDatabase(files[0], dbName, function() {
+            showMessage('External Database Update Complete', dbName + ': ' + files[0], { class: 'positive' });
+            $('#settings-import-external-db').removeClass('disabled');
+            loadCachedCollections();
+            populatePlayerCollectionMenu();
+          })
+        })
+      }
+    });
+  }
 }

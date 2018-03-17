@@ -36,3 +36,11 @@
     overflow-x: hidden;
     padding-left: 3px;
 }
+
+#settings-db-settings {
+    height: 60%;
+}
+
+#settings-app-settings {
+    height: 40%;
+}

@@ -4,141 +4,163 @@
 <template id="settings-page">
     <div id="settings-page-content" class="is-page transition hidden" section-name="settings">
         <div class="ui grid" id="settings-layout">
-            <div class="stretched row">
-                <div class="eleven wide column">
-                    <div class="ui secondary inverted menu" id="settings-submenu">
-                        <a class="active item" data-tab="replay-status">Replay List</a>
-                        <a class="item" data-tab="settings-collections">Collections</a>
-                    </div>
-                    <div class="ui active tab" data-tab="replay-status">
-                        <!-- replay file import status -->
-                        <div class="table-wrapper">
-                            <table class="ui single line compact table" id="replay-file-list">
-                                <thead><tr>
-                                    <th>Filename</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Upload Status</th>
-                                </tr></thead> 
-                                <tbody>
-                                    <!-- i think it's time to get handlebars and use templates to fill out the rows -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="ui tab" data-tab="settings-collections">
-                        <div class="table-wrapper">
-                            <table class="ui single line compact table" id="collection-list">
-                                <thead><tr>
-                                    <th>Collection Name</th>
-                                    <th>Actions</th>
-                                </tr></thead> 
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </div>
+            <div class="eleven wide column">
+                <div class="ui secondary inverted menu" id="settings-submenu">
+                    <a class="active item" data-tab="replay-status">Replay List</a>
+                    <a class="item" data-tab="settings-collections">Collections</a>
+                    <a class="item" data-tab="settings-caches">Cached Collections</a>
+                </div>
+                <div class="ui active tab" data-tab="replay-status">
+                    <!-- replay file import status -->
+                    <div class="table-wrapper">
+                        <table class="ui single line compact table" id="replay-file-list">
+                            <thead><tr>
+                                <th>Filename</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Upload Status</th>
+                            </tr></thead> 
+                            <tbody>
+                                <!-- i think it's time to get handlebars and use templates to fill out the rows -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="five wide column">
-                    <div class="ui inverted segment">
-                        <div class="ui top attached label">Database Settings</div>
-                        <div class="settings-db-wrapper">
-                            <div class="ui left aligned grid">
-                                <div class="four wide column"><div class="item">Replay Folder</div></div>
-                                <div class="twelve wide column">
-                                    <div class="ui inverted fluid action input" id="settings-set-replay-folder">
-                                        <input type="text" value="" disabled>
-                                        <button class="ui blue right labeled icon button">
+                <div class="ui tab" data-tab="settings-collections">
+                    <div class="table-wrapper">
+                        <table class="ui single line compact table" id="collection-list">
+                            <thead><tr>
+                                <th>Collection Name</th>
+                                <th>Actions</th>
+                            </tr></thead> 
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="ui tab" data-tab="settings-caches">
+                    <div class="table-wrapper">
+                        <table class="ui single line compact table" id="collection-cache-list">
+                            <thead>
+                                <tr>
+                                    <th>Cache Name</th>
+                                    <th>Collection Size</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="five wide column">
+                <div class="ui inverted segment" id="settings-db-settings">
+                    <div class="ui top attached label">Database Settings</div>
+                    <div class="settings-db-wrapper">
+                        <div class="ui left aligned grid">
+                            <div class="four wide column"><div class="item">Replay Folder</div></div>
+                            <div class="twelve wide column">
+                                <div class="ui inverted fluid action input" id="settings-set-replay-folder">
+                                    <input type="text" value="" disabled>
+                                    <button class="ui blue right labeled icon button">
+                                        <i class="folder icon"></i>
+                                        Set
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="four wide column">Database Folder</div>
+                            <div class="twelve wide column">
+                                <div class="ui inverted fluid action input" id="settings-set-db-folder">
+                                    <input type="text" value="" disabled>
+                                    <div class="ui icon buttons">
+                                        <button class="ui blue right labeled icon button" id="settings-set-db-folder-button">
                                             <i class="folder icon"></i>
                                             Set
                                         </button>
+                                        <button class="ui icon button" id="settings-reset-db-folder-button">
+                                            <i class="undo icon"></i>
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="four wide column">Database Folder</div>
-                                <div class="twelve wide column">
-                                    <div class="ui inverted fluid action input" id="settings-set-db-folder">
-                                        <input type="text" value="" disabled>
-                                        <div class="ui icon buttons">
-                                            <button class="ui blue right labeled icon button" id="settings-set-db-folder-button">
-                                                <i class="folder icon"></i>
-                                                Set
-                                            </button>
-                                            <button class="ui icon button" id="settings-reset-db-folder-button">
-                                                <i class="undo icon"></i>
-                                            </button>
-                                        </div>
+                            </div>
+                            <div class="four wide column"><div class="item">File Start Date</div></div>
+                            <div class="twelve wide column">
+                                <div class="ui inverted fluid action input" id="settings-replay-file-start">
+                                    <input type="text" value="" id="replay-file-start">
+                                </div>
+                            </div>
+                            <div class="four wide column"><div class="item">Parser</div></div>
+                            <div class="four wide column"><div class="item">
+                                <div class="ui fluid green button" id="start-process-button">Start</div>
+                            </div></div>
+                            <div class="four wide column"><div class="item">
+                                <div class="ui fluid red button" id="stop-process-button">Stop</div>
+                            </div></div>
+                            <div class="four wide column"><div class="item">
+                                <div class="ui fluid button" id="rescan-replays-button">Refresh</div>
+                            </div></div>
+                            <div class="four wide column">Import to Collection</div>
+                            <div class="twelve wide column">
+                                <div class="ui fluid search selection dropdown collection-menu" id="settings-collection-import">
+                                    <i class="dropdown icon"></i>
+                                    <span class="text">[No Collection]</span>
+                                    <div class="menu">
+                            
                                     </div>
                                 </div>
-                                <div class="four wide column"><div class="item">File Start Date</div></div>
-                                <div class="twelve wide column">
-                                    <div class="ui inverted fluid action input" id="settings-replay-file-start">
-                                        <input type="text" value="" id="replay-file-start">
-                                    </div>
+                            </div>
+                            <div class="eight wide column">
+                                <div class="ui toggle checkbox" id="settings-hots-api-button">
+                                    <input type="checkbox" name="hotsapi">
+                                    <label>Upload to HotsAPI</label>
                                 </div>
-                                <div class="four wide column"><div class="item">Parser</div></div>
-                                <div class="four wide column"><div class="item">
-                                    <div class="ui fluid green button" id="start-process-button">Start</div>
-                                </div></div>
-                                <div class="four wide column"><div class="item">
-                                    <div class="ui fluid red button" id="stop-process-button">Stop</div>
-                                </div></div>
-                                <div class="four wide column"><div class="item">
-                                    <div class="ui fluid button" id="rescan-replays-button">Refresh</div>
-                                </div></div>
-                                <div class="four wide column">Import to Collection</div>
-                                <div class="twelve wide column">
-                                    <div class="ui fluid search selection dropdown collection-menu" id="settings-collection-import">
-                                        <i class="dropdown icon"></i>
-                                        <span class="text">[No Collection]</span>
-                                        <div class="menu">
-                                
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="eight wide column">
+                                <div class="ui toggle checkbox" id="settings-hots-logs-button" data-content="Only available if uploading to HotsAPI">
+                                    <input type="checkbox" name="hotslogs">
+                                    <label>Upload to HotsLogs</label>
                                 </div>
-                                <div class="eight wide column">
-                                    <div class="ui toggle checkbox" id="settings-hots-api-button">
-                                        <input type="checkbox" name="hotsapi">
-                                        <label>Upload to HotsAPI</label>
-                                    </div>
+                            </div>
+                            <div class="sixteen wide column">
+                                <div class="ui toggle checkbox" id="settings-force-duplicate">
+                                    <input type="checkbox" name="force-dupes">
+                                    <label>Import Duplicates. Note: this will remove the match from existing collections!</label>
                                 </div>
-                                <div class="eight wide column">
-                                    <div class="ui toggle checkbox" id="settings-hots-logs-button" data-content="Only available if uploading to HotsAPI">
-                                        <input type="checkbox" name="hotslogs">
-                                        <label>Upload to HotsLogs</label>
-                                    </div>
-                                </div>
-                                <div class="sixteen wide column">
-                                    <div class="ui toggle checkbox" id="settings-force-duplicate">
-                                        <input type="checkbox" name="force-dupes">
-                                        <label>Import Duplicates. Note: this will remove the match from existing collections!</label>
-                                    </div>
-                                </div>
-                                <div class="four wide column"><div class="item">Database</div></div>
-                                <div class="eight wide column"><div class="item"></div></div>
-                                <div class="four wide column"><div class="item">
-                                    <div class="ui fluid red button" id="delete-db-button">Delete</div>
-                                </div></div>
-                                <div class="four wide column">
-                                    Dev Tools
-                                </div>
-                                <div class="two wide column"></div>
-                                <div class="five wide column">
-                                    <div class="ui fluid button" id="show-app-dev-tools">App Dev Tools</div>
-                                </div>
-                                <div class="five wide column">
-                                    <div class="ui fluid button" id="show-parser-dev-tools">Parser Dev Tools</div>
-                                </div>
+                            </div>
+                            <div class="four wide column"><div class="item">Database</div></div>
+                            <div class="eight wide column"><div class="item"></div></div>
+                            <div class="four wide column"><div class="item">
+                                <div class="ui fluid red button" id="delete-db-button">Delete</div>
+                            </div></div>
+                            <div class="four wide column">
+                                Dev Tools
+                            </div>
+                            <div class="two wide column"></div>
+                            <div class="five wide column">
+                                <div class="ui fluid button" id="show-app-dev-tools">App Dev Tools</div>
+                            </div>
+                            <div class="five wide column">
+                                <div class="ui fluid button" id="show-parser-dev-tools">Parser Dev Tools</div>
                             </div>
                         </div>
                     </div>
-                    <div class="ui inverted segment">
-                        <div class="ui top attached label">Application Settings</div>
+                </div>
+                <div class="ui inverted segment" id="settings-app-settings">
+                    <div class="ui top attached label">Application Settings</div>
+                    <div class="settings-db-wrapper">
                         <div class="ui left aligned grid">
                             <div class="four wide column">Collections</div>
                             <div class="eight wide column"></div>
                             <div class="four wide column">
                                 <div class="ui fluid button" id="settings-new-collection-button">New</div>
+                            </div>
+                            <div class="four wide column">External Comparison DB</div>
+                            <div class="eight wide column"></div>
+                            <div class="four wide column">
+                                <div class="ui fluid button" id="settings-import-external-db">Import</div>
                             </div>
                             <div class="four wide column">Player Menu Threshold</div>
                             <div class="twelve wide column">
@@ -191,6 +213,47 @@
                 <div class="ui green cancel button">No</div>
             </div>
         </div>
+        <div class="ui modal" id="settings-confirm-cache-delete-modal">
+            <div class="header">Delete Cached Data?</div>
+            <div class="content">
+                <div class="description">
+                    This will remove the cached databases from this database.
+                </div>
+            </div>
+            <div class="actions">
+                <div class="ui red approve button">Yes</div>
+                <div class="ui green cancel button">No</div>
+            </div>
+        </div>
+        <div class="ui modal" id="settings-new-cache-modal">
+            <div class="header">Import and Cache External Database</div>
+            <div class="content">
+                <div class="description">Load an external database for use in comparison panels.</div>
+                <div class="ui horizontal divider"></div>
+                <div class="ui one column grid">
+                    <div class="column">
+                        <div class="ui fluid labeled action input" id="settings-set-cache-import-folder">
+                            <div class="ui label">Database Path</div>
+                            <input type="text" value="" disabled data-content="No Database Found at this location. Please select a new location.">
+                            <button class="ui blue right labeled icon button">
+                                <i class="folder icon"></i>
+                                Set DB
+                            </button>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="ui fluid labeled input" id="settings-set-cache-name">
+                            <div class="ui label">Cache Name</div>
+                            <input type="text" data-content="Pick a different name. This name already exists. Names can't be blank"></input>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="actions">
+                <div class="ui red cancel button">Cancel</div>
+                <div class="ui green approve button">Import</div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -208,6 +271,17 @@
         <td>{{name}}</td>
         <td>
             <div class="ui button" collection-id="{{_id}}" collection-name="{{name}}" action="rename">Rename</div>
+            <div class="ui red button" collection-id="{{_id}}" collection-name="{{name}}" action="delete">Delete</div>
+        </td>
+    </tr>
+</template>
+
+<template id="collection-cache-row-template">
+    <tr>
+        <td collection-name="{{name}}">{{name}}</td>
+        <td>{{count}}</td>
+        <td>
+            <div class="ui button" collection-id="{{_id}}" collection-name="{{name}}" action="update">Update</div>
             <div class="ui red button" collection-id="{{_id}}" collection-name="{{name}}" action="delete">Delete</div>
         </td>
     </tr>
