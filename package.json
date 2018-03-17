@@ -50,6 +50,7 @@
   "scripts": {
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
+    "app": "electron ./",
     "publish": "electron-builder --publish always"
   },
   "build": {
