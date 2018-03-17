@@ -1566,6 +1566,23 @@ class Database {
     });
   }
 
+  getExternalCacheCollections(callback) {
+    this._db.settings.find({ type: 'externalCache' }, callback);
+  }
+
+  getExternalCacheCollectionHeroStats(collectionID, callback) {
+    this._db.settings.find({ type: 'externalCache',  _id: collectionID }, function(err, docs) {
+      if (docs.length > 0) {
+        let cache = docs[0];
+        cache.heroData = JSON.parse(cache.heroData);
+        callback(cache);
+      }
+      else {
+        callback();
+      }
+    });
+  }
+
   // dumps summarized hero data for each collection in the other database.
   // requires a bit of memory...
   cacheExternalDatabase(path, name, callback) {
@@ -1601,12 +1618,12 @@ class Database {
 
   processExternalCaches(current, dbName, collections, tempDB, final) {
     let self = this;
-    tempDB.getHeroData({collectionID: current._id}, function(err, heroData) {
+    tempDB.getHeroData({collection: current._id}, function(err, heroData) {
       let hdata = tempDB.summarizeHeroData(heroData);
 
       delete hdata.rawDocs;
       let cache = {};
-      cache.dbName = name;
+      cache.dbName = dbName;
       cache.name = current.name;
       cache.type = 'externalCache';
       cache.collectionID = current._id;
@@ -1617,11 +1634,21 @@ class Database {
           final();
         }
         else {
-          processExternalCaches(collections.pop(), dbName, collections, tempDB, final);
+          self.processExternalCaches(collections.pop(), dbName, collections, tempDB, final);
         }
       })
     })
+  }
 
+  // external cache stuff
+  deleteExternalCache(dbName, callback) {
+    this._db.settings.remove({ dbName: dbName, type: 'externalCache' }, { multi: true }, function(err, numRemoved) {
+      if (err)
+        console.log(err);
+
+      if (callback)
+        callback();
+    });
   }
 }
 
