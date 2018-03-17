@@ -187,6 +187,15 @@ Hero Details tab.
 ![Overall Hero Draft Stats]({{ "/images/hero-stats-01.png" | absolute_url }})
 Hero pick and ban rate stats for the entire collection.
 
+![Overall Hero Composition Stats]({{ "/images/hero-stats-02.png" | absolute_url }})
+
+Team composition statistics.
+
+![Overall Hero Pool Stats]({{ "/images/hero-stats-03.png" | absolute_url }})
+
+Overall hero pool stats. Can determine how many heroes never got picked/banned, never
+played, or never banned.
+
 ![Overall Team Stats]({{ "/images/collection-02.png" | absolute_url }})
 Rank teams by their average stats. Provides four categories to browse through.
 
@@ -199,6 +208,11 @@ you should set filters on your query before running, otherwise you will
 be waiting for the app to respond for a long time.**
 
 Displays overall individual player stats. Filterable by hero.
+
+![Overall Player Stats]({{ "/images/maps-01.png" | absolute_url }})
+
+Overall map and match statistics, including blue/red team advantage, first pick win stats,
+and first objective win stats (where available).
 
 ## <a name="uploader"></a>Built-in HotsAPI Uploader
 

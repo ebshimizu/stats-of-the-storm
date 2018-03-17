@@ -36,6 +36,10 @@ function initMapsPage() {
   loadMapStats();
 }
 
+function onShowMapsPage() {
+  $('#maps-page-content table').floatThead('reflow');
+}
+
 function updateMapsFilter(map, hero) {
   mapsHeroDataFilter = hero;
   mapsMapDataFilter = map;
