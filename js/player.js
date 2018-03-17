@@ -415,42 +415,12 @@ function initPlayerPage() {
     action: 'activate',
     onChange: updatePlayerCollectionCompare
   })
-  populatePlayerCollectionMenu();
 
   // hero pool
   $('#player-detail-hero-summary-segment .top.menu .item').tab();
   $('#player-detail-hero-summary-segment .top.menu .item').click(function() {
     $('#player-detail-hero-summary-segment table').floatThead('reflow');
   })
-}
-
-function populatePlayerCollectionMenu() {
-  $('#player-compare-collection .menu').html('');
-  $('#player-compare-collection .menu').append('<div class="item" data-value="all">All Matches</div>');
-
-  DB.getCollections(function(err, collections) {
-    if (collections.length > 0) {
-      $('#player-compare-collection .menu').append('<div class="ui divider"></div>');
-    }
-
-    for (let c in collections) {
-      let col = collections[c];
-      $('#player-compare-collection .menu').append('<div class="item" data-value="' + col._id + '">' + col.name + '</div>');
-    }
-
-    DB.getExternalCacheCollections(function(err, collections) {
-      if (collections.length > 0) {
-        $('#player-compare-collection .menu').append('<div class="ui divider"></div>')
-      }
-
-      for (let c in collections) {
-        let col = collections[c];
-        $('#player-compare-collection .menu').append('<div class="item" data-value="' + col._id + '" data-type="external">' + col.dbName + ': ' + col.name + '</div>');
-      }
-
-      $('#player-compare-collection').dropdown('refresh');
-    });
-  });
 }
 
 function initPlayerStatGraphMenus() {

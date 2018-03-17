@@ -37,6 +37,8 @@
 }
 
 #hero-collection-detail-hero-talent .table-wrapper,
+#hero-collection-detail-with-summary .table-wrapper,
+#hero-collection-detail-against-summary .table-wrapper,
 #hero-collection-pool .table-wrapper,
 #hero-collection-comps .table-wrapper {
   margin-top: 0!important;
@@ -102,6 +104,19 @@
   height: 600px;
 }
 
+#hero-collection-detail-against-summary .player-win,
+#hero-collection-detail-with-summary .player-win {
+  height: 560px;
+}
+
 #hero-collection-hero .player-win {
   font-size: 11pt;
+}
+
+#hero-collection-body .plus {
+  color: #21ba45;
+}
+
+#hero-collection-body .minus {
+  color: #f74545;
 }

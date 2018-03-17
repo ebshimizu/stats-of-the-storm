@@ -378,7 +378,7 @@ function loadSections() {
   // Matches should be the default view of the app.
   // this can be changed for development to test specific pages of course.
   // this is the dev setting.
-  changeSection('settings');
+  changeSection('hero-collection');
 
   // this is the release default
   //changeSection('matches');
@@ -498,6 +498,8 @@ function globalDBUpdate() {
   addPatchMenuOptions($('#match-patch-select'), function() {
     $('#match-patch-select').dropdown('refresh');
   });
+
+  populateStatCollectionMenus();
 }
 
 function runPlayerMenuUpdate() {
@@ -631,6 +633,36 @@ function updateCollectionMenu() {
     $('.collection-menu').dropdown('refresh');
   });
 }
+
+function populateStatCollectionMenus() {
+  $('.cache-collections .menu').html('');
+  $('.cache-collections .menu').append('<div class="item" data-value="all">All Matches</div>');
+
+  DB.getCollections(function(err, collections) {
+    if (collections.length > 0) {
+      $('.cache-collections .menu').append('<div class="ui divider"></div>');
+    }
+
+    for (let c in collections) {
+      let col = collections[c];
+      $('.cache-collections .menu').append('<div class="item" data-value="' + col._id + '">' + col.name + '</div>');
+    }
+
+    DB.getExternalCacheCollections(function(err, collections) {
+      if (collections.length > 0) {
+        $('.cache-collections .menu').append('<div class="ui divider"></div>')
+      }
+
+      for (let c in collections) {
+        let col = collections[c];
+        $('.cache-collections .menu').append('<div class="item" data-value="' + col._id + '" data-type="external">' + col.dbName + ': ' + col.name + '</div>');
+      }
+
+      $('.cache-collections').dropdown('refresh');
+    });
+  });
+}
+
 
 function setAppCollection(value, text, $elem) {
   if (value === 'none') {

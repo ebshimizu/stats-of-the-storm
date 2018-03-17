@@ -431,9 +431,22 @@
                 </div>
               </div>
             </div>
-            <div class="five wide column">
-              <div class="ui inverted segment player-win" id="hero-collection-detail-with-summary">
-                <div class="ui top attached label">Win Rate With Hero</div>
+            <div class="five wide column" id="hero-collection-detail-with-summary">
+              <div class="ui top attached menu">
+                <div class="header item">
+                  Win Rate With Hero
+                </div>
+                <div class="right menu">
+                  <div class="ui fluid search selection dropdown cache-collections">
+                    <i class="dropdown icon"></i>
+                    <span class="default text">All Matches</span>
+                    <div class="menu">
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="ui inverted attached segment player-win">
                 <div class="table-wrapper">
                   <table class="ui sortable selectable inverted table">
                     <thead>
@@ -441,6 +454,7 @@
                         <th>Hero</th>
                         <th>Win %</th>
                         <th>Games</th>
+                        <th>Win % Δ</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -450,9 +464,22 @@
                 </div>
               </div>
             </div>
-            <div class="five wide column">
-              <div class="ui inverted segment player-win" id="hero-collection-detail-against-summary">
-                <div class="ui top attached label">Win Rate Against Hero</div>
+            <div class="five wide column" id="hero-collection-detail-against-summary">
+              <div class="ui top attached menu">
+                <div class="header item">
+                  Win Rate Against Hero
+                </div>
+                <div class="right menu">
+                  <div class="ui fluid search selection dropdown cache-collections">
+                    <i class="dropdown icon"></i>
+                    <span class="default text">All Matches</span>
+                    <div class="menu">
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="ui inverted attached segment player-win">
                 <div class="table-wrapper">
                   <table class="ui sortable selectable inverted table">
                     <thead>
@@ -460,6 +487,7 @@
                         <th>Hero</th>
                         <th>Win %</th>
                         <th>Games</th>
+                        <th>Win % Δ</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -541,5 +569,21 @@
     <td class="center aligned" data-sort-value="{{picks.round3.count}}">{{picks.round3.count}}</td>
     <td class="center aligned" data-sort-value="{{picks.round3.pct}}">{{picks.round3.formatPct}}</td>
     <td class="center aligned" data-sort-value="{{picks.round3.wins}}">{{picks.round3.wins}}</td>
+  </tr>
+</template>
+
+<template id="hero-collection-detail-hero-win-row">
+  <tr>
+    <td data-sort-value="{{name}}">
+      <h3 class="ui image inverted header">
+        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui rounded image">
+        <div class="content">
+          {{name}}
+        </div>
+      </h3>
+    </td>
+    <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
+    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
+    <td class="center aligned {{deltaClass}}" data-sort-value="{{avgDelta}}">{{formatAvgDelta}}</td>
   </tr>
 </template>

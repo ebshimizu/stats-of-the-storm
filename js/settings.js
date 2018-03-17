@@ -604,7 +604,7 @@ function cacheExternalDB() {
     showMessage('External Database Load Complete', name + ': ' + path, { class: 'positive' });
     $('#settings-import-external-db').removeClass('disabled');
     loadCachedCollections();
-    populatePlayerCollectionMenu();
+    populateStatCollectionMenus();
   });
 
   $('#settings-new-cache-modal input').popup('hide');
@@ -617,7 +617,7 @@ function handleCacheAction(dbName, action) {
       onApprove: function() {
         DB.deleteExternalCache(dbName, function() {
           loadCachedCollections();
-          populatePlayerCollectionMenu();
+          populateStatCollectionMenus();
         });
       }
     }).
@@ -644,7 +644,7 @@ function handleCacheAction(dbName, action) {
             showMessage('External Database Update Complete', dbName + ': ' + files[0], { class: 'positive' });
             $('#settings-import-external-db').removeClass('disabled');
             loadCachedCollections();
-            populatePlayerCollectionMenu();
+            populateStatCollectionMenus();
           })
         })
       }

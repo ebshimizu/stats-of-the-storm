@@ -272,7 +272,7 @@ function loadTrends() {
             context.deltaFmt[stat] = '+' + context.deltaFmt[stat];
             context.statSign[stat] = 'plus';
           }
-          else {
+          else if (context.delta[stat] < 0 ) {
             context.statSign[stat] = 'minus';
           }
         }

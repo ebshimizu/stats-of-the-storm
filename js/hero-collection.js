@@ -1,10 +1,12 @@
 var heroCollectionSummaryRowTemplate;
 var heroCollectionPickRowTemplate;
+var heroCollectionHeroWinRowTemplate;
 
 // by default this screen containrs games played in official modes with bans
 var heroCollectionHeroDataFilter;
 var heroCollectionMapDataFilter;
 var heroCollectionHeroMatchThresh = 0;
+var heroDataWinCache;
 
 function initHeroCollectionPage() {
   // by default this screen containrs games played in official modes with bans
@@ -19,6 +21,8 @@ function initHeroCollectionPage() {
     find('.hero-collection-hero-summary-row')[0].outerHTML);
   heroCollectionPickRowTemplate = Handlebars.compile(getTemplate('hero-collection', '#hero-collection-hero-pick-row-template').
     find('.hero-collection-hero-summary-row')[0].outerHTML);
+  heroCollectionHeroWinRowTemplate = Handlebars.compile(getTemplate('hero-collection', '#hero-collection-detail-hero-win-row').
+    find('tr')[0].outerHTML);
 
   $('#hero-collection-summary table').tablesort();
   $('#hero-collection-picks table').tablesort();
@@ -92,6 +96,21 @@ function initHeroCollectionPage() {
   });
   $('#hero-collection-hero-thresh input').val(0);
   $('#hero-collection-hero-thresh input').blur(loadOverallHeroCollectionData);
+
+  // comparison dropdowns
+  $('#hero-collection-detail-with-summary .cache-collections.dropdown').dropdown({
+    fullTextSearch: true,
+    onChange: function(value, text, $elem) {
+      updateHeroCollectionVsStats(value, $elem, 'with', $('#hero-collection-detail-with-summary'));
+    }
+  });
+
+  $('#hero-collection-detail-against-summary .cache-collections.dropdown').dropdown({
+    fullTextSearch: true,
+    onChange: function(value, text, $elem) {
+      updateHeroCollectionVsStats(value, $elem, 'against', $('#hero-collection-detail-against-summary'));
+    }
+  });
 }
 
 function heroCollectionShowSection() {
@@ -127,7 +146,7 @@ function resetCollectionFilter() {
 }
 
 function loadOverallHeroCollectionData() {
-  heroCollectionHeroMatchThresh = $('#hero-collection-hero-thresh input').val();
+  heroCollectionHeroMatchThresh = parseInt($('#hero-collection-hero-thresh input').val());
 
   // the summary only loads the hero pick/win details which are easily extracted
   // from the match data
@@ -332,10 +351,12 @@ function toggleHeroCollectionType(tableID, active, container) {
 
 // many of the functions here are borrowed from player.js
 function loadHeroCollectionData(value, text, $elem) {
+  heroCollectionHeroMatchThresh = parseInt($('#hero-collection-hero-thresh input').val());
   let query = Object.assign({}, heroCollectionHeroDataFilter);
   query.hero = value;
   DB.getHeroData(query, function(err, docs) {
     let stats = DB.summarizeHeroData(docs);
+    heroDataWinCache = { with: stats.withHero, against: stats.againstHero };
 
     updateHeroTitle($('#hero-collection-hero-header'), value);
 
@@ -345,8 +366,12 @@ function loadHeroCollectionData(value, text, $elem) {
     // map stats
     renderMapStatsTo($('#hero-collection-detail-map-summary'), stats);
 
-    renderHeroVsStatsTo($('#hero-collection-detail-with-summary'), stats.withHero);
-    renderHeroVsStatsTo($('#hero-collection-detail-against-summary'), stats.againstHero);
+    // vs stats
+    let val = $('#hero-collection-detail-with-summary .cache-collections').dropdown('get value');
+    updateHeroCollectionVsStats(val, $('#hero-collection-detail-with-summary .cache-collections .item[data-value="' + val + '"]'), 'with', $('#hero-collection-detail-with-summary'));;
+    
+    val = $('#hero-collection-detail-against-summary .cache-collections').dropdown('get value');
+    updateHeroCollectionVsStats(val, $('#hero-collection-detail-against-summary .cache-collections .item[data-value="' + val + '"]'), 'against', $('#hero-collection-detail-against-summary'));
 
     renderAwardsTo($('#hero-collection-award-summary'), stats);
 
@@ -358,7 +383,62 @@ function loadHeroCollectionData(value, text, $elem) {
     $('#hero-collection-detail-misc-summary .statistic[name="overallKDA"] .value').text((stats.totalTD / Math.max(stats.totalDeaths, 1)).toFixed(2));
     $('#hero-collection-detail-misc-summary .statistic[name="overallMVP"] .value').text((stats.totalMVP / Math.max(stats.games, 1) * 100).toFixed(1) + '%');
     $('#hero-collection-detail-misc-summary .statistic[name="overallAward"] .value').text((stats.totalAward / Math.max(stats.games) * 100).toFixed(1) + '%');
+
+    $('#hero-collection-page-content table').floatThead('reflow');
   });
+}
+
+function updateHeroCollectionVsStats(value, $elem, key, container) {
+  if (heroDataWinCache === undefined)
+    return;
+
+  container.find('.dropdown.cache-collections').addClass('loading disabled');
+
+  let cid = value === 'all' ? null : value;
+
+  if ($elem.attr('data-type') === 'external')
+    DB.getExternalCacheCollectionHeroStats(cid, function(cache) {
+      renderHeroCollectionVsStatsTo(container, heroDataWinCache[key], heroCollectionHeroMatchThresh, cache);
+      container.find('.dropdown.cache-collections').removeClass('loading disabled');
+    });
+  else
+    DB.getCachedCollectionHeroStats(cid, function(cache) {
+      renderHeroCollectionVsStatsTo(container, heroDataWinCache[key], heroCollectionHeroMatchThresh, cache);
+      container.find('.dropdown.cache-collections').removeClass('loading disabled');
+    });
+}
+
+function renderHeroCollectionVsStatsTo(container, stats, threshold, avg) {
+  if (threshold === undefined)
+    threshold = 0;
+
+  container.find('tbody').html('');
+
+  for (let h in stats) {
+    let context = stats[h];
+
+    if ('defeated' in context) {
+      context.winPercent = context.defeated / context.games;
+    }
+    else {
+      context.winPercent = context.wins / context.games;
+    }
+    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
+    context.heroImg = Heroes.heroIcon(context.name);
+
+    if (h in avg.heroData.heroes) {
+      context.avgDelta = context.winPercent - (avg.heroData.heroes[h].wins / avg.heroData.heroes[h].games);
+    }
+    else {
+      context.avgDelta = 0;
+    }
+
+    context.formatAvgDelta = (context.avgDelta > 0 ? '+' : '') + (context.avgDelta * 100).toFixed(1) + '%';
+    context.deltaClass = (context.avgDelta > 0) ? 'plus' : ((context.avgDelta < 0) ? 'minus' : '');
+
+    if (context.games >= threshold)
+      container.find('tbody').append(heroCollectionHeroWinRowTemplate(context));
+  }
 }
 
 function getCompositionElement(roles) {
