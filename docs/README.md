@@ -30,15 +30,20 @@ It also comes with a [HotsAPI](http://hotsapi.net/)/[HotsLogs](https://www.hotsl
 * [Replay File Format Reference](hots-replay-data.md)
 
 ## Download
-Stats of the Storm is a Windows-only application right now. You can download the latest build
+Stats of the Storm is available for Windows and macOS (experimental). You can download the latest build
 from the [Releases](https://github.com/ebshimizu/stats-of-the-storm/releases) page.
 The first thing you'll want to do is set up the parser in the Settings menu, which you can reach by
-opening the menu in the top left corner of the app.
+opening the menu in the top left corner of the app. The application is unsigned, so you will need
+to tell your respective OS to allow the installation of the app.
 
 Once you install the program, you can start parsing your own matches, or explore
 a database created by someone else. An example of this has been created for
 Phase 1 of the 2018 HGC, and Season 3 of the [NGS](https://nexusgamingseries.com),
 and instructions can be found [here](external-db.md).
+
+The macOS build should be considered _experimental_ at this time. I am testing the app
+on a VM, so it may behave differently on actual hardware. Please let me know what sort
+of problems come up there.
 
 Want to help develop? Found a bug? Check out the [project repository](https://github.com/ebshimizu/stats-of-the-storm/).
 
@@ -65,14 +70,9 @@ The parser in this app is tied to Blizzard's [heroprotocol](https://github.com/B
 When this library updates, I will push an update for the app as soon as I can. It sometimes takes a few
 days for the heroprotocol repository to update.
 
-**Why doesn't this run on OS X?**
-Theoretically there is no problem and it already runs on OS X.
-However, I can't build an installer for OS X because I don't have a Mac to run this on.
-You can run it in development mode by following the instructions on the repository's readme.
-
 **Why don't I see all the players in the Player Details page?**
 Personal databases have a lot of players that only show up once or twice. In order to keep the
-app responsive, players with fewer than 5 matches in the database are excluded from the Player
+app responsive, players with fewer than 5 matches in the database are automatically  excluded from the Player
 Details page. You can change this threshold in the Settings page with the Player Menu Threshold
 option.
 
