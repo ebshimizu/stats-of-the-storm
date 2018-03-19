@@ -1,6 +1,6 @@
 {
   "name": "stats-of-the-storm",
-  "version": "0.5.0",
+  "version": "1.0.0-dev",
   "main": "main.js",
   "description": "A Heroes of the Storm stat tracking application.",
   "bugs": "falindrith@gmail.com",

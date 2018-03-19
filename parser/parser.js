@@ -94,6 +94,68 @@ function parse(file, requestedData, opts) {
   return replay;
 }
 
+// returns a summary of header data (player ID, date, type, map)
+// for checking duplicates
+function getHeader(file) {
+  try {
+    let data = parse(file, [ReplayDataType.header, ReplayDataType.details, ReplayDataType.init, ReplayDataType.tracker]);
+
+    var details = data.details;
+    var match = {};
+
+    // header data
+    match.version = data.header.m_version;
+    match.type = data.header.m_type;
+
+    // game mode
+    match.mode = data.initdata.m_syncLobbyState.m_gameDescription.m_gameOptions.m_ammId;
+
+    if (match.mode === null)
+      match.mode = -1;
+
+    // map details
+    // for localization reasons we need the internal map name from the EndOfGameTalentChoices event
+    var tracker = data.trackerevents;
+    for (let i in tracker) {
+      let event = tracker[i];
+
+      // case on event type
+      if (event._eventid === ReplayTypes.TrackerEvent.Stat) {
+        if (event.m_eventName === ReplayTypes.StatEventType.EndOfGameTalentChoices) {
+          let internalMap = event.m_stringData[2].m_value;
+          if (internalMap in ReplayTypes.MapType) {
+            match.map = ReplayTypes.MapType[event.m_stringData[2].m_value];
+            break;
+          }
+          else {
+            console.log('Unrecognized internal map name: ' + internalMap);
+            return { };
+          }
+        }
+      }
+    }
+
+    match.date = winFileTimeToDate(details.m_timeUTC);
+    match.rawDate = details.m_timeUTC;
+
+    // players
+    match.playerIDs = [];
+    var playerDetails = details.m_playerList;
+
+    for (var i = 0; i < playerDetails.length; i++) {
+      var pdata = playerDetails[i];
+      let ToonHandle = pdata.m_toon.m_region + '-' + pdata.m_toon.m_programId + '-' + pdata.m_toon.m_realm + '-' + pdata.m_toon.m_id;
+      match.playerIDs.push(ToonHandle);
+    }
+
+    return match;
+  }
+  catch (err) {
+    console.log(err);
+    return {};
+  }
+}
+
 // processes a replay file and adds it to the database
 // the parser now requires a heroes talents instance to function.
 function processReplay(file, HeroesTalents, opts = {}) {
@@ -225,7 +287,6 @@ function processReplay(file, HeroesTalents, opts = {}) {
 
       players[pdoc.ToonHandle] = pdoc;
       match.playerIDs.push(pdoc.ToonHandle);
-      match.heroes.push(pdoc.hero);
 
       console.log("Found player " + pdoc.ToonHandle + " (" + pdoc.name+ ")");
     }
@@ -254,6 +315,9 @@ function processReplay(file, HeroesTalents, opts = {}) {
 
           playerIDMap[event.m_intData[0].m_value] = event.m_stringData[1].m_value;
           players[event.m_stringData[1].m_value].hero = HeroesTalents.heroNameFromAttr(data.attributeevents.scopes[event.m_intData[0].m_value]['4002'][0].value);
+
+          // right hero names should be tracked here...
+          match.heroes.push(players[event.m_stringData[1].m_value].hero);
 
           console.log("Player " + event.m_stringData[1].m_value + " has tracker ID " + event.m_intData[0].m_value);
         }
@@ -1849,5 +1913,6 @@ exports.AllReplayData = AllReplayData;
 exports.processReplay = processReplay;
 exports.ReplayStatus = ReplayStatus;
 exports.StatusString = StatusString;
+exports.getHeader = getHeader;
 exports.getFirstObjectiveTeam = getFirstObjectiveTeam;
 exports.VERSION = PARSER_VERSION;

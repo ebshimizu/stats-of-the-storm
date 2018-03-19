@@ -230,12 +230,32 @@ class Database {
 
   checkDuplicate(file, callback) {
     try {
-      let data = Parser.parse(file, [Parser.ReplayDataType.header, Parser.ReplayDataType.details]);
+      let header = Parser.getHeader(file);
       let search = {};
-      search.type = data.header.m_type;
+
+      // duplicate criteria:
+      // same type
+      search.type = header.type;
+
       //search.loopLength = data.header.m_elapsedGameLoops;
-      search.map = data.details.m_title;
-      search.rawDate = data.details.m_timeUTC;
+      
+      // same map
+      search.map = header.map;
+
+      // same players
+      // they should be in identical order but just in case
+      search.$and = [];
+      for (let p of header.playerIDs) {
+        search.$and.push({ playerIDs: p });
+      }
+
+      // date within 1 minute
+      let dateMin = new Date(header.date.getTime() - 60000);
+      let dateMax = new Date(header.date.getTime() + 60000);
+      search.$where = function() {
+        let d = new Date(this.date);
+        return dateMin <= d && d <= dateMax;
+      }
 
       // this is the one raw call that is not preprocessed by collections for what should be somewhat obvious reasons
       this._db.matches.find(search, function(err, docs) {
