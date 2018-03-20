@@ -448,6 +448,14 @@ function loadMatch(docs, doneLoadCallback) {
   // summary graphs
   loadTeamStats();
 
+  // non-english hero name check
+  for (let h of matchDetailMatch.heroes) {
+    if (Heroes.role(h) === '') {
+      showMessage('Match Metadata Error', 'A hero name in this match\'s metadata is invalid. This only affects the ability to search for a hero in this match on the Matches page. Player Details and the Collection: Heroes pages are unaffected. To fix, you should re-import the match or re-create the database.', { class: 'negative', sticky: true });
+      break;
+    }
+  }
+
   $('#match-detail-details').scrollTop(0);
   doneLoadCallback();
   $('#match-detail-details table').floatThead('reflow');

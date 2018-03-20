@@ -740,6 +740,9 @@ function showMessage(title, text, opts = {}) {
       }
     });
   }
+
+  // should really dump to console too just in case rendering gets messed up
+  console.log(title + ': ' + text);
 }
 
 function exportMatch(id, filename) {
