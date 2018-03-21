@@ -89,9 +89,9 @@ function initMatchesPage() {
     action: 'hide',
     onChange: handleMatchesCollectionAction
   });
-  $('#matches-export-menu').dropdown({
+  $('#matches-file-menu').dropdown({
     action: 'hide',
-    onChange: handleMatchesExportAction
+    onChange: handleMatchesFileAction
   });
 
   $('#matches-collection-select').modal();
@@ -112,7 +112,7 @@ function resetMatchesPage() {
 
 function showMatchesPage() {
   $('#matches-collection').removeClass('is-hidden');
-  $('#matches-export-menu').removeClass('is-hidden');
+  $('#matches-file-menu').removeClass('is-hidden');
 }
 
 function getMatchCount() {
@@ -605,7 +605,7 @@ function handleMatchesCollectionAction(action, text, $elem) {
   }
 }
 
-function handleMatchesExportAction(action, text, $elem) {
+function handleMatchesFileAction(action, text, $elem) {
   if (action === 'match') {
     dialog.showOpenDialog({
       title: 'Select Export Folder',
@@ -620,4 +620,35 @@ function handleMatchesExportAction(action, text, $elem) {
       }
     })
   }
+  else if (action === 'delete') {
+    $('#matches-confirm-delete-matches').modal({
+      onApprove: function() {
+        if (selectedMatches.length === 0) {
+          showMessage('No Matches Selected', 'No matches deleted because no matches are selected', {});
+        }
+        else {
+          let toDelete = [];
+          for (let m of selectedMatches) {
+            toDelete.push(m._id);
+          }
+
+          showMessage('Deleting ' + toDelete.length + ' Matches', '', '');
+          handleDeleteMatches(toDelete.pop(), toDelete);
+        }
+      }
+    }).modal('show');
+  }
+}
+
+function handleDeleteMatches(current, remaining) {
+  DB.deleteReplay(current, function() {
+    if (remaining.length > 0) {
+      handleDeleteMatches(remaining.pop(), remaining);
+    }
+    else {
+      showMessage('Matches Deleted', '', {});
+      getMatchCount();
+      selectMatches();
+    }
+  })
 }

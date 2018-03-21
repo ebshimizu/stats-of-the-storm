@@ -350,9 +350,9 @@ function initMatchDetailPage() {
     onChange: matchDetailCollectionAction
   });
 
-  $('#match-detail-export-menu').dropdown({
+  $('#match-detail-file-menu').dropdown({
     action: 'hide',
-    onChange: matchDetailExportAction
+    onChange: matchDetailFileAction
   });
 
   $('#match-detail-existing-team').modal();
@@ -370,7 +370,7 @@ function initMatchDetailPage() {
 function matchDetailsShowSection() {
   $('#match-detail-teams').removeClass('is-hidden');
   $('#match-detail-collection').removeClass('is-hidden');
-  $('#match-detail-export-menu').removeClass('is-hidden');
+  $('#match-detail-file-menu').removeClass('is-hidden');
 }
 
 function matchDetailTeamAction(action) {
@@ -1956,7 +1956,7 @@ function matchDetailCollectionAction(value, text, $elem) {
   }
 }
 
-function matchDetailExportAction(value, text, $elem) {
+function matchDetailFileAction(value, text, $elem) {
   if (value === 'match') {
     dialog.showSaveDialog({
       title: 'Export Match',
@@ -1967,4 +1967,17 @@ function matchDetailExportAction(value, text, $elem) {
       }
     });
   }
+  else if (value === 'delete') {
+    $('#match-detail-confirm-delete-match').modal({
+      onApprove: function() {
+        DB.deleteReplay(matchDetailMatch._id, function() {
+          showMessage('Match Deleted', '');
+          getMatchCount();
+          selectMatches();
+          changeSection('matches');
+        });
+      }
+    }).modal('show');
+  }
+
 }
