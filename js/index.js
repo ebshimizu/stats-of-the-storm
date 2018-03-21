@@ -807,36 +807,49 @@ function migrateVersion2ToVersion3() {
 }
 
 function updateMatchToVersion3(match, remaining) {
-  console.log('updating match ' + match._id);
-  setLoadMessage('Updating DB Version 2 to Version 3<br>' + remaining.length + ' matches left');
+  try {
+    console.log('updating match ' + match._id);
+    setLoadMessage('Updating DB Version 2 to Version 3<br>' + remaining.length + ' matches left');
 
-  if (match.picks) {
-    match.firstPickWin = match.picks.first === match.winner;
+    if (match.picks) {
+      match.firstPickWin = match.picks.first === match.winner;
+    }
+    else {
+      match.firstPickWin = false;
+    }
+
+    match.firstObjective = Parser.getFirstObjectiveTeam(match);
+    match.firstObjectiveWin = match.winner === match.firstObjective;
+
+    // update length!
+    // the offset from the end of the xp breakdown to the actual end of the match is 114 frames
+    // this may vary a little bit, but it should bring things in line with the current parser.
+    // users can of course re-import the matches if they desire.
+    let lastXP = match.XPBreakdown[match.XPBreakdown.length - 1];
+    match.loopLength = lastXP.loop - 114;
+    match.length = Parser.loopsToSeconds(match.loopLength - match.loopGameStart);
+
+    // update
+    DB.updateMatch(match, function() {
+      if (remaining.length === 0) {
+        finishVersion2To3Migration();
+      }
+      else {
+        updateMatchToVersion3(remaining.pop(), remaining);
+      }
+    });
   }
-  else {
-    match.firstPickWin = false;
-  }
+  catch (err) {
+    console.log(err);
+    console.log('Failed to update match ' + match._id + ' please file bug report');
 
-  match.firstObjective = Parser.getFirstObjectiveTeam(match);
-  match.firstObjectiveWin = match.winner === match.firstObjective;
-
-  // update length!
-  // the offset from the end of the xp breakdown to the actual end of the match is 114 frames
-  // this may vary a little bit, but it should bring things in line with the current parser.
-  // users can of course re-import the matches if they desire.
-  let lastXP = match.XPBreakdown[match.XPBreakdown.length - 1];
-  match.loopLength = lastXP.loop - 114;
-  match.length = Parser.loopsToSeconds(match.loopLength - match.loopGameStart);
-
-  // update
-  DB.updateMatch(match, function() {
     if (remaining.length === 0) {
       finishVersion2To3Migration();
     }
     else {
       updateMatchToVersion3(remaining.pop(), remaining);
-    }
-  });
+    } 
+  }
 }
 
 function finishVersion2To3Migration() {
