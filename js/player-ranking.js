@@ -154,7 +154,7 @@ function loadPlayerRankings() {
       context.id = p;
       context.name = player.name;
       context.value.winPercent = player.wins / player.games;
-      context.formatWinPercent = (context.value.winPercent * 100).toFixed(2) + '%';
+      context.formatWinPercent = formatStat('pct', context.value.winPercent);
 
       if (mode === 'total' || mode === 'averages') {
         context.value.totalKDA = player.totalKDA;
@@ -162,7 +162,7 @@ function loadPlayerRankings() {
       }
       else {
         context.value.totalKDA = player[mode].KDA;
-        context.totalKda = context.value.totalKDA.toFixed(2);
+        context.totalKda = formatStat('KDA', context.value.totalKDA);
       }
       
       context.value.games = player.games;
@@ -175,9 +175,9 @@ function loadPlayerRankings() {
 
       context.totalAwards = player.totalAwards;
       context.value.awardPct = context.totalAwards / player.games;
-      context.awardPct = (context.value.awardPct * 100).toFixed(2) + '%';
+      context.awardPct = formatStat('pct', context.value.awardPct);
       context.value.MVPPct = player.totalMVP / player.games;
-      context.MVPPct = (context.value.MVPPct * 100).toFixed(2) + '%';
+      context.MVPPct = formatStat('pct', context.value.MVPPct);
       context.taunts = player.taunts;
 
       $('#player-ranking-general-table').append(playerRankingGeneralTemplate(context));

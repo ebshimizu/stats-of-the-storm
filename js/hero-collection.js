@@ -192,11 +192,11 @@ function loadOverallHeroCollectionData() {
       context.heroName = h;
       context.heroImg = Heroes.heroIcon(h);
       context.winPercent = hero.games === 0 ? 0 : hero.wins / hero.games;
-      context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
+      context.formatWinPercent = formatStat('pct', context.winPercent);
       context.banPercent = hero.bans.total / overallStats.totalMatches;
-      context.formatBanPercent = (context.banPercent * 100).toFixed(2) + '%';
+      context.formatBanPercent = formatStat('pct', context.banPercent);
       context.popPercent = hero.involved / overallStats.totalMatches;
-      context.formatPopPercent = (context.popPercent * 100).toFixed(2) + '%';
+      context.formatPopPercent = formatStat('pct', context.popPercent);
       context.games = hero.games;
       context.win = hero.wins;
       context.loss = hero.games - hero.wins;
@@ -217,14 +217,14 @@ function loadOverallHeroCollectionData() {
       banContext.format.banPercent = context.formatBanPercent;
       banContext.bans = hero.bans;
       banContext.firstBanPercent = hero.bans.first / overallStats.totalMatches;
-      banContext.format.firstBanPercent = (banContext.firstBanPercent * 100).toFixed(2) + '%';
+      banContext.format.firstBanPercent = formatStat('pct', banContext.firstBanPercent);
       banContext.secondBanPercent = hero.bans.second / overallStats.totalMatches;
-      banContext.format.secondBanPercent = (banContext.secondBanPercent * 100).toFixed(2) + '%';
+      banContext.format.secondBanPercent = formatStat('pct', banContext.secondBanPercent);
       banContext.picks = hero.picks;
 
       for (let p in banContext.picks) {
         banContext.picks[p].pct = banContext.picks[p].count / overallStats.totalMatches;
-        banContext.picks[p].formatPct = (banContext.picks[p].pct * 100).toFixed(2) + '%';
+        banContext.picks[p].formatPct = formatStat('pct', banContext.picks[p].pct);
       }
 
       $('#hero-collection-picks tbody').append(heroCollectionPickRowTemplate(banContext));
@@ -276,8 +276,8 @@ function loadOverallHeroCollectionData() {
     for (let key in matchData.compositions) {
       let comp = matchData.compositions[key];
       let row = '<tr><td class="center aligned" data-sort-value="' + key + '">' + getCompositionElement(comp.roles) + '</td>';
-      row += '<td class="center aligned" data-sort-value="' + (comp.wins / comp.games) + '">' + (comp.wins / comp.games * 100).toFixed(1) + ' %</td>';
-      row += '<td class="center aligned" data-sort-value="' + (comp.games / (overallStats.totalMatches * 2)) + '">' + (comp.games / (overallStats.totalMatches * 2) * 100).toFixed(1) + ' %</td>';
+      row += '<td class="center aligned" data-sort-value="' + (comp.wins / comp.games) + '">' + formatStat('pct', comp.wins / comp.games) + '</td>';
+      row += '<td class="center aligned" data-sort-value="' + (comp.games / (overallStats.totalMatches * 2)) + '">' + formatStat('pct', comp.games / (overallStats.totalMatches * 2)) + '</td>';
       row += '<td class="center aligned" data-sort-value="' + comp.wins + '">' + comp.wins + '</td>';
       row += '<td class="center aligned" data-sort-value="' + (comp.games - comp.wins) + '">' + (comp.games - comp.wins) + '</td>';
       row += '<td class="center aligned" data-sort-value="' + comp.games + '">' + comp.games + '</td></tr>';
@@ -376,13 +376,13 @@ function loadHeroCollectionData(value, text, $elem) {
     renderAwardsTo($('#hero-collection-award-summary'), stats);
 
     // these are annoying
-    $('#hero-collection-detail-misc-summary .statistic[name="overallWin"] .value').text((stats.wins / stats.games * 100).toFixed(2) + '%');
+    $('#hero-collection-detail-misc-summary .statistic[name="overallWin"] .value').text(formatStat('pct', stats.wins / stats.games));
     $('#hero-collection-detail-misc-summary .statistic[name="overallGames"] .value').text(stats.games);
-    $('#hero-collection-detail-misc-summary .statistic[name="overallTD"] .value').text((stats.totalTD / stats.games).toFixed(2));
-    $('#hero-collection-detail-misc-summary .statistic[name="overallDeaths"] .value').text((stats.totalDeaths / stats.games).toFixed(2));
-    $('#hero-collection-detail-misc-summary .statistic[name="overallKDA"] .value').text((stats.totalTD / Math.max(stats.totalDeaths, 1)).toFixed(2));
-    $('#hero-collection-detail-misc-summary .statistic[name="overallMVP"] .value').text((stats.totalMVP / Math.max(stats.games, 1) * 100).toFixed(1) + '%');
-    $('#hero-collection-detail-misc-summary .statistic[name="overallAward"] .value').text((stats.totalAward / Math.max(stats.games) * 100).toFixed(1) + '%');
+    $('#hero-collection-detail-misc-summary .statistic[name="overallTD"] .value').text(formatStat('overallTD', stats.totalTD / stats.games), true);
+    $('#hero-collection-detail-misc-summary .statistic[name="overallDeaths"] .value').text(formatStat('overallDeaths', stats.totalDeaths / stats.games), true);
+    $('#hero-collection-detail-misc-summary .statistic[name="overallKDA"] .value').text(formatStat('KDA', stats.totalTD / Math.max(stats.totalDeaths, 1)));
+    $('#hero-collection-detail-misc-summary .statistic[name="overallMVP"] .value').text(formatStat('pct', stats.totalMVP / Math.max(stats.games, 1)));
+    $('#hero-collection-detail-misc-summary .statistic[name="overallAward"] .value').text(formatStat('pct', stats.totalAward / Math.max(stats.games)));
 
     $('#hero-collection-page-content table').floatThead('reflow');
   });
@@ -423,7 +423,7 @@ function renderHeroCollectionVsStatsTo(container, stats, threshold, avg) {
     else {
       context.winPercent = context.wins / context.games;
     }
-    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
+    context.formatWinPercent = formatStat('pct', context.winPercent);
     context.heroImg = Heroes.heroIcon(context.name);
 
     if (h in avg.heroData.heroes) {
@@ -433,7 +433,7 @@ function renderHeroCollectionVsStatsTo(container, stats, threshold, avg) {
       context.avgDelta = 0;
     }
 
-    context.formatAvgDelta = (context.avgDelta > 0 ? '+' : '') + (context.avgDelta * 100).toFixed(1) + '%';
+    context.formatAvgDelta = (context.avgDelta > 0 ? '+' : '') + formatStat('pct', context.avgDelta);
     context.deltaClass = (context.avgDelta > 0) ? 'plus' : ((context.avgDelta < 0) ? 'minus' : '');
 
     if (context.games >= threshold)

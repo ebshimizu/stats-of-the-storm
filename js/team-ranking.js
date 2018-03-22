@@ -198,7 +198,7 @@ function updateTeamRankingData(err, matches, team) {
   let teamStats = DB.summarizeTeamData(team, matches, Heroes);
   teamStats.name = team.name;
   teamStats.winPercent = teamStats.wins / teamStats.totalMatches;
-  teamStats.formatWinPercent = (teamStats.winPercent * 100).toFixed(2) + '%';
+  teamStats.formatWinPercent = formatStat('pct', teamStats.winPercent);
 
   if (mode === 'averages' || mode === 'total') {
     teamStats.stats.total.totalKDA = teamStats.takedowns.total / teamStats.deaths.total;
@@ -206,7 +206,7 @@ function updateTeamRankingData(err, matches, team) {
   else {
     teamStats.stats.total.totalKDA = teamStats.stats[mode].KDA;
   }
-  teamStats.totalKDA = teamStats.stats.total.totalKDA.toFixed(2);
+  teamStats.totalKDA = formatStat('KDA', teamStats.stats.total.totalKDA);
 
   teamStats.matchLength.format = formatSeconds(teamStats.matchLength[mode]);
   teamStats.matchLength.val = teamStats.matchLength[mode];
@@ -223,8 +223,8 @@ function updateTeamRankingData(err, matches, team) {
   teamStats.average = teamStats.stats[mode];
   teamStats.stats.takedowns = teamStats.takedowns[mode];
   teamStats.stats.deaths = teamStats.deaths[mode];
-  teamStats.takedowns = teamStats.stats.takedowns.toFixed(2);
-  teamStats.deaths = teamStats.stats.deaths.toFixed(2);
+  teamStats.takedowns = formatStat('', teamStats.stats.takedowns, true);
+  teamStats.deaths = formatStat('', teamStats.stats.deaths, true);
 
   teamStats.structures.Fort.first /= Math.max(1, teamStats.structures.Fort.gamesWithFirst);
   teamStats.structures.Keep.first /= Math.max(1, teamStats.structures.Keep.gamesWithFirst);

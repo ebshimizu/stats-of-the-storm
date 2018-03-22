@@ -296,21 +296,21 @@ function loadTeamData(team, matches, heroData) {
     context.Deaths = hero.stats.Deaths;
 
     context.value.KDA = hero.stats.Takedowns / Math.max(1, hero.stats.Deaths);
-    context.KDA = context.value.KDA.toFixed(2);
+    context.KDA = formatStat('KDA', context.value.KDA);
 
     context.value.TimeSpentDead = heroStats.averages[h].TimeSpentDead;
     context.TimeSpentDead = formatSeconds(context.value.TimeSpentDead);
 
     context.value.timeDeadPct = hero.stats.timeDeadPct / hero.games;
-    context.timeDeadPct = (context.value.timeDeadPct * 100).toFixed(2) + '%';
+    context.timeDeadPct = formatStat('pct', context.value.timeDeadPct);
 
     context.value.games = hero.games;
     context.value.winPercent = hero.wins / hero.games;
     context.value.pickPercent = hero.games / teamStats.totalMatches;
 
     context.games = hero.games;
-    context.winPercent = (context.value.winPercent * 100).toFixed(2) + '%';
-    context.pickPercent = (context.value.pickPercent * 100).toFixed(2) + '%';
+    context.winPercent = formatStat('pct', context.value.winPercent);
+    context.pickPercent = formatStat('pct', context.value.pickPercent);
     context.heroImg = Heroes.heroIcon(h);
     context.heroName = h;
 
@@ -340,9 +340,9 @@ function loadTeamData(team, matches, heroData) {
     context.value.ban2Percent = hero.second / teamStats.totalMatches;
     context.ban2 = hero.second;
 
-    context.banPercent = (context.value.banPercent * 100).toFixed(2) + '%';
-    context.ban1Percent = (context.value.ban1Percent * 100).toFixed(2) + '%';
-    context.ban2Percent = (context.value.ban2Percent * 100).toFixed(2) + '%';
+    context.banPercent =  formatStat('pct', context.value.banPercent);
+    context.ban1Percent = formatStat('pct', context.value.ban1Percent);
+    context.ban2Percent = formatStat('pct', context.value.ban2Percent);
 
     if (hero.bans >= teamHeroMatchThresh)
       $('#team-ban-summary tbody').append(teamBanSummaryRowTemplate(context));
@@ -359,11 +359,11 @@ function loadTeamData(team, matches, heroData) {
     context.heroImg = Heroes.heroIcon(h);
     context.value.picks = hero.picks;
     context.value.winPercent = hero.wins / hero.games;
-    context.winPercent = (context.value.winPercent * 100).toFixed(2) + '%';
+    context.winPercent = formatStat('pct', context.value.winPercent);
     context.value.games = hero.games;
     context.games = hero.games;
     for (let p in context.value.picks) {
-      context[p + 'Percent'] = (context.value.picks[p].count / teamStats.totalMatches * 100).toFixed(2) + '%';
+      context[p + 'Percent'] = formatStat('pct', context.value.picks[p].count / teamStats.totalMatches);
     }
 
     if (hero.games >= teamHeroMatchThresh)
@@ -372,27 +372,27 @@ function loadTeamData(team, matches, heroData) {
 
   // other stats
   try {
-    $('#team-summary-stats .statistic[name="overallWin"] .value').text((teamStats.wins / teamStats.totalMatches * 100).toFixed(2) + '%');
-    $('#team-summary-stats .statistic[name="overallGames"] .value').text(teamStats.totalMatches);
-    $('#team-summary-stats .statistic[name="overallTD"] .value').text(teamStats.takedowns.total);
-    $('#team-summary-stats .statistic[name="overallDeaths"] .value').text(teamStats.deaths.total);
-    $('#team-summary-stats .statistic[name="overallKDA"] .value').text((teamStats.takedowns.total / Math.max(1, teamStats.deaths.total)).toFixed(2));
+    $('#team-summary-stats .statistic[name="overallWin"] .value').text(formatStat('pct', teamStats.wins / teamStats.totalMatches));
+    $('#team-summary-stats .statistic[name="overallGames"] .value').text(formatStat('', teamStats.totalMatches, true));
+    $('#team-summary-stats .statistic[name="overallTD"] .value').text(formatStat('', teamStats.takedowns.total, true));
+    $('#team-summary-stats .statistic[name="overallDeaths"] .value').text(formatStat('', teamStats.deaths.total, true));
+    $('#team-summary-stats .statistic[name="overallKDA"] .value').text(formatStat('KDA', teamStats.takedowns.total / Math.max(1, teamStats.deaths.total)));
     $('#team-summary-stats .statistic[name="timeDead"] .value').text(formatSeconds(teamStats.stats.average.avgTimeSpentDead));
-    $('#team-summary-stats .statistic[name="pctTimeDead"] .value').text((teamStats.stats.average.timeDeadPct * 100).toFixed(2) + '%');
+    $('#team-summary-stats .statistic[name="pctTimeDead"] .value').text(formatStat('pct', teamStats.stats.average.timeDeadPct));
     $('#team-summary-stats .statistic[name="heroesPlayed"] .value').text(picked);
-    $('#team-summary-stats .statistic[name="heroesPct"] .value').text((picked / Heroes.heroCount * 100).toFixed(2) + '%');
+    $('#team-summary-stats .statistic[name="heroesPct"] .value').text(formatStat('pct', picked / Heroes.heroCount));
     $('#team-summary-stats .statistic[name="avgLength"] .value').text(formatSeconds(teamStats.matchLength.average));
-    $('#team-summary-stats .statistic[name="PPK"] .value').text(teamStats.stats.average.PPK.toFixed(2));
+    $('#team-summary-stats .statistic[name="PPK"] .value').text(formatStat('KDA', teamStats.stats.average.PPK));
 
     let elem = $('#team-detail-stats');
     $('#team-detail-stats .statistic[name="team-time-to-10"] .value').text(formatSeconds(teamStats.stats.average.timeTo10));
-    $('#team-detail-stats .statistic[name="team-times-at-10"] .value').text(teamStats.level10Games);
+    $('#team-detail-stats .statistic[name="team-times-at-10"] .value').text(formatStat('', teamStats.level10Games, true));
     $('#team-detail-stats .statistic[name="team-time-to-20"] .value').text(formatSeconds(teamStats.stats.average.timeTo20));
-    $('#team-detail-stats .statistic[name="team-times-at-20"] .value').text(teamStats.level20Games);
+    $('#team-detail-stats .statistic[name="team-times-at-20"] .value').text(formatStat('', teamStats.level20Games, true));
 
-    $('#team-detail-stats .statistic[name="merc-captures"] .value').text(teamStats.stats.average.mercCaptures.toFixed(2));
+    $('#team-detail-stats .statistic[name="merc-captures"] .value').text(formatStat('mercCaptures', teamStats.stats.average.mercCaptures, true));
     $('#team-detail-stats .statistic[name="merc-uptime"] .value').text(formatSeconds(teamStats.stats.average.mercUptime));
-    $('#team-detail-stats .statistic[name="merc-uptime-percent"] .value').text((teamStats.stats.average.mercUptimePercent * 100).toFixed(2) + '%');
+    $('#team-detail-stats .statistic[name="merc-uptime-percent"] .value').text(formatStat('pct', teamStats.stats.average.mercUptimePercent));
 
     updateTeamStat(elem, 'T1', formatSeconds(teamStats.tierTimes.T1.average));
     updateTeamStat(elem, 'T2', formatSeconds(teamStats.tierTimes.T2.average));
@@ -423,18 +423,18 @@ function loadTeamData(team, matches, heroData) {
     updateTeamStat(elem, 'first-tower', hideTowerTime ? 'N/A' : formatSeconds(Math.min(teamStats.structures['Fort Tower'].first / teamStats.structures['Fort Tower'].gamesWithFirst, teamStats.structures['Keep Tower'].first / teamStats.structures['Keep Tower'].gamesWithFirst)));
 
     elem = $('#team-damage-stats');
-    updateTeamStat(elem, 'hero-damage', teamStats.stats.average.HeroDamage.toFixed(0));
-    updateTeamStat(elem, 'siege-damage', teamStats.stats.average.SiegeDamage.toFixed(0));
-    updateTeamStat(elem, 'creep-damage', teamStats.stats.average.CreepDamage.toFixed(0));
-    updateTeamStat(elem, 'minion-damage', teamStats.stats.average.MinionDamage.toFixed(0));
-    updateTeamStat(elem, 'healing', teamStats.stats.average.Healing.toFixed(0));
-    updateTeamStat(elem, 'self-healing', teamStats.stats.average.SelfHealing.toFixed(0));
-    updateTeamStat(elem, 'shields', teamStats.stats.average.ProtectionGivenToAllies.toFixed(0));
-    updateTeamStat(elem, 'damage-taken', teamStats.stats.average.DamageTaken.toFixed(0));
+    updateTeamStat(elem, 'hero-damage',  formatStat('', teamStats.stats.average.HeroDamage, true));
+    updateTeamStat(elem, 'siege-damage', formatStat('', teamStats.stats.average.SiegeDamage, true));
+    updateTeamStat(elem, 'creep-damage', formatStat('', teamStats.stats.average.CreepDamage, true));
+    updateTeamStat(elem, 'minion-damage', formatStat('', teamStats.stats.average.MinionDamage, true));
+    updateTeamStat(elem, 'healing', formatStat('', teamStats.stats.average.Healing, true));
+    updateTeamStat(elem, 'self-healing', formatStat('', teamStats.stats.average.SelfHealing, true));
+    updateTeamStat(elem, 'shields', formatStat('', teamStats.stats.average.ProtectionGivenToAllies, true));
+    updateTeamStat(elem, 'damage-taken', formatStat('', teamStats.stats.average.DamageTaken, true));
 
-    updateTeamStat(elem, 'hero-damage-tf', teamStats.stats.average.TeamfightHeroDamage.toFixed(0));
-    updateTeamStat(elem, 'damage-taken-tf', teamStats.stats.average.TeamfightDamageTaken.toFixed(0));
-    updateTeamStat(elem, 'healing-tf', teamStats.stats.average.TeamfightHealingDone.toFixed(0));
+    updateTeamStat(elem, 'hero-damage-tf', formatStat('', teamStats.stats.average.TeamfightHeroDamage, true));
+    updateTeamStat(elem, 'damage-taken-tf', formatStat('', teamStats.stats.average.TeamfightDamageTaken, true));
+    updateTeamStat(elem, 'healing-tf', formatStat('', teamStats.stats.average.TeamfightHealingDone, true));
     updateTeamStat(elem, 'cc', formatSeconds(teamStats.stats.average.TimeCCdEnemyHeroes));
     updateTeamStat(elem, 'root', formatSeconds(teamStats.stats.average.TimeRootingEnemyHeroes));
     updateTeamStat(elem, 'silence', formatSeconds(teamStats.stats.average.TimeSilencingEnemyHeroes));
@@ -483,7 +483,7 @@ function loadTeamRoster(playerStats) {
       }
       context.value.games = player.games;
       context.games = player.games;
-      context.highestStreak = player[mode].HighestKillStreak.toFixed(2);
+      context.highestStreak = formatStat('', player[mode].HighestKillStreak, true);
 
       $('#team-roster-stats tbody').append(teamRosterRowTemplate(context));
 
@@ -770,7 +770,7 @@ function displayTeamAverages() {
     else
       context.pctDiff = (context.pDataSort - context.cmpDataSort) / context.cmpDataSort;
 
-    context.pctDiffFormat = (context.pctDiff * 100).toFixed(2) + '%';
+    context.pctDiffFormat = formatStat('pct', context.pctDiff);
 
     $('#team-compare-table tbody').append(playerCompareRowTemplate(context));
   }

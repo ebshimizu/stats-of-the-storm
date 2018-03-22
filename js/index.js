@@ -469,21 +469,19 @@ function formatStat(field, val, allFixed = false) {
   if (val === undefined)
     return 0;
 
-  if (field === 'KillParticipation')
-    return (val * 100).toFixed(2) + '%';
+  if (field === 'KillParticipation' || field === 'timeDeadPct' || field === 'mercUptimePercent' || field === 'pct')
+    return (val * 100).toLocaleString(undefined, { maximumFractionDigits: 1}) + '%';
   else if (field === 'KDA')
-    return val.toFixed(2);
+    return val.toLocaleString(undefined, { maximumFractionDigits: 1});
   else if (field.startsWith('Time') || field === 'OnFireTimeOnFire' || field === 'timeTo10' ||
     field === 'timeTo20' || field === 'mercUptime' || field === 'avgTimeSpentDead')
     return formatSeconds(val);
-  else if (field === 'timeDeadPct' || field === 'mercUptimePercent')
-    return (val * 100).toFixed(2) + '%';
 
   if (allFixed) {
-    return val.toFixed(2);
+    return val.toLocaleString(undefined, { maximumFractionDigits: 1});
   }
 
-  return val;
+  return val.toLocaleString();
 }
 
 // updates certain elements based on a new replay inserted into the database

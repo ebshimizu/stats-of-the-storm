@@ -581,6 +581,11 @@ function appendSummaryRow(color, id) {
   context.kills = data.gameStats.SoloKill;
   context.gameStats = data.gameStats;
   context.hasAwardClass = "is-hidden"
+  context.format = {};
+
+  for (let s in context.gameStats) {
+    context.format[s] = formatStat(s, context.gameStats[s]);
+  }
 
   if (data.gameStats.awards.length > 0) {
     let award = Heroes.awardInfo(data.gameStats.awards[0]);
@@ -1212,8 +1217,8 @@ function getBraxisEvents(items) {
       item0.className = 'blue';
       item1.className = 'red';
 
-      let t0 = (wave.startScore[0] * 100).toFixed(2) + '% Zerg Wave';
-      let t1 = (wave.startScore[1] * 100).toFixed(2) + '% Zerg Wave';
+      let t0 = formatStat('pct', wave.startScore[0]) + ' Zerg Wave';
+      let t1 = formatStat('pct', wave.startScore[1]) + ' Zerg Wave';
 
       let pop0 = "<h3 class='ui header'>";
       pop0 += "<div class='content'>" + t0 + "<div class='sub header'>Spawned at: " + formatSeconds(item0.start) + ", Duration: " + formatSeconds(item0.end - item0.start);
@@ -1374,7 +1379,7 @@ function getBOEEvents(items) {
     item.group = 5;
     item.className = immo.winner === 0 ? 'blue' : 'red';
 
-    let pop = "<h3 class='ui header'><div class='content'>" + immo.power.toFixed(2) + "% Immortal";
+    let pop = "<h3 class='ui header'><div class='content'>" + formatStat('', immo.power, true) + "% Immortal";
     pop += "<div class='sub header'>Spawn: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(immo.immortalDuration);
     pop += "</div></div></h3>";
 
@@ -1840,8 +1845,8 @@ function updateTeamStats() {
     let elem = t === '0' ? $('#match-detail-blue-team-stats') : $('#match-detail-red-team-stats');
 
     // team stats
-    updateTeamStat(elem, 'team-kda', stats.KDA.toFixed(2));
-    updateTeamStat(elem, 'team-ppk', stats.PPK.toFixed(2));
+    updateTeamStat(elem, 'team-kda', formatStat('KDA', stats.KDA));
+    updateTeamStat(elem, 'team-ppk', formatStat('KDA', stats.PPK));
 
     if ('timeTo10' in stats) {
       updateTeamStat(elem, 'team-time-to-10', formatSeconds(stats.timeTo10));
@@ -1860,7 +1865,7 @@ function updateTeamStats() {
     // mercs
     updateTeamStat(elem, 'merc-capture', stats.mercCaptures);
     updateTeamStat(elem, 'merc-uptime', formatSeconds(stats.mercUptime));
-    updateTeamStat(elem, 'merc-uptime-pct', (stats.mercUptimePercent * 100).toFixed(2) + '%');
+    updateTeamStat(elem, 'merc-uptime-pct', formatStat('mercUptimePercent', stats.mercUptimePercent));
 
     updateTeamStat(elem, 'forts-destroyed', stats.structures.Fort.destroyed ? stats.structures.Fort.destroyed : '0');
     updateTeamStat(elem, 'forts-lost', stats.structures.Fort.lost);

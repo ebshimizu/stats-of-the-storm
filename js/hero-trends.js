@@ -153,11 +153,11 @@ function loadTrends() {
           win.heroName = h;
           win.heroImg = Heroes.heroIcon(h);
           win.winPercent = hero.games === 0 ? 0 : hero.wins / hero.games;
-          win.formatWinPercent = (win.winPercent * 100).toFixed(1) + '%';
+          win.formatWinPercent = formatStat('pct', win.winPercent);
           win.banPercent = hero.bans.total / data.totalMatches;
-          win.formatBanPercent = (win.banPercent * 100).toFixed(1) + '%';
+          win.formatBanPercent = formatStat('pct', win.banPercent);
           win.popPercent = hero.involved / data.totalMatches;
-          win.formatPopPercent = (win.popPercent * 100).toFixed(1) + '%';
+          win.formatPopPercent = formatStat('pct', win.popPercent);
           win.games = hero.games;
           win.win = hero.wins;
           win.loss = hero.games - hero.wins;
@@ -177,14 +177,14 @@ function loadTrends() {
           draft.format.banPercent = win.formatBanPercent;
           draft.bans = hero.bans;
           draft.firstBanPercent = hero.bans.first / data.totalMatches;
-          draft.format.firstBanPercent = (draft.firstBanPercent * 100).toFixed(1) + '%';
+          draft.format.firstBanPercent = formatStat('pct', draft.firstBanPercent);
           draft.secondBanPercent = hero.bans.second / data.totalMatches;
-          draft.format.secondBanPercent = (draft.secondBanPercent * 100).toFixed(1) + '%';
+          draft.format.secondBanPercent = formatStat('pct', draft.secondBanPercent);
           draft.picks = hero.picks;
 
           for (let p in draft.picks) {
             draft.picks[p].pct = draft.picks[p].count / data.totalMatches;
-            draft.picks[p].formatPct = (draft.picks[p].pct * 100).toFixed(1) + '%';
+            draft.picks[p].formatPct = formatStat('pct', draft.picks[p].pct);
           }
 
           aggr[h][p] = { win, draft };
@@ -265,7 +265,7 @@ function loadTrends() {
             context.delta[stat] = '0';
           }
           else {
-            context.deltaFmt[stat] = (context.delta[stat] * 100).toFixed(1) + '%';
+            context.deltaFmt[stat] = formatStat('pct', context.delta[stat]);
           }
 
           if (context.delta[stat] > 0) {
@@ -319,12 +319,12 @@ function loadTrends() {
       for (let c in comps) {
         let comp = comps[c];
         let row = '<tr><td class="center aligned" data-sort-value="' + c + '">' + getCompositionElement(comp.roles) + '</td>';
-        row += '<td class="center aligned" data-sort-value="' + comp.p1Win + '">' + (comp.p1Win * 100).toFixed(1) + ' %</td>';
-        row += '<td class="center aligned" data-sort-value="' + comp.p2Win + '">' + (comp.p2Win * 100).toFixed(1) + ' %</td>';
-        row += '<td class="center aligned ' + (comp.winDelta > 0 ? 'plus' : 'minus') + '" data-sort-value="' + comp.winDelta + '">' + (comp.winDelta > 0 ? '+' : '') + (comp.winDelta * 100).toFixed(1) + ' %</td>';
-        row += '<td class="center aligned" data-sort-value="' + comp.p1Pop + '">' + (comp.p1Pop * 100).toFixed(1) + ' %</td>';
-        row += '<td class="center aligned" data-sort-value="' + comp.p2Pop + '">' + (comp.p2Pop * 100).toFixed(1) + ' %</td>';
-        row += '<td class="center aligned ' + (comp.popDelta > 0 ? 'plus' : 'minus') + '" data-sort-value="' + comp.popDelta + '">' + (comp.popDelta > 0 ? '+' : '') + (comp.popDelta * 100).toFixed(1) + ' %</td></tr>';
+        row += '<td class="center aligned" data-sort-value="' + comp.p1Win + '">' + formatStat('pct', comp.p1Win) + '</td>';
+        row += '<td class="center aligned" data-sort-value="' + comp.p2Win + '">' + formatStat('pct', comp.p2Win) + '</td>';
+        row += '<td class="center aligned ' + (comp.winDelta > 0 ? 'plus' : 'minus') + '" data-sort-value="' + comp.winDelta + '">' + (comp.winDelta > 0 ? '+' : '') + formatStat('pct', comp.winDelta) + '</td>';
+        row += '<td class="center aligned" data-sort-value="' + comp.p1Pop + '">' + formatStat('pct', comp.p1Pop) + '</td>';
+        row += '<td class="center aligned" data-sort-value="' + comp.p2Pop + '">' + formatStat('pct', comp.p2Pop) + '</td>';
+        row += '<td class="center aligned ' + (comp.popDelta > 0 ? 'plus' : 'minus') + '" data-sort-value="' + comp.popDelta + '">' + (comp.popDelta > 0 ? '+' : '') + formatStat('pct', comp.popDelta) + '</td></tr>';
   
         $('#hero-trends-comps tbody').append(row);
       }

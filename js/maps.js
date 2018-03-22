@@ -66,10 +66,10 @@ function loadMapStats() {
     updateTeamStat(statContainer, 'median', formatSeconds(mapData.aggregate.median));
     updateTeamStat(statContainer, 'min', formatSeconds(mapData.aggregate.min));
     updateTeamStat(statContainer, 'max', formatSeconds(mapData.aggregate.max));
-    updateTeamStat(statContainer, 'firstPickWin', (mapData.aggregate.firstPickWin / mapData.aggregate.draftGames * 100).toFixed(1) + '%');
-    updateTeamStat(statContainer, 'firstObjectiveWins', (mapData.aggregate.firstObjectiveWins / mapData.aggregate.games * 100).toFixed(1) + '%');
-    updateTeamStat(statContainer, 'blueWin', (mapData.aggregate.blueWin / mapData.aggregate.games * 100).toFixed(1) + '%');
-    updateTeamStat(statContainer, 'redWin', (mapData.aggregate.redWin / mapData.aggregate.games * 100).toFixed(1) + '%');
+    updateTeamStat(statContainer, 'firstPickWin', formatStat('pct', mapData.aggregate.firstPickWin / mapData.aggregate.draftGames));
+    updateTeamStat(statContainer, 'firstObjectiveWins', formatStat('pct', mapData.aggregate.firstObjectiveWins / mapData.aggregate.games));
+    updateTeamStat(statContainer, 'blueWin', formatStat('pct', mapData.aggregate.blueWin / mapData.aggregate.games));
+    updateTeamStat(statContainer, 'redWin', formatStat('pct', mapData.aggregate.redWin / mapData.aggregate.games));
 
     $('#map-overall-stats .statistic[name="min"]').attr('matchID', mapData.aggregate.minId);
     $('#map-overall-stats .statistic[name="max"]').attr('matchID', mapData.aggregate.maxId);
@@ -89,15 +89,15 @@ function loadMapStats() {
       context.format.median = formatSeconds(context.median);
       context.format.min = formatSeconds(context.min);
       context.format.max = formatSeconds(context.max);
-      context.format.firstPickWinPct = (context.firstPickWinPct * 100).toFixed(1) + '%';
+      context.format.firstPickWinPct = formatStat('pct', context.firstPickWinPct);
 
       if (map === ReplayTypes.MapType.BlackheartsBay || map === ReplayTypes.MapType.HauntedMines)
         context.format.firstObjectiveWinsPct = 'No Data';
       else
-        context.format.firstObjectiveWinsPct = (context.firstObjectiveWinsPct * 100).toFixed(1) + '%';
+        context.format.firstObjectiveWinsPct = formatStat('pct', context.firstObjectiveWinsPct);
 
-      context.format.blueWinPct = (context.blueWinPct * 100).toFixed(1) + '%';
-      context.format.redWinPct = (context.redWinPct * 100).toFixed(1) + '%';
+      context.format.blueWinPct = formatStat('pct', context.blueWinPct);
+      context.format.redWinPct = formatStat('pct', context.redWinPct);
 
       $('#map-individual-stats tbody').append(mapsMapRowTemplate(context));
     }

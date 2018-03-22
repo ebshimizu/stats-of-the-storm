@@ -595,11 +595,11 @@ function renderAllHeroSummary() {
     context.heroImg = Heroes.heroIcon(h);
     context.games = playerDetailStats.heroes[h].games;
     context.stats = playerDetailStats.heroes[h].stats;
-    context.stats.formatMVPPct = (context.stats.MVPPct * 100).toFixed(2) + '%';
-    context.stats.formatAwardPct = (context.stats.AwardPct * 100).toFixed(2) + '%';
+    context.stats.formatMVPPct = formatStat('pct', context.stats.MVPPct);
+    context.stats.formatAwardPct = formatStat('pct', context.stats.AwardPct);
     context.winPercent = playerDetailStats.heroes[h].wins / playerDetailStats.heroes[h].games;
-    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
-    context.stats.totalKDA = context.stats.totalKDA.toFixed(2);
+    context.formatWinPercent = formatStat('pct', context.winPercent);
+    context.stats.totalKDA = formatStat('KDA', context.stats.totalKDA);
 
     if (context.games >= playerHeroMatchThreshold)
       $('#player-detail-hero-summary tbody').append(playerDetailHeroSummaryRowTemplate(context));
@@ -641,9 +641,9 @@ function renderAllHeroSummary() {
       heroPoolWinsGraphData.data.datasets[0].data.push(0);
     }
     else {
-      selector.find('div[name="games"] .value').text(roleData[r].games);
-      selector.find('div[name="win"] .value').text((roleData[r].wins / roleData[r].games * 100).toFixed(1) + '%');
-      selector.find('div[name="pool"] .value').text(roleData[r].count + ' / ' + Heroes.heroRoleCount(r));
+      selector.find('div[name="games"] .value').text(formatStat('', roleData[r].games, true));
+      selector.find('div[name="win"] .value').text(formatStat('pct', roleData[r].wins / roleData[r].games));
+      selector.find('div[name="pool"] .value').text(formatStat('', roleData[r].count, true) + ' / ' + Heroes.heroRoleCount(r));
 
       heroPoolGamesGraphData.data.datasets[0].data.push(roleData[r].games);
       heroPoolWinsGraphData.data.datasets[0].data.push(roleData[r].wins);
@@ -689,8 +689,8 @@ function renderHeroTalentsTo(hero, container, docs) {
       context.description = Heroes.talentDesc(talent);
       context.name = Heroes.talentName(talent);
       context.games = data[tier][talent].games;
-      context.formatPop = (data[tier][talent].games / total * 100).toFixed(2) + '%';
-      context.formatWinPercent = (data[tier][talent].wins / context.games * 100).toFixed(2) + '%';
+      context.formatPop = formatStat('pct', data[tier][talent].games / total);
+      context.formatWinPercent = formatStat('pct', data[tier][talent].wins / context.games);
 
       container.find('.talent-pick tbody').append(heroTalentRowTemplate(context));
     }
@@ -725,9 +725,9 @@ function renderHeroTalentsTo(hero, container, docs) {
 
     let winPct = build.wins / build.games;
     let pop = build.games / total;
-    row.append('<td data-sort-value="' + winPct + '">' + (winPct * 100).toFixed(2) + '%</td>');
+    row.append('<td data-sort-value="' + winPct + '">' + formatStat('pct', winPct) + '</td>');
     row.append('<td data-sort-value="' + build.games + '">' + build.games + '</td>');
-    row.append('<td data-sort-value="' + pop + '">' + (pop * 100).toFixed(2) + '%</td>');
+    row.append('<td data-sort-value="' + pop + '">' + formatStat('pct', pop) + '</td>');
 
     container.find('.talent-build tbody').append(row);
   }
@@ -754,7 +754,7 @@ function renderPlayerSummary() {
 
     let context = playerDetailStats.withPlayer[d];
     context.winPercent = context.wins / context.games;
-    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
+    context.formatWinPercent = formatStat('pct', context.winPercent);
 
     $('#player-detail-friend-summary tbody').append(playerWinRateRowTemplate(context));
   }
@@ -766,7 +766,7 @@ function renderPlayerSummary() {
     // can't really be vs yourself huh
     let context = playerDetailStats.againstPlayer[d];
     context.winPercent = context.defeated / context.games;
-    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
+    context.formatWinPercent = formatStat('pct', context.winPercent);
 
     $('#player-detail-rival-summary tbody').append(playerWinRateRowTemplate(context));
   }
@@ -784,7 +784,7 @@ function renderPlayerSummary() {
     
     context.games = playerDetailStats.skins[s].games;
     context.winPercent = playerDetailStats.skins[s].wins / context.games;
-    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
+    context.formatWinPercent = formatStat('pct', context.winPercent);
 
     $('#player-detail-skin-summary tbody').append(playerWinRateRowTemplate(context));
   }
@@ -793,17 +793,17 @@ function renderPlayerSummary() {
   renderAwardsTo($('#player-detail-award-summary'), playerDetailStats);
 
   // individual stats
-  $('#player-detail-misc-summary .statistic[name="overallWin"] .value').text((playerDetailStats.wins / playerDetailStats.games * 100).toFixed(2) + '%');
-  $('#player-detail-misc-summary .statistic[name="overallGames"] .value').text(playerDetailStats.games);
-  $('#player-detail-misc-summary .statistic[name="overallTD"] .value').text(playerDetailStats.totalTD);
-  $('#player-detail-misc-summary .statistic[name="overallDeaths"] .value').text(playerDetailStats.totalDeaths);
-  $('#player-detail-misc-summary .statistic[name="overallKDA"] .value').text((playerDetailStats.totalTD / Math.max(playerDetailStats.totalDeaths, 1)).toFixed(2));
-  $('#player-detail-misc-summary .statistic[name="overallMVP"] .value').text((playerDetailStats.totalMVP / Math.max(playerDetailStats.games, 1) * 100).toFixed(1) + '%');
-  $('#player-detail-misc-summary .statistic[name="overallAward"] .value').text((playerDetailStats.totalAward / Math.max(playerDetailStats.games) * 100).toFixed(1) + '%');
+  $('#player-detail-misc-summary .statistic[name="overallWin"] .value').text(formatStat('pct', playerDetailStats.wins / playerDetailStats.games));
+  $('#player-detail-misc-summary .statistic[name="overallGames"] .value').text(formatStat('', playerDetailStats.games, true));
+  $('#player-detail-misc-summary .statistic[name="overallTD"] .value').text(formatStat('', playerDetailStats.totalTD, true));
+  $('#player-detail-misc-summary .statistic[name="overallDeaths"] .value').text(formatStat('', playerDetailStats.totalDeaths, true));
+  $('#player-detail-misc-summary .statistic[name="overallKDA"] .value').text(formatStat('KDA', playerDetailStats.totalTD / Math.max(playerDetailStats.totalDeaths, 1)));
+  $('#player-detail-misc-summary .statistic[name="overallMVP"] .value').text(formatStat('pct', playerDetailStats.totalMVP / Math.max(playerDetailStats.games, 1)));
+  $('#player-detail-misc-summary .statistic[name="overallAward"] .value').text(formatStat('pct', playerDetailStats.totalAward / Math.max(playerDetailStats.games)));
   $('#player-detail-misc-summary .statistic[name="timeDead"] .value').text(formatSeconds(playerDetailStats.totalTimeDead / playerDetailStats.games));
-  $('#player-detail-misc-summary .statistic[name="votes"] .value').text(playerDetailStats.totalVotes);
-  $('#player-detail-misc-summary .statistic[name="pctTimeDead"] .value').text((playerDetailStats.avgTimeDeadPct * 100).toFixed(2) + '%');
-  $('#player-detail-misc-summary .statistic[name="highestStreak"] .value').text(playerDetailStats.highestStreak);
+  $('#player-detail-misc-summary .statistic[name="votes"] .value').text(formatStat('', playerDetailStats.totalVotes, true));
+  $('#player-detail-misc-summary .statistic[name="pctTimeDead"] .value').text(formatStat('pct', playerDetailStats.avgTimeDeadPct));
+  $('#player-detail-misc-summary .statistic[name="highestStreak"] .value').text(formatStat('', playerDetailStats.highestStreak, true));
 
   // taunts
   setTauntStats('bstep', playerDetailStats.taunts.bsteps);
@@ -827,7 +827,7 @@ function renderMapStatsTo(container, stats) {
     let context = stats.maps[m];
     context.mapName = m;
     context.winPct = context.wins / context.games;
-    context.formatWinPct = (context.winPct* 100).toFixed(2) + '%';
+    context.formatWinPct = formatStat('pct', context.winPct);
 
     container.find('tbody').append(playerDetailMapSummaryRowTemplate(context));
   }
@@ -849,7 +849,7 @@ function renderHeroVsStatsTo(container, stats, threshold) {
     else {
       context.winPercent = context.wins / context.games;
     }
-    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
+    context.formatWinPercent = formatStat('pct', context.winPercent);
     context.heroImg = Heroes.heroIcon(context.name);
 
     if (context.games >= threshold)
@@ -865,7 +865,7 @@ function renderAwardsTo(container, stats) {
 
     context.games = stats.awards[a];
     context.winPercent = context.games / stats.games;
-    context.formatWinPercent = (context.winPercent * 100).toFixed(2) + '%';
+    context.formatWinPercent = formatStat('pct', context.winPercent);
 
     container.find('tbody').append(playerAwardRowTemplate(context));
   }
@@ -1270,20 +1270,20 @@ function processPlayerCollectionCompare(cache) {
     winCtx.pDataSort = playerDetailStats.heroes[activeHero].wins / playerDetailStats.heroes[activeHero].games;
   }
 
-  winCtx.pData = (winCtx.pDataSort * 100).toFixed(2) + '%';
-  winCtx.cmpData = (winCtx.cmpDataSort * 100).toFixed(2) + '%';
+  winCtx.pData = formatStat('pct', winCtx.pDataSort);
+  winCtx.cmpData = formatStat('pct', winCtx.cmpDataSort);
   winCtx.pctDiff = (winCtx.pDataSort - winCtx.cmpDataSort) / winCtx.cmpDataSort;
-  winCtx.pctDiffFormat = (winCtx.pctDiff * 100).toFixed(2) + '%';
+  winCtx.pctDiffFormat = formatStat('pct', winCtx.pctDiff);
 
-  okdaCtx.pData = okdaCtx.pDataSort.toFixed(2);
-  okdaCtx.cmpData = okdaCtx.cmpDataSort.toFixed(2);
+  okdaCtx.pData = formatStat('KDA', okdaCtx.pDataSort);
+  okdaCtx.cmpData = formatStat('KDA', okdaCtx.cmpDataSort);
   okdaCtx.pctDiff = (okdaCtx.pDataSort - okdaCtx.cmpDataSort) / okdaCtx.cmpDataSort;
-  okdaCtx.pctDiffFormat = (okdaCtx.pctDiff * 100).toFixed(2) + '%';
+  okdaCtx.pctDiffFormat = formatStat('pct', okdaCtx.pctDiff);
 
   lengthCtx.pData = formatSeconds(lengthCtx.pDataSort)
   lengthCtx.cmpData = formatSeconds(lengthCtx.cmpDataSort);
   lengthCtx.pctDiff = (lengthCtx.pDataSort - lengthCtx.cmpDataSort) / lengthCtx.cmpDataSort;
-  lengthCtx.pctDiffFormat = (lengthCtx.pctDiff * 100).toFixed(2) + '%';
+  lengthCtx.pctDiffFormat = formatStat('pct', lengthCtx.pctDiff);
 
   $('#player-compare-table tbody').append(playerCompareRowTemplate(winCtx));
   $('#player-compare-table tbody').append(playerCompareRowTemplate(okdaCtx));
@@ -1302,7 +1302,7 @@ function processPlayerCollectionCompare(cache) {
 
     context.pData = formatStat(d, pData[d], true);
     context.pDataSort = pData[d];
-    context.pctDiffFormat = (context.pctDiff * 100).toFixed(2) + '%';
+    context.pctDiffFormat = formatStat('pct', context.pctDiff);
 
     if (cmpData) {
       context.cmpData = formatStat(d, cmpData[d], true);
