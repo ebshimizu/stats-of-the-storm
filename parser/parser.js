@@ -129,7 +129,7 @@ function getHeader(file) {
           }
           else {
             console.log('Unrecognized internal map name: ' + internalMap);
-            return { };
+            return { err: 'map' };
           }
         }
       }
@@ -152,7 +152,7 @@ function getHeader(file) {
   }
   catch (err) {
     console.log(err);
-    return {};
+    return { err: err };
   }
 }
 

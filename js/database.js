@@ -171,9 +171,22 @@ class Database {
   // deletes a match and the associated hero data.
   deleteReplay(matchID, callback) {
     var self = this;
-    this._db.matches.remove({ _id: matchID }, {}, function(err, numRemoved) {
-      self._db.heroData.remove({ matchID: matchID }, { multi: true }, function(err, numRemoved) {
+    this._db.matches.find({ _id: matchID }, function(err, docs) {
+      if (docs.length === 0) {
         callback();
+        return;
+      }
+
+      let match = docs[0];
+
+      for (let id of match.playerIDs) {
+        self._db.players.update({ _id: id }, { $inc: { matches: -1 }}, { upsert: false });
+      }
+
+      self._db.matches.remove({ _id: matchID }, {}, function(err, numRemoved) {
+        self._db.heroData.remove({ matchID: matchID }, { multi: true }, function(err, numRemoved) {
+          callback();
+        });
       });
     });
   }
@@ -231,6 +244,12 @@ class Database {
   checkDuplicate(file, callback) {
     try {
       let header = Parser.getHeader(file);
+
+      if (header.err) {
+        callback(header.err);
+        return;
+      }
+
       let search = {};
 
       // duplicate criteria:

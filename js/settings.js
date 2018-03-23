@@ -375,34 +375,32 @@ function parseReplaysAsync(replay) {
   DB.checkDuplicate(replay.path, function(result) {
     if (importDuplicates === true || result === false) {
       bgWindow.webContents.send('parseReplay', replay.path, replay.idx, BrowserWindow.getAllWindows()[0].id);
+      return;
     }
-    else if (result === 'Internal Exception') {
-      console.log(replay.id + ' Parser error');
-
-      $('tr[replay-id="' + replay.id + '"] .replay-status').text('Error: Internal Exception').addClass('negative');
-      listedReplays[replay.idx].processed = true;
-      updateLastDate(listedReplays[replay.idx].date);
-
-      if (replayQueue.length > 0) {
-        parseReplaysAsync(replayQueue.shift());
-      }
-      else {
-        enableParsingUI();
-      }
+    else if (result === 'map') {
+      console.log(replay.id + ' unsupported map');
+      listedReplays[replay.idx].duplicate = false;
+      $('tr[replay-id="' + replay.id + '"] .replay-status').text('Unsupported Map').addClass('negative');
     }
-    else {
+    else if (result === true) {
       console.log(replay.id + ' is a duplicate');
       listedReplays[replay.idx].duplicate = true;
       $('tr[replay-id="' + replay.id + '"] .replay-status').text('Duplicate').addClass('warning');
-      listedReplays[replay.idx].processed = true;
-      updateLastDate(listedReplays[replay.idx].date);
+    }
+    else {
+      console.log(replay.id + ' Parser error');
 
-      if (replayQueue.length > 0) {
-        parseReplaysAsync(replayQueue.shift());
-      }
-      else {
-        enableParsingUI();
-      }
+      $('tr[replay-id="' + replay.id + '"] .replay-status').text('Error: Internal Exception').addClass('negative');
+    }
+
+    listedReplays[replay.idx].processed = true;
+    updateLastDate(listedReplays[replay.idx].date);
+
+    if (replayQueue.length > 0) {
+      parseReplaysAsync(replayQueue.shift());
+    }
+    else {
+      enableParsingUI();
     }
   });
 }
