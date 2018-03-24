@@ -458,6 +458,7 @@ function showPage(pageNum) {
 function renderToSlot(gameData, slot) {
   let context = {};
   context.map = gameData.map;
+  context.mapClass = gameData.map.replace(/[^A-Z0-9]/ig, "-");
   context.mode = ReplayTypes.GameModeStrings[gameData.mode];
   context.id = gameData._id;
   

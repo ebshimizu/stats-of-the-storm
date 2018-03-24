@@ -54,11 +54,88 @@
 #match-list .match-summary {
   cursor: pointer;
   height: 170px;
+  width: 99%;
+  margin: 0 auto;
 }
 
 #match-list .match-summary .match-basic-info {
   height: 50px;
   margin-bottom: 2px;
+}
+
+#match-list td {
+  background-size: cover;
+  position: relative;
+}
+
+.bg-dimmer {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  left: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+#match-list td:hover .bg-dimmer {
+  background: rgba(32, 32, 32, 0.7);
+}
+
+#match-list td.Towers-of-Doom {
+  background-image: url('../images/towers-of-doom-banner.png');
+}
+
+#match-list td.Battlefield-of-Eternity {
+  background-image: url('../images/boe-banner.png');
+}
+
+#match-list td.Blackheart-s-Bay {
+  background-image: url('../images/blackhearts-banner.png');
+}
+
+#match-list td.Cursed-Hollow {
+  background-image: url('../images/cursed-banner.png');
+}
+
+#match-list td.Warhead-Junction {
+  background-image: url('../images/warhead-banner.png');
+}
+
+#match-list td.Sky-Temple {
+  background-image: url('../images/sky-temple-banner.png');
+}
+
+#match-list td.Tomb-of-the-Spider-Queen {
+  background-image: url('../images/spider-banner.png');
+}
+
+#match-list td.Volskaya-Foundry {
+  background-image: url('../images/volskaya-banner.png');
+}
+
+#match-list td.Dragon-Shire {
+  background-image: url('../images/dragon-shire-banner.png');
+}
+
+#match-list td.Haunted-Mines {
+  background-image: url('../images/haunted-mines-banner.png');
+}
+
+#match-list td.Garden-of-Terror {
+  background-image: url('../images/garden-banner.png');
+}
+
+#match-list td.Braxis-Holdout {
+  background-image: url('../images/braxis-banner.png');
+}
+
+#match-list td.Infernal-Shrines {
+  background-image: url('../images/shrines-banner.png');
+}
+
+#match-list td.Hanamura {
+  background-image: url('../images/hanamura-banner.png');
 }
 
 #match-list .match-map-name {
