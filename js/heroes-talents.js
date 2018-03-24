@@ -43,11 +43,47 @@ const Awards = {
   EndOfMatchAwardMostTimeOnPointBoolean: {name: 'Point Guard', subtitle: 'Most Time on Point', image: 'storm_ui_mvp_icons_rewards_pointguard.png'}
 }
 
+// if a talent was renamed but not removed, store those IDs manually here.
+// will have to monitor heroes talents repo to discover these.
+const TalentRenames = {
+  RehgarMasteryColossalTotem: 'RehgarEarthbindTotemColossalTotem',
+  RehgarMasteryElectricCharge: 'RehgarLightningShieldElectricCharge',
+  RehgarMasteryWolfRun: 'RehgarWolfRun',
+  RehgarMasteryFeralHeart: 'RehgarFeralHeart',
+  RehgarMasteryStormcaller: 'RehgarLightningShieldStormcaller', 
+  RehgarMasteryShamanHealingWard: 'RehgarHealingTotem',
+  RehgarGhostWolfBloodAndThunder: 'RehgarBloodAndThunder',
+  RehgarMasteryFarsight: 'RehgarFarsight',
+  RehgarHeroicAbilityAncestralHealing: 'RehgarAncestralHealing',
+  RehgarHeroicAbilityBloodlust: 'RehgarBloodlust',
+  RehgarMasteryEarthShield: 'RehgarLightningShieldEarthShield',
+  RehgarMasteryEarthGraspTotem: 'RehgarEarthbindTotemEarthgraspTotem',
+  RehgarHungeroftheWolf: 'RehgarHungerOfTheWolf',
+  RehgarRisingStorm: 'RehgarLightningShieldRisingStorm',
+  RehgarMasteryFarseersBlessing: 'RehgarAncestralHealingFarseersBlessing',
+  RehgarMasteryGladiatorsWarShout: 'RehgarGladiatorsWarShout',
+  BarbarianMasteryShatteredGroundSeismicSlam: 'BarbarianShatteredGround',
+  BarbarianMasteryHurricaneWhirlwind: 'BarbarianHurricane',
+  BarbarianMasteryWarPaint: 'BarbarianWarPaint',
+  BarbarianMasteryPoisonedSpearAncientSpear: 'BarbarianPoisonedSpear',
+  BarbarianCombatStyleShotofFury: 'BarbarianShotOfFury',
+  BarbarianMasteryMysticalSpearAncientSpear: 'BarbarianMysticalSpear',
+  BarbarianMasteryFuriousBlowSeismicSlam: 'BarbarianGiantSlammer',
+  SonyaTalentNervesOfSteel: 'BarbarianNervesOfSteel',
+  BarbarianMasteryArreatCraterLeap: 'BarbarianArreatCrater',
+  SonyaTalentIgnorePain: 'BarbarianIgnorePain',
+  BrightwingHyperShiftPhaseShift: 'BrightwingPhaseShiftHyperShift',
+  BrightwingPeekabooPhaseShift: 'BrightwingPhaseShiftPeekaboo', 
+  FaerieDragonMasteryPhaseShield: 'BrightwingPhaseShiftPhaseShield',
+  RaynorMasteryHelsAngelsRaynorsBanshees: 'RaynorMasteryDuskWingsRaynorsBanshees'
+}
+
 class HeroesTalents {
-  constructor(path) {
+  constructor(path, extra) {
     this._heroPath = path + '/hero';
     this._heroImgPath = path + '/images/heroes';
     this._talentImgPath = path + '/images/talents';
+    this._missingPath = extra + '/deleted_talents.json';
 
     this.loadData();
   }
@@ -59,6 +95,15 @@ class HeroesTalents {
     this._roles = {};
     this._heroAttr = {};
     this._lcAttr = {};
+
+    // extra data
+    // load this first in case it gets overwritten
+    console.log('loading deleted talents from ' + this._missingPath);
+    let deleted = JSON.parse(fs.readFileSync(this._missingPath));
+    for (let i in deleted) {
+      deleted[i].removed = true;
+      this._talents[deleted[i].talentTreeId] = deleted[i];
+    }
 
     let files = fs.readdirSync(this._heroPath);
 
@@ -154,8 +199,10 @@ class HeroesTalents {
   }
 
   talentIcon(talentName) {
-    if (talentName in this._talents) {
-      return this._talents[talentName].icon;
+    let id = this.getRenamedTalent(talentName);
+
+    if (id in this._talents) {
+      return this._talents[id].icon;
     }
 
     // specific to this project
@@ -163,17 +210,36 @@ class HeroesTalents {
   }
 
   talentDesc(talentName) {
-    if (talentName in this._talents)
-      return this._talents[talentName].description;
+    let id = this.getRenamedTalent(talentName);
+
+    if (id in this._talents) {
+      return this._talents[id].description;
+    }
 
     return 'No Description Found.';
   }
 
   talentName(talentName) {
-    if (talentName in this._talents)
-      return this._talents[talentName].name;
+    let id = this.getRenamedTalent(talentName);
 
-    return talentName + ' [Removed]';
+    if (id in this._talents) {
+      if (this._talents[id].removed) {
+        return this._talents[id].name + ' [Removed]';
+      }
+
+      return this._talents[id].name;
+    }
+
+    return id + ' [Removed]';
+  }
+
+  // checks for renamed talent IDs
+  getRenamedTalent(id) {
+    if (id in TalentRenames) {
+      return TalentRenames[id];
+    }
+
+    return id;
   }
 
   awardInfo(award) {

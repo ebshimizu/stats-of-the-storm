@@ -680,7 +680,8 @@ class Database {
   }
 
   // this is intended to be used with only one hero but can be used with multiple (?)
-  summarizeTalentData(docs) {
+  // needs a heroes-talent instance
+  summarizeTalentData(docs, Heroes) {
     let talentStats = {};
     let buildStats = {};
 
@@ -697,20 +698,21 @@ class Database {
 
       let key = '';
       for (let t in match.talents) {
-        key += match.talents[t];
+        let tid = Heroes.getRenamedTalent(match.talents[t]);
+        key += tid;
 
         if (!(t in talentStats[match.hero])) {
           talentStats[match.hero][t] = {};
         }
 
-        if (!(match.talents[t] in talentStats[match.hero][t])) {
-          talentStats[match.hero][t][match.talents[t]] = { games: 0, wins: 0};
+        if (!(tid in talentStats[match.hero][t])) {
+          talentStats[match.hero][t][tid] = { games: 0, wins: 0};
         }
 
-        talentStats[match.hero][t][match.talents[t]].games += 1;
+        talentStats[match.hero][t][tid].games += 1;
         
         if (match.win) {
-          talentStats[match.hero][t][match.talents[t]].wins += 1;
+          talentStats[match.hero][t][tid].wins += 1;
         }
       }
 

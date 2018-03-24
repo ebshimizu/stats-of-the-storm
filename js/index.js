@@ -255,7 +255,7 @@ function loadDatabase() {
 
   console.log('Loading Heroes Talents database');
   // load the heroes talents database
-  Heroes = new HeroesTalents.HeroesTalents(__dirname + '/assets/heroes-talents');
+  Heroes = new HeroesTalents.HeroesTalents(__dirname + '/assets/heroes-talents', __dirname + '/assets/data');
 
   let path = settings.get('dbPath');
   console.log("Database loading from " + path);

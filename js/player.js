@@ -670,7 +670,7 @@ function renderHeroTalents(hero) {
 
 function renderHeroTalentsTo(hero, container, docs) {
   // summarize talent data
-  let talentData = DB.summarizeTalentData(docs);
+  let talentData = DB.summarizeTalentData(docs, Heroes);
   let data = talentData.talentStats[hero];
 
   container.find('tbody').html('');
