@@ -8,7 +8,7 @@
     const app = require('electron').remote.app;
     const HeroesTalents = require(path.join(__dirname, './js/heroes-talents.js'));
 
-    Heroes = new HeroesTalents.HeroesTalents(__dirname + '/assets/heroes-talents');
+    Heroes = new HeroesTalents.HeroesTalents(__dirname + '/assets/heroes-talents', __dirname + '/assets/data');
   
     ipc.on('parseReplay', function(event, file, id, fromWindowId) {
       let out = Parser.processReplay(file, Heroes);
