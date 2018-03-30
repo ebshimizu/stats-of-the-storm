@@ -536,6 +536,7 @@ function processPlayerData(err, docs) {
 
   let val = $('#player-compare-collection').dropdown('get value');
   updatePlayerCollectionCompare(val, null, $('#player-compare-collection .menu .item[data-value="' + val + '"]'));
+  $('#player-detail-body th').removeClass('sorted ascending descending');
 }
 
 // callback for hero select menu
@@ -567,6 +568,7 @@ function showHeroDetails(value, text, $selectedItem) {
   updateHeroTitle($('#player-detail-summary-header'), value);
   let val = $('#player-compare-collection').dropdown('get value');
   updatePlayerCollectionCompare(val, null, $('#player-compare-collection .menu .item[data-value="' + val + '"]'));
+  $('#player-detail-body th').removeClass('sorted ascending descending');
 }
 
 function updateHeroTitle(container, value) {
@@ -831,6 +833,9 @@ function renderMapStatsTo(container, stats) {
 
     container.find('tbody').append(playerDetailMapSummaryRowTemplate(context));
   }
+
+  // clear sort from headers
+  container.find('th').removeClass('sorted ascending descending');
 }
 
 // expects stats to be from DB.summarizeHeroData(docs).withHero / againstHero

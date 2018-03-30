@@ -188,5 +188,7 @@ function loadPlayerRankings() {
     $('#player-ranking-body .player-name').click(function() {
       showPlayerProfile($(this).attr('playerID'));
     });
+
+    $('#player-ranking-body th').removeClass('sorted ascending descending');
   });
 }

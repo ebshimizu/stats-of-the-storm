@@ -451,6 +451,7 @@ function loadTeamData(team, matches, heroData) {
   updateTeamCollectionCompare($('#team-compare-collection').dropdown('get value'), null, null);
 
   $('#team-detail-body table').floatThead('reflow');
+  $('#team-detail-body th').removeClass('sorted ascending descending');
 }
 
 function toggleTeamRosterMode(elem) {
@@ -462,6 +463,9 @@ function toggleTeamRosterMode(elem) {
 function loadTeamRoster(playerStats) {
   $('#team-roster-stats tbody').html('');
   let mode = $('#team-roster-stats .top.attached.menu .active.item').attr('data-mode');
+
+  if (currentTeam === undefined)
+    return;
 
   for (let p in currentTeam.players) {
     let id = currentTeam.players[p];

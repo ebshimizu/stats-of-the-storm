@@ -459,6 +459,7 @@ function loadMatch(docs, doneLoadCallback) {
   $('#match-detail-details').scrollTop(0);
   doneLoadCallback();
   $('#match-detail-details table').floatThead('reflow');
+  $('#match-detail-body th').removeClass('sorted ascending descending');
 }
 
 function updateBasicInfo() {

@@ -287,6 +287,7 @@ function loadOverallHeroCollectionData() {
 
     $('#hero-collection-pool table').floatThead('reflow');
     $('#hero-collection-comps table').floatThead('reflow');
+    $('#hero-collection-page-content th').removeClass('sorted ascending descending');
   })
 }
 
@@ -385,6 +386,7 @@ function loadHeroCollectionData(value, text, $elem) {
     $('#hero-collection-detail-misc-summary .statistic[name="overallAward"] .value').text(formatStat('pct', stats.totalAward / Math.max(stats.games)));
 
     $('#hero-collection-page-content table').floatThead('reflow');
+    $('#hero-collection-page-content th').removeClass('sorted ascending descending');
   });
 }
 

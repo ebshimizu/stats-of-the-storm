@@ -111,5 +111,6 @@ function loadMapStats() {
     });
 
     $('#maps-page-content table').floatThead('reflow');
+    $('#maps-page-content th').removeClass('sorted ascending descending');
   });
 }

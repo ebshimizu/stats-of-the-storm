@@ -357,6 +357,7 @@ function loadTrends() {
       }
 
       $('#hero-trends-body table').floatThead('reflow');
+      $('#hero-trends-body th').removeClass('sorted ascending descending');
     });
   });
   

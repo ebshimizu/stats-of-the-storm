@@ -235,4 +235,5 @@ function updateTeamRankingData(err, matches, team) {
   $('#team-ranking-match-table tbody').append(teamRankingMatchTemplate(teamStats));
   $('#team-ranking-cc-table tbody').append(teamRankingCCTemplate(teamStats));
   $('#team-ranking-structure-table tbody').append(teamRankingStructureTemplate(teamStats));
+  $('#team-ranking-body th').removeClass('sorted ascending descending');
 }
