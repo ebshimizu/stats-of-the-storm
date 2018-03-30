@@ -205,7 +205,7 @@ function loadTrends() {
         if (stats.period1[h] === undefined)
           stats.period1[h] = { involved: 0 };
         if (stats.period2[h] === undefined)
-          stats.period2[h] = {involved: 0};
+          stats.period2[h] = { involved: 0 };
 
         if (stats.period1[h].involved + stats.period2[h].involved < trendsHeroMatchThreshold)
           continue;
@@ -230,6 +230,19 @@ function loadTrends() {
           context.delta.r3 = context.period2.draft.picks.round3.pct;
           context.delta.firstBanPercent = context.period2.draft.firstBanPercent;
           context.delta.secondBanPercent = context.period2.draft.secondBanPercent;
+
+          context.period1 = {};
+          context.period1.win = {
+            formatWinPercent: '0%', winPercent: 0,
+            formatBanPercent: '0%', banPercent: 0,
+            formatPopPercent: '0%', popPercent: 0,
+            games: 0
+          };
+          context.period1.draft = {
+            picks: { round1: { pct: 0, formatPct: '0%' }, round2: { pct: 0, formatPct: '0%' }, round3: { pct: 0, formatPct: '0%' } },
+            firstBanPercent: 0,
+            secondBanPercent: 0
+          };
         }
         else if (context.period2 === undefined) {
           // target period has no data
@@ -244,6 +257,19 @@ function loadTrends() {
           context.delta.r3 = -context.period1.draft.picks.round3.pct;
           context.delta.firstBanPercent = -context.period1.draft.firstBanPercent;
           context.delta.secondBanPercent = -context.period1.draft.secondBanPercent;
+
+          context.period2 = {};
+          context.period2.win = {
+            formatWinPercent: '0%', winPercent: 0,
+            formatBanPercent: '0%', banPercent: 0,
+            formatPopPercent: '0%', popPercent: 0,
+            games: 0
+          };
+          context.period2.draft = {
+            picks: { round1: { pct: 0, formatPct: '0%' }, round2: { pct: 0, formatPct: '0%' }, round3: { pct: 0, formatPct: '0%' } },
+            firstBanPercent: 0,
+            secondBanPercent: 0
+          };
         }
         else {
           context.delta.winPercent = (context.period2.win.winPercent - context.period1.win.winPercent) / context.period1.win.winPercent;
@@ -305,7 +331,8 @@ function loadTrends() {
         if (!(c in comps)) {
           comps[c] = {
             p1Win: 0,
-            p1Pop: 0
+            p1Pop: 0,
+            roles: comp.roles
           }
         }
 
