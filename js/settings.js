@@ -122,6 +122,7 @@ function initSettingsPage() {
   $('#settings-set-player').dropdown({
     action: 'activate',
     fullTextSearch: true,
+    direction: 'downward',
     onChange: updateSelectedUser
   });
   $('#settings-set-player').dropdown('set selected', selectedPlayerID);

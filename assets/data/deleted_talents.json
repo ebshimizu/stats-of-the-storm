@@ -118,5 +118,14 @@
     "icon": "storm_ui_icon_sonya_whirlwind.png",
     "sort": 1,
     "abilityId": "Sonya|E1"
+  },
+  {
+    "tooltipId": "VarianParryLivebytheSword",
+    "talentTreeId": "VarianParryLivebytheSword",
+    "name": "Live by the Sword",
+    "description": "Increase the duration of Parry by 40%. If at least 4 Hero Basic Attacks are blocked with a single Parry, its cooldown is reduced by 2 seconds.",
+    "icon": "storm_ui_icon_varian_parry.png",
+    "sort": 1,
+    "abilityId": "Varian|W1"
   }
 ]

@@ -75,7 +75,10 @@ const TalentRenames = {
   BrightwingHyperShiftPhaseShift: 'BrightwingPhaseShiftHyperShift',
   BrightwingPeekabooPhaseShift: 'BrightwingPhaseShiftPeekaboo', 
   FaerieDragonMasteryPhaseShield: 'BrightwingPhaseShiftPhaseShield',
-  RaynorMasteryHelsAngelsRaynorsBanshees: 'RaynorMasteryDuskWingsRaynorsBanshees'
+  RaynorMasteryHelsAngelsRaynorsBanshees: 'RaynorMasteryDuskWingsRaynorsBanshees',
+  JunkratHeroicAbilityRIPTire: 'JunkratRIPTire',
+  JunkratHeroicRocketRide: 'JunkratRocketRide',
+  JunkratSpreadVolley: 'JunkratFragLauncherSpreadVolley'
 }
 
 class HeroesTalents {
