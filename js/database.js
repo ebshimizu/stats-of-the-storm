@@ -191,6 +191,41 @@ class Database {
     });
   }
 
+  tagReplay(matchID, tag, callback) {
+    var self = this;
+    this._db.matches.update({_id: matchID }, { $addToSet: { tags: tag } }, {}, function() {
+      self._db.heroData.update({ matchID: matchID }, { $addToSet: { tags: tag } }, { multi: true }, callback);
+    })
+  }
+
+  untagReplay(matchID, tag, callback) {
+    var self = this;
+    this._db.matches.update({_id: matchID }, { $pull: { tags: tag } }, {}, function() {
+      self._db.heroData.update({ matchID: matchID }, { $pull: { tags: tag } }, { multi: true }, callback);
+    })
+  }  
+
+  getTags(callback) {
+    var self = this;
+    let query = {};
+    this.preprocessQuery(query);
+    this._db.matches.find(query, { tags: 1 }, function(err, docs) {
+      // create set, then return
+      let tags = [];
+      for (let doc of docs) {
+        if ('tags' in doc) {
+          let t = doc.tags;
+          for (let tag of t) {
+            if (tags.indexOf(tag) === -1)
+              tags.push(tag);
+          }
+        }
+      } 
+
+      callback(tags);
+    });
+  }
+
   // teams are stored in settings
   addTeam(players, name, callback) {
     this._db.settings.insert({ players, name, type: 'team' }, callback);
