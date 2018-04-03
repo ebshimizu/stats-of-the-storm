@@ -2026,6 +2026,7 @@ function matchDetailAddTag(tagValue, tagText, $added) {
     populateTagMenu($('#match-search-tags'), function() {
       $('#match-search-tags').dropdown('set exactly', vals);
     });
+    populateTagMenu($('.filter-widget-tags'));
   });
 }
 
@@ -2037,5 +2038,6 @@ function matchDetailRemoveTag(tagValue, tagText, $removed) {
     populateTagMenu($('#match-search-tags'), function() {
       $('#match-search-tags').dropdown('set exactly', vals);
     });
+    populateTagMenu($('.filter-widget-tags'));
   });
 }

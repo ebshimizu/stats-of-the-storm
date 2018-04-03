@@ -110,8 +110,7 @@ function initMatchesPage() {
   });
 
   $('#match-search-tags').dropdown({
-    fullTextSearch: true,
-    allowAdditions: true
+    fullTextSearch: true
   });
 
   populateTagMenu($('#matches-tags-popup .search.dropdown'));
@@ -719,6 +718,7 @@ function matchesAddTag(tagValue, tagText, $added) {
     populateTagMenu($('#match-search-tags'), function() {
       $('#match-search-tags').dropdown('set exactly', vals);
     });
+    populateTagMenu($('.filter-widget-tags'));
   });
 }
 
@@ -738,5 +738,6 @@ function matchesRemoveTag(tagValue, tagText, $removed) {
     populateTagMenu($('#match-search-tags'), function() {
       $('#match-search-tags').dropdown('set exactly', vals);
     });
+    populateTagMenu($('.filter-widget-tags'));
   });
 }

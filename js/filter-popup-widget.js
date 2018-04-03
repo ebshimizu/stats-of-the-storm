@@ -63,6 +63,13 @@ function initPopup(elem) {
     $('.filter-widget-team-menu').dropdown('restore defaults');
   })
 
+  // tags
+  elem.find('.filter-widget-tags').dropdown({
+    fullTextSearch: true
+  });
+
+  populateTagMenu(elem.find('.filter-widget-tags'));
+
   // the buttons get rebound depending on the page
   elem.find('.filter-widget-reset').click(function() { resetFilterWidget(elem) });
 }
@@ -138,6 +145,9 @@ function getPopupQuery(elem, callback) {
   let team = elem.find('.filter-widget-team-menu').dropdown('get value');
   let teamWin = elem.find('.filter-widget-team-win').dropdown('get value');
 
+  // tags
+  let tags = elem.find('.filter-widget-tags').dropdown('get value').split(',');
+
   for (let p in patches) {
     if (patches[p] !== "")
       patches[p] = parseInt(patches[p]);
@@ -155,6 +165,10 @@ function getPopupQuery(elem, callback) {
 
   if (patches[0] !== "") {
     query['version.m_build'] = { $in: patches };
+  }
+
+  if (tags[0] !== "") {
+    query.tags = { $in: tags };
   }
 
   // dates
