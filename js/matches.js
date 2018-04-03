@@ -109,7 +109,13 @@ function initMatchesPage() {
     onRemove: matchesRemoveTag
   });
 
+  $('#match-search-tags').dropdown({
+    fullTextSearch: true,
+    allowAdditions: true
+  });
+
   populateTagMenu($('#matches-tags-popup .search.dropdown'));
+  populateTagMenu($('#match-search-tags'));
 
   $('#matches-collection-select').modal();
 
@@ -192,6 +198,9 @@ function selectMatches() {
   let team = $('#match-search-team').dropdown('get value');
   let teamWin = $('#match-search-team-win').dropdown('get value');
 
+  // tags
+  let tags = $('#match-search-tags').dropdown('get value').split(',');
+
   for (let p in patches) {
     if (patches[p] !== "")
       patches[p] = parseInt(patches[p]);
@@ -209,6 +218,10 @@ function selectMatches() {
 
   if (patches[0] !== "") {
     query['version.m_build'] = { $in: patches };
+  }
+
+  if (tags[0] !== "") {
+    query.tags = { $in: tags };
   }
 
   // dates
@@ -701,7 +714,11 @@ function matchesAddTag(tagValue, tagText, $added) {
 
   DB.tagReplays(ids, tagValue, function() {
     console.log('added ' + tagValue + ' to ' + ids.join(','));
-    //populateTagMenu($('#matches-tags-popup .search.dropdown')); 
+
+    let vals = $('#match-search-tags').dropdown('get value');
+    populateTagMenu($('#match-search-tags'), function() {
+      $('#match-search-tags').dropdown('set exactly', vals);
+    });
   });
 }
 
@@ -716,6 +733,10 @@ function matchesRemoveTag(tagValue, tagText, $removed) {
 
   DB.untagReplays(ids, tagValue, function() {
     console.log('removed ' + tagValue + ' from ' + ids.join(','));
-    //populateTagMenu($('#matches-tags-popup .search.dropdown')); 
+
+    let vals = $('#match-search-tags').dropdown('get value');
+    populateTagMenu($('#match-search-tags'), function() {
+      $('#match-search-tags').dropdown('set exactly', vals);
+    });
   });
 }
