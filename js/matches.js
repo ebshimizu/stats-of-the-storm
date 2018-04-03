@@ -10,7 +10,8 @@ const summaryProjection = {
   date: 1,
   winner: 1,
   version: 1,
-  bans: 1
+  bans: 1,
+  tags: 1
 };
 
 const matchesPerPage = 10;
@@ -18,6 +19,7 @@ const matchesPerPage = 10;
 var displayedMatchIDs;
 var currentPage;
 var matchRowTemplate;
+var enableTagEdit = true;
 
 function initMatchesPage() {
   // player menu init
@@ -94,6 +96,21 @@ function initMatchesPage() {
     onChange: handleMatchesFileAction
   });
 
+  $('#matches-tags').popup({
+    inline: true,
+    position: 'bottom left',
+    on: 'click'
+  });
+
+  $('#matches-tags-popup .search.dropdown').dropdown({
+    fullTextSearch: true,
+    allowAdditions: true,
+    onAdd: matchesAddTag,
+    onRemove: matchesRemoveTag
+  });
+
+  populateTagMenu($('#matches-tags-popup .search.dropdown'));
+
   $('#matches-collection-select').modal();
 
   // initial settings
@@ -113,6 +130,7 @@ function resetMatchesPage() {
 function showMatchesPage() {
   $('#matches-collection').removeClass('is-hidden');
   $('#matches-file-menu').removeClass('is-hidden');
+  $('#matches-tags').removeClass('is-hidden');
 }
 
 function getMatchCount() {
@@ -375,6 +393,24 @@ function selectMatches() {
 function updateSelectedMatches(err, docs) {
   selectedMatches = docs;
   $('#matches-selected').text(selectedMatches.length);
+
+  enableTagEdit = false;
+  populateTagMenu($('#matches-tags-popup .search.dropdown'), function() {
+    // tags
+    let tags = [];
+    for (let d of docs) {
+      if ('tags' in d) {
+        for (let tag of d.tags) {
+          if (tags.indexOf(tag) === -1) {
+            tags.push(tag);
+          }
+        }
+      }
+    }
+    $('#matches-tags-popup .search.dropdown').dropdown('set exactly', tags);
+    enableTagEdit = true;
+  });
+
   showPage(currentPage);
 }
 
@@ -652,4 +688,34 @@ function handleDeleteMatches(current, remaining) {
       selectMatches();
     }
   })
+}
+
+function matchesAddTag(tagValue, tagText, $added) {
+  if (!enableTagEdit)
+    return;
+  
+  let ids = [];
+  for (let m of selectedMatches) {
+    ids.push(m._id);
+  }
+
+  DB.tagReplays(ids, tagValue, function() {
+    console.log('added ' + tagValue + ' to ' + ids.join(','));
+    //populateTagMenu($('#matches-tags-popup .search.dropdown')); 
+  });
+}
+
+function matchesRemoveTag(tagValue, tagText, $removed) {
+  if (!enableTagEdit)
+    return;
+
+  let ids = [];
+  for (let m of selectedMatches) {
+    ids.push(m._id);
+  }
+
+  DB.untagReplays(ids, tagValue, function() {
+    console.log('removed ' + tagValue + ' from ' + ids.join(','));
+    //populateTagMenu($('#matches-tags-popup .search.dropdown')); 
+  });
 }

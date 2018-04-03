@@ -192,16 +192,24 @@ class Database {
   }
 
   tagReplay(matchID, tag, callback) {
+    this.tagReplays([matchID], tag, callback);
+  }
+
+  tagReplays(matchIDs, tag, callback) {
     var self = this;
-    this._db.matches.update({_id: matchID }, { $addToSet: { tags: tag } }, {}, function() {
-      self._db.heroData.update({ matchID: matchID }, { $addToSet: { tags: tag } }, { multi: true }, callback);
-    })
+    this._db.matches.update({ _id: { $in : matchIDs } }, { $addToSet: { tags: tag } }, { multi: true }, function() {
+      self._db.heroData.update({ matchID: { $in: matchIDs } }, { $addToSet: { tags: tag } }, { multi: true }, callback);
+    });
   }
 
   untagReplay(matchID, tag, callback) {
+    this.untagReplay([matchID], tag, callback);
+  }
+
+  untagReplays(matchIDs, tag, callback) {
     var self = this;
-    this._db.matches.update({_id: matchID }, { $pull: { tags: tag } }, {}, function() {
-      self._db.heroData.update({ matchID: matchID }, { $pull: { tags: tag } }, { multi: true }, callback);
+    this._db.matches.update({_id: { $in: matchIDs } }, { $pull: { tags: tag } }, { multi: true }, function() {
+      self._db.heroData.update({ matchID: { $in: matchIDs } }, { $pull: { tags: tag } }, { multi: true }, callback);
     })
   }  
 

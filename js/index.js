@@ -661,6 +661,21 @@ function populateStatCollectionMenus() {
   });
 }
 
+// populates the tag menu with available tags
+function populateTagMenu(menu, callback) {
+  DB.getTags(function(tags) {
+    menu.find('.menu').html('');
+
+    for (let tag of tags) {
+      menu.find('.menu').append('<div class="item" data-value="' + tag + '">' + tag + '</div>');
+    }
+
+    menu.dropdown('refresh');
+
+    if (callback)
+      callback();
+  });
+}
 
 function setAppCollection(value, text, $elem) {
   if (value === 'none') {
