@@ -363,6 +363,20 @@ function initMatchDetailPage() {
   // xp graph tabs
   $('#match-detail-xp-graph-menu .item').tab();
 
+  // tags
+  $('#match-tags-popup .search.dropdown').dropdown({
+    fullTextSearch: true,
+    allowAdditions: true,
+    onAdd: matchDetailAddTag,
+    onRemove: matchDetailRemoveTag
+  });
+
+  $('#match-tags').popup({
+    inline: true,
+    position: 'bottom left',
+    on: 'click'
+  });
+
   // DEBUG - LOAD SPECIFIC MATCH
   //loadMatchData("RtTPtP5mHaBoFJW2", function() { console.log("done loading"); });
 }
@@ -371,6 +385,7 @@ function matchDetailsShowSection() {
   $('#match-detail-teams').removeClass('is-hidden');
   $('#match-detail-collection').removeClass('is-hidden');
   $('#match-detail-file-menu').removeClass('is-hidden');
+  $('#match-tags').removeClass('is-hidden');
 }
 
 function matchDetailTeamAction(action) {
@@ -425,6 +440,21 @@ function loadMatch(docs, doneLoadCallback) {
   for (let p in docs) {
     matchDetailPlayers[docs[p].ToonHandle] = docs[p];
   }
+
+  populateTagMenu($('#match-tags-popup .search.dropdown'), function() {
+    // tags
+    let tags = [];
+    for (let d of docs) {
+      if ('tags' in d) {
+        for (let tag of d.tags) {
+          if (tags.indexOf(tag) === -1) {
+            tags.push(tag);
+          }
+        }
+      }
+    }
+    $('#match-tags-popup .search.dropdown').dropdown('set exactly', matchDetailMatch.tags);
+  });
 
   // place basic info
   updateBasicInfo();
@@ -1986,4 +2016,26 @@ function matchDetailFileAction(value, text, $elem) {
     }).modal('show');
   }
 
+}
+
+function matchDetailAddTag(tagValue, tagText, $added) {
+  DB.tagReplay(matchDetailMatch._id, tagValue, function() {
+    console.log('added ' + tagValue + ' to ' + matchDetailMatch._id);
+
+    let vals = $('#match-search-tags').dropdown('get value');
+    populateTagMenu($('#match-search-tags'), function() {
+      $('#match-search-tags').dropdown('set exactly', vals);
+    });
+  });
+}
+
+function matchDetailRemoveTag(tagValue, tagText, $removed) {
+  DB.untagReplay(matchDetailMatch._id, tagValue, function() {
+    console.log('removed ' + tagValue + ' from ' + matchDetailMatch._id);
+
+    let vals = $('#match-search-tags').dropdown('get value');
+    populateTagMenu($('#match-search-tags'), function() {
+      $('#match-search-tags').dropdown('set exactly', vals);
+    });
+  });
 }

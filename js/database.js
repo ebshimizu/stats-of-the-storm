@@ -203,7 +203,7 @@ class Database {
   }
 
   untagReplay(matchID, tag, callback) {
-    this.untagReplay([matchID], tag, callback);
+    this.untagReplays([matchID], tag, callback);
   }
 
   untagReplays(matchIDs, tag, callback) {
