@@ -918,6 +918,31 @@ function copyFloatingTable(src, dest) {
   }
 }
 
+function copyGraph(srcData, dest, opts = {}) {
+  dest.removeClass('.chartjs-render-monitor');
+  dest.attr('style', '');
+  
+  if (opts.width) {
+    dest.attr('width', opts.width);
+  }
+
+  if (opts.height) {
+    dest.attr('height', opts.height);
+  }
+
+  // hey lets deep copy objects by straight up serializing them and then
+  // deserializing the string ??????????
+  let data = {}
+  data.type = srcData.type;
+  data.options = JSON.parse(JSON.stringify(srcData.options));
+  data.options.legend.labels.fontColor = 'black';
+  data.options.responsive = false;
+  data.options.animation.duration = 0;
+  data.data = srcData.data;
+
+  let tmpChart = new Chart(dest, data);
+}
+
 function renderAndPrint(filename, size = 'Letter', landscape = false) {
   $('#print-window').removeClass('is-hidden');
 

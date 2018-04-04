@@ -420,7 +420,9 @@ function initPlayerPage() {
   $('#player-detail-hero-summary-segment .top.menu .item').tab();
   $('#player-detail-hero-summary-segment .top.menu .item').click(function() {
     $('#player-detail-hero-summary-segment table').floatThead('reflow');
-  })
+  });
+
+  $('#player-print-sections .ui.dropdown').dropdown();
 }
 
 function initPlayerStatGraphMenus() {
@@ -1206,6 +1208,32 @@ function handlePlayerExportAction(action, text, $elem) {
       }
     })
   }
+  else if (action === 'print-player') {
+    dialog.showSaveDialog({
+      title: 'Print Hero Stats',
+      filters: [{name: 'pdf', extensions: ['pdf']}]
+    }, function(filename) {
+      if (filename) {
+        printPlayerSummary(filename, null);
+      }
+    });
+  }
+  else if (action === 'print-sections') {
+    $('#player-print-sections').modal({
+      onApprove: function() {
+        dialog.showSaveDialog({
+          title: 'Print Hero Stats',
+          filters: [{name: 'pdf', extensions: ['pdf']}]
+        }, function(filename) {
+          if (filename) {
+            let sections = $('#player-print-sections .ui.dropdown').dropdown('get value').split(',');
+            printPlayerSummary(filename, sections);
+          }
+        });
+      },
+      closable: false
+    }).modal('show');
+  }
 }
 
 function updatePlayerCollectionCompare(value, text, $elem) {
@@ -1353,6 +1381,8 @@ function layoutPlayerPrint(sections) {
       $('#print-window .hero-pool').append($('#player-detail-hero-pool .two.grid').clone());
 
       // graph update / copy
+      copyGraph(heroPoolGamesGraphData, $('.hero-pool #player-hero-pool-games-graph'), { width: 500, height: 300 });
+      copyGraph(heroPoolWinsGraphData, $('.hero-pool #player-hero-pool-win-graph'), { width: 500, height: 300 });
     }
   }
   else {
