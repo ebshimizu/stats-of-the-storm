@@ -1319,3 +1319,110 @@ function processPlayerCollectionCompare(cache) {
   $('#player-compare-collection').removeClass('loading disabled');
   $('#player-compare-table table').floatThead('reflow');
 }
+
+function layoutPlayerPrint(sections) {
+  let sects = sections;
+  if (!sects) {
+    sects = ['general', 'hero', 'pool', 'maps', 'with', 'against', 'awards', 'compare', 'with-player', 'against-player', 'skins', 'taunts', 'talents', 'builds'];
+  }
+
+  clearPrintLayout();
+  if ($('#player-detail-summary-header h2').text() === 'All Hero Summary') {
+    addPrintHeader('Player Summary: ' + playerDetailInfo.name);
+  }
+  else {
+    addPrintHeader('Player Summary: ' + playerDetailInfo.name + "'s " + $('#player-hero-select-menu').dropdown('get value'));
+  }
+  addPrintDate();
+
+  if (sects.indexOf('general') !== -1) {
+    addPrintSubHeader('Overall Stats');
+    $('#print-window .contents').append($('#player-detail-misc-summary .statistics').clone());
+    $('#print-window').find('.statistics').removeClass('horizontal');
+  }
+
+  // case on if we're in detail mode or not
+  if ($('#player-detail-summary-header h2').text() === 'All Hero Summary') {
+    if (sects.indexOf('pool') !== -1) {
+      // copy raw stats
+      addPrintSubHeader('Hero Pool');
+      $('#print-window .contents').append('<div class="ui horizontal small statistic">' + $('#player-overall-hero-pool').html() + '</div>');
+      $('#print-window .contents #player-overall-hero-pool').removeClass('tiny');
+      $('#print-window .contents').append('<div class="ui segment hero-pool"></div>');
+      $('#print-window .hero-pool').append($('#player-detail-hero-pool .five.grid').clone());
+      $('#print-window .hero-pool').append($('#player-detail-hero-pool .two.grid').clone());
+
+      // graph update / copy
+    }
+  }
+  else {
+    if (sects.indexOf('talents') !== -1) {
+      addPrintSubHeader('Talents');
+      copyFloatingTable($('#player-detail-hero-talent .talent-pick .floatThead-wrapper'));
+    }
+
+    if (sects.indexOf('builds') !== -1) {
+      addPrintSubHeader('Builds');
+      copyFloatingTable($('#player-detail-hero-talent .talent-build .floatThead-wrapper'));
+    }
+  }
+
+  if (sects.indexOf('hero') !== -1) {
+    addPrintSubHeader('Hero Summary');
+    copyFloatingTable($('#player-detail-hero-summary .floatThead-wrapper'));
+  }
+
+  if (sects.indexOf('maps') !== -1) {
+    addPrintSubHeader('Map Summary');
+    copyFloatingTable($('#player-detail-map-summary .floatThead-wrapper'));
+  }
+
+  if (sects.indexOf('with') !== -1) {
+    addPrintSubHeader('Win Rate With Hero');
+    copyFloatingTable($('#player-detail-with-summary .floatThead-wrapper'));
+  }
+
+  if (sects.indexOf('against') !== -1) {
+    addPrintSubHeader('Win Rate Against Hero');
+    copyFloatingTable($('#player-detail-against-summary .floatThead-wrapper'));
+  }
+
+  if (sects.indexOf('awards') !== -1) {
+    addPrintSubHeader('Awards');
+    copyFloatingTable($('#player-detail-award-summary .floatThead-wrapper'));
+  }
+
+  if (sects.indexOf('compare') !== -1) {
+    addPrintSubHeader('Comparison vs Collection Average: ' + $('#player-compare-collection').dropdown('get text'));
+    copyFloatingTable($('#player-compare-segment .floatThead-wrapper'));
+  }
+
+  if (sects.indexOf('with-player') !== -1) {
+    addPrintSubHeader('Win Rate With Player');
+    copyFloatingTable($('#player-detail-friend-summary .floatThead-wrapper'));
+  }
+
+  if (sects.indexOf('against-player') !== -1) {
+    addPrintSubHeader('Win Rate Against Player');
+    copyFloatingTable($('#player-detail-rival-summary .floatThead-wrapper'));
+  }
+
+  if (sects.indexOf('skins') !== -1) {
+    addPrintSubHeader('Win Rate By Skin');
+    copyFloatingTable($('#player-detail-skin-summary .floatThead-wrapper'));
+  }
+
+  if (sects.indexOf('taunts') !== -1) {
+    addPrintSubHeader('Taunts');
+    $('#print-window .contents').append('<div class="ui segment detail-taunt"></div>');
+    $('#print-window .contents .detail-taunt').append($('#player-detail-taunt-summary').clone());
+    $('#print-window .contents .detail-taunt .top.label').remove();
+  }
+
+  $('#print-window').removeClass('is-hidden');
+}
+
+function printPlayerSummary(filename, sections) {
+  layoutPlayerPrint(sections);
+  renderAndPrint(filename, 'Letter', true);
+}

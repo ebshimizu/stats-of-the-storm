@@ -116,11 +116,25 @@
           </div>
         </div>
         <div class="ui dropdown link item is-hidden section-submenu" id="player-export-menu">
-          Export
+          File
           <i class="dropdown icon"></i>
           <div class="menu">
-            <div class="item" data-value="player">Current Player</div>
-            <div class="item" data-value="all-players">All Players</div>
+            <div class="item">
+              <i class="dropdown icon"></i>
+              <span class="text">Export JSON</span>
+              <div class="menu">
+                <div class="item" data-value="player">Current Player</div>
+                <div class="item" data-value="all-players">All Players</div>
+              </div>
+            </div>
+            <div class="item">
+              <i class="dropdown icon"></i>
+              <span class="text">Print</span>
+              <div class="menu">
+                <div class="item" data-value="print-player">All Sections</div>
+                <div class="item" data-value="print-sections">Selected Sections...</div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="ui dropdown link item is-hidden section-submenu" id="match-detail-collection">
