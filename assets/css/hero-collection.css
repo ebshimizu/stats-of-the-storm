@@ -55,7 +55,9 @@
 }
 
 #hero-collection-comps table tbody tr td .mini.image,
-#hero-collection-comps table tbody tr td .mini.image img {
+#hero-collection-comps table tbody tr td .mini.image img,
+#print-window table tbody tr td .mini.image,
+#print-window table tbody tr td .mini.image img {
   width: 100px;
   height: 100px;
   margin: 0 auto;

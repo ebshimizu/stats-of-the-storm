@@ -111,10 +111,16 @@ function initHeroCollectionPage() {
       updateHeroCollectionVsStats(value, $elem, 'against', $('#hero-collection-detail-against-summary'));
     }
   });
+
+  $('#hero-collection-file-menu').dropdown({
+    action: 'hide',
+    onChange: handleHeroStatsFileAction
+  });
 }
 
 function heroCollectionShowSection() {
   $('#hero-collection-body table').floatThead('reflow');
+  $('#hero-collection-file-menu').removeClass('is-hidden');
 }
 
 function resetHeroCollection() {
@@ -462,4 +468,70 @@ function getCompositionElement(roles) {
 
   elem += '</div>';
   return elem;
+}
+
+function layoutHeroCollectionPrint(sections) {
+  let sects = sections;
+  if (!sects) {
+    sects = ['general', 'draft', 'comps', 'pool'];
+  }
+
+  // prints basically just copy DOM elements into the print container
+  // then show the print container, and then hide it
+  clearPrintLayout();
+  addPrintHeader('Hero Summary');
+
+  // copy the main table
+  if (sects.indexOf('general') !== -1) {
+    addPrintSubHeader('General Stats');
+    copyFloatingTable($('#hero-collection-summary .floatThead-wrapper'));
+  }
+
+  // picks
+  if (sects.indexOf('draft') !== -1) {
+    addPrintSubHeader('Draft Stats');
+    copyFloatingTable($('#hero-collection-picks .floatThead-wrapper'));
+  }
+
+  // compositions
+  if (sects.indexOf('comps') !== -1) {
+    addPrintSubHeader('Composition Stats');
+    copyFloatingTable($('#hero-collection-comps .floatThead-wrapper'));
+  }
+
+  // hero pool is... more complicated
+  if (sects.indexOf('pool') !== -1) {
+    addPrintSubHeader('Hero Pool Stats');
+    $('#print-window .contents').append('<div class="hero-pool ui segment"></div>');
+    $('#print-window .contents .hero-pool.segment').append($('#hero-collection-pool .six.column.grid').clone());
+
+    $('#print-window .contents').append('<div class="ui segment draft-tables"><div class="ui three column grid"></div></div>');
+    $('#print-window .draft-tables .grid').append('<div class="ui column grid-cell-1"><h4 class="ui header">Zero Participation</div></div>');
+    $('#print-window .draft-tables .grid').append('<div class="ui column grid-cell-2"><h4 class="ui header">Zero Games</div></div>');
+    $('#print-window .draft-tables .grid').append('<div class="ui column grid-cell-3"><h4 class="ui header">Zero Bans</div></div>');
+    copyFloatingTable($('#hero-collection-zero-participation .floatThead-wrapper'), $('#print-window .grid-cell-1'));
+    copyFloatingTable($('#hero-collection-zero-games .floatThead-wrapper'), $('#print-window .grid-cell-2'));
+    copyFloatingTable($('#hero-collection-zero-bans .floatThead-wrapper'), $('#print-window .grid-cell-3'));
+  }
+}
+
+function printHeroCollection(sections, filename) {
+  layoutHeroCollectionPrint(sections);
+  renderAndPrint(filename);
+}
+
+function handleHeroStatsFileAction(value, text, $elem) {
+  if (value === 'print-all') {
+    dialog.showSaveDialog({
+      title: 'Print Hero Stats',
+      filters: [ {name: 'pdf', extensions: ['.pdf']} ]
+    }, function(filename) {
+      if (filename) {
+        printHeroCollection(null, filename);
+      }
+    });
+  }
+  else if (value === 'print-sections') {
+
+  }
 }

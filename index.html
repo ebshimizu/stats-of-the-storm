@@ -36,6 +36,11 @@
     <title>Stats of the Storm</title>
   </head>
   <body>
+    <div id="print-window" class="is-hidden">
+      <div class="contents">
+
+      </div>
+    </div>
     <div id="main-menu" class="ui sidebar inverted vertical menu">
       <div class="header item app-title">
         <img class="ui mini image" src="assets/images/storm_ui_mvp_icon.png">
@@ -72,6 +77,15 @@
             <div class="item" data-value="new">New Team</div>
             <div class="item" data-value="rename">Rename Team</div>
             <div class="item" data-value="delete">Delete Team</div>
+          </div>
+        </div>
+        <div class="ui dropdown link item is-hidden section-submenu" id="hero-collection-file-menu">
+          File
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" data-value="print-all">Print Summary</div>
+            <div class="item" data-value="print-sections">Print Summary Sections...</div>
+            <div class="item" data-value="print-hero">Print Hero Details</div>
           </div>
         </div>
         <div class="ui dropdown link item is-hidden section-submenu" id="match-detail-file-menu">

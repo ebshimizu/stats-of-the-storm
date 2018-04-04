@@ -124,3 +124,22 @@ body {
 .player-name:hover {
     color: #ffe21f!important;
 }
+
+#print-window {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 10000;
+    background-color: #FFFFFF;
+    width: 100%;
+    height: 100%;
+}
+
+#print-window .contents {
+    height: 100%;
+    position: relative;
+}
+
+#print-window .contents .new-page {
+    page-break-before: always;
+}

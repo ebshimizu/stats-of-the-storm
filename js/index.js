@@ -874,3 +874,68 @@ function finishVersion2To3Migration() {
   );
   DB.setDBVersion(3, checkDBVersion(3));
 }
+
+function clearPrintLayout() {
+  $('#print-window .contents').html('');
+}
+
+function addPrintHeader(title) {
+  $('#print-window .contents').append('<h1 class="ui dividing header new-page">' + title + '</h1>')
+}
+
+function addPrintSubHeader(title) {
+  $('#print-window .contents').append('<h2 class="ui dividing header new-page">' + title + '</h2>');
+}
+
+function copyFloatingTable(src, dest) {
+  // float thead pulls the headers out, we'll put them back in and copy to the specified destination element
+  let table = src.clone();
+  let headers = table.find('.floatThead-table thead').detach();
+  table.find('.floatThead-container').remove();
+  table.find('thead').remove();
+  table.find('table.table').prepend(headers);
+
+  // printing classes
+  table.find('table').addClass('small compact');
+
+  // shrink image headers
+  table.find('h3.image.header').replaceWith(function() {
+    return '<h4 class="ui image header">' + $(this).html() + '</h4>';
+  })
+
+  // remove wrapper
+  if (dest) {
+    dest.append(table.find('table'));
+  }
+  else {
+    $('#print-window .contents').append(table.find('table'));
+  }
+}
+
+function renderAndPrint(filename) {
+  $('#print-window').removeClass('is-hidden');
+
+  // remove all inverted classes
+  $('#print-window .ui').removeClass('inverted');
+
+  // let's be honest i am really bad at browser windows
+  let windows = BrowserWindow.getAllWindows();
+  let win = null;
+  for (let window of windows) {
+    if (window.getTitle() === 'Stats of the Storm') {
+      win = window;
+    }
+  }
+
+  win.webContents.printToPDF({ landscape: true }, function(error, data) {
+    if (error) {
+      showMessage('Print Error', error, { class: 'negative' });
+    }
+    else {
+      fs.writeFileSync(filename, data);
+      showMessage('Print Success', 'Printed to ' + filename, { class: 'positive' });
+    }
+
+    $('#print-window').addClass('is-hidden');
+  });
+}
