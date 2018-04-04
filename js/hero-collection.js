@@ -520,8 +520,45 @@ function layoutHeroCollectionPrint(sections) {
   $('#print-window').removeClass('is-hidden');
 }
 
+function layoutHeroCollectionDetailPrint() {
+  clearPrintLayout();
+  addPrintHeader('Overall Hero Details');
+  addPrintDate();
+
+  $('#print-window .contents').append($('#hero-collection-hero-header h2.header').clone());
+  
+  addPrintSubHeader('Overall Stats');
+  $('#print-window .contents').append($('#hero-collection-detail-misc-summary .statistics').clone());
+  $('#print-window').find('.statistics').removeClass('horizontal');
+
+  addPrintSubHeader('Talents');
+  copyFloatingTable($('#hero-collection-detail-hero-talent .talent-pick .floatThead-wrapper'));
+
+  addPrintSubHeader('Builds');
+  copyFloatingTable($('#hero-collection-detail-hero-talent .talent-build .floatThead-wrapper'));
+
+  addPrintSubHeader('Maps');
+  copyFloatingTable($('#hero-collection-detail-map-summary .floatThead-wrapper'));
+
+  addPrintSubHeader('Win Rate With Hero');
+  copyFloatingTable($('#hero-collection-detail-with-summary .floatThead-wrapper'));
+
+  addPrintSubHeader('Win Rate Against Hero');
+  copyFloatingTable($('#hero-collection-detail-against-summary .floatThead-wrapper'));
+
+  addPrintSubHeader('Awards');
+  copyFloatingTable($('#hero-collection-award-summary .floatThead-wrapper'));
+
+  $('#print-window').removeClass('is-hidden');
+}
+
 function printHeroCollection(sections, filename) {
   layoutHeroCollectionPrint(sections);
+  renderAndPrint(filename, 'Legal', true);
+}
+
+function printHeroCollectionHero(filename) {
+  layoutHeroCollectionDetailPrint();
   renderAndPrint(filename);
 }
 
@@ -551,5 +588,15 @@ function handleHeroStatsFileAction(value, text, $elem) {
       },
       closable: false
     }).modal('show');
+  }
+  else if (value === 'print-hero') {
+    dialog.showSaveDialog({
+      title: 'Print Hero Stats',
+      filters: [{name: 'pdf', extensions: ['pdf']}]
+    }, function(filename) {
+      if (filename) {
+        printHeroCollectionHero(filename);
+      }
+    });
   }
 }

@@ -918,7 +918,7 @@ function copyFloatingTable(src, dest) {
   }
 }
 
-function renderAndPrint(filename) {
+function renderAndPrint(filename, size = 'Letter', landscape = false) {
   $('#print-window').removeClass('is-hidden');
 
   // remove all inverted classes
@@ -933,7 +933,7 @@ function renderAndPrint(filename) {
     }
   }
 
-  win.webContents.printToPDF({ landscape: true, pageSize: 'Legal' }, function(error, data) {
+  win.webContents.printToPDF({ landscape: landscape, pageSize: size }, function(error, data) {
     if (error) {
       showMessage('Print Error', error, { class: 'negative' });
     }
