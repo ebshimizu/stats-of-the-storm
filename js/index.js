@@ -879,6 +879,11 @@ function clearPrintLayout() {
   $('#print-window .contents').html('');
 }
 
+function addPrintDate() {
+  $('#print-window .contents').append('<p>Database path: ' + settings.get('dbPath') + '</p>');
+  $('#print-window .contents').append('<p>Printed on ' + (new Date()).toLocaleString('en-US') + '</p>');
+}
+
 function addPrintHeader(title) {
   $('#print-window .contents').append('<h1 class="ui dividing header new-page">' + title + '</h1>')
 }
@@ -896,7 +901,8 @@ function copyFloatingTable(src, dest) {
   table.find('table.table').prepend(headers);
 
   // printing classes
-  table.find('table').addClass('small compact');
+  table.find('table').addClass('compact');
+  table.find('table').attr('style', '');
 
   // shrink image headers
   table.find('h3.image.header').replaceWith(function() {
@@ -927,13 +933,19 @@ function renderAndPrint(filename) {
     }
   }
 
-  win.webContents.printToPDF({ landscape: true }, function(error, data) {
+  win.webContents.printToPDF({ landscape: true, pageSize: 'Legal' }, function(error, data) {
     if (error) {
       showMessage('Print Error', error, { class: 'negative' });
     }
     else {
-      fs.writeFileSync(filename, data);
-      showMessage('Print Success', 'Printed to ' + filename, { class: 'positive' });
+      try {
+        fs.writeFileSync(filename, data);
+        showMessage('Print Success', 'Printed to ' + filename, { class: 'positive' });
+      }
+      catch (err) {
+        $('#print-window').addClass('is-hidden');
+        showMessage('Print Error', err, { class: 'negative' });
+      }
     }
 
     $('#print-window').addClass('is-hidden');

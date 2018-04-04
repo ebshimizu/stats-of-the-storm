@@ -116,6 +116,8 @@ function initHeroCollectionPage() {
     action: 'hide',
     onChange: handleHeroStatsFileAction
   });
+
+  $('#hero-collection-print-sections .ui.dropdown').dropdown();
 }
 
 function heroCollectionShowSection() {
@@ -450,7 +452,7 @@ function renderHeroCollectionVsStatsTo(container, stats, threshold, avg) {
 }
 
 function getCompositionElement(roles) {
-  let elem = '<div class="ui five column grid">';
+  let elem = '<div class="ui five column grid comp-grid">';
   
   for (let r of roles) {
     elem += '<div class="column">';
@@ -480,6 +482,7 @@ function layoutHeroCollectionPrint(sections) {
   // then show the print container, and then hide it
   clearPrintLayout();
   addPrintHeader('Hero Summary');
+  addPrintDate();
 
   // copy the main table
   if (sects.indexOf('general') !== -1) {
@@ -513,6 +516,8 @@ function layoutHeroCollectionPrint(sections) {
     copyFloatingTable($('#hero-collection-zero-games .floatThead-wrapper'), $('#print-window .grid-cell-2'));
     copyFloatingTable($('#hero-collection-zero-bans .floatThead-wrapper'), $('#print-window .grid-cell-3'));
   }
+
+  $('#print-window').removeClass('is-hidden');
 }
 
 function printHeroCollection(sections, filename) {
@@ -524,7 +529,7 @@ function handleHeroStatsFileAction(value, text, $elem) {
   if (value === 'print-all') {
     dialog.showSaveDialog({
       title: 'Print Hero Stats',
-      filters: [ {name: 'pdf', extensions: ['.pdf']} ]
+      filters: [{name: 'pdf', extensions: ['pdf']}]
     }, function(filename) {
       if (filename) {
         printHeroCollection(null, filename);
@@ -532,6 +537,19 @@ function handleHeroStatsFileAction(value, text, $elem) {
     });
   }
   else if (value === 'print-sections') {
-
+    $('#hero-collection-print-sections').modal({
+      onApprove: function() {
+        dialog.showSaveDialog({
+          title: 'Print Hero Stats',
+          filters: [{name: 'pdf', extensions: ['pdf']}]
+        }, function(filename) {
+          if (filename) {
+            let sections = $('#hero-collection-print-sections .ui.dropdown').dropdown('get value').split(',');
+            printHeroCollection(sections, filename);
+          }
+        });
+      },
+      closable: false
+    }).modal('show');
   }
 }
