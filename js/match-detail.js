@@ -82,8 +82,7 @@ const xpSoakOpts = {
     yAxes: [{
       stacked: false,
       ticks: {
-        fontColor: '#FFFFFF',
-        
+        fontColor: '#FFFFFF'
       },
       gridLines: {
         color: '#ababab'
@@ -2040,4 +2039,102 @@ function matchDetailRemoveTag(tagValue, tagText, $removed) {
     });
     populateTagMenu($('.filter-widget-tags'));
   });
+}
+
+function layoutMatchDetailPrint(sections) {
+  let sects = sections;
+  if (!sects) {
+    sects = ['summary', 'talents', 'graphs', 'team-stats', 'details', 'xp', 'chat', 'taunts'];
+  }
+
+  clearPrintLayout();
+
+  // header is always printed
+  $('#print-window .contents').append($('#match-detail-page-header').clone());
+  $('#print-window .contents').find('.statistic').addClass('mini');
+
+  if (sects.indexOf('summary') !== -1) {
+    addPrintPage('summary');
+    copyFloatingTable($('#match-detail-summary'), $('#print-window .summary.page'));
+
+    if (!$('#match-detail-draft').hasClass('is-hidden')) {
+      addPrintSubHeader('Draft', 'summary');
+      getPrintPage('summary').append($('#match-detail-draft').clone());
+      getPrintPage('summary').find('.top.attached.label').remove();
+    }
+  }
+
+  if (sects.indexOf('talents') !== -1) {
+    addPrintPage('talents');
+    addPrintSubHeader('Talents', 'talents');
+    copyFloatingTable($('#match-detail-talents'), getPrintPage('talents'));
+  }
+
+  if (sects.indexOf('graphs') !== -1) {
+    addPrintPage('graphs');
+    addPrintSubHeader('Stats', 'graphs');
+    
+    getPrintPage('graphs').append($('#match-detail-team-numbers').clone());
+    copyGraph(teamOverallStatGraphData, $('#print-window #match-detail-team-numbers'), { width: 1650, height: 650 });
+
+    addPrintSubHeader('Teamfight Stats', 'graphs');
+    getPrintPage('graphs').append($('#match-detail-teamfight-numbers').clone());
+    copyGraph(teamfightStatGraphData, $('#print-window #match-detail-teamfight-numbers'), { width: 1650, height: 300 });
+
+    addPrintSubHeader('CC Stats', 'graphs');
+    getPrintPage('graphs').append($('#match-detail-team-cc').clone());
+    copyGraph(teamCCGraphData, $('#print-window #match-detail-team-cc'), { width: 1650, height: 375 });
+  }
+
+  if (sects.indexOf('details') !== -1) {
+    addPrintPage('details');
+    addPrintSubHeader('Detailed Stats', 'details');
+    copyFloatingTable($('.ui.tab[data-tab="details"] .floatThead-wrapper'), getPrintPage('details'));
+  }
+
+  if (sects.indexOf('xp') !== -1) {
+    addPrintPage('xp');
+    addPrintSubHeader('XP Graphs', 'xp');
+    $('#print-window .contents .xp.page').append('<div class="ui two column grid xp-graphs"></div>');
+    
+    $('#print-window .xp-graphs').append('<div class="column xp-vs-time"><h3 class="ui dividing header">XP vs Time</h3><canvas></div>')
+    copyGraph(overallXPGraphData, $('#print-window .xp-vs-time canvas'), { width: 700, height: 400 });
+
+    $('#print-window .xp-graphs').append('<div class="column levels-vs-time"><h3 class="ui dividing header">Levels vs Time</h3><canvas></div>')
+    copyGraph(overallLevelGraphData, $('#print-window .levels-vs-time canvas'), { width: 700, height: 400 });
+
+    $('#print-window .xp-graphs').append('<div class="column blue-xpb"><h3 class="ui dividing header">Blue Team XP Breakdown</h3><canvas></div>')
+    copyGraph(blueTeamXPGraphData, $('#print-window .blue-xpb canvas'), { width: 700, height: 400 });
+
+    $('#print-window .xp-graphs').append('<div class="column red-xpb"><h3 class="ui dividing header">Red Team XP Breakdown</h3><canvas></div>')
+    copyGraph(redTeamXPGraphData, $('#print-window .red-xpb canvas'), { width: 700, height: 400 });
+
+    addPrintPage('xp2');
+    $('#print-window .contents .xp2.page').append('<div class="ui two column grid xp-graphs2"></div>');
+    $('#print-window .xp-graphs2').append('<div class="column soak-xp"><h3 class="ui dividing header">XP Soak</h3><canvas></div>')
+    copyGraph(teamXPSoakGraphData, $('#print-window .soak-xp canvas'), { width: 700, height: 400 });
+
+    $('#print-window .xp-graphs2').append('<div class="column xp-time"><h3 class="ui dividing header">Time Per Tier</h3><canvas></div>')
+    copyGraph(timePerTierGraphData, $('#print-window .xp-time canvas'), { width: 700, height: 400 });
+  }
+
+  if (sects.indexOf('chat') !== -1) {
+    addPrintPage('chat');
+    addPrintSubHeader('Chat Log', 'chat');
+    getPrintPage('chat').append('<div class="ui segment chat-log"></div>');
+    $('#print-window .chat-log').append($('#match-detail-chat').clone());
+  }
+
+  if (sects.indexOf('taunts') !== -1) {
+    addPrintPage('taunt')
+    addPrintSubHeader('Taunt Log', 'taunt');
+    copyFloatingTable($('#match-detail-chat-log .floatThead-wrapper'), getPrintPage('taunt'));
+  }
+
+  $('#print-window').removeClass('is-hidden');
+}
+
+function printMatchDetail(filename, sections) {
+  layoutMatchDetailPrint(sections);
+  renderAndPrint(filename, 'Letter', true);
 }

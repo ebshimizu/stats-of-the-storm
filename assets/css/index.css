@@ -142,4 +142,6 @@ body {
 
 #print-window .contents .new-page {
     page-break-before: always;
+    display: block;
+    clear: both;
 }

@@ -74,17 +74,44 @@
 }
 
 #match-detail-summary tr.blue,
+#print-window tr.blue,
+#print-window th.blue,
 #match-detail-talents tr.blue,
 #match-detail-details th.blue,
 #match-detail-body .floatThead-wrapper th.blue {
   background-color: #125080;
+  -webkit-print-color-adjust: exact;
 }
 
 #match-detail-summary tr.red,
+#print-window tr.red,
+#print-window th.red,
 #match-detail-talents tr.red,
 #match-detail-details th.red,
 #match-detail-body .floatThead-wrapper th.red {
   background-color: #8e0e0e;
+  -webkit-print-color-adjust: exact;
+}
+
+#print-window tr.blue h4,
+#print-window tr.red h4,
+#print-window th.blue h4,
+#print-window th.red h4,
+#print-window th.blue h4 .sub.header,
+#print-window th.red h4 .sub.header,
+#print-window tr.blue h4 .sub.header,
+#print-window tr.red h4 .sub.header,
+#print-window tr.blue .statistic .value,
+#print-window tr.red .statistic .value {
+  color: #FFFFFF!important;
+}
+
+#print-window #match-detail-victor {
+  font-size: 16pt!important;
+}
+
+#print-window tr .statistic .value {
+  font-size: 14pt!important;
 }
 
 #match-detail-summary td h3 {
@@ -259,4 +286,21 @@
 
 .ui.header.second {
   margin-top: 0;
+}
+
+#print-window .label {
+  -webkit-print-color-adjust: exact;
+}
+
+#print-window #match-detail-draft .images {
+  margin-left: 0;
+}
+
+#print-window .match-detail-talents-row img.centered.tiny.rounded.image {
+  width: 50px!important;
+  height: auto;
+}
+
+#print-window .page {
+  break-inside: avoid;
 }

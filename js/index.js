@@ -879,17 +879,39 @@ function clearPrintLayout() {
   $('#print-window .contents').html('');
 }
 
+function addPrintPage(name) {
+  $('#print-window .contents').append('<div class="new-page page ' + name + '"></div>');
+}
+
 function addPrintDate() {
   $('#print-window .contents').append('<p>Database path: ' + settings.get('dbPath') + '</p>');
   $('#print-window .contents').append('<p>Printed on ' + (new Date()).toLocaleString('en-US') + '</p>');
 }
 
-function addPrintHeader(title) {
-  $('#print-window .contents').append('<h1 class="ui dividing header new-page">' + title + '</h1>')
+function getPrintPage(page) {
+  return $('#print-window .contents .page.' + page);
 }
 
-function addPrintSubHeader(title) {
-  $('#print-window .contents').append('<h2 class="ui dividing header new-page">' + title + '</h2>');
+function addPrintHeader(title, page) {
+  let t = '<h1 class="ui dividing header new-page">' + title + '</h1>';
+
+  if (!page) {
+    $('#print-window .contents').append(t)
+  }
+  else {
+    $('#print-window .contents').find('.page.' + page).append(t)
+  }
+}
+
+function addPrintSubHeader(title, page) {
+  let t = '<h2 class="ui dividing header new-page">' + title + '</h2>';
+
+  if (!page) {
+    $('#print-window .contents').append(t);
+  }
+  else {
+    $('#print-window .contents').find('.page.' + page).append(t);
+  }
 }
 
 function copyFloatingTable(src, dest) {
@@ -897,11 +919,14 @@ function copyFloatingTable(src, dest) {
   let table = src.clone();
   let headers = table.find('.floatThead-table thead').detach();
   table.find('.floatThead-container').remove();
-  table.find('thead').remove();
-  table.find('table.table').prepend(headers);
+  
+  if (headers.length > 0) {
+    table.find('thead').remove();
+    table.find('table.table').prepend(headers);
+  }
 
   // printing classes
-  table.find('table').addClass('compact');
+  table.find('table').addClass('compact').removeClass('fixed');
   table.find('table').attr('style', '');
 
   // shrink image headers
@@ -938,6 +963,14 @@ function copyGraph(srcData, dest, opts = {}) {
   data.options.legend.labels.fontColor = 'black';
   data.options.responsive = false;
   data.options.animation.duration = 0;
+
+  data.options.scales.yAxes[0].ticks.fontColor = '#000';
+  data.options.scales.yAxes[0].ticks.major.fontColor = '#000';
+  data.options.scales.yAxes[0].ticks.minor.fontColor = '#000';
+  data.options.scales.xAxes[0].ticks.fontColor = '#000';
+  data.options.scales.xAxes[0].ticks.major.fontColor = '#000';
+  data.options.scales.xAxes[0].ticks.minor.fontColor = '#000';
+
   data.data = srcData.data;
 
   let tmpChart = new Chart(dest, data);
@@ -974,5 +1007,6 @@ function renderAndPrint(filename, size = 'Letter', landscape = false) {
     }
 
     $('#print-window').addClass('is-hidden');
+    $('#print-window .contents').html('');
   });
 }
