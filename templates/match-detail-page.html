@@ -166,7 +166,7 @@
               </div>
             </div>
           </div>
-          <div class="ui eight wide column">
+          <div class="ui eight wide column print-team-stats">
             <div class="ui inverted segment" id="match-detail-blue-team-stats">
               <div class="ui top attached label">Blue Team Stats</div>
               <div class="ui four inverted blue statistics">
@@ -275,7 +275,7 @@
               </div>
             </div>
           </div>
-          <div class="ui eight wide column">
+          <div class="ui eight wide column print-team-stats">
             <div class="ui inverted segment" id="match-detail-red-team-stats">
               <div class="ui top attached label">Red Team Stats</div>
               <div class="ui four inverted red statistics">
@@ -550,6 +550,29 @@
     <div class="actions">
       <div class="ui green approve button">Yes</div>
       <div class="ui red deny button">No</div>
+    </div>
+  </div>
+  <div class="ui modal" id="match-detail-print-sections">
+    <div class="header">Select Sections to Print</div>
+    <div class="content">
+      <div class="ui fluid search multiple selection dropdown">
+        <i class="dropdown icon"></i>
+        <div class="default text">Select Sections</div>
+        <div class="menu">
+          <div class="item" data-value="summary">Summary and Draft</div>
+          <div class="item" data-value="talents">Talents</div>
+          <div class="item" data-value="graphs">Stat Graphs</div>
+          <div class="item" data-value="team-stats">Team Statistics</div>
+          <div class="item" data-value="details">Detailed Stats</div>
+          <div class="item" data-value="xp">XP Graphs</div>
+          <div class="item" data-value="chat">Chat</div>
+          <div class="item" data-value="taunts">Taunts</div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui green approve button">Print</div>
+      <div class="ui red deny button">Cancel</div>
     </div>
   </div>
 </template>

@@ -376,6 +376,8 @@ function initMatchDetailPage() {
     on: 'click'
   });
 
+  $('#match-detail-print-sections .dropdown.search').dropdown();
+
   // DEBUG - LOAD SPECIFIC MATCH
   //loadMatchData("RtTPtP5mHaBoFJW2", function() { console.log("done loading"); });
 }
@@ -2014,6 +2016,32 @@ function matchDetailFileAction(value, text, $elem) {
       }
     }).modal('show');
   }
+  else if (value === 'print-all') {
+    dialog.showSaveDialog({
+      title: 'Print Match Report',
+      filters: [{name: 'pdf', extensions: ['pdf']}]
+    }, function(filename) {
+      if (filename) {
+        printMatchDetail(filename, null);
+      }
+    });
+  }
+  else if (value === 'print-sections') {
+    $('#match-detail-print-sections').modal({
+      onApprove: function() {
+        dialog.showSaveDialog({
+          title: 'Print Match Report',
+          filters: [{name: 'pdf', extensions: ['pdf']}]
+        }, function(filename) {
+          if (filename) {
+            let sections = $('#match-detail-print-sections .ui.dropdown').dropdown('get value').split(',');
+            printMatchDetail(filename, sections);
+          }
+        });
+      },
+      closable: false
+    }).modal('show');
+  }
 
 }
 
@@ -2068,6 +2096,13 @@ function layoutMatchDetailPrint(sections) {
     addPrintPage('talents');
     addPrintSubHeader('Talents', 'talents');
     copyFloatingTable($('#match-detail-talents'), getPrintPage('talents'));
+  }
+  
+  if (sects.indexOf('team-stats') !== -1) {
+    addPrintPage('team-stats');
+    addPrintSubHeader('Team Stats', 'team-stats');
+    getPrintPage('team-stats').append('<div class="grid"></div>')
+    getPrintPage('team-stats').find('.grid').append($('.print-team-stats').clone());
   }
 
   if (sects.indexOf('graphs') !== -1) {
