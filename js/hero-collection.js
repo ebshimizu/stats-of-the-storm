@@ -486,29 +486,33 @@ function layoutHeroCollectionPrint(sections) {
 
   // copy the main table
   if (sects.indexOf('general') !== -1) {
-    addPrintSubHeader('General Stats');
-    copyFloatingTable($('#hero-collection-summary .floatThead-wrapper'));
+    addPrintPage('general');
+    addPrintSubHeader('General Stats', 'general');
+    copyFloatingTable($('#hero-collection-summary .floatThead-wrapper'), getPrintPage('general'));
   }
 
   // picks
   if (sects.indexOf('draft') !== -1) {
-    addPrintSubHeader('Draft Stats');
-    copyFloatingTable($('#hero-collection-picks .floatThead-wrapper'));
+    addPrintPage('draft');
+    addPrintSubHeader('Draft Stats', 'draft');
+    copyFloatingTable($('#hero-collection-picks .floatThead-wrapper'), getPrintPage('draft'));
   }
 
   // compositions
   if (sects.indexOf('comps') !== -1) {
-    addPrintSubHeader('Composition Stats');
-    copyFloatingTable($('#hero-collection-comps .floatThead-wrapper'));
+    addPrintPage('comps');
+    addPrintSubHeader('Composition Stats', 'comps');
+    copyFloatingTable($('#hero-collection-comps .floatThead-wrapper'), getPrintPage('comps'));
   }
 
   // hero pool is... more complicated
   if (sects.indexOf('pool') !== -1) {
-    addPrintSubHeader('Hero Pool Stats');
-    $('#print-window .contents').append('<div class="hero-pool ui segment"></div>');
-    $('#print-window .contents .hero-pool.segment').append($('#hero-collection-pool .six.column.grid').clone());
+    addPrintPage('pool');
+    addPrintSubHeader('Hero Pool Stats', 'pool');
+    getPrintPage('pool').append('<div class="hero-pool ui segment"></div>');
+    getPrintPage('pool').find('.hero-pool.segment').append($('#hero-collection-pool .six.column.grid').clone());
 
-    $('#print-window .contents').append('<div class="ui segment draft-tables"><div class="ui three column grid"></div></div>');
+    getPrintPage('pool').append('<div class="ui segment draft-tables"><div class="ui three column grid"></div></div>');
     $('#print-window .draft-tables .grid').append('<div class="ui column grid-cell-1"><h4 class="ui header">Zero Participation</div></div>');
     $('#print-window .draft-tables .grid').append('<div class="ui column grid-cell-2"><h4 class="ui header">Zero Games</div></div>');
     $('#print-window .draft-tables .grid').append('<div class="ui column grid-cell-3"><h4 class="ui header">Zero Bans</div></div>');
@@ -531,30 +535,36 @@ function layoutHeroCollectionDetailPrint() {
   $('#print-window .contents').append($('#hero-collection-detail-misc-summary .statistics').clone());
   $('#print-window').find('.statistics').removeClass('horizontal');
 
-  addPrintSubHeader('Talents');
-  copyFloatingTable($('#hero-collection-detail-hero-talent .talent-pick .floatThead-wrapper'));
+  addPrintPage('talents');
+  addPrintSubHeader('Talents', 'talents');
+  copyFloatingTable($('#hero-collection-detail-hero-talent .talent-pick .floatThead-wrapper'), getPrintPage('talents'));
 
-  addPrintSubHeader('Builds');
-  copyFloatingTable($('#hero-collection-detail-hero-talent .talent-build .floatThead-wrapper'));
+  addPrintPage('builds')
+  addPrintSubHeader('Builds', 'builds');
+  copyFloatingTable($('#hero-collection-detail-hero-talent .talent-build .floatThead-wrapper'), getPrintPage('builds'));
 
-  addPrintSubHeader('Maps');
-  copyFloatingTable($('#hero-collection-detail-map-summary .floatThead-wrapper'));
+  addPrintPage('maps');
+  addPrintSubHeader('Maps', 'maps');
+  copyFloatingTable($('#hero-collection-detail-map-summary .floatThead-wrapper'), getPrintPage('maps'));
 
-  addPrintSubHeader('Win Rate With Hero');
-  copyFloatingTable($('#hero-collection-detail-with-summary .floatThead-wrapper'));
+  addPrintPage('with');
+  addPrintSubHeader('Win Rate With Hero', 'with');
+  copyFloatingTable($('#hero-collection-detail-with-summary .floatThead-wrapper'), getPrintPage('with'));
 
-  addPrintSubHeader('Win Rate Against Hero');
-  copyFloatingTable($('#hero-collection-detail-against-summary .floatThead-wrapper'));
+  addPrintPage('against');
+  addPrintSubHeader('Win Rate Against Hero', 'against');
+  copyFloatingTable($('#hero-collection-detail-against-summary .floatThead-wrapper'), getPrintPage('against'));
 
-  addPrintSubHeader('Awards');
-  copyFloatingTable($('#hero-collection-award-summary .floatThead-wrapper'));
+  addPrintPage('awards');
+  addPrintSubHeader('Awards', 'awards');
+  copyFloatingTable($('#hero-collection-award-summary .floatThead-wrapper'), getPrintPage('awards'));
 
   $('#print-window').removeClass('is-hidden');
 }
 
 function printHeroCollection(sections, filename) {
   layoutHeroCollectionPrint(sections);
-  renderAndPrint(filename, 'Legal', true);
+  renderAndPrint(filename, 'Letter', true);
 }
 
 function printHeroCollectionHero(filename) {

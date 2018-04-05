@@ -964,12 +964,14 @@ function copyGraph(srcData, dest, opts = {}) {
   data.options.responsive = false;
   data.options.animation.duration = 0;
 
-  data.options.scales.yAxes[0].ticks.fontColor = '#000';
-  data.options.scales.yAxes[0].ticks.major.fontColor = '#000';
-  data.options.scales.yAxes[0].ticks.minor.fontColor = '#000';
-  data.options.scales.xAxes[0].ticks.fontColor = '#000';
-  data.options.scales.xAxes[0].ticks.major.fontColor = '#000';
-  data.options.scales.xAxes[0].ticks.minor.fontColor = '#000';
+  if (data.options.scales) {
+    data.options.scales.yAxes[0].ticks.fontColor = '#000';
+    data.options.scales.yAxes[0].ticks.major.fontColor = '#000';
+    data.options.scales.yAxes[0].ticks.minor.fontColor = '#000';
+    data.options.scales.xAxes[0].ticks.fontColor = '#000';
+    data.options.scales.xAxes[0].ticks.major.fontColor = '#000';
+    data.options.scales.xAxes[0].ticks.minor.fontColor = '#000';
+  }
 
   data.data = srcData.data;
 

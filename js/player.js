@@ -1364,8 +1364,9 @@ function layoutPlayerPrint(sections) {
   addPrintDate();
 
   if (sects.indexOf('general') !== -1) {
-    addPrintSubHeader('Overall Stats');
-    $('#print-window .contents').append($('#player-detail-misc-summary .statistics').clone());
+    addPrintPage('general');
+    addPrintSubHeader('Overall Stats', 'general');
+    getPrintPage('general').append($('#player-detail-misc-summary .statistics').clone());
     $('#print-window').find('.statistics').removeClass('horizontal');
   }
 
@@ -1373,10 +1374,11 @@ function layoutPlayerPrint(sections) {
   if ($('#player-detail-summary-header h2').text() === 'All Hero Summary') {
     if (sects.indexOf('pool') !== -1) {
       // copy raw stats
-      addPrintSubHeader('Hero Pool');
-      $('#print-window .contents').append('<div class="ui horizontal small statistic">' + $('#player-overall-hero-pool').html() + '</div>');
-      $('#print-window .contents #player-overall-hero-pool').removeClass('tiny');
-      $('#print-window .contents').append('<div class="ui segment hero-pool"></div>');
+      addPrintPage('pool');
+      addPrintSubHeader('Hero Pool', 'pool');
+      getPrintPage('pool').append('<div class="ui horizontal small statistic">' + $('#player-overall-hero-pool').html() + '</div>');
+      getPrintPage('pool').find('#player-overall-hero-pool').removeClass('tiny');
+      getPrintPage('pool').append('<div class="ui segment hero-pool"></div>');
       $('#print-window .hero-pool').append($('#player-detail-hero-pool .five.grid').clone());
       $('#print-window .hero-pool').append($('#player-detail-hero-pool .two.grid').clone());
 
@@ -1387,64 +1389,76 @@ function layoutPlayerPrint(sections) {
   }
   else {
     if (sects.indexOf('talents') !== -1) {
-      addPrintSubHeader('Talents');
-      copyFloatingTable($('#player-detail-hero-talent .talent-pick .floatThead-wrapper'));
+      addPrintPage('talents');
+      addPrintSubHeader('Talents', 'talents');
+      copyFloatingTable($('#player-detail-hero-talent .talent-pick .floatThead-wrapper'), getPrintPage('talents'));
     }
 
     if (sects.indexOf('builds') !== -1) {
-      addPrintSubHeader('Builds');
-      copyFloatingTable($('#player-detail-hero-talent .talent-build .floatThead-wrapper'));
+      addPrintPage('builds')
+      addPrintSubHeader('Builds', 'builds');
+      copyFloatingTable($('#player-detail-hero-talent .talent-build .floatThead-wrapper'), getPrintPage('builds'));
     }
   }
 
   if (sects.indexOf('hero') !== -1) {
-    addPrintSubHeader('Hero Summary');
-    copyFloatingTable($('#player-detail-hero-summary .floatThead-wrapper'));
+    addPrintPage('hero');
+    addPrintSubHeader('Hero Summary', 'hero');
+    copyFloatingTable($('#player-detail-hero-summary .floatThead-wrapper'), getPrintPage('hero'));
   }
 
   if (sects.indexOf('maps') !== -1) {
-    addPrintSubHeader('Map Summary');
-    copyFloatingTable($('#player-detail-map-summary .floatThead-wrapper'));
+    addPrintPage('maps');
+    addPrintSubHeader('Map Summary', 'maps');
+    copyFloatingTable($('#player-detail-map-summary .floatThead-wrapper'), getPrintPage('maps'));
   }
 
   if (sects.indexOf('with') !== -1) {
-    addPrintSubHeader('Win Rate With Hero');
-    copyFloatingTable($('#player-detail-with-summary .floatThead-wrapper'));
+    addPrintPage('with');
+    addPrintSubHeader('Win Rate With Hero', 'with');
+    copyFloatingTable($('#player-detail-with-summary .floatThead-wrapper'), getPrintPage('with'));
   }
 
   if (sects.indexOf('against') !== -1) {
-    addPrintSubHeader('Win Rate Against Hero');
-    copyFloatingTable($('#player-detail-against-summary .floatThead-wrapper'));
+    addPrintPage('against');
+    addPrintSubHeader('Win Rate Against Hero', 'against');
+    copyFloatingTable($('#player-detail-against-summary .floatThead-wrapper'), getPrintPage('against'));
   }
 
   if (sects.indexOf('awards') !== -1) {
-    addPrintSubHeader('Awards');
-    copyFloatingTable($('#player-detail-award-summary .floatThead-wrapper'));
+    addPrintPage('award');
+    addPrintSubHeader('Awards', 'award');
+    copyFloatingTable($('#player-detail-award-summary .floatThead-wrapper'), getPrintPage('award'));
   }
 
   if (sects.indexOf('compare') !== -1) {
-    addPrintSubHeader('Comparison vs Collection Average: ' + $('#player-compare-collection').dropdown('get text'));
-    copyFloatingTable($('#player-compare-segment .floatThead-wrapper'));
+    addPrintPage('compare');
+    addPrintSubHeader('Comparison vs Collection Average: ' + $('#player-compare-collection').dropdown('get text'), 'compare');
+    copyFloatingTable($('#player-compare-segment .floatThead-wrapper'), getPrintPage('compare'));
   }
 
   if (sects.indexOf('with-player') !== -1) {
-    addPrintSubHeader('Win Rate With Player');
-    copyFloatingTable($('#player-detail-friend-summary .floatThead-wrapper'));
+    addPrintPage('with-player');
+    addPrintSubHeader('Win Rate With Player', 'with-player');
+    copyFloatingTable($('#player-detail-friend-summary .floatThead-wrapper'), getPrintPage('with-player'));
   }
 
   if (sects.indexOf('against-player') !== -1) {
-    addPrintSubHeader('Win Rate Against Player');
-    copyFloatingTable($('#player-detail-rival-summary .floatThead-wrapper'));
+    addPrintPage('against-player');
+    addPrintSubHeader('Win Rate Against Player', 'against-player');
+    copyFloatingTable($('#player-detail-rival-summary .floatThead-wrapper'), getPrintPage('against-player'));
   }
 
   if (sects.indexOf('skins') !== -1) {
-    addPrintSubHeader('Win Rate By Skin');
-    copyFloatingTable($('#player-detail-skin-summary .floatThead-wrapper'));
+    addPrintPage('skins');
+    addPrintSubHeader('Win Rate By Skin', 'skins');
+    copyFloatingTable($('#player-detail-skin-summary .floatThead-wrapper'), getPrintPage('skins'));
   }
 
   if (sects.indexOf('taunts') !== -1) {
-    addPrintSubHeader('Taunts');
-    $('#print-window .contents').append('<div class="ui segment detail-taunt"></div>');
+    addPrintPage('taunts');
+    addPrintSubHeader('Taunts', 'taunts');
+    getPrintPage('taunts').append('<div class="ui segment detail-taunt"></div>');
     $('#print-window .contents .detail-taunt').append($('#player-detail-taunt-summary').clone());
     $('#print-window .contents .detail-taunt .top.label').remove();
   }

@@ -66,3 +66,4 @@ test.js
 dist/*
 parser/heroprotocol/dist/*
 parser/heroprotocol.spec
+test.pdf
