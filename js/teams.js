@@ -105,6 +105,11 @@ function initTeamsPage() {
   $('#teams-hero-thresh input').blur(function() {
     updateTeamData($('#team-set-team').dropdown('get value'), $('#team-set-team').dropdown('get text'));
   });
+
+  $('#team-file-menu').dropdown({
+    onChange: handleTeamMenuCallback
+  });
+  $('#team-print-sections .ui.dropdown').dropdown();
 }
 
 function populateTeamCollectionMenu() {
@@ -129,6 +134,7 @@ function resetTeamsPage() {
 function teamShowSection() {
   // basically just expose the proper menu options here
   $('#team-edit-menu').removeClass('is-hidden');
+  $('#team-file-menu').removeClass('is-hidden');
 }
 
 function updateTeamsFilter(hero, map) {
@@ -631,6 +637,32 @@ function handleTeamMenuCallback(action) {
     }).
     modal('show');
   }
+  else if (action === 'print-team') {
+    dialog.showSaveDialog({
+      title: 'Print Team Report',
+      filters: [{name: 'pdf', extensions: ['pdf']}]
+    }, function(filename) {
+      if (filename) {
+        printTeamDetail(filename, null);
+      }
+    });
+  }
+  else if (action === 'print-sections') {
+    $('#team-print-sections').modal({
+      onApprove: function() {
+        dialog.showSaveDialog({
+          title: 'Print Team Report',
+          filters: [{name: 'pdf', extensions: ['pdf']}]
+        }, function(filename) {
+          if (filename) {
+            let sections = $('#team-print-sections .ui.dropdown').dropdown('get value').split(',');
+            printTeamDetail(filename, sections);
+          }
+        });
+      },
+      closable: false
+    }).modal('show');
+  }
 }
 
 function showMatchHistory() {
@@ -781,4 +813,82 @@ function displayTeamAverages() {
 
   $('#team-compare-collection').removeClass('loading disabled');
   $('#team-compare-table table').floatThead('reflow');
+}
+
+function layoutTeamDetailPrint(sections) {
+  let sects = sections;
+  if (!sects) {
+    sects = ['stats', 'summary', 'draft', 'maps', 'against', 'roster', 'compare']
+  }
+
+  clearPrintLayout();
+
+  addPrintHeader('Team Report: ' + $('#team-set-team').dropdown('get text'));
+  addPrintDate();
+
+  if (sects.indexOf('stats') !== -1) {
+    addPrintPage('stats');
+    addPrintSubHeader('Stats', 'stats');
+    getPrintPage('stats').append($('#team-summary-stats .statistics').clone());
+    getPrintPage('stats').find('.statistics').removeClass('horizontal');
+    
+    addPrintSubHeader('Macro Stats', 'stats');
+    getPrintPage('stats').append($('#team-detail-stats').clone());
+    getPrintPage('stats').find('.top.attached.label').remove();
+    addPrintPage('rstats');
+    
+    addPrintSubHeader('Role Stats', 'rstats');
+    getPrintPage('rstats').append($('#team-damage-stats').clone());
+    getPrintPage('rstats').find('.top.attached.label').remove();
+    addPrintPage('struct');
+
+    addPrintSubHeader('Structure Stats', 'struct');
+    getPrintPage('struct').append($('#team-structure-stats').clone());
+    getPrintPage('struct').find('.top.attached.label').remove();
+  }
+  
+  if (sects.indexOf('maps') !== -1) {
+    addPrintPage('maps');
+    addPrintSubHeader('Maps', 'maps');
+    copyFloatingTable($('#team-map-summary .floatThead-wrapper'), getPrintPage('maps'));
+  }
+
+  if (sects.indexOf('summary') !== -1) {
+    addPrintPage('summary');
+    addPrintSubHeader('Hero Summary', 'summary');
+    copyFloatingTable($('#team-hero-summary-table .floatThead-wrapper'), getPrintPage('summary'));
+  }
+
+  if (sects.indexOf('draft') !== -1) {
+    addPrintPage('picks');
+    addPrintSubHeader('Pick Priority', 'picks');
+    copyFloatingTable($('#team-draft-table .floatThead-wrapper'), getPrintPage('picks'));
+    
+    addPrintPage('bans');
+    addPrintSubHeader('Ban Priority', 'bans');
+    copyFloatingTable($('#team-ban-summary .floatThead-wrapper'), getPrintPage('bans'));
+  }
+
+  if (sects.indexOf('against') !== -1) {
+    addPrintPage('against');
+    addPrintSubHeader('Win Rate Against Hero', 'against');
+    copyFloatingTable($('#team-against-summary .floatThead-wrapper'), getPrintPage('against'));
+  }
+
+  if (sects.indexOf('roster') !== -1) {
+    addPrintPage('roster');
+    addPrintSubHeader('Roster Summary', 'roster');
+    copyFloatingTable($('#team-roster-stats .floatThead-wrapper'), getPrintPage('roster'));
+  }
+
+  if (sects.indexOf('compare') !== -1) {
+    addPrintPage('compare');
+    addPrintSubHeader('Comparison to Collection Average: ' + $('#team-compare-collection').dropdown('get text'), 'compare');
+    copyFloatingTable($('#team-compare-table .floatThead-wrapper'), getPrintPage('compare'));
+  }
+}
+
+function printTeamDetail(filename, sections) {
+  layoutTeamDetailPrint(sections);
+  renderAndPrint(filename, 'Letter', true);
 }

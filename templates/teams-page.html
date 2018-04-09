@@ -487,7 +487,7 @@
                     <th class="center aligned stat">Minion Damage</th>
                     <th class="center aligned stat">Creep Damage</th>
                     <th class="center aligned stat">Healing</th>
-                    <th class="center aligned stat">Clutch Heals</th>
+                    <!-- <th class="center aligned stat">Clutch Heals</th> -->
                     <th class="center aligned stat">Damage Taken</th>
                     <th></th>
                   </tr>
@@ -539,6 +539,28 @@
     </div>
     <div class="actions">
       <div class="ui green approve button">Add</div>
+      <div class="ui red deny button">Cancel</div>
+    </div>
+  </div>
+  <div class="ui modal" id="team-print-sections">
+    <div class="header">Select Sections to Print</div>
+    <div class="content">
+      <div class="ui fluid search multiple selection dropdown">
+        <i class="dropdown icon"></i>
+        <div class="default text">Select Sections</div>
+        <div class="menu">
+          <div class="item" data-value="stats">Stats</div>
+          <div class="item" data-value="summary">Hero Summary</div>
+          <div class="item" data-value="draft">Draft</div>
+          <div class="item" data-value="maps">Maps</div>
+          <div class="item" data-value="against">Win Rate Against Hero</div>
+          <div class="item" data-value="roster">Roster Summary</div>
+          <div class="item" data-value="compare">Comparison to Collection</div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui green approve button">Print</div>
       <div class="ui red deny button">Cancel</div>
     </div>
   </div>
@@ -622,7 +644,7 @@
     <td class="center aligned" data-sort-value="{{value.MinionDamage}}">{{MinionDamage}}</td>
     <td class="center aligned" data-sort-value="{{value.CreepDamage}}">{{CreepDamage}}</td>
     <td class="center aligned" data-sort-value="{{value.Healing}}">{{Healing}}</td>
-    <td class="center aligned" data-sort-value="{{value.ClutchHealsPerformed}}">{{ClutchHealsPerformed}}</td>
+    <!-- <td class="center aligned" data-sort-value="{{value.ClutchHealsPerformed}}">{{ClutchHealsPerformed}}</td> -->
     <td class="center aligned" data-sort-value="{{value.DamageTaken}}">{{DamageTaken}}</td>
     <td>
       <div class="ui mini icon floating dropdown button" player-id="{{id}}">

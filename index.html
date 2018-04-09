@@ -70,15 +70,6 @@
         <a class="icon item" id="show-sidebar-button"><i class="sidebar icon"></i></a>
         <a class="icon item" id="section-menu-back-button"><i class="arrow left icon"></i></a>
         <div class="header item" id="section-menu-name">Loading...</div>
-        <div class="ui dropdown link item is-hidden section-submenu" id="team-edit-menu">
-          Edit
-          <i class="dropdown icon"></i>
-          <div class="menu">
-            <div class="item" data-value="new">New Team</div>
-            <div class="item" data-value="rename">Rename Team</div>
-            <div class="item" data-value="delete">Delete Team</div>
-          </div>
-        </div>
         <div class="ui dropdown link item is-hidden section-submenu" id="hero-collection-file-menu">
           File
           <i class="dropdown icon"></i>
@@ -156,6 +147,29 @@
                 <div class="item" data-value="print-sections">Selected Sections...</div>
               </div>
             </div>
+          </div>
+        </div>
+        <div class="ui dropdown link item is-hidden section-submenu" id="team-file-menu">
+          File
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item">
+              <i class="dropdown icon"></i>
+              <span class="text">Export PDF</span>
+              <div class="menu">
+                <div class="item" data-value="print-team">Team</div>
+                <div class="item" data-value="print-sections">Selected Sections...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ui dropdown link item is-hidden section-submenu" id="team-edit-menu">
+          Edit
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" data-value="new">New Team</div>
+            <div class="item" data-value="rename">Rename Team</div>
+            <div class="item" data-value="delete">Delete Team</div>
           </div>
         </div>
         <div class="ui dropdown link item is-hidden section-submenu" id="match-detail-collection">
