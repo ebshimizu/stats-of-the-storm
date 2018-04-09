@@ -32,7 +32,7 @@
           <a class="item" data-mode="median">Median</a>
         </div>
         <div class="ui attached inverted segment">
-          <div table-name="General" class="section">
+          <div table-name="General" class="section" table-print="general">
             <div class="table-wrapper">
               <table class="ui inverted sortable selectable table" id="team-ranking-general-table">
                 <thead>
@@ -65,7 +65,7 @@
               </table>
             </div>
           </div>
-          <div table-name="Match Stats" class="section is-hidden">
+          <div table-name="Match Stats" class="section is-hidden" table-print="match">
             <div class="table-wrapper">
               <table class="ui inverted sortable selectable table" id="team-ranking-match-table">
                 <thead>
@@ -97,7 +97,7 @@
               </table>
             </div>
           </div>
-          <div table-name="Team Fight and CC" class="section is-hidden">
+          <div table-name="Team Fight and CC" class="section is-hidden" table-print="team">
             <div class="table-wrapper">
               <table class="ui inverted sortable selectable table" id="team-ranking-cc-table">
                 <thead>
@@ -122,7 +122,7 @@
               </table>
             </div>
           </div>
-          <div table-name="Structures" class="section is-hidden">
+          <div table-name="Structures" class="section is-hidden" table-print="struct">
             <div class="table-wrapper">
               <table class="ui inverted sortable selectable table" id="team-ranking-structure-table">
                 <thead>
@@ -148,6 +148,25 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="ui modal" id="team-ranking-print-sections">
+    <div class="header">Select Sections to Print</div>
+    <div class="content">
+      <div class="ui fluid search multiple selection dropdown">
+        <i class="dropdown icon"></i>
+        <div class="default text">Select Sections</div>
+        <div class="menu">
+          <div class="item" data-value="general">General</div>
+          <div class="item" data-value="match">Match Stats</div>
+          <div class="item" data-value="team">Team Fight and CC</div>
+          <div class="item" data-value="struct">Structures</div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui green approve button">Print</div>
+      <div class="ui red deny button">Cancel</div>
     </div>
   </div>
 </template>

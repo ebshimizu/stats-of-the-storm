@@ -205,6 +205,7 @@ function loadPlayerRankings() {
 
 function layoutPlayerRankingPrint(sections) {
   let sects = sections;
+  // well i did these backwards but i'm not changing it now i guess
   if (!sects) {
     sects = ['General', 'Team Fight and CC', 'Awards and Taunts'];
   }

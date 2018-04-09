@@ -47,10 +47,20 @@ function initTeamRankingPage() {
   $('#team-ranking-body .top.attached.menu .item').click(function() {
     toggleTeamRankingMode(this);
   });
+
+  $('#team-ranking-file-menu').dropdown({
+    onChange: handleTeamRankingAction
+  });
+
+  $('#team-ranking-print-sections .ui.dropdown').dropdown();
 }
 
 function resetTeamRankingPage() {
   resetTeamRankingsFilter();
+}
+
+function showTeamRankingSection() {
+  $('#team-ranking-file-menu').removeClass('is-hidden');
 }
 
 function updateTeamRankingFilter(map, hero) {
@@ -236,4 +246,56 @@ function updateTeamRankingData(err, matches, team) {
   $('#team-ranking-cc-table tbody').append(teamRankingCCTemplate(teamStats));
   $('#team-ranking-structure-table tbody').append(teamRankingStructureTemplate(teamStats));
   $('#team-ranking-body th').removeClass('sorted ascending descending');
+}
+
+function layoutTeamRankingPrint(sections) {
+  let sects = sections;
+  if (!sects) {
+    sects = ['general', 'match', 'team', 'struct'];
+  }
+
+  clearPrintLayout();
+  addPrintHeader('Team Statistics');
+  addPrintDate();
+
+  for (let section of sects) {
+    let sectionName = $('#team-ranking-body div[table-print="' + section + '"]').attr('table-name');
+    addPrintPage(section);
+    addPrintSubHeader(sectionName, section);
+    copyFloatingTable($('#team-ranking-body div[table-print="' + section + '"] .floatThead-wrapper'), getPrintPage(section));
+  }
+}
+
+function printTeamRanking(filename, sections) {
+  layoutTeamRankingPrint(sections);
+  renderAndPrint(filename, 'Legal', true);
+}
+
+function handleTeamRankingAction(value, text, $elem) {
+  if (value === 'print') {
+    dialog.showSaveDialog({
+      title: 'Print Team Stats',
+      filters: [{name: 'pdf', extensions: ['pdf']}]
+    }, function(filename) {
+      if (filename) {
+        printTeamRanking(filename, null);
+      }
+    });
+  }
+  else if (value === 'print-sections') {
+    $('#team-ranking-print-sections').modal({
+      onApprove: function() {
+        dialog.showSaveDialog({
+          title: 'Print Player Stats',
+          filters: [{name: 'pdf', extensions: ['pdf']}]
+        }, function(filename) {
+          if (filename) {
+            let sections = $('#team-ranking-print-sections .ui.dropdown').dropdown('get value').split(',');
+            printTeamRanking(filename, sections);
+          }
+        });
+      },
+      closable: false
+    }).modal('show');
+  }
 }

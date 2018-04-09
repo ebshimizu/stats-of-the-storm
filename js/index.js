@@ -370,7 +370,7 @@ function loadSections() {
   sections['hero-collection'] = {id: '#hero-collection-page-content', title: 'Hero Statistics', showBack: false, reset: resetHeroCollection, onShow: heroCollectionShowSection };
   sections['player-ranking'] = {id: '#player-ranking-page-content', title: 'Player Statistics', showBack: false, reset: resetPlayerRankingPage, onShow: playerRankingShowSection };
   sections.teams = {id: '#teams-page-content', title: 'Teams', showBack: false, reset: resetTeamsPage, onShow: teamShowSection };
-  sections['team-ranking'] = {id: '#team-ranking-page-content', title: 'Team Statistics', reset: resetTeamRankingPage, showBack: false };
+  sections['team-ranking'] = {id: '#team-ranking-page-content', title: 'Team Statistics', reset: resetTeamRankingPage, onShow: showTeamRankingSection, showBack: false };
   sections.about = { id: '#about-page-content', title: 'About', showBack: false };
   sections.trends = { id: '#hero-trends-page-content', title: 'Hero Trends', showBack: false };
   sections.maps = { id: '#maps-page-content', title: 'Battlegrounds', showBack: false, onShow: onShowMapsPage };
