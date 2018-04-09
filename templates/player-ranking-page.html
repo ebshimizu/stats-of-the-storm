@@ -48,7 +48,7 @@
           <a class="item" data-mode="median">Median</a>
         </div>
         <div class="ui attached inverted segment">
-          <div table-name="General" class="section">
+          <div table-name="General" class="section" table-print="general">
             <div class="table-wrapper">
               <table class="ui inverted sortable selectable table" id="player-ranking-general-table">
                 <thead>
@@ -83,7 +83,7 @@
               </table>
             </div>
           </div>
-          <div class="section is-hidden" table-name="Team Fight and CC">
+          <div class="section is-hidden" table-name="Team Fight and CC" table-print="team">
             <div class="table-wrapper">
               <table class="ui inverted sortable selectable table" id="player-ranking-teamfight-table">
                 <thead>
@@ -113,7 +113,7 @@
               </table>
             </div>
           </div>
-          <div class="section is-hidden" table-name="Awards and Taunts">
+          <div class="section is-hidden" table-name="Awards and Taunts" table-print="award">
             <div class="table-wrapper">
               <table class="ui inverted sortable selectable table" id="player-ranking-misc-table">
                 <thead>
@@ -151,6 +151,24 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="ui modal" id="players-print-sections">
+    <div class="header">Select Sections to Print</div>
+    <div class="content">
+      <div class="ui fluid search multiple selection dropdown">
+        <i class="dropdown icon"></i>
+        <div class="default text">Select Sections</div>
+        <div class="menu">
+          <div class="item" data-value="General">General</div>
+          <div class="item" data-value="Team Fight and CC">Team Fight and CC</div>
+          <div class="item" data-value="Awards and Taunts">Awards and Taunts</div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui green approve button">Print</div>
+      <div class="ui red deny button">Cancel</div>
     </div>
   </div>
 </template>

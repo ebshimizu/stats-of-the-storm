@@ -77,10 +77,20 @@ function initPlayerRankingPage() {
   $('#player-ranking-body .top.attached.menu .item').click(function() {
     togglePlayerRankingMode(this);
   });
+
+  $('#players-file-menu').dropdown({
+    onChange: handlePlayerRankingAction
+  });
+
+  $('#players-print-sections .ui.dropdown').dropdown();
 }
 
 function resetPlayerRankingPage() {
   resetPlayerRankingsFilter();
+}
+
+function playerRankingShowSection() {
+  $('#players-file-menu').removeClass('is-hidden');
 }
 
 function updatePlayerRankingsFilter(map, hero) {
@@ -191,4 +201,56 @@ function loadPlayerRankings() {
 
     $('#player-ranking-body th').removeClass('sorted ascending descending');
   });
+}
+
+function layoutPlayerRankingPrint(sections) {
+  let sects = sections;
+  if (!sects) {
+    sects = ['General', 'Team Fight and CC', 'Awards and Taunts'];
+  }
+
+  clearPrintLayout();
+  addPrintHeader('Player Statistics');
+  addPrintDate();
+
+  for (section of sects) {
+    let sectionID = $('#player-ranking-body div[table-name="' + section + '"]').attr('table-print');
+    addPrintPage(sectionID);
+    addPrintSubHeader(section, sectionID);
+    copyFloatingTable($('#player-ranking-body div[table-name="' + section + '"] .floatThead-wrapper'), getPrintPage(sectionID));
+  }
+}
+
+function printPlayerRanking(filename, sections) {
+  layoutPlayerRankingPrint(sections);
+  renderAndPrint(filename, 'Legal', true);
+}
+
+function handlePlayerRankingAction(value, text, $elem) {
+  if (value === 'print') {
+    dialog.showSaveDialog({
+      title: 'Print Player Stats',
+      filters: [{name: 'pdf', extensions: ['pdf']}]
+    }, function(filename) {
+      if (filename) {
+        printPlayerRanking(filename, null);
+      }
+    });
+  }
+  else if (value === 'print-sections') {
+    $('#players-print-sections').modal({
+      onApprove: function() {
+        dialog.showSaveDialog({
+          title: 'Print Player Stats',
+          filters: [{name: 'pdf', extensions: ['pdf']}]
+        }, function(filename) {
+          if (filename) {
+            let sections = $('#players-print-sections .ui.dropdown').dropdown('get value').split(',');
+            printPlayerRanking(filename, sections);
+          }
+        });
+      },
+      closable: false
+    }).modal('show');
+  }
 }
