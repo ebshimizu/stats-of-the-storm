@@ -16,7 +16,7 @@ It also comes with a [HotsAPI](http://hotsapi.net/)/[HotsLogs](https://www.hotsl
 * [Team Details](#teamDetails)
 * [Collection Stats](#collection)
 * [Uploader](#uploader)
-* [Export Data](#exporter)
+* [Export JSON and PDF Data](#exporter)
 
 ## How To
 * [Parse Replays](parser.md)
@@ -221,8 +221,15 @@ Upload your matches to HotsAPI (and HotsLogs if you like) automatically
 when you import a match. Stats of the Storm does not actively monitor your replay
 folder at the moment, so you'll have to remember to upload them manually for now.
 
-## <a name="exporter"></a>Exporter
+## <a name="exporter"></a>Exporting Data
 
-Export data from the app in JSON format. You can export match data, and
-player data right now, with team data to come in a future update. Have data you
-want exported that's not in one of these categories? Let me know!
+The app allows data to be exported in JSON and PDF formats.
+
+With JSON data, you can export match data, and
+player data.
+
+With PDFs, you can create printable reports for most parts of the application.
+Note that PDF printing takes a snapshot of the current section, which means that you'll
+have to make sure your tables are sorted in your desired order before using
+the print function. The application will briefly change layout and color while printing,
+and will return to normal when complete. If it does not return to normal, let me know.
