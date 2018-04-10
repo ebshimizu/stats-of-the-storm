@@ -30,6 +30,10 @@ function initMapsPage() {
     closable: false
   });
 
+  $('#maps-file-menu').dropdown({
+    onChange: handleMapsAction
+  });
+
   bindFilterButton(filterWidget, updateMapsFilter);
   bindFilterResetButton(filterWidget, resetMapsFilter);
 
@@ -38,6 +42,7 @@ function initMapsPage() {
 
 function onShowMapsPage() {
   $('#maps-page-content table').floatThead('reflow');
+  $('#maps-file-menu').removeClass('is-hidden');
 }
 
 function updateMapsFilter(map, hero) {
@@ -113,4 +118,33 @@ function loadMapStats() {
     $('#maps-page-content table').floatThead('reflow');
     $('#maps-page-content th').removeClass('sorted ascending descending');
   });
+}
+
+// no sections it's like 1 page
+function printMaps(filename) {
+  clearPrintLayout();
+  addPrintHeader('Battleground Statistics');
+  addPrintDate();
+
+  $('#print-window .contents').append($('#map-overall-stats').clone());
+  $('#print-window').find('.statistics').removeClass('eight').addClass('tiny');
+  $('#print-window').find('.top.attached.label').remove();
+
+  addPrintSubHeader('Stats Per Map');
+  copyFloatingTable($('#map-individual-stats .floatThead-wrapper'));
+
+  renderAndPrint(filename, 'Letter', true);
+}
+
+function handleMapsAction(value, text, $elem) {
+  if (value === 'print') {
+    dialog.showSaveDialog({
+      title: 'Print Battleground Report',
+      filters: [{name: 'pdf', extensions: ['pdf']}]
+    }, function(filename) {
+      if (filename) {
+        printMaps(filename);
+      }
+    });
+  }
 }
