@@ -63,7 +63,7 @@
         <a class="item" data-tab="hero-trends-bans">Bans</a>
         <a class="item" data-tab="hero-trends-comps">Compositions</a>
       </div>
-      <div class="ui active tab" data-tab="hero-trends-overall" id="hero-trends-summary">
+      <div class="ui active tab" data-tab="hero-trends-overall" id="hero-trends-summary" title="Overall">
         <div class="five ui buttons">
           <div class="ui Assassin red button">Assassin</div>
           <div class="ui Warrior blue button">Warrior</div>
@@ -98,7 +98,7 @@
           </div>
         </div>
       </div>
-      <div class="ui tab" data-tab="hero-trends-picks" id="hero-trends-picks">
+      <div class="ui tab" data-tab="hero-trends-picks" id="hero-trends-picks" title="Picks">
         <div class="five ui buttons">
           <div class="ui Assassin red button">Assassin</div>
           <div class="ui Warrior blue button">Warrior</div>
@@ -133,7 +133,7 @@
           </div>
         </div>
       </div>
-      <div class="ui tab" data-tab="hero-trends-bans" id="hero-trends-bans">
+      <div class="ui tab" data-tab="hero-trends-bans" id="hero-trends-bans" title="Bans">
         <div class="five ui buttons">
           <div class="ui Assassin red button">Assassin</div>
           <div class="ui Warrior blue button">Warrior</div>
@@ -165,7 +165,7 @@
           </div>
         </div>
       </div>
-      <div class="ui tab" data-tab="hero-trends-comps" id="hero-trends-comps">
+      <div class="ui tab" data-tab="hero-trends-comps" id="hero-trends-comps" title="Compositions">
         <div class="hero-trends-wrapper">
           <div class="table-wrapper">
             <table class="ui sortable compact selectable inverted table">
@@ -187,6 +187,25 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="ui modal" id="trends-print-sections">
+    <div class="header">Select Sections to Print</div>
+    <div class="content">
+      <div class="ui fluid search multiple selection dropdown">
+        <i class="dropdown icon"></i>
+        <div class="default text">Select Sections</div>
+        <div class="menu">
+          <div class="item" data-value="hero-trends-summary">Overall</div>
+          <div class="item" data-value="hero-trends-picks">Picks</div>
+          <div class="item" data-value="hero-trends-bans">Bans</div>
+          <div class="item" data-value="hero-trends-comps">Compositions</div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui green approve button">Print</div>
+      <div class="ui red deny button">Cancel</div>
     </div>
   </div>
 </template>

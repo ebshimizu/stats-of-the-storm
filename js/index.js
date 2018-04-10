@@ -372,7 +372,7 @@ function loadSections() {
   sections.teams = {id: '#teams-page-content', title: 'Teams', showBack: false, reset: resetTeamsPage, onShow: teamShowSection };
   sections['team-ranking'] = {id: '#team-ranking-page-content', title: 'Team Statistics', reset: resetTeamRankingPage, onShow: showTeamRankingSection, showBack: false };
   sections.about = { id: '#about-page-content', title: 'About', showBack: false };
-  sections.trends = { id: '#hero-trends-page-content', title: 'Hero Trends', showBack: false };
+  sections.trends = { id: '#hero-trends-page-content', title: 'Hero Trends', showBack: false, onShow: showTrendsSection };
   sections.maps = { id: '#maps-page-content', title: 'Battlegrounds', showBack: false, onShow: onShowMapsPage };
 
   // Matches should be the default view of the app.

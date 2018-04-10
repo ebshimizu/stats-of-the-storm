@@ -72,7 +72,7 @@ days for the heroprotocol repository to update.
 
 **Why don't I see all the players in the Player Details page?**
 Personal databases have a lot of players that only show up once or twice. In order to keep the
-app responsive, players with fewer than 5 matches in the database are automatically  excluded from the Player
+app responsive, players with fewer than 5 matches in the database are automatically excluded from the Player
 Details page. You can change this threshold in the Settings page with the Player Menu Threshold
 option.
 

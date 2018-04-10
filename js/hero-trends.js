@@ -84,6 +84,11 @@ function initTrendsPage() {
   $('#hero-trends-body .five.ui.buttons .button').click(function() {
     toggleHeroCollectionType('#hero-trends-body', $(this), '#hero-trends-body');
   });
+
+  $('#trends-print-sections .ui.dropdown').dropdown('get value').split(',');
+  $('#trends-file-menu').dropdown({
+    onChange: handleTrendsAction
+  });
 }
 
 function updateTrendsFilter(map, hero) {
@@ -91,6 +96,10 @@ function updateTrendsFilter(map, hero) {
   trendsMapDataFilter = map;
 
   loadTrends();
+}
+
+function showTrendsSection() {
+  $('#trends-file-menu').removeClass('is-hidden');
 }
 
 function resetTrendsFilter() {
@@ -360,5 +369,61 @@ function loadTrends() {
       $('#hero-trends-body th').removeClass('sorted ascending descending');
     });
   });
-  
+}
+
+function layoutTrendsPrint(sections) {
+  let sects = sections;
+  if (!sects) {
+    sects = ['hero-trends-summary', 'hero-trends-picks', 'hero-trends-bans', 'hero-trends-comps'];
+  }
+
+  clearPrintLayout();
+  addPrintHeader('Hero Trends');
+  addPrintDate();
+  $('#print-window .contents').append('<p>[1] From: ' + trendsDateLimits['1-start'] + ' To: ' + trendsDateLimits['1-end']);
+  $('#print-window .contents').append('<p>[2] From: ' + trendsDateLimits['2-start'] + ' To: ' + trendsDateLimits['2-end']);
+
+  for (let section of sects) {
+    let sectionName = $('#' + section).attr('title');
+    addPrintPage(section);
+    addPrintSubHeader(sectionName, section);
+    copyFloatingTable($('#' + section), getPrintPage(section));
+  }
+
+  $('#print-window').find('.plus').removeClass('plus').addClass('positive');
+  $('#print-window').find('.minus').removeClass('minus').addClass('negative');
+}
+
+function printTrends(filename, section) {
+  layoutTrendsPrint(section);
+  renderAndPrint(filename, 'Letter', true);
+}
+
+function handleTrendsAction(value, text, $elem) {
+  if (value === 'print') {
+    dialog.showSaveDialog({
+      title: 'Print Trends Report',
+      filters: [{name: 'pdf', extensions: ['pdf']}]
+    }, function(filename) {
+      if (filename) {
+        printTrends(filename, null);
+      }
+    });
+  }
+  else if (value === 'print-sections') {
+    $('#trends-print-sections').modal({
+      onApprove: function() {
+        dialog.showSaveDialog({
+          title: 'Print Trends Report',
+          filters: [{name: 'pdf', extensions: ['pdf']}]
+        }, function(filename) {
+          if (filename) {
+            let sections = $('#trends-print-sections .ui.dropdown').dropdown('get value').split(',');
+            printTrends(filename, sections);
+          }
+        });
+      },
+      closable: false
+    }).modal('show');
+  }
 }
