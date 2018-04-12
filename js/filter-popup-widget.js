@@ -68,6 +68,9 @@ function initPopup(elem) {
     fullTextSearch: true
   });
 
+  //toggles
+  // elem.find('.filter-widget-hero-team').checkbox();
+
   populateTagMenu(elem.find('.filter-widget-tags'));
 
   // the buttons get rebound depending on the page
@@ -148,6 +151,10 @@ function getPopupQuery(elem, callback) {
   // tags
   let tags = elem.find('.filter-widget-tags').dropdown('get value').split(',');
 
+  // toggles;
+  let widgetHeroOnTeam = false;
+  //let widgetHeroOnTeam = elem.find('.filter-widget-hero-team').checkbox('is checked');
+
   for (let p in patches) {
     if (patches[p] !== "")
       patches[p] = parseInt(patches[p]);
@@ -224,6 +231,15 @@ function getPopupQuery(elem, callback) {
         }
 
         if (count === player.length) {
+          if (widgetHeroOnTeam === true) {
+            // basically here if we don't find the selected heroes on the team we should reject it
+            for (let hero of heroArr) {
+              if (this.teams[0].heroes.indexOf(hero) === -1) {
+                return false;
+              }
+            }
+          }
+
           if (teamWin === 'win') {
             return this.winner === 0 && boundWhere();
           }
@@ -242,6 +258,15 @@ function getPopupQuery(elem, callback) {
         }
 
         if (count === player.length) {
+          if (widgetHeroOnTeam === true) {
+            // basically here if we don't find the selected heroes on the team we should reject it
+            for (let hero of heroArr) {
+              if (this.teams[1].heroes.indexOf(hero) === -1) {
+                return false;
+              }
+            }
+          }
+
           if (teamWin === 'win') {
             return this.winner === 1 && boundWhere();
           }
@@ -270,6 +295,15 @@ function getPopupQuery(elem, callback) {
         }
 
         if (count === 5) {
+          if (widgetHeroOnTeam === true) {
+            // basically here if we don't find the selected heroes on the team we should reject it
+            for (let hero of heroArr) {
+              if (this.teams[0].heroes.indexOf(hero) === -1) {
+                return false;
+              }
+            }
+          }
+
           if (teamWin === 'win') {
             return this.winner === 0 && boundWhere();
           }
@@ -288,6 +322,15 @@ function getPopupQuery(elem, callback) {
         }
 
         if (count === 5) {
+          if (widgetHeroOnTeam === true) {
+            // basically here if we don't find the selected heroes on the team we should reject it
+            for (let hero of heroArr) {
+              if (this.teams[1].heroes.indexOf(hero) === -1) {
+                return false;
+              }
+            }
+          }
+
           if (teamWin === 'win') {
             return this.winner === 1 && boundWhere();
           }
