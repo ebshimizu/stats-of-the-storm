@@ -44,3 +44,12 @@
 #settings-app-settings {
     height: 40%;
 }
+
+#settings-set-replay-folder-button,
+#settings-set-db-folder-button {
+    border-radius: 0;
+}
+
+#settings-replay-folder-settings-popup #settings-recursive-replay label {
+    color: #000!important;
+}

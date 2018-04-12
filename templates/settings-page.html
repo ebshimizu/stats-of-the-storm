@@ -16,7 +16,8 @@
                         <table class="ui single line compact table" id="replay-file-list">
                             <thead><tr>
                                 <th>Filename</th>
-                                <th>Date</th>
+                                <th>Folder</th>
+                                <th>File Creation Date</th>
                                 <th>Status</th>
                                 <th>Upload Status</th>
                             </tr></thead> 
@@ -65,10 +66,15 @@
                             <div class="twelve wide column">
                                 <div class="ui inverted fluid action input" id="settings-set-replay-folder">
                                     <input type="text" value="" disabled>
-                                    <button class="ui blue right labeled icon button">
-                                        <i class="folder icon"></i>
-                                        Set
-                                    </button>
+                                    <div class="ui icon buttons">
+                                        <button class="ui blue left labeled icon button" id="settings-set-replay-folder-button">
+                                            <i class="folder icon"></i>
+                                            Set
+                                        </button>
+                                        <button class="ui right icon button" id="settings-set-folder-options-button">
+                                            <i class="settings icon"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="four wide column">Database Folder</div>
@@ -76,11 +82,11 @@
                                 <div class="ui inverted fluid action input" id="settings-set-db-folder">
                                     <input type="text" value="" disabled>
                                     <div class="ui icon buttons">
-                                        <button class="ui blue right labeled icon button" id="settings-set-db-folder-button">
+                                        <button class="ui blue left labeled icon button" id="settings-set-db-folder-button">
                                             <i class="folder icon"></i>
                                             Set
                                         </button>
-                                        <button class="ui icon button" id="settings-reset-db-folder-button">
+                                        <button class="ui right icon button" id="settings-reset-db-folder-button">
                                             <i class="undo icon"></i>
                                         </button>
                                     </div>
@@ -255,12 +261,25 @@
             </div>
         </div>
     </div>
+    <div class="ui popup" id="settings-replay-folder-settings-popup">
+        <div class="header">Replay Folder Options</div>
+        <div class="ui horizontal divider"></div>
+        <div class="ui grid">
+            <div class="sixteen wide column">
+                <div class="ui toggle checkbox" id="settings-recursive-replay">
+                    <input type="checkbox">
+                    <label>Search Subdirectories</label>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <template id="replay-row-template">
     <tr replay-id="{{id}}">
         <td class="replay-filename">{{filename}}</td>
-        <td class="replay-date">{{date}}</td>
+        <td class="replay-folder">{{folder}}</td>
+        <td class="replay-date">{{fdate}}</td>
         <td class="replay-status">{{status}}</td>
         <td class="upload-status">{{upload}}</td>
     </tr>

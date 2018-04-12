@@ -75,7 +75,7 @@ function initSettingsPage() {
   });
 
   // handlers
-  $('#settings-set-replay-folder button').click(setReplayFolder);
+  $('#settings-set-replay-folder-button').click(setReplayFolder);
   ipcRenderer.on('replayParsed', function(event, data) {
     loadReplay(data);
   });
@@ -187,6 +187,26 @@ function initSettingsPage() {
     }).modal('show');
   });
 
+  // setting popup
+  $('#settings-set-folder-options-button').popup({
+    on: 'click',
+    position: 'bottom right',
+    popup: $('#settings-replay-folder-settings-popup')
+  });
+
+  $('#settings-recursive-replay').checkbox({
+    onChecked: function() {
+      settings.set('recursiveReplaySearch', true);
+    },
+    onUnchecked: function() {
+      settings.set('recursiveReplaySearch', false);
+    }
+  });
+
+  if (settings.get('recursiveReplaySearch') === true) {
+    $('#settings-recursive-replay').checkbox('set checked');
+  }
+
   if (replayPath) {
     // load the directory
     startReplayScan();
@@ -263,53 +283,61 @@ function startReplayScan() {
 
   $('#replay-file-list tbody').html('');
   let path = settings.get('replayPath');
-  fs.readdir(path, function(err, files) {
-    if (err) {
-      console.log(err);
-      return;
-    }
+  let replays = addReplaysToList(path);
 
-    // replays are expected to end in .StormReplay, if not
-    // the person running this should stop doing that???
-    let count = 0;
+  // sort by date
+  replays.sort(function(a, b) {
+    if (a.date === b.date)
+      return 0;
+    
+    if (a.date < b.date)
+      return -1;
+    
+    return 1;
+  });
+
+  let count = 0;
+  for (let r in replays) {
+    replays[r].id = count;
+    $('#replay-file-list').append(settingsRowTemplate(replays[r]));
+    replays[r].processed = false;
+    count += 1;
+  }
+  listedReplays = replays;
+
+  console.log('Found ' + count + ' replays ')
+}
+
+function addReplaysToList(path) {
+  try {
+    let currentDate = $('#replay-file-start').datepicker('getDate');
+    let files = fs.readdirSync(path);
     let replays = [];
-    for (let i = 0; i < files.length; i++) {
-      // check if replay
-      if (files[i].endsWith('.StormReplay')) {
-        // add a thing
-        let context = { filename: files[i] };
+    for (let file of files) {
+      let stats = fs.statSync(path + '/' + file);
+      if (file.endsWith('.StormReplay')) {
+        let context = { filename: file };
         context.status = "";
-        let stats = fs.statSync(path + '/' + files[i]);
-        context.date = new Date(stats.ctime);
+        context.date = new Date(stats.birthtime);
+        context.fdate = context.date.toLocaleString('en-us');
+        context.folder = path.match(/([^\/\\]*)\/*$/)[1];
 
         if (context.date >= currentDate) {
-          context.id = i;
-          context.path = path + '/' + files[i];
+          context.path = path + '/' + file;
           replays.push(context);
-          count += 1;
         }
+      }
+      else if (stats.isDirectory()) {
+        replays = replays.concat(addReplaysToList(path + '/' + file));
       }
     }
 
-    // sort by date
-    replays.sort(function(a, b) {
-      if (a.date === b.date)
-        return 0;
-      
-      if (a.date < b.date)
-        return -1;
-      
-      return 1;
-    });
-
-    for (let r in replays) {
-      $('#replay-file-list').append(settingsRowTemplate(replays[r]));
-      replays[r].processed = false;
-    }
-    listedReplays = replays;
-
-    console.log('Found ' + count + ' replays ')
-  });
+    return replays;
+  }
+  catch (err) {
+    console.log(err);
+    return [];
+  }
 }
 
 function parseReplays() {
