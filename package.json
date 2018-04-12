@@ -51,7 +51,8 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "app": "electron ./",
-    "publish": "electron-builder --publish always"
+    "publish": "electron-builder --publish always",
+    "update-protocol": "node ./node_modules/heroprotocol/postinstall.js"
   },
   "build": {
     "appId": "com.stats-of-the-storm.app",

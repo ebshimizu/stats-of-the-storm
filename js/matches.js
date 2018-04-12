@@ -20,6 +20,7 @@ var displayedMatchIDs;
 var currentPage;
 var matchRowTemplate;
 var enableTagEdit = true;
+var requireHeroOnTeam = false;
 
 function initMatchesPage() {
   // player menu init
@@ -117,6 +118,15 @@ function initMatchesPage() {
   populateTagMenu($('#match-search-tags'));
 
   $('#matches-collection-select').modal();
+
+  $('#search-hero-on-team').checkbox({
+    onChecked: function() {
+      requireHeroOnTeam = true;
+    },
+    onUnchecked: function() {
+      requireHeroOnTeam = false;
+    }
+  });
 
   // initial settings
   getMatchCount();
@@ -314,6 +324,15 @@ function selectMatches() {
           }
   
           if (count === player.length) {
+            if (requireHeroOnTeam === true) {
+              // basically here if we don't find the selected heroes on the team we should reject it
+              for (let hero of heroes) {
+                if (this.teams[0].heroes.indexOf(hero) === -1) {
+                  return false;
+                }
+              }
+            }
+
             if (teamWin === 'win') {
               return this.winner === 0 && boundWhere();
             }
@@ -332,6 +351,15 @@ function selectMatches() {
           }
   
           if (count === player.length) {
+            if (requireHeroOnTeam === true) {
+              // basically here if we don't find the selected heroes on the team we should reject it
+              for (let hero of heroes) {
+                if (this.teams[1].heroes.indexOf(hero) === -1) {
+                  return false;
+                }
+              }
+            }
+
             if (teamWin === 'win') {
               return this.winner === 1 && boundWhere();
             }
@@ -360,6 +388,15 @@ function selectMatches() {
           }
   
           if (count === 5) {
+            if (requireHeroOnTeam === true) {
+              // basically here if we don't find the selected heroes on the team we should reject it
+              for (let hero of heroes) {
+                if (this.teams[0].heroes.indexOf(hero) === -1) {
+                  return false;
+                }
+              }
+            }
+
             if (teamWin === 'win') {
               return this.winner === 0 && boundWhere();
             }
@@ -378,6 +415,15 @@ function selectMatches() {
           }
   
           if (count === 5) {
+            if (requireHeroOnTeam === true) {
+              // basically here if we don't find the selected heroes on the team we should reject it
+              for (let hero of heroes) {
+                if (this.teams[1].heroes.indexOf(hero) === -1) {
+                  return false;
+                }
+              }
+            }
+
             if (teamWin === 'win') {
               return this.winner === 1 && boundWhere();
             }
@@ -404,6 +450,8 @@ function selectMatches() {
 
 function updateSelectedMatches(err, docs) {
   selectedMatches = docs;
+  let heroes = $('#match-search-heroes').dropdown('get value').split(',');
+
   $('#matches-selected').text(selectedMatches.length);
 
   enableTagEdit = false;

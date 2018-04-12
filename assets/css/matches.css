@@ -264,3 +264,14 @@
   display: inline-block;
   margin-right: 0;
 }
+
+#search-hero-on-team {
+  float: right;
+}
+
+.ui.toggle.checkbox.inverted input:focus:checked~label,
+.ui.toggle.checkbox.inverted input:checked~label,
+.inverted label,
+.inverted.checked label {
+  color: #FFF!important;
+}

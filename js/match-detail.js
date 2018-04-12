@@ -2042,7 +2042,6 @@ function matchDetailFileAction(value, text, $elem) {
       closable: false
     }).modal('show');
   }
-
 }
 
 function matchDetailAddTag(tagValue, tagText, $added) {
