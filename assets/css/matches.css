@@ -271,7 +271,7 @@
 
 .ui.toggle.checkbox.inverted input:focus:checked~label,
 .ui.toggle.checkbox.inverted input:checked~label,
-.inverted label,
-.inverted.checked label {
+.ui.toggle.checkbox.inverted label,
+.ui.toggle.checkbox.inverted.checked label {
   color: #FFF!important;
 }

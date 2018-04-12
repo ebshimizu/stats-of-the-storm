@@ -60,6 +60,10 @@ body {
     display: inline-block;
 }
 
+.filter-popup-widget .filter-widget-hero-team {
+    float: right;
+}
+
 .secondary.pointing.menu {
     border-top: 0;
     border-right: 0;
