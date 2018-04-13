@@ -285,48 +285,43 @@ class Database {
   }
 
   checkDuplicate(file, callback) {
-    try {
-      let header = Parser.getHeader(file);
+    let header = Parser.getHeader(file);
 
-      if (header.err) {
-        callback(header.err);
-        return;
-      }
-
-      let search = {};
-
-      // duplicate criteria:
-      // same type
-      search.type = header.type;
-
-      //search.loopLength = data.header.m_elapsedGameLoops;
-      
-      // same map
-      search.map = header.map;
-
-      // same players
-      // they should be in identical order but just in case
-      search.$and = [];
-      for (let p of header.playerIDs) {
-        search.$and.push({ playerIDs: p });
-      }
-
-      // date within 1 minute
-      let dateMin = new Date(header.date.getTime() - 60000);
-      let dateMax = new Date(header.date.getTime() + 60000);
-      search.$where = function() {
-        let d = new Date(this.date);
-        return dateMin <= d && d <= dateMax;
-      }
-
-      // this is the one raw call that is not preprocessed by collections for what should be somewhat obvious reasons
-      this._db.matches.find(search, function(err, docs) {
-        callback(docs.length > 0);
-      });
+    if (header.err) {
+      callback(header.err);
+      return;
     }
-    catch (err) {
-      callback('Internal Exception');
+
+    let search = {};
+
+    // duplicate criteria:
+    // same type
+    search.type = header.type;
+
+    //search.loopLength = data.header.m_elapsedGameLoops;
+    
+    // same map
+    search.map = header.map;
+
+    // same players
+    // they should be in identical order but just in case
+    search.$and = [];
+    for (let p of header.playerIDs) {
+      search.$and.push({ playerIDs: p });
     }
+
+    // date within 1 minute
+    let dateMin = new Date(header.date.getTime() - 60000);
+    let dateMax = new Date(header.date.getTime() + 60000);
+    search.$where = function() {
+      let d = new Date(this.date);
+      return dateMin <= d && d <= dateMax;
+    }
+
+    // this is the one raw call that is not preprocessed by collections for what should be somewhat obvious reasons
+    this._db.matches.find(search, function(err, docs) {
+      callback(docs.length > 0);
+    });
   }
 
   // counts the given matches

@@ -419,7 +419,13 @@ function parseReplaysAsync(replay) {
     else {
       console.log(replay.id + ' Parser error');
 
-      $('tr[replay-id="' + replay.id + '"] .replay-status').text('Error: Internal Exception').addClass('negative');
+      // this message is specifically for when a protocol doesn't exist
+      if (result.message === "Cannot read property 'decodeReplayHeader' of undefined") {
+        $('tr[replay-id="' + replay.id + '"] .replay-status').text('Error: Missing Replay Protocol').addClass('negative');
+      }
+      else {
+        $('tr[replay-id="' + replay.id + '"] .replay-status').text('Error: Internal Exception').addClass('negative');
+      }
     }
 
     listedReplays[replay.idx].processed = true;
