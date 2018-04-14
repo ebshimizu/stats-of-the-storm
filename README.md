@@ -20,6 +20,10 @@ Here's what you'll need to develop the app.
 * Run `npm install` inthe repository root (the one with `package.json` in it)
 * From the root directory, run `npm run app`
 
+## Feedback
+
+Bugs? Feature Requests? File an issue on GitHub or send an email to falindrith@gmail.com.
+
 ## Third-Party Libraries
 * [heroprotocol.js](https://github.com/nydus/heroprotocol)
 * [heroes-talents](https://github.com/heroespatchnotes/heroes-talents)
