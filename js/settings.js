@@ -3,6 +3,8 @@ var replayQueue;
 var collectionRowTemplate;
 var collectionCacheRowTemplate;
 var importDuplicates = false;
+var localImportSet = {};
+var usingImportSet = false;
 
 // used by the parser
 var listedReplays;
@@ -203,6 +205,29 @@ function initSettingsPage() {
     }
   });
 
+  // import sets
+  $('#settings-use-import-set').checkbox({
+    onChecked: () => setImportSetUse(true),
+    onUnchecked: () => setImportSetUse(false)
+  });
+
+  if (settings.get('usingImportSet') === true) {
+    $('#settings-use-import-set').checkbox('check');
+  }
+
+  $('#settings-add-import-set').click(addImportSetFolder);
+
+  // load existing import set (if any)
+  let importSet = settings.get('importSets');
+  if (importSet) {
+    if (path in importSet) {
+      localImportSet = importSet[path];
+      for (let dir in localImportSet) {
+        insertImportSetRow(importSet[path][dir]);
+      }
+    }
+  }
+
   if (settings.get('recursiveReplaySearch') === true) {
     $('#settings-recursive-replay').checkbox('set checked');
   }
@@ -282,8 +307,18 @@ function startReplayScan() {
   settings.set('lastReplayDate', currentDate);
 
   $('#replay-file-list tbody').html('');
-  let path = settings.get('replayPath');
-  let replays = addReplaysToList(path);
+
+  let replays = [];
+  if (usingImportSet) {
+    // import from each path, assign collections to each thing
+    for (let dir in localImportSet) {
+      replays = replays.concat(addReplaysToList(localImportSet[dir].path, localImportSet[dir].collections));
+    }
+  }
+  else {
+    let path = settings.get('replayPath');
+    replays = addReplaysToList(path);
+  }
 
   // sort by date
   replays.sort(function(a, b) {
@@ -308,7 +343,7 @@ function startReplayScan() {
   console.log('Found ' + count + ' replays ')
 }
 
-function addReplaysToList(path) {
+function addReplaysToList(path, collections) {
   try {
     let currentDate = $('#replay-file-start').datepicker('getDate');
     let files = fs.readdirSync(path);
@@ -321,6 +356,9 @@ function addReplaysToList(path) {
         context.date = new Date(stats.birthtime);
         context.fdate = context.date.toLocaleString('en-us');
         context.folder = path.match(/([^\/\\]*)\/*$/)[1];
+
+        // only used for import sets, safe to leave undefined otherwise
+        context.collections = collections;
 
         if (context.date >= currentDate) {
           context.path = path + '/' + file;
@@ -377,6 +415,8 @@ function disableParsingUI() {
   $('#settings-set-db-folder .button').addClass('disabled');
   $('#settings-set-replay-folder .button').addClass('disabled');
   $('#delete-db-button').addClass('disabled');
+  $('#settings-import-set .ui.dropdown').addClass('disabled');
+  $('#settings-import-set .button').addClass('disabled');
 }
 
 function enableParsingUI() {
@@ -385,10 +425,16 @@ function enableParsingUI() {
   $('#settings-hots-api-button').checkbox('enable');
   $('#settings-hots-logs-button').checkbox('enable');
   $('#settings-replay-file-start').removeClass('disabled');
-  $('#settings-collection-import').removeClass('disabled');
+  
+  if (!usingImportSet) {
+    $('#settings-collection-import').removeClass('disabled');
+  }
+
   $('#settings-set-db-folder .button').removeClass('disabled');
   $('#settings-set-replay-folder .button').removeClass('disabled');
   $('#delete-db-button').removeClass('disabled');
+  $('#settings-import-set .ui.dropdown').removeClass('disabled');
+  $('#settings-import-set .button').removeClass('disabled');
 }
 
 function parseReplaysAsync(replay) {
@@ -445,8 +491,11 @@ function loadReplay(data) {
   if (data.status === Parser.ReplayStatus.OK) {
     let collection = null;
 
-    if ($('#settings-collection-import').dropdown('get value') !== '') {
-      collection = $('#settings-collection-import').dropdown('get value');
+    if (!usingImportSet && $('#settings-collection-import').dropdown('get value') !== '') {
+      collection = [$('#settings-collection-import').dropdown('get value')];
+    }
+    else if (usingImportSet) {
+      collection = listedReplays[data.idx].collections;
     }
 
     DB.insertReplay(data.match, data.players, collection);
@@ -683,4 +732,100 @@ function handleCacheAction(dbName, action) {
       }
     });
   }
+}
+
+function setImportSetUse(state) {
+  usingImportSet = state;
+
+  if (usingImportSet) {
+    $('#settings-set-replay-folder input').val('[Using Import Set]');
+    $('#settings-collection-import').addClass('disabled');
+  }
+  else {
+    $('#settings-set-replay-folder input').val(settings.get('replayPath'));
+    $('#settings-collection-import').removeClass('disabled');
+  }
+
+  settings.set('usingImportSet', state);
+  startReplayScan();
+}
+
+function addImportSetFolder() {
+  dialog.showOpenDialog({
+    defaultPath: settings.get('replayPath'),
+    title: 'Select Replay Folder',
+    properties: ["openDirectory", "createDirectory"]
+  }, function(files) {
+    if (files) {
+      // pick the first, should only be 1 dir
+      let path = files[0];
+      if (path in localImportSet) {
+        showMessage('Failed to Add Folder to Import Set', 'Folder is already in the import set', { class: 'negative' })
+      }
+      else {
+        localImportSet[path] = {
+          path: path,
+          collections: []
+        }
+
+        insertImportSetRow(localImportSet[path]);
+      }
+    }
+  });
+}
+
+function insertImportSetRow(data) {
+  let elem = '<tr path="' + data.path + '">'
+  elem += '<td>' + data.path + '</td>';
+
+  // collection menu
+  elem += '<td><div path="' + data.path + '" class="ui fluid search multiple selection dropdown collection-menu">';
+  elem += '<i class="dropdown icon"></i><span class="text">[No Collection]</span><div class="menu"></div></div></td>';
+
+  // actions
+  elem += '<td><div path="' + data.path + '" class="ui red button">Delete</div></td>';
+  elem += '</tr>';
+
+  elem = $(elem);
+  $('#settings-import-set tbody').append(elem);
+
+  // bindings
+  let path = data.path;
+  elem.find('.collection-menu.dropdown').dropdown({
+    onChange: function(value, text, $elem) {
+      localImportSet[path].collections = value.split(',');
+      saveLocalImportSet();
+    }
+  });
+
+  elem.find('.red.button').click(function() {
+    deleteImportSetFolder(elem);
+  });
+
+  updateCollectionMenu(function() {
+    elem.find('.dropdown').dropdown('set exactly', data.collections);
+  });
+
+  saveLocalImportSet();
+}
+
+function deleteImportSetFolder(elem) {
+  let path = $(elem).attr('path');
+  delete localImportSet[path];
+  elem.remove();
+  saveLocalImportSet();
+}
+
+function saveLocalImportSet() {
+  let globalSet = settings.get('importSets');
+  let dbPath = settings.get('dbPath');
+
+  if (!globalSet) {
+    globalSet = { dbPath: localImportSet };
+  }
+  else {
+    globalSet[dbPath] = localImportSet;
+  }
+
+  settings.set('importSets', globalSet);
 }

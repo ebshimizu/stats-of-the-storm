@@ -604,9 +604,21 @@ function populateTeamMenu(elem) {
   });
 }
 
-function updateCollectionMenu() {
+function updateCollectionMenu(callback) {
   // add the proper options n stuff
   DB.getCollections(function(err, collections) {
+    // alpha sort
+    collections.sort(function(a, b) {
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+
+      return 0;
+    });
+
     $('#collection-switch-menu .menu').html('');
 
     // generic collection menus do not get the clear option
@@ -629,6 +641,10 @@ function updateCollectionMenu() {
 
     $('#collection-switch-menu').dropdown('refresh');
     $('.collection-menu').dropdown('refresh');
+
+    if (callback) {
+      callback();
+    }
   });
 }
 

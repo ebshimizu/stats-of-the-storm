@@ -127,8 +127,11 @@ class Database {
   insertReplay(match, players, collection) {
     var self = this;
 
-    if (collection) {
-      match.collection = [collection];
+    if (!collection) {
+      match.collection = [];
+    }
+    else {
+      match.collection = collection;
     }
 
     // temporary relaxation of match length param for duplicate detection

@@ -9,6 +9,7 @@
                     <a class="active item" data-tab="replay-status">Replay List</a>
                     <a class="item" data-tab="settings-collections">Collections</a>
                     <a class="item" data-tab="settings-caches">Cached Collections</a>
+                    <a class="item" data-tab="settings-import-set">Import Set</a>
                 </div>
                 <div class="ui active tab" data-tab="replay-status">
                     <!-- replay file import status -->
@@ -52,6 +53,31 @@
                             </thead>
                             <tbody>
 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="ui tab" data-tab="settings-import-set">
+                    <div class="table-wrapper">
+                        <table class="ui single line compact table" id="settings-import-set">
+                            <thead>
+                                <tr>
+                                    <th>Folder</th>
+                                    <th>Collections</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <td>
+                                        <div class="ui labeled icon button" id="settings-add-import-set">
+                                            <i class="plus icon"></i>
+                                            Add Folder
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                            <tbody>
                             </tbody>
                         </table>
                     </div>
@@ -269,6 +295,12 @@
                 <div class="ui toggle checkbox" id="settings-recursive-replay">
                     <input type="checkbox">
                     <label>Search Subdirectories</label>
+                </div>
+            </div>
+            <div class="sixteen wide column">
+                <div class="ui toggle checkbox" id="settings-use-import-set">
+                    <input type="checkbox">
+                    <label>Use Import Set</label>
                 </div>
             </div>
         </div>

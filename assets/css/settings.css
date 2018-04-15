@@ -50,6 +50,7 @@
     border-radius: 0;
 }
 
-#settings-replay-folder-settings-popup #settings-recursive-replay label {
+#settings-replay-folder-settings-popup #settings-recursive-replay label,
+#settings-replay-folder-settings-popup #settings-use-import-set label {
     color: #000!important;
 }
