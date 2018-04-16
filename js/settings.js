@@ -366,7 +366,7 @@ function addReplaysToList(path, collections) {
         }
       }
       else if (stats.isDirectory()) {
-        replays = replays.concat(addReplaysToList(path + '/' + file));
+        replays = replays.concat(addReplaysToList(path + '/' + file, collections));
       }
     }
 

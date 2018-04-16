@@ -552,7 +552,7 @@ function updateBasicInfo() {
       $('div[pick-slot^="second"] img').attr('src', '');
 
       if ('picks' in matchDetailMatch) {
-        showMessage('Older Replays Missing Draft Data', 'Earlier versions of the replay files didn\'t store draft picks, so no draft data is available');
+        showMessage('Missing Draft Data', 'This replay has corrupted draft data, or was not played in a draft mode (custom game). No draft data is available.');
       }
     }
 
