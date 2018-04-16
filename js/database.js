@@ -825,7 +825,7 @@ class Database {
           continue;
 
         if (!(statName in playerDetailStats[match.ToonHandle].stats)) {
-          playerDetailStats[match.ToonHandle].stats[statName] = 0;
+          playerDetailStats[match.ToonHandle].stats[statName] = match.gameStats[statName];
           playerDetailStats[match.ToonHandle].max[statName] = match.gameStats[statName];
           playerDetailStats[match.ToonHandle].min[statName] = match.gameStats[statName];
           playerDetailStats[match.ToonHandle].total[statName] = match.gameStats[statName];

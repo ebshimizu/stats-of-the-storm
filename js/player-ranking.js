@@ -172,7 +172,7 @@ function loadPlayerRankings() {
       }
       else {
         context.value.totalKDA = player[mode].KDA;
-        context.totalKda = formatStat('KDA', context.value.totalKDA);
+        context.totalKDA = formatStat('KDA', context.value.totalKDA);
       }
       
       context.value.games = player.games;
