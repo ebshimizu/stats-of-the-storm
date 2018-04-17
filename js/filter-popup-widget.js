@@ -69,7 +69,13 @@ function initPopup(elem) {
   });
 
   //toggles
-  // elem.find('.filter-widget-hero-team').checkbox();
+  elem.find('.filter-widget-hero-team').checkbox();
+
+  // populate hero menu
+  addHeroMenuOptions(elem.find('.filter-widget-hero-search')); 
+  elem.find('.filter-widget-hero-search').dropdown({
+    fullTextSearch: true
+  });
 
   populateTagMenu(elem.find('.filter-widget-tags'));
 
@@ -137,6 +143,7 @@ function getPopupQuery(elem, callback) {
       }
     }
   }
+  let heroes = elem.find('.filter-widget-hero-search').dropdown('get value').split(',');
 
   // maps
   let maps = elem.find('.filter-widget-map').dropdown('get value').split(',');
@@ -152,8 +159,7 @@ function getPopupQuery(elem, callback) {
   let tags = elem.find('.filter-widget-tags').dropdown('get value').split(',');
 
   // toggles;
-  let widgetHeroOnTeam = false;
-  //let widgetHeroOnTeam = elem.find('.filter-widget-hero-team').checkbox('is checked');
+  let widgetHeroOnTeam = elem.find('.filter-widget-hero-team').checkbox('is checked');
 
   for (let p in patches) {
     if (patches[p] !== "")
@@ -189,15 +195,24 @@ function getPopupQuery(elem, callback) {
   let hero = Object.assign({}, query);
 
   // heroes
+  let heroArr = [];
   if (types[0] !== "") {
-    heroArr = []
     for (let t in types) {
-      let heroes = Heroes.heroRole(types[t]);
-      for (let h in heroes) {
-        if (heroArr.indexOf(heroes[h]) === -1) {
-          heroArr.push(heroes[h]);
+      let heroest = Heroes.heroRole(types[t]);
+      for (let h in heroest) {
+        if (heroArr.indexOf(heroest[h]) === -1) {
+          heroArr.push(heroest[h]);
         }
       }
+    }
+
+    hero.hero = { $in: heroArr };
+    map.heroes = { $elemMatch: { $in: heroArr } };
+  }
+
+  if (heroes[0] !== '') {
+    for (let h of heroes) {
+      heroArr.push(h);
     }
 
     hero.hero = { $in: heroArr };
