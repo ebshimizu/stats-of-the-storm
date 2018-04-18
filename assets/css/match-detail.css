@@ -211,6 +211,7 @@
 }
 
 /* Timeline Styles */
+#match-detail-timeline-wrapper .vis-timeline .vis-nested-group,
 #match-detail-timeline-wrapper .vis-timeline {
   background-color: #1b1c1d;
 }

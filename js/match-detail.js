@@ -229,7 +229,8 @@ overallXPGraphData = {
   }
 }
 
-var matchDetailTimelineGroups = [
+var matchDetailTimelineGroups = new vis.DataSet({});
+matchDetailTimelineGroups.add([
   {
     id: 1,
     content: 'Takedowns',
@@ -258,7 +259,8 @@ var matchDetailTimelineGroups = [
     id: 5,
     content: 'Objective',
     classname: 'timeline-objective',
-    visible: true
+    visible: true,
+    nestedGroups: []
   },
   {
     id: 6,
@@ -271,8 +273,32 @@ var matchDetailTimelineGroups = [
     content: 'Mercenary Units',
     classname: 'timeline-merc-units',
     visible: false
+  },
+  {
+    id: 11,
+    content: 'Top Beacon',
+    classname: 'braxis-top-beacon',
+    visible: false
+  },
+  {
+    id: 12,
+    content: 'Bottom Beacon',
+    classname: 'braxis-bot-beacon',
+    visible: false
+  },
+  {
+    id: 13,
+    content: 'Moon Shrine',
+    classname: 'dragon-moon-shrine',
+    visible: false
+  },
+  {
+    id: 14,
+    content: 'Sun Shrine',
+    classname: 'dragon-sun-shrine',
+    visible: false
   }
-];
+]);
 
 function initMatchDetailPage() {
   $('#match-detail-submenu .item').tab();
@@ -327,9 +353,9 @@ function initMatchDetailPage() {
   initTeamStatGraphs();
 
   // init buttons
-  for (let g in matchDetailTimelineGroups) {
-    if (matchDetailTimelineGroups[g].visible) {
-      $('#match-detail-timeline-buttons .button[button-id="' + g + '"]').addClass('violet');
+  for (let g of matchDetailTimelineGroups.getIds()) {
+    if (matchDetailTimelineGroups.get(g).visible) {
+      $('#match-detail-timeline-buttons .button[button-id="' + (g - 1) + '"]').addClass('violet');
     }
   }
 
@@ -950,6 +976,7 @@ function getTeamTimePerTier() {
 }
 
 function loadTimeline() {
+  matchDetailTimelineGroups.off('*');
   $('#match-detail-timeline-wrapper').html('');
   let items = [];
 
@@ -1135,6 +1162,13 @@ function loadTimeline() {
     items.push(item);
   }
 
+  // group config
+  matchDetailTimelineGroups.update({id: 11, visible: false})
+  matchDetailTimelineGroups.update({id: 12, visible: false})
+  matchDetailTimelineGroups.update({id: 13, visible: false})
+  matchDetailTimelineGroups.update({id: 14, visible: false})
+  matchDetailTimelineGroups.update({id: 5, nestedGroups: null});
+
   // objectives...
   if (matchDetailMatch.map === ReplayTypes.MapType.ControlPoints) {
     getSkyTempleEvents(items);
@@ -1197,19 +1231,23 @@ function loadTimeline() {
   matchDetailTimeline.on('rangechanged', function(props) {
     $('.timeline-popup').popup();
   }); 
+  matchDetailTimelineGroups.on('update', function() {
+    matchDetailTimeline.redraw();
+  });
 }
 
 function toggleGroup(idx) {
-  matchDetailTimelineGroups[idx].visible = !matchDetailTimelineGroups[idx].visible;
-
-  if (matchDetailTimelineGroups[idx].visible) {
-    $('#match-detail-timeline-buttons .button[button-id="' + idx + '"]').addClass('violet');
+  let elem = $('#match-detail-timeline-buttons .button[button-id="' + idx + '"]');
+  if (elem.hasClass('violet')) {
+    elem.removeClass('violet');
+    matchDetailTimelineGroups.update({id: idx + 1, visible: false});
   }
   else {
-    $('#match-detail-timeline-buttons .button[button-id="' + idx + '"]').removeClass('violet');
+    elem.addClass('violet');
+    matchDetailTimelineGroups.update({id: idx + 1, visible: true});
   }
 
-  matchDetailTimeline.setGroups(matchDetailTimelineGroups);
+  //matchDetailTimeline.setGroups(matchDetailTimelineGroups);
   matchDetailTimeline.redraw();
 }
 
@@ -1263,7 +1301,7 @@ function getBraxisEvents(items) {
       item0.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop0 + '">' + t0 + '</div>';
       item1.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop1 + '">' + t1 + '</div>';
 
-      item0.group = 54
+      item0.group = 5;
       item1.group = 5;
 
       items.push(item0);
@@ -1279,6 +1317,44 @@ function getBraxisEvents(items) {
       items.push(sitem);
     }
   }
+
+  for (let i = 0; i < matchDetailMatch.objective.beacons.length; i++) {
+    let beacon = matchDetailMatch.objective.beacons[i];
+
+    // only care if team 0 or 1 has it
+    if (beacon.team === 0 || beacon.team === 1) {
+      let item = {};
+      item.start = beacon.time;
+
+      // find end by searching forward until next beacon of same type is found
+      let endFound = false;
+      for (let j = i + 1; j < matchDetailMatch.objective.beacons.length; j++) {
+        let beacon2 = matchDetailMatch.objective.beacons[j];
+        if (beacon2.side === beacon.side) {
+          // parser only records changes so pick first encountered
+          item.end = beacon2.time;
+          endFound = true;
+          break;
+        }
+      }
+
+      // if not found game ended
+      if (endFound === false) {
+        item.end = matchDetailMatch.length;
+      }
+
+      item.group = beacon.side === 'top' ? 11 : 12;
+      item.className = beacon.team === 0 ? 'blue plus2' : 'red plus2';
+      item.type = 'background';
+      item.content = '';
+      items.push(item);
+    }
+  }
+
+  // activate groups
+  matchDetailTimelineGroups.update({id: 5, nestedGroups: [11, 12]});
+  matchDetailTimelineGroups.update({id: 11, visible: true});
+  matchDetailTimelineGroups.update({id: 12, visible: true});
 }
 
 function getGardenEvents(items) {
@@ -1470,6 +1546,56 @@ function getDragonEvents(items) {
       items.push(item);
     }
   }
+
+  let moons = matchDetailMatch.objective.shrines.moon;
+  let suns = matchDetailMatch.objective.shrines.sun;
+  for (let i = 0; i < moons.length; i++) {
+    let shrine = moons[i];
+    if (shrine.team === -1)
+      continue;
+
+    let item = {};
+    item.start = shrine.time;
+
+    if (i + 1 >= moons.length) {
+      item.end = matchDetailMatch.length;
+    }
+    else {
+      item.end = moons[i + 1].time;
+    }
+
+    item.className = shrine.team === 0 ? 'blue plus2' : 'red plus2';
+    item.group = 13;
+    item.content = '';
+    item.type = 'background';
+    items.push(item);
+  }
+
+  for (let i = 0; i < suns.length; i++) {
+    let shrine = suns[i];
+    if (shrine.team === -1)
+      continue;
+
+    let item = {};
+    item.start = shrine.time;
+
+    if (i + 1 >= suns.length) {
+      item.end = matchDetailMatch.length;
+    }
+    else {
+      item.end = suns[i + 1].time;
+    }
+
+    item.className = shrine.team === 0 ? 'blue plus2' : 'red plus2';
+    item.group = 14;
+    item.content = '';
+    item.type = 'background';
+    items.push(item);
+  }
+
+  matchDetailTimelineGroups.update({id: 5, nestedGroups: [13, 14]});
+  matchDetailTimelineGroups.update({id: 13, visible: true});
+  matchDetailTimelineGroups.update({id: 14, visible: true});
 }
 
 function getShrinesEvents(items) {
