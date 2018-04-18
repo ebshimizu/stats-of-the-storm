@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const ReplayTypes = require(path.join(__dirname, 'constants.js'));
 const heroprotocol = require('heroprotocol');
-const PARSER_VERSION = 3;
+const PARSER_VERSION = 4;
 
 const ReplayDataType = {
   game: "gameevents",
@@ -1336,8 +1336,14 @@ function processReplay(file, HeroesTalents, opts = {}) {
     match.teams[0].takedowns = match.team0Takedowns;
     match.teams[1].takedowns = match.team1Takedowns;
 
+    // final stats pass
     for (let p in players) {
       players[p].gameStats.KDA = players[p].gameStats.Takedowns / Math.max(players[p].gameStats.Deaths, 1);
+      players[p].gameStats.damageDonePerDeath = players[p].gameStats.HeroDamage / Math.max(1, players[p].gameStats.Deaths);
+      players[p].gameStats.damageTakenPerDeath = players[p].gameStats.DamageTaken / Math.max(1, players[p].gameStats.Deaths);
+      players[p].gameStats.healingDonePerDeath = (players[p].gameStats.Healing + players[p].gameStats.SelfHealing) / Math.max(1, players[p].gameStats.Deaths);
+      players[p].gameStats.DPM = players[p].gameStats.HeroDamage / (match.length / 60);
+      players[p].gameStats.HPM = (players[p].gameStats.Healing + players[p].gameStats.SelfHealing) / (match.length / 60);
 
       if (players[p].team === ReplayTypes.TeamType.Blue) {
         players[p].gameStats.KillParticipation = players[p].gameStats.Takedowns / match.team0Takedowns;

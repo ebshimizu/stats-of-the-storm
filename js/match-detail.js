@@ -695,13 +695,13 @@ function appendDetailRow(field) {
   for (let i in matchDetailMatch.teams[0].ids) {
     let p = matchDetailPlayers[matchDetailMatch.teams[0].ids[i]];
 
-    context.stats.push(formatStat(field, p.gameStats[field]));
+    context.stats.push(formatStat(field, p.gameStats[field], true));
   }
 
   for (let i in matchDetailMatch.teams[1].ids) {
     let p = matchDetailPlayers[matchDetailMatch.teams[1].ids[i]];
 
-    context.stats.push(formatStat(field, p.gameStats[field]));
+    context.stats.push(formatStat(field, p.gameStats[field], true));
   }
 
   $('#match-detail-details table tbody').append(matchDetailRowTemplate(context));

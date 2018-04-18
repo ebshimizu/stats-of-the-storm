@@ -55,6 +55,11 @@ const DetailStatList = [
   'ClutchHealsPerformed',
   'DamageTaken',
   'TeamfightDamageTaken',
+  'damageDonePerDeath',
+  'damageTakenPerDeath',
+  'healingDonePerDeath',
+  'DPM',
+  'HPM',
   'TimeCCdEnemyHeroes',
   'TimeRootingEnemyHeroes',
   'TimeSilencingEnemyHeroes',
@@ -152,7 +157,12 @@ const DetailStatString = {
   'T3' : 'Time at Level 7',
   'T4' : 'Time at Level 10',
   'T5' : 'Time at Level 13',
-  'T6' : 'Time at Level 16'
+  'T6' : 'Time at Level 16',
+  'damageDonePerDeath' : 'Damage per Death',
+  'damageTakenPerDeath' : 'Damage Taken per Death',
+  'healingDonePerDeath' : 'Healing per Death',
+  'DPM' : 'DPM',
+  'HPM' : 'HPM'
 };
 
 const RoleColor = {
@@ -287,6 +297,10 @@ function checkDBVersion(dbVer) {
     }
     else if (dbVer === 2) {
       migrateVersion2ToVersion3();
+      return;
+    }
+    else if (dbVer === 3) {
+      migrateVersion3ToVersion4();
       return;
     }
   }
@@ -813,83 +827,6 @@ function showPlayerProfile(id) {
   changeSection('player', true);
 }
 
-// DATABASE MIGRATIONS
-function migrateVersion1ToVersion2() {
-  let text = `The parser has been updated to version 2, which means that you will need to
-  re-import your matches to use the latest features. You can force the database to re-import duplicate
-  matches by using the Import Duplicates option, or you can delete the database and just re-import everything.
-  Note that importing duplicates will reset their membership in collections, so if you use that feature,
-  remember to set the Import to Collection option accordingly.`
-  showMessage('Parser Updated to Version 2', text, { sticky: true });
-  DB.setDBVersion(2, checkDBVersion(2));
-}
-
-function migrateVersion2ToVersion3() {
-  // this one we actually do work.
-  setLoadMessage('Updating DB Version 2 to Version 3');
-  DB.getMatches({}, function(err, docs) {
-    if (docs.length > 0)
-      updateMatchToVersion3(docs.pop(), docs);
-    else
-      finishVersion2To3Migration();
-  })
-}
-
-function updateMatchToVersion3(match, remaining) {
-  try {
-    console.log('updating match ' + match._id);
-    setLoadMessage('Updating DB Version 2 to Version 3<br>' + remaining.length + ' matches left');
-
-    if (match.picks) {
-      match.firstPickWin = match.picks.first === match.winner;
-    }
-    else {
-      match.firstPickWin = false;
-    }
-
-    match.firstObjective = Parser.getFirstObjectiveTeam(match);
-    match.firstObjectiveWin = match.winner === match.firstObjective;
-
-    // update length!
-    // the offset from the end of the xp breakdown to the actual end of the match is 114 frames
-    // this may vary a little bit, but it should bring things in line with the current parser.
-    // users can of course re-import the matches if they desire.
-    let lastXP = match.XPBreakdown[match.XPBreakdown.length - 1];
-    match.loopLength = lastXP.loop - 114;
-    match.length = Parser.loopsToSeconds(match.loopLength - match.loopGameStart);
-
-    // update
-    DB.updateMatch(match, function() {
-      if (remaining.length === 0) {
-        finishVersion2To3Migration();
-      }
-      else {
-        updateMatchToVersion3(remaining.pop(), remaining);
-      }
-    });
-  }
-  catch (err) {
-    console.log(err);
-    console.log('Failed to update match ' + match._id + ' please file bug report');
-
-    if (remaining.length === 0) {
-      finishVersion2To3Migration();
-    }
-    else {
-      updateMatchToVersion3(remaining.pop(), remaining);
-    } 
-  }
-}
-
-function finishVersion2To3Migration() {
-  setLoadMessage('Version 3 Upgrade Complete');
-  showMessage(
-    'Parser Updated to Version 3',
-    'Match length corrected to estimate from last XP Breakdown. Additional database fields added. You do not need to re-import your matches. However, if you feel that the match lengths are still incorrect, you may want to re-create (not re-import) the entire database.',
-    { sticky: true, class: 'positive' }
-  );
-  DB.setDBVersion(3, checkDBVersion(3));
-}
 
 function clearPrintLayout() {
   $('#print-window .contents').html('');
@@ -1027,4 +964,138 @@ function renderAndPrint(filename, size = 'Letter', landscape = false) {
     $('#print-window').addClass('is-hidden');
     $('#print-window .contents').html('');
   });
+}
+
+// DATABASE MIGRATIONS
+function migrateVersion1ToVersion2() {
+  let text = `The parser has been updated to version 2, which means that you will need to
+  re-import your matches to use the latest features. You can force the database to re-import duplicate
+  matches by using the Import Duplicates option, or you can delete the database and just re-import everything.
+  Note that importing duplicates will reset their membership in collections, so if you use that feature,
+  remember to set the Import to Collection option accordingly.`
+  showMessage('Parser Updated to Version 2', text, { sticky: true });
+  DB.setDBVersion(2, checkDBVersion(2));
+}
+
+function migrateVersion2ToVersion3() {
+  // this one we actually do work.
+  setLoadMessage('Updating DB Version 2 to Version 3');
+  DB.getMatches({}, function(err, docs) {
+    if (docs.length > 0)
+      updateMatchToVersion3(docs.pop(), docs);
+    else
+      finishVersion2To3Migration();
+  })
+}
+
+function migrateVersion3ToVersion4() {
+  setLoadMessage('Updating DB Version 3 to Version 4');
+  DB._db.heroData.find({}, function(err, docs) {
+    if (docs.length > 0) {
+      updateHeroDataToVersion4(docs.pop(), docs);
+    }
+    else {
+      finishVersion3To4Migration();
+    }
+  });
+}
+
+function updateMatchToVersion3(match, remaining) {
+  try {
+    console.log('updating match ' + match._id);
+    setLoadMessage('Updating DB Version 2 to Version 3<br>' + remaining.length + ' matches left');
+
+    if (match.picks) {
+      match.firstPickWin = match.picks.first === match.winner;
+    }
+    else {
+      match.firstPickWin = false;
+    }
+
+    match.firstObjective = Parser.getFirstObjectiveTeam(match);
+    match.firstObjectiveWin = match.winner === match.firstObjective;
+
+    // update length!
+    // the offset from the end of the xp breakdown to the actual end of the match is 114 frames
+    // this may vary a little bit, but it should bring things in line with the current parser.
+    // users can of course re-import the matches if they desire.
+    let lastXP = match.XPBreakdown[match.XPBreakdown.length - 1];
+    match.loopLength = lastXP.loop - 114;
+    match.length = Parser.loopsToSeconds(match.loopLength - match.loopGameStart);
+
+    // update
+    DB.updateMatch(match, function() {
+      if (remaining.length === 0) {
+        finishVersion2To3Migration();
+      }
+      else {
+        updateMatchToVersion3(remaining.pop(), remaining);
+      }
+    });
+  }
+  catch (err) {
+    console.log(err);
+    console.log('Failed to update match ' + match._id + ' please file bug report');
+
+    if (remaining.length === 0) {
+      finishVersion2To3Migration();
+    }
+    else {
+      updateMatchToVersion3(remaining.pop(), remaining);
+    } 
+  }
+}
+
+function updateHeroDataToVersion4(heroData, remaining) {
+  try {
+    console.log('updating hero data ' + heroData._id);
+    setLoadMessage('Updating DB Version 3 to Version 4<br>' + remaining.length + ' entries left');
+
+    // this one's pretty easy, just take the hero data and update the missing gameStats fields
+    heroData.gameStats.damageDonePerDeath = heroData.gameStats.HeroDamage / Math.max(1, heroData.gameStats.Deaths);
+    heroData.gameStats.damageTakenPerDeath = heroData.gameStats.DamageTaken / Math.max(1, heroData.gameStats.Deaths);
+    heroData.gameStats.healingDonePerDeath = (heroData.gameStats.Healing + heroData.gameStats.SelfHealing) / Math.max(1, heroData.gameStats.Deaths);
+    heroData.gameStats.DPM = heroData.gameStats.HeroDamage / (heroData.length / 60);
+    heroData.gameStats.HPM = (heroData.gameStats.Healing + heroData.gameStats.SelfHealing) / (heroData.length / 60);
+
+    DB._db.heroData.update({_id: heroData._id}, heroData, {}, function() {
+      if (remaining.length === 0) {
+        finishVersion3To4Migration();
+      }
+      else {
+        updateHeroDataToVersion4(remaining.pop(), remaining);
+      }
+    });
+  }
+  catch (err) {
+    console.log(err);
+    console.log('Failed to update heroData entry ' + heroData._id + '. Please file a bug report.');
+
+    if (remaining.length === 0) {
+      finishVersion3To4Migration();
+    }
+    else {
+      updateHeroDataToVersion4(remaining.pop(), remaining);
+    }
+  }
+}
+
+function finishVersion2To3Migration() {
+  setLoadMessage('Version 3 Upgrade Complete');
+  showMessage(
+    'Parser Updated to Version 3',
+    'Match length corrected to estimate from last XP Breakdown. Additional database fields added. You do not need to re-import your matches. However, if you feel that the match lengths are still incorrect, you may want to re-create (not re-import) the entire database.',
+    { sticky: true, class: 'positive' }
+  );
+  DB.setDBVersion(3, checkDBVersion(3));
+}
+
+function finishVersion3To4Migration() {
+  setLoadMessage('Version 4 Upgrade Complete');
+  showMessage(
+    'Parser Updated to Version 4',
+    'Added 5 additional stats to the database. These stats are computable from existing data. No re-import is necessary.',
+    { sticky: true, class: 'positive' }
+  );
+  DB.setDBVersion(4, checkDBVersion(4));
 }
