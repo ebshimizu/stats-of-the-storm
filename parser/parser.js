@@ -373,6 +373,18 @@ function processReplay(file, HeroesTalents, opts = {}) {
       playerWorkingSlotID[pl.m_workingSetSlotId] = toon;
     }
 
+    // fallback plan
+    // the initdata.m_lobbyState.m_slots should have it instead
+    if (null in playerWorkingSlotID) {
+      playerWorkingSlotID = {};
+      for (let slot of data.initdata.m_syncLobbyState.m_lobbyState.m_slots) {
+        let toon = playerLobbyID[slot.m_userId];
+        if (toon) {
+          playerWorkingSlotID[slot.m_workingSetSlotId] = toon;
+        }
+      }
+    }
+
     console.log("Cosmetic use data collection complete");
 
     // draft bans check
