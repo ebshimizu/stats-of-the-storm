@@ -67,6 +67,7 @@ const DetailStatList = [
   //'TimeOnPoint',
   'OnFireTimeOnFire',
   'ExperienceContribution',
+  'XPM',
   'MercCampCaptures',
   //'TownKills',
   'WatchTowerCaptures'
@@ -162,7 +163,8 @@ const DetailStatString = {
   'damageTakenPerDeath' : 'Damage Taken per Death',
   'healingDonePerDeath' : 'Healing per Death',
   'DPM' : 'DPM',
-  'HPM' : 'HPM'
+  'HPM' : 'HPM',
+  'XPM' : 'XPM'
 };
 
 const RoleColor = {
@@ -1054,9 +1056,10 @@ function updateHeroDataToVersion4(heroData, remaining) {
     // this one's pretty easy, just take the hero data and update the missing gameStats fields
     heroData.gameStats.damageDonePerDeath = heroData.gameStats.HeroDamage / Math.max(1, heroData.gameStats.Deaths);
     heroData.gameStats.damageTakenPerDeath = heroData.gameStats.DamageTaken / Math.max(1, heroData.gameStats.Deaths);
-    heroData.gameStats.healingDonePerDeath = (heroData.gameStats.Healing + heroData.gameStats.SelfHealing) / Math.max(1, heroData.gameStats.Deaths);
+    heroData.gameStats.healingDonePerDeath = (heroData.gameStats.Healing + heroData.gameStats.SelfHealing + heroData.gameStats.ProtectionGivenToAllies) / Math.max(1, heroData.gameStats.Deaths);
     heroData.gameStats.DPM = heroData.gameStats.HeroDamage / (heroData.length / 60);
-    heroData.gameStats.HPM = (heroData.gameStats.Healing + heroData.gameStats.SelfHealing) / (heroData.length / 60);
+    heroData.gameStats.HPM = (heroData.gameStats.Healing + heroData.gameStats.SelfHealing + heroData.gameStats.ProtectionGivenToAllies) / (heroData.length / 60);
+    heroData.gameStats.XPM = heroData.gameStats.ExperienceContribution / (heroData.length / 60);
 
     DB._db.heroData.update({_id: heroData._id}, heroData, {}, function() {
       if (remaining.length === 0) {
@@ -1094,7 +1097,7 @@ function finishVersion3To4Migration() {
   setLoadMessage('Version 4 Upgrade Complete');
   showMessage(
     'Parser Updated to Version 4',
-    'Added 5 additional stats to the database. These stats are computable from existing data. No re-import is necessary.',
+    'Added 6 additional stats to the database. These stats are computable from existing data. No re-import is necessary.',
     { sticky: true, class: 'positive' }
   );
   DB.setDBVersion(4, checkDBVersion(4));

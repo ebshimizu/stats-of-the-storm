@@ -1341,9 +1341,10 @@ function processReplay(file, HeroesTalents, opts = {}) {
       players[p].gameStats.KDA = players[p].gameStats.Takedowns / Math.max(players[p].gameStats.Deaths, 1);
       players[p].gameStats.damageDonePerDeath = players[p].gameStats.HeroDamage / Math.max(1, players[p].gameStats.Deaths);
       players[p].gameStats.damageTakenPerDeath = players[p].gameStats.DamageTaken / Math.max(1, players[p].gameStats.Deaths);
-      players[p].gameStats.healingDonePerDeath = (players[p].gameStats.Healing + players[p].gameStats.SelfHealing) / Math.max(1, players[p].gameStats.Deaths);
+      players[p].gameStats.healingDonePerDeath = (players[p].gameStats.Healing + players[p].gameStats.SelfHealing + players[p].gameStats.ProtectionGivenToAllies) / Math.max(1, players[p].gameStats.Deaths);
       players[p].gameStats.DPM = players[p].gameStats.HeroDamage / (match.length / 60);
-      players[p].gameStats.HPM = (players[p].gameStats.Healing + players[p].gameStats.SelfHealing) / (match.length / 60);
+      players[p].gameStats.HPM = (players[p].gameStats.Healing + players[p].gameStats.SelfHealing + players[p].gameStats.ProtectionGivenToAllies) / (match.length / 60);
+      players[p].gameStats.XPM = players[p].gameStats.ExperienceContribution / (match.length / 60);
 
       if (players[p].team === ReplayTypes.TeamType.Blue) {
         players[p].gameStats.KillParticipation = players[p].gameStats.Takedowns / match.team0Takedowns;

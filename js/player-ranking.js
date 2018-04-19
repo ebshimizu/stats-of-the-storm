@@ -4,13 +4,14 @@ var playerRankingsMapFilter = {};
 var playerRankingGeneralTemplate;
 var playerRankingTeamfightTemplate;
 var playerRankingMiscTemplate;
-
+var playerRankingAdditionalTemplate;
 
 function initPlayerRankingPage() {
   // templates
   playerRankingGeneralTemplate = Handlebars.compile(getTemplate('player-ranking', '#player-ranking-row-template').find('tr')[0].outerHTML);
   playerRankingTeamfightTemplate = Handlebars.compile(getTemplate('player-ranking', '#player-ranking-teamfight-row-template').find('tr')[0].outerHTML);
   playerRankingMiscTemplate = Handlebars.compile(getTemplate('player-ranking', '#player-ranking-misc-row-template').find('tr')[0].outerHTML);
+  playerRankingAdditionalTemplate = Handlebars.compile(getTemplate('player-ranking', '#player-ranking-additional-row-template').find('tr')[0].outerHTML);
 
   // filter popup
   let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
@@ -59,6 +60,12 @@ function initPlayerRankingPage() {
 
   $('#player-ranking-misc-table').tablesort();
   $('#player-ranking-misc-table').floatThead({
+    scrollContainer: closestWrapper,
+    autoReflow: true
+  });
+
+  $('#player-ranking-additional-table').tablesort();
+  $('#player-ranking-additional-table').floatThead({
     scrollContainer: closestWrapper,
     autoReflow: true
   });
@@ -169,6 +176,16 @@ function loadPlayerRankings() {
       if (mode === 'total' || mode === 'averages') {
         context.value.totalKDA = player.totalKDA;
         context.totalKDA = player.totalKDA;
+
+        if (mode === 'total') {
+          // context replacement for a few stats
+          context.value.damageDonePerDeath = context.value.HeroDamage / Math.max(1, context.value.Deaths);
+          context.value.damageTakenPerDeath = context.value.DamageTaken / Math.max(1, context.value.Deaths);
+          context.value.healingDonePerDeath = (context.value.Healing + context.value.SelfHealing + context.value.ProtectionGivenToAllies) / Math.max(1, context.value.Deaths);
+          context.value.DPM = context.value.HeroDamage / (player.totalTime / 60);
+          context.value.HPM = (context.value.Healing + context.value.SelfHealing + context.value.ProtectionGivenToAllies) / (player.totalTime / 60);
+          context.value.XPM = context.value.ExperienceContribution / (player.totalTime / 60);
+        }
       }
       else {
         context.value.totalKDA = player[mode].KDA;
@@ -193,6 +210,7 @@ function loadPlayerRankings() {
       $('#player-ranking-general-table').append(playerRankingGeneralTemplate(context));
       $('#player-ranking-teamfight-table').append(playerRankingTeamfightTemplate(context));
       $('#player-ranking-misc-table').append(playerRankingMiscTemplate(context));
+      $('#player-ranking-additional-table').append(playerRankingAdditionalTemplate(context));
     }
 
     $('#player-ranking-body .player-name').click(function() {

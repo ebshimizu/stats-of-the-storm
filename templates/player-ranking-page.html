@@ -34,8 +34,9 @@
       </div>
     </div>
     <div id="player-ranking-body">
-      <div class="ui three buttons">
+      <div class="ui four buttons">
         <div class="ui violet button">General</div>
+        <div class="ui button">Damage Stats</div>
         <div class="ui button">Team Fight and CC</div>
         <div class="ui button">Awards and Taunts</div>
       </div>
@@ -103,6 +104,39 @@
                     <th class="center alligned stat">Root Time</th>
                     <th class="center alligned stat">Silence Time</th>
                     <th class="center alligned stat">Vengeances</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="17">Use the Search button in the Filter Matches menu to load player data.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div table-name="Damage Stats" class="section" table-print="additional">
+            <div class="table-wrapper">
+              <table class="ui inverted sortable selectable table" id="player-ranking-additional-table">
+                <thead>
+                  <tr>
+                    <th>Player</th>
+                    <th class="center alligned stat">Win %</th>
+                    <th class="center alligned stat">Games</th>
+                    <th class="center alligned stat">KDA</th>
+                    <th class="center alligned stat">TD</th>
+                    <th class="center alligned stat">K</th>
+                    <th class="center alligned stat">A</th>
+                    <th class="center alligned stat">D</th>
+                    <th class="center alligned stat">XP</th>
+                    <th class="center alligned stat">XPM</th>
+                    <th class="center alligned stat">Hero Damage</th>
+                    <th class="center alligned stat">Damage per Death</th>
+                    <th class="center alligned stat">DPM</th>
+                    <th class="center alligned stat">Damage Taken</th>
+                    <th class="center alligned stat">Damage Taken per Death</th>
+                    <th class="center alligned stat">Healing</th>
+                    <th class="center alligned stat">Healing per Death</th>
+                    <th class="center alligned stat">HPM</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -197,6 +231,30 @@
     <td class="center aligned" data-sort-value="{{value.ProtectionGivenToAllies}}">{{ProtectionGivenToAllies}}</td>
   </tr>
 </template>
+
+<template id="player-ranking-additional-row-template">
+  <tr>
+    <td data-sort-value="{{name}}"><h3 class="ui inverted header player-name" playerID="{{id}}">{{name}}</h3></td>
+    <td class="center aligned" data-sort-value="{{value.winPercent}}">{{formatWinPercent}}</td>
+    <td class="center aligned" data-sort-value="{{value.games}}">{{games}}</td>
+    <td class="center aligned" data-sort-value="{{value.totalKDA}}">{{totalKDA}}</td>
+    <td class="center aligned" data-sort-value="{{value.Takedowns}}">{{Takedowns}}</td>
+    <td class="center aligned" data-sort-value="{{value.SoloKill}}">{{SoloKill}}</td>
+    <td class="center aligned" data-sort-value="{{value.Assists}}">{{Assists}}</td>
+    <td class="center aligned" data-sort-value="{{value.Deaths}}">{{Deaths}}</td>
+    <td class="center aligned" data-sort-value="{{value.ExperienceContribution}}">{{ExperienceContribution}}</td>
+    <td class="center aligned" data-sort-value="{{value.XPM}}">{{XPM}}</td>
+    <td class="center aligned" data-sort-value="{{value.HeroDamage}}">{{HeroDamage}}</td>
+    <td class="center aligned" data-sort-value="{{value.damageDonePerDeath}}">{{damageDonePerDeath}}</td>
+    <td class="center aligned" data-sort-value="{{value.DPM}}">{{DPM}}</td>
+    <td class="center aligned" data-sort-value="{{value.DamageTaken}}">{{DamageTaken}}</td>
+    <td class="center aligned" data-sort-value="{{value.damageTakenPerDeath}}">{{damageTakenPerDeath}}</td>
+    <td class="center aligned" data-sort-value="{{value.Healing}}">{{Healing}}</td>
+    <td class="center aligned" data-sort-value="{{value.healingDonePerDeath}}">{{healingDonePerDeath}}</td>
+    <td class="center aligned" data-sort-value="{{value.HPM}}">{{HPM}}</td>
+  </tr>
+</template>
+
 
 <template id="player-ranking-teamfight-row-template">
   <tr>
