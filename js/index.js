@@ -1115,6 +1115,7 @@ function exportHeroDataAsCSV(docs, file) {
   // identifiers
   outData += 'ToonHandle';
   outData += ',name';
+  outData += ',hero';
   outData += ',date';
   outData += ',win';
   outData += ',map';
@@ -1147,6 +1148,7 @@ function exportHeroDataAsCSV(docs, file) {
     // identifiers
     row += doc.ToonHandle;
     row += ',' + doc.name;
+    row += ',' + doc.hero;
     row += ',' + doc.date;
     row += ',' + (doc.win ? 'true' : 'false');
     row += ',' + doc.map;

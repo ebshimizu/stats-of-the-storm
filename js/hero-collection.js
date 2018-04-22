@@ -609,4 +609,134 @@ function handleHeroStatsFileAction(value, text, $elem) {
       }
     });
   }
+  else if (value === 'json-pick') {
+    dialog.showSaveDialog({
+      title: 'Export Draft Data',
+      filters: [{name: 'json', extensions: ['json']}]
+    }, function(filename) {
+      if (filename) {
+        exportHeroCollectionSummaryJSON(filename);
+      }
+    });
+  }
+  else if (value === 'json-hero') {
+    dialog.showSaveDialog({
+      title: 'Export Hero Data',
+      filters: [{name: 'json', extensions: ['json']}]
+    }, function(filename) {
+      if (filename) {
+        exportHeroCollectionHeroJSON(filename);
+      }
+    });
+  }
+  else if (value === 'csv-draft') {
+    dialog.showSaveDialog({
+      title: 'Export Draft Data',
+      filters: [{name: 'csv', extensions: ['csv']}]
+    }, function(filename) {
+      if (filename) {
+        exportHeroDraftCSV(filename);
+      }
+    });
+  }
+  else if (value === 'csv-hero') {
+    dialog.showSaveDialog({
+      title: 'Export Hero Data',
+      filters: [{name: 'csv', extensions: ['csv']}]
+    }, function(filename) {
+      if (filename) {
+        exportHeroCollectionHeroCSV(filename);
+      }
+    });
+  }
+}
+
+function exportHeroCollectionSummaryJSON(filename) {
+  DB.getMatches(heroCollectionMapDataFilter, function(err, docs) {
+    let matchData = DB.summarizeMatchData(docs, Heroes);
+    fs.writeFile(filename, JSON.stringify(matchData, null, 2), function(err) {
+      if (err) {
+        showMessage('JSON Export Error', err, { class: 'negative' });
+      }
+      else {
+        showMessage('JSON Export Complete', 'Exported to ' + filename);
+      }
+    });
+  });
+}
+
+function exportHeroCollectionHeroJSON(filename) {
+  let query = Object.assign({}, heroCollectionHeroDataFilter);
+  query.hero = $('#hero-collection-hero-select-menu').dropdown('get value');
+  DB.getHeroData(query, function(err, docs) {
+    let stats = DB.summarizeHeroData(docs);
+    fs.writeFile(filename, JSON.stringify(stats, null, 2), function(err) {
+      if (err) {
+        showMessage('JSON Export Error', err, { class: 'negative' });
+      }
+      else {
+        showMessage('JSON Export Complete', 'Exported to ' + filename);
+      }
+    });
+  });
+}
+
+function exportHeroCollectionHeroCSV(filename) {
+  let query = Object.assign({}, heroCollectionHeroDataFilter);
+  query.hero = $('#hero-collection-hero-select-menu').dropdown('get value');
+  DB.getHeroData(query, function(err, docs) {
+    exportHeroDataAsCSV(docs, filename);
+  });
+}
+
+function exportHeroDraftCSV(filename) {
+  DB.getMatches(heroCollectionMapDataFilter, function(err, docs) {
+    let matchData = DB.summarizeMatchData(docs, Heroes);
+
+    // pull specific values
+    let outData = '';
+    let fields = ['hero', 'role', 'wins', 'games', 'involved', 'round 1', 'round 2', 'round 3', 'bans', 'ban 1', 'ban 2', 'round 1 wins', 'round 2 wins', 'round 3 wins', 'totalGames'];
+
+    for (let i = 0; i < fields.length; i++) {
+      if (i > 0)
+        outData += ',';
+      
+      outData += fields[i];
+    }
+
+    for (let h in matchData.data) {
+      if (h === 'totalMatches' || h === 'totalBans')
+        continue;
+      
+      let hero = matchData.data[h];
+
+      let row = '';
+      row += h;
+      row += ',' + Heroes.role(h);
+      row += ',' + hero.wins;
+      row += ',' + hero.games;
+      row += ',' + hero.involved;
+      row += ',' + hero.picks.round1.count;
+      row += ',' + hero.picks.round2.count;
+      row += ',' + hero.picks.round3.count;
+      row += ',' + hero.bans.total;
+      row += ',' + hero.bans.first;
+      row += ',' + hero.bans.second;
+      row += ',' + hero.picks.round1.wins;
+      row += ',' + hero.picks.round2.wins;
+      row += ',' + hero.picks.round3.wins;
+      row += ',' + matchData.data.totalMatches;
+
+      outData += '\n' + row;
+    }
+
+    fs.writeFile(filename, outData, function(err) {
+      if (err) {
+        showMessage('CSV Export Error', err, { class: 'negative' });
+      }
+      else {
+        showMessage('CSV Export Complete', 'Exported to ' + filename);
+      }
+    });
+  });
 }
