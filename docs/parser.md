@@ -30,4 +30,11 @@ You can't just upload to HotsLogs though, so make sure the HotsAPI option is che
 You can also set a player ID to focus on with the My ID setting. This will highlight that player when
 browsing through matches.
 
+## Using Import Sets
+
+Import sets allow you to pre-define which folders you would like to import and specify which collections the replays
+in each folder should be added to. Import sets are stored __locally__ per database (so the settings don't get carried
+over if you load someone else's database). To activate import sets, click on the gear menu on the right of
+the replay folder option, and toggle the `Use Replay Set` setting.
+
 [Back](https://ebshimizu.github.io/stats-of-the-storm/)
