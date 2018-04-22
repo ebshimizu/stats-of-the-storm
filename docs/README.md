@@ -67,8 +67,8 @@ or implementing one! When you're ready, submit a pull request and we'll get the 
 
 **HotS updated, but the parser doesn't work?**
 The parser in this app is tied to Blizzard's [heroprotocol](https://github.com/Blizzard/heroprotocol) library.
-When this library updates, I will push an update for the app as soon as I can. It sometimes takes a few
-days for the heroprotocol repository to update.
+When this library updates, I will push an update for the app as soon as I can. It may take longer to update
+if a new hero is added, as I then have to make sure the heroes-talents repository is also updated.
 
 **Why don't I see all the players in the Player Details page?**
 Personal databases have a lot of players that only show up once or twice. In order to keep the

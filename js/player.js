@@ -1239,6 +1239,28 @@ function handlePlayerExportAction(action, text, $elem) {
       closable: false
     }).modal('show');
   }
+  else if (action === 'csv-current') {
+    dialog.showSaveDialog({
+      title: 'Export Current Player Hero Data to CSV',
+      filters: [{name: 'csv', extensions: ['csv']}]
+    }, function(filename) {
+      if (filename) {
+        exportPlayerHeroCSV(filename);
+      }
+    });
+  }
+  else if (action === 'csv-all') {
+    dialog.showSaveDialog({
+      title: 'Export Collection Hero Data to CSV',
+      filters: [{name: 'csv', extensions: ['csv']}]
+    }, function(filename) {
+      if (filename) {
+        DB.getHeroData({}, function(err, docs) {
+          exportHeroDataAsCSV(docs, filename);
+        });
+      }
+    });
+  }
 }
 
 function updatePlayerCollectionCompare(value, text, $elem) {
@@ -1474,4 +1496,10 @@ function layoutPlayerPrint(sections) {
 function printPlayerSummary(filename, sections) {
   layoutPlayerPrint(sections);
   renderAndPrint(filename, 'Letter', true);
+}
+
+function exportPlayerHeroCSV(file) {
+  if (playerDetailStats) {
+    exportHeroDataAsCSV(playerDetailStats.rawDocs, file);
+  }
 }
