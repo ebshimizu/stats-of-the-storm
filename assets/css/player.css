@@ -223,3 +223,8 @@
   float: right;
   width: 100%;
 }
+
+.btag {
+  font-size: 10pt;
+  margin-left: 5px;
+}

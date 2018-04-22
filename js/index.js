@@ -538,7 +538,7 @@ function updatePlayerMenus(err, players) {
 
       let elem = '<div class="item" data-value="' + players[p]._id + '">';
       elem += '<div class="ui horizontal label"><i class="file outline icon"></i>' + players[p].matches + '</div>';
-      elem += players[p].name + ' (' + RegionString[players[p].region] + ')</div>';
+      elem += players[p].name + (players[p].tag ? '#' + players[p].tag : '') + ' (' + RegionString[players[p].region] + ')</div>';
 
       opts.append(elem);
     }

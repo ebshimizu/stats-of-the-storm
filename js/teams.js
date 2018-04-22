@@ -520,6 +520,9 @@ function loadTeamRoster(playerStats) {
     }
     else {
       DB.getPlayer(id, function(err, doc) {
+        if (doc.length === 0)
+          return;
+
         let context = {};
         context.name = doc[0].name;
         context.id = doc[0]._id;

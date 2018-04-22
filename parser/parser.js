@@ -4,6 +4,7 @@ const path = require('path');
 const ReplayTypes = require(path.join(__dirname, 'constants.js'));
 const heroprotocol = require('heroprotocol');
 const PARSER_VERSION = 4;
+const battletags = require('./battletags.js');
 
 const ReplayDataType = {
   game: "gameevents",
@@ -53,32 +54,12 @@ const StatusString = {
 const CommonReplayData = [ReplayDataType.message, ReplayDataType.tracker, ReplayDataType.attribute, ReplayDataType.header, ReplayDataType.details, ReplayDataType.init, ReplayDataType.stats];
 const AllReplayData = [ReplayDataType.game, ReplayDataType.message, ReplayDataType.tracker, ReplayDataType.attribute, ReplayDataType.header, ReplayDataType.details, ReplayDataType.init, ReplayDataType.stats];
 
-// this just wraps the reference python implementation inside of
-// a javascript module and will return json objects containing the different
-// bundles of data provided by the parser.
-// this file also assumes the existence of python on the host computer
 function parse(file, requestedData, opts) {
   var replay = {};
 
   // execute sync
   for (var i in requestedData) {
     console.log("Retrieving " + requestedData[i]);
-
-    // debug version for independent testing
-    //const script = cp.spawnSync(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe'), ['--json', '--' + requestedData[i], file], {
-    //const script = cp.spawnSync(fixPathForAsarUnpack(path.join(__dirname, 'heroprotocol/dist/heroprotocol/heroprotocol.exe')), ['--json', '--' + requestedData[i], file], {
-    //  maxBuffer: 300000*1024    // if anyone asks why it's 300MB it's because gameevents is huge
-    //});
-
-    //var rawData = script.stdout.toString('utf8');
-
-    // each line is a new json object
-    //rawData = rawData.replace(/\}\r?\n\{/g, '},\n{');
-    //rawData = rawData.replace(/\]\r?\n\{/g, '],\n{');
-    
-    //rawData = '[' + rawData + ']';
-
-    //replay[requestedData[i]] = JSON.parse(rawData);
     replay[requestedData[i]] = heroprotocol.get(ReplayToProtocolType[requestedData[i]], file);
   }
 
@@ -90,6 +71,9 @@ function parse(file, requestedData, opts) {
       });
     }
   }
+
+  // battletags
+  replay.tags = battletags.get(file);
 
   return replay;
 }
@@ -260,6 +244,13 @@ function processReplay(file, HeroesTalents, opts = {}) {
       pdoc.uuid = pdata.m_toon.m_id;
       pdoc.region = pdata.m_toon.m_region;
       pdoc.realm = pdata.m_toon.m_realm;
+
+      // ok so actually search forward here and look for a name match
+      for (let j = i; j < data.tags.length; j++) {
+        if (data.tags[j].name === pdoc.name) {
+          pdoc.tag = parseInt(data.tags[j].tag);
+        }
+      }
 
       // match region should be logged too, since all players should be 
       // in the same region, overwrite constantly

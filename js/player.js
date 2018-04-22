@@ -492,7 +492,12 @@ function updatePlayerDetailID(value, text, $item) {
 function updatePlayerPage(err, doc) {
   if (doc.length === 1) {
     playerDetailInfo = doc[0];
-    $('#player-page-header h1.header .content .player').text(playerDetailInfo.name);
+    let formatName = playerDetailInfo.name;
+    if (playerDetailInfo.tag) {
+      formatName += '<span class="btag">#' + playerDetailInfo.tag + '</span>';
+    }
+
+    $('#player-page-header h1.header .content .player').html(formatName);
 
     // check player teams
     DB.getPlayerTeams(playerDetailInfo._id, function(err, teams) {

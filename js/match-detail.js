@@ -635,7 +635,7 @@ function appendSummaryRow(color, id) {
   context.heroName = data.hero;
   context.heroImg = Heroes.heroIcon(data.hero);
   context.playerID = id;
-  context.playerName = data.name;
+  context.playerName = data.name + (data.tag ? '#' + data.tag : '');
   context.kills = data.gameStats.SoloKill;
   context.gameStats = data.gameStats;
   context.hasAwardClass = "is-hidden"

@@ -160,6 +160,9 @@ class Database {
           playerDbEntry.region = players[i].region;
           playerDbEntry.realm = players[i].realm;
 
+          // in general this will ensure the most recent tag gets associated with each player
+          playerDbEntry.tag = players[i].tag;
+
           var updateEntry = { $set: playerDbEntry, $inc: { matches: 1}};
 
           self._db.players.update({ _id: playerDbEntry._id }, updateEntry, {upsert: true}, function(err, numReplaced, upsert) {
