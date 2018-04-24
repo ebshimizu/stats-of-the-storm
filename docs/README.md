@@ -9,6 +9,30 @@ different divisions in a league.
 
 It also comes with a [HotsAPI](http://hotsapi.net/)/[HotsLogs](https://www.hotslogs.com/) uploader built in.
 
+## Download
+Stats of the Storm is available for Windows and macOS (experimental). You can download the latest build
+from the [Releases](https://github.com/ebshimizu/stats-of-the-storm/releases) page.
+
+Windowws users: Download the `stats-of-the-storm-setup-x.x.x.exe` file.
+
+Mac users: Download either the `stats-of-the-storm-x.x.x.dmg` or `stats-of-the-storm-x.x.x-mac.zip`. 
+
+### Setup
+The first thing you'll want to do is set up the parser in the Settings menu, which you can reach by
+opening the menu in the top left corner of the app. The application is unsigned, so you will need
+to tell your respective OS to allow the installation of the app.
+
+Once you install the program, you can start parsing your own matches, or explore
+a database created by someone else. An example of this has been created for
+Phase 1 of the 2018 HGC, and Season 4 of the [NGS](https://nexusgamingseries.com),
+and instructions can be found [here](external-db.md).
+
+The macOS build should be considered _experimental_ at this time. I am testing the app
+on a VM, so it may behave differently on actual hardware. Please let me know what sort
+of problems come up there.
+
+Want to help develop? Found a bug? Check out the [project repository](https://github.com/ebshimizu/stats-of-the-storm/).
+
 ## Features
 * [Match Database](#matchDB)
 * [Match Details](#matchDetails)
@@ -28,24 +52,6 @@ It also comes with a [HotsAPI](http://hotsapi.net/)/[HotsLogs](https://www.hotsl
 
 ## Replay Reference
 * [Replay File Format Reference](hots-replay-data.md)
-
-## Download
-Stats of the Storm is available for Windows and macOS (experimental). You can download the latest build
-from the [Releases](https://github.com/ebshimizu/stats-of-the-storm/releases) page.
-The first thing you'll want to do is set up the parser in the Settings menu, which you can reach by
-opening the menu in the top left corner of the app. The application is unsigned, so you will need
-to tell your respective OS to allow the installation of the app.
-
-Once you install the program, you can start parsing your own matches, or explore
-a database created by someone else. An example of this has been created for
-Phase 1 of the 2018 HGC, and Season 3 of the [NGS](https://nexusgamingseries.com),
-and instructions can be found [here](external-db.md).
-
-The macOS build should be considered _experimental_ at this time. I am testing the app
-on a VM, so it may behave differently on actual hardware. Please let me know what sort
-of problems come up there.
-
-Want to help develop? Found a bug? Check out the [project repository](https://github.com/ebshimizu/stats-of-the-storm/).
 
 ## FAQ
 
