@@ -305,3 +305,18 @@
 #print-window .page {
   break-inside: avoid;
 }
+
+.match-detail-team-names .red-team {
+  text-align: right;
+  padding-right: 10px;
+}
+
+.match-detail-team-names .blue-team {
+  text-align: left;
+}
+
+.match-detail-team-names .vs {
+  text-align: center;
+  font-size: 25px;
+  color: #FFF;
+}

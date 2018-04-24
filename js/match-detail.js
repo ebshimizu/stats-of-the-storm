@@ -522,6 +522,9 @@ function loadMatch(docs, doneLoadCallback) {
 function updateBasicInfo() {
   $('#match-detail-map-name').text(matchDetailMatch.map);
 
+  popuplateMatchDetailTeamNameplate(matchDetailMatch._id, 0, matchDetailMatch.teams[0].ids)
+  popuplateMatchDetailTeamNameplate(matchDetailMatch._id, 1, matchDetailMatch.teams[1].ids)
+
   let winnerHeader = $('#match-detail-victor');
   if (matchDetailMatch.winner === 0) {
     winnerHeader.removeClass('red').addClass('blue').text("Blue Team Victory");
@@ -597,6 +600,22 @@ function updateBasicInfo() {
   else {
     $('#match-detail-draft').addClass('hidden');
   }
+}
+
+function popuplateMatchDetailTeamNameplate(matchID, teamID, players) {
+  DB.getTeamByPlayers(players, function(err, docs) {
+    if (docs.length > 0) {
+      // take first team found, not room for all
+      let team = docs[0];
+      let elem = (teamID === 0 ? '.blue' : '.red') + '-team';
+      elem = '.match-detail-team-names ' + elem;
+      $('#match-detail-summary').find(elem).text(team.name);
+      $('#match-detail-summary .match-detail-team-names').removeClass('is-hidden');
+    }
+    else {
+      $('#match-detail-summary .match-detail-team-names').addClass('is-hidden');
+    }
+  });
 }
 
 function loadPlayers() {
