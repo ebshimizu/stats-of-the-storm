@@ -306,13 +306,9 @@
   break-inside: avoid;
 }
 
+.match-detail-team-names .blue-team,
 .match-detail-team-names .red-team {
-  text-align: right;
-  padding-right: 10px;
-}
-
-.match-detail-team-names .blue-team {
-  text-align: left;
+  text-align: center;
 }
 
 .match-detail-team-names .vs {

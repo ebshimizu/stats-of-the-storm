@@ -16,6 +16,7 @@ function getBattletags(archive) {
     let name = match.substr(0, match.indexOf('#'));
     let tag = match.substr(match.indexOf('#') + 1);
     tagMap.push({ tag, name, full: match });
+    console.log('found tag: ' + match);
   }
 
   return tagMap;

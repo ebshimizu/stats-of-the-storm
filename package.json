@@ -28,6 +28,7 @@
     "electron-util": "^0.6.0",
     "floatthead": "^2.1.1",
     "form-data": "^2.3.2",
+    "fs-extra": "^5.0.0",
     "handlebars": "^4.0.11",
     "heroprotocol": "^1.0.1",
     "jquery": "^3.3.1",

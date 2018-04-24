@@ -367,6 +367,7 @@ function processReplay(file, HeroesTalents, opts = {}) {
     // fallback plan
     // the initdata.m_lobbyState.m_slots should have it instead
     if (null in playerWorkingSlotID) {
+      console.log('playerWorkingSlotIDs are null. Proceeding to fallback...');
       playerWorkingSlotID = {};
       for (let slot of data.initdata.m_syncLobbyState.m_lobbyState.m_slots) {
         let toon = playerLobbyID[slot.m_userId];
@@ -1429,7 +1430,7 @@ function processReplay(file, HeroesTalents, opts = {}) {
       var playerBSeq = {};
       for (let i = 0; i < gameLog.length; i++) {
         // the b action is likely of type 27 however i don't actually know how to interpret that data
-        // working theory: eventid 27 abilLink 200 is b.
+        // working theory: eventid 27 abilLink 119 is the current b.
         // this actually varies per-build, so while i missed a few builds, it should work at the moment.
         let event = gameLog[i];
         if (event._eventid === 27) {
