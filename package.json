@@ -26,14 +26,14 @@
     "electron-settings": "^3.1.4",
     "electron-updater": "^2.21.8",
     "electron-util": "^0.6.0",
-    "floatthead": "^2.1.1",
+    "floatthead": "^2.1.2",
     "form-data": "^2.3.2",
     "fs-extra": "^5.0.0",
     "handlebars": "^4.0.11",
     "heroprotocol": "^1.0.1",
     "jquery": "^3.3.1",
     "jquery-tablesort": "0.0.11",
-    "moment": "^2.22.0",
+    "moment": "^2.22.1",
     "nedb": "^1.8.0",
     "npm": "^5.8.0",
     "semantic-ui": "^2.3.1",
@@ -41,13 +41,13 @@
     "xregexp": "^4.1.1"
   },
   "devDependencies": {
-    "electron": "^1.8.4",
-    "electron-builder": "^20.8.2",
+    "electron": "^1.8.6",
+    "electron-builder": "^20.11.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.7.0",
-    "eslint-plugin-standard": "^3.0.1"
+    "eslint-plugin-standard": "^3.1.0"
   },
   "scripts": {
     "pack": "electron-builder --dir",
