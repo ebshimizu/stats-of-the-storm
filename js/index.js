@@ -513,7 +513,7 @@ function globalDBUpdate() {
     $('#match-patch-select').dropdown('refresh');
   });
 
-  populateStatCollectionMenus();
+ populateStatCollectionMenus();
 }
 
 function runPlayerMenuUpdate() {

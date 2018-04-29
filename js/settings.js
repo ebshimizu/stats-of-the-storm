@@ -420,6 +420,8 @@ function disableParsingUI() {
 }
 
 function enableParsingUI() {
+  globalDBUpdate();
+
   $('#start-process-button').removeClass('loading disabled');
   $('#rescan-replays-button').removeClass('disabled');
   $('#settings-hots-api-button').checkbox('enable');
@@ -514,7 +516,8 @@ function loadReplay(data) {
 
   // updates certain elements in the entire application (player search dropdowns for instance)
   // after a new replay is processed.
-  globalDBUpdate();
+  //globalDBUpdate();
+  getMatchCount();
 
   if (replayQueue.length > 0) {
     parseReplaysAsync(replayQueue.shift());
