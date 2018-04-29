@@ -510,7 +510,6 @@ function updatePlayerPage(err, doc) {
     });
 
     $('#player-hero-select-menu').dropdown('set text', 'All Heroes');
-    $('#player-hero-select-menu').dropdown('set value', 'all');
     updateHeroTitle($('#player-detail-summary-header'), 'all');
 
     // then do the big query
@@ -550,7 +549,7 @@ function processPlayerData(err, docs) {
 function showHeroDetails(value, text, $selectedItem) {
   playerHeroMatchThreshold = parseInt($('#player-hero-thresh input').val());
   
-  if (value === 'all') {
+  if (value === 'all' || value === '') {
     DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, playerDetailFilter, function(err, docs) {
       playerDetailStats = DB.summarizeHeroData(docs);
       renderAllHeroSummary();
@@ -1284,6 +1283,12 @@ function processPlayerCollectionCompare(cache) {
   }
 
   let activeHero = $('#player-hero-select-menu').dropdown('get value');
+
+  // special case real quick
+  if ($('#player-hero-select-menu').dropdown('get text') === 'All Heroes') {
+    activeHero = '';
+  }
+
   let cmpData;
   let pData;
 
