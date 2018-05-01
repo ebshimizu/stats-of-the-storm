@@ -1,6 +1,5 @@
 // list of selected match ids
 // note that this isn't the currently displayed match ids, that's a different one
-var selectedMatches;
 const summaryProjection = {
   _id: 1,
   teams: 1,
@@ -444,14 +443,12 @@ function selectMatches() {
       matchSearchQuery = query;
       currentPage = 0;
       showPage(currentPage)
-      //DB.getMatches(query, updateSelectedMatches, {projection: summaryProjection, sort: {'date' : -1}});
     });
   }
   else {
     currentPage = 0;
     matchSearchQuery = query;
     showPage(currentPage);
-    //DB.getMatches(query, updateSelectedMatches, {projection: summaryProjection, sort: {'date' : -1}});
   }
 }
 
@@ -653,12 +650,14 @@ function handleMatchesCollectionAction(action, text, $elem) {
         if (collectionID === '')
           return;
 
-        for (let i in selectedMatches) {
-          DB.addMatchToCollection(selectedMatches[i]._id, collectionID);
-        }
-
-        if (collectionID === DB.getCollection())
-          resetAllSections();
+        DB.getMatches(matchSearchQuery, function(err, selectedMatches) {
+          for (let i in selectedMatches) {
+            DB.addMatchToCollection(selectedMatches[i]._id, collectionID);
+          }
+          if (collectionID === DB.getCollection()) {
+            resetAllSections();
+          }
+        });
       }
     }).
     modal('show');
@@ -676,12 +675,14 @@ function handleMatchesCollectionAction(action, text, $elem) {
           if (collectionID === '')
             return;
 
-          for (let i in selectedMatches) {
-            DB.removeMatchFromCollection(selectedMatches[i]._id, collectionID);
-          }
+          DB.getMatches(matchSearchQuery, function(err, selectedMatches) {
+            for (let i in selectedMatches) {
+              DB.removeMatchFromCollection(selectedMatches[i]._id, collectionID);
+            }
 
-          if (collectionID === DB.getCollection())
-            resetAllSections();
+            if (collectionID === DB.getCollection())
+              resetAllSections();
+          });
         }
       }).
       modal('show');
@@ -698,27 +699,31 @@ function handleMatchesFileAction(action, text, $elem) {
       if (files) {
         // pick the first, should only be 1 dir
         let path = files[0];
-        for (let i in selectedMatches) {
-          exportMatch(selectedMatches[i]._id, path + '/' + selectedMatches[i]._id + '.json');
-        }
+        DB.getMatches(matchSearchQuery, function(err, selectedMatches) {
+          for (let i in selectedMatches) {
+            exportMatch(selectedMatches[i]._id, path + '/' + selectedMatches[i]._id + '.json');
+          }
+        })
       }
     })
   }
   else if (action === 'delete') {
     $('#matches-confirm-delete-matches').modal({
       onApprove: function() {
-        if (selectedMatches.length === 0) {
-          showMessage('No Matches Selected', 'No matches deleted because no matches are selected', {});
-        }
-        else {
-          let toDelete = [];
-          for (let m of selectedMatches) {
-            toDelete.push(m._id);
+        DB.getMatches(matchSearchQuery, function(err, selectedMatches) {
+          if (selectedMatches.length === 0) {
+            showMessage('No Matches Selected', 'No matches deleted because no matches are selected', {});
           }
+          else {
+            let toDelete = [];
+            for (let m of selectedMatches) {
+              toDelete.push(m._id);
+            }
 
-          showMessage('Deleting ' + toDelete.length + ' Matches', '', '');
-          handleDeleteMatches(toDelete.pop(), toDelete);
-        }
+            showMessage('Deleting ' + toDelete.length + ' Matches', '', '');
+            handleDeleteMatches(toDelete.pop(), toDelete);
+          }
+        });
       }
     }).modal('show');
   }
@@ -741,38 +746,42 @@ function matchesAddTag(tagValue, tagText, $added) {
   if (!enableTagEdit)
     return;
   
-  let ids = [];
-  for (let m of selectedMatches) {
-    ids.push(m._id);
-  }
+  DB.getMatches(matchSearchQuery, function(err, selectedMatches) {
+    let ids = [];
+    for (let m of selectedMatches) {
+      ids.push(m._id);
+    }
 
-  DB.tagReplays(ids, tagValue, function() {
-    console.log('added ' + tagValue + ' to ' + ids.join(','));
+    DB.tagReplays(ids, tagValue, function() {
+      console.log('added ' + tagValue + ' to ' + ids.join(','));
 
-    let vals = $('#match-search-tags').dropdown('get value');
-    populateTagMenu($('#match-search-tags'), function() {
-      $('#match-search-tags').dropdown('set exactly', vals);
+      let vals = $('#match-search-tags').dropdown('get value');
+      populateTagMenu($('#match-search-tags'), function() {
+        $('#match-search-tags').dropdown('set exactly', vals);
+      });
+      populateTagMenu($('.filter-widget-tags'));
     });
-    populateTagMenu($('.filter-widget-tags'));
-  });
+  })
 }
 
 function matchesRemoveTag(tagValue, tagText, $removed) {
   if (!enableTagEdit)
     return;
 
-  let ids = [];
-  for (let m of selectedMatches) {
-    ids.push(m._id);
-  }
+  DB.getMatches(matchSearchQuery, function(err, selectedMatches) {
+    let ids = [];
+    for (let m of selectedMatches) {
+      ids.push(m._id);
+    }
 
-  DB.untagReplays(ids, tagValue, function() {
-    console.log('removed ' + tagValue + ' from ' + ids.join(','));
+    DB.untagReplays(ids, tagValue, function() {
+      console.log('removed ' + tagValue + ' from ' + ids.join(','));
 
-    let vals = $('#match-search-tags').dropdown('get value');
-    populateTagMenu($('#match-search-tags'), function() {
-      $('#match-search-tags').dropdown('set exactly', vals);
+      let vals = $('#match-search-tags').dropdown('get value');
+      populateTagMenu($('#match-search-tags'), function() {
+        $('#match-search-tags').dropdown('set exactly', vals);
+      });
+      populateTagMenu($('.filter-widget-tags'));
     });
-    populateTagMenu($('.filter-widget-tags'));
   });
 }
