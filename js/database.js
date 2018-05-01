@@ -369,6 +369,13 @@ class Database {
     }
   }
 
+  getMatchPage(query, pageNum, limit, projection, callback) {
+    this.preprocessQuery(query);
+
+    let skip = pageNum * limit;
+    this._db.matches.find(query, projection).skip(skip).limit(limit).sort({date: -1}).exec(callback);
+  }
+
   // updates the entire match
   updateMatch(match, callback) {
     if (callback) {

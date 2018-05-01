@@ -16,11 +16,11 @@ const summaryProjection = {
 
 const matchesPerPage = 10;
 
-var displayedMatchIDs;
 var currentPage;
 var matchRowTemplate;
 var enableTagEdit = true;
 var requireHeroOnTeam = false;
+var matchSearchQuery = {};
 
 function initMatchesPage() {
   // player menu init
@@ -156,7 +156,9 @@ function getMatchCount() {
 
 function selectAllMatches() {
   // get just the necessary info in descending time order
-  DB.getMatches({}, updateSelectedMatches, {projection: summaryProjection, sort: {'date' : -1 }});
+  matchSearchQuery = {};
+  currentPage = 0;
+  showPage(currentPage);
 }
 
 function resetMatchFilters() {
@@ -173,6 +175,7 @@ function resetMatchFilters() {
 
   $('#match-search-start-date').datepicker('setDate', new Date('1-1-2012'));
   $('#match-search-end-date').datepicker('setDate', new Date());
+  selectMatches();
 }
 
 // using the current search settings, search for matches
@@ -438,117 +441,101 @@ function selectMatches() {
         }
       }
 
+      matchSearchQuery = query;
       currentPage = 0;
-      DB.getMatches(query, updateSelectedMatches, {projection: summaryProjection, sort: {'date' : -1}});
+      showPage(currentPage)
+      //DB.getMatches(query, updateSelectedMatches, {projection: summaryProjection, sort: {'date' : -1}});
     });
   }
   else {
     currentPage = 0;
-    DB.getMatches(query, updateSelectedMatches, {projection: summaryProjection, sort: {'date' : -1}});
+    matchSearchQuery = query;
+    showPage(currentPage);
+    //DB.getMatches(query, updateSelectedMatches, {projection: summaryProjection, sort: {'date' : -1}});
   }
-}
-
-function updateSelectedMatches(err, docs) {
-  selectedMatches = docs;
-  let heroes = $('#match-search-heroes').dropdown('get value').split(',');
-
-  $('#matches-selected').text(selectedMatches.length);
-
-  enableTagEdit = false;
-  populateTagMenu($('#matches-tags-popup .search.dropdown'), function() {
-    // tags
-    let tags = [];
-    for (let d of docs) {
-      if ('tags' in d) {
-        for (let tag of d.tags) {
-          if (tags.indexOf(tag) === -1) {
-            tags.push(tag);
-          }
-        }
-      }
-    }
-    $('#matches-tags-popup .search.dropdown').dropdown('set exactly', tags);
-    enableTagEdit = true;
-  });
-
-  showPage(currentPage);
 }
 
 function showPage(pageNum) {
-  // clear
-  for (let i = 0; i < matchesPerPage; i++) {
-    $('tr[slot="' + i + '"]').html('');
-  }
+  DB.countMatches(matchSearchQuery, function(err, count) {
+    $('#matches-selected').text(count);
 
-  // check in range
-  let maxPages = Math.ceil(selectedMatches.length / matchesPerPage);
-  if (0 <= pageNum && pageNum < maxPages) {
-    // so like pick the correct range and just render it
-    let startIdx = pageNum * matchesPerPage;
+    let maxPages = Math.ceil(count / matchesPerPage);
+    if (0 <= pageNum && pageNum < maxPages) {
+      DB.getMatchPage(matchSearchQuery, pageNum, matchesPerPage, summaryProjection, function(err, selectedMatches) {
+        // clear
+        for (let i = 0; i < matchesPerPage; i++) {
+          $('tr[slot="' + i + '"]').html('');
+        }
 
-    for (let i = 0; i < matchesPerPage; i++) {
-      if (i + startIdx < selectedMatches.length) {
-        renderToSlot(selectedMatches[i + startIdx], i);
+        // so like pick the correct range and just render it
+        for (let i = 0; i < selectedMatches.length; i++) {
+            renderToSlot(selectedMatches[i], i);
+        }
+        currentPage = pageNum;
+
+        // update the pagination buttons
+        $('#match-list-page-menu').html('');
+        
+        // determine what to show
+        let show = Array.from(new Array(5), (x, i) => i - 2 + currentPage);
+        // first, we always have the first page
+        let elems = '';
+        if (currentPage > 0)
+          elems += '<a class="icon item prev"><i class="left chevron icon"></i></a>';
+        elems += '<a class="item" page="1">1</a>';
+
+        if (show[0] >= 2)
+          elems += '<a class="item disabled">...</a>';
+
+        for (let i = 0; i < show.length; i++) {
+          let pn = show[i];
+          
+          if (pn < 1 || pn >= maxPages - 1)
+            continue;
+          
+          elems += '<a class="item" page="' + (pn + 1) + '">' + (pn + 1) + '</a>';
+        }
+
+        if (show[show.length - 1] < maxPages - 2)
+          elems += '<a class="item disabled">...</a>';
+        
+        if (maxPages > 1) {
+          elems += '<a class="item" page="' + maxPages + '">' + maxPages + '</a>';
+        }
+
+        if (currentPage < maxPages - 1)
+          elems += '<a class="icon item next"><i class="right chevron icon"></i></a>';
+
+        $('#match-list-page-menu').html(elems);
+        $('#match-list-page-menu .item[page="' + (currentPage + 1) + '"]').addClass('active');
+
+        $('#match-list-page-menu .item').click(function() {
+          if ($(this).hasClass('disabled'))
+            return;
+
+          if ($(this).hasClass('next'))
+            showPage(currentPage + 1);
+          else if ($(this).hasClass('prev'))
+            showPage(currentPage - 1);
+          else
+            showPage(parseInt($(this).attr('page')) - 1);
+        });
+
+        $('#match-page-table .match-summary').click(function() {
+          let id = $(this).attr('match-id');
+          loadMatchData(id, function() { changeSection('match-detail'); });
+        })
+      });
+    }
+    else {
+      for (let i = 0; i < matchesPerPage; i++) {
+        $('tr[slot="' + i + '"]').html('');
+      }
+      if (count === 0) {
+        $('#match-list-page-menu').html('');
       }
     }
-    currentPage = pageNum;
-
-    // update the pagination buttons
-    $('#match-list-page-menu').html('');
-    
-    // determine what to show
-    let show = Array.from(new Array(5), (x, i) => i - 2 + currentPage);
-    // first, we always have the first page
-    let elems = '';
-    if (currentPage > 0)
-      elems += '<a class="icon item prev"><i class="left chevron icon"></i></a>';
-    elems += '<a class="item" page="1">1</a>';
-
-    if (show[0] >= 2)
-      elems += '<a class="item disabled">...</a>';
-
-    for (let i = 0; i < show.length; i++) {
-      let pn = show[i];
-      
-      if (pn < 1 || pn >= maxPages - 1)
-        continue;
-      
-      elems += '<a class="item" page="' + (pn + 1) + '">' + (pn + 1) + '</a>';
-    }
-
-    if (show[show.length - 1] < maxPages - 2)
-      elems += '<a class="item disabled">...</a>';
-    
-    if (maxPages > 1) {
-      elems += '<a class="item" page="' + maxPages + '">' + maxPages + '</a>';
-    }
-
-    if (currentPage < maxPages - 1)
-      elems += '<a class="icon item next"><i class="right chevron icon"></i></a>';
-
-    $('#match-list-page-menu').html(elems);
-    $('#match-list-page-menu .item[page="' + (currentPage + 1) + '"]').addClass('active');
-
-    $('#match-list-page-menu .item').click(function() {
-      if ($(this).hasClass('disabled'))
-        return;
-
-      if ($(this).hasClass('next'))
-        showPage(currentPage + 1);
-      else if ($(this).hasClass('prev'))
-        showPage(currentPage - 1);
-      else
-        showPage(parseInt($(this).attr('page')) - 1);
-    });
-
-    $('#match-page-table .match-summary').click(function() {
-      let id = $(this).attr('match-id');
-      loadMatchData(id, function() { changeSection('match-detail'); });
-    })
-  }
-  else {
-    $('#match-list-page-menu').html('');
-  }
+  });
 }
 
 function renderToSlot(gameData, slot) {
