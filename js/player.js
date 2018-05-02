@@ -565,7 +565,7 @@ function showHeroDetails(value, text, $selectedItem) {
     DB.getHeroData(query, function(err, docs) {
       playerDetailStats = DB.summarizeHeroData(docs);
 
-      renderHeroTalents(value);
+      renderHeroTalents(value, docs);
       renderPlayerSummary();
       renderProgression();
     });
@@ -669,11 +669,11 @@ function renderAllHeroSummary() {
   $('#player-overall-hero-pool .value').text(Object.keys(playerDetailStats.heroes).length + ' / ' + Heroes.heroCount);
 }
 
-function renderHeroTalents(hero) {
+function renderHeroTalents(hero, docs) {
   $('#player-detail-hero-summary-segment').addClass('is-hidden');
   $('#player-detail-hero-talent').removeClass('is-hidden');
 
-  renderHeroTalentsTo(hero, $('#player-detail-hero-talent'), playerDetailStats.rawDocs);
+  renderHeroTalentsTo(hero, $('#player-detail-hero-talent'), docs);
 }
 
 function renderHeroTalentsTo(hero, container, docs) {
@@ -969,183 +969,195 @@ function renderProgression() {
     axis2Stats = [];
 
   // collect a few stats along the specified interval
-  let data = {};
-  for (let d in playerDetailStats.rawDocs) {
-    let doc = playerDetailStats.rawDocs[d];
 
-    // ok where are we putting this
-    let hash;
-    if (playerProgressionInterval === IntervalMode.Patch) {
-      hash = hashInterval(doc.version, playerProgressionInterval);
-    }
-    else {
-      hash = hashInterval(new Date(doc.date), playerProgressionInterval);
-    }
+  // get the data
+  let query = Object.assign({}, playerDetailFilter);
+  query.ToonHandle = playerDetailInfo._id;
+  
+  let value = $('#player-hero-select-menu').dropdown('get value');
+  if (value !== 'all' && value !== '') {
+    query.hero = value;
+  }
 
-    if (!(hash[0] in data)) {
-      // initialize the data
-      data[hash[0]] = {
-        kills: 0,
-        takedowns: 0,
-        deaths: 0,
-        wins: 0,
-        award: 0,
-        mvp: 0,
-        games: 0,
-        sort: hash[1],
-        label: hash[0]
+  DB.getHeroData(query, function(err, docs) {
+    let data = {};
+    for (let d in docs) {
+      let doc = docs[d];
+
+      // ok where are we putting this
+      let hash;
+      if (playerProgressionInterval === IntervalMode.Patch) {
+        hash = hashInterval(doc.version, playerProgressionInterval);
+      }
+      else {
+        hash = hashInterval(new Date(doc.date), playerProgressionInterval);
+      }
+
+      if (!(hash[0] in data)) {
+        // initialize the data
+        data[hash[0]] = {
+          kills: 0,
+          takedowns: 0,
+          deaths: 0,
+          wins: 0,
+          award: 0,
+          mvp: 0,
+          games: 0,
+          sort: hash[1],
+          label: hash[0]
+        }
+      }
+
+      // stats
+      data[hash[0]].takedowns += doc.gameStats.Takedowns;
+      data[hash[0]].deaths += doc.gameStats.Deaths;
+      data[hash[0]].wins += doc.win ? 1 : 0;
+      data[hash[0]].award += doc.gameStats.awards.length;
+      data[hash[0]].mvp += doc.gameStats.awards.indexOf('EndOfMatchAwardMVPBoolean') >= 0 ? 1 : 0;
+      data[hash[0]].games += 1;
+
+      for (let stat of axis1Stats) {
+        if (!(stat in data[hash[0]]))
+          data[hash[0]][stat] = 0;
+
+        data[hash[0]][stat] += doc.gameStats[stat];
+      }
+
+      for (let stat of axis2Stats) {
+        if (!(stat in data[hash[0]]))
+          data[hash[0]][stat] = 0;
+
+        data[hash[0]][stat] += doc.gameStats[stat];
       }
     }
 
-    // stats
-    data[hash[0]].takedowns += doc.gameStats.Takedowns;
-    data[hash[0]].deaths += doc.gameStats.Deaths;
-    data[hash[0]].wins += doc.win ? 1 : 0;
-    data[hash[0]].award += doc.gameStats.awards.length;
-    data[hash[0]].mvp += doc.gameStats.awards.indexOf('EndOfMatchAwardMVPBoolean') >= 0 ? 1 : 0;
-    data[hash[0]].games += 1;
+    // stick objects in array then sort
+    let dataArr = [];
+    for (let d in data) {
+      dataArr.push(data[d]);
+    }
 
+    if (playerProgressionInterval === IntervalMode.Week) {
+      dataArr.sort(function(a, b) {
+        let ad = a.label.split('-');
+        let bd = b.label.split('-');
+
+        if (parseInt(ad[0]) < parseInt(bd[0]))
+          return -1;
+        else if (parseInt(ad[0]) > parseInt(bd[0]))
+          return 1;
+        
+        if (parseInt(ad[1]) < parseInt(bd[1]))
+          return -1;
+        else if (parseInt(ad[1]) > parseInt(bd[1]))
+          return 1;
+        
+        return 0;
+      });
+    }
+    else {
+      dataArr.sort(function(a, b) {
+        if (a.sort < b.sort)
+          return -1;
+        else if (a.sort > b.sort)
+          return 1;
+
+        return 0;
+      })  
+    }
+
+    // update data arrays
+    let labels = [];
+    progressionWinRateGraphData.data.datasets[0].data = [];
+    progressionWinRateGraphData.data.datasets[1].data = [];
+    progressionAwardsGraphData.data.datasets[0].data = [];
+    progressionAwardsGraphData.data.datasets[1].data = [];
+    progressionStatGraphData.data.datasets = [];
+
+    let ci = 0;
     for (let stat of axis1Stats) {
-      if (!(stat in data[hash[0]]))
-        data[hash[0]][stat] = 0;
+      let ds = {
+        label: DetailStatString[stat],
+        fill: 'false',
+        borderColor: statColors[ci],
+        backgroundColor: statColors[ci],
+        cubicInterpolationMode: 'monotone',
+        data: [],
+        yAxisID: 'axis1'
+      }
+      ci += 1;
+      ci %= statColors.length;
 
-      data[hash[0]][stat] += doc.gameStats[stat];
+      progressionStatGraphData.data.datasets.push(ds);
     }
 
     for (let stat of axis2Stats) {
-      if (!(stat in data[hash[0]]))
-        data[hash[0]][stat] = 0;
+      let ds = {
+        label: DetailStatString[stat],
+        fill: 'false',
+        borderColor: statColors[ci],
+        backgroundColor: statColors[ci],
+        cubicInterpolationMode: 'monotone',
+        data: [],
+        yAxisID: 'axis2'
+      }
+      ci += 1;
+      ci %= statColors.length;
 
-      data[hash[0]][stat] += doc.gameStats[stat];
+      progressionStatGraphData.data.datasets.push(ds);
     }
-  }
 
-  // stick objects in array then sort
-  let dataArr = [];
-  for (let d in data) {
-    dataArr.push(data[d]);
-  }
+    for (let i = 0; i < dataArr.length; i++) {
+      let stat = dataArr[i];
 
-  if (playerProgressionInterval === IntervalMode.Week) {
-    dataArr.sort(function(a, b) {
-      let ad = a.label.split('-');
-      let bd = b.label.split('-');
-
-      if (parseInt(ad[0]) < parseInt(bd[0]))
-        return -1;
-      else if (parseInt(ad[0]) > parseInt(bd[0]))
-        return 1;
-      
-      if (parseInt(ad[1]) < parseInt(bd[1]))
-        return -1;
-      else if (parseInt(ad[1]) > parseInt(bd[1]))
-        return 1;
-      
-      return 0;
-    });
-  }
-  else {
-    dataArr.sort(function(a, b) {
-      if (a.sort < b.sort)
-        return -1;
-      else if (a.sort > b.sort)
-        return 1;
-
-      return 0;
-    })  
-  }
-
-  // update data arrays
-  let labels = [];
-  progressionWinRateGraphData.data.datasets[0].data = [];
-  progressionWinRateGraphData.data.datasets[1].data = [];
-  progressionAwardsGraphData.data.datasets[0].data = [];
-  progressionAwardsGraphData.data.datasets[1].data = [];
-  progressionStatGraphData.data.datasets = [];
-
-  let ci = 0;
-  for (let stat of axis1Stats) {
-    let ds = {
-      label: DetailStatString[stat],
-      fill: 'false',
-      borderColor: statColors[ci],
-      backgroundColor: statColors[ci],
-      cubicInterpolationMode: 'monotone',
-      data: [],
-      yAxisID: 'axis1'
-    }
-    ci += 1;
-    ci %= statColors.length;
-
-    progressionStatGraphData.data.datasets.push(ds);
-  }
-
-  for (let stat of axis2Stats) {
-    let ds = {
-      label: DetailStatString[stat],
-      fill: 'false',
-      borderColor: statColors[ci],
-      backgroundColor: statColors[ci],
-      cubicInterpolationMode: 'monotone',
-      data: [],
-      yAxisID: 'axis2'
-    }
-    ci += 1;
-    ci %= statColors.length;
-
-    progressionStatGraphData.data.datasets.push(ds);
-  }
-
-  for (let i = 0; i < dataArr.length; i++) {
-    let stat = dataArr[i];
-
-    if (playerProgressionInterval === IntervalMode.Month) {
-      let m = moment(stat.sort);
-      labels.push(m.format('YYYY MMM'));
-    }
-    else if (playerProgressionInterval === IntervalMode.Week) {
-      let spl = stat.label.split('-');
-      labels.push(spl[0] + ' Week ' + spl[1]);
-    }
-    else {
-      labels.push(stat.label);
-    }
-    progressionWinRateGraphData.data.datasets[0].data.push((stat.wins / stat.games * 100).toFixed(2));
-    progressionWinRateGraphData.data.datasets[1].data.push(stat.games);
-    progressionAwardsGraphData.data.datasets[0].data.push((stat.award / stat.games * 100).toFixed(2));
-    progressionAwardsGraphData.data.datasets[1].data.push((stat.mvp / stat.games * 100).toFixed(2));
-
-    let idx = 0;
-    for (let s of axis1Stats) {
-      if (s === 'KDA') {
-        progressionStatGraphData.data.datasets[idx].data.push((stat.takedowns / Math.max(stat.deaths, 1)).toFixed(2));
+      if (playerProgressionInterval === IntervalMode.Month) {
+        let m = moment(stat.sort);
+        labels.push(m.format('YYYY MMM'));
+      }
+      else if (playerProgressionInterval === IntervalMode.Week) {
+        let spl = stat.label.split('-');
+        labels.push(spl[0] + ' Week ' + spl[1]);
       }
       else {
-        progressionStatGraphData.data.datasets[idx].data.push((stat[s] / stat.games).toFixed(2));
+        labels.push(stat.label);
+      }
+      progressionWinRateGraphData.data.datasets[0].data.push((stat.wins / stat.games * 100).toFixed(2));
+      progressionWinRateGraphData.data.datasets[1].data.push(stat.games);
+      progressionAwardsGraphData.data.datasets[0].data.push((stat.award / stat.games * 100).toFixed(2));
+      progressionAwardsGraphData.data.datasets[1].data.push((stat.mvp / stat.games * 100).toFixed(2));
+
+      let idx = 0;
+      for (let s of axis1Stats) {
+        if (s === 'KDA') {
+          progressionStatGraphData.data.datasets[idx].data.push((stat.takedowns / Math.max(stat.deaths, 1)).toFixed(2));
+        }
+        else {
+          progressionStatGraphData.data.datasets[idx].data.push((stat[s] / stat.games).toFixed(2));
+        }
+
+        idx += 1;
       }
 
-      idx += 1;
+      for (let s of axis2Stats) {
+        if (s === 'KDA') {
+          progressionStatGraphData.data.datasets[idx].data.push((stat.takedowns / Math.max(stat.deaths, 1)).toFixed(2));
+        }
+        else {
+          progressionStatGraphData.data.datasets[idx].data.push((stat[s] / stat.games).toFixed(2));
+        }
+
+        idx += 1;
+      }
     }
 
-    for (let s of axis2Stats) {
-      if (s === 'KDA') {
-        progressionStatGraphData.data.datasets[idx].data.push((stat.takedowns / Math.max(stat.deaths, 1)).toFixed(2));
-      }
-      else {
-        progressionStatGraphData.data.datasets[idx].data.push((stat[s] / stat.games).toFixed(2));
-      }
+    progressionWinRateGraphData.data.labels = labels;
+    progressionStatGraphData.data.labels = labels;
+    progressionAwardsGraphData.data.labels = labels;
 
-      idx += 1;
-    }
-  }
-
-  progressionWinRateGraphData.data.labels = labels;
-  progressionStatGraphData.data.labels = labels;
-  progressionAwardsGraphData.data.labels = labels;
-
-  progressionWinRateGraph.update();
-  progressionStatGraph.update();
-  progressionAwardsGraph.update();
+    progressionWinRateGraph.update();
+    progressionStatGraph.update();
+    progressionAwardsGraph.update();
+  });
 }
 
 // gonna need a bunch of helpers
@@ -1504,7 +1516,15 @@ function printPlayerSummary(filename, sections) {
 }
 
 function exportPlayerHeroCSV(file) {
-  if (playerDetailStats) {
-    exportHeroDataAsCSV(playerDetailStats.rawDocs, file);
+  let query = Object.assign({}, playerDetailFilter);
+  query.ToonHandle = playerDetailInfo._id;
+  
+  let value = $('#player-hero-select-menu').dropdown('get value');
+  if (value !== 'all' && value !== '') {
+    query.hero = value;
   }
+  
+  DB.getHeroData(query, function(err, docs) {
+    exportHeroDataAsCSV(docs, file);
+  });
 }

@@ -469,7 +469,6 @@ class Database {
     let playerDetailStats = {};
     playerDetailStats.heroes = {};
     playerDetailStats.maps = {};
-    playerDetailStats.rawDocs = docs;
     playerDetailStats.games = 0;
     playerDetailStats.wins = 0;
     playerDetailStats.nonCustomGames = 0;
@@ -1632,7 +1631,6 @@ class Database {
             let hdata = self.summarizeHeroData(heroData);
             
             // don't save these
-            delete hdata.rawDocs;
             let cache = {};
 
             // NeDB doesn't allow fields with '.' in it which is a problem for E.T.C. and others, so i will
@@ -1687,7 +1685,6 @@ class Database {
         tempDB.getHeroData({}, function(err, heroData) {
           let hdata = tempDB.summarizeHeroData(heroData);
 
-          delete hdata.rawDocs;
           let cache = {};
           cache.dbName = name;
           cache.name = name;
@@ -1713,7 +1710,6 @@ class Database {
     tempDB.getHeroData({collection: current._id}, function(err, heroData) {
       let hdata = tempDB.summarizeHeroData(heroData);
 
-      delete hdata.rawDocs;
       let cache = {};
       cache.dbName = dbName;
       cache.name = current.name;

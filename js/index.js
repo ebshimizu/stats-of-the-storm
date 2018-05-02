@@ -521,7 +521,7 @@ function globalDBUpdate() {
  populateStatCollectionMenus();
 }
 
-// TEMPORARY LOCATION
+// called on keydown for all player input fields
 function updatePlayerMenuOptions(elem, value) {
   // ok so like search for the player i guess
   let q = new RegExp(value, 'i');
