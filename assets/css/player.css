@@ -228,3 +228,10 @@
   font-size: 10pt;
   margin-left: 5px;
 }
+
+#players-set-player {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  float: right;
+}

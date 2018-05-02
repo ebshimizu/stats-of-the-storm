@@ -29,7 +29,7 @@ function initMatchesPage() {
     fullTextSearch: true
     // on change isn't actually necessary here. the search button handles all options
   });
-  
+
   // templates
   matchRowTemplate = Handlebars.compile(getTemplate('matches', '#match-summary-row').find('td')[0].outerHTML);
 

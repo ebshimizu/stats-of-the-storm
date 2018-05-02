@@ -662,8 +662,10 @@ function handleCollectionAction(id, name, action) {
 
 function setPlayerMenuThreshold() {
   settings.set('playerThreshold', parseInt($('#player-menu-thresh-input input').val()));
-  showMessage('Player Threshold Updated', 'Menus have been updated', { class: 'positive' });
-  runPlayerMenuUpdate();
+  showMessage(
+    'Player Menu Result Limit Updated', 'Menus will now show ' + settings.get('playerThreshold') + ' players maximum when searching.',
+    { class: 'positive' }
+  );
 }
 
 function cacheExternalDB() {

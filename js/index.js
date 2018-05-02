@@ -257,6 +257,13 @@ function resumeInitApp() {
   setLoadMessage('Populating Menus');
   globalDBUpdate();
 
+  $('.player-menu input.search').keydown(function(e) {
+    if (e.which === 38 || e.which === 40 || e.which === 13)
+      return;
+
+    updatePlayerMenuOptions(this, $(this).val());
+  });
+
   removeLoader();
 }
 
@@ -502,8 +509,6 @@ function formatStat(field, val, allFixed = false) {
 
 // updates certain elements based on a new replay inserted into the database
 function globalDBUpdate() {
-  runPlayerMenuUpdate();
-
   // patch update
   addPatchMenuOptions($('#filter-popup-widget .filter-widget-patch'), function() {
     $('#filter-popup-widget .filter-widget-patch').dropdown('refresh');
@@ -516,38 +521,37 @@ function globalDBUpdate() {
  populateStatCollectionMenus();
 }
 
-function runPlayerMenuUpdate() {
-  // populate user selection dropdowns with new entries.
-  DB.getPlayers({}, updatePlayerMenus, {sort: {'matches' : -1}});
-}
+// TEMPORARY LOCATION
+function updatePlayerMenuOptions(elem, value) {
+  // ok so like search for the player i guess
+  let q = new RegExp(value, 'i');
+  DB.getPlayers({name: q }, function(err, players) {
+    let menu = $(elem).parent('.dropdown');
+    menu.find('.menu .item').not('.active').remove();
+    menu.find('.message').remove();
 
-function updatePlayerMenus(err, players) {
-  // everything with a .player-menu class will do this update
-  $('.player-menu').each(function(idx, elem) {
-    // save selected
-    let selected = $(elem).dropdown('get value');
+    // limit 10 for perf
+    let max = settings.get('playerThreshold');
+    let count = 0;
+    for (let player of players) {
+      if (count > max)
+        break;
 
-    // replace things
-    let opts = $(elem).find('.menu');
-    opts.html('');
+      let name = player.name;
+      if (player.tag) {
+        name += '#' + player.tag;
+      }
 
-    for (let p in players) {
-      // in non-collection mode players with less than 1 game are hidden
-      if (DB.getCollection() === null && players[p].matches < settings.get('playerThreshold'))
-        continue;
+      let item = '<div class="item" data-value="' + player._id + '">';
+      //item += '<div class="ui horizontal label"><i class="file outline icon"></i>' + player.matches + '</div>';
+      item += '<div class="item" data-value="' + player._id + '">' + name + ' (' + RegionString[player.region] + ')</div>'
 
-      let elem = '<div class="item" data-value="' + players[p]._id + '">';
-      elem += '<div class="ui horizontal label"><i class="file outline icon"></i>' + players[p].matches + '</div>';
-      elem += players[p].name + (players[p].tag ? '#' + players[p].tag : '') + ' (' + RegionString[players[p].region] + ')</div>';
-
-      opts.append(elem);
+      menu.find('.menu').append(item);
+      count += 1
     }
 
-    $(elem).dropdown('refresh');
-    $(elem).dropdown('set selected', selected);
+    menu.dropdown('refresh');
   });
-
-  getMatchCount();
 }
 
 // given a user id, returns 'focus-player' class if the player id is, well, the focus player
@@ -724,7 +728,6 @@ function setAppCollection(value, text, $elem) {
 function resetAllSections() {
   // this should be called after a database reload
   // sections will register a reset function (if any) that will be called here
-  DB.getPlayers({}, updatePlayerMenus, {sort: {'matches' : -1}});
   updateCollectionMenu();
   populateTeamMenu($('.team-menu'));
 
