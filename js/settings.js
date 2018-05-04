@@ -350,7 +350,8 @@ function addReplaysToList(path, collections) {
     let replays = [];
     for (let file of files) {
       let stats = fs.statSync(path + '/' + file);
-      if (file.endsWith('.StormReplay')) {
+      let lcstr = file.toLowerCase();
+      if (lcstr.endsWith('.stormreplay')) {
         let context = { filename: file };
         context.status = "";
         context.date = new Date(stats.birthtime);
