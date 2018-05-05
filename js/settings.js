@@ -350,6 +350,11 @@ function addReplaysToList(path, collections) {
     let replays = [];
     for (let file of files) {
       let stats = fs.statSync(path + '/' + file);
+
+      if (new Date(stats.birthtime) < currentDate) {
+        continue;
+      }
+
       let lcstr = file.toLowerCase();
       if (lcstr.endsWith('.stormreplay')) {
         let context = { filename: file };
@@ -361,10 +366,8 @@ function addReplaysToList(path, collections) {
         // only used for import sets, safe to leave undefined otherwise
         context.collections = collections;
 
-        if (context.date >= currentDate) {
-          context.path = path + '/' + file;
-          replays.push(context);
-        }
+        context.path = path + '/' + file;
+        replays.push(context);
       }
       else if (stats.isDirectory()) {
         replays = replays.concat(addReplaysToList(path + '/' + file, collections));
