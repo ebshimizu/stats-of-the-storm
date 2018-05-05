@@ -1,10 +1,14 @@
+
+
 var settingsRowTemplate;
-var replayQueue;
+var replayQueue = [];
 var collectionRowTemplate;
 var collectionCacheRowTemplate;
 var importDuplicates = false;
 var localImportSet = {};
 var usingImportSet = false;
+var parserRunning = false;
+var watcher;
 
 // used by the parser
 var listedReplays;
@@ -232,9 +236,25 @@ function initSettingsPage() {
     $('#settings-recursive-replay').checkbox('set checked');
   }
 
-  if (replayPath) {
-    // load the directory
-    startReplayScan();
+  $('#settings-watch-dirs').checkbox({
+    onChecked: startWatcher,
+    onUnchecked: stopWatcher
+  });
+
+  // watch directories
+  let watchDirs = settings.get('watchDirs');
+  if (watchDirs) {
+    if (path in watchDirs) {
+      if (watchDirs[path] === true) {
+        $('#settings-watch-dirs').checkbox('check');
+      }
+    }
+  }
+  else {
+    if (replayPath) {
+      // load the directory
+      startReplayScan();
+    }
   }
 }
 
@@ -410,6 +430,7 @@ function parseReplays() {
 }
 
 function disableParsingUI() {
+  parserRunning = true; 
   $('#start-process-button').addClass('loading disabled');
   $('#rescan-replays-button').addClass('disabled');
   $('#settings-hots-api-button').checkbox('disable');
@@ -425,6 +446,7 @@ function disableParsingUI() {
 
 function enableParsingUI() {
   globalDBUpdate();
+  parserRunning = false;
 
   $('#start-process-button').removeClass('loading disabled');
   $('#rescan-replays-button').removeClass('disabled');
@@ -837,4 +859,87 @@ function saveLocalImportSet() {
   }
 
   settings.set('importSets', globalSet);
+}
+
+function startWatcher() {
+  let watchDirs = settings.get('watchDirs');
+  let dbPath = settings.get('dbPath');
+  let recursive = settings.get('recursiveReplaySearch');
+  showMessage('Started watching replay folder', 'New files will be automatically imported');
+
+  if (!watchDirs) {
+    watchDirs = {};
+  }
+
+  watchDirs[dbPath] = true;
+  settings.set('watchDirs', watchDirs);
+
+  if (watcher)
+    watcher.close();
+
+  if (usingImportSet) {
+    // get all the import set paths
+    let dirs = [];
+    let importSet = settings.get('importSets')[dbPath];
+    for (let dir in importSet) {
+      dirs.push(importSet[dir].path);
+    }
+
+    watcher = watch(dirs, { recursive, filter: /\.stormreplay$/i}, liveAddReplay);
+  }
+  else {
+    // just the one
+    watcher = watch(settings.get('replayPath'), { recursive, filter: /\.stormreplay$/i }, liveAddReplay);
+  }
+}
+
+function stopWatcher() {
+  let watchDirs = settings.get('watchDirs');
+  let dbPath = settings.get('dbPath');
+  showMessage('Stopped watching replay folder', 'New files will not be automatically imported');
+
+  if (!watchDirs) {
+    watchDirs = {};
+  }
+
+  watchDirs[dbPath] = false;
+  settings.set('watchDirs', watchDirs);
+
+  if (watcher) {
+    watcher.close();
+  }
+}
+
+function liveAddReplay(evt, name) {
+  if (evt === 'update') {
+    // filtered out non-stormreplay files
+    let stats = fs.statSync(name);
+
+    let prefix = name.match(/(.*)[\/\\]/)[1]||'';
+
+    let context = { };
+    context.status = "";
+    context.date = new Date(stats.birthtime);
+    context.fdate = context.date.toLocaleString('en-us');
+    context.folder = prefix.match(/([^\/\\]*)\/*$/)[1];
+    context.filename = name.match(/([^\/\\]*)\/*$/)[1];
+
+    // only used for import sets, safe to leave undefined otherwise
+    context.collections = localImportSet[prefix].collections;
+
+    context.path = name;
+    
+    context.id = listedReplays.length;
+    $('#replay-file-list').append(settingsRowTemplate(context));
+    context.processed = false;
+    listedReplays.push(context);
+
+    context.idx = context.id;
+    replayQueue.push(context);
+
+    if (!parserRunning) {
+      disableParsingUI();
+      parseReplaysAsync(replayQueue.shift());
+    }
+  }
 }

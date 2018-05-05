@@ -51,6 +51,7 @@
 }
 
 #settings-replay-folder-settings-popup #settings-recursive-replay label,
+#settings-replay-folder-settings-popup #settings-watch-dirs label,
 #settings-replay-folder-settings-popup #settings-use-import-set label {
     color: #000!important;
 }

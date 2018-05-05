@@ -20,6 +20,7 @@ const ReplayTypes = require(path.join(__dirname, 'parser/constants.js'));
 const moment = require('moment');
 const FormData = require('form-data');
 const { is, fixPathForAsarUnpack } = require('electron-util');
+const watch = require('node-watch');
 
 const RegionString = {
   1: 'NA',
