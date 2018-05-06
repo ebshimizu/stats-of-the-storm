@@ -885,11 +885,11 @@ function startWatcher() {
       dirs.push(importSet[dir].path);
     }
 
-    watcher = watch(dirs, { recursive, filter: /\.stormreplay$/i}, liveAddReplay);
+    watcher = watch(dirs, { recursive, filter: /\.stormreplay$/i, delay: 1000 }, liveAddReplay);
   }
   else {
     // just the one
-    watcher = watch(settings.get('replayPath'), { recursive, filter: /\.stormreplay$/i }, liveAddReplay);
+    watcher = watch(settings.get('replayPath'), { recursive, filter: /\.stormreplay$/i, delay: 1000 }, liveAddReplay);
   }
 }
 
