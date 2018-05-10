@@ -3,24 +3,23 @@
 // their respective javascript files
 
 const path = require('path');
-const HeroesDB = require(path.join(__dirname, './js/database.js'));
 const settings = require('electron-settings');
-const Parser = require(path.join(__dirname, './parser/parser.js'));
-const HeroesTalents = require(path.join(__dirname, './js/heroes-talents.js'));
-const app = require('electron').remote.app;
-const dialog = require('electron').remote.dialog;
-const remote = require('electron').remote;
-const shell = require('electron').shell;
+
+const watch = require('node-watch');
+
+const { shell, remote, ipcRenderer } = require('electron');
+const { app, dialog, BrowserWindow } = remote;
+
 const Handlebars = require('handlebars');
 const fs = require('fs-extra');
 const cp = require('child_process');
-const BrowserWindow = require('electron').remote.BrowserWindow
-const ipcRenderer = require('electron').ipcRenderer
-const ReplayTypes = require(path.join(__dirname, 'parser/constants.js'));
+
+const HeroesDB = require('./js/database.js');
+const Parser = require('./parser/parser.js');
+const HeroesTalents = require('./js/heroes-talents.js');
+const ReplayTypes = require('./parser/constants.js');
 const moment = require('moment');
 const FormData = require('form-data');
-const { is, fixPathForAsarUnpack } = require('electron-util');
-const watch = require('node-watch');
 
 const summarizeHeroData = require('./js/database/summarize-hero-data');
 const summarizeMapData = require('./js/database/summarize-map-data');
