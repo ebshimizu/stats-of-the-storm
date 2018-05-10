@@ -11,7 +11,7 @@ var parserRunning = false;
 var watcher;
 
 // used by the parser
-var listedReplays;
+var listedReplays = [];
 
 function initSettingsPage() {
   // templates
