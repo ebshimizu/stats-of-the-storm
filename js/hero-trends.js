@@ -138,8 +138,8 @@ function loadTrends() {
       $('#hero-trends-body tbody').html('');
 
       let stats = {};
-      let p1stats = DB.summarizeMatchData(dp1, Heroes);
-      let p2stats = DB.summarizeMatchData(dp2, Heroes);
+      let p1stats = summarizeMatchData(dp1, Heroes);
+      let p2stats = summarizeMatchData(dp2, Heroes);
       stats.period1 = p1stats.data;
       stats.period2 = p2stats.data;
 

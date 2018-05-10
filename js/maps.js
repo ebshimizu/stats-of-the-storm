@@ -63,7 +63,7 @@ function loadMapStats() {
   $('#map-individual-stats tbody').html('');
 
   DB.getMatches(mapsMapDataFilter, function(err, docs) {
-    let mapData = DB.summarizeMapData(docs);
+    let mapData = summarizeMapData(docs);
 
     // stats
     let statContainer = $('#map-overall-stats');

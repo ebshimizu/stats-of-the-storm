@@ -264,9 +264,9 @@ function loadTeamData(team, matches, heroData) {
   teamHeroMatchThresh = parseInt($('#teams-hero-thresh input').val());
 
   // compute hero stats
-  let heroStats = DB.summarizeHeroData(heroData);
-  teamPlayerStats = DB.summarizePlayerData(heroData);
-  teamTeamStats = DB.summarizeTeamData(team, matches, Heroes);
+  let heroStats = summarizeHeroData(heroData);
+  teamPlayerStats = summarizePlayerData(heroData);
+  teamTeamStats = summarizeTeamData(team, matches, Heroes);
 
   // i'm uh, kind of lazy
   let playerStats = teamPlayerStats;
@@ -722,7 +722,7 @@ function processTeamAverages(err, matches, team) {
   }
 
   teamAvgTracker.actual += 1;
-  let teamStats = DB.summarizeTeamData(team, matches, Heroes);
+  let teamStats = summarizeTeamData(team, matches, Heroes);
 
   for (let s in teamStats.stats.total) {
     if (!(s in teamAvgData))

@@ -22,6 +22,13 @@ const FormData = require('form-data');
 const { is, fixPathForAsarUnpack } = require('electron-util');
 const watch = require('node-watch');
 
+const summarizeHeroData = require('./js/database/summarize-hero-data');
+const summarizeMapData = require('./js/database/summarize-map-data');
+const summarizeMatchData = require('./js/database/summarize-match-data');
+const summarizePlayerData = require('./js/database/summarize-player-data');
+const summarizeTalentData = require('./js/database/summarize-talent-data');
+const summarizeTeamData = require('./js/database/summarize-team-data');
+
 const RegionString = {
   1: 'NA',
   2: 'EU',
@@ -29,68 +36,9 @@ const RegionString = {
   98: 'PTR/TR'
 }
 
-const DetailStatList = [
-  'Takedowns',
-  'SoloKill',
-  'Assists',
-  'Deaths',
-  'KillParticipation', // special case
-  'KDA',
-  'HighestKillStreak',
-  'VengeancesPerformed',
-  'TimeSpentDead',
-  'OutnumberedDeaths',
-  'EscapesPerformed',
-  'TeamfightEscapesPerformed',
-  'HeroDamage',
-  'DPM',
-  'damageDonePerDeath',
-  'TeamfightHeroDamage',
-  'SiegeDamage',
-  'StructureDamage',
-  'MinionDamage',
-  'SummonDamage',
-  'CreepDamage',
-  'Healing',
-  'HPM',
-  'healingDonePerDeath',
-  'TeamfightHealingDone',
-  'SelfHealing',
-  'ProtectionGivenToAllies',
-  'ClutchHealsPerformed',
-  'DamageTaken',
-  'damageTakenPerDeath',
-  'TeamfightDamageTaken',
-  'TimeCCdEnemyHeroes',
-  'TimeRootingEnemyHeroes',
-  'TimeSilencingEnemyHeroes',
-  'TimeStunningEnemyHeroes',
-  //'TimeOnPoint',
-  'OnFireTimeOnFire',
-  'ExperienceContribution',
-  'XPM',
-  'MercCampCaptures',
-  //'TownKills',
-  'WatchTowerCaptures'
-  //'Role'
-];
+const DetailStatList = require('./js/game-data/detail-stat-list');
 
-const PerMapStatList = {
-  "Towers of Doom" : ["AltarDamageDone"],
-  "Battlefield of Eternity" : ["DamageDoneToImmortal"],
-  "Dragon Shire" : ["DragonNumberOfDragonCaptures", "DragonShrinesCaptured"],
-  "Blackheart's Bay" : ["BlackheartDoubloonsCollected", "BlackheartDoubloonsTurnedIn"],
-  "Haunted Mines" : ["MinesSkullsCollected"],
-  "Infernal Shrines" : ["DamageDoneToShrineMinions"],
-  "Garden of Terror" : ["GardensPlantDamage", "GardensSeedsCollected"],
-  "Tomb of the Spider Queen" : ["GemsTurnedIn"],
-  "Warhead Junction" : ["NukeDamageDone"],
-  "Cursed Hollow" : ["CurseDamageDone"],
-  "Volskaya Foundry" : [],
-  "Sky Temple" : ["TimeInTemple"],
-  "Braxis Holdout" : ["DamageDoneToZerg"],
-  "Hanamura" : []
-};
+const PerMapStatList = require('./js/game-data/map-stats');
 
 const DetailStatString = {
   'Takedowns' : 'Takedowns',
@@ -648,7 +596,7 @@ function updateCollectionMenu(callback) {
 
     if (collections.length > 0)
       $('#collection-switch-menu .menu').append('<div class="ui divider"></div>');
-    
+
     for (let c in collections) {
       let collection = collections[c];
 
@@ -816,7 +764,7 @@ function exportMatch(id, filename) {
 
 function exportPlayer(id, filename) {
   DB.getHeroDataForPlayer(id, function(err, docs) {
-    let data = DB.summarizeHeroData(docs);
+    let data = summarizeHeroData(docs);
     fs.writeFile(filename, JSON.stringify(data, null, 2), function(err) {
       if (err) {
         showMessage('Export Error', err, { class: 'negative' });
@@ -878,7 +826,7 @@ function copyFloatingTable(src, dest) {
   let table = src.clone();
   let headers = table.find('.floatThead-table thead').detach();
   table.find('.floatThead-container').remove();
-  
+
   if (headers.length > 0) {
     table.find('thead').remove();
     table.find('table.table').prepend(headers);
@@ -905,7 +853,7 @@ function copyFloatingTable(src, dest) {
 function copyGraph(srcData, dest, opts = {}) {
   dest.removeClass('.chartjs-render-monitor');
   dest.attr('style', '');
-  
+
   if (opts.width) {
     dest.attr('width', opts.width);
   }
@@ -978,7 +926,7 @@ function exportHeroDataAsCSV(docs, file) {
   // assert docs > 0
   if (docs.length === 0)
     return;
-  
+
   // first, setup fields
   let outData = '';
 
@@ -990,7 +938,7 @@ function exportHeroDataAsCSV(docs, file) {
   outData += ',win';
   outData += ',map';
   outData += ',length';
-  
+
   // stats in order
   for (let s of DetailStatList) {
     outData += ',' + s;
@@ -1014,7 +962,7 @@ function exportHeroDataAsCSV(docs, file) {
   // time for exporting
   for (doc of docs) {
     let row = '';
-  
+
     // identifiers
     row += doc.ToonHandle;
     row += ',' + doc.name;
@@ -1023,12 +971,12 @@ function exportHeroDataAsCSV(docs, file) {
     row += ',' + (doc.win ? 'true' : 'false');
     row += ',' + doc.map;
     row += ',' + doc.length;
-    
+
     // stats in order
     for (let s of DetailStatList) {
       row += ',' + doc.gameStats[s];
     }
-  
+
     for (let m in PerMapStatList) {
       for (let s of PerMapStatList[m]) {
         if (s in doc.gameStats) {
@@ -1088,7 +1036,7 @@ function migrateVersion3ToVersion4() {
   setLoadMessage('Updating DB Version 3 to Version 4');
 
   setLoadMessage('Updating DB Version 3 to Version 4<br>Backing up existing database');
-  
+
   // copy the 4 files to a new directory (db3-backup)
   let path = settings.get('dbPath');
 
@@ -1159,7 +1107,7 @@ function updateMatchToVersion3(match, remaining) {
     }
     else {
       updateMatchToVersion3(remaining.pop(), remaining);
-    } 
+    }
   }
 }
 

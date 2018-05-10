@@ -523,7 +523,7 @@ function updatePlayerPage(err, doc) {
 
 // this is the initial call to creating the data
 function processPlayerData(err, docs) {
-  playerDetailStats = DB.summarizeHeroData(docs);
+  playerDetailStats = summarizeHeroData(docs);
 
   // dropdown initialization
   $('#player-hero-select-menu .menu').html('<div class="item" data-value="all">All Heroes</div>');
@@ -551,7 +551,7 @@ function showHeroDetails(value, text, $selectedItem) {
   
   if (value === 'all' || value === '') {
     DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, playerDetailFilter, function(err, docs) {
-      playerDetailStats = DB.summarizeHeroData(docs);
+      playerDetailStats = summarizeHeroData(docs);
       renderAllHeroSummary();
       renderPlayerSummary();
       renderProgression();
@@ -563,7 +563,7 @@ function showHeroDetails(value, text, $selectedItem) {
     query.hero = value;
 
     DB.getHeroData(query, function(err, docs) {
-      playerDetailStats = DB.summarizeHeroData(docs);
+      playerDetailStats = summarizeHeroData(docs);
 
       renderHeroTalents(value, docs);
       renderPlayerSummary();
@@ -678,7 +678,7 @@ function renderHeroTalents(hero, docs) {
 
 function renderHeroTalentsTo(hero, container, docs) {
   // summarize talent data
-  let talentData = DB.summarizeTalentData(docs, Heroes);
+  let talentData = summarizeTalentData(docs, Heroes);
   let data = talentData.talentStats[hero];
 
   container.find('tbody').html('');
@@ -827,7 +827,7 @@ function renderPlayerSummary() {
   $('#player-detail-map-summary table').floatThead('reflow');
 }
 
-// expects stats to be from DB.summarizeHeroData(docs).maps
+// expects stats to be from summarizeHeroData(docs).maps
 function renderMapStatsTo(container, stats) {
   container.find('tbody').html('');
 
@@ -844,7 +844,7 @@ function renderMapStatsTo(container, stats) {
   container.find('th').removeClass('sorted ascending descending');
 }
 
-// expects stats to be from DB.summarizeHeroData(docs).withHero / againstHero
+// expects stats to be from summarizeHeroData(docs).withHero / againstHero
 function renderHeroVsStatsTo(container, stats, threshold) {
   if (threshold === undefined)
     threshold = 0;
