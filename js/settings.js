@@ -470,13 +470,13 @@ function parseReplaysAsync(replay) {
   // then hand back to the main thread to actually insert into the database
   $('tr[replay-id="' + replay.id + '"] .replay-status').text('Processing...');
 
-  // upload maybe
-  if (settings.get('uploadToHotsAPI') === true) {
-    uploadReplayToHotsAPI(replay.id, replay.path);
-  }
-
   DB.checkDuplicate(replay.path, function(result) {
     if (importDuplicates === true || result === false) {
+      // upload maybe
+      if (settings.get('uploadToHotsAPI') === true) {
+        uploadReplayToHotsAPI(replay.id, replay.path);
+      }
+
       bgWindow.webContents.send('parseReplay', replay.path, replay.idx, BrowserWindow.getAllWindows()[0].id);
       return;
     }
@@ -925,7 +925,9 @@ function liveAddReplay(evt, name) {
     context.filename = name.match(/([^\/\\]*)\/*$/)[1];
 
     // only used for import sets, safe to leave undefined otherwise
-    context.collections = localImportSet[prefix].collections;
+    if (usingImportSet) {
+      context.collections = localImportSet[prefix].collections;
+    }
 
     context.path = name;
     
