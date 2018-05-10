@@ -66,7 +66,9 @@ function initTrendsPage() {
   // init values
   $('#hero-trends-hero-thresh input').val(trendsHeroMatchThreshold);
 
-  $('#hero-trends-page-header .trends-date').datepicker();
+  $('#hero-trends-page-header .trends-date').datepicker({
+    autoHide: false
+  });
   $('#hero-trends-page-header .trends-date').on('pick.datepicker', function(e) {
     trendsDateLimits[$(this).attr('name')] = e.date;
   });

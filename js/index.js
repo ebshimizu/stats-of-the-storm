@@ -22,6 +22,11 @@ const FormData = require('form-data');
 const { is, fixPathForAsarUnpack } = require('electron-util');
 const watch = require('node-watch');
 
+// datepicker gloabl settings
+$.fn.datepicker.setDefaults({
+  autoHide: true
+});
+
 const RegionString = {
   1: 'NA',
   2: 'EU',
