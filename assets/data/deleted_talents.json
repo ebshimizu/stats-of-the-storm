@@ -127,5 +127,50 @@
     "icon": "storm_ui_icon_varian_parry.png",
     "sort": 1,
     "abilityId": "Varian|W1"
+  },
+  {
+    "tooltipId": "AurielRepellingStrikeDetainmentStrikeTalent",
+    "talentTreeId": "AurielRepellingStrikeDetainmentStrikeTalent",
+    "name": "Repelling Strike",
+    "description": "Enemies hit by Detainment Strike are knocked back 35% farther.",
+    "icon": "storm_ui_icon_auriel_restrainingblow_a.png",
+    "sort": 4,
+    "abilityId": "Auriel|E1"
+  },
+  {
+    "tooltipId": "GuldanDrainLifeTalentGlyphofDrainLife",
+    "talentTreeId": "GuldanDrainLifeGlyphOfDrainLife",
+    "name": "Glyph of Drain Life",
+    "description": "Increases the cast range of Drain Life by 25%.",
+    "icon": "storm_ui_icon_guldan_healthfunnel.png",
+    "sort": 2,
+    "abilityId": "Gul'dan|W1"
+  },
+  {
+    "tooltipId": "GuldanDrainLifeDevourTheFrail",
+    "talentTreeId": "GuldanDrainLifeDevourTheFrail",
+    "name": "Devour the Frail",
+    "description": "Drain Life deals 50% more damage to enemies below 50% Health.",
+    "icon": "storm_ui_icon_guldan_healthfunnel.png",
+    "sort": 2,
+    "abilityId": "Gul'dan|W1"
+  },
+  {
+    "tooltipId": "KaelthasArcaneDynamo",
+    "talentTreeId": "KaelthasArcaneDynamo",
+    "name": "Arcane Dynamo",
+    "description": "Using a Basic Ability increases Kael'thas's Spell Power by 3% for 5 seconds, stacking up to 15%.",
+    "icon": "storm_ui_icon_talent_arcanepower.png",
+    "sort": 3,
+    "abilityId": "Kael'thas|Passive"
+  },
+  {
+    "tooltipId": "TychusFullyLoaded",
+    "talentTreeId": "TychusFullyLoaded",
+    "name": "Fully Loaded",
+    "description": "Reduce Minigun's cooldown by 5 seconds.",
+    "icon": "storm_ui_icon_tychus_minigun_a.png",
+    "sort": 2,
+    "abilityId": "Tychus|D1"
   }
 ]
