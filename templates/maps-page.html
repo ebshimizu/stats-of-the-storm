@@ -88,13 +88,13 @@
   <tr class="map-table-row">
     <td><h3 class="ui inverted header">{{map}}</h3></td>
     <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
-    <td class="center aligned" data-sort-value="{{average}}">{{format.average}}</td>
-    <td class="center aligned" data-sort-value="{{median}}">{{format.median}}</td>
-    <td class="center aligned match-link" data-sort-value="{{min}}" matchID="{{minId}}">{{format.min}}</td>
-    <td class="center aligned match-link" data-sort-value="{{max}}" matchID="{{maxId}}">{{format.max}}</td>
-    <td class="center aligned" data-sort-value="{{firstPickWinPct}}">{{format.firstPickWinPct}}</td>
-    <td class="center aligned" data-sort-value="{{firstObjectiveWinsPct}}">{{format.firstObjectiveWinsPct}}</td>
-    <td class="center aligned" data-sort-value="{{blueWinPct}}">{{format.blueWinPct}}</td>
-    <td class="center aligned" data-sort-value="{{redWinPct}}">{{format.redWinPct}}</td>
+    <td class="center aligned" data-sort-value="{{average}}">{{formatSeconds average}}</td>
+    <td class="center aligned" data-sort-value="{{median}}">{{formatSeconds median}}</td>
+    <td class="center aligned match-link" data-sort-value="{{min}}" matchID="{{minId}}">{{formatSeconds min}}</td>
+    <td class="center aligned match-link" data-sort-value="{{max}}" matchID="{{maxId}}">{{formatSeconds max}}</td>
+    <td class="center aligned" data-sort-value="{{firstPickWinPct}}">{{formatPct firstPickWinPct}}</td>
+    <td class="center aligned" data-sort-value="{{firstObjectiveWinsPct}}">{{formatPct firstObjectiveWinsPct}}</td>
+    <td class="center aligned" data-sort-value="{{blueWinPct}}">{{formatPct blueWinPct}}</td>
+    <td class="center aligned" data-sort-value="{{redWinPct}}">{{formatPct redWinPct}}</td>
   </tr>
 </template>

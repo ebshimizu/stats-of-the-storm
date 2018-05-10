@@ -3,9 +3,10 @@ var mapsMapDataFilter;
 var mapsMapRowTemplate;
 
 function initMapsPage() {
+
   // templates
   mapsMapRowTemplate = Handlebars.compile(getTemplate('maps', '#map-table-row-template').find('tr')[0].outerHTML);
-  
+
   // tables
   $('#maps-page-content table').tablesort();
   $('#maps-page-content table').floatThead({
@@ -19,7 +20,7 @@ function initMapsPage() {
   // filter popup
   let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
   filterWidget.attr('widget-name', 'maps-filter');
-  
+
   $('#filter-widget').append(filterWidget);
   initPopup(filterWidget);
 
@@ -81,32 +82,21 @@ function loadMapStats() {
 
     // maps
     for (let map in mapData.stats) {
-      let context = mapData.stats[map];
+      let context = Object.assign({}, mapData.stats[map]);
 
       context.firstPickWinPct = context.firstPickWin / context.draftGames;
-      context.firstObjectiveWinsPct = context.firstObjectiveWins / context.games;
+      if (map === ReplayTypes.MapType.BlackheartsBay || map === ReplayTypes.MapType.HauntedMines) {
+        context.firstObjectiveWinsPct = NaN;
+      } else {
+        context.firstObjectiveWinsPct = context.firstObjectiveWins / context.games;
+      }
       context.blueWinPct = context.blueWin / context.games;
       context.redWinPct = context.redWin / context.games;
       context.map = map;
 
-      context.format = {};
-      context.format.average = formatSeconds(context.average);
-      context.format.median = formatSeconds(context.median);
-      context.format.min = formatSeconds(context.min);
-      context.format.max = formatSeconds(context.max);
-      context.format.firstPickWinPct = formatStat('pct', context.firstPickWinPct);
-
-      if (map === ReplayTypes.MapType.BlackheartsBay || map === ReplayTypes.MapType.HauntedMines)
-        context.format.firstObjectiveWinsPct = 'No Data';
-      else
-        context.format.firstObjectiveWinsPct = formatStat('pct', context.firstObjectiveWinsPct);
-
-      context.format.blueWinPct = formatStat('pct', context.blueWinPct);
-      context.format.redWinPct = formatStat('pct', context.redWinPct);
-
       $('#map-individual-stats tbody').append(mapsMapRowTemplate(context));
     }
-    
+
     // link binding
     $('#maps-page-content .match-link').off();
     $('#maps-page-content .match-link').click(function() {

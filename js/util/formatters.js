@@ -13,6 +13,9 @@ function formatSeconds(val) {
 }
 
 function formatStat(field, val, allFixed = false) {
+  if (Number.isNaN(val))
+    return "N/A";
+
   if (val === undefined)
     return 0;
 

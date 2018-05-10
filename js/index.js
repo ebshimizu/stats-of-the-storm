@@ -35,6 +35,10 @@ const {
 } = require('./js/util/formatters');
 
 
+Handlebars.registerHelper('formatSeconds', formatSeconds);
+
+Handlebars.registerHelper('formatPct', (value) => formatStat('pct', value));
+
 const RegionString = {
   1: 'NA',
   2: 'EU',
