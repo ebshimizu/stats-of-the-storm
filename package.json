@@ -44,6 +44,7 @@
   "devDependencies": {
     "electron": "^1.8.6",
     "electron-builder": "^20.11.1",
+    "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-node": "^5.2.1",
