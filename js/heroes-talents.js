@@ -162,10 +162,6 @@ class HeroesTalents {
     return this._roles[role].all.length;
   }
 
-  get heroCount() {
-    return Object.keys(this._heroes).length;
-  }
-
   get roles() {
     return Object.keys(this._roles);
   }

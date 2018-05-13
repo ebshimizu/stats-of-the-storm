@@ -697,12 +697,7 @@ function exportHeroDraftCSV(filename) {
     let outData = '';
     let fields = ['hero', 'role', 'wins', 'games', 'involved', 'round 1', 'round 2', 'round 3', 'bans', 'ban 1', 'ban 2', 'round 1 wins', 'round 2 wins', 'round 3 wins', 'totalGames'];
 
-    for (let i = 0; i < fields.length; i++) {
-      if (i > 0)
-        outData += ',';
-
-      outData += fields[i];
-    }
+    outData += fields.join(',');
 
     for (let h in matchData.data) {
       if (h === 'totalMatches' || h === 'totalBans')
