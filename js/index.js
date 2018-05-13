@@ -531,7 +531,7 @@ function globalDBUpdate() {
 function updatePlayerMenuOptions(elem, value) {
   // ok so like search for the player i guess
   let q = new RegExp(value, 'i');
-  DB.getPlayers({name: q }, function(err, players) {
+  DB.getPlayers({ $or: [{name: { $regex: q } }, { nickname: { $regex: q } }] }, function(err, players) {
     let menu = $(elem).parent('.dropdown');
     menu.find('.menu .item').not('.active').remove();
     menu.find('.message').remove();
@@ -543,10 +543,7 @@ function updatePlayerMenuOptions(elem, value) {
       if (count > max)
         break;
 
-      let name = player.name;
-      if (player.tag) {
-        name += '#' + player.tag;
-      }
+      let name = formatPlayerName(player);
 
       let item = '<div class="item" data-value="' + player._id + '">';
       //item += '<div class="ui horizontal label"><i class="file outline icon"></i>' + player.matches + '</div>';
@@ -558,6 +555,21 @@ function updatePlayerMenuOptions(elem, value) {
 
     menu.dropdown('refresh');
   });
+}
+
+// given player object, formats player name accoriding to options
+function formatPlayerName(player, opts = {}) {
+  let name = player.name;
+
+  if (!opts.noNickname && player.nickname && player.nickname !== '') {
+    name = player.nickname;
+  }
+
+  if (!opts.noTag && player.tag) {
+    name += '#' + player.tag;
+  }
+
+  return name;
 }
 
 // given a user id, returns 'focus-player' class if the player id is, well, the focus player

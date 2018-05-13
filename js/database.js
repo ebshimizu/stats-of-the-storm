@@ -461,6 +461,10 @@ class Database {
     this.getPlayers({_id: id}, callback);
   }
 
+  setPlayerNickname(id, name, callback) {
+    this._db.players.update({ _id: id }, { $set : { nickname: name } }, {}, callback);
+  }
+
   // this will go an process a set of heroData into a set of stats divided
   // by hero, and by map
   summarizeHeroData(docs) {

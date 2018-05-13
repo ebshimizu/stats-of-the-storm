@@ -585,7 +585,7 @@ function renderToSlot(gameData, slot) {
   let bd = gameData.teams[0];
   let rd = gameData.teams[1];
   for (let i = 0; i < gameData.teams[0].ids.length; i++) {
-    context.blueHeroes.push({heroImg: Heroes.heroIcon(bd.heroes[i]), playerName: bd.names[i], playerID: bd.ids[i], isFocus: focusClass(bd.ids[i] )});
+    context.blueHeroes.push({heroImg: Heroes.heroIcon(bd.heroes[i]), playerName: bd.names[i], playerID: bd.ids[i], isFocus: focusClass(bd.ids[i]) });
     context.redHeroes.push({heroImg: Heroes.heroIcon(rd.heroes[i]), playerName: rd.names[i], playerID: rd.ids[i], isFocus: focusClass(rd.ids[i]) });
   }
 
