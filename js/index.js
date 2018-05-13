@@ -263,7 +263,7 @@ function resumeInitApp() {
   setLoadMessage('Populating Menus');
   globalDBUpdate();
 
-  $('.player-menu input.search').keydown(function(e) {
+  $('.player-menu input.search').keyup(function(e) {
     if (e.which === 38 || e.which === 40 || e.which === 13)
       return;
 
@@ -560,10 +560,6 @@ function updatePlayerMenuOptions(elem, value) {
 // given player object, formats player name accoriding to options
 function formatPlayerName(player, opts = {}) {
   let name = player.name;
-
-  if (!opts.noNickname && player.nickname && player.nickname !== '') {
-    name = player.nickname;
-  }
 
   if (!opts.noTag && player.tag) {
     name += '#' + player.tag;

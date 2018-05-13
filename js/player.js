@@ -494,7 +494,18 @@ function updatePlayerPage(err, doc) {
     playerDetailInfo = doc[0];
     let formatName = playerDetailInfo.name;
     let menuName = formatName;
-    if (playerDetailInfo.tag) {
+
+    if (playerDetailInfo.nickname && playerDetailInfo.nickname !== '') {
+      formatName = playerDetailInfo.nickname + '<span class="btag">' + formatName;
+
+      if (playerDetailInfo.tag) {
+        formatName += '#' + playerDetailInfo.tag;
+        menuName += '#' + playerDetailInfo.tag;
+      }
+
+      formatName += '</span>';
+    }
+    else if (playerDetailInfo.tag) {
       formatName += '<span class="btag">#' + playerDetailInfo.tag + '</span>';
       menuName += '#' + playerDetailInfo.tag;
     }
