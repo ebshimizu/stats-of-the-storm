@@ -493,11 +493,16 @@ function updatePlayerPage(err, doc) {
   if (doc.length === 1) {
     playerDetailInfo = doc[0];
     let formatName = playerDetailInfo.name;
+    let menuName = formatName;
     if (playerDetailInfo.tag) {
       formatName += '<span class="btag">#' + playerDetailInfo.tag + '</span>';
+      menuName += '#' + playerDetailInfo.tag;
     }
 
+    menuName += ' (' + RegionString[playerDetailInfo.region] + ')';
+
     $('#player-page-header h1.header .content .player').html(formatName);
+    $('#players-set-player').dropdown('set text', menuName);
 
     // check player teams
     DB.getPlayerTeams(playerDetailInfo._id, function(err, teams) {
