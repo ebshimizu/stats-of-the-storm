@@ -1,4 +1,4 @@
-
+const FormData = require('form-data');
 
 var settingsRowTemplate;
 var replayQueue = [];
@@ -344,10 +344,10 @@ function startReplayScan() {
   replays.sort(function(a, b) {
     if (a.date === b.date)
       return 0;
-    
+
     if (a.date < b.date)
       return -1;
-    
+
     return 1;
   });
 
@@ -430,7 +430,7 @@ function parseReplays() {
 }
 
 function disableParsingUI() {
-  parserRunning = true; 
+  parserRunning = true;
   $('#start-process-button').addClass('loading disabled');
   $('#rescan-replays-button').addClass('disabled');
   $('#settings-hots-api-button').checkbox('disable');
@@ -453,7 +453,7 @@ function enableParsingUI() {
   $('#settings-hots-api-button').checkbox('enable');
   $('#settings-hots-logs-button').checkbox('enable');
   $('#settings-replay-file-start').removeClass('disabled');
-  
+
   if (!usingImportSet) {
     $('#settings-collection-import').removeClass('disabled');
   }
@@ -670,7 +670,7 @@ function handleCollectionAction(id, name, action) {
     $('#team-text-input .input .label').text('Collection Name');
     $('#team-text-input input').val('');
     $('#team-text-input .actions .approve').text('Rename');
-  
+
     $('#team-text-input').modal({
       onApprove: function() {
         let name = $('#team-text-input input').val();
@@ -930,7 +930,7 @@ function liveAddReplay(evt, name) {
     }
 
     context.path = name;
-    
+
     context.id = listedReplays.length;
     $('#replay-file-list').append(settingsRowTemplate(context));
     context.processed = false;

@@ -3,24 +3,41 @@
 // their respective javascript files
 
 const path = require('path');
-const HeroesDB = require(path.join(__dirname, './js/database.js'));
 const settings = require('electron-settings');
-const Parser = require(path.join(__dirname, './parser/parser.js'));
-const HeroesTalents = require(path.join(__dirname, './js/heroes-talents.js'));
-const app = require('electron').remote.app;
-const dialog = require('electron').remote.dialog;
-const remote = require('electron').remote;
-const shell = require('electron').shell;
+
+const watch = require('node-watch');
+
+const { shell, remote, ipcRenderer } = require('electron');
+const { app, dialog, BrowserWindow } = remote;
+
 const Handlebars = require('handlebars');
 const fs = require('fs-extra');
 const cp = require('child_process');
-const BrowserWindow = require('electron').remote.BrowserWindow
-const ipcRenderer = require('electron').ipcRenderer
-const ReplayTypes = require(path.join(__dirname, 'parser/constants.js'));
-const moment = require('moment');
-const FormData = require('form-data');
-const { is, fixPathForAsarUnpack } = require('electron-util');
-const watch = require('node-watch');
+
+const HeroesDB = require('./js/database.js');
+const Parser = require('./parser/parser.js');
+const HeroesTalents = require('./js/heroes-talents.js');
+const ReplayTypes = require('./parser/constants.js');
+
+const summarizeHeroData = require('./js/database/summarize-hero-data');
+const summarizeMapData = require('./js/database/summarize-map-data');
+const summarizeMatchData = require('./js/database/summarize-match-data');
+const summarizePlayerData = require('./js/database/summarize-player-data');
+const summarizeTalentData = require('./js/database/summarize-talent-data');
+const summarizeTeamData = require('./js/database/summarize-team-data');
+
+const migrateDatabase = require('./js/database/migrate');
+
+const {
+  formatSeconds,
+  formatStat,
+  capitalize
+} = require('./js/util/formatters');
+
+
+Handlebars.registerHelper('formatSeconds', formatSeconds);
+
+Handlebars.registerHelper('formatPct', (value) => formatStat('pct', value));
 
 // datepicker gloabl settings
 $.fn.datepicker.setDefaults({
@@ -34,144 +51,11 @@ const RegionString = {
   98: 'PTR/TR'
 }
 
-const DetailStatList = [
-  'Takedowns',
-  'SoloKill',
-  'Assists',
-  'Deaths',
-  'KillParticipation', // special case
-  'KDA',
-  'HighestKillStreak',
-  'VengeancesPerformed',
-  'TimeSpentDead',
-  'OutnumberedDeaths',
-  'EscapesPerformed',
-  'TeamfightEscapesPerformed',
-  'HeroDamage',
-  'DPM',
-  'damageDonePerDeath',
-  'TeamfightHeroDamage',
-  'SiegeDamage',
-  'StructureDamage',
-  'MinionDamage',
-  'SummonDamage',
-  'CreepDamage',
-  'Healing',
-  'HPM',
-  'healingDonePerDeath',
-  'TeamfightHealingDone',
-  'SelfHealing',
-  'ProtectionGivenToAllies',
-  'ClutchHealsPerformed',
-  'DamageTaken',
-  'damageTakenPerDeath',
-  'TeamfightDamageTaken',
-  'TimeCCdEnemyHeroes',
-  'TimeRootingEnemyHeroes',
-  'TimeSilencingEnemyHeroes',
-  'TimeStunningEnemyHeroes',
-  //'TimeOnPoint',
-  'OnFireTimeOnFire',
-  'ExperienceContribution',
-  'XPM',
-  'MercCampCaptures',
-  //'TownKills',
-  'WatchTowerCaptures'
-  //'Role'
-];
+const DetailStatList = require('./js/game-data/detail-stat-list');
 
-const PerMapStatList = {
-  "Towers of Doom" : ["AltarDamageDone"],
-  "Battlefield of Eternity" : ["DamageDoneToImmortal"],
-  "Dragon Shire" : ["DragonNumberOfDragonCaptures", "DragonShrinesCaptured"],
-  "Blackheart's Bay" : ["BlackheartDoubloonsCollected", "BlackheartDoubloonsTurnedIn"],
-  "Haunted Mines" : ["MinesSkullsCollected"],
-  "Infernal Shrines" : ["DamageDoneToShrineMinions"],
-  "Garden of Terror" : ["GardensPlantDamage", "GardensSeedsCollected"],
-  "Tomb of the Spider Queen" : ["GemsTurnedIn"],
-  "Warhead Junction" : ["NukeDamageDone"],
-  "Cursed Hollow" : ["CurseDamageDone"],
-  "Volskaya Foundry" : [],
-  "Sky Temple" : ["TimeInTemple"],
-  "Braxis Holdout" : ["DamageDoneToZerg"],
-  "Hanamura" : []
-};
+const PerMapStatList = require('./js/game-data/map-stats');
 
-const DetailStatString = {
-  'Takedowns' : 'Takedowns',
-  'KillParticipation' : 'Kill Participation', // special case
-  'Kills' : 'Kills',  // special case
-  'HighestKillStreak' : 'Highest Kill Streak',
-  'SoloKill' : 'Kills',
-  'VengeancesPerformed' : 'Vengeances',
-  'Assists' : 'Assists',
-  'Deaths' : 'Deaths',
-  'TimeSpentDead' : 'Time Dead',
-  'OutnumberedDeaths' : 'Deaths While Outnumbered',
-  'EscapesPerformed' : 'Escapes',
-  'HeroDamage' : 'Hero Damage',
-  'SiegeDamage' : 'Siege Damage',
-  'StructureDamage' : 'Structure Damage',
-  'MinionDamage' : 'Minion Damage',
-  'SummonDamage' : 'Summon Damage',
-  'CreepDamage' : 'Creep Damage',
-  'Healing' : 'Healing',
-  'SelfHealing' : 'Self Healing',
-  'ProtectionGivenToAllies' : 'Allied Shields',
-  'ClutchHealsPerformed' : 'Clutch Heals',
-  'DamageTaken' : 'Damage Taken',
-  'TeamfightDamageTaken' : 'Team Fight Damage Taken',
-  'TeamfightEscapesPerformed' : 'Team Fight Escapes',
-  'TeamfightHealingDone' : 'Team Fight Healing',
-  'TeamfightHeroDamage' : 'Team Fight Hero Damage',
-  'TimeCCdEnemyHeroes' : 'CC Time',
-  'TimeRootingEnemyHeroes' : 'Root Time',
-  'TimeSilencingEnemyHeroes' : 'Silence Time',
-  'TimeStunningEnemyHeroes' : 'Stun Time',
-  'TimeOnPoint' : 'Time on Point',
-  'OnFireTimeOnFire' : 'Time on Fire',
-  'ExperienceContribution' : 'XP Contribution',
-  'MercCampCaptures' : 'Merc Camp Captures',
-  'TownKills' : 'Town Kills',
-  'WatchTowerCaptures' : 'Watch Tower Captures',
-  'Role' : 'Role',
-  'AltarDamageDone' : 'Altar Damage Done',
-  'DamageDoneToImmortal' : 'Damage to Immortal',
-  'DragonNumberOfDragonCaptures' : 'Dragon Knights Captured',
-  'DragonShrinesCaptured' : 'Shrines Captured',
-  'BlackheartDoubloonsCollected' : 'Dubloons Held At End',
-  'BlackheartDoubloonsTurnedIn' : 'Dubloons Turned In',
-  'MinesSkullsCollected' : 'Skulls Collected',
-  'DamageDoneToShrineMinions' : 'Shrine Minion Damage',
-  'GardensPlantDamage' : 'Plant Damage',
-  'GardensSeedsCollected' : 'Seeds Collected',
-  'GemsTurnedIn' : 'Gems Turned In',
-  'NukeDamageDone' : 'Nuke Damage',
-  'CurseDamageDone' : 'Curse Damage',
-  'TimeInTemple' : 'Time On Temple',
-  'DamageDoneToZerg' : 'Damage Done to Zerg',
-  'KDA' : 'KDA',
-  'timeDeadPct' : 'Time Dead %',
-  'PPK' : 'People Per Kill',
-  'mercCaptures' : 'Mercenary Captures',
-  'mercUptime' : 'Mercenary Uptime',
-  'mercUptimePercent' : 'Mercenary Uptime %',
-  'timeTo10' : 'Time to Level 10',
-  'timeTo20' : 'Time to Level 20',
-  'avgTimeSpentDead' : 'Average Time Spent Dead',
-  'T1' : 'Time at Level 1',
-  'T2' : 'Time at Level 4',
-  'T3' : 'Time at Level 7',
-  'T4' : 'Time at Level 10',
-  'T5' : 'Time at Level 13',
-  'T6' : 'Time at Level 16',
-  'damageDonePerDeath' : 'Damage per Death',
-  'damageTakenPerDeath' : 'Damage Taken per Death',
-  'healingDonePerDeath' : 'Healing per Death',
-  'DPM' : 'DPM',
-  'HPM' : 'HPM',
-  'XPM' : 'XPM'
-};
+const DetailStatString = require('./js/game-data/detail-stat-string');
 
 const RoleColor = {
   'Assassin' : '#db2828',
@@ -280,11 +164,11 @@ function loadDatabase() {
 
   console.log('Loading Heroes Talents database');
   // load the heroes talents database
-  Heroes = new HeroesTalents.HeroesTalents(__dirname + '/assets/heroes-talents', __dirname + '/assets/data');
+  Heroes = new HeroesTalents.HeroesTalents(path.join(__dirname, '/assets/heroes-talents'), path.join(__dirname, '/assets/data'));
 
-  let path = settings.get('dbPath');
-  console.log("Database loading from " + path);
-  DB = new HeroesDB.HeroesDatabase(path);
+  const dbPath = settings.get('dbPath');
+  console.log("Database loading from " + dbPath);
+  DB = new HeroesDB.HeroesDatabase(dbPath);
   DB.load(loadDatabaseComplete, setLoadMessage);
 }
 
@@ -296,35 +180,8 @@ function loadDatabaseComplete(err) {
   }
 
   // check database version
-  DB.getDBVersion(checkDBVersion);
-}
 
-function checkDBVersion(dbVer) {
-  console.log('Database and Parser version: ' + dbVer);
-
-  if (dbVer < Parser.VERSION) {
-    // here's where database migrations go, if any
-    console.log('Updating database from version ' + dbVer + ' to version ' + Parser.VERSION);
-    if (dbVer === 1) {
-      migrateVersion1ToVersion2();
-      // migrate will call back to check DB version after updating the version
-      return;
-    }
-    else if (dbVer === 2) {
-      migrateVersion2ToVersion3();
-      return;
-    }
-    else if (dbVer === 3) {
-      migrateVersion3ToVersion4();
-      return;
-    }
-  }
-  else if (dbVer > Parser.VERSION) {
-    showMessage('Warning: Loading Newer Database in Older App', 'The app should function normally, however the database is newer than the app, and some unexpected errors may occur.', { sticky: true });
-  }
-
-  setLoadMessage('Database and Parser Version ' + dbVer);
-  resumeInitApp();
+  migrateDatabase(DB, resumeInitApp);
 }
 
 function initGlobalUIHandlers() {
@@ -480,38 +337,6 @@ function setMenuTitle(title, showBackButton) {
   }
 }
 
-// formats to mm:ss
-function formatSeconds(val) {
-  let invert = false;
-  if (val < 0)
-    invert = true;
-  let fval = Math.abs(val);
-
-  let duration = new Date(fval * 1000);
-  let seconds = duration.getUTCSeconds();
-  let minutes = duration.getUTCMinutes();
-
-  return (invert ? '-' : '') + (minutes < 1 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-}
-
-function formatStat(field, val, allFixed = false) {
-  if (val === undefined)
-    return 0;
-
-  if (field === 'KillParticipation' || field === 'timeDeadPct' || field === 'mercUptimePercent' || field === 'pct')
-    return (val * 100).toLocaleString(undefined, { maximumFractionDigits: 1}) + '%';
-  else if (field === 'KDA')
-    return val.toLocaleString(undefined, { maximumFractionDigits: 1});
-  else if (field.startsWith('Time') || field === 'OnFireTimeOnFire' || field === 'timeTo10' ||
-    field === 'timeTo20' || field === 'mercUptime' || field === 'avgTimeSpentDead')
-    return formatSeconds(val);
-
-  if (allFixed) {
-    return val.toLocaleString(undefined, { maximumFractionDigits: 1});
-  }
-
-  return val.toLocaleString();
-}
 
 // updates certain elements based on a new replay inserted into the database
 function globalDBUpdate() {
@@ -589,10 +414,6 @@ function addMapMenuOptions(menu) {
   }
 }
 
-function capitalize(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
 function addPatchMenuOptions(elem, callback) {
   DB.getVersions(function(versions) {
     elem.find('.menu').html('');
@@ -653,7 +474,7 @@ function updateCollectionMenu(callback) {
 
     if (collections.length > 0)
       $('#collection-switch-menu .menu').append('<div class="ui divider"></div>');
-    
+
     for (let c in collections) {
       let collection = collections[c];
 
@@ -821,7 +642,7 @@ function exportMatch(id, filename) {
 
 function exportPlayer(id, filename) {
   DB.getHeroDataForPlayer(id, function(err, docs) {
-    let data = DB.summarizeHeroData(docs);
+    let data = summarizeHeroData(docs);
     fs.writeFile(filename, JSON.stringify(data, null, 2), function(err) {
       if (err) {
         showMessage('Export Error', err, { class: 'negative' });
@@ -883,7 +704,7 @@ function copyFloatingTable(src, dest) {
   let table = src.clone();
   let headers = table.find('.floatThead-table thead').detach();
   table.find('.floatThead-container').remove();
-  
+
   if (headers.length > 0) {
     table.find('thead').remove();
     table.find('table.table').prepend(headers);
@@ -910,7 +731,7 @@ function copyFloatingTable(src, dest) {
 function copyGraph(srcData, dest, opts = {}) {
   dest.removeClass('.chartjs-render-monitor');
   dest.attr('style', '');
-  
+
   if (opts.width) {
     dest.attr('width', opts.width);
   }
@@ -983,7 +804,7 @@ function exportHeroDataAsCSV(docs, file) {
   // assert docs > 0
   if (docs.length === 0)
     return;
-  
+
   // first, setup fields
   let outData = '';
 
@@ -995,7 +816,7 @@ function exportHeroDataAsCSV(docs, file) {
   outData += ',win';
   outData += ',map';
   outData += ',length';
-  
+
   // stats in order
   for (let s of DetailStatList) {
     outData += ',' + s;
@@ -1019,7 +840,7 @@ function exportHeroDataAsCSV(docs, file) {
   // time for exporting
   for (doc of docs) {
     let row = '';
-  
+
     // identifiers
     row += doc.ToonHandle;
     row += ',' + doc.name;
@@ -1028,12 +849,12 @@ function exportHeroDataAsCSV(docs, file) {
     row += ',' + (doc.win ? 'true' : 'false');
     row += ',' + doc.map;
     row += ',' + doc.length;
-    
+
     // stats in order
     for (let s of DetailStatList) {
       row += ',' + doc.gameStats[s];
     }
-  
+
     for (let m in PerMapStatList) {
       for (let s of PerMapStatList[m]) {
         if (s in doc.gameStats) {
@@ -1065,160 +886,4 @@ function exportHeroDataAsCSV(docs, file) {
       showMessage('CSV Export Complete', 'Exported to ' + file);
     }
   });
-}
-
-// DATABASE MIGRATIONS
-function migrateVersion1ToVersion2() {
-  let text = `The parser has been updated to version 2, which means that you will need to
-  re-import your matches to use the latest features. You can force the database to re-import duplicate
-  matches by using the Import Duplicates option, or you can delete the database and just re-import everything.
-  Note that importing duplicates will reset their membership in collections, so if you use that feature,
-  remember to set the Import to Collection option accordingly.`
-  showMessage('Parser Updated to Version 2', text, { sticky: true });
-  DB.setDBVersion(2, checkDBVersion(2));
-}
-
-function migrateVersion2ToVersion3() {
-  // this one we actually do work.
-  setLoadMessage('Updating DB Version 2 to Version 3');
-  DB.getMatches({}, function(err, docs) {
-    if (docs.length > 0)
-      updateMatchToVersion3(docs.pop(), docs);
-    else
-      finishVersion2To3Migration();
-  });
-}
-
-function migrateVersion3ToVersion4() {
-  setLoadMessage('Updating DB Version 3 to Version 4');
-
-  setLoadMessage('Updating DB Version 3 to Version 4<br>Backing up existing database');
-  
-  // copy the 4 files to a new directory (db3-backup)
-  let path = settings.get('dbPath');
-
-  fs.ensureDir(path + '/db3-backup', function(err) {
-    if (err) {
-      console.log(err);
-      showMessage('Unable to Backup Version 3 Database. Aborting.', err, { sticky: true, class: 'negative' });
-      // ok so this needs to crash (it can't load, it can't do anything). throw an exception
-      throw new Exception('Database Upgrade Exception - Unable to Backup Files');
-    }
-    else {
-      fs.copySync(path + '/matches.db', path + '/db3-backup/matches.db');
-      fs.copySync(path + '/hero.db', path + '/db3-backup/hero.db');
-      fs.copySync(path + '/players.db', path + '/db3-backup/players.db');
-      fs.copySync(path + '/settings.db', path + '/db3-backup/settings.db');
-
-      DB._db.heroData.find({}, function(err, docs) {
-        if (docs.length > 0) {
-          updateHeroDataToVersion4(docs.pop(), docs);
-        }
-        else {
-          finishVersion3To4Migration();
-        }
-      });
-    }
-  });
-}
-
-function updateMatchToVersion3(match, remaining) {
-  try {
-    console.log('updating match ' + match._id);
-    setLoadMessage('Updating DB Version 2 to Version 3<br>' + remaining.length + ' matches left');
-
-    if (match.picks) {
-      match.firstPickWin = match.picks.first === match.winner;
-    }
-    else {
-      match.firstPickWin = false;
-    }
-
-    match.firstObjective = Parser.getFirstObjectiveTeam(match);
-    match.firstObjectiveWin = match.winner === match.firstObjective;
-
-    // update length!
-    // the offset from the end of the xp breakdown to the actual end of the match is 114 frames
-    // this may vary a little bit, but it should bring things in line with the current parser.
-    // users can of course re-import the matches if they desire.
-    let lastXP = match.XPBreakdown[match.XPBreakdown.length - 1];
-    match.loopLength = lastXP.loop - 114;
-    match.length = Parser.loopsToSeconds(match.loopLength - match.loopGameStart);
-
-    // update
-    DB.updateMatch(match, function() {
-      if (remaining.length === 0) {
-        finishVersion2To3Migration();
-      }
-      else {
-        updateMatchToVersion3(remaining.pop(), remaining);
-      }
-    });
-  }
-  catch (err) {
-    console.log(err);
-    console.log('Failed to update match ' + match._id + ' please file bug report');
-
-    if (remaining.length === 0) {
-      finishVersion2To3Migration();
-    }
-    else {
-      updateMatchToVersion3(remaining.pop(), remaining);
-    } 
-  }
-}
-
-function updateHeroDataToVersion4(heroData, remaining) {
-  try {
-    console.log('updating hero data ' + heroData._id);
-    setLoadMessage('Updating DB Version 3 to Version 4<br>' + remaining.length + ' entries left<br>DO NOT CLOSE THE APP');
-
-    // this one's pretty easy, just take the hero data and update the missing gameStats fields
-    heroData.gameStats.damageDonePerDeath = heroData.gameStats.HeroDamage / Math.max(1, heroData.gameStats.Deaths);
-    heroData.gameStats.damageTakenPerDeath = heroData.gameStats.DamageTaken / Math.max(1, heroData.gameStats.Deaths);
-    heroData.gameStats.healingDonePerDeath = (heroData.gameStats.Healing + heroData.gameStats.SelfHealing + heroData.gameStats.ProtectionGivenToAllies) / Math.max(1, heroData.gameStats.Deaths);
-    heroData.gameStats.DPM = heroData.gameStats.HeroDamage / (heroData.length / 60);
-    heroData.gameStats.HPM = (heroData.gameStats.Healing + heroData.gameStats.SelfHealing + heroData.gameStats.ProtectionGivenToAllies) / (heroData.length / 60);
-    heroData.gameStats.XPM = heroData.gameStats.ExperienceContribution / (heroData.length / 60);
-
-    DB._db.heroData.update({_id: heroData._id}, heroData, {}, function() {
-      if (remaining.length === 0) {
-        finishVersion3To4Migration();
-      }
-      else {
-        updateHeroDataToVersion4(remaining.pop(), remaining);
-      }
-    });
-  }
-  catch (err) {
-    console.log(err);
-    console.log('Failed to update heroData entry ' + heroData._id + '. Please file a bug report.');
-
-    if (remaining.length === 0) {
-      finishVersion3To4Migration();
-    }
-    else {
-      updateHeroDataToVersion4(remaining.pop(), remaining);
-    }
-  }
-}
-
-function finishVersion2To3Migration() {
-  setLoadMessage('Version 3 Upgrade Complete');
-  showMessage(
-    'Parser Updated to Version 3',
-    'Match length corrected to estimate from last XP Breakdown. Additional database fields added. You do not need to re-import your matches. However, if you feel that the match lengths are still incorrect, you may want to re-create (not re-import) the entire database.',
-    { sticky: true, class: 'positive' }
-  );
-  DB.setDBVersion(3, checkDBVersion(3));
-}
-
-function finishVersion3To4Migration() {
-  setLoadMessage('Version 4 Upgrade Complete');
-  showMessage(
-    'Parser and Database Updated to Version 4',
-    'Added 6 additional stats to the database. No re-import is necessary.<br>A backup was created at ' + settings.get('dbPath') + '/db3-backup. If the database updated correctly, you can safely delete this folder',
-    { sticky: true, class: 'positive' }
-  );
-  DB.setDBVersion(4, checkDBVersion(4));
 }

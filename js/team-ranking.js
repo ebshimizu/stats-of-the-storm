@@ -205,7 +205,7 @@ function updateTeamRankingData(err, matches, team) {
   let mode = $('#team-ranking-body .top.attached.menu .active.item').attr('data-mode');
 
   // at this point we might have all the data we need?
-  let teamStats = DB.summarizeTeamData(team, matches, Heroes);
+  let teamStats = summarizeTeamData(team, matches, Heroes);
   teamStats.name = team.name;
   teamStats.winPercent = teamStats.wins / teamStats.totalMatches;
   teamStats.formatWinPercent = formatStat('pct', teamStats.winPercent);

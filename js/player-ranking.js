@@ -155,7 +155,7 @@ function togglePlayerRankingMode(elem) {
 function loadPlayerRankings() {
   // this can take a long time so we don't do this on load, the user must hit the search button
   DB.getHeroData(playerRankingsHeroFilter, function(err, docs) {
-    let data = DB.summarizePlayerData(docs);
+    let data = summarizePlayerData(docs);
     let threshold = parseInt($('#player-ranking-match-thresh input').val());
     $('#player-ranking-body tbody').html('');
 

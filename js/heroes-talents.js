@@ -50,7 +50,7 @@ const TalentRenames = {
   RehgarMasteryElectricCharge: 'RehgarLightningShieldElectricCharge',
   RehgarMasteryWolfRun: 'RehgarWolfRun',
   RehgarMasteryFeralHeart: 'RehgarFeralHeart',
-  RehgarMasteryStormcaller: 'RehgarLightningShieldStormcaller', 
+  RehgarMasteryStormcaller: 'RehgarLightningShieldStormcaller',
   RehgarMasteryShamanHealingWard: 'RehgarHealingTotem',
   RehgarGhostWolfBloodAndThunder: 'RehgarBloodAndThunder',
   RehgarMasteryFarsight: 'RehgarFarsight',
@@ -73,7 +73,7 @@ const TalentRenames = {
   BarbarianMasteryArreatCraterLeap: 'BarbarianArreatCrater',
   SonyaTalentIgnorePain: 'BarbarianIgnorePain',
   BrightwingHyperShiftPhaseShift: 'BrightwingPhaseShiftHyperShift',
-  BrightwingPeekabooPhaseShift: 'BrightwingPhaseShiftPeekaboo', 
+  BrightwingPeekabooPhaseShift: 'BrightwingPhaseShiftPeekaboo',
   FaerieDragonMasteryPhaseShield: 'BrightwingPhaseShiftPhaseShield',
   RaynorMasteryHelsAngelsRaynorsBanshees: 'RaynorMasteryDuskWingsRaynorsBanshees',
   JunkratHeroicAbilityRIPTire: 'JunkratRIPTire',
@@ -102,7 +102,7 @@ class HeroesTalents {
     // extra data
     // load this first in case it gets overwritten
     console.log('loading deleted talents from ' + this._missingPath);
-    let deleted = JSON.parse(fs.readFileSync(this._missingPath));
+    let deleted = require(this._missingPath); // eslint-disable-line global-require
     for (let i in deleted) {
       deleted[i].removed = true;
       this._talents[deleted[i].talentTreeId] = deleted[i];
@@ -114,8 +114,8 @@ class HeroesTalents {
       let file = this._heroPath + '/' + files[i];
 
       console.log('loading ' + file + ' (' + (i + 1) + '/' + files.length + ')');
-      let data = JSON.parse(fs.readFileSync(file));
-      
+      let data = require(file);  // eslint-disable-line global-require
+
       // sort everything, some data is replicated but that's ok
       this._heroes[data.name] = data;
       this._heroAttr[data.attributeId] = data.name;
@@ -129,7 +129,7 @@ class HeroesTalents {
 
       if (!(data.role in this._roles))
         this._roles[data.role] = { all: [], Ranged: [], Melee: [] };
-      
+
       this._roles[data.role].all.push(data.name);
       this._roles[data.role][data.type].push(data.name);
     }
@@ -162,10 +162,6 @@ class HeroesTalents {
     return this._roles[role].all.length;
   }
 
-  get heroCount() {
-    return Object.keys(this._heroes).length;
-  }
-
   get roles() {
     return Object.keys(this._roles);
   }
@@ -181,7 +177,7 @@ class HeroesTalents {
   heroNameFromAttr(attr) {
     if (attr in this._heroAttr)
       return this._heroAttr[attr];
-    
+
     return 'NotFound';
   }
 
@@ -248,7 +244,7 @@ class HeroesTalents {
   awardInfo(award) {
     if (award in Awards)
       return Awards[award];
-    
+
     console.log(award + ' is unknown!');
     return { name: 'Unknown Award', subtitle: '', image: 'not-found.png'};
   }
