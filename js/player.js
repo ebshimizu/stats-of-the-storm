@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 var playerDetailID;
 var playerDetailStats;
 var playerDetailInfo;
@@ -317,7 +319,7 @@ function initPlayerPage() {
   let playerWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
   playerWidget.attr('widget-name', 'player-filter');
   playerWidget.find('.filter-widget-team').addClass('is-hidden');
-  
+
   $('#filter-widget').append(playerWidget);
   initPopup(playerWidget);
 
@@ -361,7 +363,7 @@ function initPlayerPage() {
     type: 'line',
     data: {
       datasets: [{
-        
+
       }]
     },
     options: progressionStatGraphSettings
@@ -539,7 +541,7 @@ function updatePlayerPage(err, doc) {
 
 // this is the initial call to creating the data
 function processPlayerData(err, docs) {
-  playerDetailStats = DB.summarizeHeroData(docs);
+  playerDetailStats = summarizeHeroData(docs);
 
   // dropdown initialization
   $('#player-hero-select-menu .menu').html('<div class="item" data-value="all">All Heroes</div>');
@@ -564,10 +566,10 @@ function processPlayerData(err, docs) {
 // callback for hero select menu
 function showHeroDetails(value, text, $selectedItem) {
   playerHeroMatchThreshold = parseInt($('#player-hero-thresh input').val());
-  
+
   if (value === 'all' || value === '') {
     DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, playerDetailFilter, function(err, docs) {
-      playerDetailStats = DB.summarizeHeroData(docs);
+      playerDetailStats = summarizeHeroData(docs);
       renderAllHeroSummary();
       renderPlayerSummary();
       renderProgression();
@@ -579,7 +581,7 @@ function showHeroDetails(value, text, $selectedItem) {
     query.hero = value;
 
     DB.getHeroData(query, function(err, docs) {
-      playerDetailStats = DB.summarizeHeroData(docs);
+      playerDetailStats = summarizeHeroData(docs);
 
       renderHeroTalents(value, docs);
       renderPlayerSummary();
@@ -694,7 +696,7 @@ function renderHeroTalents(hero, docs) {
 
 function renderHeroTalentsTo(hero, container, docs) {
   // summarize talent data
-  let talentData = DB.summarizeTalentData(docs, Heroes);
+  let talentData = summarizeTalentData(docs, Heroes);
   let data = talentData.talentStats[hero];
 
   container.find('tbody').html('');
@@ -735,7 +737,7 @@ function renderHeroTalentsTo(hero, container, docs) {
     for (let i = 0; i < 7; i++) {
       // this should theoretically be in order
       let context = {};
-  
+
       if (i < keys.length) {
         context.img = Heroes.talentIcon(build.talents[keys[i]]);
         context.description = Heroes.talentDesc(build.talents[keys[i]]);
@@ -805,7 +807,7 @@ function renderPlayerSummary() {
 
     if (context.name === "")
       context.name = "Default";
-    
+
     context.games = playerDetailStats.skins[s].games;
     context.winPercent = playerDetailStats.skins[s].wins / context.games;
     context.formatWinPercent = formatStat('pct', context.winPercent);
@@ -843,7 +845,7 @@ function renderPlayerSummary() {
   $('#player-detail-map-summary table').floatThead('reflow');
 }
 
-// expects stats to be from DB.summarizeHeroData(docs).maps
+// expects stats to be from summarizeHeroData(docs).maps
 function renderMapStatsTo(container, stats) {
   container.find('tbody').html('');
 
@@ -860,7 +862,7 @@ function renderMapStatsTo(container, stats) {
   container.find('th').removeClass('sorted ascending descending');
 }
 
-// expects stats to be from DB.summarizeHeroData(docs).withHero / againstHero
+// expects stats to be from summarizeHeroData(docs).withHero / againstHero
 function renderHeroVsStatsTo(container, stats, threshold) {
   if (threshold === undefined)
     threshold = 0;
@@ -980,7 +982,7 @@ function renderProgression() {
 
   if (axis1Stats[0] === '')
     axis1Stats = [];
-  
+
   if (axis2Stats[0] === '')
     axis2Stats = [];
 
@@ -989,7 +991,7 @@ function renderProgression() {
   // get the data
   let query = Object.assign({}, playerDetailFilter);
   query.ToonHandle = playerDetailInfo._id;
-  
+
   let value = $('#player-hero-select-menu').dropdown('get value');
   if (value !== 'all' && value !== '') {
     query.hero = value;
@@ -1062,12 +1064,12 @@ function renderProgression() {
           return -1;
         else if (parseInt(ad[0]) > parseInt(bd[0]))
           return 1;
-        
+
         if (parseInt(ad[1]) < parseInt(bd[1]))
           return -1;
         else if (parseInt(ad[1]) > parseInt(bd[1]))
           return 1;
-        
+
         return 0;
       });
     }
@@ -1079,7 +1081,7 @@ function renderProgression() {
           return 1;
 
         return 0;
-      })  
+      })
     }
 
     // update data arrays
@@ -1186,7 +1188,7 @@ function hashInterval(date, mode) {
   else if (mode === IntervalMode.Week) {
     let mdate = moment(date)
     let ident = date.getFullYear() + '-' + mdate.week();
-    
+
     return [ident, mdate];
   }
   else if (mode === IntervalMode.Season) {
@@ -1205,7 +1207,7 @@ function hashInterval(date, mode) {
     let versionString = date.m_major + '.' + date.m_minor + '.' + date.m_revision + ' (build ' + date.m_build + ')';
     return [versionString, date.m_build];
   }
-  
+
   //listen if you call this with an invalid mode i hope it crashes
   return [null, null];
 }
@@ -1534,12 +1536,12 @@ function printPlayerSummary(filename, sections) {
 function exportPlayerHeroCSV(file) {
   let query = Object.assign({}, playerDetailFilter);
   query.ToonHandle = playerDetailInfo._id;
-  
+
   let value = $('#player-hero-select-menu').dropdown('get value');
   if (value !== 'all' && value !== '') {
     query.hero = value;
   }
-  
+
   DB.getHeroData(query, function(err, docs) {
     exportHeroDataAsCSV(docs, file);
   });

@@ -15,7 +15,7 @@ function initHeroCollectionPage() {
   }
   heroCollectionMapDataFilter = {
     mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague, ReplayTypes.GameMode.Custom]}
-  }  
+  }
 
   heroCollectionSummaryRowTemplate = Handlebars.compile(getTemplate('hero-collection', '#hero-collection-hero-summary-row-template').
     find('.hero-collection-hero-summary-row')[0].outerHTML);
@@ -58,7 +58,7 @@ function initHeroCollectionPage() {
   // filter popup
   let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
   filterWidget.attr('widget-name', 'hero-collection-filter');
-  
+
   $('#filter-widget').append(filterWidget);
   initPopup(filterWidget);
 
@@ -160,7 +160,7 @@ function loadOverallHeroCollectionData() {
   // from the match data
   // check the hero details section for all that extra stuff.
   DB.getMatches(heroCollectionMapDataFilter, function(err, docs) {
-    let matchData = DB.summarizeMatchData(docs, Heroes);
+    let matchData = summarizeMatchData(docs, Heroes);
     let overallStats = matchData.data;
 
     $('#hero-collection-summary tbody').html('');
@@ -175,7 +175,7 @@ function loadOverallHeroCollectionData() {
 
       let hero = overallStats[h];
       let role = Heroes.role(h);
-      
+
       if (!(role in roleData)) {
         roleData[role] = { games: 0, bans: 0, wins: 0, count: 0 };
       }
@@ -241,7 +241,7 @@ function loadOverallHeroCollectionData() {
     // roles
     for (let r of Heroes.roles) {
       let selector = $('#hero-collection-pool div[role="' + r + '"]');
-  
+
       if (!(r in roleData)) {
         selector.find('div[name="pool"] .value').text('0 / ' + Heroes.heroRoleCount(r));
         selector.find('div[name="games"] .value').text('0');
@@ -364,7 +364,7 @@ function loadHeroCollectionData(value, text, $elem) {
   let query = Object.assign({}, heroCollectionHeroDataFilter);
   query.hero = value;
   DB.getHeroData(query, function(err, docs) {
-    let stats = DB.summarizeHeroData(docs);
+    let stats = summarizeHeroData(docs);
     heroDataWinCache = { with: stats.withHero, against: stats.againstHero };
 
     updateHeroTitle($('#hero-collection-hero-header'), value);
@@ -378,7 +378,7 @@ function loadHeroCollectionData(value, text, $elem) {
     // vs stats
     let val = $('#hero-collection-detail-with-summary .cache-collections').dropdown('get value');
     updateHeroCollectionVsStats(val, $('#hero-collection-detail-with-summary .cache-collections .item[data-value="' + val + '"]'), 'with', $('#hero-collection-detail-with-summary'));;
-    
+
     val = $('#hero-collection-detail-against-summary .cache-collections').dropdown('get value');
     updateHeroCollectionVsStats(val, $('#hero-collection-detail-against-summary .cache-collections .item[data-value="' + val + '"]'), 'against', $('#hero-collection-detail-against-summary'));
 
@@ -453,7 +453,7 @@ function renderHeroCollectionVsStatsTo(container, stats, threshold, avg) {
 
 function getCompositionElement(roles) {
   let elem = '<div class="ui five column grid comp-grid">';
-  
+
   for (let r of roles) {
     elem += '<div class="column">';
     elem += '<div class="ui mini image">';
@@ -530,7 +530,7 @@ function layoutHeroCollectionDetailPrint() {
   addPrintDate();
 
   $('#print-window .contents').append($('#hero-collection-hero-header h2.header').clone());
-  
+
   addPrintSubHeader('Overall Stats');
   $('#print-window .contents').append($('#hero-collection-detail-misc-summary .statistics').clone());
   $('#print-window').find('.statistics').removeClass('horizontal');
@@ -653,7 +653,7 @@ function handleHeroStatsFileAction(value, text, $elem) {
 
 function exportHeroCollectionSummaryJSON(filename) {
   DB.getMatches(heroCollectionMapDataFilter, function(err, docs) {
-    let matchData = DB.summarizeMatchData(docs, Heroes);
+    let matchData = summarizeMatchData(docs, Heroes);
     fs.writeFile(filename, JSON.stringify(matchData, null, 2), function(err) {
       if (err) {
         showMessage('JSON Export Error', err, { class: 'negative' });
@@ -669,7 +669,7 @@ function exportHeroCollectionHeroJSON(filename) {
   let query = Object.assign({}, heroCollectionHeroDataFilter);
   query.hero = $('#hero-collection-hero-select-menu').dropdown('get value');
   DB.getHeroData(query, function(err, docs) {
-    let stats = DB.summarizeHeroData(docs);
+    let stats = summarizeHeroData(docs);
     fs.writeFile(filename, JSON.stringify(stats, null, 2), function(err) {
       if (err) {
         showMessage('JSON Export Error', err, { class: 'negative' });
@@ -691,23 +691,18 @@ function exportHeroCollectionHeroCSV(filename) {
 
 function exportHeroDraftCSV(filename) {
   DB.getMatches(heroCollectionMapDataFilter, function(err, docs) {
-    let matchData = DB.summarizeMatchData(docs, Heroes);
+    let matchData = summarizeMatchData(docs, Heroes);
 
     // pull specific values
     let outData = '';
     let fields = ['hero', 'role', 'wins', 'games', 'involved', 'round 1', 'round 2', 'round 3', 'bans', 'ban 1', 'ban 2', 'round 1 wins', 'round 2 wins', 'round 3 wins', 'totalGames'];
 
-    for (let i = 0; i < fields.length; i++) {
-      if (i > 0)
-        outData += ',';
-      
-      outData += fields[i];
-    }
+    outData += fields.join(',');
 
     for (let h in matchData.data) {
       if (h === 'totalMatches' || h === 'totalBans')
         continue;
-      
+
       let hero = matchData.data[h];
 
       let row = '';

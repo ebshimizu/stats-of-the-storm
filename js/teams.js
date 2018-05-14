@@ -31,7 +31,7 @@ function initTeamsPage() {
   let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
   filterWidget.attr('widget-name', 'teams-filter');
   filterWidget.find('.filter-widget-team').addClass('is-hidden');
-  
+
   $('#filter-widget').append(filterWidget);
   initPopup(filterWidget);
 
@@ -44,7 +44,7 @@ function initTeamsPage() {
 
   bindFilterButton(filterWidget, updateTeamsFilter);
   bindFilterResetButton(filterWidget, resetTeamsFilter);
-  
+
   $('#team-detail-body table').tablesort();
   $('#team-detail-body table').floatThead({
     scrollContainer: closestWrapper,
@@ -157,7 +157,7 @@ function updateTeamData(value, text, $elem) {
   // lol that's the null team don't do this
   if (value === '')
     return;
-    
+
   $('#teams-page-header .team-name').text(text);
 
   // ok so matches get a special version of where for ids and here's how it works:
@@ -196,7 +196,7 @@ function updateTeamData(value, text, $elem) {
 
         if (count === player.length)
           return boundWhere();
-        
+
         count = 0;
         let t1 = this.teams[1].ids;
         for (let i in t1) {
@@ -206,12 +206,12 @@ function updateTeamData(value, text, $elem) {
 
         if (count === player.length)
           return boundWhere();
-        
+
         return false;
       }
     }
     else {
-      // basically we need a match 5 of the players and then we're ok 
+      // basically we need a match 5 of the players and then we're ok
       query.$where = function() {
         if (player.length === 0)
           return false;
@@ -226,7 +226,7 @@ function updateTeamData(value, text, $elem) {
 
         if (count === 5)
           return boundWhere();
-        
+
         count = 0;
         let t1 = this.teams[1].ids;
         for (let i in t1) {
@@ -236,7 +236,7 @@ function updateTeamData(value, text, $elem) {
 
         if (count === 5)
           return boundWhere();
-        
+
         return false;
       }
     }
@@ -264,9 +264,9 @@ function loadTeamData(team, matches, heroData) {
   teamHeroMatchThresh = parseInt($('#teams-hero-thresh input').val());
 
   // compute hero stats
-  let heroStats = DB.summarizeHeroData(heroData);
-  teamPlayerStats = DB.summarizePlayerData(heroData);
-  teamTeamStats = DB.summarizeTeamData(team, matches, Heroes);
+  let heroStats = summarizeHeroData(heroData);
+  teamPlayerStats = summarizePlayerData(heroData);
+  teamTeamStats = summarizeTeamData(team, matches, Heroes);
 
   // i'm uh, kind of lazy
   let playerStats = teamPlayerStats;
@@ -333,7 +333,7 @@ function loadTeamData(team, matches, heroData) {
     let hero = teamStats.heroes[h];
     if (hero.bans === 0)
       continue;
-    
+
     let context = {};
     context.value = {};
 
@@ -507,7 +507,7 @@ function loadTeamRoster(playerStats) {
           return 1;
         else if (a.games > b.games)
           return -1;
-        
+
         return 0;
       });
 
@@ -720,7 +720,7 @@ function loadTeamAverages(collectionID) {
     let query = {};
     if (collectionID)
       query.collection = collectionID;
-    
+
     getAllTeamData(query, processTeamAverages)
   });
 }
@@ -736,7 +736,7 @@ function processTeamAverages(err, matches, team) {
   }
 
   teamAvgTracker.actual += 1;
-  let teamStats = DB.summarizeTeamData(team, matches, Heroes);
+  let teamStats = summarizeTeamData(team, matches, Heroes);
 
   for (let s in teamStats.stats.total) {
     if (!(s in teamAvgData))
@@ -756,7 +756,7 @@ function processTeamAverages(err, matches, team) {
   for (let t in teamStats.tierTimes) {
     if (!(t in teamAvgData))
       teamAvgData[t] = 0;
-    
+
     teamAvgData[t] += teamStats.tierTimes[t].average;
   }
 
@@ -848,12 +848,12 @@ function layoutTeamDetailPrint(sections) {
     addPrintSubHeader('Stats', 'stats');
     getPrintPage('stats').append($('#team-summary-stats .statistics').clone());
     getPrintPage('stats').find('.statistics').removeClass('horizontal');
-    
+
     addPrintSubHeader('Macro Stats', 'stats');
     getPrintPage('stats').append($('#team-detail-stats').clone());
     getPrintPage('stats').find('.top.attached.label').remove();
     addPrintPage('rstats');
-    
+
     addPrintSubHeader('Role Stats', 'rstats');
     getPrintPage('rstats').append($('#team-damage-stats').clone());
     getPrintPage('rstats').find('.top.attached.label').remove();
@@ -863,7 +863,7 @@ function layoutTeamDetailPrint(sections) {
     getPrintPage('struct').append($('#team-structure-stats').clone());
     getPrintPage('struct').find('.top.attached.label').remove();
   }
-  
+
   if (sects.indexOf('maps') !== -1) {
     addPrintPage('maps');
     addPrintSubHeader('Maps', 'maps');
@@ -880,7 +880,7 @@ function layoutTeamDetailPrint(sections) {
     addPrintPage('picks');
     addPrintSubHeader('Pick Priority', 'picks');
     copyFloatingTable($('#team-draft-table .floatThead-wrapper'), getPrintPage('picks'));
-    
+
     addPrintPage('bans');
     addPrintSubHeader('Ban Priority', 'bans');
     copyFloatingTable($('#team-ban-summary .floatThead-wrapper'), getPrintPage('bans'));
