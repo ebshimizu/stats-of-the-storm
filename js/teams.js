@@ -517,6 +517,14 @@ function loadTeamRoster(playerStats) {
         let img = '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(heroes[i].hero) + '">';
         $('#team-roster-stats .top-three[player-id="' + id + '"] .images').append(img);
       }
+
+      // nickname replacement
+      DB.getPlayer(id, function(err, doc) {
+        // replace the recently added row
+        if (doc[0].nickname) {
+          $('#team-roster-stats .player-name[playerID="' + id + '"]').text(doc[0].nickname);
+        }
+      });
     }
     else {
       DB.getPlayer(id, function(err, doc) {
@@ -524,7 +532,13 @@ function loadTeamRoster(playerStats) {
           return;
 
         let context = {};
-        context.name = doc[0].name;
+
+        if (doc[0].nickname && doc[0].nickname !== '') {
+          context.name = doc[0].nickname;
+        }
+        else {
+          context.name = doc[0].name;
+        }
         context.id = doc[0]._id;
         $('#team-roster-stats tbody').append(teamRosterRowTemplate(context));
 
