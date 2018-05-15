@@ -38,6 +38,7 @@ const {
 Handlebars.registerHelper('formatSeconds', formatSeconds);
 
 Handlebars.registerHelper('formatPct', (value) => formatStat('pct', value));
+Handlebars.registerHelper('formatKDA', (value) => formatStat('KDA', value));
 
 // datepicker gloabl settings
 $.fn.datepicker.setDefaults({
