@@ -68,3 +68,4 @@ parser/heroprotocol/dist/*
 parser/heroprotocol.spec
 test.pdf
 parser/test.json
+.npmrc

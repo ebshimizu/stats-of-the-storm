@@ -576,14 +576,14 @@
         </div>
       </h3>
     </td>
-    <td class="center aligned" data-sort-value="{{value.winPercent}}">{{winPercent}}</td>
-    <td class="center aligned" data-sort-value="{{value.pickPercent}}">{{pickPercent}}</td>
-    <td class="center aligned" data-sort-value="{{value.games}}">{{games}}</td>
-    <td class="center aligned" data-sort-value="{{value.Takedowns}}">{{Takedowns}}</td>
-    <td class="center aligned" data-sort-value="{{value.Deaths}}">{{Deaths}}</td>
-    <td class="center aligned" data-sort-value="{{value.KDA}}">{{KDA}}</td>
-    <td class="center aligned" data-sort-value="{{value.TimeSpentDead}}">{{TimeSpentDead}}</td>
-    <td class="center aligned" data-sort-value="{{value.timeDeadPct}}">{{timeDeadPct}}</td>
+    <td class="center aligned" data-sort-value="{{winPercent}}">{{formatPct winPercent}}</td>
+    <td class="center aligned" data-sort-value="{{pickPercent}}">{{formatPct pickPercent}}</td>
+    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
+    <td class="center aligned" data-sort-value="{{Takedowns}}">{{Takedowns}}</td>
+    <td class="center aligned" data-sort-value="{{Deaths}}">{{Deaths}}</td>
+    <td class="center aligned" data-sort-value="{{KDA}}">{{formatKDA KDA}}</td>
+    <td class="center aligned" data-sort-value="{{TimeSpentDead}}">{{formatSeconds TimeSpentDead}}</td>
+    <td class="center aligned" data-sort-value="{{timeDeadPct}}">{{formatPct timeDeadPct}}</td>
   </tr>
 </template>
 
@@ -597,11 +597,11 @@
         </div>
       </h3>
     </td>
-    <td class="center aligned" data-sort-value="{{value.winPercent}}">{{winPercent}}</td>
-    <td class="center aligned" data-sort-value="{{value.games}}">{{games}}</td>
-    <td class="center aligned" data-sort-value="{{value.picks.round1.count}}">{{round1Percent}}</td>
-    <td class="center aligned" data-sort-value="{{value.picks.round2.count}}">{{round2Percent}}</td>
-    <td class="center aligned" data-sort-value="{{value.picks.round3.count}}">{{round3Percent}}</td>
+    <td class="center aligned" data-sort-value="{{winPercent}}">{{formatPct winPercent}}</td>
+    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
+    <td class="center aligned" data-sort-value="{{round1Percent}}">{{formatPct round1Percent}}</td>
+    <td class="center aligned" data-sort-value="{{round2Percent}}">{{formatPct round2Percent}}</td>
+    <td class="center aligned" data-sort-value="{{round3Percent}}">{{formatPct round3Percent}}</td>
   </tr>
 </template>
 
@@ -615,11 +615,11 @@
         </div>
       </h3>
     </td>
-    <td class="center aligned" data-sort-value="{{value.banPercent}}">{{banPercent}}</td>
+    <td class="center aligned" data-sort-value="{{banPercent}}">{{formatPct banPercent}}</td>
     <td class="center aligned" data-sort-value="{{bans}}">{{bans}}</td>
-    <td class="center aligned" data-sort-value="{{value.ban1Percent}}">{{ban1Percent}}</td>
+    <td class="center aligned" data-sort-value="{{ban1Percent}}">{{formatPct ban1Percent}}</td>
     <td class="center aligned" data-sort-value="{{ban1}}">{{ban1}}</td>
-    <td class="center aligned" data-sort-value="{{value.ban2Percent}}">{{ban2Percent}}</td>
+    <td class="center aligned" data-sort-value="{{ban2Percent}}">{{formatPct ban2Percent}}</td>
     <td class="center aligned" data-sort-value="{{ban2}}">{{ban2}}</td>
   </tr>
 </template>
