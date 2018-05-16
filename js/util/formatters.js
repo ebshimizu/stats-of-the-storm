@@ -38,8 +38,13 @@ function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+function formatDelta(value) {
+  return value > 0 ? `+${value}` : `${value}`;
+}
+
 module.exports = {
   formatSeconds,
   formatStat,
-  capitalize
+  capitalize,
+  formatDelta
 };
