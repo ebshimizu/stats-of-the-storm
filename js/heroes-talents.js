@@ -2,8 +2,8 @@
 
 const fs = require('fs');
 
-const Awards = require('./js/game-data/awards');
-const TalentRenames = require('./js/game-data/talent-renames');
+const Awards = require('./game-data/awards');
+const TalentRenames = require('./game-data/talent-renames');
 
 class HeroesTalents {
   constructor(path, extra) {
