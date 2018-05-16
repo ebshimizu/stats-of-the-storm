@@ -19,8 +19,7 @@ function initTrendsPage() {
     mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague, ReplayTypes.GameMode.Custom]}
   }
 
-  trendsOverallHeroRowTemplate = Handlebars.compile(getTemplate('trends', '#trends-hero-summary-row-template').
-    find('tr')[0].outerHTML);
+  trendsOverallHeroRowTemplate = Handlebars.compile(getTemplate('trends', '#trends-hero-summary-row-template').find('tr')[0].outerHTML);
   trendsHeroPickTemplate = Handlebars.compile(getTemplate('trends', '#trends-hero-pick-row-template').find('tr')[0].outerHTML);
   trendsHeroBanTemplate = Handlebars.compile(getTemplate('trends', '#trends-hero-pick-ban-template').find('tr')[0].outerHTML);
 
@@ -37,7 +36,7 @@ function initTrendsPage() {
   // filter
   let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
   filterWidget.attr('widget-name', 'hero-trends-filter');
-  
+
   $('#filter-widget').append(filterWidget);
   initPopup(filterWidget);
 
@@ -62,7 +61,7 @@ function initTrendsPage() {
   $('#hero-trends-page-header input').popup({
     on: 'focus'
   });
-  
+
   // init values
   $('#hero-trends-hero-thresh input').val(trendsHeroMatchThreshold);
 
@@ -139,219 +138,15 @@ function loadTrends() {
     DB.getMatches(query2, function(err, dp2) {
       $('#hero-trends-body tbody').html('');
 
-      let stats = {};
       let p1stats = summarizeMatchData(dp1, Heroes);
       let p2stats = summarizeMatchData(dp2, Heroes);
-      stats.period1 = p1stats.data;
-      stats.period2 = p2stats.data;
 
-      // should aggregate these since some heroes might not show up in both periods
-      let aggr = {};
-      for (let p in stats) {
-        let data = stats[p];
+      const { hContext, comps } = summarizeTrendData(p1stats, p2stats);
 
-        for (let h in data) {
-          if (h === 'totalMatches' || h === 'totalBans')
-            continue;
-
-          if (!(h in aggr)) {
-            aggr[h] = {}
-          }
-          let hero = data[h];
-
-          // general win loss pop stats
-          let win = {};
-          win.heroName = h;
-          win.heroImg = Heroes.heroIcon(h);
-          win.winPercent = hero.games === 0 ? 0 : hero.wins / hero.games;
-          win.formatWinPercent = formatStat('pct', win.winPercent);
-          win.banPercent = hero.bans.total / data.totalMatches;
-          win.formatBanPercent = formatStat('pct', win.banPercent);
-          win.popPercent = hero.involved / data.totalMatches;
-          win.formatPopPercent = formatStat('pct', win.popPercent);
-          win.games = hero.games;
-          win.win = hero.wins;
-          win.loss = hero.games - hero.wins;
-          win.bans = hero.bans.total;
-          win.heroRole = Heroes.role(h);
-
-          // picks and bans
-          let draft = {};
-          draft.format = {};
-          draft.games = hero.games;
-          draft.heroName = h;
-          draft.heroImg = win.heroImg;
-          draft.heroRole = win.heroRole;
-          draft.winPercent = win.winPercent;
-          draft.format.winPercent = win.formatWinPercent;
-          draft.banPercent = win.banPercent;
-          draft.format.banPercent = win.formatBanPercent;
-          draft.bans = hero.bans;
-          draft.firstBanPercent = hero.bans.first / data.totalMatches;
-          draft.format.firstBanPercent = formatStat('pct', draft.firstBanPercent);
-          draft.secondBanPercent = hero.bans.second / data.totalMatches;
-          draft.format.secondBanPercent = formatStat('pct', draft.secondBanPercent);
-          draft.picks = hero.picks;
-
-          for (let p in draft.picks) {
-            draft.picks[p].pct = draft.picks[p].count / data.totalMatches;
-            draft.picks[p].formatPct = formatStat('pct', draft.picks[p].pct);
-          }
-
-          aggr[h][p] = { win, draft };
-        }
-      }
-
-      // time to take deltas and render
-      for (let h in aggr) {
-        let context = {};
-        context.heroName = h;
-        context.heroImg = Heroes.heroIcon(h);
-        context.heroRole = Heroes.role(h);
-
-        context.period1 = aggr[h].period1;
-        context.period2 = aggr[h].period2;
-
-        // undef stuff is the worst
-        if (stats.period1[h] === undefined)
-          stats.period1[h] = { involved: 0 };
-        if (stats.period2[h] === undefined)
-          stats.period2[h] = { involved: 0 };
-
-        if (stats.period1[h].involved + stats.period2[h].involved < trendsHeroMatchThreshold)
-          continue;
-
-        context.delta = {};
-        context.deltaFmt = {};
-        context.statSign = {};
-
-        // note that percentage deltas are linear
-        // wins
-        if (context.period1 === undefined) {
-          // initial period has no data
-          context.delta.winPercent = context.period2.win.winPercent;
-          context.delta.popPercent = context.period2.win.popPercent;
-          context.delta.banPercent = context.period2.win.banPercent;
-          // well i mean positive inf maybe isn't the best thing to put so 100%
-          context.delta.win = 1;
-          context.delta.loss = 1;
-          context.delta.games = 1;
-          context.delta.r1 = context.period2.draft.picks.round1.pct;
-          context.delta.r2 = context.period2.draft.picks.round2.pct;
-          context.delta.r3 = context.period2.draft.picks.round3.pct;
-          context.delta.firstBanPercent = context.period2.draft.firstBanPercent;
-          context.delta.secondBanPercent = context.period2.draft.secondBanPercent;
-
-          context.period1 = {};
-          context.period1.win = {
-            formatWinPercent: '0%', winPercent: 0,
-            formatBanPercent: '0%', banPercent: 0,
-            formatPopPercent: '0%', popPercent: 0,
-            games: 0
-          };
-          context.period1.draft = {
-            picks: { round1: { pct: 0, formatPct: '0%' }, round2: { pct: 0, formatPct: '0%' }, round3: { pct: 0, formatPct: '0%' } },
-            firstBanPercent: 0,
-            secondBanPercent: 0
-          };
-        }
-        else if (context.period2 === undefined) {
-          // target period has no data
-          context.delta.winPercent = -context.period1.win.winPercent;
-          context.delta.popPercent = -context.period1.win.popPercent;
-          context.delta.banPercent = -context.period1.win.banPercent;
-          context.delta.win = -1;
-          context.delta.loss = -1;
-          context.delta.games = -1;
-          context.delta.r1 = -context.period1.draft.picks.round1.pct;
-          context.delta.r2 = -context.period1.draft.picks.round2.pct;
-          context.delta.r3 = -context.period1.draft.picks.round3.pct;
-          context.delta.firstBanPercent = -context.period1.draft.firstBanPercent;
-          context.delta.secondBanPercent = -context.period1.draft.secondBanPercent;
-
-          context.period2 = {};
-          context.period2.win = {
-            formatWinPercent: '0%', winPercent: 0,
-            formatBanPercent: '0%', banPercent: 0,
-            formatPopPercent: '0%', popPercent: 0,
-            games: 0
-          };
-          context.period2.draft = {
-            picks: { round1: { pct: 0, formatPct: '0%' }, round2: { pct: 0, formatPct: '0%' }, round3: { pct: 0, formatPct: '0%' } },
-            firstBanPercent: 0,
-            secondBanPercent: 0
-          };
-        }
-        else {
-          context.delta.winPercent = (context.period2.win.winPercent - context.period1.win.winPercent) / context.period1.win.winPercent;
-          context.delta.popPercent = (context.period2.win.popPercent - context.period1.win.popPercent) / context.period1.win.popPercent;
-          context.delta.banPercent = (context.period2.win.banPercent - context.period1.win.banPercent) / context.period1.win.banPercent;
-          context.delta.win = (context.period2.win.win - context.period1.win.win) / context.period1.win.win;
-          context.delta.loss = (context.period2.win.loss - context.period1.win.loss) / context.period1.win.loss;
-          context.delta.games = (context.period2.win.games - context.period1.win.games) / context.period1.win.games;
-          context.delta.r1 = (context.period2.draft.picks.round1.pct - context.period1.draft.picks.round1.pct) / context.period1.draft.picks.round1.pct; 
-          context.delta.r2 = (context.period2.draft.picks.round2.pct - context.period1.draft.picks.round2.pct) / context.period1.draft.picks.round2.pct; 
-          context.delta.r3 = (context.period2.draft.picks.round3.pct - context.period1.draft.picks.round3.pct) / context.period1.draft.picks.round3.pct; 
-          context.delta.firstBanPercent = (context.period2.draft.firstBanPercent - context.period1.draft.firstBanPercent) / context.period1.draft.firstBanPercent;
-          context.delta.secondBanPercent = (context.period2.draft.secondBanPercent - context.period1.draft.secondBanPercent) / context.period1.draft.secondBanPercent;
-        }
-
-        for (let stat in context.delta) {
-          if (isNaN(context.delta[stat])) {
-            context.deltaFmt[stat] = '0.0%';
-            context.delta[stat] = '0';
-          }
-          else {
-            context.deltaFmt[stat] = formatStat('pct', context.delta[stat]);
-          }
-
-          if (context.delta[stat] > 0) {
-            context.deltaFmt[stat] = '+' + context.deltaFmt[stat];
-            context.statSign[stat] = 'plus';
-          }
-          else if (context.delta[stat] < 0 ) {
-            context.statSign[stat] = 'minus';
-          }
-        }
-
+      for (let context of hContext) {
         $('#hero-trends-summary tbody').append(trendsOverallHeroRowTemplate(context));
         $('#hero-trends-picks tbody').append(trendsHeroPickTemplate(context));
         $('#hero-trends-bans tbody').append(trendsHeroBanTemplate(context));
-      }
-
-      // composition aggregation
-      let comps = {};
-      for (let c in p1stats.compositions) {
-        let comp = p1stats.compositions[c];
-        
-        // nothing exists yet
-        comps[c] = {
-          p1Win: comp.wins / comp.games,
-          p1Pop: comp.games / (p1stats.data.totalMatches * 2),
-          p2Win: 0,
-          p2Pop: 0,
-          winDelta: -1,
-          popDelta: -1,
-          roles: comp.roles
-        }
-      }
-
-      for (let c in p2stats.compositions) {
-        let comp = p2stats.compositions[c];
-
-        if (!(c in comps)) {
-          comps[c] = {
-            p1Win: 0,
-            p1Pop: 0,
-            roles: comp.roles
-          }
-        }
-
-        comps[c].p2Win = comp.wins / comp.games;
-        comps[c].p2Pop = comp.games / (p2stats.data.totalMatches * 2);
-
-        comps[c].winDelta = (comps[c].p2Win - comps[c].p1Win) / comps[c].p1Win;
-        comps[c].popDelta = (comps[c].p2Pop - comps[c].p1Pop) / comps[c].p1Pop;
       }
 
       for (let c in comps) {
@@ -363,7 +158,7 @@ function loadTrends() {
         row += '<td class="center aligned" data-sort-value="' + comp.p1Pop + '">' + formatStat('pct', comp.p1Pop) + '</td>';
         row += '<td class="center aligned" data-sort-value="' + comp.p2Pop + '">' + formatStat('pct', comp.p2Pop) + '</td>';
         row += '<td class="center aligned ' + (comp.popDelta > 0 ? 'plus' : 'minus') + '" data-sort-value="' + comp.popDelta + '">' + (comp.popDelta > 0 ? '+' : '') + formatStat('pct', comp.popDelta) + '</td></tr>';
-  
+
         $('#hero-trends-comps tbody').append(row);
       }
 

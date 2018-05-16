@@ -25,19 +25,22 @@ const summarizeMatchData = require('./js/database/summarize-match-data');
 const summarizePlayerData = require('./js/database/summarize-player-data');
 const summarizeTalentData = require('./js/database/summarize-talent-data');
 const summarizeTeamData = require('./js/database/summarize-team-data');
+const summarizeTrendData = require('./js/database/summarize-trend-data');
 
 const migrateDatabase = require('./js/database/migrate');
 
 const {
   formatSeconds,
   formatStat,
-  capitalize
+  capitalize,
+  formatDelta
 } = require('./js/util/formatters');
 
 
 Handlebars.registerHelper('formatSeconds', formatSeconds);
-
 Handlebars.registerHelper('formatPct', (value) => formatStat('pct', value));
+Handlebars.registerHelper('formatKDA', (value) => formatStat('KDA', value));
+Handlebars.registerHelper('formatDelta', formatDelta);
 
 // datepicker gloabl settings
 $.fn.datepicker.setDefaults({

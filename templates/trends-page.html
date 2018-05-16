@@ -220,14 +220,14 @@
         </div>
       </h3>
     </td>
-    <td class="center aligned" data-sort-value="{{period1.win.winPercent}}">{{period1.win.formatWinPercent}}</td>
-    <td class="center aligned" data-sort-value="{{period2.win.winPercent}}">{{period2.win.formatWinPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period1.win.winPercent}}">{{formatPct period1.win.winPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period2.win.winPercent}}">{{formatPct period2.win.winPercent}}</td>
     <td class="center aligned {{statSign.winPercent}}" data-sort-value="{{delta.winPercent}}">{{deltaFmt.winPercent}}</td>
-    <td class="center aligned" data-sort-value="{{period1.win.banPercent}}">{{period1.win.formatBanPercent}}</td>
-    <td class="center aligned" data-sort-value="{{period2.win.banPercent}}">{{period2.win.formatBanPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period1.win.banPercent}}">{{formatPct period1.win.banPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period2.win.banPercent}}">{{formatPct period2.win.banPercent}}</td>
     <td class="center aligned {{statSign.banPercent}}" data-sort-value="{{delta.banPercent}}">{{deltaFmt.banPercent}}</td>
-    <td class="center aligned" data-sort-value="{{period1.win.popPercent}}">{{period1.win.formatPopPercent}}</td>
-    <td class="center aligned" data-sort-value="{{period2.win.popPercent}}">{{period2.win.formatPopPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period1.win.popPercent}}">{{formatPct period1.win.popPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period2.win.popPercent}}">{{formatPct period2.win.popPercent}}</td>
     <td class="center aligned {{statSign.popPercent}}" data-sort-value="{{delta.popPercent}}">{{deltaFmt.popPercent}}</td>
     <td class="center aligned" data-sort-value="{{period1.win.games}}">{{period1.win.games}}</td>
     <td class="center aligned" data-sort-value="{{period2.win.games}}">{{period2.win.games}}</td>
@@ -248,14 +248,14 @@
     <td class="center aligned" data-sort-value="{{period1.win.games}}">{{period1.win.games}}</td>
     <td class="center aligned" data-sort-value="{{period2.win.games}}">{{period2.win.games}}</td>
     <td class="center aligned {{statSign.games}}" data-sort-value="{{delta.games}}">{{deltaFmt.games}}</td>
-    <td class="center aligned" data-sort-value="{{period1.draft.picks.round1.pct}}">{{period1.draft.picks.round1.formatPct}}</td>
-    <td class="center aligned" data-sort-value="{{period2.draft.picks.round1.pct}}">{{period2.draft.picks.round1.formatPct}}</td>
+    <td class="center aligned" data-sort-value="{{period1.draft.picks.round1.pct}}">{{formatPct period1.draft.picks.round1.pct}}</td>
+    <td class="center aligned" data-sort-value="{{period2.draft.picks.round1.pct}}">{{formatPct period2.draft.picks.round1.pct}}</td>
     <td class="center aligned {{statSign.r1}}" data-sort-value="{{delta.r1}}">{{deltaFmt.r1}}</td>
-    <td class="center aligned" data-sort-value="{{period1.draft.picks.round2.pct}}">{{period1.draft.picks.round2.formatPct}}</td>
-    <td class="center aligned" data-sort-value="{{period2.draft.picks.round2.pct}}">{{period2.draft.picks.round2.formatPct}}</td>
+    <td class="center aligned" data-sort-value="{{period1.draft.picks.round2.pct}}">{{formatPct period1.draft.picks.round2.pct}}</td>
+    <td class="center aligned" data-sort-value="{{period2.draft.picks.round2.pct}}">{{formatPct period2.draft.picks.round2.pct}}</td>
     <td class="center aligned {{statSign.r2}}" data-sort-value="{{delta.r2}}">{{deltaFmt.r2}}</td>
-    <td class="center aligned" data-sort-value="{{period1.draft.picks.round3.pct}}">{{period1.draft.picks.round3.formatPct}}</td>
-    <td class="center aligned" data-sort-value="{{period2.draft.picks.round3.pct}}">{{period2.draft.picks.round3.formatPct}}</td>
+    <td class="center aligned" data-sort-value="{{period1.draft.picks.round3.pct}}">{{formatPct period1.draft.picks.round3.pct}}</td>
+    <td class="center aligned" data-sort-value="{{period2.draft.picks.round3.pct}}">{{formatPct period2.draft.picks.round3.pct}}</td>
     <td class="center aligned {{statSign.r3}}" data-sort-value="{{delta.r3}}">{{deltaFmt.r3}}</td>
   </tr>
 </template>
@@ -270,14 +270,14 @@
         </div>
       </h3>
     </td>
-    <td class="center aligned" data-sort-value="{{period1.win.banPercent}}">{{period1.win.formatBanPercent}}</td>
-    <td class="center aligned" data-sort-value="{{period2.win.banPercent}}">{{period2.win.formatBanPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period1.win.banPercent}}">{{formatPct period1.win.banPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period2.win.banPercent}}">{{formatPct period2.win.banPercent}}</td>
     <td class="center aligned {{statSign.banPercent}}" data-sort-value="{{delta.banPercent}}">{{deltaFmt.banPercent}}</td>
-    <td class="center aligned" data-sort-value="{{period1.draft.firstBanPercent}}">{{period1.draft.format.firstBanPercent}}</td>
-    <td class="center aligned" data-sort-value="{{period2.draft.firstBanPercent}}">{{period2.draft.format.firstBanPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period1.draft.firstBanPercent}}">{{formatPct period1.draft.firstBanPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period2.draft.firstBanPercent}}">{{formatPct period2.draft.firstBanPercent}}</td>
     <td class="center aligned {{statSign.firstBanPercent}}" data-sort-value="{{delta.firstBanPercent}}">{{deltaFmt.firstBanPercent}}</td>
-    <td class="center aligned" data-sort-value="{{period1.draft.secondBanPercent}}">{{period1.draft.format.secondBanPercent}}</td>
-    <td class="center aligned" data-sort-value="{{period2.draft.secondBanPercent}}">{{period2.draft.format.secondBanPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period1.draft.secondBanPercent}}">{{formatPct period1.draft.secondBanPercent}}</td>
+    <td class="center aligned" data-sort-value="{{period2.draft.secondBanPercent}}">{{formatPct period2.draft.secondBanPercent}}</td>
     <td class="center aligned {{statSign.secondBanPercent}}" data-sort-value="{{delta.secondBanPercent}}">{{deltaFmt.secondBanPercent}}</td>
   </tr>
 </template>
