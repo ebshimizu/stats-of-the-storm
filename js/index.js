@@ -27,6 +27,10 @@ const summarizeTalentData = require('./js/database/summarize-talent-data');
 const summarizeTeamData = require('./js/database/summarize-team-data');
 const summarizeTrendData = require('./js/database/summarize-trend-data');
 
+const heroDataCSV = require('./js/exporters/hero-csv');
+const heroDraftCSV = require('./js/exporters/hero-draft-csv');
+
+
 const migrateDatabase = require('./js/database/migrate');
 
 const {
@@ -150,7 +154,7 @@ function resumeInitApp() {
   setLoadMessage('Populating Menus');
   globalDBUpdate();
 
-  $('.player-menu input.search').keydown(function(e) {
+  $('.player-menu input.search').keyup(function(e) {
     if (e.which === 38 || e.which === 40 || e.which === 13)
       return;
 
@@ -359,7 +363,7 @@ function globalDBUpdate() {
 function updatePlayerMenuOptions(elem, value) {
   // ok so like search for the player i guess
   let q = new RegExp(value, 'i');
-  DB.getPlayers({name: q }, function(err, players) {
+  DB.getPlayers({ $or: [{name: { $regex: q } }, { nickname: { $regex: q } }] }, function(err, players) {
     let menu = $(elem).parent('.dropdown');
     menu.find('.menu .item').not('.active').remove();
     menu.find('.message').remove();
@@ -371,10 +375,7 @@ function updatePlayerMenuOptions(elem, value) {
       if (count > max)
         break;
 
-      let name = player.name;
-      if (player.tag) {
-        name += '#' + player.tag;
-      }
+      let name = formatPlayerName(player);
 
       let item = '<div class="item" data-value="' + player._id + '">';
       //item += '<div class="ui horizontal label"><i class="file outline icon"></i>' + player.matches + '</div>';
@@ -386,6 +387,17 @@ function updatePlayerMenuOptions(elem, value) {
 
     menu.dropdown('refresh');
   });
+}
+
+// given player object, formats player name accoriding to options
+function formatPlayerName(player, opts = {}) {
+  let name = player.name;
+
+  if (!opts.noTag && player.tag) {
+    name += '#' + player.tag;
+  }
+
+  return name;
 }
 
 // given a user id, returns 'focus-player' class if the player id is, well, the focus player
@@ -805,83 +817,9 @@ function renderAndPrint(filename, size = 'Letter', landscape = false) {
 // takes a bunch of hero data json docs and converts them into rows
 function exportHeroDataAsCSV(docs, file) {
   // assert docs > 0
-  if (docs.length === 0)
-    return;
+  if (docs.length === 0) return;
 
-  // first, setup fields
-  let outData = '';
-
-  // identifiers
-  outData += 'ToonHandle';
-  outData += ',name';
-  outData += ',hero';
-  outData += ',date';
-  outData += ',win';
-  outData += ',map';
-  outData += ',length';
-
-  // stats in order
-  for (let s of DetailStatList) {
-    outData += ',' + s;
-  }
-
-  for (let m in PerMapStatList) {
-    for (let s of PerMapStatList[m]) {
-      outData += ',' + s;
-    }
-  }
-
-  // talents
-  outData += ',Tier 1 Choice';
-  outData += ',Tier 2 Choice';
-  outData += ',Tier 3 Choice';
-  outData += ',Tier 4 Choice';
-  outData += ',Tier 5 Choice';
-  outData += ',Tier 6 Choice';
-  outData += ',Tier 7 Choice';
-
-  // time for exporting
-  for (doc of docs) {
-    let row = '';
-
-    // identifiers
-    row += doc.ToonHandle;
-    row += ',' + doc.name;
-    row += ',' + doc.hero;
-    row += ',' + doc.date;
-    row += ',' + (doc.win ? 'true' : 'false');
-    row += ',' + doc.map;
-    row += ',' + doc.length;
-
-    // stats in order
-    for (let s of DetailStatList) {
-      row += ',' + doc.gameStats[s];
-    }
-
-    for (let m in PerMapStatList) {
-      for (let s of PerMapStatList[m]) {
-        if (s in doc.gameStats) {
-          row += ',' + doc.gameStats[s];
-        }
-        else {
-          row += ', ';
-        }
-      }
-    }
-
-    // talents, should render to undefined if, well, undefined
-    row += ',' + doc.talents['Tier 1 Choice'];
-    row += ',' + doc.talents['Tier 2 Choice'];
-    row += ',' + doc.talents['Tier 3 Choice'];
-    row += ',' + doc.talents['Tier 4 Choice'];
-    row += ',' + doc.talents['Tier 5 Choice'];
-    row += ',' + doc.talents['Tier 6 Choice'];
-    row += ',' + doc.talents['Tier 7 Choice'];
-
-    outData += '\n' + row;
-  }
-
-  fs.writeFile(file, outData, function(err) {
+  fs.writeFile(file, heroDataCSV(docs), function(err) {
     if (err) {
       showMessage('CSV Export Error', err, { class: 'negative' });
     }

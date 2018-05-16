@@ -494,12 +494,8 @@ function updatePlayerDetailID(value, text, $item) {
 function updatePlayerPage(err, doc) {
   if (doc.length === 1) {
     playerDetailInfo = doc[0];
-    let formatName = playerDetailInfo.name;
-    if (playerDetailInfo.tag) {
-      formatName += '<span class="btag">#' + playerDetailInfo.tag + '</span>';
-    }
-
-    $('#player-page-header h1.header .content .player').html(formatName);
+    
+    updatePlayerPageHeader();
 
     // check player teams
     DB.getPlayerTeams(playerDetailInfo._id, function(err, teams) {
@@ -521,6 +517,31 @@ function updatePlayerPage(err, doc) {
   else {
     console.log("no player found?");
   }
+}
+
+function updatePlayerPageHeader() {
+  let formatName = playerDetailInfo.name;
+  let menuName = formatName;
+
+  if (playerDetailInfo.nickname && playerDetailInfo.nickname !== '') {
+    formatName = playerDetailInfo.nickname + '<span class="btag">' + formatName;
+
+    if (playerDetailInfo.tag) {
+      formatName += '#' + playerDetailInfo.tag;
+      menuName += '#' + playerDetailInfo.tag;
+    }
+
+    formatName += '</span>';
+  }
+  else if (playerDetailInfo.tag) {
+    formatName += '<span class="btag">#' + playerDetailInfo.tag + '</span>';
+    menuName += '#' + playerDetailInfo.tag;
+  }
+
+  menuName += ' (' + RegionString[playerDetailInfo.region] + ')';
+
+  $('#player-page-header h1.header .content .player').html(formatName);
+  $('#players-set-player').dropdown('set text', menuName);
 }
 
 // this is the initial call to creating the data
@@ -1273,6 +1294,22 @@ function handlePlayerExportAction(action, text, $elem) {
         });
       }
     });
+  }
+  else if (action === 'nickname') {
+    if (playerDetailID) {
+      $('#player-set-nickname-modal').find('input').val(playerDetailInfo.nickname);
+      $('#player-set-nickname-modal').modal({
+        onApprove: function() {
+          let name = $('#player-set-nickname-modal').find('input').val();
+          playerDetailInfo.nickname = name;
+          DB.setPlayerNickname(playerDetailID, name, function() {
+            // display message, update player header
+            showMessage('Nickname Updated', `${playerDetailInfo.name}'s nickname updated to "${name}"`);
+            updatePlayerPageHeader();
+          });
+        }
+      }).modal('show');
+    }
   }
 }
 

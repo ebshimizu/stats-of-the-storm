@@ -290,90 +290,61 @@ function loadTeamData(team, matches, heroData) {
   $('#team-hero-summary-table tbody').html('');
   let picked = 0;
   for (let h in heroStats.heroes) {
-    let hero = heroStats.heroes[h];
-    let context = {};
-    context.value = {};
-
-    // for formatting reasons i'll do this manually
-    context.value.Takedowns = hero.stats.Takedowns;
-    context.Takedowns = hero.stats.Takedowns;
-
-    context.value.Deaths = hero.stats.Deaths;
-    context.Deaths = hero.stats.Deaths;
-
-    context.value.KDA = hero.stats.Takedowns / Math.max(1, hero.stats.Deaths);
-    context.KDA = formatStat('KDA', context.value.KDA);
-
-    context.value.TimeSpentDead = heroStats.averages[h].TimeSpentDead;
-    context.TimeSpentDead = formatSeconds(context.value.TimeSpentDead);
-
-    context.value.timeDeadPct = hero.stats.timeDeadPct / hero.games;
-    context.timeDeadPct = formatStat('pct', context.value.timeDeadPct);
-
-    context.value.games = hero.games;
-    context.value.winPercent = hero.wins / hero.games;
-    context.value.pickPercent = hero.games / teamStats.totalMatches;
-
-    context.games = hero.games;
-    context.winPercent = formatStat('pct', context.value.winPercent);
-    context.pickPercent = formatStat('pct', context.value.pickPercent);
-    context.heroImg = Heroes.heroIcon(h);
-    context.heroName = h;
-
     picked += 1;
+    const hero = heroStats.heroes[h];
 
-    if (hero.games >= teamHeroMatchThresh)
+    if (hero.games >= teamHeroMatchThresh) {
+      const context = {
+        Takedowns: hero.stats.Takedowns,
+        Deaths: hero.stats.Deaths,
+        KDA: hero.stats.Takedowns / Math.max(1, hero.stats.Deaths),
+        TimeSpentDead: heroStats.averages[h].TimeSpentDead,
+        timeDeadPct: hero.stats.timeDeadPct / hero.games,
+        games: hero.games,
+        winPercent: hero.wins / hero.games,
+        pickPercent: hero.games / teamStats.totalMatches,
+        heroImg: Heroes.heroIcon(h),
+        heroName: h
+      };
       $('#team-hero-summary-table tbody').append(teamHeroSummaryRowTemplate(context));
+    }
   }
 
   // picks and bans
   $('#team-ban-summary tbody').html('');
   $('#team-draft-table tbody').html('');
   for (let h in teamStats.heroes) {
-    let hero = teamStats.heroes[h];
-    if (hero.bans === 0)
-      continue;
+    const hero = teamStats.heroes[h];
 
-    let context = {};
-    context.value = {};
+    if (hero.bans > 0 && hero.bans >= teamHeroMatchThresh) {
+      const context = {
+        heroName: h,
+        heroImg: Heroes.heroIcon(h),
+        banPercent: hero.bans / teamStats.totalMatches,
+        bans: hero.bans,
+        ban1Percent: hero.first / teamStats.totalMatches,
+        ban1: hero.first,
+        ban2Percent: hero.second / teamStats.totalMatches,
+        ban2: hero.second
+      };
 
-    context.heroName = h;
-    context.heroImg = Heroes.heroIcon(h);
-    context.value.banPercent = hero.bans / teamStats.totalMatches;
-    context.bans = hero.bans;
-    context.value.ban1Percent = hero.first / teamStats.totalMatches;
-    context.ban1 = hero.first;
-    context.value.ban2Percent = hero.second / teamStats.totalMatches;
-    context.ban2 = hero.second;
-
-    context.banPercent =  formatStat('pct', context.value.banPercent);
-    context.ban1Percent = formatStat('pct', context.value.ban1Percent);
-    context.ban2Percent = formatStat('pct', context.value.ban2Percent);
-
-    if (hero.bans >= teamHeroMatchThresh)
       $('#team-ban-summary tbody').append(teamBanSummaryRowTemplate(context));
-  }
-
-  for (let h in teamStats.heroes) {
-    let hero = teamStats.heroes[h];
-    if (hero.games === 0)
-      continue;
-
-    let context = {};
-    context.value = {};
-    context.heroName = h;
-    context.heroImg = Heroes.heroIcon(h);
-    context.value.picks = hero.picks;
-    context.value.winPercent = hero.wins / hero.games;
-    context.winPercent = formatStat('pct', context.value.winPercent);
-    context.value.games = hero.games;
-    context.games = hero.games;
-    for (let p in context.value.picks) {
-      context[p + 'Percent'] = formatStat('pct', context.value.picks[p].count / teamStats.totalMatches);
     }
 
-    if (hero.games >= teamHeroMatchThresh)
+    if (hero.games > 0 && hero.games >= teamHeroMatchThresh) {
+      const context = {
+        heroName: h,
+        heroImg: Heroes.heroIcon(h),
+        winPercent: hero.wins / hero.games,
+        games: hero.games
+      };
+
+      for (let p in hero.picks) {
+        context[p + 'Percent'] = hero.picks[p].count / teamStats.totalMatches;
+      }
+
       $('#team-draft-table tbody').append(teamHeroPickRowTemplate(context));
+    }
   }
 
   // other stats
@@ -425,7 +396,7 @@ function loadTeamData(team, matches, heroData) {
     updateTeamStat(elem, 'towers-destroyed', teamStats.structures['Fort Tower'].destroyed + teamStats.structures['Keep Tower'].destroyed);
     updateTeamStat(elem, 'towers-lost', teamStats.structures['Fort Tower'].lost + teamStats.structures['Keep Tower'].lost);
 
-    let hideTowerTime = (teamStats.structures['Fort Tower'].destroyed + teamStats.structures['Keep Tower'].destroyed) === 0;
+    let hideTowerTime = teamStats.structures['Fort Tower'].destroyed + teamStats.structures['Keep Tower'].destroyed === 0;
     updateTeamStat(elem, 'first-tower', hideTowerTime ? 'N/A' : formatSeconds(Math.min(teamStats.structures['Fort Tower'].first / teamStats.structures['Fort Tower'].gamesWithFirst, teamStats.structures['Keep Tower'].first / teamStats.structures['Keep Tower'].gamesWithFirst)));
 
     elem = $('#team-damage-stats');
@@ -502,30 +473,36 @@ function loadTeamRoster(playerStats) {
       for (let h in player.heroes) {
         heroes.push({hero: h, games: player.heroes[h]});
       }
-      heroes.sort(function(a, b) {
-        if (a.games < b.games)
-          return 1;
-        else if (a.games > b.games)
-          return -1;
 
-        return 0;
-      });
+      heroes.sort((a, b) => b.games - a.games);
 
-      for (let i = 0; i < 3; i++) {
-        if (i >= heroes.length)
-          break;
-        let img = '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(heroes[i].hero) + '">';
+      for (let i = 0; i < Math.min(heroes.length, 3); i++) { // max 3 heroes, min heroes.length
+        const img = `<img src="assets/heroes-talents/images/heroes/${Heroes.heroIcon(heroes[i].hero)}">`;
         $('#team-roster-stats .top-three[player-id="' + id + '"] .images').append(img);
       }
+
+      // nickname replacement
+      DB.getPlayer(id, function(err, doc) {
+        // replace the recently added row
+        if (doc[0].nickname) {
+          $('#team-roster-stats .player-name[playerID="' + id + '"]').text(doc[0].nickname);
+        }
+      });
     }
     else {
       DB.getPlayer(id, function(err, doc) {
         if (doc.length === 0)
           return;
 
-        let context = {};
-        context.name = doc[0].name;
-        context.id = doc[0]._id;
+        let context = {
+          name: doc[0].name,
+          id: doc[0]._id
+        };
+
+        if (doc[0].nickname && doc[0].nickname !== '') {
+          context.name = doc[0].nickname;
+        }
+
         $('#team-roster-stats tbody').append(teamRosterRowTemplate(context));
 
         $('#team-roster-stats .dropdown.button[player-id="' + doc[0]._id + '"]').dropdown({

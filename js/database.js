@@ -463,6 +463,9 @@ class Database {
     this.getPlayers({_id: id}, callback);
   }
 
+  setPlayerNickname(id, name, callback) {
+    this._db.players.update({ _id: id }, { $set : { nickname: name } }, {}, callback);
+  }
 
   // hero data is separated by hero, if you need the total stuff, use this function
   // returns: all stats in the 'average' fields
