@@ -22,13 +22,13 @@ function initTeamsPage() {
     fullTextSearch: true
   });
 
-  teamHeroSummaryRowTemplate = Handlebars.compile(getTemplate('teams', '#team-hero-summary-row').find('tr')[0].outerHTML);
-  teamBanSummaryRowTemplate = Handlebars.compile(getTemplate('teams', '#team-hero-ban-row').find('tr')[0].outerHTML);
-  teamRosterRowTemplate = Handlebars.compile(getTemplate('teams', '#team-roster-row').find('tr')[0].outerHTML);
-  teamHeroPickRowTemplate = Handlebars.compile(getTemplate('teams', '#team-hero-pick-row').find('tr')[0].outerHTML);
+  teamHeroSummaryRowTemplate = getHandlebars('teams', '#team-hero-summary-row');
+  teamBanSummaryRowTemplate = getHandlebars('teams', '#team-hero-ban-row');
+  teamRosterRowTemplate = getHandlebars('teams', '#team-roster-row');
+  teamHeroPickRowTemplate = getHandlebars('teams', '#team-hero-pick-row');
 
   // filter popup
-  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
+  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template'));
   filterWidget.attr('widget-name', 'teams-filter');
   filterWidget.find('.filter-widget-team').addClass('is-hidden');
 

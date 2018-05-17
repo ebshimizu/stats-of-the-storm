@@ -1,4 +1,4 @@
-<template id="about-page">
+<script id="about-page" type="text/x-handlebars-template">
   <div id="about-page-content" class="is-page transition hidden" section-name="about">
     <div class="ui inverted segment">
       <h1 class="ui inverted header">About</h1>
@@ -150,7 +150,7 @@
           can now be scanned recursively (optional).
         </p>
         <p>
-          Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/145">#145</a> Filter widgets 
+          Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/145">#145</a> Filter widgets
           will now be displayable on more resolutions.
         </p>
         <h3 class="ui inverted dividing header">Version 0.6.0</h3>
@@ -232,7 +232,7 @@
           The fix for this requires an optional re-import to restore this functionality. Player Details and most other sections are unaffected by this bug.
         </p>
         <p>
-          Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/130">#130</a> Parser now properly identifies the same 
+          Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/130">#130</a> Parser now properly identifies the same
           match recorded on different computers.
         </p>
         <h3 class="ui inverted dividing header">Version 0.5.0</h3>
@@ -241,7 +241,7 @@
           and external database comparison support to Stats of the Storm. This version also corrects the match lengths
           in the database. You do not need to re-import your matches to get the extra stats in this version.
           <br>
-          Thanks again to AlexNewell on GitHub for finding some bugs this time around. 
+          Thanks again to AlexNewell on GitHub for finding some bugs this time around.
         </p>
         <p>
           Version 0.5.0 is also the first version of Stats of the Storm available on Mac. This app
@@ -267,7 +267,7 @@
           Match Details: Import path is now shown for each replay.
         </p>
         <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/124">#124</a>
-          Parser: Corrected match lengths. Note that the graphs still extend past the match end. This is due 
+          Parser: Corrected match lengths. Note that the graphs still extend past the match end. This is due
           to the last XP breakdown occuring after the game technically ends. For completeness, I have let the graphs
           extend to this duration instead of clamping them.
         </p>
@@ -333,11 +333,11 @@
         <p>Parser update for build 63070.</p>
         <h3 class="ui inverted dividing header">Version 0.3.0</h3>
         <p>
-          Version 0.3.0 fixes a few bugs, adds additional data views for players and teams, lets you parse replays from 
+          Version 0.3.0 fixes a few bugs, adds additional data views for players and teams, lets you parse replays from
           any language, and also allows you to
           compare player and team performance to the overall collection averages. Data for players and matches can
           now be exported in json format from the UI. If you have additional data you'd like to see in those exports,
-          let me know what you'd like to see. 
+          let me know what you'd like to see.
         </p>
         <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/85">#85</a>
           Parser: Able to parse replays in all languages.
@@ -400,4 +400,4 @@
       </div>
     </div>
   </div>
-</template>
+</script>

@@ -19,9 +19,9 @@ function initTrendsPage() {
     mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague, ReplayTypes.GameMode.Custom]}
   }
 
-  trendsOverallHeroRowTemplate = Handlebars.compile(getTemplate('trends', '#trends-hero-summary-row-template').find('tr')[0].outerHTML);
-  trendsHeroPickTemplate = Handlebars.compile(getTemplate('trends', '#trends-hero-pick-row-template').find('tr')[0].outerHTML);
-  trendsHeroBanTemplate = Handlebars.compile(getTemplate('trends', '#trends-hero-pick-ban-template').find('tr')[0].outerHTML);
+  trendsOverallHeroRowTemplate = getHandlebars('trends', '#trends-hero-summary-row-template');
+  trendsHeroPickTemplate = getHandlebars('trends', '#trends-hero-pick-row-template');
+  trendsHeroBanTemplate = getHandlebars('trends', '#trends-hero-pick-ban-template');
 
   //tables
   $('#hero-trends-body table').tablesort();
@@ -34,7 +34,7 @@ function initTrendsPage() {
   });
 
   // filter
-  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
+  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template'));
   filterWidget.attr('widget-name', 'hero-trends-filter');
 
   $('#filter-widget').append(filterWidget);
@@ -136,18 +136,15 @@ function loadTrends() {
 
   DB.getMatches(query1, function(err, dp1) {
     DB.getMatches(query2, function(err, dp2) {
-      $('#hero-trends-body tbody').html('');
-
       let p1stats = summarizeMatchData(dp1, Heroes);
       let p2stats = summarizeMatchData(dp2, Heroes);
 
       const { hContext, comps } = summarizeTrendData(p1stats, p2stats);
 
-      for (let context of hContext) {
-        $('#hero-trends-summary tbody').append(trendsOverallHeroRowTemplate(context));
-        $('#hero-trends-picks tbody').append(trendsHeroPickTemplate(context));
-        $('#hero-trends-bans tbody').append(trendsHeroBanTemplate(context));
-      }
+      $('#hero-trends-body tbody').html('');
+      $('#hero-trends-summary tbody').append(trendsOverallHeroRowTemplate({ context: hContext }));
+      $('#hero-trends-picks tbody').append(trendsHeroPickTemplate({context: hContext}));
+      $('#hero-trends-bans tbody').append(trendsHeroBanTemplate({context: hContext}));
 
       for (let c in comps) {
         let comp = comps[c];

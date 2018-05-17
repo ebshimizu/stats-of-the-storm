@@ -304,13 +304,13 @@ function initMatchDetailPage() {
   $('#match-detail-submenu .item').tab();
 
   // templates
-  matchSummaryRowTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-summary-row-template').find('tr')[0].outerHTML);
-  matchDetailHeaderTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-detail-header').find('th')[0].outerHTML);
+  matchSummaryRowTemplate = getHandlebars('match-detail', '#match-detail-summary-row-template');
+  matchDetailHeaderTemplate = getHandlebars('match-detail', '#match-detail-detail-header');
   matchDetailRowTemplate = Handlebars.compile(matchDetailRowTemplateSrc);
-  matchTalentRowTitleTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-talents-row-title-template').find('tr')[0].outerHTML);
-  matchTalentRowCellTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-talents-row-cell-template').find('td')[0].outerHTML);
-  matchChatEntryTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-chat-log-entry').find('div.event')[0].outerHTML);
-  matchTauntEntryTemplate = Handlebars.compile(getTemplate('match-detail', '#match-detail-taunt-entry').find('tr')[0].outerHTML);
+  matchTalentRowTitleTemplate = getHandlebars('match-detail', '#match-detail-talents-row-title-template');
+  matchTalentRowCellTemplate = getHandlebars('match-detail', '#match-detail-talents-row-cell-template');
+  matchChatEntryTemplate = getHandlebars('match-detail', '#match-detail-chat-log-entry');
+  matchTauntEntryTemplate = getHandlebars('match-detail', '#match-detail-taunt-entry');
 
   $('#match-detail-taunt-table').tablesort();
   $('#match-detail-taunt-table').floatThead({
@@ -328,7 +328,7 @@ function initMatchDetailPage() {
     $('#match-detail-taunt-table').floatThead('reflow');
   });
 
-  
+
   redTeamXPGraphData = {
     type: 'line',
     data: {},
@@ -362,11 +362,11 @@ function initMatchDetailPage() {
   $('#match-detail-timeline-buttons .button').click(function() {
     toggleGroup(parseInt($(this).attr('button-id')));
   });
-  
+
   $('#match-detail-teams').dropdown({
     action: 'hide',
     onChange: function(value, text, $elem) {
-      matchDetailTeamAction(value); 
+      matchDetailTeamAction(value);
     }
   });
 
@@ -495,7 +495,7 @@ function loadMatch(docs, doneLoadCallback) {
 
   // load xp
   graphXP();
-  
+
   // load chat
   loadChat();
 
@@ -534,7 +534,7 @@ function updateBasicInfo() {
   }
 
   $('#match-detail-mode').text(ReplayTypes.GameModeStrings[matchDetailMatch.mode]);
-  let d = new Date(matchDetailMatch.date); 
+  let d = new Date(matchDetailMatch.date);
   $('#match-detail-date').text(d.toLocaleString('en-US'));
   $('#match-detail-file').text(matchDetailMatch.filename);
   $('#match-detail-blue-level').text(matchDetailMatch.teams[0].level);
@@ -769,7 +769,7 @@ function loadChat() {
     if ('text' in msg) {
       let context = { message: msg.text };
       context.time = formatSeconds(msg.time);
-      
+
       if (msg.player in matchDetailPlayers) {
         context.playerName = matchDetailPlayers[msg.player].name;
         context.showImg = '';
@@ -827,7 +827,7 @@ function addTauntEntry(type, player, data) {
   $('#match-detail-taunt-table tbody').append(matchTauntEntryTemplate(context));
 }
 
-// takes the total of all the xp values 
+// takes the total of all the xp values
 function graphXP() {
   let team0XP = getTotalXPSet(0);
   let team1XP = getTotalXPSet(1);
@@ -872,7 +872,7 @@ function getTotalXPSet(teamID) {
     let x = matchDetailMatch.XPBreakdown[xp];
 
     if (x.team === teamID) {
-      // we want the total here. 
+      // we want the total here.
       let y = x.breakdown.CreepXP + x.breakdown.HeroXP + x.breakdown.MinionXP + x.breakdown.StructureXP + x.breakdown.TrickleXP
       data.push({x: x.time, y: parseInt(y) });
     }
@@ -889,7 +889,7 @@ function getLevelsXPSet(teamID) {
     let level = levels[l];
     if (level.level === 1)
       continue;
-    
+
     data.push({ x: level.time, y: level.level });
   }
 
@@ -1057,7 +1057,7 @@ function loadTimeline() {
       return 0;
     if (a.time < b.time)
       return -1;
-    
+
     return 1;
   });
   let start = 0;
@@ -1080,7 +1080,7 @@ function loadTimeline() {
       let item = {};
       item.start = start;
       item.end = event.time;
-      
+
       if (currentLevelDiff === 0) {
         item.content = "0";
       }
@@ -1151,7 +1151,7 @@ function loadTimeline() {
     let item = {};
     item.start = merc.time;
     item.content = merc.type;
-    
+
     if (merc.team === 0) {
       item.className = 'blue';
     }
@@ -1200,7 +1200,7 @@ function loadTimeline() {
   }
   else if (matchDetailMatch.map === ReplayTypes.MapType.HauntedMines) {
     getMinesEvents(items);
-  } 
+  }
   else if (matchDetailMatch.map === ReplayTypes.MapType.BattlefieldOfEternity) {
     getBOEEvents(items);
   }
@@ -1252,7 +1252,7 @@ function loadTimeline() {
   matchDetailTimeline = new vis.Timeline($('#match-detail-timeline-wrapper')[0], new vis.DataSet(items), matchDetailTimelineGroups, opts);
   matchDetailTimeline.on('rangechanged', function(props) {
     $('.timeline-popup').popup();
-  }); 
+  });
   matchDetailTimelineGroups.on('update', function() {
     matchDetailTimeline.redraw();
   });
@@ -1281,7 +1281,7 @@ function generateTDTimeline(data) {
   pop += formatSeconds(data.time) + "</div></div></h3>";
   pop += "<h3 class='ui header second'>Killed By</h3>";
   pop += "<div class='ui mini circular images'>";
-  
+
   for (let a in data.killers) {
     let k = data.killers[a];
     pop += "<img class='ui image' src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(k.hero) + "'>";
@@ -1391,7 +1391,7 @@ function getGardenEvents(items) {
       item.group = 5;
 
       let hero = matchDetailMatch.teams[t].heroes[matchDetailMatch.teams[t].ids.indexOf(terror.player)];
-      
+
       let pop = "<h3 class='ui image header'>";
       pop += "<img src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(hero) + "' class='ui large circular image'>";
       pop += "<div class='content'>Garden Terror<div class='sub header'>Spawned at: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(terror.duration);
@@ -1488,7 +1488,7 @@ function getMinesEvents(items) {
       item.end = golem.endTime;
       item.group = 5;
       item.className = golem.team === 0 ? 'blue' : 'red';
-      
+
       let pop = "<h3 class='ui header'><div class='content'>Grave Golem<div class='sub header'>Spawn: " + formatSeconds(golem.startTime);
       pop += ", Duration: " + formatSeconds(golem.duration) + "</div></div></h3>";
 
@@ -1653,7 +1653,7 @@ function getShrinesEvents(items) {
       pop += "<div class='sub header'>Spawn: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(punisher.duration);
       pop += "</div></div></h3>";
       pop += "<p>Siege Damage: " + parseInt(punisher.siegeDamage) + "<br>Hero Damage: " + parseInt(punisher.heroDamage) + "</p>";
-      
+
       item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">'
       item.content += punisher.type.substr(0, punisher.type.length - 6) + ' Punisher</div>';
       items.push(item);
@@ -1671,11 +1671,11 @@ function getTombEvents(items) {
       item.end = spider.end;
       item.group = 5;
       item.className = spider.team === 0 ? 'blue' : 'red';
-  
+
       let pop = "<h3 class='ui header'><div class='content'>Webweavers";
       pop += "<div class='sub header'>Spawn: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(spider.duration);
       pop += "</div></div></h3>";
-  
+
       item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">Webweavers</div>';
       items.push(item);
     }
@@ -1700,7 +1700,7 @@ function getVolskayaEvents(items) {
      item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">Triglav</div>';
      items.push(item);
    }
- } 
+ }
 }
 
 function getWarheadEvents(items) {
@@ -1712,7 +1712,7 @@ function getWarheadEvents(items) {
       item.start = nuke.time;
       item.group = 5;
       item.className = nuke.team === 0 ? 'blue' : 'red';
-      
+
       let hero = matchDetailMatch.teams[t].heroes[matchDetailMatch.teams[t].ids.indexOf(nuke.player)];
       let pop = "<h3 class='ui image header'>";
       pop += "<img src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(hero) + "' class='ui large circular image'>";
@@ -1918,7 +1918,7 @@ function drawTeamStatGraphs() {
       if (p.team === 0) {
         color = blueColors[blueCt];
         blueCt += 1;
-      } 
+      }
       else {
         color = redColors[redCt];
         redCt += 1;
@@ -2104,7 +2104,7 @@ function matchDetailCollectionAction(value, text, $elem) {
   if (value ==='add') {
     $('#matches-collection-select .header').text('Add Current Match To Collection')
     $('#matches-collection-select p.text').text('Add the current match to the spcified collection. Matches can be added to multiple collections.');
-  
+
     $('#matches-collection-select').modal({
       onApprove: function() {
         let collectionID = $('#matches-collection-select .collection-menu').dropdown('get value');
@@ -2123,7 +2123,7 @@ function matchDetailCollectionAction(value, text, $elem) {
   else if (value === 'remove') {
     $('#matches-collection-select .header').text('Remove Current Match From Collection')
     $('#matches-collection-select p.text').text('Remove the current match from the spcified collection.');
-  
+
     $('#matches-collection-select').modal({
       onApprove: function() {
         let collectionID = $('#matches-collection-select .collection-menu').dropdown('get value');
@@ -2244,7 +2244,7 @@ function layoutMatchDetailPrint(sections) {
     addPrintSubHeader('Talents', 'talents');
     copyFloatingTable($('#match-detail-talents'), getPrintPage('talents'));
   }
-  
+
   if (sects.indexOf('team-stats') !== -1) {
     addPrintPage('team-stats');
     addPrintSubHeader('Team Stats', 'team-stats');
@@ -2255,7 +2255,7 @@ function layoutMatchDetailPrint(sections) {
   if (sects.indexOf('graphs') !== -1) {
     addPrintPage('graphs');
     addPrintSubHeader('Stats', 'graphs');
-    
+
     getPrintPage('graphs').append($('#match-detail-team-numbers').clone());
     copyGraph(teamOverallStatGraphData, $('#print-window #match-detail-team-numbers'), { width: 1650, height: 650 });
 
@@ -2278,7 +2278,7 @@ function layoutMatchDetailPrint(sections) {
     addPrintPage('xp');
     addPrintSubHeader('XP Graphs', 'xp');
     $('#print-window .contents .xp.page').append('<div class="ui two column grid xp-graphs"></div>');
-    
+
     $('#print-window .xp-graphs').append('<div class="column xp-vs-time"><h3 class="ui dividing header">XP vs Time</h3><canvas></div>')
     copyGraph(overallXPGraphData, $('#print-window .xp-vs-time canvas'), { width: 700, height: 400 });
 

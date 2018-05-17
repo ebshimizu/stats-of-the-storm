@@ -1,7 +1,7 @@
 <script src="../js/player.js"></script>
 <link rel="stylesheet" type="text/css" href="../assets/css/player.css">
 
-<template id="player-page">
+<script id="player-page" type="text/x-handlebars-template">
   <div id="player-page-content" class="is-page transition hidden" section-name="player">
     <div id="player-page-header">
       <div class="ui grid">
@@ -721,9 +721,9 @@
       <div class="ui red deny button">Cancel</div>
     </div>
   </div>
-</template>
+</script>
 
-<template id="player-detail-hero-summary-row">
+<script id="player-detail-hero-summary-row" type="text/x-handlebars-template">
   <tr class="player-detail-summary-row">
     <td data-sort-value="{{heroName}}">
       <h3 class="ui image inverted header">
@@ -743,9 +743,9 @@
     <td class="center aligned" data-sort-value="{{stats.MVPPct}}">{{stats.formatMVPPct}}</td>
     <td class="center aligned" data-sort-value="{{stats.AwardPct}}">{{stats.formatAwardPct}}</td>
   </tr>
-</template>
+</script>
 
-<template id="player-detail-map-summary-row">
+<script id="player-detail-map-summary-row" type="text/x-handlebars-template">
   <tr class="player-detail-map-summary-row">
     <td>
       <h4 class="ui inverted header">{{mapName}}</h3>
@@ -753,9 +753,9 @@
     <td class="center aligned" data-sort-value="{{winPct}}">{{formatWinPct}}</td>
     <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
   </tr>
-</template>
+</script>
 
-<template id="player-detail-player-win-row">
+<script id="player-detail-player-win-row" type="text/x-handlebars-template">
   <tr>
     <td>
       <h4 class="ui inverted header">{{name}}</h4>
@@ -763,9 +763,9 @@
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
     <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
   </tr>
-</template>
+</script>
 
-<template id="player-detail-hero-win-row">
+<script id="player-detail-hero-win-row" type="text/x-handlebars-template">
   <tr>
     <td data-sort-value="{{name}}">
       <h3 class="ui image inverted header">
@@ -778,9 +778,9 @@
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
     <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
   </tr>
-</template>
+</script>
 
-<template id="player-detail-talent-row">
+<script id="player-detail-talent-row" type="text/x-handlebars-template">
   <tr>
     <td>
       <div class="ui items">
@@ -801,9 +801,9 @@
     <td class="center aligned talent-stat">{{formatPop}}</td>
     <td class="center aligned talent-stat">{{games}}</td>
   </tr>
-</template>
+</script>
 
-<template id="player-detail-hero-award-row">
+<script id="player-detail-hero-award-row" type="text/x-handlebars-template">
   <tr>
     <td data-sort-value="{{name}}">
       <h3 class="ui image inverted header">
@@ -817,13 +817,13 @@
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
     <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
   </tr>
-</template>
+</script>
 
-<template id="player-compare-table-row">
+<script id="player-compare-table-row" type="text/x-handlebars-template">
   <tr>
     <td><h3 class="ui inverted header">{{statName}}</h3></td>
     <td class="center aligned" data-sort-value="{{pDataSort}}">{{pData}}</td>
     <td class="center aligned" data-sort-value="{{pctDiff}}">{{pctDiffFormat}}</td>
     <td class="center aligned" data-sort-value="{{cmpDataSort}}">{{cmpData}}</td>
   </tr>
-</template>
+</script>

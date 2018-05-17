@@ -17,12 +17,9 @@ function initHeroCollectionPage() {
     mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague, ReplayTypes.GameMode.Custom]}
   }
 
-  heroCollectionSummaryRowTemplate = Handlebars.compile(getTemplate('hero-collection', '#hero-collection-hero-summary-row-template').
-    find('.hero-collection-hero-summary-row')[0].outerHTML);
-  heroCollectionPickRowTemplate = Handlebars.compile(getTemplate('hero-collection', '#hero-collection-hero-pick-row-template').
-    find('.hero-collection-hero-summary-row')[0].outerHTML);
-  heroCollectionHeroWinRowTemplate = Handlebars.compile(getTemplate('hero-collection', '#hero-collection-detail-hero-win-row').
-    find('tr')[0].outerHTML);
+  heroCollectionSummaryRowTemplate = getHandlebars('hero-collection', '#hero-collection-hero-summary-row-template');
+  heroCollectionPickRowTemplate = getHandlebars('hero-collection', '#hero-collection-hero-pick-row-template');
+  heroCollectionHeroWinRowTemplate = getHandlebars('hero-collection', '#hero-collection-detail-hero-win-row');
 
   $('#hero-collection-summary table').tablesort();
   $('#hero-collection-picks table').tablesort();
@@ -56,7 +53,7 @@ function initHeroCollectionPage() {
   });
 
   // filter popup
-  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
+  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template'));
   filterWidget.attr('widget-name', 'hero-collection-filter');
 
   $('#filter-widget').append(filterWidget);
@@ -301,61 +298,21 @@ function loadOverallHeroCollectionData() {
 
 function toggleHeroCollectionType(tableID, active, container) {
   let type = active.text();
-  let hide = false;
   let elem = $(container).find('.button.' + type);
 
   if (type === "Assassin") {
-    if (active.hasClass('red')) {
-      hide = true;
-      elem.removeClass('red');
-    }
-    else {
-      elem.addClass('red');
-    }
-  }
-  if (type === "Warrior") {
-    if (active.hasClass('blue')) {
-      hide = true;
-      elem.removeClass('blue');
-    }
-    else {
-      elem.addClass('blue');
-    }
-  }
-  if (type === "Support") {
-    if (active.hasClass('teal')) {
-      hide = true;
-      elem.removeClass('teal');
-    }
-    else {
-      elem.addClass('teal');
-    }
-  }
-  if (type === "Specialist") {
-    if (active.hasClass('violet')) {
-      hide = true;
-      elem.removeClass('violet');
-    }
-    else {
-      elem.addClass('violet');
-    }
-  }
-  if (type === "Multiclass") {
-    if (active.hasClass('purple')) {
-      hide = true;
-      elem.removeClass('purple');
-    }
-    else {
-      elem.addClass('purple');
-    }
+    elem.toggleClass('red');
+  } else if (type === "Warrior") {
+    elem.toggleClass('blue');
+  } else if (type === "Support") {
+    elem.toggleClass('teal');
+  } else if (type === "Specialist") {
+    elem.toggleClass('violet');
+  } else if (type === "Multiclass") {
+    elem.toggleClass('purple');
   }
 
-  if (hide) {
-    $(tableID + ' table').find('.' + type).addClass('is-hidden');
-  }
-  else {
-    $(tableID + ' table').find('.' + type).removeClass('is-hidden');
-  }
+  $(tableID + ' table').find('.' + type).toggleClass('is-hidden');
 }
 
 // many of the functions here are borrowed from player.js

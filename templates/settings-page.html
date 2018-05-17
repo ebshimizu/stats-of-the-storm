@@ -1,7 +1,7 @@
 <script src="../js/settings.js"></script>
 <link rel="stylesheet" type="text/css" href="../assets/css/settings.css">
 
-<template id="settings-page">
+<script id="settings-page" type="text/x-handlebars-template">
     <div id="settings-page-content" class="is-page transition hidden" section-name="settings">
         <div class="ui grid" id="settings-layout">
             <div class="eleven wide column">
@@ -311,9 +311,9 @@
             </div>
         </div>
     </div>
-</template>
+</script>
 
-<template id="replay-row-template">
+<script id="replay-row-template" type="text/x-handlebars-template">
     <tr replay-id="{{id}}">
         <td class="replay-filename">{{filename}}</td>
         <td class="replay-folder">{{folder}}</td>
@@ -321,9 +321,9 @@
         <td class="replay-status">{{status}}</td>
         <td class="upload-status">{{upload}}</td>
     </tr>
-</template>
+</script>
 
-<template id="collection-row-template">
+<script id="collection-row-template" type="text/x-handlebars-template">
     <tr>
         <td>{{name}}</td>
         <td>
@@ -331,9 +331,9 @@
             <div class="ui red button" collection-id="{{_id}}" collection-name="{{name}}" action="delete">Delete</div>
         </td>
     </tr>
-</template>
+</script>
 
-<template id="collection-cache-row-template">
+<script id="collection-cache-row-template" type="text/x-handlebars-template">
     <tr>
         <td collection-name="{{name}}">{{name}}</td>
         <td>{{count}}</td>
@@ -342,4 +342,4 @@
             <div class="ui red button" collection-id="{{_id}}" collection-name="{{name}}" action="delete">Delete</div>
         </td>
     </tr>
-</template>
+</script>

@@ -31,7 +31,7 @@ function initMatchesPage() {
   });
 
   // templates
-  matchRowTemplate = Handlebars.compile(getTemplate('matches', '#match-summary-row').find('td')[0].outerHTML);
+  matchRowTemplate = getHandlebars('matches', '#match-summary-row');
 
   // bindings
   $('#match-player-search').dropdown();
@@ -246,7 +246,7 @@ function selectMatches() {
     if (heroMode === 'and') {
       if (!('$and' in query))
         query.$and = [];
-      
+
       for (let h in heroes) {
         query.$and.push({ 'heroes' : heroes[h] });
       }
@@ -261,7 +261,7 @@ function selectMatches() {
     if (playerMode === 'and') {
       if (!('$and' in query))
         query.$and = [];
-      
+
       for (let p in players) {
         if (playerWin === 'win') {
           query.$and.push({ 'winningPlayers' : players[p]});
@@ -282,7 +282,7 @@ function selectMatches() {
       else if (playerWin === 'loss') {
         if (!('$or' in query))
           query.$or = [];
-        
+
         for (let p in players) {
           let q = { $and: []};
           q.$and.push({ 'playerIDs' : players[p] });
@@ -317,7 +317,7 @@ function selectMatches() {
         }
       }
       else {
-        // basically we need a match 5 of the players and then we're ok 
+        // basically we need a match 5 of the players and then we're ok
         for (let i = 0; i < 5; i++) {
           const t0key = 'teams.0.ids.' + i;
           const t1key = 'teams.1.ids.' + i;
@@ -387,7 +387,7 @@ function showPage(pageNum) {
 
         // update the pagination buttons
         $('#match-list-page-menu').html('');
-        
+
         // determine what to show
         let show = Array.from(new Array(5), (x, i) => i - 2 + currentPage);
         // first, we always have the first page
@@ -401,16 +401,16 @@ function showPage(pageNum) {
 
         for (let i = 0; i < show.length; i++) {
           let pn = show[i];
-          
+
           if (pn < 1 || pn >= maxPages - 1)
             continue;
-          
+
           elems += '<a class="item" page="' + (pn + 1) + '">' + (pn + 1) + '</a>';
         }
 
         if (show[show.length - 1] < maxPages - 2)
           elems += '<a class="item disabled">...</a>';
-        
+
         if (maxPages > 1) {
           elems += '<a class="item" page="' + maxPages + '">' + maxPages + '</a>';
         }
@@ -456,7 +456,7 @@ function renderToSlot(gameData, slot) {
   context.mapClass = gameData.map.replace(/[^A-Z0-9]/ig, "-");
   context.mode = ReplayTypes.GameModeStrings[gameData.mode];
   context.id = gameData._id;
-  
+
   // if player id is defined, highlight if present, otherwise red/blue
   let focusId = settings.get('selectedPlayerID');
   if ((gameData.teams[0].ids.indexOf(focusId) > -1 && gameData.winner === 0) ||
@@ -478,7 +478,7 @@ function renderToSlot(gameData, slot) {
       context.winText = "Red Team Victory";
     }
   }
-  
+
   if (!gameData.bans) {
     context.hideBans = 'is-hidden';
   }
@@ -557,7 +557,7 @@ function handleMatchesCollectionAction(action, text, $elem) {
   if (action === 'add-current') {
     $('#matches-collection-select .header').text('Add Matches to Collection')
     $('#matches-collection-select p.text').text('All all of the currently selected matches to the spcified collection. Matches can be added to multiple collections.');
-  
+
     $('#matches-collection-select').modal({
       onApprove: function() {
         let collectionID = $('#matches-collection-select .collection-menu').dropdown('get value');
@@ -660,7 +660,7 @@ function handleDeleteMatches(current, remaining) {
 function matchesAddTag(tagValue, tagText, $added) {
   if (!enableTagEdit)
     return;
-  
+
   DB.getMatches(matchSearchQuery, function(err, selectedMatches) {
     let ids = [];
     for (let m of selectedMatches) {

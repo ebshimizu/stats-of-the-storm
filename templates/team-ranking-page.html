@@ -1,7 +1,7 @@
 <script src="../js/team-ranking.js"></script>
 <link rel="stylesheet" type="text/css" href="../assets/css/team-ranking.css">
 
-<template id="team-ranking-page">
+<script id="team-ranking-page" type="text/x-handlebars-template">
   <div id="team-ranking-page-content" class="is-page transition hidden" section-name="team-ranking">
     <div id="team-ranking-page-header">
       <div class="ui grid">
@@ -169,9 +169,9 @@
       <div class="ui red deny button">Cancel</div>
     </div>
   </div>
-</template>
+</script>
 
-<template id="team-ranking-row-template">
+<script id="team-ranking-row-template" type="text/x-handlebars-template">
   <tr>
     <td data-sort-value="{{name}}"><h3 class="ui inverted header">{{name}}</h3></td>
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
@@ -192,9 +192,9 @@
     <td class="center aligned" data-sort-value="{{stats.average.SelfHealing}}">{{SelfHealing}}</td>
     <td class="center aligned" data-sort-value="{{stats.average.ProtectionGivenToAllies}}">{{ProtectionGivenToAllies}}</td>
   </tr>
-</template>
+</script>
 
-<template id="team-ranking-match-row-template">
+<script id="team-ranking-match-row-template" type="text/x-handlebars-template">
   <tr>
     <td data-sort-value="{{name}}"><h3 class="ui inverted header">{{name}}</h3></td>
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
@@ -214,9 +214,9 @@
     <td class="center aligned" data-sort-value="{{stats.average.mercUptime}}">{{mercUptime}}</td>
     <td class="center aligned" data-sort-value="{{stats.average.mercUptimePercent}}">{{mercUptimePercent}}</td>
   </tr>
-</template>
+</script>
 
-<template id="team-ranking-cc-row-template">
+<script id="team-ranking-cc-row-template" type="text/x-handlebars-template">
   <tr>
     <td data-sort-value="{{name}}"><h3 class="ui inverted header">{{name}}</h3></td>
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
@@ -229,9 +229,9 @@
     <td class="center aligned" data-sort-value="{{stats.average.TimeSilencingEnemyHeroes}}">{{TimeSilencingEnemyHeroes}}</td>
     <td class="center aligned" data-sort-value="{{stats.average.TimeStunningEnemyHeroes}}">{{TimeStunningEnemyHeroes}}</td>
   </tr>
-</template>
+</script>
 
-<template id="team-ranking-structure-row-template">
+<script id="team-ranking-structure-row-template" type="text/x-handlebars-template">
   <tr>
     <td data-sort-value="{{name}}"><h3 class="ui inverted header">{{name}}</h3></td>
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
@@ -243,4 +243,4 @@
     <td class="center aligned" data-sort-value="{{structures.Keep.first}}">{{structures.Keep.formatFirst}}</td>
     <td class="center aligned" data-sort-value="{{structures.Keep.lost}}">{{structures.Keep.lost}}</td>
   </tr>
-</template>
+</script>

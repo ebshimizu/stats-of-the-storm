@@ -2,7 +2,7 @@
 <script src="../js/teams.js"></script>
 <link rel="stylesheet" type="text/css" href="../assets/css/teams.css">
 
-<template id="teams-page">
+<script id="teams-page" type="text/x-handlebars-template">
   <div id="teams-page-content" class="is-page transition hidden" section-name="teams">
     <div id="teams-page-header">
       <div class="ui grid">
@@ -564,9 +564,9 @@
       <div class="ui red deny button">Cancel</div>
     </div>
   </div>
-</template>
+</script>
 
-<template id="team-hero-summary-row">
+<script id="team-hero-summary-row" type="text/x-handlebars-template">
   <tr>
     <td>
       <h3 class="ui image inverted header">
@@ -585,9 +585,9 @@
     <td class="center aligned" data-sort-value="{{TimeSpentDead}}">{{formatSeconds TimeSpentDead}}</td>
     <td class="center aligned" data-sort-value="{{timeDeadPct}}">{{formatPct timeDeadPct}}</td>
   </tr>
-</template>
+</script>
 
-<template id="team-hero-pick-row">
+<script id="team-hero-pick-row" type="text/x-handlebars-template">
   <tr>
     <td>
       <h3 class="ui image inverted header">
@@ -603,9 +603,9 @@
     <td class="center aligned" data-sort-value="{{round2Percent}}">{{formatPct round2Percent}}</td>
     <td class="center aligned" data-sort-value="{{round3Percent}}">{{formatPct round3Percent}}</td>
   </tr>
-</template>
+</script>
 
-<template id="team-hero-ban-row">
+<script id="team-hero-ban-row" type="text/x-handlebars-template">
   <tr>
     <td>
       <h3 class="ui image inverted header">
@@ -622,9 +622,9 @@
     <td class="center aligned" data-sort-value="{{ban2Percent}}">{{formatPct ban2Percent}}</td>
     <td class="center aligned" data-sort-value="{{ban2}}">{{ban2}}</td>
   </tr>
-</template>
+</script>
 
-<template id="team-roster-row">
+<script id="team-roster-row" type="text/x-handlebars-template">
   <tr>
     <td><h3 class="ui inverted header player-name" playerID="{{id}}">{{name}}</h3></td>
     <td class="center aligned top-three" player-id="{{id}}">
@@ -656,4 +656,4 @@
       </div>
     </td>
   </tr>
-</template>
+</script>

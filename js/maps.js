@@ -5,7 +5,7 @@ var mapsMapRowTemplate;
 function initMapsPage() {
 
   // templates
-  mapsMapRowTemplate = Handlebars.compile(getTemplate('maps', '#map-table-row-template').find('tr')[0].outerHTML);
+  mapsMapRowTemplate = getHandlebars('maps', '#map-table-row-template');
 
   // tables
   $('#maps-page-content table').tablesort();
@@ -18,7 +18,7 @@ function initMapsPage() {
   });
 
   // filter popup
-  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
+  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template'));
   filterWidget.attr('widget-name', 'maps-filter');
 
   $('#filter-widget').append(filterWidget);

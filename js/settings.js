@@ -15,9 +15,9 @@ var listedReplays = [];
 
 function initSettingsPage() {
   // templates
-  settingsRowTemplate = Handlebars.compile(getTemplate('settings', '#replay-row-template').find('tr')[0].outerHTML);
-  collectionRowTemplate = Handlebars.compile(getTemplate('settings', '#collection-row-template').find('tr')[0].outerHTML);
-  collectionCacheRowTemplate = Handlebars.compile(getTemplate('settings', '#collection-cache-row-template').find('tr')[0].outerHTML);
+  settingsRowTemplate = getHandlebars('settings', '#replay-row-template');
+  collectionRowTemplate = getHandlebars('settings', '#collection-row-template');
+  collectionCacheRowTemplate = getHandlebars('settings', '#collection-cache-row-template');
 
   let date = settings.get('lastReplayDate');
   if (!date) {

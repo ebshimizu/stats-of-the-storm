@@ -1,7 +1,7 @@
 <script src="../js/hero-trends.js"></script>
 <link rel="stylesheet" type="text/css" href="../assets/css/hero-trends.css">
 
-<template id="hero-trends-page">
+<script id="hero-trends-page" type="text/x-handlebars-template">
   <div id="hero-trends-page-content" class="is-page transition hidden" section-name="hero-trends">
     <div id="hero-trends-page-header">
       <div class="ui grid">
@@ -208,9 +208,10 @@
       <div class="ui red deny button">Cancel</div>
     </div>
   </div>
-</template>
+</script>
 
-<template id="trends-hero-summary-row-template">
+<script id="trends-hero-summary-row-template" type="text/x-handlebars-template">
+  {{#each context}}
   <tr class="trends-hero-summary-row {{heroRole}}">
     <td data-sort-value="{{heroName}}">
       <h3 class="ui image inverted header">
@@ -233,9 +234,11 @@
     <td class="center aligned" data-sort-value="{{period2.win.games}}">{{period2.win.games}}</td>
     <td class="center aligned {{statSign.games}}" data-sort-value="{{delta.games}}">{{deltaFmt.games}}</td>
   </tr>
-</template>
+  {{/each}}
+</script>
 
-<template id="trends-hero-pick-row-template">
+<script id="trends-hero-pick-row-template" type="text/x-handlebars-template">
+  {{#each context}}
   <tr class="trends-hero-pick-row {{heroRole}}">
     <td data-sort-value="{{heroName}}">
       <h3 class="ui image inverted header">
@@ -258,9 +261,11 @@
     <td class="center aligned" data-sort-value="{{period2.draft.picks.round3.pct}}">{{formatPct period2.draft.picks.round3.pct}}</td>
     <td class="center aligned {{statSign.r3}}" data-sort-value="{{delta.r3}}">{{deltaFmt.r3}}</td>
   </tr>
-</template>
+  {{/each}}
+</script>
 
-<template id="trends-hero-pick-ban-template">
+<script id="trends-hero-pick-ban-template" type="text/x-handlebars-template">
+  {{#each context}}
   <tr class="trends-hero-ban-row {{heroRole}}">
     <td data-sort-value="{{heroName}}">
       <h3 class="ui image inverted header">
@@ -280,4 +285,5 @@
     <td class="center aligned" data-sort-value="{{period2.draft.secondBanPercent}}">{{formatPct period2.draft.secondBanPercent}}</td>
     <td class="center aligned {{statSign.secondBanPercent}}" data-sort-value="{{delta.secondBanPercent}}">{{deltaFmt.secondBanPercent}}</td>
   </tr>
-</template>
+  {{/each}}
+</script>

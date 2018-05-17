@@ -277,13 +277,14 @@ function loadSections() {
   changeSection('matches');
 }
 
+
+const getHandlebars = require('./js/util/handlebars');
+
+
 // returns the template contained in an import
 function getTemplate(name, selector) {
-  let link = document.querySelector('link[name="'+ name + '"]');
-  let template = link.import.querySelector(selector);
-  let clone = $(document.importNode(template.content, true));
-
-  return clone;
+  const link = document.querySelector('link[name="'+ name + '"]');
+  return link.import.querySelector(selector).innerHTML;
 }
 
 function createBGWindow() {
