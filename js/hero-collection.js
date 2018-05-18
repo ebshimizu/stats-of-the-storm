@@ -299,19 +299,7 @@ function loadOverallHeroCollectionData() {
 function toggleHeroCollectionType(tableID, active, container) {
   let type = active.text();
   let elem = $(container).find('.button.' + type);
-
-  if (type === "Assassin") {
-    elem.toggleClass('red');
-  } else if (type === "Warrior") {
-    elem.toggleClass('blue');
-  } else if (type === "Support") {
-    elem.toggleClass('teal');
-  } else if (type === "Specialist") {
-    elem.toggleClass('violet');
-  } else if (type === "Multiclass") {
-    elem.toggleClass('purple');
-  }
-
+  elem.toggleClass(RoleColorClass[type]);
   $(tableID + ' table').find('.' + type).toggleClass('is-hidden');
 }
 
@@ -409,24 +397,17 @@ function renderHeroCollectionVsStatsTo(container, stats, threshold, avg) {
 }
 
 function getCompositionElement(roles) {
-  let elem = '<div class="ui five column grid comp-grid">';
+  const template = getHandlebars("hero-collection", "#hero-composition");
 
-  for (let r of roles) {
-    elem += '<div class="column">';
-    elem += '<div class="ui mini image">';
-    elem += '<div class="ui small ' + RoleColorClass[r] + ' ribbon label">' + r + '</div>';
+  const context = {
+    roles: roles.map((r) => ({
+      name: r,
+      colorClass: RoleColorClass[r],
+      image: r === 'Multiclass' ? 'specialist' : r.toLowerCase()
+    }))
+  };
 
-    if (r === 'Multiclass') {
-      elem += '<img src="assets/images/role_specialist.png">'
-    }
-    else {
-      elem += '<img src="assets/images/role_' + r.toLowerCase() + '.png">';
-    }
-    elem += '</div></div>'
-  }
-
-  elem += '</div>';
-  return elem;
+  return template(context);
 }
 
 function layoutHeroCollectionPrint(sections) {

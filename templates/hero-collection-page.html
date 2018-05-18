@@ -76,7 +76,7 @@
               <thead>
                 <tr>
                   <th>Hero</th>
-                  <th class="center aligned stat">Games</th> 
+                  <th class="center aligned stat">Games</th>
                   <th class="center aligned stat">Win %</th>
                   <th class="center aligned stat">Bans</th>
                   <th class="center aligned stat">Ban %</th>
@@ -312,7 +312,7 @@
                   </tr>
                 </thead>
                 <tbody>
-  
+
                 </tbody>
               </table>
             </div>
@@ -458,7 +458,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      
+
                     </tbody>
                   </table>
                 </div>
@@ -491,7 +491,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      
+
                     </tbody>
                   </table>
                 </div>
@@ -605,4 +605,17 @@
     <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
     <td class="center aligned {{deltaClass}}" data-sort-value="{{avgDelta}}">{{formatAvgDelta}}</td>
   </tr>
+</script>
+
+<script id="hero-composition" type="text/x-handlebars-template">
+  <div class="ui five column grid comp-grid">
+  {{#each roles}}
+    <div class="column">
+      <div class="ui mini image">
+        <div class="ui small {{ colorClass }} ribbon label">{{ name }}</div>
+        <img src="assets/images/role_{{ image }}.png">
+      </div>
+    </div>
+  {{/each}}
+  </div>
 </script>
