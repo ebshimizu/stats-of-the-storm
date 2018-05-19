@@ -16,7 +16,7 @@ const playerHeroDetailRowTemplateContent = `<tr>
   </td>
   </td>
   {{#each stat}}
-    <td class="center aligned" data-sort-value="{{avg}}" data-position="left center" data-variation="wide" data-html='<h4 class="ui image header"><img class="ui rounded image" src="assets/heroes-talents/images/heroes/{{../heroImg}}"><div class="content">{{../heroName}}<div class="ui sub header">{{name}}</div></div></h4>'>
+    <td class="center aligned" data-sort-value="{{avg}}" data-position="left center" data-variation="wide" data-html='<h4 class="ui image header"><img class="ui rounded image" src="{{heroImage ../heroName}}"><div class="content">{{../heroName}}<div class="ui sub header">{{name}}</div></div></h4>'>
       {{render}}
     </td>
   {{/each}}
@@ -624,7 +624,6 @@ function renderAllHeroSummary() {
 
     // some formatting needs to happen
     context.heroName = h;
-    context.heroImg = Heroes.heroIcon(h);
     context.games = playerDetailStats.heroes[h].games;
     context.stats = playerDetailStats.heroes[h].stats;
     context.stats.formatMVPPct = formatStat('pct', context.stats.MVPPct);
@@ -885,7 +884,7 @@ function renderHeroVsStatsTo(container, stats, threshold) {
       context.winPercent = context.wins / context.games;
     }
     context.formatWinPercent = formatStat('pct', context.winPercent);
-    context.heroImg = Heroes.heroIcon(context.name);
+    context.heroName = context.name;
 
     if (context.games >= threshold)
       container.find('tbody').append(heroWinRateRowTemplate(context));
@@ -922,7 +921,6 @@ function renderPlayerHeroDetail() {
     let statData = playerDetailStats[mode][h];
     let context = {};
     context.heroName = h;
-    context.heroImg = Heroes.heroIcon(h);
     context.stat = [];
 
     context.stat.push({

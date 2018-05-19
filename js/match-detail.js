@@ -654,7 +654,6 @@ function appendSummaryRow(color, id) {
   let context = {};
   context.teamColor = color;
   context.heroName = data.hero;
-  context.heroImg = Heroes.heroIcon(data.hero);
   context.playerID = id;
   context.playerName = data.name + (data.tag ? '#' + data.tag : '');
   context.kills = data.gameStats.SoloKill;
@@ -685,7 +684,6 @@ function appendDetailHeader(color, id) {
   context.playerID = id;
   context.playerName = data.name;
   context.teamColor = color;
-  context.heroImg = Heroes.heroIcon(data.hero);
 
   $('#match-detail-details table thead tr').append(matchDetailHeaderTemplate(context));
 }
@@ -734,7 +732,6 @@ function appendTalentRow(color, id) {
   let titleContext = {};
   titleContext.teamColor = color;
   titleContext.playerID = id;
-  titleContext.heroImg = Heroes.heroIcon(data.hero);
   titleContext.heroName = data.hero;
   titleContext.playerName = data.name;
 
@@ -772,8 +769,8 @@ function loadChat() {
 
       if (msg.player in matchDetailPlayers) {
         context.playerName = matchDetailPlayers[msg.player].name;
+        context.heroName = matchDetailPlayers[msg.player].hero;
         context.showImg = '';
-        context.heroImg = Heroes.heroIcon(matchDetailPlayers[msg.player].hero);
       }
       else {
         context.showImg = 'is-hidden';

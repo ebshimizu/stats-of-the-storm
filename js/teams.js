@@ -267,7 +267,6 @@ function loadTeamData(team, matches, heroData) {
         games: hero.games,
         winPercent: hero.wins / hero.games,
         pickPercent: hero.games / teamStats.totalMatches,
-        heroImg: Heroes.heroIcon(h),
         heroName: h
       };
       $('#team-hero-summary-table tbody').append(teamHeroSummaryRowTemplate(context));
@@ -283,7 +282,6 @@ function loadTeamData(team, matches, heroData) {
     if (hero.bans > 0 && hero.bans >= teamHeroMatchThresh) {
       const context = {
         heroName: h,
-        heroImg: Heroes.heroIcon(h),
         banPercent: hero.bans / teamStats.totalMatches,
         bans: hero.bans,
         ban1Percent: hero.first / teamStats.totalMatches,
@@ -298,7 +296,6 @@ function loadTeamData(team, matches, heroData) {
     if (hero.games > 0 && hero.games >= teamHeroMatchThresh) {
       const context = {
         heroName: h,
-        heroImg: Heroes.heroIcon(h),
         winPercent: hero.wins / hero.games,
         games: hero.games
       };

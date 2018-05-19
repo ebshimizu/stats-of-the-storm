@@ -45,6 +45,7 @@ Handlebars.registerHelper('formatSeconds', formatSeconds);
 Handlebars.registerHelper('formatPct', (value) => formatStat('pct', value));
 Handlebars.registerHelper('formatKDA', (value) => formatStat('KDA', value));
 Handlebars.registerHelper('formatDelta', formatDelta);
+Handlebars.registerHelper('heroImage', (name) => `assets/heroes-talents/images/heroes/${Heroes.heroIcon(name)}`);
 
 // datepicker gloabl settings
 $.fn.datepicker.setDefaults({

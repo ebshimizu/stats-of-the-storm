@@ -483,10 +483,10 @@ function renderToSlot(gameData, slot) {
     context.hideBans = 'is-hidden';
   }
   else {
-    context.bban1Img = Heroes.heroIcon(Heroes.heroNameFromAttr(gameData.bans[0][0].hero));
-    context.bban2Img = Heroes.heroIcon(Heroes.heroNameFromAttr(gameData.bans[0][1].hero));
-    context.rban1Img = Heroes.heroIcon(Heroes.heroNameFromAttr(gameData.bans[1][0].hero));
-    context.rban2Img = Heroes.heroIcon(Heroes.heroNameFromAttr(gameData.bans[1][1].hero));
+    context.bban1Hero = Heroes.heroNameFromAttr(gameData.bans[0][0].hero);
+    context.bban2Hero = Heroes.heroNameFromAttr(gameData.bans[0][1].hero);
+    context.rban1Hero = Heroes.heroNameFromAttr(gameData.bans[1][0].hero);
+    context.rban2Hero = Heroes.heroNameFromAttr(gameData.bans[1][1].hero);
   }
 
   context.date = new Date(gameData.date);
@@ -500,8 +500,18 @@ function renderToSlot(gameData, slot) {
   let bd = gameData.teams[0];
   let rd = gameData.teams[1];
   for (let i = 0; i < gameData.teams[0].ids.length; i++) {
-    context.blueHeroes.push({heroImg: Heroes.heroIcon(bd.heroes[i]), playerName: bd.names[i], playerID: bd.ids[i], isFocus: focusClass(bd.ids[i]) });
-    context.redHeroes.push({heroImg: Heroes.heroIcon(rd.heroes[i]), playerName: rd.names[i], playerID: rd.ids[i], isFocus: focusClass(rd.ids[i]) });
+    context.blueHeroes.push({
+      heroName: bd.heroes[i],
+      playerName: bd.names[i],
+      playerID: bd.ids[i],
+      isFocus: focusClass(bd.ids[i])
+    });
+    context.redHeroes.push({
+      heroName: rd.heroes[i],
+      playerName: rd.names[i],
+      playerID: rd.ids[i],
+      isFocus: focusClass(rd.ids[i])
+    });
   }
 
   $('#match-list tr[slot="' + slot + '"]').html(matchRowTemplate(context));

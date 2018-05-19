@@ -34,7 +34,6 @@ function summarizeTrendData(p1stats, p2stats) {
       // general win loss pop stats
       const win = {
         heroName,
-        heroImg: Heroes.heroIcon(heroName),
         winPercent: hero.games === 0 ? 0 : hero.wins / hero.games,
         banPercent: hero.bans.total / data.totalMatches,
         popPercent: hero.involved / data.totalMatches,
@@ -50,7 +49,6 @@ function summarizeTrendData(p1stats, p2stats) {
         format: {},
         games: hero.games,
         heroName,
-        heroImg: win.heroImg,
         heroRole: win.heroRole,
         winPercent: win.winPercent,
         banPercent: win.banPercent,
@@ -78,7 +76,6 @@ function summarizeTrendData(p1stats, p2stats) {
 
     const context = {
       heroName,
-      heroImg: Heroes.heroIcon(heroName),
       heroRole: Heroes.role(heroName),
       period1: aggr[heroName].period1 || {
         win: {

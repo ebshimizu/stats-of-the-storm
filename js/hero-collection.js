@@ -195,7 +195,6 @@ function loadOverallHeroCollectionData() {
 
       let context = {};
       context.heroName = h;
-      context.heroImg = Heroes.heroIcon(h);
       context.winPercent = hero.games === 0 ? 0 : hero.wins / hero.games;
       context.formatWinPercent = formatStat('pct', context.winPercent);
       context.banPercent = hero.bans.total / overallStats.totalMatches;
@@ -214,7 +213,6 @@ function loadOverallHeroCollectionData() {
       banContext.format = {};
       banContext.games = hero.games;
       banContext.heroName = h;
-      banContext.heroImg = context.heroImg;
       banContext.heroRole = context.heroRole;
       banContext.winPercent = context.winPercent;
       banContext.format.winPercent = context.formatWinPercent;
@@ -379,7 +377,6 @@ function renderHeroCollectionVsStatsTo(container, stats, threshold, avg) {
       context.winPercent = context.wins / context.games;
     }
     context.formatWinPercent = formatStat('pct', context.winPercent);
-    context.heroImg = Heroes.heroIcon(context.name);
 
     if (h in avg.heroData.heroes) {
       context.avgDelta = context.winPercent - (avg.heroData.heroes[h].wins / avg.heroData.heroes[h].games);

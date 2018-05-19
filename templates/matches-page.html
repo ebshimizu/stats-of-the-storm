@@ -10,7 +10,7 @@
           <h1 class="ui inverted header">Matches</h1>
         </div>
         <div class="eight wide column">
-          
+
         </div>
       </div>
     </div>
@@ -176,7 +176,7 @@
                 <i class="dropdown icon"></i>
                 <span class="default text">All Players</span>
                 <div class="menu">
-    
+
                 </div>
               </div>
             </div>
@@ -207,7 +207,7 @@
                 <i class="dropdown icon"></i>
                 <span class="default text">Team</span>
                 <div class="menu">
-    
+
                 </div>
               </div>
               <div class="ui right floated icon button" id="match-search-clear-team">
@@ -289,17 +289,17 @@
           <div class="ui inverted blue horizontal divider {{hideBans}}">Blue Bans</div>
           <div class="ui two column grid {{hideBans}}">
             <div class="column">
-              <img class="ui circular blue-hero middle-align image" src="assets/heroes-talents/images/heroes/{{bban1Img}}">
+              <img class="ui circular blue-hero middle-align image" src="{{heroImage bban1Hero}}">
             </div>
             <div class="column">
-              <img class="ui circular blue-hero middle-align image" src="assets/heroes-talents/images/heroes/{{bban2Img}}">
+              <img class="ui circular blue-hero middle-align image" src="{{heroImage bban2Hero}}">
             </div>
           </div>
           <div class="blue-team-nameplate"></div>
         </div>
         {{#each blueHeroes}}
         <div class="ui column">
-          <img class="ui circular blue-hero middle-align image {{isFocus}}" src="assets/heroes-talents/images/heroes/{{heroImg}}" data-content="{{playerName}}" player-id="{{playerID}}" data-position="top center">
+          <img class="ui circular blue-hero middle-align image {{isFocus}}" src="{{heroImage heroName}}" data-content="{{playerName}}" player-id="{{playerID}}" data-position="top center">
         </div>
         {{/each}}
         <div class="ui two wide column match-center-stats">
@@ -323,17 +323,17 @@
         </div>
         {{#each redHeroes}}
         <div class="ui column">
-          <img class="ui circular red-hero middle-align image {{isFocus}}" src="assets/heroes-talents/images/heroes/{{heroImg}}" data-content="{{playerName}}" player-id="{{playerID}}" data-position="top center">
+          <img class="ui circular red-hero middle-align image {{isFocus}}" src="{{heroImage heroName}}" data-content="{{playerName}}" player-id="{{playerID}}" data-position="top center">
         </div>
         {{/each}}
         <div class="ui two wide column red-bans">
           <div class="ui inverted red horizontal divider {{hideBans}}">Red Bans</div>
           <div class="ui two column grid {{hideBans}}">
             <div class="column">
-              <img class="ui circular red-hero middle-align image" src="assets/heroes-talents/images/heroes/{{rban1Img}}">
+              <img class="ui circular red-hero middle-align image" src="{{heroImage rban1Hero}}">
             </div>
             <div class="column">
-              <img class="ui circular red-hero middle-align image" src="assets/heroes-talents/images/heroes/{{rban2Img}}">
+              <img class="ui circular red-hero middle-align image" src="{{heroImage rban2Hero}}">
             </div>
           </div>
           <div class="red-team-nameplate"></div>

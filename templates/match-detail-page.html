@@ -194,11 +194,11 @@
                 <div class="statistic" name="team-time-to-10">
                   <div class="value">###</div>
                   <div class="label">Time To 10</div>
-                </div> 
+                </div>
                 <div class="statistic" name="team-time-to-20">
                   <div class="value">###</div>
                   <div class="label">Time To 20</div>
-                </div> 
+                </div>
               </div>
               <div class="ui inverted horizontal divider">Mercenaries</div>
               <div class="ui three inverted blue statistics">
@@ -303,11 +303,11 @@
                 <div class="statistic" name="team-time-to-10">
                   <div class="value">###</div>
                   <div class="label">Time To 10</div>
-                </div> 
+                </div>
                 <div class="statistic" name="team-time-to-20">
                   <div class="value">###</div>
                   <div class="label">Time To 20</div>
-                </div> 
+                </div>
               </div>
               <div class="ui inverted horizontal divider">Mercenaries</div>
               <div class="ui three inverted red statistics">
@@ -594,7 +594,7 @@
   <tr class="match-detail-summary-row {{teamColor}}" playerID="{{playerID}}">
     <td data-sort-value="{{teamColor}}">
       <h3 class="ui image inverted header">
-        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui large rounded image">
+        <img src="{{heroImage heroName}}" class="ui large rounded image">
         <div class="content">
           {{heroName}}
           <div class="sub header player-name" playerID="{{playerID}}">{{playerName}}</div>
@@ -618,7 +618,7 @@
 <script id="match-detail-detail-header" type="text/x-handlebars-template">
   <th class="{{teamColor}}">
     <h4 class="ui image inverted header">
-      <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui tiny rounded image">
+      <img src="{{heroImage heroName}}" class="ui tiny rounded image">
       <div class="content">
         {{heroName}}
         <div class="sub header player-name" playerID="{{playerID}}">{{playerName}}</div>
@@ -631,7 +631,7 @@
   <tr class="match-detail-talents-row {{teamColor}}" playerID="{{playerID}}">
     <td>
       <h3 class="ui image inverted header">
-        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui large rounded image">
+        <img src="{{heroImage heroName}}" class="ui large rounded image">
         <div class="content">
           {{heroName}}
           <div class="sub header player-name" playerID="{{playerID}}">{{playerName}}</div>
@@ -653,7 +653,7 @@
 <script id="match-detail-chat-log-entry" type="text/x-handlebars-template">
   <div class="event">
     <div class="label {{showImg}}">
-      <img src="assets/heroes-talents/images/heroes/{{heroImg}}">
+      <img src="{{heroImage heroName}}">
     </div>
     <div class="content">
       <div class="date">{{time}}</div>
@@ -661,7 +661,7 @@
         {{playerName}}: {{message}}
       </div>
     </div>
-  </div> 
+  </div>
 </script>
 
 <script id="match-detail-taunt-entry" type="text/x-handlebars-template">
