@@ -1,3 +1,7 @@
+const Datastore = require('ndeb');
+const LinvoDB = require('linvodb3');
+LinvoDB.defaults.store = { db: require('medeadown') };
+
 module.exports = function(path, callback) {
   // basically first check if there are any existing 2.0 database files around
   // if so, skip. We can assume that if hero.ldb exists, we don't run the conversion
@@ -27,4 +31,18 @@ function exitDBConversion(callback) {
 
 function startDBConversion() {
 
+}
+
+// the real meat of the conversion. basically just dumps documents from
+// nedb to linvoDB. Requires a bunch of memory, but just this once
+let queue = [];
+function copyNeDBToLinvoDB(store, path, progress, final, error) {
+  const ndb = new Datastore({ filename: path + '/' + store + '.db' });
+  ndb.loadDatabase(function(err) {
+    const ldb = new LinvoDB(store, {}, { filename: path + '/' + store + '.ldb' });
+
+    // get documents
+
+    // run async conversion
+  });
 }
