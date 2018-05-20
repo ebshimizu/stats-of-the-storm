@@ -8,6 +8,10 @@ function formatSeconds(val) {
   let duration = new Date(fval * 1000);
   let seconds = duration.getUTCSeconds();
   let minutes = duration.getUTCMinutes();
+  let hours = duration.getUTCHours();
+
+  // going to display minutes only here, can change this later maybe
+  minutes += hours * 60;
 
   return (invert ? '-' : '') + (minutes < 1 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 }

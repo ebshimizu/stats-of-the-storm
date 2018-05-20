@@ -603,12 +603,14 @@ function updateBasicInfo() {
 }
 
 function popuplateMatchDetailTeamNameplate(matchID, teamID, players) {
+  let elem = (teamID === 0 ? '.blue' : '.red') + '-team';
+  elem = `.match-detail-team-names ${elem}`;
+  $('#match-detail-summary').find(elem).text('');
+
   DB.getTeamByPlayers(players, function(err, docs) {
     if (docs.length > 0) {
       // take first team found, not room for all
       let team = docs[0];
-      let elem = (teamID === 0 ? '.blue' : '.red') + '-team';
-      elem = '.match-detail-team-names ' + elem;
       $('#match-detail-summary').find(elem).text(team.name);
       $('#match-detail-summary .match-detail-team-names').removeClass('is-hidden');
     }
