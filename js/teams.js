@@ -489,7 +489,13 @@ function loadTeamRoster(playerStats) {
         }
       });
     }
-    else {
+  }
+
+  // second iteration so players with no games end up at end
+  for (let p in currentTeam.players) {
+    let id = currentTeam.players[p];
+
+    if (!(id in playerStats)) {
       DB.getPlayer(id, function(err, doc) {
         if (doc.length === 0)
           return;
