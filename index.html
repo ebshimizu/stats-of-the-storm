@@ -316,7 +316,7 @@
       <!-- LinvoDB Migration Modal -->
       <div class="ui modal" id="linvo-db-migrate">
         <div class="header">Database Conversion Required</div>
-        <div class="content">
+        <div class="content" id="linvo-db-migrate-step1">
           <p>
             Hi there! Stats of the Storm has updated its backend to reduce the 
             amount of memory the program uses while running. You might not have noticed
@@ -353,6 +353,20 @@
                 Convert
               </div>
             </div>
+          </div>
+        </div>
+        <div class="content is-hidden" id="linvo-db-migrate-active">
+          <p class="status">
+
+          </p>
+          <div class="ui blue active progress" id="linvo-db-migrate-progress">
+            <div class="bar">
+              <div class="progress"></div>
+            </div>
+            <div class="label">Initializing</div>
+          </div>
+          <div class="ui fluid green button is-hidden" id="linvo-db-migrate-reboot">
+            Relaunch
           </div>
         </div>
       </div>

@@ -162,3 +162,8 @@ body {
     clear: both;
     margin-top: 10px;
 }
+
+p.status {
+    text-align: center;
+    font-weight: bold;
+}
