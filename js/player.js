@@ -8,19 +8,6 @@ var playerDetailMapSummaryRowTemplate;
 var allDetailStats;
 var playerAwardRowTemplate;
 var playerCompareRowTemplate;
-const playerHeroDetailRowTemplateContent = `<tr>
-  <td data-sort-value="{{heroName}}">
-    <h3 class="ui inverted header">
-      <div class="content">{{heroName}}</div>
-    </h3>
-  </td>
-  </td>
-  {{#each stat}}
-    <td class="center aligned" data-sort-value="{{avg}}" data-position="left center" data-variation="wide" data-html='<h4 class="ui image header"><img class="ui rounded image" src="{{heroImage ../heroName}}"><div class="content">{{../heroName}}<div class="ui sub header">{{name}}</div></div></h4>'>
-      {{render}}
-    </td>
-  {{/each}}
- </tr>`;
 let playerHeroDetailRowTemplate;
 
 var playerWinRateRowTemplate;
@@ -236,7 +223,7 @@ function initPlayerPage() {
   heroTalentRowTemplate = getHandlebars('player', '#player-detail-talent-row');
   playerAwardRowTemplate = getHandlebars('player', '#player-detail-hero-award-row');
   playerCompareRowTemplate = getHandlebars('player', '#player-compare-table-row');
-  playerHeroDetailRowTemplate = Handlebars.compile(playerHeroDetailRowTemplateContent);
+  playerHeroDetailRowTemplate = getHandlebars('player', '#player-hero-detail-row');
 
   createDetailTableHeader();
 

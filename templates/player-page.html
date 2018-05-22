@@ -1,6 +1,22 @@
 <script src="../js/player.js"></script>
 <link rel="stylesheet" type="text/css" href="../assets/css/player.css">
 
+<script id="player-hero-detail-row"  type="text/x-handlebars-template">
+  <tr>
+    <td data-sort-value="{{heroName}}">
+      <h3 class="ui inverted header">
+        <div class="content">{{heroName}}</div>
+      </h3>
+    </td>
+    </td>
+    {{#each stat}}
+    <td class="center aligned" data-sort-value="{{avg}}" data-position="left center" data-variation="wide" data-html='<h4 class="ui image header"><img class="ui rounded image" src="{{heroImage ../heroName}}"><div class="content">{{../heroName}}<div class="ui sub header">{{name}}</div></div></h4>'>
+      {{render}}
+    </td>
+    {{/each}}
+  </tr>
+</script>
+
 <script id="player-page" type="text/x-handlebars-template">
   <div id="player-page-content" class="is-page transition hidden" section-name="player">
     <div id="player-page-header">
