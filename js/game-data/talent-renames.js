@@ -33,7 +33,8 @@ const TalentRenames = {
   RaynorMasteryHelsAngelsRaynorsBanshees: 'RaynorMasteryDuskWingsRaynorsBanshees',
   JunkratHeroicAbilityRIPTire: 'JunkratRIPTire',
   JunkratHeroicRocketRide: 'JunkratRocketRide',
-  JunkratSpreadVolley: 'JunkratFragLauncherSpreadVolley'
+  JunkratSpreadVolley: 'JunkratFragLauncherSpreadVolley',
+  "Kael'thasLivingBombIgnite": 'KaelthasLivingBombIgnite'
 };
 
 module.exports = TalentRenames;

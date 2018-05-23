@@ -172,5 +172,191 @@
     "icon": "storm_ui_icon_tychus_minigun_a.png",
     "sort": 2,
     "abilityId": "Tychus|D1"
+  },
+  {
+    "tooltipId": "DiabloBulwark",
+    "talentTreeId": "DiabloBulwark",
+    "name": "Bulwark",
+    "description": "Increases the duration of Armor granted by Shadow Charge from 2 seconds to 4 seconds.",
+    "icon": "storm_ui_icon_diablo_shadowcharge_var1.png"
+  },
+  {
+    "tooltipId": "DiabloShadowChargeFromTheShadowsTalent",
+    "talentTreeId": "DiabloMasteryFromTheShadowsShadowCharge",
+    "name": "From the Shadows",
+    "description": "Increases the cast range of Shadow Charge by 40%.",
+    "icon": "storm_ui_icon_diablo_shadowcharge_var1.png",
+    "sort": 1,
+    "abilityId": "Diablo|Q1"
+  },
+  {
+    "tooltipId": "DiabloSpeedDemon",
+    "talentTreeId": "DiabloSpeedDemon",
+    "name": "Speed Demon",
+    "description": "Being Stunned or Rooted increases Diablo's Movement Speed by 30% for 5 seconds.",
+    "icon": "storm_ui_icon_talent_relentless.png"
+  },
+  {
+    "tooltipId": "DiabloOverpowerDemonicStrengthTalent",
+    "talentTreeId": "DiabloMasteryDemonicStrength",
+    "name": "Demonic Strength",
+    "description": "Once Overpower's stun expires, the target is slowed by 30% for 3 seconds.",
+    "icon": "storm_ui_icon_diablo_overpower_var1.png"
+  },
+  {
+    "tooltipId": "DiabloBlackSoulstoneSoulFeastTalent",
+    "talentTreeId": "DiabloMasterySoulFeastBlackSoulstone",
+    "name": "Soul Feast",
+    "description": "Black Soulstone increases Diablo's Health Regeneration by 0.4 per second per Soul.",
+    "icon": "storm_ui_icon_diablo_blacksoulstone_var1.png"
+  },
+  {
+    "tooltipId": "DiabloSoulShield",
+    "talentTreeId": "DiabloSoulShield",
+    "name": "Soul Shield",
+    "description": "Black Soulstone grants Diablo 0.25 Spell Armor per soul, reducing Ability Damage taken by 0.25% per Soul.",
+    "icon": "storm_ui_icon_diablo_blacksoulstone_var2.png"
+  },
+  {
+    "tooltipId": "DiabloFirestompFireDevilTalent",
+    "talentTreeId": "DiabloMasteryFireDevilFireStomp",
+    "name": "Fire Devil",
+    "description": "Fire Stomp increases Diablo's Basic Attack damage by 20% and surrounds Diablo in flames that deal 20 (+4% per level) damage every second. Lasts 6 seconds.",
+    "icon": "storm_ui_icon_diablo_firestomp.png"
+  },
+  {
+    "tooltipId": "DiabloFearfulPresenceTalent",
+    "talentTreeId": "DiabloFearfulPresence",
+    "name": "Fearful Presence",
+    "description": "Activate to reduce the damage dealt by nearby enemy Heroes by 30% for 3 seconds. Passive: Heroes and Summons that attack Diablo have their Attack Speed slowed by 20% for 2.5 seconds.",
+    "icon": "storm_ui_icon_talent_imposingpresence.png",
+    "sort": 3,
+    "abilityId": "Diablo|Active",
+    "cooldown": 20
+  },
+  {
+    "tooltipId": "DryadBlossomSwellTalent",
+    "talentTreeId": "DryadBlossomSwell",
+    "name": "Blossom Swell",
+    "description": "Increases Noxious Blossom's radius by 20%.",
+    "icon": "storm_ui_icon_lunara_pollencloud.png"
+  },
+  {
+    "tooltipId": "DryadPhotosynthesisTalent",
+    "talentTreeId": "DryadPhotosynthesis",
+    "name": "Photosynthesis",
+    "description": "Crippling Spores returns 10 Mana per enemy hit, up to 40 Mana.",
+    "icon": "storm_ui_icon_lunara_fullbloom.png",
+    "sort": 2,
+    "abilityId": "Lunara|W1"
+  },
+  {
+    "tooltipId": "DryadCruelSporesTalent",
+    "talentTreeId": "DryadCruelSpores",
+    "name": "Cruel Spores",
+    "description": "When Crippling Spores hits only Minions or Mercenaries, its cooldown is reduced by 80% and 20 Mana is restored.",
+    "icon": "storm_ui_icon_lunara_fullbloom_a.png",
+    "sort": 4,
+    "abilityId": "Lunara|W1"
+  },
+  {
+    "tooltipId": "DryadNimbleWispTalent",
+    "talentTreeId": "DryadNimbleWisp",
+    "name": "Nimble Wisp",
+    "description": "Increases Wisp Movement Speed by 100% and vision radius by 50%.",
+    "icon": "storm_ui_icon_lunara_wisp.png",
+    "sort": 1,
+    "abilityId": "Lunara|E1"
+  },
+  {
+    "tooltipId": "DryadTimelostWispTalent",
+    "talentTreeId": "DryadTimelostWisp",
+    "name": "Timelost Wisp",
+    "description": "Wisp costs no Mana and its cooldown recharges 125% faster while no Wisp is active.",
+    "icon": "storm_ui_icon_lunara_wisp_a.png",
+    "sort": 2,
+    "abilityId": "Lunara|E1"
+  },
+  {
+    "tooltipId": "DryadSkyboundWispTalent",
+    "talentTreeId": "DryadSkyboundWisp",
+    "name": "Skybound Wisp",
+    "description": "Wisp can see over obstacles and reveals the area for 4 seconds after dying.",
+    "icon": "storm_ui_icon_lunara_wisp_b.png",
+    "sort": 3,
+    "abilityId": "Lunara|E1"
+  },
+  {
+    "tooltipId": "DryadDividingWispTalent",
+    "talentTreeId": "DryadDividingWisp",
+    "name": "Dividing Wisp",
+    "description": "The first time a Wisp is relocated, it leaves a copy of itself in the previous location.",
+    "icon": "storm_ui_icon_lunara_wisp_c.png",
+    "sort": 4,
+    "abilityId": "Lunara|E1"
+  },
+  {
+    "tooltipId": "DryadSiphoningToxinTalent",
+    "talentTreeId": "DryadSiphoningToxin",
+    "name": "Siphoning Toxin",
+    "description": "As long as Nature's Toxin is active on an enemy, heal 18 (+4% per level) Health a second.",
+    "icon": "storm_ui_icon_lunara_stiflingblossom_var1.png",
+    "sort": 1,
+    "abilityId": "Lunara|D1"
+  },
+  {
+    "tooltipId": "DryadNaturesCullingTalent",
+    "talentTreeId": "DryadNaturesCulling",
+    "name": "Nature's Culling",
+    "description": "Increases Nature's Toxin's damage by 150% to non-Heroes.",
+    "icon": "storm_ui_icon_lunara_stiflingblossom.png",
+    "sort": 4,
+    "abilityId": "Lunara|D1"
+  },
+  {
+    "tooltipId": "DryadPesteringBlossomTalent",
+    "talentTreeId": "DryadPesteringBlossom",
+    "name": "Pestering Blossom",
+    "description": "Increases Noxious Blossom's range by 50%.",
+    "icon": "storm_ui_icon_lunara_pollencloud.png",
+    "sort": 1,
+    "abilityId": "Lunara|Q1"
+  },
+  {
+    "tooltipId": "GenericGiantKiller",
+    "talentTreeId": "GenericTalentGiantKiller",
+    "name": "Giant Killer",
+    "description": "Basic Attacks against enemy Heroes deal bonus damage equal to 1.5% of the Hero's maximum Health.",
+    "icon": "storm_ui_icon_talent_autoattack_damage.png",
+    "sort": 3,
+    "abilityId": "Lunara|Passive"
+  },
+  {
+    "tooltipId": "DryadChokingPollenTalent",
+    "talentTreeId": "DryadChokingPollen",
+    "name": "Choking Pollen",
+    "description": "Increases Noxious Blossom damage by 125% against enemies afflicted with Nature's Toxin.",
+    "icon": "storm_ui_icon_lunara_pollencloud.png",
+    "sort": 1,
+    "abilityId": "Lunara|Q1"
+  },
+  {
+    "tooltipId": "DryadLetThemWitherTalent",
+    "talentTreeId": "DryadLetThemWither",
+    "name": "Let Them Wither",
+    "description": "Increases Crippling Spores' slow to 50% and causes it to no longer decay.",
+    "icon": "storm_ui_icon_lunara_fullbloom_b.png",
+    "sort": 4,
+    "abilityId": "Lunara|W1"
+  },
+  {
+    "tooltipId": "DryadAbolishMagicHotbar",
+    "talentTreeId": "DryadAbolishMagic",
+    "name": "Abolish Magic",
+    "description": "Target an Ally to remove all damage over time and disabling effects from them and Lunara. For 2 seconds after, the duration of disabling effects is reduced by 50%.",
+    "icon": "storm_ui_icon_lunara_abolishmagic.png",
+    "sort": 4,
+    "abilityId": "Lunara|Active",
+    "cooldown": 35
   }
 ]
