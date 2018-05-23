@@ -1,6 +1,6 @@
 {
   "name": "stats-of-the-storm",
-  "version": "1.1.0-dev",
+  "version": "1.1.0",
   "main": "main.js",
   "description": "A Heroes of the Storm stat tracking application.",
   "bugs": "falindrith@gmail.com",
@@ -56,7 +56,7 @@
     "dist": "electron-builder",
     "app": "electron ./",
     "publish": "electron-builder --publish always",
-    "update-protocol": "node ./node_modules/heroprotocol/postinstall.js"
+    "protocol": "node ./node_modules/heroprotocol/postinstall.js"
   },
   "build": {
     "appId": "com.stats-of-the-storm.app",
