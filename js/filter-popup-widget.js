@@ -225,143 +225,62 @@ function getPopupQuery(elem, callback) {
   }
 
   DB.getTeam(team, function(err, team) {
-    let oldWhere = function() { return true; };
-    let player = team.players;
-    if ('$where' in map) {
-      oldWhere = map.$where;
+    let players = team.players;
+
+    if (!('$or' in map)) {
+      map.$or = [];
     }
 
+    let t0queries = [];
+    let t1queries = [];
     if (team.players.length <= 5) {
-      // need to match length of players array
-      map.$where = function() {
-        if (player.length === 0)
-          return false;
-
-        let boundWhere = oldWhere.bind(this);
-        let t0 = this.teams[0].ids;
-        let count = 0;
-        for (let i in t0) {
-          if (player.indexOf(t0[i]) >= 0)
-            count += 1;
-        }
-
-        if (count === player.length) {
-          if (widgetHeroOnTeam === true) {
-            // basically here if we don't find the selected heroes on the team we should reject it
-            for (let hero of heroArr) {
-              if (this.teams[0].heroes.indexOf(hero) === -1) {
-                return false;
-              }
-            }
-          }
-
-          if (teamWin === 'win') {
-            return this.winner === 0 && boundWhere();
-          }
-          else if (teamWin === 'loss') {
-            return this.winner !== 0 && boundWhere();
-          }
-
-          return boundWhere();
-        }
-        
-        count = 0;
-        let t1 = this.teams[1].ids;
-        for (let i in t1) {
-          if (player.indexOf(t1[i]) >= 0)
-            count += 1;
-        }
-
-        if (count === player.length) {
-          if (widgetHeroOnTeam === true) {
-            // basically here if we don't find the selected heroes on the team we should reject it
-            for (let hero of heroArr) {
-              if (this.teams[1].heroes.indexOf(hero) === -1) {
-                return false;
-              }
-            }
-          }
-
-          if (teamWin === 'win') {
-            return this.winner === 1 && boundWhere();
-          }
-          else if (teamWin === 'loss') {
-            return this.winner !== 1 && boundWhere();
-          }
-
-          return boundWhere();
-        }
-        
-        return false;
+      // all players need to be in a team somewhere
+      for (const i in players) {
+        t0queries.push({ 'teams.0.ids': players[i] });
+        t1queries.push({ 'teams.1.ids': players[i] });
       }
     }
     else {
       // basically we need a match 5 of the players and then we're ok 
-      map.$where = function() {
-        if (player.length === 0)
-          return false;
+      for (let i = 0; i < 5; i++) {
+        const t0key = 'teams.0.ids.' + i;
+        const t1key = 'teams.1.ids.' + i;
 
-        let boundWhere = oldWhere.bind(this);
-        let t0 = this.teams[0].ids;
-        let count = 0;
-        for (let i in t0) {
-          if (player.indexOf(t0[i]) >= 0)
-            count += 1;
-        }
+        let t0arg = { };
+        t0arg[t0key] = { $in: players };
+        let t1arg = {};
+        t1arg[t1key] = { $in: players };
 
-        if (count === 5) {
-          if (widgetHeroOnTeam === true) {
-            // basically here if we don't find the selected heroes on the team we should reject it
-            for (let hero of heroArr) {
-              if (this.teams[0].heroes.indexOf(hero) === -1) {
-                return false;
-              }
-            }
-          }
-
-          if (teamWin === 'win') {
-            return this.winner === 0 && boundWhere();
-          }
-          else if (teamWin === 'loss') {
-            return this.winner !== 0 && boundWhere();
-          }
-
-          return boundWhere();
-        }
-        
-        count = 0;
-        let t1 = this.teams[1].ids;
-        for (let i in t1) {
-          if (player.indexOf(t1[i]) >= 0)
-            count += 1;
-        }
-
-        if (count === 5) {
-          if (widgetHeroOnTeam === true) {
-            // basically here if we don't find the selected heroes on the team we should reject it
-            for (let hero of heroArr) {
-              if (this.teams[1].heroes.indexOf(hero) === -1) {
-                return false;
-              }
-            }
-          }
-
-          if (teamWin === 'win') {
-            return this.winner === 1 && boundWhere();
-          }
-          else if (teamWin === 'loss') {
-            return this.winner !== 1 && boundWhere();
-          }
-
-          return boundWhere();
-        }
-        
-        return false;
+        t0queries.push(t0arg);
+        t1queries.push(t1arg);
       }
     }
 
+    if (teamWin === 'win') {
+      t0queries.push({ winner: 0 });
+      t1queries.push({ winner: 1 });
+    }
+    else if (teamWin === 'loss') {
+      t0queries.push({ winner: 1 });
+      t1queries.push({ winner: 0 });
+    }
+
+    if (requireHeroOnTeam) {
+      let heroArgs0 = [];
+      let heroArgs1 = [];
+      for (let hero of heroes) {
+        heroArgs0.push({ 'teams.0.heroes': hero });
+        heroArgs1.push({ 'teams.1.heroes': hero });
+      }
+      t0queries.push({ $or: heroArgs0 });
+      t1queries.push({ $or: heroArgs1 });
+    }
+
+    map.$or.push({ $and: t0queries });
+    map.$or.push({ $and: t1queries });
+
     // players for a team
-    hero.ToonHandle = { $in: player };
+    hero.ToonHandle = { $in: players };
 
     if (teamWin === 'win') {
       hero.win = true;

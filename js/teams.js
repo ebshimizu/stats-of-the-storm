@@ -171,75 +171,39 @@ function updateTeamData(value, text, $elem) {
     let query = Object.assign({}, teamsMapDataFilter);
     currentTeam = team;
 
-    // im sure this will 100% murder performace but eh
-    let oldWhere = function() { return true; };
-    if ('$where' in query) {
-      oldWhere = query.$where;
+    let players = team.players;
+
+    if (!('$or' in query)) {
+      query.$or = [];
     }
-    let player = team.players;
 
-    // this is a bit weird but we're gonna overwrite the where and use a special query
-    // first, wrap the old callback if it exists (and it totally does becasue dates)
+    let t0queries = [];
+    let t1queries = [];
     if (team.players.length <= 5) {
-      // need to match length of players array
-      query.$where = function() {
-        if (player.length === 0)
-          return false;
-
-        let boundWhere = oldWhere.bind(this);
-        let t0 = this.teams[0].ids;
-        let count = 0;
-        for (let i in t0) {
-          if (player.indexOf(t0[i]) >= 0)
-            count += 1;
-        }
-
-        if (count === player.length)
-          return boundWhere();
-
-        count = 0;
-        let t1 = this.teams[1].ids;
-        for (let i in t1) {
-          if (player.indexOf(t1[i]) >= 0)
-            count += 1;
-        }
-
-        if (count === player.length)
-          return boundWhere();
-
-        return false;
+      // all players need to be in a team somewhere
+      for (const i in players) {
+        t0queries.push({ 'teams.0.ids': players[i] });
+        t1queries.push({ 'teams.1.ids': players[i] });
       }
     }
     else {
-      // basically we need a match 5 of the players and then we're ok
-      query.$where = function() {
-        if (player.length === 0)
-          return false;
+      // basically we need a match 5 of the players and then we're ok 
+      for (let i = 0; i < 5; i++) {
+        const t0key = 'teams.0.ids.' + i;
+        const t1key = 'teams.1.ids.' + i;
 
-        let boundWhere = oldWhere.bind(this);
-        let t0 = this.teams[0].ids;
-        let count = 0;
-        for (let i in t0) {
-          if (player.indexOf(t0[i]) >= 0)
-            count += 1;
-        }
+        let t0arg = { };
+        t0arg[t0key] = { $in: players };
+        let t1arg = {};
+        t1arg[t1key] = { $in: players };
 
-        if (count === 5)
-          return boundWhere();
-
-        count = 0;
-        let t1 = this.teams[1].ids;
-        for (let i in t1) {
-          if (player.indexOf(t1[i]) >= 0)
-            count += 1;
-        }
-
-        if (count === 5)
-          return boundWhere();
-
-        return false;
+        t0queries.push(t0arg);
+        t1queries.push(t1arg);
       }
     }
+
+    query.$or.push({ $and: t0queries });
+    query.$or.push({ $and: t1queries });
 
     // execute
     DB.getMatches(query, function(err, matches) {
