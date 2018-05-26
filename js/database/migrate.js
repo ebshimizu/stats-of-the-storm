@@ -264,6 +264,9 @@ module.exports = function(DB, callback) {
   }
 
   function finishVersion4To5Migration() {
+    DB._db.heroData.persistence.compactDatafile();
+    DB._db.matches.persistence.compactDatafile();
+
     setLoadMessage('Version 5 Upgrade Complete');
     showMessage(
       'Parser and Database Updated to Version 5',
