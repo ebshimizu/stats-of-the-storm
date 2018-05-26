@@ -313,6 +313,49 @@
       </div>
       <div id="message-container">
       </div>
+      <!-- LinvoDB Migration Modal -->
+      <div class="ui modal" id="linvo-db-migrate">
+        <div class="header">Database Conversion Required</div>
+        <div class="content">
+          <p>
+            Hi there! Stats of the Storm has updated its backend to reduce the 
+            amount of memory the program uses while running. You might not have noticed
+            this if your computer has enough RAM, but in the interest of keeping system
+            requirements to a reasonable level, we have to convert your database
+            to a different format.
+          </p>
+          <p>
+            You have two options for moving your data over.
+          </p>
+          <div class="ui two column grid">
+            <div class="column">
+              <div class="ui horizontal divider">Create a New Database</div>
+              <p>
+                You may create a fresh database in the same location as your old database
+                and re-import all of your matches. This will leave your old database files untouched,
+                in the event that you'd like to import them.
+              </p>
+            </div>
+            <div class="column">
+              <div class="ui horizontal divider">Convert Current Database</div>
+              <p>
+                This will convert your database to the new format. This operation is non-destructive,
+                and your existing files will be untouched in case of an error.
+              </p>
+            </div>
+            <div class="column">
+              <div class="ui fluid blue button" id="linvo-new">
+                New Database
+              </div>
+            </div>
+            <div class="column">
+              <div class="ui fluid blue button" id="linvo-convert">
+                Convert
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="ui active page dimmer" id="main-app-loader">
       <div class="ui huge text loader">

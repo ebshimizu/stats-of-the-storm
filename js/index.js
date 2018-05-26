@@ -30,6 +30,7 @@ const summarizeTrendData = require('./js/database/summarize-trend-data');
 const heroDataCSV = require('./js/exporters/hero-csv');
 const heroDraftCSV = require('./js/exporters/hero-draft-csv');
 
+const convertNeDB = require('./js/database/convertNeDB');
 const migrateDatabase = require('./js/database/migrate');
 
 const {
@@ -107,35 +108,39 @@ ipcRenderer.on('updateStatus', function(event, message) {
 function initApp() {
   showLoader();
 
-  // initial ui event bindings
-  // this should happen first just in case someone needs to exit and
-  // the script dies in a fire
-  $('#app-maximize-button').click(function() {
-    if (BrowserWindow.getFocusedWindow().isMaximized()) {
-      BrowserWindow.getFocusedWindow().unmaximize();
-    }
-    else {
-      BrowserWindow.getFocusedWindow().maximize();
-    }
-  });
-  $('#app-minimize-button').click(function() {
-    BrowserWindow.getFocusedWindow().minimize();
-  });
-  $('#app-quit-button').click(function() {
-    app.quit();
-  });
-  $('.app-version-number').text(app.getVersion());
+  // this is somewhat temporary, once 2.0 launches and is out for a bit,
+  // we can probably eventually remove this
+  convertNeDB(settings.get('dbPath'), function() {
+    // initial ui event bindings
+    // this should happen first just in case someone needs to exit and
+    // the script dies in a fire
+    $('#app-maximize-button').click(function() {
+      if (BrowserWindow.getFocusedWindow().isMaximized()) {
+        BrowserWindow.getFocusedWindow().unmaximize();
+      }
+      else {
+        BrowserWindow.getFocusedWindow().maximize();
+      }
+    });
+    $('#app-minimize-button').click(function() {
+      BrowserWindow.getFocusedWindow().minimize();
+    });
+    $('#app-quit-button').click(function() {
+      app.quit();
+    });
+    $('.app-version-number').text(app.getVersion());
 
-  // initialization for the entire app
-  // we'll probably want to pop up a loading thing here while all the things
-  // happen.
-  // create background window
-  setLoadMessage('Setting up Parser');
-  createBGWindow();
+    // initialization for the entire app
+    // we'll probably want to pop up a loading thing here while all the things
+    // happen.
+    // create background window
+    setLoadMessage('Setting up Parser');
+    createBGWindow();
 
-  // load database
-  setLoadMessage('Loading Database');
-  loadDatabase();
+    // load database
+    setLoadMessage('Loading Database');
+    loadDatabase();
+  });
 }
 
 // there's a functional break here as the database gets its version checked async
