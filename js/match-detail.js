@@ -958,7 +958,7 @@ function getTeamXPSoakData() {
     backgroundColor: '#E9C46A',
     cubicInterpolationMode: 'monotone',
     steppedLine: true,
-    data: [{x: 0, y: 0}]
+    data: []
   }, {
     label: 'Blue Team',
     fill: false,
@@ -975,23 +975,39 @@ function getTeamXPSoakData() {
     data: [{x: 0, y: 0}]
   }];
 
+  let minionXP = [];
   for (let xp in matchDetailMatch.XPBreakdown) {
     let x = matchDetailMatch.XPBreakdown[xp];
 
     if (x.team === 0) {
-      data[0].data.push({ x: x.time, y: x.theoreticalMinionXP });
       data[1].data.push({ x: x.time, y: x.breakdown.MinionXP });
+      // theoretical minion xp processed later due to some complications
+      minionXP.push(x);
     }
     else if (x.team === 1) {
       data[2].data.push({ x: x.time, y: x.breakdown.MinionXP });
     }
   }
 
+  // scan and adjust minion xp data, is in order now
+  for (let i = 0; i < minionXP.length; i++) {
+    // not the final breakdown
+    // need the diff
+    if (i < minionXP.length - 1) {
+      let prev = i === 0 ? 0 : minionXP[i - 1].theoreticalMinionXP;
+      const delta = minionXP[i].theoreticalMinionXP - prev;
+      data[0].data.push({ x: minionXP[i].time - 60, y: minionXP[i].theoreticalMinionXP - delta / 2});
+      data[0].data.push({ x: minionXP[i].time - 30, y: minionXP[i].theoreticalMinionXP });
+    }
+    else {
+      data[0].data.push({ x: minionXP[i].time, y: minionXP[i].theoreticalMinionXP });
+    }
+  }
+
   return data;
 }
-
 function getTeamTimePerTier() {
-
+  // huh a stub.
 }
 
 function loadTimeline() {
