@@ -30,7 +30,6 @@ const summarizeTrendData = require('./js/database/summarize-trend-data');
 const heroDataCSV = require('./js/exporters/hero-csv');
 const heroDraftCSV = require('./js/exporters/hero-draft-csv');
 
-
 const migrateDatabase = require('./js/database/migrate');
 
 const {
@@ -39,7 +38,6 @@ const {
   capitalize,
   formatDelta
 } = require('./js/util/formatters');
-
 
 Handlebars.registerHelper('formatSeconds', formatSeconds);
 Handlebars.registerHelper('formatPct', (value) => formatStat('pct', value));
@@ -829,4 +827,9 @@ function exportHeroDataAsCSV(docs, file) {
       showMessage('CSV Export Complete', 'Exported to ' + file);
     }
   });
+}
+
+function dateToWinTime(date) {
+  let ms = date.getTime();
+  return (ms + 11644473600000) * 10000 + 9999;
 }

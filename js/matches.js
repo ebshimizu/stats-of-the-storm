@@ -236,10 +236,7 @@ function selectMatches() {
   }
 
   // dates
-  query.$where = function() {
-    let d = new Date(this.date);
-    return (start <= d && d <= end);
-  }
+  query.$and = [{ rawDate: { $gte: dateToWinTime(start) } }, { rawDate: { $lte: dateToWinTime(end) } }];
 
   // heroes
   if (heroes[0] !== "") {

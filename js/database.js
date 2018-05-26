@@ -321,10 +321,10 @@ class Database {
     // date within 1 minute
     let dateMin = new Date(header.date.getTime() - 60000);
     let dateMax = new Date(header.date.getTime() + 60000);
-    search.$where = function() {
-      let d = new Date(this.date);
-      return dateMin <= d && d <= dateMax;
-    }
+
+    // dates
+    search.$and.push({ rawDate: { $gte: dateToWinTime(dateMin) } });
+    search.$and.push({ rawDate: { $lte: dateToWinTime(dateMax) } });
 
     // this is the one raw call that is not preprocessed by collections for what should be somewhat obvious reasons
     this._db.matches.find(search, function(err, docs) {
