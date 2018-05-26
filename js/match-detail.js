@@ -960,6 +960,7 @@ function getTeamXPSoakData() {
     borderColor: '#E9C46A',
     backgroundColor: '#E9C46A',
     cubicInterpolationMode: 'monotone',
+    steppedLine: true,
     data: [{x: 0, y: 0}]
   }, {
     label: 'Blue Team',

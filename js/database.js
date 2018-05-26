@@ -9,7 +9,7 @@ const fs = require('fs');
 const summarizeHeroData = require('./database/summarize-hero-data');
 
 // databases are loaded from the specified folder when the database object is created
-var Datastore = require('nedb');
+var Datastore = require('nedb-core');
 
 // ok so you should never call raw db ops on the _db object unless you are debugging.
 // the Database is able to restrict results to a specified collection, allowing multiple views
