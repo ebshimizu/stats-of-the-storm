@@ -286,7 +286,7 @@ function selectMatches() {
         for (let p in players) {
           let q = { $and: []};
           q.$and.push({ 'playerIDs' : players[p] });
-          q.$and.push({ '$not' : { 'winningPlayers': players[p] })};
+          q.$and.push({ '$not' : { 'winningPlayers': players[p] }});
 
           query.$or.push(q);
         }
