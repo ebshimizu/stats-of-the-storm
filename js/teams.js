@@ -22,13 +22,13 @@ function initTeamsPage() {
     fullTextSearch: true
   });
 
-  teamHeroSummaryRowTemplate = Handlebars.compile(getTemplate('teams', '#team-hero-summary-row').find('tr')[0].outerHTML);
-  teamBanSummaryRowTemplate = Handlebars.compile(getTemplate('teams', '#team-hero-ban-row').find('tr')[0].outerHTML);
-  teamRosterRowTemplate = Handlebars.compile(getTemplate('teams', '#team-roster-row').find('tr')[0].outerHTML);
-  teamHeroPickRowTemplate = Handlebars.compile(getTemplate('teams', '#team-hero-pick-row').find('tr')[0].outerHTML);
+  teamHeroSummaryRowTemplate = getHandlebars('teams', '#team-hero-summary-row');
+  teamBanSummaryRowTemplate = getHandlebars('teams', '#team-hero-ban-row');
+  teamRosterRowTemplate = getHandlebars('teams', '#team-roster-row');
+  teamHeroPickRowTemplate = getHandlebars('teams', '#team-hero-pick-row');
 
   // filter popup
-  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
+  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template'));
   filterWidget.attr('widget-name', 'teams-filter');
   filterWidget.find('.filter-widget-team').addClass('is-hidden');
 
@@ -267,7 +267,6 @@ function loadTeamData(team, matches, heroData) {
         games: hero.games,
         winPercent: hero.wins / hero.games,
         pickPercent: hero.games / teamStats.totalMatches,
-        heroImg: Heroes.heroIcon(h),
         heroName: h
       };
       $('#team-hero-summary-table tbody').append(teamHeroSummaryRowTemplate(context));
@@ -283,7 +282,6 @@ function loadTeamData(team, matches, heroData) {
     if (hero.bans > 0 && hero.bans >= teamHeroMatchThresh) {
       const context = {
         heroName: h,
-        heroImg: Heroes.heroIcon(h),
         banPercent: hero.bans / teamStats.totalMatches,
         bans: hero.bans,
         ban1Percent: hero.first / teamStats.totalMatches,
@@ -298,7 +296,6 @@ function loadTeamData(team, matches, heroData) {
     if (hero.games > 0 && hero.games >= teamHeroMatchThresh) {
       const context = {
         heroName: h,
-        heroImg: Heroes.heroIcon(h),
         winPercent: hero.wins / hero.games,
         games: hero.games
       };

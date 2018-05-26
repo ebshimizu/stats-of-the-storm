@@ -9,13 +9,13 @@ var teamRankingCCTemplate;
 var teamRankingStructureTemplate;
 
 function initTeamRankingPage() {
-  teamRankingGeneralTemplate = Handlebars.compile(getTemplate('team-ranking', '#team-ranking-row-template').find('tr')[0].outerHTML);
-  teamRankingMatchTemplate = Handlebars.compile(getTemplate('team-ranking', '#team-ranking-match-row-template').find('tr')[0].outerHTML);
-  teamRankingCCTemplate = Handlebars.compile(getTemplate('team-ranking', '#team-ranking-cc-row-template').find('tr')[0].outerHTML);
-  teamRankingStructureTemplate = Handlebars.compile(getTemplate('team-ranking', '#team-ranking-structure-row-template').find('tr')[0].outerHTML);
+  teamRankingGeneralTemplate = getHandlebars('team-ranking', '#team-ranking-row-template');
+  teamRankingMatchTemplate = getHandlebars('team-ranking', '#team-ranking-match-row-template');
+  teamRankingCCTemplate = getHandlebars('team-ranking', '#team-ranking-cc-row-template');
+  teamRankingStructureTemplate = getHandlebars('team-ranking', '#team-ranking-structure-row-template');
 
   // filter popup
-  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
+  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template'));
   filterWidget.attr('widget-name', 'team-ranking-filter');
   filterWidget.find('.filter-widget-team').addClass('is-hidden');
 
@@ -81,7 +81,7 @@ function resetTeamRankingsFilter() {
 
 function toggleTeamRankingSection() {
   let section = $(this).text();
-  
+
   if ($(this).hasClass('violet')) {
     return;
   }
@@ -123,7 +123,7 @@ function getAllTeamData(filter, callback) {
         }
       }
       else {
-        // basically we need a match 5 of the players and then we're ok 
+        // basically we need a match 5 of the players and then we're ok
         for (let i = 0; i < 5; i++) {
           const t0key = 'teams.0.ids.' + i;
           const t1key = 'teams.1.ids.' + i;

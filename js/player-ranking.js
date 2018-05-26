@@ -8,16 +8,16 @@ var playerRankingAdditionalTemplate;
 
 function initPlayerRankingPage() {
   // templates
-  playerRankingGeneralTemplate = Handlebars.compile(getTemplate('player-ranking', '#player-ranking-row-template').find('tr')[0].outerHTML);
-  playerRankingTeamfightTemplate = Handlebars.compile(getTemplate('player-ranking', '#player-ranking-teamfight-row-template').find('tr')[0].outerHTML);
-  playerRankingMiscTemplate = Handlebars.compile(getTemplate('player-ranking', '#player-ranking-misc-row-template').find('tr')[0].outerHTML);
-  playerRankingAdditionalTemplate = Handlebars.compile(getTemplate('player-ranking', '#player-ranking-additional-row-template').find('tr')[0].outerHTML);
+  playerRankingGeneralTemplate = getHandlebars('player-ranking', '#player-ranking-row-template');
+  playerRankingTeamfightTemplate = getHandlebars('player-ranking', '#player-ranking-teamfight-row-template');
+  playerRankingMiscTemplate = getHandlebars('player-ranking', '#player-ranking-misc-row-template');
+  playerRankingAdditionalTemplate = getHandlebars('player-ranking', '#player-ranking-additional-row-template');
 
   // filter popup
-  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
+  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template'));
   filterWidget.attr('widget-name', 'player-ranking-filter');
   filterWidget.find('.filter-widget-hero').addClass('is-hidden');
-  
+
   $('#filter-widget').append(filterWidget);
   initPopup(filterWidget);
 
@@ -134,7 +134,7 @@ function updateHeroFilter(value, text, $elem) {
 
 function togglePlayerRankingSection() {
   let section = $(this).text();
-  
+
   if ($(this).hasClass('violet')) {
     return;
   }
@@ -191,7 +191,7 @@ function loadPlayerRankings() {
         context.value.totalKDA = player[mode].KDA;
         context.totalKDA = formatStat('KDA', context.value.totalKDA);
       }
-      
+
       context.value.games = player.games;
       context.games = player.games
       context.votes = player.votes;

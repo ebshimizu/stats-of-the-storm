@@ -45,6 +45,7 @@ Handlebars.registerHelper('formatSeconds', formatSeconds);
 Handlebars.registerHelper('formatPct', (value) => formatStat('pct', value));
 Handlebars.registerHelper('formatKDA', (value) => formatStat('KDA', value));
 Handlebars.registerHelper('formatDelta', formatDelta);
+Handlebars.registerHelper('heroImage', (name) => `assets/heroes-talents/images/heroes/${Heroes.heroIcon(name)}`);
 
 // datepicker gloabl settings
 $.fn.datepicker.setDefaults({
@@ -277,13 +278,14 @@ function loadSections() {
   changeSection('matches');
 }
 
+
+const getHandlebars = require('./js/util/handlebars');
+
+
 // returns the template contained in an import
 function getTemplate(name, selector) {
-  let link = document.querySelector('link[name="'+ name + '"]');
-  let template = link.import.querySelector(selector);
-  let clone = $(document.importNode(template.content, true));
-
-  return clone;
+  const link = document.querySelector('link[name="'+ name + '"]');
+  return link.import.querySelector(selector).innerHTML;
 }
 
 function createBGWindow() {

@@ -1,7 +1,7 @@
 <script src="../js/player-ranking.js"></script>
 <link rel="stylesheet" type="text/css" href="../assets/css/player-ranking.css">
 
-<template id="player-ranking-page">
+<script id="player-ranking-page" type="text/x-handlebars-template">
   <div id="player-ranking-page-content" class="is-page transition hidden" section-name="player-ranking">
     <div id="player-ranking-page-header">
       <div class="ui grid">
@@ -206,9 +206,9 @@
       <div class="ui red deny button">Cancel</div>
     </div>
   </div>
-</template>
+</script>
 
-<template id="player-ranking-row-template">
+<script id="player-ranking-row-template" type="text/x-handlebars-template">
   <tr>
     <td data-sort-value="{{name}}"><h3 class="ui inverted header player-name" playerID="{{id}}">{{name}}</h3></td>
     <td class="center aligned" data-sort-value="{{value.winPercent}}">{{formatWinPercent}}</td>
@@ -231,9 +231,9 @@
     <td class="center aligned" data-sort-value="{{value.SelfHealing}}">{{SelfHealing}}</td>
     <td class="center aligned" data-sort-value="{{value.ProtectionGivenToAllies}}">{{ProtectionGivenToAllies}}</td>
   </tr>
-</template>
+</script>
 
-<template id="player-ranking-additional-row-template">
+<script id="player-ranking-additional-row-template" type="text/x-handlebars-template">
   <tr>
     <td data-sort-value="{{name}}"><h3 class="ui inverted header player-name" playerID="{{id}}">{{name}}</h3></td>
     <td class="center aligned" data-sort-value="{{value.winPercent}}">{{formatWinPercent}}</td>
@@ -254,10 +254,10 @@
     <td class="center aligned" data-sort-value="{{value.healingDonePerDeath}}">{{healingDonePerDeath}}</td>
     <td class="center aligned" data-sort-value="{{value.HPM}}">{{HPM}}</td>
   </tr>
-</template>
+</script>
 
 
-<template id="player-ranking-teamfight-row-template">
+<script id="player-ranking-teamfight-row-template" type="text/x-handlebars-template">
   <tr>
     <td data-sort-value="{{name}}"><h3 class="ui inverted header player-name" playerID="{{id}}">{{name}}</h3></td>
     <td class="center aligned" data-sort-value="{{value.winPercent}}">{{formatWinPercent}}</td>
@@ -275,9 +275,9 @@
     <td class="center aligned" data-sort-value="{{value.TimeSilencingEnemyHeroes}}">{{TimeSilencingEnemyHeroes}}</td>
     <td class="center aligned" data-sort-value="{{value.VengeancesPerformed}}">{{VengeancesPerformed}}</td>
   </tr>
-</template>
+</script>
 
-<template id="player-ranking-misc-row-template">
+<script id="player-ranking-misc-row-template" type="text/x-handlebars-template">
   <tr>
     <td data-sort-value="{{name}}"><h3 class="ui inverted header player-name" playerID="{{id}}">{{name}}</h3></td>
     <td class="center aligned" data-sort-value="{{value.winPercent}}">{{formatWinPercent}}</td>
@@ -301,4 +301,4 @@
     <td class="center aligned" data-sort-value="{{taunts.dances.takedowns}}">{{taunts.dances.takedowns}}</td>
     <td class="center aligned" data-sort-value="{{taunts.dances.deaths}}">{{taunts.dances.deaths}}</td>
   </tr>
-</template>
+</script>

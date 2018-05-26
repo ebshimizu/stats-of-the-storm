@@ -17,12 +17,9 @@ function initHeroCollectionPage() {
     mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague, ReplayTypes.GameMode.Custom]}
   }
 
-  heroCollectionSummaryRowTemplate = Handlebars.compile(getTemplate('hero-collection', '#hero-collection-hero-summary-row-template').
-    find('.hero-collection-hero-summary-row')[0].outerHTML);
-  heroCollectionPickRowTemplate = Handlebars.compile(getTemplate('hero-collection', '#hero-collection-hero-pick-row-template').
-    find('.hero-collection-hero-summary-row')[0].outerHTML);
-  heroCollectionHeroWinRowTemplate = Handlebars.compile(getTemplate('hero-collection', '#hero-collection-detail-hero-win-row').
-    find('tr')[0].outerHTML);
+  heroCollectionSummaryRowTemplate = getHandlebars('hero-collection', '#hero-collection-hero-summary-row-template');
+  heroCollectionPickRowTemplate = getHandlebars('hero-collection', '#hero-collection-hero-pick-row-template');
+  heroCollectionHeroWinRowTemplate = getHandlebars('hero-collection', '#hero-collection-detail-hero-win-row');
 
   $('#hero-collection-summary table').tablesort();
   $('#hero-collection-picks table').tablesort();
@@ -56,7 +53,7 @@ function initHeroCollectionPage() {
   });
 
   // filter popup
-  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
+  let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template'));
   filterWidget.attr('widget-name', 'hero-collection-filter');
 
   $('#filter-widget').append(filterWidget);
@@ -198,7 +195,6 @@ function loadOverallHeroCollectionData() {
 
       let context = {};
       context.heroName = h;
-      context.heroImg = Heroes.heroIcon(h);
       context.winPercent = hero.games === 0 ? 0 : hero.wins / hero.games;
       context.formatWinPercent = formatStat('pct', context.winPercent);
       context.banPercent = hero.bans.total / overallStats.totalMatches;
@@ -217,7 +213,6 @@ function loadOverallHeroCollectionData() {
       banContext.format = {};
       banContext.games = hero.games;
       banContext.heroName = h;
-      banContext.heroImg = context.heroImg;
       banContext.heroRole = context.heroRole;
       banContext.winPercent = context.winPercent;
       banContext.format.winPercent = context.formatWinPercent;
@@ -301,61 +296,9 @@ function loadOverallHeroCollectionData() {
 
 function toggleHeroCollectionType(tableID, active, container) {
   let type = active.text();
-  let hide = false;
   let elem = $(container).find('.button.' + type);
-
-  if (type === "Assassin") {
-    if (active.hasClass('red')) {
-      hide = true;
-      elem.removeClass('red');
-    }
-    else {
-      elem.addClass('red');
-    }
-  }
-  if (type === "Warrior") {
-    if (active.hasClass('blue')) {
-      hide = true;
-      elem.removeClass('blue');
-    }
-    else {
-      elem.addClass('blue');
-    }
-  }
-  if (type === "Support") {
-    if (active.hasClass('teal')) {
-      hide = true;
-      elem.removeClass('teal');
-    }
-    else {
-      elem.addClass('teal');
-    }
-  }
-  if (type === "Specialist") {
-    if (active.hasClass('violet')) {
-      hide = true;
-      elem.removeClass('violet');
-    }
-    else {
-      elem.addClass('violet');
-    }
-  }
-  if (type === "Multiclass") {
-    if (active.hasClass('purple')) {
-      hide = true;
-      elem.removeClass('purple');
-    }
-    else {
-      elem.addClass('purple');
-    }
-  }
-
-  if (hide) {
-    $(tableID + ' table').find('.' + type).addClass('is-hidden');
-  }
-  else {
-    $(tableID + ' table').find('.' + type).removeClass('is-hidden');
-  }
+  elem.toggleClass(RoleColorClass[type]);
+  $(tableID + ' table').find('.' + type).toggleClass('is-hidden');
 }
 
 // many of the functions here are borrowed from player.js
@@ -434,7 +377,6 @@ function renderHeroCollectionVsStatsTo(container, stats, threshold, avg) {
       context.winPercent = context.wins / context.games;
     }
     context.formatWinPercent = formatStat('pct', context.winPercent);
-    context.heroImg = Heroes.heroIcon(context.name);
 
     if (h in avg.heroData.heroes) {
       context.avgDelta = context.winPercent - (avg.heroData.heroes[h].wins / avg.heroData.heroes[h].games);
@@ -452,24 +394,17 @@ function renderHeroCollectionVsStatsTo(container, stats, threshold, avg) {
 }
 
 function getCompositionElement(roles) {
-  let elem = '<div class="ui five column grid comp-grid">';
+  const template = getHandlebars("hero-collection", "#hero-composition");
 
-  for (let r of roles) {
-    elem += '<div class="column">';
-    elem += '<div class="ui mini image">';
-    elem += '<div class="ui small ' + RoleColorClass[r] + ' ribbon label">' + r + '</div>';
+  const context = {
+    roles: roles.map((r) => ({
+      name: r,
+      colorClass: RoleColorClass[r],
+      image: r === 'Multiclass' ? 'specialist' : r.toLowerCase()
+    }))
+  };
 
-    if (r === 'Multiclass') {
-      elem += '<img src="assets/images/role_specialist.png">'
-    }
-    else {
-      elem += '<img src="assets/images/role_' + r.toLowerCase() + '.png">';
-    }
-    elem += '</div></div>'
-  }
-
-  elem += '</div>';
-  return elem;
+  return template(context);
 }
 
 function layoutHeroCollectionPrint(sections) {

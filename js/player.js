@@ -6,22 +6,10 @@ var playerDetailInfo;
 var playerDetailHeroSummaryRowTemplate;
 var playerDetailMapSummaryRowTemplate;
 var allDetailStats;
-var playerHeroDetailRowTemplate;
 var playerAwardRowTemplate;
 var playerCompareRowTemplate;
-const playerHeroDetailRowTemplateContent = `<tr>
-  <td data-sort-value="{{heroName}}">
-    <h3 class="ui inverted header">
-      <div class="content">{{heroName}}</div>
-    </h3>
-  </td>
-  </td>
-  {{#each stat}}
-    <td class="center aligned" data-sort-value="{{avg}}" data-position="left center" data-variation="wide" data-html='<h4 class="ui image header"><img class="ui rounded image" src="assets/heroes-talents/images/heroes/{{../heroImg}}"><div class="content">{{../heroName}}<div class="ui sub header">{{name}}</div></div></h4>'>
-      {{render}}
-    </td>
-  {{/each}}
- </tr>`;
+let playerHeroDetailRowTemplate;
+
 var playerWinRateRowTemplate;
 var heroWinRateRowTemplate;
 var heroTalentRowTemplate;
@@ -228,14 +216,14 @@ function initPlayerPage() {
   //$('#players-set-player').dropdown('set selected', selectedPlayerID);
 
   // templates
-  playerDetailHeroSummaryRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-hero-summary-row').find('tr')[0].outerHTML);
-  playerDetailMapSummaryRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-map-summary-row').find('tr')[0].outerHTML);
-  playerWinRateRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-player-win-row').find('tr')[0].outerHTML);
-  heroWinRateRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-hero-win-row').find('tr')[0].outerHTML);
-  heroTalentRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-talent-row').find('tr')[0].outerHTML);
-  playerAwardRowTemplate = Handlebars.compile(getTemplate('player', '#player-detail-hero-award-row').find('tr')[0].outerHTML);
-  playerCompareRowTemplate = Handlebars.compile(getTemplate('player', '#player-compare-table-row').find('tr')[0].outerHTML);
-  playerHeroDetailRowTemplate = Handlebars.compile(playerHeroDetailRowTemplateContent);
+  playerDetailHeroSummaryRowTemplate = getHandlebars('player', '#player-detail-hero-summary-row');
+  playerDetailMapSummaryRowTemplate = getHandlebars('player', '#player-detail-map-summary-row');
+  playerWinRateRowTemplate = getHandlebars('player', '#player-detail-player-win-row');
+  heroWinRateRowTemplate = getHandlebars('player', '#player-detail-hero-win-row');
+  heroTalentRowTemplate = getHandlebars('player', '#player-detail-talent-row');
+  playerAwardRowTemplate = getHandlebars('player', '#player-detail-hero-award-row');
+  playerCompareRowTemplate = getHandlebars('player', '#player-compare-table-row');
+  playerHeroDetailRowTemplate = getHandlebars('player', '#player-hero-detail-row');
 
   createDetailTableHeader();
 
@@ -316,7 +304,7 @@ function initPlayerPage() {
   });
 
   // filter popup
-  let playerWidget = $(getTemplate('filter', '#filter-popup-widget-template').find('.filter-popup-widget')[0].outerHTML);
+  let playerWidget = $(getTemplate('filter', '#filter-popup-widget-template'));
   playerWidget.attr('widget-name', 'player-filter');
   playerWidget.find('.filter-widget-team').addClass('is-hidden');
 
@@ -494,7 +482,7 @@ function updatePlayerDetailID(value, text, $item) {
 function updatePlayerPage(err, doc) {
   if (doc.length === 1) {
     playerDetailInfo = doc[0];
-    
+
     updatePlayerPageHeader();
 
     // check player teams
@@ -623,7 +611,6 @@ function renderAllHeroSummary() {
 
     // some formatting needs to happen
     context.heroName = h;
-    context.heroImg = Heroes.heroIcon(h);
     context.games = playerDetailStats.heroes[h].games;
     context.stats = playerDetailStats.heroes[h].stats;
     context.stats.formatMVPPct = formatStat('pct', context.stats.MVPPct);
@@ -884,7 +871,7 @@ function renderHeroVsStatsTo(container, stats, threshold) {
       context.winPercent = context.wins / context.games;
     }
     context.formatWinPercent = formatStat('pct', context.winPercent);
-    context.heroImg = Heroes.heroIcon(context.name);
+    context.heroName = context.name;
 
     if (context.games >= threshold)
       container.find('tbody').append(heroWinRateRowTemplate(context));
@@ -921,7 +908,6 @@ function renderPlayerHeroDetail() {
     let statData = playerDetailStats[mode][h];
     let context = {};
     context.heroName = h;
-    context.heroImg = Heroes.heroIcon(h);
     context.stat = [];
 
     context.stat.push({

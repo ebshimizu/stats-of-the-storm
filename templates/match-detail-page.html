@@ -2,7 +2,7 @@
 <script src="../js/match-detail.js"></script>
 <link rel="stylesheet" type="text/css" href="../assets/css/match-detail.css">
 
-<template id="match-detail-page">
+<script id="match-detail-page" type="text/x-handlebars-template">
   <div id="match-detail-page-content" class="is-page transition hidden" section-name="match-detail">
     <div id="match-detail-page-header">
       <div class="ui grid">
@@ -194,11 +194,11 @@
                 <div class="statistic" name="team-time-to-10">
                   <div class="value">###</div>
                   <div class="label">Time To 10</div>
-                </div> 
+                </div>
                 <div class="statistic" name="team-time-to-20">
                   <div class="value">###</div>
                   <div class="label">Time To 20</div>
-                </div> 
+                </div>
               </div>
               <div class="ui inverted horizontal divider">Mercenaries</div>
               <div class="ui three inverted blue statistics">
@@ -303,11 +303,11 @@
                 <div class="statistic" name="team-time-to-10">
                   <div class="value">###</div>
                   <div class="label">Time To 10</div>
-                </div> 
+                </div>
                 <div class="statistic" name="team-time-to-20">
                   <div class="value">###</div>
                   <div class="label">Time To 20</div>
-                </div> 
+                </div>
               </div>
               <div class="ui inverted horizontal divider">Mercenaries</div>
               <div class="ui three inverted red statistics">
@@ -588,13 +588,13 @@
       <div class="ui red deny button">Cancel</div>
     </div>
   </div>
-</template>
+</script>
 
-<template id="match-detail-summary-row-template">
+<script id="match-detail-summary-row-template" type="text/x-handlebars-template">
   <tr class="match-detail-summary-row {{teamColor}}" playerID="{{playerID}}">
     <td data-sort-value="{{teamColor}}">
       <h3 class="ui image inverted header">
-        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui large rounded image">
+        <img src="{{heroImage heroName}}" class="ui large rounded image">
         <div class="content">
           {{heroName}}
           <div class="sub header player-name" playerID="{{playerID}}">{{playerName}}</div>
@@ -613,25 +613,25 @@
     <td class="center aligned" data-sort-value="{{gameStats.DamageTaken}}"><div class="ui inverted mini statistic"><div class="value">{{format.DamageTaken}}</div></div></td>
     <td class="center aligned" data-sort-value="{{gameStats.ExperienceContribution}}"><div class="ui inverted mini statistic"><div class="value">{{format.ExperienceContribution}}</div></div></td>
   </tr>
-</template>
+</script>
 
-<template id="match-detail-detail-header">
+<script id="match-detail-detail-header" type="text/x-handlebars-template">
   <th class="{{teamColor}}">
     <h4 class="ui image inverted header">
-      <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui tiny rounded image">
+      <img src="{{heroImage heroName}}" class="ui tiny rounded image">
       <div class="content">
         {{heroName}}
         <div class="sub header player-name" playerID="{{playerID}}">{{playerName}}</div>
       </div>
     </h4>
   </th>
-</template>
+</script>
 
-<template id="match-detail-talents-row-title-template">
+<script id="match-detail-talents-row-title-template" type="text/x-handlebars-template">
   <tr class="match-detail-talents-row {{teamColor}}" playerID="{{playerID}}">
     <td>
       <h3 class="ui image inverted header">
-        <img src="assets/heroes-talents/images/heroes/{{heroImg}}" class="ui large rounded image">
+        <img src="{{heroImage heroName}}" class="ui large rounded image">
         <div class="content">
           {{heroName}}
           <div class="sub header player-name" playerID="{{playerID}}">{{playerName}}</div>
@@ -639,21 +639,21 @@
       </h3>
     </td>
   </tr>
-</template>
+</script>
 
-<template id="match-detail-talents-row-cell-template">
+<script id="match-detail-talents-row-cell-template" type="text/x-handlebars-template">
   <td data-sort-value="{{name}}">
     <div class="ui content">
       <img src="assets/heroes-talents/images/talents/{{img}}" class="ui centered tiny rounded image"
         data-html='<div class="header">{{name}}</div><div class="content">{{description}}</div>' data-position="left center">
     </div>
   </td>
-</template>
+</script>
 
-<template id="match-detail-chat-log-entry">
+<script id="match-detail-chat-log-entry" type="text/x-handlebars-template">
   <div class="event">
     <div class="label {{showImg}}">
-      <img src="assets/heroes-talents/images/heroes/{{heroImg}}">
+      <img src="{{heroImage heroName}}">
     </div>
     <div class="content">
       <div class="date">{{time}}</div>
@@ -661,10 +661,10 @@
         {{playerName}}: {{message}}
       </div>
     </div>
-  </div> 
-</template>
+  </div>
+</script>
 
-<template id="match-detail-taunt-entry">
+<script id="match-detail-taunt-entry" type="text/x-handlebars-template">
   <tr>
     <td>{{name}}</td>
     <td>{{type}}</td>
@@ -672,4 +672,4 @@
     <td>{{kills}}</td>
     <td>{{deaths}}</td>
   </tr>
-</template>
+</script>

@@ -1,7 +1,7 @@
 <script src="../js/maps.js"></script>
 <link rel="stylesheet" type="text/css" href="../assets/css/maps.css">
 
-<template id="maps-page">
+<script id="maps-page" type="text/x-handlebars-template">
   <div id="maps-page-content" class="is-page transition hidden" section-name="maps">
     <div id="maps-page-header">
       <div class="ui grid">
@@ -82,9 +82,9 @@
       </div>
     </div>
   </div>
-</template>
+</script>
 
-<template id="map-table-row-template">
+<script id="map-table-row-template" type="text/x-handlebars-template">
   <tr class="map-table-row">
     <td><h3 class="ui inverted header">{{map}}</h3></td>
     <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
@@ -97,4 +97,4 @@
     <td class="center aligned" data-sort-value="{{blueWinPct}}">{{formatPct blueWinPct}}</td>
     <td class="center aligned" data-sort-value="{{redWinPct}}">{{formatPct redWinPct}}</td>
   </tr>
-</template>
+</script>
