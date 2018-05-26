@@ -271,9 +271,7 @@ function selectMatches() {
         }
 
         if (playerWin === 'loss') {
-          query.$and.push({ '$where' : function() {
-            return this.winningPlayers.indexOf(players[p]) === -1
-          }});
+          query.$and.push({ '$not' : { 'winningPlayers' : players[p] }});
         }
       }
     }
@@ -288,9 +286,7 @@ function selectMatches() {
         for (let p in players) {
           let q = { $and: []};
           q.$and.push({ 'playerIDs' : players[p] });
-          q.$and.push({ '$where' : function() {
-            return this.winningPlayers.indexOf(players[p]) === -1;
-          }});
+          q.$and.push({ '$not' : { 'winningPlayers': players[p] })};
 
           query.$or.push(q);
         }
