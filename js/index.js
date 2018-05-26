@@ -191,7 +191,6 @@ function loadDatabaseComplete(err) {
   }
 
   // check database version
-
   migrateDatabase(DB, resumeInitApp);
 }
 

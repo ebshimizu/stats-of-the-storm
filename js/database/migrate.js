@@ -71,10 +71,25 @@ module.exports = function(DB, callback) {
         throw new Exception('Database Upgrade Exception - Unable to Backup Files');
       }
       else {
-        fs.copySync(path + '/matches.db', path + '/db4-backup/matches.db');
-        fs.copySync(path + '/hero.db', path + '/db4-backup/hero.db');
-        fs.copySync(path + '/players.db', path + '/db4-backup/players.db');
-        fs.copySync(path + '/settings.db', path + '/db4-backup/settings.db');
+        try {
+          fs.copySync(path + '/matches.db', path + '/db4-backup/matches.db');
+          fs.copySync(path + '/hero.db', path + '/db4-backup/hero.db');
+          fs.copySync(path + '/players.db', path + '/db4-backup/players.db');
+          fs.copySync(path + '/settings.db', path + '/db4-backup/settings.db');
+        }
+        catch (e) {
+          console.log('Could not find NeDB files')
+        }
+
+        try {
+          fs.copySync(path + '/matches.ldb', path + '/db4-backup/matches.ldb');
+          fs.copySync(path + '/hero.ldb', path + '/db4-backup/hero.ldb');
+          fs.copySync(path + '/players.ldb', path + '/db4-backup/players.ldb');
+          fs.copySync(path + '/settings.ldb', path + '/db4-backup/settings.ldb');
+        }
+        catch (e) {
+          console.log('Could not find LinvoDB3 files');
+        }
 
         DB._db.heroData.find({}, function(err, docs) {
           if (docs.length > 0) {
@@ -264,8 +279,14 @@ module.exports = function(DB, callback) {
   }
 
   function finishVersion4To5Migration() {
-    DB._db.heroData.persistence.compactDatafile();
-    DB._db.matches.persistence.compactDatafile();
+    try {
+      DB._db.heroData.persistence.compactDatafile();
+      DB._db.matches.persistence.compactDatafile();
+    }
+    catch (err) {
+      console.log(err);
+      console.log('this is likely not an error, it is likely just using the linvoDB');
+    }
 
     setLoadMessage('Version 5 Upgrade Complete');
     showMessage(
