@@ -54,6 +54,40 @@ module.exports = function(DB, callback) {
     });
   }
 
+  // i should really de-duplicate this but eh
+  function migrateVersion4ToVersion5() {
+    setLoadMessage('Updating DB Version 4 to Version 5');
+
+    setLoadMessage('Updating DB Version 4 to Version 5<br>Backing up existing database');
+
+    // copy the 4 files to a new directory (db3-backup)
+    let path = settings.get('dbPath');
+
+    fs.ensureDir(path + '/db4-backup', function(err) {
+      if (err) {
+        console.log(err);
+        showMessage('Unable to Backup Version 4 Database. Aborting.', err, { sticky: true, class: 'negative' });
+        // ok so this needs to crash (it can't load, it can't do anything). throw an exception
+        throw new Exception('Database Upgrade Exception - Unable to Backup Files');
+      }
+      else {
+        fs.copySync(path + '/matches.db', path + '/db4-backup/matches.db');
+        fs.copySync(path + '/hero.db', path + '/db4-backup/hero.db');
+        fs.copySync(path + '/players.db', path + '/db4-backup/players.db');
+        fs.copySync(path + '/settings.db', path + '/db4-backup/settings.db');
+
+        DB._db.heroData.find({}, function(err, docs) {
+          if (docs.length > 0) {
+            updateHeroDataToVersion5(docs.pop(), docs);
+          }
+          else {
+            continueVersion4ToVersion5();
+          }
+        });
+      }
+    });
+  }
+
   function updateMatchToVersion3(match, remaining) {
     try {
       console.log('updating match ' + match._id);
@@ -100,6 +134,39 @@ module.exports = function(DB, callback) {
     }
   }
 
+  function updateMatchToVersion5(match, remaining) {
+    try {
+      console.log('updating match ' + match._id);
+      setLoadMessage('Updating DB Version 4 to Version 5<br>' + remaining.length + ' matches left<br>DO NOT CLOSE THE APP');
+
+      match.firstFort = Parser.getFirstFortTeam(match);
+      match.firstKeep = Parser.getFirstKeepTeam(match);
+      match.firstFortWin = match.winner === match.firstFort;
+      match.firstKeepWin = match.winner === match.firstKeep;
+
+      // update
+      DB.updateMatch(match, function() {
+        if (remaining.length === 0) {
+          finishVersion4To5Migration();
+        }
+        else {
+          updateMatchToVersion5(remaining.pop(), remaining);
+        }
+      });
+    }
+    catch (err) {
+      console.log(err);
+      console.log('Failed to update match ' + match._id + ' please file bug report');
+
+      if (remaining.length === 0) {
+        finishVersion4To5Migration();
+      }
+      else {
+        updateMatchToVersion5(remaining.pop(), remaining);
+      }
+    }
+  }
+
   function updateHeroDataToVersion4(heroData, remaining) {
     try {
       console.log('updating hero data ' + heroData._id);
@@ -135,6 +202,47 @@ module.exports = function(DB, callback) {
     }
   }
 
+  function updateHeroDataToVersion5(heroData, remaining) {
+    try {
+      console.log('updating hero data ' + heroData._id);
+      setLoadMessage('Updating DB Version 4 to Version 5<br>' + remaining.length + ' entries left<br>DO NOT CLOSE THE APP');
+
+      // dates lol
+      heroData.rawDate = dateToWinTime(new Date(heroData.date));
+
+      DB._db.heroData.update({_id: heroData._id}, heroData, {}, function() {
+        if (remaining.length === 0) {
+          continueVersion4ToVersion5();
+        }
+        else {
+          updateHeroDataToVersion5(remaining.pop(), remaining);
+        }
+      });
+    }
+    catch (err) {
+      console.log(err);
+      console.log('Failed to update heroData entry ' + heroData._id + '. Please file a bug report.');
+
+      if (remaining.length === 0) {
+        continueVersion4ToVersion5();
+      }
+      else {
+        updateHeroDataToVersion5(remaining.pop(), remaining);
+      }
+    }
+  }
+
+  function continueVersion4ToVersion5() {
+    // matches now
+    setLoadMessage('Updating DB Version 4 to Version 5<br>DO NOT CLOSE THE APP');
+    DB.getMatches({}, function(err, docs) {
+      if (docs.length > 0)
+        updateMatchToVersion5(docs.pop(), docs);
+      else
+        finishVersion4To5Migration();
+    });
+  }
+
   function finishVersion2To3Migration() {
     setLoadMessage('Version 3 Upgrade Complete');
     showMessage(
@@ -155,6 +263,17 @@ module.exports = function(DB, callback) {
     DB.setDBVersion(4, checkDBVersion(4));
   }
 
+  function finishVersion4To5Migration() {
+    setLoadMessage('Version 5 Upgrade Complete');
+    showMessage(
+      'Parser and Database Updated to Version 5',
+      'Date format updates, two additional match flags added.<br>A backup was created at ' + settings.get('dbPath') + '/db4-backup. If the database updated correctly, you can safely delete this folder',
+      { sticky: true, class: 'positive' }
+    );
+    DB.setDBVersion(5, checkDBVersion(5));
+  }
+
+
   function checkDBVersion(dbVer) {
     console.log('Database and Parser version: ' + dbVer);
 
@@ -172,6 +291,10 @@ module.exports = function(DB, callback) {
       }
       else if (dbVer === 3) {
         migrateVersion3ToVersion4();
+        return;
+      }
+      else if (dbVer === 4) {
+        migrateVersion4ToVersion5();
         return;
       }
     }

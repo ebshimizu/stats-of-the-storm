@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const ReplayTypes = require(path.join(__dirname, 'constants.js'));
 const heroprotocol = require('heroprotocol');
-const PARSER_VERSION = 4;
+const PARSER_VERSION = 5;
 const battletags = require('./battletags.js');
 
 const ReplayDataType = {
@@ -1505,6 +1505,10 @@ function processReplay(file, HeroesTalents, opts = {}) {
 
     match.firstObjective = getFirstObjectiveTeam(match);
     match.firstObjectiveWin = match.winner === match.firstObjective;
+    match.firstFort = getFirstFortTeam(match);
+    match.firstKeep = getFirstKeepTeam(match);
+    match.firstFortWin = match.winner === match.firstFort;
+    match.firstKeepWin = match.winner === match.firstKeep;
 
     console.log('[STATS] Match Flags set.');
 
@@ -1912,6 +1916,36 @@ function getFirstObjectiveTeam(match) {
   }
 }
 
+function getFirstFortTeam(match) {
+  let t0Fort = match.teams[0].stats.structures.Fort;
+  let t1Fort = match.teams[1].stats.structures.Fort;
+
+  if (t0Fort.first > t1Fort.first)
+    return 1;
+  else if (t0Fort.first < t1Fort.first)
+    return 0;
+
+  // same time
+  return -1;
+}
+
+function getFirstKeepTeam(match) {
+  let t0Keep = match.teams[0].stats.structures.Keep;
+  let t1Keep = match.teams[1].stats.structures.Keep;
+
+  // towers of doom doesn't have keeps
+  if (!t0Keep || !t1Keep)
+    return -2;
+
+  if (t0Keep.first > t1Keep.first)
+    return 1;
+  else if (t0Keep.first < t1Keep.first)
+    return 0;
+
+  // same time
+  return -1;
+}
+
 // general parsing utilities, not db specific
 function winFileTimeToDate(filetime) {
   return new Date(filetime / 10000 - 11644473600000);
@@ -1933,4 +1967,6 @@ exports.StatusString = StatusString;
 exports.getHeader = getHeader;
 exports.getFirstObjectiveTeam = getFirstObjectiveTeam;
 exports.winFileTimeToDate = winFileTimeToDate;
+exports.getFirstFortTeam = getFirstFortTeam;
+exports.getFirstKeepTeam = getFirstKeepTeam;
 exports.VERSION = PARSER_VERSION;
