@@ -239,7 +239,7 @@ function selectMatches() {
   query.$and = [{ rawDate: { $gte: dateToWinTime(start) } }, { rawDate: { $lte: dateToWinTime(end) } }];
 
   // heroes
-  if (heroes[0] !== "") {
+  if (heroes[0] !== "" && !requireHeroOnTeam) {
     if (heroMode === 'and') {
       if (!('$and' in query))
         query.$and = [];
@@ -249,7 +249,12 @@ function selectMatches() {
       }
     }
     else {
-      query.heroes = { $elemMatch: { $in: heroes } };
+      if (!('$or' in query))
+        query.$or = [];
+
+      for (let h in heroes) {
+        query.$or.push({ 'heroes' : heroes[h] });
+      }
     }
   }
 
@@ -274,7 +279,12 @@ function selectMatches() {
     }
     else if (playerMode === 'or' || playerMode === '') {
       if (playerWin === 'win') {
-        query.winningPlayers = { $elemMatch: { $in: players }};
+        if (!('$or' in query))
+          query.$or = [];
+
+        for (let p in players) {
+          query.$or.push({ 'winningPlayers': players[p] });
+        }
       }
       else if (playerWin === 'loss') {
         if (!('$or' in query))
@@ -289,7 +299,12 @@ function selectMatches() {
         }
       }
       else {
-        query.playerIDs = { $elemMatch: { $in: players } };
+        if (!('$or' in query))
+          query.$or = [];
+
+        for (let p in players) {
+          query.$or.push({ playerIDs: players[p] });
+        }
       }
     }
   }

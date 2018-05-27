@@ -194,26 +194,34 @@ function getPopupQuery(elem, callback) {
   // heroes
   let heroArr = [];
   if (types[0] !== "") {
+    if (!('$or' in map)) {
+      map.$or = [];
+    }
+
     for (let t in types) {
       let heroest = Heroes.heroRole(types[t]);
       for (let h in heroest) {
         if (heroArr.indexOf(heroest[h]) === -1) {
           heroArr.push(heroest[h]);
+          map.$or.push({heroes: heroest[h] });
         }
       }
     }
 
     hero.hero = { $in: heroArr };
-    map.heroes = { $elemMatch: { $in: heroArr } };
   }
 
   if (heroes[0] !== '') {
+    if (!('$or' in map)) {
+      map.$or = [];
+    }
+
     for (let h of heroes) {
       heroArr.push(h);
+      map.$or.push({heroes: h});
     }
 
     hero.hero = { $in: heroArr };
-    map.heroes = { $elemMatch: { $in: heroArr } };
   }
 
   if (team === '') {

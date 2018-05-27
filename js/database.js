@@ -501,7 +501,7 @@ class Database {
   getVersions(callback) {
     let query = {};
     this.preprocessQuery(query);
-    this._db.matches.find(query, {version: 1}, function(err, docs) {
+    this._db.matches.find(query, function(err, docs) {
       let versions = {}
 
       for (let doc of docs) {
