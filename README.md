@@ -27,7 +27,7 @@ Bugs? Feature Requests? File an issue on GitHub or send an email to falindrith@g
 ## Third-Party Libraries
 * [heroprotocol.js](https://github.com/nydus/heroprotocol)
 * [heroes-talents](https://github.com/heroespatchnotes/heroes-talents)
-* [NeDB](https://github.com/louischatriot/nedb)
+* [LinvoDB](https://github.com/Ivshti/linvodb3)
 * [Semantic UI](https://semantic-ui.com/)
 * [datepicker](https://github.com/fengyuanchen/datepicker)
 * [jquery.floatThead](https://github.com/mkoryak/floatThead)
