@@ -354,7 +354,7 @@ function startReplayScan() {
   let count = 0;
   for (let r in replays) {
     replays[r].id = count;
-    $('#replay-file-list').append(settingsRowTemplate(replays[r]));
+    $('#replay-file-list tbody').append(settingsRowTemplate(replays[r]));
     replays[r].processed = false;
     count += 1;
   }
