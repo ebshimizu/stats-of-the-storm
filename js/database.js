@@ -86,7 +86,7 @@ class Database {
   deleteCollection(collectionID, onComplete) {
     var self = this;
     this._db.settings.remove({ _id: collectionID }, {}, function(err, removed) {
-      self._db.matches.update({collection: collectionID}, { $pull: { collection: collectionID }}, function(err) {
+      self._db.matches.update({collection: collectionID}, { $pull: { collection: collectionID }}, {}, function(err) {
         self._db.heroData.update({collection: collectionID}, { $pull: { collection: collectionID }}, {multi: true}, onComplete);
       });
     });
@@ -95,17 +95,17 @@ class Database {
   // i don't think the next two need callbacks but if so i guess i'll have to add it
   addMatchToCollection(matchID, collectionID) {
     // this actually needs to modify two databases to ensure proper data aggregation
-    this._db.matches.update({ _id: matchID }, { $addToSet: { collection: collectionID }});
+    this._db.matches.update({ _id: matchID }, { $addToSet: { collection: collectionID }}, {});
     this._db.heroData.update({ matchID: matchID }, { $addToSet: { collection: collectionID }}, { multi: true });
   }
 
   removeMatchFromCollection(matchID, collectionID) {
-    this._db.matches.update({ _id: matchID }, { $pull: { collection: collectionID }});
+    this._db.matches.update({ _id: matchID }, { $pull: { collection: collectionID }}, {});
     this._db.heroData.update({ matchID: matchID }, { $pull: { collection: collectionID }}, { multi: true });
   }
 
   renameCollection(collectionID, name, onComplete) {
-    this._db.settings.update({_id: collectionID}, { $set: {name: name}}, onComplete);
+    this._db.settings.update({_id: collectionID}, { $set: {name: name}}, {}, onComplete);
   }
 
   setCollection(collectionID) {
@@ -156,10 +156,7 @@ class Database {
         // update and insert players
         for (var i in players) {
           players[i].matchID = newDoc._id;
-
-          if (collection) {
-            players[i].collection = [collection];
-          }
+          players[i].collection = newDoc.collection;
 
           self._db.heroData.insert(players[i]);
 

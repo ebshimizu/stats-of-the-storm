@@ -225,6 +225,12 @@ module.exports = function(DB, callback) {
       // dates lol
       heroData.rawDate = dateToWinTime(new Date(heroData.date));
 
+      // collections also got really screwed up somewhere, and somehow it still works
+      // in NeDB, but Linvo is much stricter about this
+      if (heroData.collection.length === 1 && heroData.collection[0].length) {
+        heroData.collection = heroData.collection[0];
+      }
+
       DB._db.heroData.update({_id: heroData._id}, heroData, {}, function() {
         if (remaining.length === 0) {
           continueVersion4ToVersion5();

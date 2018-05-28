@@ -16,65 +16,60 @@
     </div>
     <div class="ui grid" id="match-page-table">
       <div class="eleven wide column">
-        <div class="match-wrapper">
-          <table class="ui inverted selectable table" id="match-list">
-            <tbody>
-              <tr slot="0">
-
-              </tr>
-              <tr slot="1">
-
-              </tr>
-              <tr slot="2">
-
-              </tr>
-              <tr slot="3">
-
-              </tr>
-              <tr slot="4">
-
-              </tr>
-              <tr slot="5">
-
-              </tr>
-              <tr slot="6">
-
-              </tr>
-              <tr slot="7">
-
-              </tr>
-              <tr slot="8">
-
-              </tr>
-              <tr slot="9">
-
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="match-navigation">
-          <div class="ui inverted tiny statistics">
-            <div class="ui statistic">
-              <div class="value" id="matches-selected">800</div>
-              <div class="label">Selected</div>
+        <div class="match-table-wrapper">
+          <div class="match-wrapper">
+            <table class="ui inverted selectable table" id="match-list">
+              <tbody>
+                <tr slot="0"></tr>
+                <tr slot="1"></tr>
+                <tr slot="2"></tr>
+                <tr slot="3"></tr>
+                <tr slot="4"></tr>
+                <tr slot="5"></tr>
+                <tr slot="6"></tr>
+                <tr slot="7"></tr>
+                <tr slot="8"></tr>
+                <tr slot="9"></tr>
+                <tr slot="10"></tr>
+                <tr slot="11"></tr>
+                <tr slot="12"></tr>
+                <tr slot="13"></tr>
+                <tr slot="14"></tr>
+                <tr slot="15"></tr>
+                <tr slot="16"></tr>
+                <tr slot="17"></tr>
+                <tr slot="18"></tr>
+                <tr slot="19"></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="match-navigation">
+            <div class="ui inverted tiny statistics">
+              <div class="ui statistic">
+                <div class="value" id="matches-selected">800</div>
+                <div class="label">Selected</div>
+              </div>
+              <div class="ui statistic">
+                <div class="value" id="matches-in-database-stat">0</div>
+                <div class="label">Total</div>
+              </div>
             </div>
-            <div class="ui statistic">
-              <div class="value" id="matches-in-database-stat">0</div>
-              <div class="label">Total</div>
+            <div class="ui right floated pagination menu" id="match-list-page-menu">
+              <a class="icon item prev"><i class="left chevron icon"></i></a>
+              <a class="item page-num">1</a>
+              <a class="item page-num">...</a>
+              <a class="item page-num">2</a>
+              <a class="item page-num">3</a>
+              <a class="item page-num">4</a>
+              <a class="item page-num">5</a>
+              <a class="item page-num">6</a>
+              <a class="item page-num">...</a>
+              <a class="item page-num">7</a>
+              <a class="icon item next"><i class="right chevron icon"></i></a>
             </div>
           </div>
-          <div class="ui right floated pagination menu" id="match-list-page-menu">
-            <a class="icon item prev"><i class="left chevron icon"></i></a>
-            <a class="item page-num">1</a>
-            <a class="item page-num">...</a>
-            <a class="item page-num">2</a>
-            <a class="item page-num">3</a>
-            <a class="item page-num">4</a>
-            <a class="item page-num">5</a>
-            <a class="item page-num">6</a>
-            <a class="item page-num">...</a>
-            <a class="item page-num">7</a>
-            <a class="icon item next"><i class="right chevron icon"></i></a>
+          <div class="ui dimmer match-loader">
+            <div class="ui text loader">Loading</div>
           </div>
         </div>
       </div>

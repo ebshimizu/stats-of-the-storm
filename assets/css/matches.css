@@ -151,9 +151,13 @@
 }
 
 #matches-page-content .match-wrapper {
-  height: calc(100% - 90px);
+  height: calc(100% - 70px);
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+#matches-page-content .match-table-wrapper {
+  height: calc(100% - 20px);
 }
 
 #match-list .match-date {

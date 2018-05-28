@@ -83,6 +83,18 @@ function initPopup(elem) {
   elem.find('.filter-widget-reset').click(function() { resetFilterWidget(elem) });
 }
 
+function disableWidget(name) {
+  elem = $('div[widget-name="' + name + '"]');
+  elem.find('.filter-widget-search').addClass('disabled');
+  elem.find('.filter-widget-reset').addClass('disabled');
+}
+
+function enableWidget(name) {
+  elem = $('div[widget-name="' + name + '"]');
+  elem.find('.filter-widget-search').removeClass('disabled');
+  elem.find('.filter-widget-reset').removeClass('disabled');
+}
+
 // callback signature:
 // function(mapQuery, heroQuery) {} where mapQuery is a NeDB query for match objects,
 // and heroQuery is a NeDB query for heroData objects

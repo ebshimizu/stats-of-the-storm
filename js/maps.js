@@ -38,7 +38,7 @@ function initMapsPage() {
   bindFilterButton(filterWidget, updateMapsFilter);
   bindFilterResetButton(filterWidget, resetMapsFilter);
 
-  loadMapStats();
+  //loadMapStats();
 }
 
 function onShowMapsPage() {

@@ -430,6 +430,18 @@ function initPlayerStatGraphMenus() {
   $('#player-progression .player-axis-settings .green.button').click(renderProgression);
 }
 
+function showPlayerLoader() {
+  $('#player-detail-loader').dimmer('show');
+  $('#players-set-player').addClass('disabled');
+  disableWidget('player-filter');
+}
+
+function hidePlayerLoader() {
+  $('#player-detail-loader').dimmer('hide');
+  $('#players-set-player').removeClass('disabled');
+  enableWidget('player-filter');
+}
+
 function showPlayerPage() {
   $('#player-page-content table').floatThead('reflow');
   $('#player-export-menu').removeClass('is-hidden');
@@ -481,6 +493,7 @@ function updatePlayerDetailID(value, text, $item) {
 // step 1: get the basic info, update some headers
 function updatePlayerPage(err, doc) {
   if (doc.length === 1) {
+    showPlayerLoader();
     playerDetailInfo = doc[0];
 
     updatePlayerPageHeader();
@@ -554,10 +567,13 @@ function processPlayerData(err, docs) {
   let val = $('#player-compare-collection').dropdown('get value');
   updatePlayerCollectionCompare(val, null, $('#player-compare-collection .menu .item[data-value="' + val + '"]'));
   $('#player-detail-body th').removeClass('sorted ascending descending');
+
+  hidePlayerLoader();
 }
 
 // callback for hero select menu
 function showHeroDetails(value, text, $selectedItem) {
+  showPlayerLoader();
   playerHeroMatchThreshold = parseInt($('#player-hero-thresh input').val());
 
   if (value === 'all' || value === '') {
@@ -566,6 +582,7 @@ function showHeroDetails(value, text, $selectedItem) {
       renderAllHeroSummary();
       renderPlayerSummary();
       renderProgression();
+      hidePlayerLoader();
     });
   }
   else {
@@ -579,6 +596,7 @@ function showHeroDetails(value, text, $selectedItem) {
       renderHeroTalents(value, docs);
       renderPlayerSummary();
       renderProgression();
+      hidePlayerLoader();
     });
   }
 

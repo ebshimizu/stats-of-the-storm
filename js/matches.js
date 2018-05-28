@@ -13,7 +13,7 @@ const summaryProjection = {
   tags: 1
 };
 
-const matchesPerPage = 10;
+const matchesPerPage = 20;
 
 var currentPage;
 var matchRowTemplate;
@@ -145,6 +145,18 @@ function showMatchesPage() {
   $('#matches-collection').removeClass('is-hidden');
   $('#matches-file-menu').removeClass('is-hidden');
   $('#matches-tags').removeClass('is-hidden');
+}
+
+function showMatchLoader() {
+  $('#match-search-reset-button').addClass('disabled');
+  $('#match-search-button').addClass('disabled');
+  $('#match-page-table .match-loader').dimmer('show');
+}
+
+function hideMatchLoader() {
+  $('#match-page-table .match-loader').dimmer('hide');
+  $('#match-search-reset-button').removeClass('disabled');
+  $('#match-search-button').removeClass('disabled');
 }
 
 function getMatchCount() {
@@ -380,6 +392,7 @@ function selectMatches() {
 }
 
 function showPage(pageNum) {
+  showMatchLoader();
   DB.countMatches(matchSearchQuery, function(err, count) {
     $('#matches-selected').text(count);
 
@@ -447,8 +460,15 @@ function showPage(pageNum) {
 
         $('#match-page-table .match-summary').click(function() {
           let id = $(this).attr('match-id');
-          loadMatchData(id, function() { changeSection('match-detail'); });
+          // disable clicking on other matches
+          showMatchLoader();
+          loadMatchData(id, function() {
+            changeSection('match-detail');
+            hideMatchLoader();
+          });
         })
+
+        hideMatchLoader();
       });
     }
     else {
@@ -458,6 +478,8 @@ function showPage(pageNum) {
       if (count === 0) {
         $('#match-list-page-menu').html('');
       }
+
+      hideMatchLoader();
     }
   });
 }
