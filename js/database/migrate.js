@@ -227,8 +227,17 @@ module.exports = function(DB, callback) {
 
       // collections also got really screwed up somewhere, and somehow it still works
       // in NeDB, but Linvo is much stricter about this
-      if (heroData.collection.length === 1 && heroData.collection[0].length) {
+      if (heroData.collection.length === 1 && typeof heroData.collection[0] === 'object') {
         heroData.collection = heroData.collection[0];
+      }
+      else if (heroData.collection.length > 1 && typeof heroData.collection[0] === 'object') {
+        // flatten
+        // error field is always the first entry due to import set import error
+        let newArr = heroData.collection[0];
+        for (let i = 1; i < heroData.collection.length; i++) {
+          newArr.push(heroData.collection[i]);
+        }
+        heroData.collection = newArr;
       }
 
       DB._db.heroData.update({_id: heroData._id}, heroData, {}, function() {
@@ -297,7 +306,11 @@ module.exports = function(DB, callback) {
     setLoadMessage('Version 5 Upgrade Complete');
     showMessage(
       'Parser and Database Updated to Version 5',
-      'Date format updates, two additional match flags added.<br>A backup was created at ' + settings.get('dbPath') + '/db4-backup. If the database updated correctly, you can safely delete this folder',
+      `Date format updates, two additional match flags added.<br>
+      An error involving import sets and collections has been corrected. If you notice any problems,
+      you are encouraged to delete the matches and re-import them.<br>
+      A backup was created at ${settings.get('dbPath')}/db4-backup.
+      If the database updated correctly, you can safely delete this folder`,
       { sticky: true, class: 'positive' }
     );
     DB.setDBVersion(5, checkDBVersion(5));

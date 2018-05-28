@@ -11,7 +11,6 @@ module.exports = function(path, callback) {
     $('#main-app-loader').dimmer('hide');
 
     // bindings
-    $('#linvo-new').click(() => exitDBConversion(callback));
     $('#linvo-convert').click(() => startDBConversion(path));
 
     $('#linvo-db-migrate').modal({
@@ -21,12 +20,6 @@ module.exports = function(path, callback) {
   else {
     callback();
   }
-}
-
-function exitDBConversion(callback) {
-  $('#linvo-db-migrate').modal('hide');
-  $('#main-app-loader').dimmer('show');
-  callback();
 }
 
 function startDBConversion(path) {
