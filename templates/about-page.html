@@ -17,6 +17,24 @@
           gets talent info, hero info, and images from <a href="https://github.com/heroespatchnotes/heroes-talents">heroes-talents</a>.
         </p>
         <div class="ui inverted horizontal divider">Change Log</div>
+        <h3 class="ui inverted dividing header">Version 2.0.0</h3>
+        <p>
+          2.0 so soon? It's all due to a change to the database format that Stats of the Storm uses.
+        </p>
+        <p>
+          With this update, databases will no longer have a maximum size limit and the application
+          will use less memory for larger databases. This comes with a tradeoff of slower database queries,
+          however as databases can grow without bound, it seems like an ok one to make. As always, if you run into
+          bugs or problems, send in a bug report. The database conversion operation is non-destructive, so
+          don't panic if something goes wrong!
+        </p>
+        <p>
+          App: Parser update to version 5. This contains updates related to the new database format, and adds
+          two additional flags for future use.
+        </p>
+        <p>
+          Match Details: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/179">#179</a> XP soak graph adjusted, graph tick interval fixed to 1 minute.
+        </p>
         <h3 class="ui inverted dividing header">Version 1.1.1</h3>
         <p>
           heroes-talents: Talents updated for 2.33.0
