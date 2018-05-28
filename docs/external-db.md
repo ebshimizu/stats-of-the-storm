@@ -4,16 +4,16 @@ You can change the database location in the Settings panel.
 
 ![Database Loction]({{ "/images/external-db.png" | absolute_url }})
 
-Four database files are needed by Stats of the Storm. Each folder should have:
-* hero.db
-* matches.db
-* players.db
-* settings.db
+As of version 2.0, four database folders are needed by Stats of the Storm. Each folder should have:
+* hero.ldb
+* matches.ldb
+* players.ldb
+* settings.ldb
 
-If you're missing one of these files, you should create a new database and re-import the files,
+If you're missing one of these folders, you should create a new database and re-import the files,
 as Stats of the Storm is unable to recover missing data from a corrupted database.
 
-If you select a folder that already has these four existing database files, Stats of the Storm will load
+If you select a folder that already has these four existing database folders, Stats of the Storm will load
 the data from that database instead of creating a new one in that folder.
 
 Try it out! Below are some databases created for Stats of the Storm.
@@ -25,7 +25,7 @@ league. Find out more at their website: [Nexus Gaming Series](https://nexusgamin
 league. Find out more at their website: [Nexus Gaming Series](https://nexusgamingseries.com).
 
 Extract the directory and set your database path to the
-folder that has all of the `.db` files in it. Congrats! You're now a stats wizard.
+folder that has all of the `.ldb` folders in it. Congrats! You're now a stats wizard.
 
 ## Loading Comparison Databases
 Stats of the Storm 0.5.0+ allows you to load data from external databases to compare your stats against

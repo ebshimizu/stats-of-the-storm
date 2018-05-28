@@ -1,6 +1,6 @@
 /* jshint esversion: 6, maxerr: 1000, node: true */
 // this is the main database connector used by the app
-// storage model is a persistent NeDB
+// storage model is a persistent LinvoDB with medeadown as the store
 
 // libraries
 const Parser = require('../parser/parser.js');
@@ -9,7 +9,7 @@ const fs = require('fs');
 const summarizeHeroData = require('./database/summarize-hero-data');
 
 // databases are loaded from the specified folder when the database object is created
-var Datastore = require('nedb');
+//var Datastore = require('nedb');
 const LinvoDB = require('linvodb3');
 LinvoDB.defaults.store = { db: require('medeadown') };
 
