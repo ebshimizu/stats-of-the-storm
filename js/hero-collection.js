@@ -6,6 +6,7 @@ var heroCollectionHeroWinRowTemplate;
 var heroCollectionHeroDataFilter;
 var heroCollectionMapDataFilter;
 var heroCollectionHeroMatchThresh = 0;
+var currentHeroCollectionHero = '';
 var heroDataWinCache;
 
 function initHeroCollectionPage() {
@@ -317,10 +318,15 @@ function toggleHeroCollectionType(tableID, active, container) {
 
 // many of the functions here are borrowed from player.js
 function loadHeroCollectionData(value, text, $elem) {
+  if (value === currentHeroCollectionHero)
+    return;
+
   showHeroCollectionLoader();
   heroCollectionHeroMatchThresh = parseInt($('#hero-collection-hero-thresh input').val());
   let query = Object.assign({}, heroCollectionHeroDataFilter);
+
   query.hero = value;
+  currentHeroCollectionHero = value;
   DB.getHeroData(query, function(err, docs) {
     let stats = summarizeHeroData(docs);
     heroDataWinCache = { with: stats.withHero, against: stats.againstHero };
@@ -353,6 +359,7 @@ function loadHeroCollectionData(value, text, $elem) {
 
     $('#hero-collection-page-content table').floatThead('reflow');
     $('#hero-collection-page-content th').removeClass('sorted ascending descending');
+
     hideHeroCollectionLoader();
   });
 }

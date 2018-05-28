@@ -9,6 +9,7 @@ var allDetailStats;
 var playerAwardRowTemplate;
 var playerCompareRowTemplate;
 let playerHeroDetailRowTemplate;
+var currentPlayerHero = '';
 
 var playerWinRateRowTemplate;
 var heroWinRateRowTemplate;
@@ -573,10 +574,10 @@ function processPlayerData(err, docs) {
 
 // callback for hero select menu
 function showHeroDetails(value, text, $selectedItem) {
-  showPlayerLoader();
   playerHeroMatchThreshold = parseInt($('#player-hero-thresh input').val());
 
   if (value === 'all' || value === '') {
+    showPlayerLoader();
     DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, playerDetailFilter, function(err, docs) {
       playerDetailStats = summarizeHeroData(docs);
       renderAllHeroSummary();
@@ -590,7 +591,8 @@ function showHeroDetails(value, text, $selectedItem) {
       hidePlayerLoader();
     });
   }
-  else {
+  else if (currentPlayerHero !== value) {
+    showPlayerLoader();
     let query = Object.assign({}, playerDetailFilter);
     query.ToonHandle = playerDetailInfo._id;
     query.hero = value;
@@ -610,6 +612,7 @@ function showHeroDetails(value, text, $selectedItem) {
     });
   }
 
+  currentPlayerHero = value;
   $('#player-detail-body th').removeClass('sorted ascending descending');
 }
 
