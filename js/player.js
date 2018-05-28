@@ -582,6 +582,11 @@ function showHeroDetails(value, text, $selectedItem) {
       renderAllHeroSummary();
       renderPlayerSummary();
       renderProgression();
+      updateHeroTitle($('#player-detail-summary-header'), value);
+      
+      let val = $('#player-compare-collection').dropdown('get value');
+      updatePlayerCollectionCompare(val, null, $('#player-compare-collection .menu .item[data-value="' + val + '"]'));
+
       hidePlayerLoader();
     });
   }
@@ -596,13 +601,15 @@ function showHeroDetails(value, text, $selectedItem) {
       renderHeroTalents(value, docs);
       renderPlayerSummary();
       renderProgression();
+      updateHeroTitle($('#player-detail-summary-header'), value);
+
+      let val = $('#player-compare-collection').dropdown('get value');
+      updatePlayerCollectionCompare(val, null, $('#player-compare-collection .menu .item[data-value="' + val + '"]'));
+
       hidePlayerLoader();
     });
   }
 
-  updateHeroTitle($('#player-detail-summary-header'), value);
-  let val = $('#player-compare-collection').dropdown('get value');
-  updatePlayerCollectionCompare(val, null, $('#player-compare-collection .menu .item[data-value="' + val + '"]'));
   $('#player-detail-body th').removeClass('sorted ascending descending');
 }
 
