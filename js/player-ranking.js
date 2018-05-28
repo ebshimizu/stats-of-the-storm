@@ -47,24 +47,25 @@ function initPlayerRankingPage() {
   $('#player-ranking-hero-filter-menu').dropdown('refresh');
 
   $('#player-ranking-general-table').tablesort();
+  $('#player-ranking-teamfight-table').tablesort();
+  $('#player-ranking-misc-table').tablesort();
+  $('#player-ranking-additional-table').tablesort();
+
   $('#player-ranking-general-table').floatThead({
     scrollContainer: closestWrapper,
     autoReflow: true
   });
 
-  $('#player-ranking-teamfight-table').tablesort();
   $('#player-ranking-teamfight-table').floatThead({
     scrollContainer: closestWrapper,
     autoReflow: true
   });
 
-  $('#player-ranking-misc-table').tablesort();
   $('#player-ranking-misc-table').floatThead({
     scrollContainer: closestWrapper,
     autoReflow: true
   });
 
-  $('#player-ranking-additional-table').tablesort();
   $('#player-ranking-additional-table').floatThead({
     scrollContainer: closestWrapper,
     autoReflow: true
@@ -98,6 +99,16 @@ function resetPlayerRankingPage() {
 
 function playerRankingShowSection() {
   $('#players-file-menu').removeClass('is-hidden');
+}
+
+function showPlayerRankingLoader() {
+  $('#player-ranking-body .dimmer').dimmer('show');
+  disableWidget('player-ranking-filter');
+}
+
+function hidePlayerRankingLoader() {
+  $('#player-ranking-body .dimmer').dimmer('hide');
+  enableWidget('player-ranking-filter');
 }
 
 function updatePlayerRankingsFilter(map, hero) {
@@ -153,6 +164,7 @@ function togglePlayerRankingMode(elem) {
 }
 
 function loadPlayerRankings() {
+  showPlayerRankingLoader();
   // this can take a long time so we don't do this on load, the user must hit the search button
   DB.getHeroData(playerRankingsHeroFilter, function(err, docs) {
     let data = summarizePlayerData(docs);
@@ -207,10 +219,10 @@ function loadPlayerRankings() {
       context.MVPPct = formatStat('pct', context.value.MVPPct);
       context.taunts = player.taunts;
 
-      $('#player-ranking-general-table').append(playerRankingGeneralTemplate(context));
-      $('#player-ranking-teamfight-table').append(playerRankingTeamfightTemplate(context));
-      $('#player-ranking-misc-table').append(playerRankingMiscTemplate(context));
-      $('#player-ranking-additional-table').append(playerRankingAdditionalTemplate(context));
+      $('#player-ranking-general-table tbody').append(playerRankingGeneralTemplate(context));
+      $('#player-ranking-teamfight-table tbody').append(playerRankingTeamfightTemplate(context));
+      $('#player-ranking-misc-table tbody').append(playerRankingMiscTemplate(context));
+      $('#player-ranking-additional-table tbody').append(playerRankingAdditionalTemplate(context));
     }
 
     $('#player-ranking-body .player-name').click(function() {
@@ -218,6 +230,7 @@ function loadPlayerRankings() {
     });
 
     $('#player-ranking-body th').removeClass('sorted ascending descending');
+    hidePlayerRankingLoader();
   });
 }
 

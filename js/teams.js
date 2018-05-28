@@ -137,6 +137,18 @@ function teamShowSection() {
   $('#team-file-menu').removeClass('is-hidden');
 }
 
+function showTeamLoader() {
+  $('#team-detail-dimmer').dimmer('show');
+  $('#team-set-team').addClass('disabled');
+  disableWidget('teams-filter');
+}
+
+function hideTeamLoader() {
+  $('#team-detail-dimmer').dimmer('hide');
+  $('#team-set-team').removeClass('disabled');
+  enableWidget('teams-filter');
+}
+
 function updateTeamsFilter(hero, map) {
   teamsHeroDataFilter = hero;
   teamsMapDataFilter = map;
@@ -158,6 +170,7 @@ function updateTeamData(value, text, $elem) {
   if (value === '')
     return;
 
+  showTeamLoader();
   $('#teams-page-header .team-name').text(text);
 
   // ok so matches get a special version of where for ids and here's how it works:
@@ -390,6 +403,7 @@ function loadTeamData(team, matches, heroData) {
 
   $('#team-detail-body table').floatThead('reflow');
   $('#team-detail-body th').removeClass('sorted ascending descending');
+  hideTeamLoader();
 }
 
 function toggleTeamRosterMode(elem) {
