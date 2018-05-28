@@ -170,6 +170,9 @@ function updateTeamData(value, text, $elem) {
   if (value === '')
     return;
 
+  if (currentTeam && currentTeam._id === value)
+    return;
+
   showTeamLoader();
   $('#teams-page-header .team-name').text(text);
 
