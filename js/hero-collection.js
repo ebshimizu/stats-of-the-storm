@@ -126,6 +126,18 @@ function resetHeroCollection() {
   resetCollectionFilter();
 }
 
+function showHeroCollectionLoader() {
+  $('#hero-collection-body .dimmer').dimmer('show');
+  $('#hero-collection-hero-select-menu').addClass('disabled');
+  disableWidget('hero-collection-filter');
+}
+
+function hideHeroCollectionLoader() {
+  $('#hero-collection-body .dimmer').dimmer('hide');
+  $('#hero-collection-hero-select-menu').removeClass('disabled');
+  enableWidget('hero-collection-filter');
+}
+
 function updateCollectionFilter(map, hero) {
   heroCollectionHeroDataFilter = hero;
   heroCollectionMapDataFilter = map;
@@ -152,6 +164,7 @@ function resetCollectionFilter() {
 
 function loadOverallHeroCollectionData() {
   heroCollectionHeroMatchThresh = parseInt($('#hero-collection-hero-thresh input').val());
+  showHeroCollectionLoader();
 
   // the summary only loads the hero pick/win details which are easily extracted
   // from the match data
@@ -291,6 +304,7 @@ function loadOverallHeroCollectionData() {
     $('#hero-collection-pool table').floatThead('reflow');
     $('#hero-collection-comps table').floatThead('reflow');
     $('#hero-collection-page-content th').removeClass('sorted ascending descending');
+    hideHeroCollectionLoader();
   })
 }
 
@@ -303,6 +317,7 @@ function toggleHeroCollectionType(tableID, active, container) {
 
 // many of the functions here are borrowed from player.js
 function loadHeroCollectionData(value, text, $elem) {
+  showHeroCollectionLoader();
   heroCollectionHeroMatchThresh = parseInt($('#hero-collection-hero-thresh input').val());
   let query = Object.assign({}, heroCollectionHeroDataFilter);
   query.hero = value;
@@ -338,6 +353,7 @@ function loadHeroCollectionData(value, text, $elem) {
 
     $('#hero-collection-page-content table').floatThead('reflow');
     $('#hero-collection-page-content th').removeClass('sorted ascending descending');
+    hideHeroCollectionLoader();
   });
 }
 
