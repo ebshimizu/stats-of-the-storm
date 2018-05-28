@@ -51,7 +51,8 @@ const xpBreakdownOpts = {
         fontColor: '#FFFFFF',
         callback: function(value, index, values) {
           return formatSeconds(value);
-        }
+        },
+        stepSize: 60
       },
       type: 'linear',
       gridLines: {
@@ -93,7 +94,8 @@ const xpSoakOpts = {
         fontColor: '#FFFFFF',
         callback: function(value, index, values) {
           return formatSeconds(value);
-        }
+        },
+        stepSize: 60
       },
       type: 'linear',
       gridLines: {
@@ -156,7 +158,8 @@ overallLevelGraphData = {
           fontColor: '#FFFFFF',
           callback: function(value, index, values) {
             return formatSeconds(value);
-          }
+          },
+          stepSize: 60
         },
         type: 'linear',
         gridLines: {
@@ -218,7 +221,8 @@ overallXPGraphData = {
           fontColor: '#FFFFFF',
           callback: function(value, index, values) {
             return formatSeconds(value);
-          }
+          },
+          stepSize: 60
         },
         type: 'linear',
         gridLines: {
@@ -964,14 +968,14 @@ function getTeamXPSoakData() {
     fill: false,
     borderColor: '#2185d0',
     backgroundColor: '#2185d0',
-    cubicInterpolationMode: 'monotone',
+    lineTension: 0,
     data: [{x: 0, y: 0}]
   }, {
     label: 'Red Team',
     fill: false,
     borderColor: '#db2828',
     backgroundColor: '#db2828',
-    cubicInterpolationMode: 'monotone',
+    lineTension: 0,
     data: [{x: 0, y: 0}]
   }];
 
