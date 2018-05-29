@@ -227,10 +227,10 @@ module.exports = function(DB, callback) {
 
       // collections also got really screwed up somewhere, and somehow it still works
       // in NeDB, but Linvo is much stricter about this
-      if (heroData.collection.length === 1 && typeof heroData.collection[0] === 'object') {
+      if (heroData.collection && heroData.collection.length === 1 && typeof heroData.collection[0] === 'object') {
         heroData.collection = heroData.collection[0];
       }
-      else if (heroData.collection.length > 1 && typeof heroData.collection[0] === 'object') {
+      else if (heroData.collection && heroData.collection.length > 1 && typeof heroData.collection[0] === 'object') {
         // flatten
         // error field is always the first entry due to import set import error
         let newArr = heroData.collection[0];
