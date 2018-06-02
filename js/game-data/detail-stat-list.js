@@ -28,6 +28,7 @@ const DetailStatList = [
   'ProtectionGivenToAllies',
   'ClutchHealsPerformed',
   'DamageTaken',
+  'DamageSoaked',
   'damageTakenPerDeath',
   'TeamfightDamageTaken',
   'TimeCCdEnemyHeroes',

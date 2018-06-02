@@ -71,7 +71,8 @@ const DetailStatString = {
   'healingDonePerDeath' : 'Healing per Death',
   'DPM' : 'DPM',
   'HPM' : 'HPM',
-  'XPM' : 'XPM'
+  'XPM' : 'XPM',
+  'DamageSoaked' : 'Damage Soaked'
 };
 
 module.exports = DetailStatString;

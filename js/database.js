@@ -231,7 +231,7 @@ class Database {
     var self = this;
     let query = {};
     this.preprocessQuery(query);
-    this._db.matches.find(query, { tags: 1 }, function(err, docs) {
+    this._db.matches.find(query, function(err, docs) {
       // create set, then return
       let tags = [];
       for (let doc of docs) {
