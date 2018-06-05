@@ -549,6 +549,7 @@ function updatePlayerPageHeader() {
 // this is the initial call to creating the data
 function processPlayerData(err, docs) {
   playerDetailStats = summarizeHeroData(docs);
+  playerHeroMatchThreshold = parseInt($('#player-hero-thresh input').val());
 
   // dropdown initialization
   $('#player-hero-select-menu .menu').html('<div class="item" data-value="all">All Heroes</div>');
@@ -795,7 +796,7 @@ function renderPlayerSummary() {
       continue;
 
     // more than 1 game, filters out a lot of useless data
-    if (playerDetailStats.withPlayer[d].games < settings.get('playerThreshold'))
+    if (playerDetailStats.withPlayer[d].games < playerHeroMatchThreshold)
       continue;
 
     let context = playerDetailStats.withPlayer[d];
@@ -806,7 +807,7 @@ function renderPlayerSummary() {
   }
 
   for (let d in playerDetailStats.againstPlayer) {
-    if (playerDetailStats.againstPlayer[d].games < settings.get('playerThreshold'))
+    if (playerDetailStats.againstPlayer[d].games < playerHeroMatchThreshold)
       continue;
 
     // can't really be vs yourself huh
