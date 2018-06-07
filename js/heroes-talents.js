@@ -26,7 +26,7 @@ class HeroesTalents {
     // extra data
     // load this first in case it gets overwritten
     console.log('loading deleted talents from ' + this._missingPath);
-    let deleted = require(this._missingPath); // eslint-disable-line global-require
+    let deleted = JSON.parse(fs.readFileSync(this._missingPath)); // eslint-disable-line global-require
     for (let i in deleted) {
       deleted[i].removed = true;
       this._talents[deleted[i].talentTreeId] = deleted[i];
@@ -38,7 +38,7 @@ class HeroesTalents {
       let file = this._heroPath + '/' + files[i];
 
       console.log('loading ' + file + ' (' + (i + 1) + '/' + files.length + ')');
-      let data = require(file);  // eslint-disable-line global-require
+      let data = JSON.parse(fs.readFileSync(file));  // eslint-disable-line global-require
 
       // sort everything, some data is replicated but that's ok
       this._heroes[data.name] = data;
