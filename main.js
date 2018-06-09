@@ -2,6 +2,7 @@ const {app, BrowserWindow} = require('electron')
 const path = require('path')
 const url = require('url')
 const { autoUpdater } = require('electron-updater');
+const windowStateKeeper = require('electron-window-state');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -18,13 +19,25 @@ autoUpdater.on('update-downloaded', function(info) {
 });
 
 function createWindow () {
-  // Create the browser window.
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 1920,
+    defaultHeight: 1080
+  });
+
+  // Create the window using the state information
   win = new BrowserWindow({
-    width: 1920,
-    height: 1080,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
     frame: false,
     backgroundColor: '#1b1c1d'
   });
+
+  // Let us register listeners on the window, so we can update the state
+  // automatically (the listeners will be removed when the window is closed)
+  // and restore the maximized or full screen state
+  mainWindowState.manage(win);
 
   // and load the index.html of the app.
   win.loadURL(url.format({
