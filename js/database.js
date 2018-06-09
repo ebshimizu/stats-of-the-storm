@@ -11,6 +11,7 @@ const summarizeHeroData = require('./database/summarize-hero-data');
 // databases are loaded from the specified folder when the database object is created
 //var Datastore = require('nedb');
 const LinvoDB = require('linvodb3');
+const medea = require('medea');
 LinvoDB.defaults.store = { db: require('medeadown') };
 
 // ok so you should never call raw db ops on the _db object unless you are debugging.
@@ -23,6 +24,25 @@ class Database {
     LinvoDB.dbPath = this._path;
   }
 
+  compactDB(store, callback) {
+    let mdb = medea();
+    mdb.open(this._path + '/' + store + '.ldb', function(err) {
+      if (err) {
+        console.log(err);
+        callback();
+        return;
+      }
+      
+      mdb.compact(function(err) {
+        if (err) {
+          console.log(err);
+        }
+
+        mdb.close(callback);
+      });
+    });
+  }
+
   load(onComplete, progress) {
     // open the databases
     this._db = {};
@@ -31,45 +51,27 @@ class Database {
     //this._db.heroData = new Datastore({ filename: this._path + '/hero.db' });
     //this._db.players = new Datastore({ filename: this._path + '/players.db' });
     //this._db.settings = new Datastore({ filename: this._path + '/settings.db' });
+    progress('Compacting Database');
+    // gonna be pretty ugly, maybe can make a bit better
+    this.compactDB('matches', function() {
+      self.compactDB('hero', function() {
+        self.compactDB('players', function() {
+          self.compactDB('settings', function() {
+            progress('Loading Database');
+            self._db.matches = new LinvoDB('matches', {}, { filename: self._path + '/matches.ldb' });
+            self._db.heroData = new LinvoDB('heroData', {}, { filename: self._path + '/hero.ldb' });
+            self._db.players = new LinvoDB('players', {}, { filename: self._path + '/players.ldb' });
+            self._db.settings = new LinvoDB('settings', {}, { filename: self._path + '/settings.ldb' });
 
-    progress('Loading Database');
-    this._db.matches = new LinvoDB('matches', {}, { filename: this._path + '/matches.ldb' });
-    this._db.heroData = new LinvoDB('heroData', {}, { filename: this._path + '/hero.ldb' });
-    this._db.players = new LinvoDB('players', {}, { filename: this._path + '/players.ldb' });
-    this._db.settings = new LinvoDB('settings', {}, { filename: this._path + '/settings.ldb' });
+            self._db.matches.ensureIndex({ fieldName: 'map' });
+            self._db.players.ensureIndex({ fieldName: 'hero' });
 
-    this._db.matches.ensureIndex({ fieldName: 'map' });
-    this._db.players.ensureIndex({ fieldName: 'hero' });
-
-    this._collection = null;
-    onComplete(null);
-    // actual load, tracking errors
-    // apologies in advange for these next few lines
-    //progress('Loading Settings and Collections');
-    //this._db.settings.loadDatabase(function(err) {
-    //  if (err)
-    //    onComplete(err);
-    //  else {
-    //    progress('Loading Player Index');
-    //    self._db.players.loadDatabase(function (err) {
-    //      if (err)
-    //        onComplete(err);
-    //      else {
-    //        progress('Loading Match Data');
-    //        self._db.matches.loadDatabase(function(err) {
-    //          if (err)
-    //            onComplete(err);
-    //          else {
-    //            progress('Loading Player and Hero Data');
-    //            self._db.heroData.loadDatabase(function(err) {
-    //              onComplete(err);
-    //            });
-    //          }
-    //        });
-    //      }
-    //    });
-    //  }
-    //});
+            self._collection = null;
+            onComplete(null);
+          });
+        });
+      });
+    });
   }
 
   getCollections(callback) {

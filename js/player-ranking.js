@@ -218,6 +218,8 @@ function loadPlayerRankings() {
       context.value.MVPPct = player.totalMVP / player.games;
       context.MVPPct = formatStat('pct', context.value.MVPPct);
       context.taunts = player.taunts;
+      context.Pool = Object.keys(player.heroes).length;
+      context.value.Pool = context.Pool;
 
       $('#player-ranking-general-table tbody').append(playerRankingGeneralTemplate(context));
       $('#player-ranking-teamfight-table tbody').append(playerRankingTeamfightTemplate(context));
