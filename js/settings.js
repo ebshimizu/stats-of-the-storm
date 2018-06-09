@@ -37,6 +37,12 @@ function initSettingsPage() {
     settings.set('sendCopyToHotsLogs', sendCopyToHotsLogs);
   }
 
+  let uploadOnly = settings.get('uploadOnly');
+  if (!uploadOnly) {
+    uploadOnly = false;
+    settings.set('uploadOnly', uploadOnly);
+  } 
+
   $('#settings-hots-api-button').checkbox({
     onChecked: function() {
       settings.set('uploadToHotsAPI', true);
@@ -50,6 +56,10 @@ function initSettingsPage() {
 
   if (sendCopyToHotsLogs) {
     $('#settings-hots-logs-button').checkbox('set checked');
+  }
+
+  if (uploadOnly) {
+    $('#settings-upload-only').checkbox('set checked');
   }
 
   if (uploadToHotsAPI) {
@@ -77,6 +87,15 @@ function initSettingsPage() {
     },
     onUnchecked: function() {
       importDuplicates = false;
+    }
+  });
+
+  $('#settings-upload-only').checkbox({
+    onChecked: function() {
+      settings.set('uploadOnly', true);
+    },
+    onUnchecked: function() {
+      settings.set('uploadOnly', false);
     }
   });
 
@@ -471,7 +490,11 @@ function parseReplaysAsync(replay) {
   $('tr[replay-id="' + replay.id + '"] .replay-status').text('Processing...');
 
   DB.checkDuplicate(replay.path, function(result) {
-    if (importDuplicates === true || result === false) {
+    if (settings.get('uploadOnly') && settings.get('uploadToHotsAPI')) {
+      $('tr[replay-id="' + replay.id + '"] .replay-status').text('Upload Only');
+      uploadReplayToHotsAPI(replay.id, replay.path);
+    }
+    else if (importDuplicates === true || result === false) {
       // upload maybe
       if (settings.get('uploadToHotsAPI') === true) {
         uploadReplayToHotsAPI(replay.id, replay.path);
