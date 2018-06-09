@@ -23,11 +23,9 @@ var matchSearchQuery = {};
 
 function initMatchesPage() {
   // player menu init
-  let selectedPlayerID = settings.get('selectedPlayerID');
   $('#match-search-players').dropdown({
     action: 'activate',
     fullTextSearch: true
-    // on change isn't actually necessary here. the search button handles all options
   });
 
   // templates
@@ -68,7 +66,7 @@ function initMatchesPage() {
   })
 
   $('#match-search-start-date').datepicker();
-  $('#match-search-start-date').datepicker('setDate', new Date('1-1-2012'));
+  $('#match-search-start-date').datepicker('setDate', new Date('1-1-2016'));
 
   $('#match-search-end-date').datepicker();
   $('#match-search-end-date').datepicker('setDate', new Date());
