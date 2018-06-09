@@ -1247,6 +1247,9 @@ function loadTimeline() {
   else if (matchDetailMatch.map === ReplayTypes.MapType.BraxisHoldout) {
     getBraxisEvents(items);
   }
+  else if (matchDetailMatch.map === ReplayTypes.MapType.AlteracPass) {
+    getAlteracEvents(items);
+  }
 
   let opts = {};
   opts.min = 0;
@@ -1741,6 +1744,32 @@ function getWarheadEvents(items) {
       item.content += '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(hero) + '" class="ui circular avatar image">';
       item.content += 'Nuke' + (nuke.success ? '' : ' Attempt');
       item.content += '</div>';
+      items.push(item);
+    }
+  }
+}
+
+function getAlteracEvents(items) {
+  for (let t of [0, 1]) {
+    for (let cavalry of matchDetailMatch.objective[t].units) {
+      let pop = `
+        <h3 class='ui header'>
+          <div class='content'>Cavalry
+            <div class='sub header'>Spawn: ${formatSeconds(cavalry.born)}, Duration: ${formatSeconds(cavalry.died - cavalry.born)}</div>
+          </div>
+        </h3>
+      `;
+
+      let content = `<div class="timeline-popup" data-variation="wide" data-html="${pop}">Cavalry</div>`;
+    
+      let item = {
+        start: cavalry.born,
+        group: 5,
+        className: t === 0 ? 'blue' : 'red',
+        end: cavalry.died,
+        content
+      }
+
       items.push(item);
     }
   }
