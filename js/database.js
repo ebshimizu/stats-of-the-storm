@@ -51,13 +51,12 @@ class Database {
     //this._db.heroData = new Datastore({ filename: this._path + '/hero.db' });
     //this._db.players = new Datastore({ filename: this._path + '/players.db' });
     //this._db.settings = new Datastore({ filename: this._path + '/settings.db' });
-    progress('Compacting Database');
+    progress('Opening Database');
     // gonna be pretty ugly, maybe can make a bit better
     this.compactDB('matches', function() {
       self.compactDB('hero', function() {
         self.compactDB('players', function() {
           self.compactDB('settings', function() {
-            progress('Loading Database');
             self._db.matches = new LinvoDB('matches', {}, { filename: self._path + '/matches.ldb' });
             self._db.heroData = new LinvoDB('heroData', {}, { filename: self._path + '/hero.ldb' });
             self._db.players = new LinvoDB('players', {}, { filename: self._path + '/players.ldb' });
