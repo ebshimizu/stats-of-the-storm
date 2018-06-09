@@ -339,6 +339,8 @@ The following list is non-exhasutive, but it should contain most of the units of
 | Unit Type ID | Notes |
 | ------------ | ----- |
 | `KingsCore` | The Core |
+| `VanndarStormpike` | Blue Core on Alterac Pass |
+| `DrekThar` | Red Core on Alterac Pass |
 | `FootmanMinion` | Melee Minion |
 | `RangedMinion` | |
 | `WizardMinion` | The one that drops a regen globe |
@@ -370,11 +372,11 @@ death events to find out how long they were alive.
 
 | Unit Type ID | Notes |
 | ------------ | ----- |
-| `TerranHellbat` | Hellbat Merc Camp |
+| `TerranHellbat` | Hellbat Merc Camp (also the Alterac Pass Siege Camp) |
 | `TerranArchangelLaner` | Braxis boss |
 | `TerranGoliath` | Goliath Merc Camp
 | `SlimeBossLaner` | Warhead boss |
-| `JungleGraveGolemLaner` | Cursed/Sky/Tomb boss |
+| `JungleGraveGolemLaner` | Cursed/Sky/Tomb/Alterac boss |
 | `MercLanerSiegeGiant` | Siege Camp |
 | `MercGoblicSapperLaner` | Goblin Sapper |
 | `MercSiegeTrooperLaner` | Bruiser Camp, on some of the maps |
@@ -798,6 +800,7 @@ in this table.
 | `TimeOnPoint` | Time On Point | |
 | `TimeInTemple` | Time In Temple | |
 | `TimeOnPayload` | Time on Payload | |
+| `CageUnlocksInterrupted` | Cage Unlocks Interrupted | Alterac Pass |
 
 #### Awards
 The awards Booleans (the stats that end with `Boolean`) will be `true` if the player receieved the named
@@ -844,6 +847,7 @@ award. `false` otherwise. These are all false in Custom games.
 | `EndOfMatchAwardGivenToNonwinner` | End of Match Award Given to Non Winner, internal | |
 | `EndOfMatchAwardMostTimePushingBoolean` | Most Time Pushing Award | Pusher |
 | `EndOfMatchAwardMostTimeOnPointBoolean` | Most Time on Point Award | Point Guard |
+| `EndOfMatchAwardMostInterruptedCageUnlocksBoolean` | Most Interrupted Cage Unlocks |  | 
 
 ### <a name="tracker13"></a> Hero Banned (NNet.Replay.Tracker.SHeroBannedEvent), _eventID = 13
 I don't actually use this event because it's easier to just pull from the `attributeevents` data,

@@ -256,7 +256,14 @@ function processReplay(file, HeroesTalents, opts = {}) {
       match.region = pdata.m_toon.m_region;
       
       pdoc.team = pdata.m_teamId;  /// the team id doesn't neatly match up with the tracker events, may adjust later
+
       pdoc.ToonHandle = pdata.m_toon.m_region + '-' + pdata.m_toon.m_programId + '-' + pdata.m_toon.m_realm + '-' + pdata.m_toon.m_id;
+      
+      // DEBUG
+      //if (pdata.m_toon.m_realm === 0) {
+      //  pdoc.ToonHandle = pdata.m_name + ' [CPU]';
+      //}
+      
       pdoc.gameStats = {};
       pdoc.talents = {};
       pdoc.takedowns = [];
@@ -301,6 +308,8 @@ function processReplay(file, HeroesTalents, opts = {}) {
         if (event.m_eventName === ReplayTypes.StatEventType.PlayerInit) {
           if (event.m_stringData[0].m_value === "Computer") {
             console.log("Games with computer players are not supported");
+            // DEBUG
+            //event.m_stringData.push({ m_value: `Player ${event.m_intData[0].m_value} [CPU]`});
             return { status: ReplayStatus.ComputerPlayerFound };
           }
 
@@ -317,7 +326,10 @@ function processReplay(file, HeroesTalents, opts = {}) {
         }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {
-        if (event.m_unitTypeName === ReplayTypes.UnitType.KingsCore) {
+        if (event.m_unitTypeName === ReplayTypes.UnitType.KingsCore ||
+            event.m_unitTypeName === ReplayTypes.UnitType.VanndarStormpike ||
+            event.m_unitTypeName === ReplayTypes.UnitType.DrekThar)
+        {
           let tag = event.m_unitTagIndex + '-' + event.m_unitTagRecycle;
           cores[tag] = event;
 
@@ -507,6 +519,10 @@ function processReplay(file, HeroesTalents, opts = {}) {
       match.objective[1] = {count: 0, success: 0, events: []};
       match.objective.warheads = [];
     
+    }
+    else if (match.map === ReplayTypes.MapType.AlteracPass) {
+      match.objective[0] = { units: [] };
+      match.objective[1] = { units: [] };
     }
     else if (match.map === ReplayTypes.MapType.BraxisHoldout) {
       var waveUnits = {0: {}, 1: {}};
@@ -985,6 +1001,14 @@ function processReplay(file, HeroesTalents, opts = {}) {
           eventObj.time = loopsToSeconds(eventObj.loop - match.loopGameStart);
           match.objective.warheads.push(eventObj);
         }
+        else if (type === ReplayTypes.UnitType.AllianceCavalry || type === ReplayTypes.UnitType.HordeCavalry) {
+          const eventObj = {
+            loop: event._gameloop,
+            born: loopsToSeconds(event._gameloop - match.loopGameStart),
+            id: event.m_unitTagIndex + '-' + event.m_unitTagRecycle
+          }
+          match.objective[event.m_controlPlayerId - 11].units.push(eventObj);
+        }
         else if (type in ReplayTypes.MercUnitType) {
           // mercs~
           let id = event.m_unitTagIndex + '-' + event.m_unitTagRecycle;
@@ -1168,6 +1192,17 @@ function processReplay(file, HeroesTalents, opts = {}) {
             }
           }
         }
+        else if (match.map === ReplayTypes.MapType.AlteracPass) {
+          // search for unit to mark time of death
+          for (let i of [0, 1]) {
+            let units = match.objective[i].units;
+            for (let j in units) {
+              if (units[j].id === uid) {
+                units[j].died = loopsToSeconds(event._gameloop - match.loopGameStart);
+              }
+            }
+          }
+        }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitOwnerChange) {
         if (match.map === ReplayTypes.MapType.DragonShire) {
@@ -1286,14 +1321,14 @@ function processReplay(file, HeroesTalents, opts = {}) {
     else if (match.map === ReplayTypes.MapType.Crypts) {
       if (currentSpiders.active === true) {
         let spider = currentSpiders.units[Object.keys(currentSpiders.units)[0]];
-        match.objective[currentSpiders.team].events[currentSpiders.eventIdx].duration = loopsToSeconds(match.loopDuration - spider.loop);
-        match.objective[currentSpiders.team].events[currentSpiders.eventIdx].endLoop = match.loopDuration;
-        match.objective[currentSpiders.team].events[currentSpiders.eventIdx].end = loopsToSeconds(match.loopDuration - match.loopGameStart);
+        match.objective[currentSpiders.team].events[currentSpiders.eventIdx].duration = loopsToSeconds(match.loopLength - spider.loop);
+        match.objective[currentSpiders.team].events[currentSpiders.eventIdx].endLoop = match.loopLength;
+        match.objective[currentSpiders.team].events[currentSpiders.eventIdx].end = loopsToSeconds(match.loopLength - match.loopGameStart);
       }
     }
     else if (match.map === ReplayTypes.MapType.Volskaya) {
       if (currentProtector.active) {
-        let duration = loopsToSeconds(match.loopDuration - currentProtector.loop);
+        let duration = loopsToSeconds(match.loopLength - currentProtector.loop);
         match.objective[currentProtector.team].events[currentProtector.eventIdx].duration = duration;
       }
     }
@@ -1313,6 +1348,16 @@ function processReplay(file, HeroesTalents, opts = {}) {
       if ('tag' in immortal) {
         let res = match.objective.results.length - 1;
         match.objective.results[res].immortalDuration = loopsToSeconds(match.loopLength - immortal.start);
+      }
+    }
+    else if (match.map === ReplayTypes.MapType.AlteracPass) {
+      for (let i of [0, 1]) {
+        let units = match.objective[i].units;
+        for (let j in units) {
+          if (!('died' in units[j])) {
+            units[j].died = loopsToSeconds(match.loopLength - match.loopGameStart);
+          }
+        }
       }
     }
 

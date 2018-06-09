@@ -169,9 +169,10 @@ const MapType = {
   Shrines: 'Infernal Shrines',
   Crypts: 'Tomb of the Spider Queen',
   Volskaya: 'Volskaya Foundry',
-  'Warhead Junction': 'Warhead Junction',
+  'Warhead Junction': 'Warhead Junction',   // blizz why
   BraxisHoldout: 'Braxis Holdout',
-  Hanamura: 'Hanamura'
+  Hanamura: 'Hanamura',
+  AlteracPass: 'Alterac Pass'
 };
 
 const MessageType = {
@@ -232,7 +233,14 @@ const UnitType = {
   KeepWell: 'TownMoonwellL3',
   FortTower: 'TownCannonTowerL2',
   KeepTower: 'TownCannonTowerL3',
-  KingsCore: 'KingsCore'
+  KingsCore: 'KingsCore',
+  VanndarStormpike: 'VanndarStormpike',  // blue team core for Alterac Pass
+  DrekThar: 'DrekThar', // red team core for Alterac Pass
+  AbathurSymbiote: 'AbathurSymbiote',
+  AVCapturePointBeingCappedDummy: 'AVCapturePointBeingCappedDummy',
+  AVCapturePointDefender: 'AVCapturePointDefender',
+  AllianceCavalry: 'AllianceCavalry',
+  HordeCavalry: 'HordeCavalry'
 };
 
 const BraxisUnitType = {

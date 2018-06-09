@@ -12,7 +12,8 @@ const PerMapStatList = {
   "Volskaya Foundry" : [],
   "Sky Temple" : ["TimeInTemple"],
   "Braxis Holdout" : ["DamageDoneToZerg"],
-  "Hanamura" : []
+  "Hanamura" : [],
+  "Alterac Pass" : ['CageUnlocksInterrupted']
 };
 
 module.exports = PerMapStatList;
