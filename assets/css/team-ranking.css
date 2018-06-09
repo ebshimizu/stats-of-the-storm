@@ -32,3 +32,7 @@ my defense maybe this page will someday be completely different?
   margin-top: 0!important;
   height: 100%;
 }
+
+#team-progress-bar .progress.active .label {
+  color: #FFFFFF!important;
+}

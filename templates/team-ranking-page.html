@@ -1,15 +1,20 @@
 <script src="../js/team-ranking.js"></script>
-<link rel="stylesheet" type="text/css" href="../assets/css/team-ranking.css">
 
 <script id="team-ranking-page" type="text/x-handlebars-template">
   <div id="team-ranking-page-content" class="is-page transition hidden" section-name="team-ranking">
     <div id="team-ranking-page-header">
       <div class="ui grid">
-        <div class="fourteen wide column">
+        <div class="four wide column">
           <h1 class="ui inverted header">Team Statistics</h1>
         </div>
+        <div class="ten wide column">
+          <div class="ui inverted small indicating progress transition hidden" id="team-progress-bar">
+            <div class="bar"></div>
+            <div class="label">Loading Teams</div>
+          </div>
+        </div>
         <div class="two wide column">
-          <button class="ui labeled right floated icon button" id="team-ranking-filter-button" data-variation="very wide">
+          <button class="ui labeled right floated fluid icon button" id="team-ranking-filter-button" data-variation="very wide">
             <i class="filter icon"></i>
             Filter Matches
           </button>
@@ -173,7 +178,7 @@
 
 <script id="team-ranking-row-template" type="text/x-handlebars-template">
   <tr>
-    <td data-sort-value="{{name}}"><h3 class="ui inverted header">{{name}}</h3></td>
+    <td data-sort-value="{{name}}"><h3 class="ui inverted header player-name" team-id="{{id}}">{{name}}</h3></td>
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
     <td class="center aligned" data-sort-value="{{totalMatches}}">{{totalMatches}}</td>
     <td class="center aligned" data-sort-value="{{stats.total.totalKDA}}">{{totalKDA}}</td>
@@ -196,7 +201,7 @@
 
 <script id="team-ranking-match-row-template" type="text/x-handlebars-template">
   <tr>
-    <td data-sort-value="{{name}}"><h3 class="ui inverted header">{{name}}</h3></td>
+    <td data-sort-value="{{name}}"><h3 class="ui inverted header player-name" team-id="{{id}}">{{name}}</h3></td>
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
     <td class="center aligned" data-sort-value="{{totalMatches}}">{{totalMatches}}</td>
     <td class="center aligned" data-sort-value="{{matchLength.val}}">{{matchLength.format}}</td>
@@ -218,7 +223,7 @@
 
 <script id="team-ranking-cc-row-template" type="text/x-handlebars-template">
   <tr>
-    <td data-sort-value="{{name}}"><h3 class="ui inverted header">{{name}}</h3></td>
+    <td data-sort-value="{{name}}"><h3 class="ui inverted header player-name" team-id="{{id}}">{{name}}</h3></td>
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
     <td class="center aligned" data-sort-value="{{totalMatches}}">{{totalMatches}}</td>
     <td class="center aligned" data-sort-value="{{stats.average.TeamfightHeroDamage}}">{{TeamfightHeroDamage}}</td>
@@ -233,7 +238,7 @@
 
 <script id="team-ranking-structure-row-template" type="text/x-handlebars-template">
   <tr>
-    <td data-sort-value="{{name}}"><h3 class="ui inverted header">{{name}}</h3></td>
+    <td data-sort-value="{{name}}"><h3 class="ui inverted header player-name" team-id="{{id}}">{{name}}</h3></td>
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
     <td class="center aligned" data-sort-value="{{totalMatches}}">{{totalMatches}}</td>
     <td class="center aligned" data-sort-value="{{structures.Fort.destroyed}}">{{structures.Fort.destroyed}}</td>

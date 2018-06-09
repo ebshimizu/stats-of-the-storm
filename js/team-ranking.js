@@ -52,6 +52,13 @@ function initTeamRankingPage() {
     onChange: handleTeamRankingAction
   });
 
+  $('#team-progress-bar').progress({
+    text: {
+      active  : 'Loaded {value} of {total} teams',
+      success : 'All Teams Loaded'
+    }
+  });
+
   $('#team-ranking-print-sections .ui.dropdown').dropdown();
 }
 
@@ -101,6 +108,10 @@ function toggleTeamRankingMode(elem) {
 
 function getAllTeamData(filter, callback) {
   DB.getAllTeams(function(err, teams) {
+    disableWidget('team-ranking-filter');
+    $('#team-progress-bar').transition('scale');
+    $('#team-progress-bar').progress('reset');
+    $('#team-progress-bar').progress('set total', teams.length);
     for (let t in teams) {
       let team = teams[t];
       // ok for all the teams in order, we'll need to get a bunch of data
@@ -161,6 +172,12 @@ function updateTeamRanking() {
 }
 
 function updateTeamRankingData(err, matches, team) {
+  $('#team-progress-bar').progress('increment', 1);
+  if ($('#team-progress-bar').progress('is complete')) {
+    setTimeout(() => { $('#team-progress-bar').transition('scale'); }, 2000);
+    enableWidget('team-ranking-filter');
+  }
+
   // skip teams with no data
   if (matches.length === 0)
     return;
@@ -170,6 +187,7 @@ function updateTeamRankingData(err, matches, team) {
   // at this point we might have all the data we need?
   let teamStats = summarizeTeamData(team, matches, Heroes);
   teamStats.name = team.name;
+  teamStats.id = team._id;
   teamStats.winPercent = teamStats.wins / teamStats.totalMatches;
   teamStats.formatWinPercent = formatStat('pct', teamStats.winPercent);
 
@@ -209,6 +227,13 @@ function updateTeamRankingData(err, matches, team) {
   $('#team-ranking-cc-table tbody').append(teamRankingCCTemplate(teamStats));
   $('#team-ranking-structure-table tbody').append(teamRankingStructureTemplate(teamStats));
   $('#team-ranking-body th').removeClass('sorted ascending descending');
+
+  $('#team-ranking-body h3[team-id="' + team._id + '"]').click(function() {
+    $('#team-set-team').dropdown('set text', team.name);
+    $('#team-set-team').dropdown('set value', team._id);
+    $('#teams-page-header .team-name').text(team.name);
+    changeSection('teams', true);
+  })
 }
 
 function layoutTeamRankingPrint(sections) {
