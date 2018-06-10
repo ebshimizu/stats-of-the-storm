@@ -37,7 +37,7 @@ const Awards = {
   EndOfMatchAwardMostTeamfightHeroDamageDoneBoolean: {name: 'Scrapper', subtitle: 'Most Team Fight Damage Done', image: 'storm_ui_mvp_icons_rewards_scrapper.png'},
   EndOfMatchAwardMostTimePushingBoolean: {name: 'Pusher', subtitle: 'Most Time Pushing', image: 'storm_ui_mvp_icons_rewards_pusher.png'},
   EndOfMatchAwardMostTimeOnPointBoolean: {name: 'Point Guard', subtitle: 'Most Time on Point', image: 'storm_ui_mvp_icons_rewards_pointguard.png'},
-  EndOfMatchAwardMostInterruptedCageUnlocksBoolean: { name: '[EndOfMatchAwardMostInterruptedCageUnlocksBoolean]', subtitle: 'Most Interrupted Cage Unlocks', image: '' }
+  EndOfMatchAwardMostInterruptedCageUnlocksBoolean: { name: 'Loyal Defender', subtitle: 'Most Interrupted Cage Unlocks', image: 'storm_ui_mvp_icons_rewards_loyaldefender.png' }
 }
 
 module.exports = Awards;

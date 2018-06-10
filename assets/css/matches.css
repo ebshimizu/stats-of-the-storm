@@ -138,6 +138,10 @@
   background-image: url('../images/hanamura-banner.png');
 }
 
+#match-list td.Alterac-Pass {
+  background-image: url('../images/alterac-banner.png');
+}
+
 #match-list .match-map-name {
   margin-bottom: 0.1em;
 }
