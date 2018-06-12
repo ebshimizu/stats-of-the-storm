@@ -521,8 +521,8 @@ function processReplay(file, HeroesTalents, opts = {}) {
     
     }
     else if (match.map === ReplayTypes.MapType.AlteracPass) {
-      match.objective[0] = { units: [] };
-      match.objective[1] = { units: [] };
+      match.objective[0] = { events: [] };
+      match.objective[1] = { events: [] };
     }
     else if (match.map === ReplayTypes.MapType.BraxisHoldout) {
       var waveUnits = {0: {}, 1: {}};
@@ -1007,7 +1007,7 @@ function processReplay(file, HeroesTalents, opts = {}) {
             born: loopsToSeconds(event._gameloop - match.loopGameStart),
             id: event.m_unitTagIndex + '-' + event.m_unitTagRecycle
           }
-          match.objective[event.m_controlPlayerId - 11].units.push(eventObj);
+          match.objective[event.m_controlPlayerId - 11].events.push(eventObj);
         }
         else if (type in ReplayTypes.MercUnitType) {
           // mercs~
@@ -1195,7 +1195,7 @@ function processReplay(file, HeroesTalents, opts = {}) {
         else if (match.map === ReplayTypes.MapType.AlteracPass) {
           // search for unit to mark time of death
           for (let i of [0, 1]) {
-            let units = match.objective[i].units;
+            let units = match.objective[i].events;
             for (let j in units) {
               if (units[j].id === uid) {
                 units[j].died = loopsToSeconds(event._gameloop - match.loopGameStart);
@@ -1352,7 +1352,7 @@ function processReplay(file, HeroesTalents, opts = {}) {
     }
     else if (match.map === ReplayTypes.MapType.AlteracPass) {
       for (let i of [0, 1]) {
-        let units = match.objective[i].units;
+        let units = match.objective[i].events;
         for (let j in units) {
           if (!('died' in units[j])) {
             units[j].died = loopsToSeconds(match.loopLength - match.loopGameStart);
@@ -1911,14 +1911,11 @@ function combineIntervals(intervals) {
 
 function getFirstObjectiveTeam(match) {
   try {
-    if (match.map === ReplayTypes.MapType.ControlPoints ||
-        match.map === ReplayTypes.MapType.TowersOfDoom ||
-        match.map === ReplayTypes.MapType.CursedHollow ||
-        match.map === ReplayTypes.MapType.DragonShire ||
+    if (match.map === ReplayTypes.MapType.DragonShire ||
         match.map === ReplayTypes.MapType.HauntedWoods ||
         match.map === ReplayTypes.MapType.Crypts ||
         match.map === ReplayTypes.MapType.Volskaya ||
-        match.map === ReplayTypes.MapType['Warhead Junction']) {
+        match.map === ReplayTypes.MapType.AlteracPass) {
       // shutouts
       if (match.objective[0].events.length === 0 && match.objective[1].events.length > 0)
         return 1;
@@ -1928,6 +1925,112 @@ function getFirstObjectiveTeam(match) {
         return null;
 
       return match.objective[0].events[0].time < match.objective[1].events[0].time ? 0 : 1;
+    }
+    else if (match.map === ReplayTypes.MapType.ControlPoints) {
+      // add all shots to an array, sort by time, count
+      let shots = [].concat(match.objective[0].events, match.objective[1].events);
+      shots.sort(function(a, b) {
+        return a.loop - b.loop;
+      });
+
+      // count first 90
+      let blueCt = 0;
+      let redCt = 0;
+      for (let i = 0; i < 90; i++) {
+        // just in case
+        if (i >= shots.length)
+          break;
+
+        if (shots[i].team === ReplayTypes.TeamType.Blue)
+          blueCt += 1;
+        else if (shots[i].team === ReplayTypes.TeamType.Red)
+          redCt += 1;
+      }
+
+      if (blueCt === redCt)
+        return null;
+      
+      return blueCt > redCt ? ReplayTypes.TeamType.Blue : ReplayTypes.TeamType.Red;
+    }
+    else if (match.map === ReplayTypes.MapType.TowersOfDoom) {
+      // add everything to an array, check who wins first 2/3
+      let altars = [].concat(match.objective[0].events, match.objective[1].events);
+      altars.sort(function(a, b) {
+        return a.loop - b.loop;
+      });
+
+      let blueCt = 0;
+      let redCt = 0;
+
+      // it is technically possible (but highly unlikely) that no altars are captured
+      for (let i = 0; i < 3; i++) {
+        if (i >= altars.length)
+          break;
+        
+        if (altars[i].team === ReplayTypes.TeamType.Blue)
+          blueCt += 1;
+        else if (altars[i].team === ReplayTypes.TeamType.Red)
+          redCt += 1;
+      }
+
+      if (blueCt === redCt)
+        return null;
+    
+      return blueCt > redCt ? ReplayTypes.TeamType.Blue : ReplayTypes.TeamType.Red;
+    }
+    else if (match.map === ReplayTypes.MapType.CursedHollow) {
+      // first to 3
+      let tributes = [].concat(match.objective[0].events, match.objective[1].events);
+      tributes.sort(function(a, b) {
+        return a.loop - b.loop;
+      });
+
+      let blueCt = 0;
+      let redCt = 0;
+      for (let i = 0; i < tributes.length; i++) {
+        if (tributes[i].team === ReplayTypes.TeamType.Blue)
+          blueCt += 1;
+        else if (tributes[i].team === ReplayTypes.TeamType.Red)
+          redCt += 1;
+
+        if (blueCt >= 3)
+          return ReplayTypes.TeamType.Blue;
+        
+        if (redCt >= 3)
+          return ReplayTypes.TeamType.Red;
+      }
+      
+      // if no one got a curse, return null
+      return null;
+    }
+    else if (match.map === ReplayTypes.MapType['Warhead Junction']) {
+      let nukes = [].concat(match.objective[0].events, match.objective[1].events);
+      nukes.sort(function(a, b) {
+        return a.loop - b.loop;
+      });
+
+      // best out of 4 successful
+      let blueCt = 0;
+      let redCt = 0;
+      let total = 0;
+      for (let i = 0; i < nukes.length; i++) {
+        if (nukes[i].success) {
+          if (nukes[i].team === ReplayTypes.TeamType.Blue)
+            blueCt += 1;
+          else if (nukes[i].team === ReplayTypes.TeamType.Red)
+            redCt += 1;
+
+          total += 1;
+        }
+
+        if (total >= 4)
+          break;
+      }
+
+      if (blueCt === redCt)
+        return null;
+  
+      return blueCt > redCt ? ReplayTypes.TeamType.Blue : ReplayTypes.TeamType.Red;
     }
     else if (match.map === ReplayTypes.MapType.BattlefieldOfEternity) {
       if (match.objective.results.length > 0) {

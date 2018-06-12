@@ -1751,7 +1751,7 @@ function getWarheadEvents(items) {
 
 function getAlteracEvents(items) {
   for (let t of [0, 1]) {
-    for (let cavalry of matchDetailMatch.objective[t].units) {
+    for (let cavalry of matchDetailMatch.objective[t].events) {
       let pop = `
         <h3 class='ui header'>
           <div class='content'>Cavalry
