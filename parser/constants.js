@@ -171,8 +171,8 @@ const MapType = {
   Volskaya: 'Volskaya Foundry',
   'Warhead Junction': 'Warhead Junction',   // blizz why
   BraxisHoldout: 'Braxis Holdout',
-  Hanamura: 'Hanamura',
-  AlteracPass: 'Alterac Pass'
+  Hanamura: 'Hanamura'
+  //AlteracPass: 'Alterac Pass'
 };
 
 const MessageType = {
