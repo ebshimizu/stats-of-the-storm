@@ -43,34 +43,54 @@ class Database {
     });
   }
 
-  load(onComplete, progress) {
-    // open the databases
-    this._db = {};
+  compactAndReload(callback) {
     var self = this;
-    //this._db.matches = new Datastore({ filename: this._path + '/matches.db' });
-    //this._db.heroData = new Datastore({ filename: this._path + '/hero.db' });
-    //this._db.players = new Datastore({ filename: this._path + '/players.db' });
-    //this._db.settings = new Datastore({ filename: this._path + '/settings.db' });
-    progress('Opening Database');
-    // gonna be pretty ugly, maybe can make a bit better
-    this.compactDB('matches', function() {
-      self.compactDB('hero', function() {
-        self.compactDB('players', function() {
-          self.compactDB('settings', function() {
-            self._db.matches = new LinvoDB('matches', {}, { filename: self._path + '/matches.ldb' });
-            self._db.heroData = new LinvoDB('heroData', {}, { filename: self._path + '/hero.ldb' });
-            self._db.players = new LinvoDB('players', {}, { filename: self._path + '/players.ldb' });
-            self._db.settings = new LinvoDB('settings', {}, { filename: self._path + '/settings.ldb' });
-
-            self._db.matches.ensureIndex({ fieldName: 'map' });
-            self._db.players.ensureIndex({ fieldName: 'hero' });
-
-            self._collection = null;
-            onComplete(null);
+    this._db.heroData.store.close(function () {
+      self._db.matches.store.close(function () {
+        self._db.players.store.close(function () {
+          self._db.settings.store.close(function () {
+            delete self._db;
+            self.compactDB('matches', function() {
+              self.compactDB('hero', function() {
+                self.compactDB('players', function() {
+                  self.compactDB('settings', function() {
+                    self._db = {};
+                    self._db.matches = new LinvoDB('matches', {}, { filename: self._path + '/matches.ldb' });
+                    self._db.heroData = new LinvoDB('heroData', {}, { filename: self._path + '/hero.ldb' });
+                    self._db.players = new LinvoDB('players', {}, { filename: self._path + '/players.ldb' });
+                    self._db.settings = new LinvoDB('settings', {}, { filename: self._path + '/settings.ldb' });
+        
+                    self._db.matches.ensureIndex({ fieldName: 'map' });
+                    self._db.players.ensureIndex({ fieldName: 'hero' });
+        
+                    self._collection = null;
+                    callback();
+                  });
+                });
+              });
+            });
           });
         });
       });
     });
+  }
+
+  load(onComplete, progress) {
+    // open the databases
+    this._db = {};
+    var self = this;
+    progress('Opening Database');
+
+    self._db.matches = new LinvoDB('matches', {}, { filename: self._path + '/matches.ldb' });
+    self._db.heroData = new LinvoDB('heroData', {}, { filename: self._path + '/hero.ldb' });
+    self._db.players = new LinvoDB('players', {}, { filename: self._path + '/players.ldb' });
+    self._db.settings = new LinvoDB('settings', {}, { filename: self._path + '/settings.ldb' });
+
+    self._db.matches.ensureIndex({ fieldName: 'map' });
+    self._db.players.ensureIndex({ fieldName: 'hero' });
+
+    self._collection = null;
+    onComplete(null);
   }
 
   getCollections(callback) {

@@ -103,6 +103,42 @@ module.exports = function(DB, callback) {
     });
   }
 
+  function migrateVersion5ToVersion6() {
+    setLoadMessage('Updating DB to Version 6<br>Backing up existing database');
+
+    // copy the 4 files to a new directory (db3-backup)
+    let path = settings.get('dbPath');
+
+    fs.ensureDir(path + '/db-backup', function(err) {
+      if (err) {
+        console.log(err);
+        showMessage('Unable to Backup Version 5 Database. Aborting.', err, { sticky: true, class: 'negative' });
+        // ok so this needs to crash (it can't load, it can't do anything). throw an exception
+        throw new Exception('Database Upgrade Exception - Unable to Backup Files');
+      }
+      else {
+        try {
+          fs.copySync(path + '/matches.ldb', path + '/db-backup/matches.ldb');
+          fs.copySync(path + '/hero.ldb', path + '/db-backup/hero.ldb');
+          fs.copySync(path + '/players.ldb', path + '/db-backup/players.ldb');
+          fs.copySync(path + '/settings.ldb', path + '/db-backup/settings.ldb');
+        }
+        catch (e) {
+          console.log('Could not find LinvoDB3 files');
+        }
+
+        DB.getMatches({}, function(err, docs) {
+          if (docs.length > 0) {
+            updateMatchToVersion6(docs.pop(), docs);
+          }
+          else {
+            finishVersion5To6Migration();
+          }
+        });
+      }
+    });
+  }
+
   function updateMatchToVersion3(match, remaining) {
     try {
       console.log('updating match ' + match._id);
@@ -178,6 +214,38 @@ module.exports = function(DB, callback) {
       }
       else {
         updateMatchToVersion5(remaining.pop(), remaining);
+      }
+    }
+  }
+
+  function updateMatchToVersion6(match, remaining) {
+    try {
+      console.log('updating match ' + match._id);
+      setLoadMessage('Updating DB to Version 6<br>' + remaining.length + ' matches left<br>DO NOT CLOSE THE APP');
+
+      // why yes we are re-running version 2 -> 3
+      match.firstObjective = Parser.getFirstObjectiveTeam(match);
+      match.firstObjectiveWin = match.winner === match.firstObjective;
+
+      // update
+      DB.updateMatch(match, function() {
+        if (remaining.length === 0) {
+          finishVersion5To6Migration();
+        }
+        else {
+          updateMatchToVersion6(remaining.pop(), remaining);
+        }
+      });
+    }
+    catch (err) {
+      console.log(err);
+      console.log('Failed to update match ' + match._id + ' please file bug report');
+
+      if (remaining.length === 0) {
+        finishVersion5To6Migration();
+      }
+      else {
+        updateMatchToVersion6(remaining.pop(), remaining);
       }
     }
   }
@@ -316,6 +384,22 @@ module.exports = function(DB, callback) {
     DB.setDBVersion(5, checkDBVersion(5));
   }
 
+  function finishVersion5To6Migration() {
+    setLoadMessage('Compacting DB');
+    DB.setDBVersion(6, function() {
+      DB.compactAndReload(function() {
+        setLoadMessage('Version 6 Upgrade Complete');
+        showMessage(
+          'Parser and Database Updated to Version 6',
+          `First Objective Winner flags have been updated.<br>
+          A backup was created at ${settings.get('dbPath')}/db-backup.
+          If the database updated correctly, you can safely delete this folder`,
+          { sticky: true, class: 'positive' }
+        );
+        checkDBVersion(6)
+      });
+    });
+  }
 
   function checkDBVersion(dbVer) {
     console.log('Database and Parser version: ' + dbVer);
@@ -338,6 +422,10 @@ module.exports = function(DB, callback) {
       }
       else if (dbVer === 4) {
         migrateVersion4ToVersion5();
+        return;
+      }
+      else if (dbVer === 5) {
+        migrateVersion5ToVersion6();
         return;
       }
     }

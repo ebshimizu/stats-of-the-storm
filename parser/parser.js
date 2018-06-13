@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const ReplayTypes = require(path.join(__dirname, 'constants.js'));
 const heroprotocol = require('heroprotocol');
-const PARSER_VERSION = 5;
+const PARSER_VERSION = 6;
 const battletags = require('./battletags.js');
 
 const ReplayDataType = {
