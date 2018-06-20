@@ -106,12 +106,14 @@ function toggleTeamRankingMode(elem) {
   updateTeamRanking();
 }
 
-function getAllTeamData(filter, callback) {
+function getAllTeamData(filter, callback, usingTeamRanking = false) {
   DB.getAllTeams(function(err, teams) {
-    disableWidget('team-ranking-filter');
-    $('#team-progress-bar').transition('scale');
-    $('#team-progress-bar').progress('reset');
-    $('#team-progress-bar').progress('set total', teams.length);
+    if (usingTeamRanking) {
+      disableWidget('team-ranking-filter');
+      $('#team-progress-bar').transition('scale');
+      $('#team-progress-bar').progress('reset');
+      $('#team-progress-bar').progress('set total', teams.length);
+    }
     for (let t in teams) {
       let team = teams[t];
       // ok for all the teams in order, we'll need to get a bunch of data
@@ -168,7 +170,7 @@ function updateTeamRanking() {
 
   // this is going to be... some shenanigans
   // first get the list of all the teams in the database
-  getAllTeamData(teamRankingMatchFilter, updateTeamRankingData);
+  getAllTeamData(teamRankingMatchFilter, updateTeamRankingData, true);
 }
 
 function updateTeamRankingData(err, matches, team) {

@@ -72,7 +72,8 @@ const DetailStatString = {
   'DPM' : 'DPM',
   'HPM' : 'HPM',
   'XPM' : 'XPM',
-  'DamageSoaked' : 'Damage Soaked'
+  'DamageSoaked' : 'Damage Soaked',
+  'CageUnlocksInterrupted' : 'Cage Unlocks Interrupted'
 };
 
 module.exports = DetailStatString;
