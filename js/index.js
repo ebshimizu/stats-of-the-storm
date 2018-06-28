@@ -54,7 +54,8 @@ $.fn.datepicker.setDefaults({
 const RegionString = {
   1: 'NA',
   2: 'EU',
-  3: 'Asia',
+  3: 'KR',
+  5: 'CN',
   98: 'PTR/TR'
 }
 
