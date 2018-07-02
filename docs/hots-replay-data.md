@@ -225,6 +225,8 @@ Relevant data:
 * `attributeevents.scopes["16"]["4025"][0].value` - Blue Team Ban 2
 * `attributeevents.scopes["16"]["4028"][0].value` - Red Team Ban 1
 * `attributeevents.scopes["16"]["4030"][0].value` - Red Team Ban 2
+* `attributeevents.scopes["16"]["4043"][0].value` - Blue Team Ban 3
+* `attributeevents.scopes["16"]["4045"][0].value` - Red Team Ban 3
 
 Each of these objects returns a hero Attribute value (typically the first 4 letters of the hero's internal name, which doesn't
 usually match up with the display name). Recommended to use heroes-talents to resolve these names.
