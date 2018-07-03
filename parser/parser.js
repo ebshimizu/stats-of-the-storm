@@ -402,8 +402,18 @@ function processReplay(file, HeroesTalents, opts = {}) {
       for (let a in attr) {
         let obj = attr[a][0];
 
+        // first round bans
+        if (obj.attrid === 4023) {
+          // team 0 ban 1
+          match.bans[0].push({hero: obj.value, order: 1});
+        }
+        else if (obj.attrid === 4028) {
+          // team 1 ban 1
+          match.bans[1].push({hero: obj.value, order: 1});
+        }
+
         if (match.build < 66292) {
-          // prior to build 66292, there were only two bans. n this case, the second ban
+          // prior to build 66292, there were only two bans. isn this case, the second ban
           // came in the middle. After this patch, the second ban is actually a first round
           // ban (technically). It will be marked as such.
           if (obj.attrid === 4025) {
@@ -426,23 +436,13 @@ function processReplay(file, HeroesTalents, opts = {}) {
           }
         }
 
-        // first round bans are unaffected
-        if (obj.attrid === 4023) {
-          // team 0 ban 1
-          match.bans[0].push({hero: obj.value, order: 1});
-        }
-        else if (obj.attrid === 4028) {
-          // team 1 ban 1
-          match.bans[1].push({hero: obj.value, order: 1});
-        }
-
-        // third round bans are unaffected
+        // third round bans
         if (obj.attrid === 4043) {
-          // team 0 ban 2
+          // team 0 ban 3
           match.bans[0].push({hero: obj.value, order: 2});
         }
         else if (obj.attrid === 4045) {
-          // team 1 ban 2
+          // team 1 ban 3
           match.bans[1].push({hero: obj.value, order: 2});
         }
       }
