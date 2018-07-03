@@ -405,11 +405,11 @@ function processReplay(file, HeroesTalents, opts = {}) {
         // first round bans
         if (obj.attrid === 4023) {
           // team 0 ban 1
-          match.bans[0].push({hero: obj.value, order: 1});
+          match.bans[0].push({hero: obj.value, order: 1, absolute: 1});
         }
         else if (obj.attrid === 4028) {
           // team 1 ban 1
-          match.bans[1].push({hero: obj.value, order: 1});
+          match.bans[1].push({hero: obj.value, order: 1, absolute: 1});
         }
 
         if (match.build < 66292) {
@@ -418,32 +418,32 @@ function processReplay(file, HeroesTalents, opts = {}) {
           // ban (technically). It will be marked as such.
           if (obj.attrid === 4025) {
             // team 0 ban 2
-            match.bans[0].push({hero: obj.value, order: 2});
+            match.bans[0].push({hero: obj.value, order: 2, absolute: 2});
           }
           else if (obj.attrid === 4030) {
             // team 1 ban 2
-            match.bans[1].push({hero: obj.value, order: 2});
+            match.bans[1].push({hero: obj.value, order: 2, absolute: 2});
           }
         }
         else if (match.build >= 66292) {
           if (obj.attrid === 4025) {
             // team 0 ban 2
-            match.bans[0].push({hero: obj.value, order: 1});
+            match.bans[0].push({hero: obj.value, order: 1, absolute: 2});
           }
           else if (obj.attrid === 4030) {
             // team 1 ban 2
-            match.bans[1].push({hero: obj.value, order: 1});
+            match.bans[1].push({hero: obj.value, order: 1, absolute: 2});
           }
         }
 
         // third round bans
         if (obj.attrid === 4043) {
           // team 0 ban 3
-          match.bans[0].push({hero: obj.value, order: 2});
+          match.bans[0].push({hero: obj.value, order: 2, absolute: 3});
         }
         else if (obj.attrid === 4045) {
           // team 1 ban 3
-          match.bans[1].push({hero: obj.value, order: 2});
+          match.bans[1].push({hero: obj.value, order: 2, absolute: 3});
         }
       }
 
