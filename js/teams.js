@@ -154,7 +154,7 @@ function updateTeamsFilter(hero, map) {
   teamsMapDataFilter = map;
   $('#team-filter-button').addClass('green');
 
-  updateTeamData($('#team-set-team').dropdown('get value'), $('#team-set-team').dropdown('get text'));
+  updateTeamData($('#team-set-team').dropdown('get value'), $('#team-set-team').dropdown('get text'), null, true);
 }
 
 function resetTeamsFilter() {
@@ -162,15 +162,15 @@ function resetTeamsFilter() {
   teamsMapDataFilter = {};
   $('#team-filter-button').removeClass('green');
 
-  updateTeamData($('#team-set-team').dropdown('get value'), $('#team-set-team').dropdown('get text'));
+  updateTeamData($('#team-set-team').dropdown('get value'), $('#team-set-team').dropdown('get text'), null, true);
 }
 
-function updateTeamData(value, text, $elem) {
+function updateTeamData(value, text, $elem, force) {
   // lol that's the null team don't do this
   if (value === '')
     return;
 
-  if (currentTeam && currentTeam._id === value)
+  if (currentTeam && currentTeam._id === value && !force)
     return;
 
   showTeamLoader();
