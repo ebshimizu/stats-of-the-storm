@@ -523,6 +523,11 @@ function renderToSlot(gameData, slot) {
     context.bban2Hero = Heroes.heroNameFromAttr(gameData.bans[0][1].hero);
     context.rban1Hero = Heroes.heroNameFromAttr(gameData.bans[1][0].hero);
     context.rban2Hero = Heroes.heroNameFromAttr(gameData.bans[1][1].hero);
+
+    if (gameData.bans[0].length > 2 || gameData.bans[1].length > 2) {
+      context.bban3Hero = Heroes.heroNameFromAttr(gameData.bans[0][2].hero);
+      context.rban3Hero = Heroes.heroNameFromAttr(gameData.bans[1][2].hero);
+    }
   }
 
   context.date = new Date(gameData.date);

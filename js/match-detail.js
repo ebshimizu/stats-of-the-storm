@@ -564,6 +564,11 @@ function updateBasicInfo() {
       for (let b in bans) {
         let h = bans[b];
         let slot = (parseInt(t) === first ? 'first' : 'second') + '-' + h.order;
+
+        if (bans.length > 2 && b === "1") {
+          slot += 'a';
+        }
+
         let icon = Heroes.heroIcon(Heroes.heroNameFromAttr(h.hero));
         $('div[ban-slot="' + slot + '"] img').attr('src', 'assets/heroes-talents/images/heroes/' + icon);
       }
@@ -600,6 +605,15 @@ function updateBasicInfo() {
     $('div[ban-slot^="first"] .label').removeClass(secondClass).addClass(firstClass);
     $('div[ban-slot^="second"]').removeClass(firstClass).addClass(secondClass);
     $('div[ban-slot^="second"] .label').removeClass(firstClass).addClass(secondClass);
+
+    if (matchDetailMatch.bans[0].length <= 2 || matchDetailMatch.bans[1].length <= 2) {
+      $('div[ban-slot="first-1a"]').addClass('is-hidden');
+      $('div[ban-slot="second-1a"]').addClass('is-hidden');
+    }
+    else {
+      $('div[ban-slot="first-1a"]').removeClass('is-hidden');
+      $('div[ban-slot="second-1a"]').removeClass('is-hidden');
+    }
   }
   else {
     $('#match-detail-draft').addClass('hidden');

@@ -4,7 +4,7 @@
 
 // libraries
 const Parser = require('../parser/parser.js');
-const fs = require('fs');
+const fs = require('fs-extra');
 
 const summarizeHeroData = require('./database/summarize-hero-data');
 
@@ -138,13 +138,30 @@ class Database {
   }
 
   // this should have a GUI warning, this code sure won't stop you.
-  deleteDB() {
-    fs.unlinkSync(this._path + '/matches.db');
-    fs.unlinkSync(this._path + '/hero.db');
-    fs.unlinkSync(this._path + '/players.db');
-    fs.unlinkSync(this._path + '/settings.db');
+  deleteDB(callback) {
+    var self = this;
 
-    delete this._db;
+    this._db.heroData.store.close(function () {
+      self._db.matches.store.close(function () {
+        self._db.players.store.close(function () {
+          self._db.settings.store.close(function () {
+            delete self._db;
+
+            fs.emptyDirSync(self._path + '/matches.ldb');
+            fs.emptyDirSync(self._path + '/hero.ldb');
+            fs.emptyDirSync(self._path + '/players.ldb');
+            fs.emptyDirSync(self._path + '/settings.ldb');
+
+            fs.removeSync(self._path + '/matches.ldb');
+            fs.removeSync(self._path + '/hero.ldb');
+            fs.removeSync(self._path + '/players.ldb');
+            fs.removeSync(self._path + '/settings.ldb');
+
+            callback();
+          })
+        })
+      })
+    });
   }
 
   addReplayToDatabase(file, opts = {}) {

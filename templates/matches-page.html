@@ -289,13 +289,18 @@
       <div class="ui grid match-details">
         <div class="ui two wide column blue-bans">
           <div class="ui inverted blue horizontal divider {{hideBans}}">Blue Bans</div>
-          <div class="ui two column grid {{hideBans}}">
+          <div class="ui three column grid {{hideBans}}">
             <div class="column">
               <img class="ui circular blue-hero middle-align image" src="{{heroImage bban1Hero}}">
             </div>
             <div class="column">
               <img class="ui circular blue-hero middle-align image" src="{{heroImage bban2Hero}}">
             </div>
+            {{#if bban3Hero}}
+            <div class="column">
+              <img class="ui circular blue-hero middle-align image" src="{{heroImage bban3Hero}}">
+            </div>
+            {{/if}}
           </div>
           <div class="blue-team-nameplate"></div>
         </div>
@@ -330,13 +335,18 @@
         {{/each}}
         <div class="ui two wide column red-bans">
           <div class="ui inverted red horizontal divider {{hideBans}}">Red Bans</div>
-          <div class="ui two column grid {{hideBans}}">
+          <div class="ui three column grid {{hideBans}}">
             <div class="column">
               <img class="ui circular red-hero middle-align image" src="{{heroImage rban1Hero}}">
             </div>
             <div class="column">
               <img class="ui circular red-hero middle-align image" src="{{heroImage rban2Hero}}">
             </div>
+            {{#if rban3Hero}}
+            <div class="column">
+              <img class="ui circular red-hero middle-align image" src="{{heroImage rban3Hero}}">
+            </div>
+            {{/if}}
           </div>
           <div class="red-team-nameplate"></div>
         </div>

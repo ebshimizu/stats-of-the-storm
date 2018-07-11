@@ -120,9 +120,10 @@ function initSettingsPage() {
         return true;
       },
       onApprove: function() {
-        DB.deleteDB();
-        app.relaunch();
-        app.quit();
+        DB.deleteDB(function() {
+          app.relaunch();
+          app.quit();
+        });
         return true;
       }
     }).modal('show');

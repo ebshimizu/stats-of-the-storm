@@ -412,7 +412,7 @@ function processReplay(file, HeroesTalents, opts = {}) {
           match.bans[1].push({hero: obj.value, order: 1, absolute: 1});
         }
 
-        if (match.build < 66292) {
+        if (match.version.m_build < 66292) {
           // prior to build 66292, there were only two bans. isn this case, the second ban
           // came in the middle. After this patch, the second ban is actually a first round
           // ban (technically). It will be marked as such.
@@ -425,7 +425,7 @@ function processReplay(file, HeroesTalents, opts = {}) {
             match.bans[1].push({hero: obj.value, order: 2, absolute: 2});
           }
         }
-        else if (match.build >= 66292) {
+        else if (match.version.m_build >= 66292) {
           if (obj.attrid === 4025) {
             // team 0 ban 2
             match.bans[0].push({hero: obj.value, order: 1, absolute: 2});
