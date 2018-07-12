@@ -358,5 +358,408 @@
     "sort": 4,
     "abilityId": "Lunara|Active",
     "cooldown": 35
+  },
+  {
+    "tooltipId": "AzmodanGlobeOfAnnihilationTasteForBloodTalent",
+    "talentTreeId": "AzmodanMasteryTasteForBlood",
+    "name": "Taste for Blood",
+    "description": "Quest: Kill enemy Minions and Heroes within 1.5 seconds of being hit by Globe of Annihilation.  Reward: Enemy Minions that die increase its damage by 2.  Reward: Enemy Heroes that die increase its damage by 10.  Maximum bonus damage of 500.",
+    "icon": "storm_ui_icon_azmodan_globeofannihilation.png",
+    "sort": 1,
+    "abilityId": "Azmodan|Q1"
+  },
+  {
+    "tooltipId": "AzmodanGlobeOfAnnihilationSiegingWrathTalent",
+    "talentTreeId": "AzmodanMasterySiegingWrath",
+    "name": "Sieging Wrath",
+    "description": "Quest: Every time Globe of Annihilation hits a Hero, its damage is increased by 3, up to 90. Reward: After hitting 30 Heroes, the range of Globe of Annihilation is increased by 33% and its damage is increased by an additional 100.",
+    "icon": "storm_ui_icon_azmodan_globeofannihilation_a.png",
+    "sort": 2,
+    "abilityId": "Azmodan|Q1"
+  },
+  {
+    "tooltipId": "AzmodanAllShallBurnMasterOfDestructionTalent",
+    "talentTreeId": "AzmodanMasteryMasterOfDestruction",
+    "name": "Master of Destruction",
+    "description": "Reduces the Mana cost from 16 to 10 per second. Every 1.5 seconds spent channeling increases the range by 8.5%, to a maximum of 25%.",
+    "icon": "storm_ui_icon_azmodan_allshallburn.png",
+    "sort": 3,
+    "abilityId": "Azmodan|E1"
+  },
+  {
+    "tooltipId": "AzmodanAllShallBurnGluttonyTalent",
+    "talentTreeId": "AzmodanMasteryGluttony",
+    "name": "Gluttony",
+    "description": "All Shall Burn heals Azmodan for 25% of the damage dealt.",
+    "icon": "storm_ui_icon_azmodan_allshallburn.png",
+    "sort": 1,
+    "abilityId": "Azmodan|E1"
+  },
+  {
+    "tooltipId": "AzmodanSummonDemonWarriorArmyOfHellTalent",
+    "talentTreeId": "AzmodanMasteryArmyOfHell",
+    "name": "Army of Hell",
+    "description": "Increases Demon Warrior's damage by 20% and reduces their Mana cost by 20.",
+    "icon": "storm_ui_icon_azmodan_summondemonwarrior.png",
+    "sort": 2,
+    "abilityId": "Azmodan|W1"
+  },
+  {
+    "tooltipId": "AzmodanHellishHirelings",
+    "talentTreeId": "AzmodanHellishHirelings",
+    "name": "Hellish Hirelings",
+    "description": "The damage bonus from General of Hell is doubled on Mercenaries.",
+    "icon": "storm_ui_icon_azmodan_generalofhell.png",
+    "sort": 3,
+    "abilityId": "Azmodan|D1"
+  },
+  {
+    "tooltipId": "AzmodanSinsGraspHotbar",
+    "talentTreeId": "AzmodanSinsGrasp",
+    "name": "Sin's Grasp",
+    "description": "Activate to curse an enemy Hero, dealing 248 (+4% per level) damage over 8 seconds. Minion kills reduce this cooldown by 10 seconds. Can be cast while channeling All Shall Burn.",
+    "icon": "storm_ui_icon_azmodan_sinsgrasp.png",
+    "sort": 4,
+    "abilityId": "Azmodan|Active",
+    "cooldown": 120
+  },
+  {
+    "tooltipId": "AzmodanGlobeOfAnnihilationInfernalGlobeTalent",
+    "talentTreeId": "AzmodanMasteryInfernalGlobe",
+    "name": "Infernal Globe",
+    "description": "Globe of Annihilation's cast time is decreased by 40% and its missile speed is increased by 40%.",
+    "icon": "storm_ui_icon_azmodan_globeofannihilation.png",
+    "sort": 1,
+    "abilityId": "Azmodan|Q1"
+  },
+  {
+    "tooltipId": "AzmodanGeneralOfHellBoundMinionTalent",
+    "talentTreeId": "AzmodanMasteryBoundMinion",
+    "name": "Bound Minion",
+    "description": "Using General of Hell on a Minion grants them 75 Armor from non-Heroic sources, decreasing the damage they take by 75%, while also  increasing the damage they deal to non-Heroic targets by 100%. Lasts 30 seconds.",
+    "icon": "storm_ui_icon_azmodan_generalofhell.png",
+    "sort": 2,
+    "abilityId": "Azmodan|D1"
+  },
+  {
+    "tooltipId": "AzmodanGluttonousWardHotbar",
+    "talentTreeId": "AzmodanGluttonousWard",
+    "name": "Gluttonous Ward",
+    "description": "Activate to place a ward on the ground that restores 3% of Azmodan's maximum Health and Mana every second for 10 seconds. Can be cast while channeling All Shall Burn.",
+    "icon": "storm_ui_icon_azmodan_gluttonousward.png",
+    "sort": 3,
+    "abilityId": "Azmodan|Active",
+    "cooldown": 45
+  },
+  {
+    "tooltipId": "AzmodanAllShallBurnMarchOfSinTalent",
+    "talentTreeId": "AzmodanMasteryMarchOfSin",
+    "name": "March of Sin",
+    "description": "Increases Azmodan's Movement Speed while channeling All Shall Burn to 80% of normal speed.",
+    "icon": "storm_ui_icon_azmodan_allshallburn.png",
+    "sort": 4,
+    "abilityId": "Azmodan|E1"
+  },
+  {
+    "tooltipId": "AzmodanBlackPool",
+    "talentTreeId": "AzmodanHeroicAbilityBlackPool",
+    "name": "Black Pool",
+    "description": "Create a pool that empowers Azmodan, his Demons, and allied Minions, increasing their Basic Attack and Ability damage by 75%. Pools last 5 seconds. Stores up to 2 charges.",
+    "icon": "storm_ui_icon_azmodan_blackpool.png",
+    "sort": 2,
+    "abilityId": "Azmodan|R1",
+    "cooldown": 20
+  },
+  {
+    "tooltipId": "AzmodanSummonDemonWarriorHellforgedArmorTalent",
+    "talentTreeId": "AzmodanMasteryHellforgedArmor",
+    "name": "Hellforged Armor",
+    "description": "Demon Warriors deal 10 (+4% per level) damage to nearby enemies every second and are granted 50 Armor against non-Heroic sources, decreasing the damage they take 50%.",
+    "icon": "storm_ui_icon_azmodan_summondemonwarrior.png",
+    "sort": 1,
+    "abilityId": "Azmodan|W1"
+  },
+  {
+    "tooltipId": "AzmodanGlobeOfAnnihilationHedonismTalent",
+    "talentTreeId": "AzmodanMasteryHedonism",
+    "name": "Hedonism",
+    "description": "Reduces Globe of Annihilation's Mana cost by 30.",
+    "icon": "storm_ui_icon_azmodan_globeofannihilation.png",
+    "sort": 2,
+    "abilityId": "Azmodan|Q1"
+  },
+  {
+    "tooltipId": "AzmodanInfusedPowerTalent",
+    "talentTreeId": "AzmodanMasteryInfusedPower",
+    "name": "Infused Power",
+    "description": "All Shall Burn's damage growth maximum is increased by 40%.",
+    "icon": "storm_ui_icon_azmodan_allshallburn.png",
+    "sort": 3,
+    "abilityId": "Azmodan|E1"
+  },
+  {
+    "tooltipId": "AzmodanGlobOfAnnihilationBattlebornTalent",
+    "talentTreeId": "AzmodanMasteryBattleborn",
+    "name": "Battleborn",
+    "description": "If Globe of Annihilation hits an enemy, a Demon Warrior is summoned at the impact point.",
+    "icon": "storm_ui_icon_azmodan_globeofannihilation.png",
+    "sort": 1,
+    "abilityId": "Azmodan|Q1"
+  },
+  {
+    "tooltipId": "AzmodanGeneralOfHellDemonicSmiteTalent",
+    "talentTreeId": "AzmodanMasteryDemonicSmite",
+    "name": "Demonic Smite",
+    "description": "Every 7.5 seconds, the Demon Lieutenant will blast a non-Heroic unit dealing 411 (+4% per level) damage.",
+    "icon": "storm_ui_icon_azmodan_generalofhell.png",
+    "sort": 2,
+    "abilityId": "Azmodan|D1"
+  },
+  {
+    "tooltipId": "AzmodanSinforSin",
+    "talentTreeId": "AzmodanSinforSin",
+    "name": "Sin for Sin",
+    "description": "Activate to deal 10% of target enemy Hero's Max Health and heal for twice that amount. Can be cast while channeling All Shall Burn.",
+    "icon": "storm_ui_icon_talent_bloodforblood.png",
+    "sort": 3,
+    "abilityId": "Azmodan|Active",
+    "cooldown": 45
+  },
+  {
+    "tooltipId": "AzmodanDemonicInvasionPerishingFlameTalent",
+    "talentTreeId": "AzmodanMasteryPerishingFlame",
+    "name": "Perishing Flame",
+    "description": "When the Grunts die they explode, dealing 68 (+4% per level) damage to nearby enemies. Deals 100% increased damage to Minions, Mercenaries, Monsters, and Structures.",
+    "icon": "storm_ui_icon_azmodan_demonicinvasion.png",
+    "sort": 1,
+    "abilityId": "Azmodan|R2"
+  },
+  {
+    "tooltipId": "AzmodanBlackPoolFifthCircleTalent",
+    "talentTreeId": "AzmodanMasteryBlackPoolFifthCircle",
+    "name": "Fifth Circle",
+    "description": "Black Pool makes Basic Attacks and Abilities slow enemies Attack and Movement Speeds by 40% for 3 seconds.",
+    "icon": "storm_ui_icon_azmodan_blackpool.png",
+    "sort": 2,
+    "abilityId": "Azmodan|R1"
+  },
+  {
+    "tooltipId": "GenericBoltoftheStormTalent",
+    "talentTreeId": "AzmodanBoltoftheStorms",
+    "name": "Bolt of the Storm",
+    "description": "Activate to teleport to a nearby location.",
+    "icon": "storm_ui_icon_talent_boltofthestorm.png",
+    "sort": 3,
+    "abilityId": "Azmodan|Active",
+    "cooldown": 70
+  },
+  {
+    "tooltipId": "AzmodanGeneralOfHellForcedRecruitmentTalent",
+    "talentTreeId": "AzmodanMasteryForcedRecruitment",
+    "name": "Forced Recruitment",
+    "description": "Reduces General of Hell's cooldown by 10 seconds and gains an additional charge.",
+    "icon": "storm_ui_icon_azmodan_generalofhell.png",
+    "sort": 4,
+    "abilityId": "Azmodan|D1"
+  },
+  {
+    "tooltipId": "RaynorAdrenalineRushGiveMeMoreTalent",
+    "talentTreeId": "RaynorMasteryGiveMeMoreAdrenalineRush",
+    "name": "Give Me More!",
+    "description": "Increases Adrenaline Rush healing by 50%.",
+    "icon": "storm_ui_icon_raynor_adrenalinrush.png",
+    "sort": 1,
+    "abilityId": "Raynor|E1"
+  },
+  {
+    "tooltipId": "GenericSeasonedMarksmanTalent",
+    "talentTreeId": "GenericTalentSeasonedMarksman",
+    "name": "Seasoned Marksman",
+    "description": "Quest: Every Minion killed near you grants 0.2 Attack Damage, and Takedowns grant 0.5 Attack Damage.  Reward: Upon gaining 40 bonus Attack Damage, you can also activate Seasoned Marksman to increase your Attack Speed by 40% for 3 seconds. 60 second cooldown.",
+    "icon": "storm_ui_icon_talent_seasonedmarksman.png",
+    "sort": 2,
+    "abilityId": "Raynor|Active"
+  },
+  {
+    "tooltipId": "GenericScoutingDrone",
+    "talentTreeId": "GenericTalentScoutingDrone",
+    "name": "Scouting Drone",
+    "description": "Places a Scouting Drone at target location, granting vision and revealing a large area around it for 45 seconds. This drone cannot be hidden and is killed by enemies with 2 Basic Attacks.  Stores up to 2 charges.",
+    "icon": "storm_ui_icon_talent_scoutingdrone.png",
+    "sort": 3,
+    "abilityId": "Raynor|Active",
+    "cooldown": 45
+  },
+  {
+    "tooltipId": "GenericFocusedAttackTalent",
+    "talentTreeId": "GenericTalentFocusedAttack",
+    "name": "Focused Attack",
+    "description": "Every 10 seconds, your next Basic Attack against a Hero deals 60% additional damage. Basic Attacks reduce this cooldown by 1 second.",
+    "icon": "storm_ui_icon_talent_autoattack_damage.png",
+    "sort": 1,
+    "abilityId": "Raynor|Passive"
+  },
+  {
+    "tooltipId": "GenericVigorousAssaultTalent",
+    "talentTreeId": "GenericTalentVigorousAssault",
+    "name": "Vigorous Assault",
+    "description": "Basic Attacks heal for 15% of the damage dealt.",
+    "icon": "storm_ui_icon_talent_autoattack_heal.png",
+    "sort": 2,
+    "abilityId": "Raynor|Passive"
+  },
+  {
+    "tooltipId": "RaynorPenetratingRoundConfidentAimTalent",
+    "talentTreeId": "RaynorInspireConfidentAim",
+    "name": "Confident Aim",
+    "description": "Lowers the cooldown of Penetrating Round by 4 seconds if it hits an enemy Hero.",
+    "icon": "storm_ui_icon_raynor_penetratinground.png",
+    "sort": 3,
+    "abilityId": "Raynor|Q1"
+  },
+  {
+    "tooltipId": "RaynorRelentlessLeaderTalent",
+    "talentTreeId": "RaynorRelentlessLeader",
+    "name": "Relentless Leader",
+    "description": "Being Stunned or Rooted knocks away nearby enemies. This effect has an 8 second cooldown. Passive: The cooldown of Adrenaline Rush is reduced by 10 seconds.",
+    "icon": "storm_ui_icon_raynor_relentlessleader.png",
+    "sort": 4,
+    "abilityId": "Raynor|E1"
+  },
+  {
+    "tooltipId": "RaynorPenetratingRoundHamstringShotTalent",
+    "talentTreeId": "RaynorPenetratingRoundHamstringShot",
+    "name": "Hamstring Shot",
+    "description": "Enemies hit by Penetrating Round have a 20% Movement Speed slow for 3 seconds.",
+    "icon": "storm_ui_icon_raynor_penetratinground.png",
+    "sort": 1,
+    "abilityId": "Raynor|Q1"
+  },
+  {
+    "tooltipId": "RaynorInspireRevolutionOverdriveTalent",
+    "talentTreeId": "RaynorMasteryInspireRevolutionOverdrive",
+    "name": "Revolution Overdrive",
+    "description": "Gain 10% Movement Speed while affected by Inspire.  Increase this bonus by 5% for each allied Hero nearby when Inspire is cast.",
+    "icon": "storm_ui_icon_raynor_inspire.png",
+    "sort": 2,
+    "abilityId": "Raynor|W1"
+  },
+  {
+    "tooltipId": "RaynorAdrenalineRushFightOrFlightTalent",
+    "talentTreeId": "RaynorMasteryFightorFlightAdrenalineRush",
+    "name": "Fight or Flight",
+    "description": "Whenever Adrenaline Rush activates, it gives 25 Armor, reducing damage taken by 25% for 4 seconds.  Adrenaline Rush can also be manually activated.",
+    "icon": "storm_ui_icon_raynor_adrenalinrush.png",
+    "sort": 3,
+    "abilityId": "Raynor|E1"
+  },
+  {
+    "tooltipId": "RaynorLeadFromTheFrontPuttinOnAClinicTalent",
+    "talentTreeId": "RaynorLeadFromTheFrontPuttinOnAClinic",
+    "name": "Puttin' On a Clinic",
+    "description": "Whenever an enemy Minion Raynor has recently damaged is destroyed, his Ability cooldowns are reduced by 1.5 seconds.",
+    "icon": "storm_ui_icon_raynor_puttinonaclinic.png",
+    "sort": 4,
+    "abilityId": "Raynor|Passive"
+  },
+  {
+    "tooltipId": "RaynorRaynorsRaiders",
+    "talentTreeId": "RaynorHeroicAbilityRaynorsRaiders",
+    "name": "Raynor's Raiders",
+    "description": "Summon two Stealthed Banshees that attack an enemy. Each Banshee deals 50 (+4% per level) damage a second and lasts 22 seconds. Can reactivate the Ability to retarget the Banshees.",
+    "icon": "storm_ui_icon_raynor_raynorsraiders.png",
+    "sort": 2,
+    "abilityId": "Raynor|R2",
+    "cooldown": 80
+  },
+  {
+    "tooltipId": "GenericGiantKiller",
+    "talentTreeId": "GenericTalentGiantKiller",
+    "name": "Giant Killer",
+    "description": "Basic Attacks against enemy Heroes deal bonus damage equal to 1.5% of the Hero's maximum Health.",
+    "icon": "storm_ui_icon_talent_autoattack_damage.png",
+    "sort": 1,
+    "abilityId": "Raynor|Passive"
+  },
+  {
+    "tooltipId": "RaynorPenetratingRoundDoubleBarreledTalent",
+    "talentTreeId": "RaynorPenetratingRoundDoubleBarreled",
+    "name": "Double-Barreled",
+    "description": "Penetrating Round gains a second charge.",
+    "icon": "storm_ui_icon_raynor_penetratinground.png",
+    "sort": 2,
+    "abilityId": "Raynor|Q1"
+  },
+  {
+    "tooltipId": "RaynorInspireSteelResolveTalent",
+    "talentTreeId": "RaynorInspireSteelResolve",
+    "name": "Steel Resolve",
+    "description": "Increases Inspire's duration by 50% and causes Adrenaline Rush to also apply Inspire.",
+    "icon": "storm_ui_icon_raynor_inspire.png",
+    "sort": 3,
+    "abilityId": "Raynor|W1"
+  },
+  {
+    "tooltipId": "GenericExecutionerTalent",
+    "talentTreeId": "HeroGenericExecutionerPassive",
+    "name": "Executioner",
+    "description": "Attacking a Hero that is slowed, rooted, or stunned increases your Basic Attack damage by 30% for 3 seconds.",
+    "icon": "storm_ui_icon_talent_autoattack_damage.png",
+    "sort": 1,
+    "abilityId": "Raynor|Passive"
+  },
+  {
+    "tooltipId": "RaynorPenetratingRoundClusterRoundTalent",
+    "talentTreeId": "RaynorMasteryClusterRoundPenetratingRound",
+    "name": "Cluster Round",
+    "description": "Penetrating Round damage is increased by 20% for each additional target hit up to 100%, and the width is increased by 50%.",
+    "icon": "storm_ui_icon_raynor_penetratinground.png",
+    "sort": 2,
+    "abilityId": "Raynor|Q1"
+  },
+  {
+    "tooltipId": "RaynorPenetratingRoundBullseyeTalent",
+    "talentTreeId": "RaynorMasteryBullseyePenetratingRound",
+    "name": "Bullseye",
+    "description": "The first enemy hit by Penetrating Round is stunned for 1 second.",
+    "icon": "storm_ui_icon_raynor_penetratinground_var1.png",
+    "sort": 3,
+    "abilityId": "Raynor|Q1"
+  },
+  {
+    "tooltipId": "RaynorHyperionGroundStrafeTalent",
+    "talentTreeId": "RaynorHyperionGroundStrafe",
+    "name": "Scorched Earth",
+    "description": "An additional set of lasers blast the ground 5 times per second, dealing 40 (+4% per level) damage in an area.",
+    "icon": "storm_ui_icon_raynor_hyperion.png",
+    "sort": 1,
+    "abilityId": "Raynor|R1"
+  },
+  {
+    "tooltipId": "RaynorRaynorsRaidersDuskWingsTalent",
+    "talentTreeId": "RaynorMasteryDuskWingsRaynorsBanshees",
+    "name": "Dusk Wings",
+    "description": "Banshees remain Stealthed while attacking and fire 50% more frequently.",
+    "icon": "storm_ui_icon_raynor_raynorsraiders.png",
+    "sort": 2,
+    "abilityId": "Raynor|R2"
+  },
+  {
+    "tooltipId": "RaynorACardToPlayTalent",
+    "talentTreeId": "RaynorACardToPlay",
+    "name": "A Card to Play",
+    "description": "Whenever an allied or enemy Hero dies, Raynor's Heroic Ability cooldown is reduced by 15 seconds.",
+    "icon": "storm_ui_icon_raynor_acardtoplay.png",
+    "sort": 3,
+    "abilityId": "Raynor|Passive"
+  },
+  {
+    "tooltipId": "NexusFrenzyTalent",
+    "talentTreeId": "GenericTalentNexusFrenzy",
+    "name": "Nexus Frenzy",
+    "description": "Increases Attack Speed by 20% and Attack Range by 1.1.",
+    "icon": "storm_ui_icon_talent_autoattack_range.png",
+    "sort": 4,
+    "abilityId": "Raynor|Passive"
   }
 ]

@@ -34,7 +34,9 @@ const TalentRenames = {
   JunkratHeroicAbilityRIPTire: 'JunkratRIPTire',
   JunkratHeroicRocketRide: 'JunkratRocketRide',
   JunkratSpreadVolley: 'JunkratFragLauncherSpreadVolley',
-  "Kael'thasLivingBombIgnite": 'KaelthasLivingBombIgnite'   // lol
+  "Kael'thasLivingBombIgnite": 'KaelthasLivingBombIgnite',   // lol
+  AnubarakHeroicAbilityCarrionSwarm: 'AnubarakLocustSwarm',
+  AnubarakMasteryHiveMasterCarrionSwarm: 'AnubarakLocustSwarmHiveMaster'
 };
 
 module.exports = TalentRenames;
