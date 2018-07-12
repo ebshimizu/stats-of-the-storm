@@ -731,6 +731,13 @@ Contents:
 * Team: `event.m_fixedData[0].m_value` - Team in **fixed integer** format. 1: blue, 2: red after resolving.
 * Score: `event.m_intData[1].m_value` - Number of gems required for the current spawn.
 
+#### Braxis Holdout: Wave Complete
+Event Name: `BraxisHoldoutMapEventComplete`
+
+Contents:
+* Blue Team Progress: `event.m_fixedData[0].m_value`
+* Red Team Progress: `event.m_fixedData[1].m_value`
+
 ### <a name="tracker11"></a>Score (NNet.Replay.Tracker.SScoreResultEvent), _eventid = 11
 This event contains the end of game stats (hero damage, xp contribution, etc.).
 

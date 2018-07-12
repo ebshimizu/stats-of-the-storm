@@ -50,7 +50,8 @@ const StatEventType = {
   SixTowersStart: 'Six Town Event Start',
   SixTowersEnd: 'Six Town Event End',
   TowersFortCaptured: 'Town Captured',
-  Upvote: 'EndOfGameUpVotesCollected'
+  Upvote: 'EndOfGameUpVotesCollected',
+  BraxisWaveStart: `BraxisHoldoutMapEventComplete`
 };
 
 const StructureStrings = {

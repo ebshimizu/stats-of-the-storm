@@ -886,6 +886,12 @@ function processReplay(file, HeroesTalents, opts = {}) {
           players[id].globes.count += 1;
           players[id].globes.events.push(globe);
         }
+        else if (event.m_eventName === ReplayTypes.StatEventType.BraxisWaveStart) {
+          match.objective.waves[waveID].startLoop = event._gameloop;
+          match.objective.waves[waveID].startTime = loopsToSeconds(event._gameloop - match.loopGameStart);
+
+          match.objective.waves[waveID].startScore = {0: event.m_fixedData[0].m_value / 4096, 1: event.m_fixedData[1].m_value / 4096};
+        }
       }
       else if (event._eventid === ReplayTypes.TrackerEvent.UnitBorn) {
         // there's going to be a special case for tomb once i figure out the map name for it
@@ -993,7 +999,7 @@ function processReplay(file, HeroesTalents, opts = {}) {
           }
           else {
             // TODO: wave strength score update
-            let score = {0: braxisWaveStrength(waveUnits[0]), 1: braxisWaveStrength(waveUnits[1])};
+            let score = {0: braxisWaveStrength(waveUnits[0], match.version.m_build), 1: braxisWaveStrength(waveUnits[1], match.version.m_build)};
             score.loop = event._gameloop;
             score.time = loopsToSeconds(score.loop - match.loopGameStart);
             match.objective.waves[waveID].scores.push(score);
@@ -1003,10 +1009,12 @@ function processReplay(file, HeroesTalents, opts = {}) {
         }
         else if (type === ReplayTypes.UnitType.BraxisZergPath) {
           // start the wave
-          match.objective.waves[waveID].startLoop = event._gameloop;
-          match.objective.waves[waveID].startTime = loopsToSeconds(event._gameloop - match.loopGameStart);
+          if (!match.objective.waves[waveID].startLoop) {
+            match.objective.waves[waveID].startLoop = event._gameloop;
+            match.objective.waves[waveID].startTime = loopsToSeconds(event._gameloop - match.loopGameStart);
 
-          match.objective.waves[waveID].startScore = {0: braxisWaveStrength(waveUnits[0]), 1: braxisWaveStrength(waveUnits[1])};
+            match.objective.waves[waveID].startScore = {0: braxisWaveStrength(waveUnits[0], match.version.m_build), 1: braxisWaveStrength(waveUnits[1], match.version.m_build)};
+          }
         }
         else if (type === ReplayTypes.UnitType.BraxisControlPoint) {
           let id = event.m_unitTagIndex + '-' + event.m_unitTagRecycle;
@@ -1176,12 +1184,13 @@ function processReplay(file, HeroesTalents, opts = {}) {
 
           if (id in waveUnits[0]) {
             if (waveUnits[0][id].type === ReplayTypes.BraxisUnitType.ZergUltralisk) {
+              // this i think isn't relevant since build 66488
               // ok so if an ultralisk died and the killer was null, then we have to update
               // the starting strength of the other team's wave to 1 because this unit got
               // dead instantly
               if (event.m_killerPlayerId === null) {
                 if (!('startScore' in match.objective.waves[waveID])) {
-                  match.objective.waves[waveID].startScore = {0: braxisWaveStrength(waveUnits[0]), 1: braxisWaveStrength(waveUnits[1]) };
+                  match.objective.waves[waveID].startScore = {0: braxisWaveStrength(waveUnits[0], match.version.m_build), 1: braxisWaveStrength(waveUnits[1], match.version.m_build) };
                 }
                 match.objective.waves[waveID].startScore[1] = 1;
               }
@@ -1198,7 +1207,7 @@ function processReplay(file, HeroesTalents, opts = {}) {
               // dead instantly
               if (event.m_killerPlayerId === null) {
                 if (!('startScore' in match.objective.waves[waveID])) {
-                  match.objective.waves[waveID].startScore = {0: braxisWaveStrength(waveUnits[0]), 1: braxisWaveStrength(waveUnits[1]) };
+                  match.objective.waves[waveID].startScore = {0: braxisWaveStrength(waveUnits[0], match.version.m_build), 1: braxisWaveStrength(waveUnits[1], match.version.m_build) };
                 }
 
                 match.objective.waves[waveID].startScore[0] = 1;
@@ -1750,7 +1759,7 @@ function processTauntData(players, takedowns, playerBSeq) {
   }
 }
 
-function braxisWaveStrength(units) {
+function braxisWaveStrength(units, build) {
   // determines the strength of the wave based on
   // this is basically just a max of all the possible percentages indicated by the units
   var types = {};
@@ -1764,9 +1773,17 @@ function braxisWaveStrength(units) {
   }
 
   // percentage counts
-  var score = 0.05 * (types[ReplayTypes.BraxisUnitType.ZergZergling] - 6) + types[ReplayTypes.BraxisUnitType.ZergBaneling] * 0.05;
-  score = Math.max(score, types[ReplayTypes.BraxisUnitType.ZergHydralisk] * 0.14);
-  score = Math.max(score, types[ReplayTypes.BraxisUnitType.ZergGuardian] * 0.3);
+  var score = 0;
+  if (build < 66488) {
+    score = 0.05 * (types[ReplayTypes.BraxisUnitType.ZergZergling] - 6) + types[ReplayTypes.BraxisUnitType.ZergBaneling] * 0.05;
+    score = Math.max(score, types[ReplayTypes.BraxisUnitType.ZergHydralisk] * 0.14);
+    score = Math.max(score, types[ReplayTypes.BraxisUnitType.ZergGuardian] * 0.3);
+  }
+  else {
+    score = 0.1 * types[ReplayTypes.BraxisUnitType.ZergBaneling];
+    score = Math.max(score, 0.25 * (types[ReplayTypes.BraxisUnitType.ZergHydralisk] - 2));
+    score = Math.max(score, 0.35 * (types[ReplayTypes.BraxisUnitType.ZergGuardian] - 1));
+  }
   // skip ultralisks they're unreliable
 
   return score;
