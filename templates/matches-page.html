@@ -8,13 +8,25 @@
         <div class="eight wide column">
           <h1 class="ui inverted header">Matches</h1>
         </div>
-        <div class="eight wide column">
+        <div class="four wide column">
 
+        </div>
+        <div class="four wide column">
+          <div class="ui right floated buttons">
+            <div class="ui button" id="match-filter-popup-button">
+              <i class="filter icon"></i>
+              Filter
+            </div>
+            <div class="ui right labeled green icon button" id="match-search-button">
+              Search
+              <i class="search icon"></i>
+            </div>
+          </div>
         </div>
       </div>
     </div>
     <div class="ui grid" id="match-page-table">
-      <div class="eleven wide column">
+      <div class="sixteen wide column">
         <div class="match-table-wrapper">
           <div class="match-wrapper">
             <table class="ui inverted selectable table" id="match-list">
@@ -72,164 +84,160 @@
           </div>
         </div>
       </div>
-      <div class="five wide column">
-        <div class="ui inverted segment" id="match-search-segment">
-          <div class="ui top attached label">Search Matches</div>
-          <div class="ui grid">
-            <div class="eight wide column"></div>
-            <div class="four wide column">
-              <div class="ui fluid button" id="match-search-reset-button">Reset</div>
-            </div>
-            <div class="four wide column">
-              <div class="ui fluid green button" id="match-search-button">Search</div>
-            </div>
-            <div class="three wide column">Mode</div>
-            <div class="thirteen wide column">
-              <div class="ui fluid multiple search selection dropdown" id="match-mode-select">
-                <i class="dropdown icon"></i>
-                <div class="default text">All</div>
-                <div class="menu">
-                  <div class="item" data-value="50001">Quick Match</div>
-                  <div class="item" data-value="50051">Unranked Draft</div>
-                  <div class="item" data-value="50061">Hero League</div>
-                  <div class="item" data-value="50071">Team League</div>
-                  <div class="item" data-value="-1">Custom</div>
-                </div>
-              </div>
-            </div>
-            <div class="three wide column">Map</div>
-            <div class="thirteen wide column">
-              <div class="ui fluid multiple search selection dropdown" id="match-map-select">
-                <i class="dropdown icon"></i>
-                <div class="default text">All</div>
-                <div class="menu">
-
-                </div>
-              </div>
-            </div>
-            <div class="three wide column">Patch</div>
-            <div class="thirteen wide column">
-              <div class="ui fluid multiple search selection dropdown" id="match-patch-select">
-                <i class="dropdown icon"></i>
-                <div class="default text">All</div>
-                <div class="menu">
-
-                </div>
-              </div>
-            </div>
-            <div class="three wide column">Season</div>
-            <div class="thirteen wide column">
-              <div class="ui fluid selection dropdown" id="match-search-seasons">
-                <i class="dropdown icon"></i>
-                <div class="default text">All Dates</div>
-                <div class="menu">
-                </div>
-              </div>
-            </div>
-            <div class="three wide column">Start Date</div>
-            <div class="five wide column">
-              <div class="ui inverted fluid input">
-                <input type="text" value="" id="match-search-start-date">
-              </div>
-            </div>
-            <div class="three wide column">End Date</div>
-            <div class="five wide column">
-              <div class="ui inverted fluid input">
-                <input type="text" value="" id="match-search-end-date">
-              </div>
-            </div>
-            <div class="three wide column">Hero</div>
-            <div class="ten wide column">
-              <div class="ui fluid multiple search selection dropdown" id="match-search-heroes">
-                <i class="dropdown icon"></i>
-                <span class="default text">All Heroes</span>
-                <div class="menu">
-
-                </div>
-              </div>
-            </div>
-            <div class="three wide column">
-              <div class="ui fluid selection dropdown" id="match-search-heroes-mode">
-                <i class="dropdown icon"></i>
-                <span class="default text">Any</span>
-                <div class="menu">
-                  <div class="item" data-value="or">Any</div>
-                  <div class="item" data-value="and">All</div>
-                </div>
-              </div>
-            </div>
-            <div class="sixteen wide column">
-              <div class="ui toggle inverted checkbox" id="search-hero-on-team">
-                  <input type="checkbox" name="search-hero-on-team">
-                  <label>Require Hero On Selected Team</label>
-              </div>
-            </div>
-            <div class="three wide column">Player</div>
-            <div class="seven wide column">
-              <div class="ui fluid multiple search selection dropdown player-menu" id="match-search-players">
-                <i class="dropdown icon"></i>
-                <span class="default text">All Players</span>
-                <div class="menu">
-
-                </div>
-              </div>
-            </div>
-            <div class="three wide column">
-              <div class="ui fluid selection dropdown" id="match-search-players-win">
-                <i class="dropdown icon"></i>
-                <span class="default text">W/L</span>
-                <div class="menu">
-                  <div class="item" data-value="both">W/L</div>
-                  <div class="item" data-value="win">Win</div>
-                  <div class="item" data-value="loss">Loss</div>
-                </div>
-              </div>
-            </div>
-            <div class="three wide column">
-              <div class="ui fluid selection dropdown" id="match-search-players-mode">
-                <i class="dropdown icon"></i>
-                <span class="default text">Any</span>
-                <div class="menu">
-                  <div class="item" data-value="or">Any</div>
-                  <div class="item" data-value="and">All</div>
-                </div>
-              </div>
-            </div>
-            <div class="three wide column">Team</div>
-            <div class="ten wide column">
-              <div class="ui fluid search selection dropdown team-menu" id="match-search-team">
-                <i class="dropdown icon"></i>
-                <span class="default text">Team</span>
-                <div class="menu">
-
-                </div>
-              </div>
-              <div class="ui right floated icon button" id="match-search-clear-team">
-                <i class="eraser icon"></i>
-              </div>
-            </div>
-            <div class="three wide column">
-              <div class="ui fluid selection dropdown" id="match-search-team-win">
-                <i class="dropdown icon"></i>
-                <span class="default text">W/L</span>
-                <div class="menu">
-                  <div class="item" data-value="both">W/L</div>
-                  <div class="item" data-value="win">Win</div>
-                  <div class="item" data-value="loss">Loss</div>
-                </div>
-              </div>
-            </div>
-            <div class="three wide column">Tags</div>
-            <div class="thirteen wide column">
-              <div class="ui fluid search multiple selection dropdown" id="match-search-tags">
-                <i class="dropdown icon"></i>
-                <span class="default text">All Tags</span>
-                <div class="menu">
-                </div>
-              </div>
-            </div>
+    </div>
+  </div>
+  <div class="ui popup" id="match-filter-popup" data-variation="very wide">
+    <div class="match-filter-popup-wrapper">
+      <div class="ui grid">
+      <div class="twelve wide column"></div>
+      <div class="four wide column">
+        <div class="ui fluid button" id="match-search-reset-button">Reset</div>
+      </div>
+      <div class="three wide column">Mode</div>
+      <div class="thirteen wide column">
+        <div class="ui fluid multiple search selection dropdown" id="match-mode-select">
+          <i class="dropdown icon"></i>
+          <div class="default text">All</div>
+          <div class="menu">
+            <div class="item" data-value="50001">Quick Match</div>
+            <div class="item" data-value="50051">Unranked Draft</div>
+            <div class="item" data-value="50061">Hero League</div>
+            <div class="item" data-value="50071">Team League</div>
+            <div class="item" data-value="-1">Custom</div>
           </div>
         </div>
+      </div>
+      <div class="three wide column">Map</div>
+      <div class="thirteen wide column">
+        <div class="ui fluid multiple search selection dropdown" id="match-map-select">
+          <i class="dropdown icon"></i>
+          <div class="default text">All</div>
+          <div class="menu">
+
+          </div>
+        </div>
+      </div>
+      <div class="three wide column">Patch</div>
+      <div class="thirteen wide column">
+        <div class="ui fluid multiple search selection dropdown" id="match-patch-select">
+          <i class="dropdown icon"></i>
+          <div class="default text">All</div>
+          <div class="menu">
+
+          </div>
+        </div>
+      </div>
+      <div class="three wide column">Season</div>
+      <div class="thirteen wide column">
+        <div class="ui fluid selection dropdown" id="match-search-seasons">
+          <i class="dropdown icon"></i>
+          <div class="default text">All Dates</div>
+          <div class="menu">
+          </div>
+        </div>
+      </div>
+      <div class="three wide column">Start Date</div>
+      <div class="five wide column">
+        <div class="ui fluid input">
+          <input type="text" value="" id="match-search-start-date">
+        </div>
+      </div>
+      <div class="three wide column">End Date</div>
+      <div class="five wide column">
+        <div class="ui fluid input">
+          <input type="text" value="" id="match-search-end-date">
+        </div>
+      </div>
+      <div class="three wide column">Hero</div>
+      <div class="ten wide column">
+        <div class="ui fluid multiple search selection dropdown" id="match-search-heroes">
+          <i class="dropdown icon"></i>
+          <span class="default text">All Heroes</span>
+          <div class="menu">
+
+          </div>
+        </div>
+      </div>
+      <div class="three wide column">
+        <div class="ui fluid selection dropdown" id="match-search-heroes-mode">
+          <i class="dropdown icon"></i>
+          <span class="default text">Any</span>
+          <div class="menu">
+            <div class="item" data-value="or">Any</div>
+            <div class="item" data-value="and">All</div>
+          </div>
+        </div>
+      </div>
+      <div class="sixteen wide column">
+        <div class="ui toggle checkbox" id="search-hero-on-team">
+            <input type="checkbox" name="search-hero-on-team">
+            <label>Require Hero On Selected Team</label>
+        </div>
+      </div>
+      <div class="three wide column">Player</div>
+      <div class="seven wide column">
+        <div class="ui fluid multiple search selection dropdown player-menu" id="match-search-players">
+          <i class="dropdown icon"></i>
+          <span class="default text">All Players</span>
+          <div class="menu">
+
+          </div>
+        </div>
+      </div>
+      <div class="three wide column">
+        <div class="ui fluid selection dropdown" id="match-search-players-win">
+          <i class="dropdown icon"></i>
+          <span class="default text">W/L</span>
+          <div class="menu">
+            <div class="item" data-value="both">W/L</div>
+            <div class="item" data-value="win">Win</div>
+            <div class="item" data-value="loss">Loss</div>
+          </div>
+        </div>
+      </div>
+      <div class="three wide column">
+        <div class="ui fluid selection dropdown" id="match-search-players-mode">
+          <i class="dropdown icon"></i>
+          <span class="default text">Any</span>
+          <div class="menu">
+            <div class="item" data-value="or">Any</div>
+            <div class="item" data-value="and">All</div>
+          </div>
+        </div>
+      </div>
+      <div class="three wide column">Team</div>
+      <div class="ten wide column">
+        <div class="ui fluid search selection dropdown team-menu" id="match-search-team">
+          <i class="dropdown icon"></i>
+          <span class="default text">Team</span>
+          <div class="menu">
+
+          </div>
+        </div>
+        <div class="ui right floated icon button" id="match-search-clear-team">
+          <i class="eraser icon"></i>
+        </div>
+      </div>
+      <div class="three wide column">
+        <div class="ui fluid selection dropdown" id="match-search-team-win">
+          <i class="dropdown icon"></i>
+          <span class="default text">W/L</span>
+          <div class="menu">
+            <div class="item" data-value="both">W/L</div>
+            <div class="item" data-value="win">Win</div>
+            <div class="item" data-value="loss">Loss</div>
+          </div>
+        </div>
+      </div>
+      <div class="three wide column">Tags</div>
+      <div class="thirteen wide column">
+        <div class="ui fluid search multiple selection dropdown" id="match-search-tags">
+          <i class="dropdown icon"></i>
+          <span class="default text">All Tags</span>
+          <div class="menu">
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   </div>

@@ -32,6 +32,10 @@ function initMatchesPage() {
   matchRowTemplate = getHandlebars('matches', '#match-summary-row');
 
   // bindings
+  $('#match-filter-popup-button').popup({
+    popup: '#match-filter-popup',
+    on: 'click'
+  });
   $('#match-player-search').dropdown();
   $('#match-mode-select').dropdown({
     action: 'activate',

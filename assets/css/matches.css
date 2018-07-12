@@ -283,3 +283,13 @@
 .ui.toggle.checkbox.inverted.checked label {
   color: #FFF!important;
 }
+
+.match-filter-popup-wrapper {
+  width: 35vw;
+  height: 50vh;
+  min-width: 500px;
+  overflow-y: auto;
+  padding: 5px;
+  overflow-x: hidden;
+  min-height: 300px;
+}
