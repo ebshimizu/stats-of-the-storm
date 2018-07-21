@@ -17,7 +17,7 @@ const cp = require('child_process');
 const HeroesDB = require('./js/database.js');
 const Parser = require('./hots-parser/parser.js');
 const HeroesTalents = require('./js/heroes-talents.js');
-const ReplayTypes = require('./parser/constants.js');
+const ReplayTypes = require('./hots-parser/constants.js');
 
 const summarizeHeroData = require('./js/database/summarize-hero-data');
 const summarizeMapData = require('./js/database/summarize-map-data');
