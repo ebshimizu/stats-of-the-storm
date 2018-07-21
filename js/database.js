@@ -152,10 +152,10 @@ class Database {
             fs.emptyDirSync(self._path + '/players.ldb');
             fs.emptyDirSync(self._path + '/settings.ldb');
 
-            fs.removeSync(self._path + '/matches.ldb');
-            fs.removeSync(self._path + '/hero.ldb');
-            fs.removeSync(self._path + '/players.ldb');
-            fs.removeSync(self._path + '/settings.ldb');
+            //fs.removeSync(self._path + '/matches.ldb');
+            //fs.removeSync(self._path + '/hero.ldb');
+            //fs.removeSync(self._path + '/players.ldb');
+            //fs.removeSync(self._path + '/settings.ldb');
 
             callback();
           })
