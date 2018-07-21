@@ -10,3 +10,6 @@
 [submodule "assets/heroes-talents"]
 	path = assets/heroes-talents
 	url = https://github.com/heroespatchnotes/heroes-talents.git
+[submodule "hots-parser"]
+	path = hots-parser
+	url = git@github.com:ebshimizu/hots-parser.git
