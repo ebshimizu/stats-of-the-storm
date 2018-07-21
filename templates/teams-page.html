@@ -5,7 +5,7 @@
   <div id="teams-page-content" class="is-page transition hidden" section-name="teams">
     <div id="teams-page-header">
       <div class="ui grid">
-        <div class="eight wide column">
+        <div class="seven wide column">
           <h1 class="ui inverted header team-name">[Team Name]</h1>
         </div>
         <div class="two wide column">
@@ -16,11 +16,17 @@
             <input type="text" data-content="A hero needs this many matches to show up in the hero summary and picks tables">
           </div>
         </div>
-        <div class="two wide column">
-          <button class="ui labeled fluid icon button" id="team-filter-button" data-variation="very wide">
-            <i class="filter icon"></i>
-            Filter Matches
-          </button>
+        <div class="three wide column">
+          <div class="ui fluid buttons">
+            <button class="ui labeled icon button" id="team-filter-button">
+              <i class="filter icon"></i>
+              Filter
+            </button>
+            <div class="ui right labeled green icon button" id="team-alt-search-button">
+              Search
+              <i class="search icon"></i>
+            </div>
+          </div>
         </div>
         <div class="four wide column">
           <div class="ui fluid search selection dropdown team-menu" id="team-set-team">

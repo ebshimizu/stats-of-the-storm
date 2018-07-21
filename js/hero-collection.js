@@ -73,6 +73,7 @@ function initHeroCollectionPage() {
   }
   bindFilterButton(filterWidget, updateCollectionFilter);
   bindFilterResetButton(filterWidget, resetCollectionFilter);
+  bindOtherSearchButton(filterWidget, $('#hero-collection-alt-search-button'), updateCollectionFilter);
 
   $('#hero-collection-hero-select-menu').dropdown({
     onChange: loadHeroCollectionData

@@ -93,13 +93,6 @@
   font-size: 14pt;
 }
 
-#player-page-header .button {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  float: right;
-}
-
 #player-hero-detail-stats {
   height: calc(100% - 90px);
 }

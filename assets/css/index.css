@@ -69,6 +69,7 @@ body {
 .filter-popup-widget .filter-area {
     height: calc(100% - 40px);
     overflow-y: auto;
+    width: 30vw!important;
 }
 
 .filter-popup-widget .action-buttons {

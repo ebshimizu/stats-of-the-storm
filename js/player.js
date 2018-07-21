@@ -314,6 +314,7 @@ function initPlayerPage() {
 
   bindFilterButton($('.filter-popup-widget[widget-name="player-filter"]'), updatePlayerFilter);
   bindFilterResetButton($('.filter-popup-widget[widget-name="player-filter"]'), resetPlayerFilter);
+  bindOtherSearchButton($('.filter-popup-widget[widget-name="player-filter"]'), $('#players-alt-search-button'), updatePlayerFilter);
 
   $('#player-hero-detail-stats .menu .item').click(function() {
     togglePlayerDetailMode(this);

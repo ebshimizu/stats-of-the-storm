@@ -24,6 +24,7 @@ function initTeamRankingPage() {
 
   bindFilterButton(filterWidget, updateTeamRankingFilter);
   bindFilterResetButton(filterWidget, resetTeamRankingsFilter);
+  bindOtherSearchButton(filterWidget, $('#team-ranking-alt-search-button'), updateTeamRankingFilter);
 
   $('#team-ranking-filter-button').popup({
     popup: '.filter-popup-widget[widget-name="team-ranking-filter"]',

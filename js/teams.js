@@ -44,6 +44,7 @@ function initTeamsPage() {
 
   bindFilterButton(filterWidget, updateTeamsFilter);
   bindFilterResetButton(filterWidget, resetTeamsFilter);
+  bindOtherSearchButton(filterWidget, $('#team-alt-search-button'), updateTeamsFilter);
 
   $('#team-detail-body table').tablesort();
   $('#team-detail-body table').floatThead({

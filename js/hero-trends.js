@@ -53,6 +53,7 @@ function initTrendsPage() {
   }
   bindFilterButton(filterWidget, updateTrendsFilter);
   bindFilterResetButton(filterWidget, resetTrendsFilter);
+  bindOtherSearchButton(filterWidget, $('#hero-trends-alt-search-button'), updateTrendsFilter);
 
   // hide the dates, we don't use them here
   filterWidget.find('.date-input').addClass('is-hidden');

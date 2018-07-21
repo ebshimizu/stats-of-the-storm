@@ -23,6 +23,7 @@ function initPlayerRankingPage() {
 
   bindFilterButton(filterWidget, updatePlayerRankingsFilter);
   bindFilterResetButton(filterWidget, resetPlayerRankingsFilter);
+  bindOtherSearchButton(filterWidget, $('#player-ranking-alt-search-button'), updatePlayerRankingsFilter);
 
   $('#player-ranking-filter-button').popup({
     popup: '.filter-popup-widget[widget-name="player-ranking-filter"]',

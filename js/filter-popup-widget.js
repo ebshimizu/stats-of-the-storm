@@ -102,10 +102,19 @@ function bindFilterButton(elem, callback) {
   elem.find('.filter-widget-search').off();
 
   elem.find('.filter-widget-search').click(function() {
-    let queries = getPopupQuery(elem, function(queries) {
+    getPopupQuery(elem, function(queries) {
       callback(queries.map, queries.hero);
     });
   });
+}
+
+// Executes the filter button callback for theis element on an arbitrary element
+function bindOtherSearchButton(popup, elem, callback) {
+  elem.click(function() {
+    getPopupQuery(popup, function(queries) {
+      callback(queries.map, queries.hero);
+    });
+  })
 }
 
 function bindFilterResetButton(elem, callback) {

@@ -37,6 +37,7 @@ function initMapsPage() {
 
   bindFilterButton(filterWidget, updateMapsFilter);
   bindFilterResetButton(filterWidget, resetMapsFilter);
+  bindOtherSearchButton(filterWidget, $('#maps-alt-search-button'), updateMapsFilter);
 
   //loadMapStats();
 }
