@@ -511,6 +511,53 @@ class Database {
     this._db.players.update({ _id: id }, { $set : { nickname: name } }, {}, callback);
   }
 
+  updatePlayerAliases(id, aliases, callback) {
+    var self = this;
+    // find the root player
+    this._db.players.find({_id: id}, function(err, docs) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+
+      if (docs.length === 0) {
+        console.log(`no player with id ${id}`);
+        callback();
+        return;
+      }
+
+      const player = docs[0];
+
+      // you can't alias a player that has anything in the aliases field (circular refs)
+      if (player.aliasedTo !== undefined && player.aliasedTo !== '') {
+        callback('Player is already aliased to another player');
+        return;
+      }
+
+      // un-alias current aliases
+      self._db.players.update({ _id: { $in: player.aliases } }, { $set: { 'aliasedTo' : '' } }, { multi: true }, function(err) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+
+        // update new aliases
+        player.aliases = aliases;
+        player.save(function(err) {
+          if (err) {
+            console.log(err);
+            return;
+          }
+
+          // update all of the aliased players
+          self._db.players.update({ _id: { $in: aliases } }, { $set: { 'aliasedTo' : id } }, { multi: true }, function(err) {
+            callback();
+          });
+        });
+      });
+    });
+  }
+
   // hero data is separated by hero, if you need the total stuff, use this function
   // returns: all stats in the 'average' fields
   allAverageHeroData(data) {
