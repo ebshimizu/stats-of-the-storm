@@ -109,8 +109,13 @@ function toggleTeamRankingMode(elem) {
 
 function getAllTeamData(filter, callback, usingTeamRanking = false) {
   DB.getAllTeams(function(err, teams) {
+    // do nothing, there are no teams
+    if (teams.length === 0)
+      return;
+
     if (usingTeamRanking) {
       disableWidget('team-ranking-filter');
+      $('#team-ranking-alt-search-button').addClass('disabled');
       $('#team-progress-bar').transition('scale');
       $('#team-progress-bar').progress('reset');
       $('#team-progress-bar').progress('set total', teams.length);
@@ -179,6 +184,7 @@ function updateTeamRankingData(err, matches, team) {
   if ($('#team-progress-bar').progress('is complete')) {
     setTimeout(() => { $('#team-progress-bar').transition('scale'); }, 2000);
     enableWidget('team-ranking-filter');
+    $('#team-ranking-alt-search-button').removeClass('disabled');
   }
 
   // skip teams with no data
