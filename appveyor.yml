@@ -1,0 +1,19 @@
+platform:
+  - x64
+
+environment:
+  nodejs_version: "10"
+
+# Install scripts. (runs after repo cloning)
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - yarn install
+
+cache:
+  - '%APPDATA%\npm-cache'
+  - '%USERPROFILE%\.electron'
+
+build_script:
+  - npm run publish
+
+test: off
