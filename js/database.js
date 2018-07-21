@@ -3,7 +3,7 @@
 // storage model is a persistent LinvoDB with medeadown as the store
 
 // libraries
-const Parser = require('../parser/parser.js');
+const Parser = require('../hots-parser/parser.js');
 const fs = require('fs-extra');
 
 const summarizeHeroData = require('./database/summarize-hero-data');

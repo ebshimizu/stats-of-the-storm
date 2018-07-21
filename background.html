@@ -2,7 +2,7 @@
   <script type="text/javascript">
     const path = require('path');
     const { is, fixPathForAsarUnpack } = require('electron-util');
-    const Parser = require(path.join(__dirname, 'parser/parser.js'));
+    const Parser = require(path.join(__dirname, 'hots-parser/parser.js'));
     const ipc = require('electron').ipcRenderer;
     const BrowserWindow = require('electron').remote.BrowserWindow;
     const app = require('electron').remote.app;

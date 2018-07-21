@@ -10,8 +10,9 @@
     "main.js",
     "index.html",
     "background.html",
-    "parser/parser.js",
-    "parser/constants.js",
+    "hots-parser/parser.js",
+    "hots-parser/constants.js",
+    "hots-parser/attrs.js",
     "templates",
     "js",
     "assets"

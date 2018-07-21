@@ -15,7 +15,7 @@ const fs = require('fs-extra');
 const cp = require('child_process');
 
 const HeroesDB = require('./js/database.js');
-const Parser = require('./parser/parser.js');
+const Parser = require('./hots-parser/parser.js');
 const HeroesTalents = require('./js/heroes-talents.js');
 const ReplayTypes = require('./parser/constants.js');
 
