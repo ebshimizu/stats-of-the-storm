@@ -613,6 +613,12 @@ class Database {
     });
   }
 
+  // returns a set of all players that are aliased to something else in the db
+  getAliasedPlayers(callback) {
+    const aliasFilter = { $and: [{aliasedTo: { $exists: true } }, { $not: { aliasedTo: '' } }] };
+    this.getPlayers(aliasFilter, callback);
+  }
+
   // hero data is separated by hero, if you need the total stuff, use this function
   // returns: all stats in the 'average' fields
   allAverageHeroData(data) {

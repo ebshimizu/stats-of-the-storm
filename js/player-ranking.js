@@ -167,73 +167,75 @@ function togglePlayerRankingMode(elem) {
 function loadPlayerRankings() {
   showPlayerRankingLoader();
   // this can take a long time so we don't do this on load, the user must hit the search button
-  DB.getHeroData(playerRankingsHeroFilter, function(err, docs) {
-    let data = summarizePlayerData(docs);
-    let threshold = parseInt($('#player-ranking-match-thresh input').val());
-    $('#player-ranking-body tbody').html('');
+  DB.getAliasedPlayers(function(err, players) {
+    DB.getHeroData(playerRankingsHeroFilter, function(err, docs) {
+      let data = summarizePlayerData(docs, createPlayerAliasMap(players));
+      let threshold = parseInt($('#player-ranking-match-thresh input').val());
+      $('#player-ranking-body tbody').html('');
 
-    let mode = $('#player-ranking-body .top.attached.menu .active.item').attr('data-mode');
+      let mode = $('#player-ranking-body .top.attached.menu .active.item').attr('data-mode');
 
-    for (let p in data) {
-      let player = data[p];
+      for (let p in data) {
+        let player = data[p];
 
-      if (player.games < threshold)
-        continue;
+        if (player.games < threshold)
+          continue;
 
-      let context = {value: player[mode]};
-      context.id = p;
-      context.name = player.name;
-      context.value.winPercent = player.wins / player.games;
-      context.formatWinPercent = formatStat('pct', context.value.winPercent);
+        let context = {value: player[mode]};
+        context.id = p;
+        context.name = player.name;
+        context.value.winPercent = player.wins / player.games;
+        context.formatWinPercent = formatStat('pct', context.value.winPercent);
 
-      if (mode === 'total' || mode === 'averages') {
-        context.value.totalKDA = player.totalKDA;
-        context.totalKDA = player.totalKDA;
+        if (mode === 'total' || mode === 'averages') {
+          context.value.totalKDA = player.totalKDA;
+          context.totalKDA = player.totalKDA;
 
-        if (mode === 'total') {
-          // context replacement for a few stats
-          context.value.damageDonePerDeath = context.value.HeroDamage / Math.max(1, context.value.Deaths);
-          context.value.damageTakenPerDeath = context.value.DamageTaken / Math.max(1, context.value.Deaths);
-          context.value.healingDonePerDeath = (context.value.Healing + context.value.SelfHealing + context.value.ProtectionGivenToAllies) / Math.max(1, context.value.Deaths);
-          context.value.DPM = context.value.HeroDamage / (player.totalTime / 60);
-          context.value.HPM = (context.value.Healing + context.value.SelfHealing + context.value.ProtectionGivenToAllies) / (player.totalTime / 60);
-          context.value.XPM = context.value.ExperienceContribution / (player.totalTime / 60);
+          if (mode === 'total') {
+            // context replacement for a few stats
+            context.value.damageDonePerDeath = context.value.HeroDamage / Math.max(1, context.value.Deaths);
+            context.value.damageTakenPerDeath = context.value.DamageTaken / Math.max(1, context.value.Deaths);
+            context.value.healingDonePerDeath = (context.value.Healing + context.value.SelfHealing + context.value.ProtectionGivenToAllies) / Math.max(1, context.value.Deaths);
+            context.value.DPM = context.value.HeroDamage / (player.totalTime / 60);
+            context.value.HPM = (context.value.Healing + context.value.SelfHealing + context.value.ProtectionGivenToAllies) / (player.totalTime / 60);
+            context.value.XPM = context.value.ExperienceContribution / (player.totalTime / 60);
+          }
         }
+        else {
+          context.value.totalKDA = player[mode].KDA;
+          context.totalKDA = formatStat('KDA', context.value.totalKDA);
+        }
+
+        context.value.games = player.games;
+        context.games = player.games
+        context.votes = player.votes;
+
+        for (let v in context.value) {
+          context[v] = formatStat(v, context.value[v], true);
+        }
+
+        context.totalAwards = player.totalAwards;
+        context.value.awardPct = context.totalAwards / player.games;
+        context.awardPct = formatStat('pct', context.value.awardPct);
+        context.value.MVPPct = player.totalMVP / player.games;
+        context.MVPPct = formatStat('pct', context.value.MVPPct);
+        context.taunts = player.taunts;
+        context.Pool = Object.keys(player.heroes).length;
+        context.value.Pool = context.Pool;
+
+        $('#player-ranking-general-table tbody').append(playerRankingGeneralTemplate(context));
+        $('#player-ranking-teamfight-table tbody').append(playerRankingTeamfightTemplate(context));
+        $('#player-ranking-misc-table tbody').append(playerRankingMiscTemplate(context));
+        $('#player-ranking-additional-table tbody').append(playerRankingAdditionalTemplate(context));
       }
-      else {
-        context.value.totalKDA = player[mode].KDA;
-        context.totalKDA = formatStat('KDA', context.value.totalKDA);
-      }
 
-      context.value.games = player.games;
-      context.games = player.games
-      context.votes = player.votes;
+      $('#player-ranking-body .player-name').click(function() {
+        showPlayerProfile($(this).attr('playerID'));
+      });
 
-      for (let v in context.value) {
-        context[v] = formatStat(v, context.value[v], true);
-      }
-
-      context.totalAwards = player.totalAwards;
-      context.value.awardPct = context.totalAwards / player.games;
-      context.awardPct = formatStat('pct', context.value.awardPct);
-      context.value.MVPPct = player.totalMVP / player.games;
-      context.MVPPct = formatStat('pct', context.value.MVPPct);
-      context.taunts = player.taunts;
-      context.Pool = Object.keys(player.heroes).length;
-      context.value.Pool = context.Pool;
-
-      $('#player-ranking-general-table tbody').append(playerRankingGeneralTemplate(context));
-      $('#player-ranking-teamfight-table tbody').append(playerRankingTeamfightTemplate(context));
-      $('#player-ranking-misc-table tbody').append(playerRankingMiscTemplate(context));
-      $('#player-ranking-additional-table tbody').append(playerRankingAdditionalTemplate(context));
-    }
-
-    $('#player-ranking-body .player-name').click(function() {
-      showPlayerProfile($(this).attr('playerID'));
+      $('#player-ranking-body th').removeClass('sorted ascending descending');
+      hidePlayerRankingLoader();
     });
-
-    $('#player-ranking-body th').removeClass('sorted ascending descending');
-    hidePlayerRankingLoader();
   });
 }
 
