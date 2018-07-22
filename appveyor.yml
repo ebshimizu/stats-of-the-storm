@@ -6,6 +6,7 @@ environment:
 
 # Install scripts. (runs after repo cloning)
 install:
+  - git submodule update --init --recursive
   - ps: Install-Product node $env:nodejs_version
   - yarn install
 
