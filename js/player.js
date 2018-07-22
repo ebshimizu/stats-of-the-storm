@@ -573,7 +573,7 @@ function updatePlayerPageHeader() {
     let popup = '<b>Active Aliases</b>';
     for (let p of playerDetailInfo.resolvedAliases) {
       let tag = p.tag ? `#${p.tag}` : ''
-      popup += `<br>${p.name}${p.tag} (${RegionString[p.region]})`;
+      popup += `<br>${p.name}${tag} (${RegionString[p.region]})`;
     }
 
     $('#player-alias-icon').attr('data-html', popup);

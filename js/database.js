@@ -322,23 +322,39 @@ class Database {
       // teams need to resolve aliases as well, so the playeres array will consist
       // of all actually assigned IDs and aliased IDs
       // resolve all aliases for each player
-      self.getPlayers({ _id: { $in: team.players }}, function(err, players) {
-        // combine player ids and aliases
-        team.resolvedPlayers = players;
-        let ids = [];
-        for (let p of players) {
-          ids.push(p._id);
-
-          if ('aliases' in p) {
-            for (var alias of p.aliases) {
-              ids.push(alias);
-            }
+      self.getPlayers({ _id: { $in: team.players }}, function(err, players1) {
+        // so at this point the team could consist of aliased players (as in an aliased ID was added
+        // to the team). We'll need to resolve this first, then run another get players query
+        let resolvedIDs = [];
+        for (let p of players1) {
+          if ('aliasedTo' in p && p.aliaedTo !== '') {
+            resolvedIDs.push(p.aliasedTo);
+          }
+          else {
+            resolvedIDs.push(p._id);
           }
         }
 
-        team.players = ids;
+        // run another query
+        self.getPlayers({ _id: { $in: resolvedIDs } }, function(err, players) {
+          // players now consists of all root players (no aliases)
+          // combine player ids and aliases
+          team.resolvedPlayers = players;
+          let ids = [];
+          for (let p of players) {
+            ids.push(p._id);
 
-        callback(err, team);
+            if ('aliases' in p) {
+              for (var alias of p.aliases) {
+                ids.push(alias);
+              }
+            }
+          }
+
+          team.players = ids;
+
+          callback(err, team);
+        })
       });
     });
   }
@@ -353,7 +369,8 @@ class Database {
 
       for (let p of docs) {
         if ('aliasedTo' in p && p.aliasedTo !== '') {
-          query.$and.push({ players: p.aliasedTo });
+          // aliasing ambiguity, allow either or to be on the team
+          query.$and.push({ $or: [{players: p.aliasedTo }, { players: p._id }] });
         }
         else {
           query.$and.push({ players: p._id });
@@ -568,6 +585,13 @@ class Database {
 
   updatePlayerAliases(id, aliases, callback) {
     var self = this;
+
+    // sanity check for self-aliases
+    // will remove self aliases but proceed
+    if (aliases.indexOf(id) >= 0) {
+      aliases.splice(aliases.indexOf(id), 1);
+    }
+
     // find the root player
     this._db.players.find({_id: id}, function(err, docs) {
       if (err) {

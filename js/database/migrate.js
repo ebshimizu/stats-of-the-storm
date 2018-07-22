@@ -37,10 +37,15 @@ module.exports = function(DB, callback) {
         throw new Exception('Database Upgrade Exception - Unable to Backup Files');
       }
       else {
-        fs.copySync(path + '/matches.db', path + '/db3-backup/matches.db');
-        fs.copySync(path + '/hero.db', path + '/db3-backup/hero.db');
-        fs.copySync(path + '/players.db', path + '/db3-backup/players.db');
-        fs.copySync(path + '/settings.db', path + '/db3-backup/settings.db');
+        try {
+          fs.copySync(path + '/matches.db', path + '/db3-backup/matches.db');
+          fs.copySync(path + '/hero.db', path + '/db3-backup/hero.db');
+          fs.copySync(path + '/players.db', path + '/db3-backup/players.db');
+          fs.copySync(path + '/settings.db', path + '/db3-backup/settings.db');
+        }
+        catch (exc) {
+          console.log('failed to copy, proceeding anyway since this is a very old format')
+        }
 
         DB._db.heroData.find({}, function(err, docs) {
           if (docs.length > 0) {
