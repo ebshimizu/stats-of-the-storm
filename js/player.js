@@ -325,6 +325,8 @@ function initPlayerPage() {
     onChange: handlePlayerExportAction
   });
 
+  $('#player-alias-icon').popup();
+
   // graphs
   progressionWinRateGraphData = {
     type: 'line',
@@ -498,24 +500,29 @@ function updatePlayerPage(err, doc) {
     showPlayerLoader();
     playerDetailInfo = doc[0];
 
-    updatePlayerPageHeader();
+    // need to resolve aliases
+    DB.getPlayers({ _id: { $in: playerDetailInfo.aliases }}, function(err, docs) {
+      playerDetailInfo.resolvedAliases = docs;
 
-    // check player teams
-    DB.getPlayerTeams(playerDetailInfo._id, function(err, teams) {
-      let teamNames = []
-      for (let t in teams) {
-        teamNames.push(teams[t].name);
-      }
+      updatePlayerPageHeader();
 
-      $('#player-page-header h1.header .content .teams').text(teamNames.join(', '));
-    });
+      // check player teams
+      DB.getPlayerTeams(playerDetailInfo._id, function(err, teams) {
+        let teamNames = []
+        for (let t in teams) {
+          teamNames.push(teams[t].name);
+        }
 
-    $('#player-hero-select-menu').dropdown('set text', 'All Heroes');
-    updateHeroTitle($('#player-detail-summary-header'), 'all');
+        $('#player-page-header h1.header .content .teams').text(teamNames.join(', '));
+      });
 
-    // then do the big query
-    // depending on filters, this may get increasingly complicated
-    DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, playerDetailFilter, processPlayerData);
+      $('#player-hero-select-menu').dropdown('set text', 'All Heroes');
+      updateHeroTitle($('#player-detail-summary-header'), 'all');
+
+      // then do the big query
+      // depending on filters, this may get increasingly complicated
+      DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, playerDetailFilter, processPlayerData);
+    })
   }
   else {
     console.log("no player found?");
@@ -542,6 +549,21 @@ function updatePlayerPageHeader() {
   }
 
   menuName += ' (' + RegionString[playerDetailInfo.region] + ')';
+
+  // aliases
+  if (playerDetailInfo.resolvedAliases.length > 0) {
+    let popup = '<b>Active Aliases</b>';
+    for (let p of playerDetailInfo.resolvedAliases) {
+      let tag = p.tag ? `#${p.tag}` : ''
+      popup += `<br>${p.name}${p.tag} (${RegionString[p.region]})`;
+    }
+
+    $('#player-alias-icon').attr('data-html', popup);
+    $('#player-alias-icon').removeClass('is-hidden');
+  }
+  else {
+    $('#player-alias-icon').addClass('is-hidden');
+  }
 
   $('#player-page-header h1.header .content .player').html(formatName);
   $('#players-set-player').dropdown('set text', menuName);
@@ -596,10 +618,10 @@ function showHeroDetails(value, text, $selectedItem) {
   else if (currentPlayerHero !== value) {
     showPlayerLoader();
     let query = Object.assign({}, playerDetailFilter);
-    query.ToonHandle = playerDetailInfo._id;
+    //query.ToonHandle = playerDetailInfo._id;
     query.hero = value;
 
-    DB.getHeroData(query, function(err, docs) {
+    DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, query, function(err, docs) {
       playerDetailStats = summarizeHeroData(docs);
 
       renderHeroTalents(value, docs);

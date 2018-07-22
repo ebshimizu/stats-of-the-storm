@@ -450,19 +450,42 @@ class Database {
   }
 
   // returns all hero data entries for the given player id
+  // if a player is aliasedTo a different player, we're gonna return the combined
+  // hero data for all players aliasedTo the root player.
   getHeroDataForPlayer(playerID, callback) {
-    let query = {ToonHandle: playerID};
-
-    this.preprocessQuery(query);
-    this._db.heroData.find(query, callback);
+    this.getHeroDataForPlayerWithFilter(playerID, {}, callback);
   }
 
   getHeroDataForPlayerWithFilter(playerID, filter, callback) {
-    let query = Object.assign({}, filter);
-    query.ToonHandle = playerID;
+    var self = this;
 
-    this.preprocessQuery(query);
-    this._db.heroData.find(query, callback);
+    this.getPlayer(playerID, function(err, player) {
+      if (err) {
+        callback(err, null);
+        return;
+      }
+
+      const p = player[0];
+      let query = Object.assign({}, filter);
+      query.ToonHandle = playerID;
+
+      if ('aliasedTo' in p && p.aliasedTo !== '') {
+        // recurse
+        self.getHeroDataForPlayerWIthFilter(p.aliasedTo, filter, callback); 
+        return;
+      }
+
+      // if we have a root player
+      if ('aliases' in p && p.aliases.length > 0) {
+        let ids = p.aliases;
+        ids.push(playerID);
+
+        query.ToonHandle = { $in: ids };
+      }
+      
+      self.preprocessQuery(query);
+      self._db.heroData.find(query, callback);
+    });
   }
 
   getHeroData(query, callback) {

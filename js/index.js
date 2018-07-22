@@ -368,7 +368,11 @@ function globalDBUpdate() {
 function updatePlayerMenuOptions(elem, value) {
   // ok so like search for the player i guess
   let q = new RegExp(value, 'i');
-  DB.getPlayers({ $or: [{name: { $regex: q } }, { nickname: { $regex: q } }] }, function(err, players) {
+  const aliasFilter = { $or: [{aliasedTo: ''}, { aliasedTo: { $exists: false }}] };
+  const playerQuery = { $or: [{name: { $regex: q } }, { nickname: { $regex: q } }] };
+  const query = { $and: [aliasFilter, playerQuery] };
+
+  DB.getPlayers(query, function(err, players) {
     let menu = $(elem).parent('.dropdown');
     menu.find('.menu .item').not('.active').remove();
     menu.find('.message').remove();
