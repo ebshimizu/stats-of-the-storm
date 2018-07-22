@@ -500,6 +500,12 @@ function updatePlayerPage(err, doc) {
     showPlayerLoader();
     playerDetailInfo = doc[0];
 
+    // if the player itself is aliased, recurse
+    if ('aliasedTo' in playerDetailInfo && playerDetailInfo.aliasedTo !== '') {
+      preloadPlayerID(playerDetailInfo.aliasedTo);
+      return;
+    }
+
     // need to resolve aliases
     DB.getPlayers({ _id: { $in: playerDetailInfo.aliases }}, function(err, docs) {
       playerDetailInfo.resolvedAliases = docs;
