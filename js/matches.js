@@ -36,7 +36,6 @@ function initMatchesPage() {
     popup: '#match-filter-popup',
     on: 'click'
   });
-  $('#match-player-search').dropdown();
   $('#match-mode-select').dropdown({
     action: 'activate',
     fullTextSearch: true

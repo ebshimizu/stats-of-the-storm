@@ -746,6 +746,32 @@
       <div class="ui red deny button">Cancel</div>
     </div>
   </div>
+  <div class="ui modal" id="player-alias-editor">
+    <div class="header">Edit Player Aliases</div>
+    <div class="content">
+      <p>
+        Aliases allow you to combine stats from two different players. This can be used to combine
+        stats for the same player across regions (PTR and Live).
+      </p>
+      <p>
+        The player that you are editing right now is the root player. All players aliased by this
+        player will not show up in searches, stat summaries, or team rosters. Their names will
+        still be displayed in match details, however their player details page will map back
+        to this player. This player will combine stats from the aliased players displayed below.
+      </p>
+      <div class="ui fluid search multiple selection dropdown player-menu" id="player-alias-editor-menu">
+        <i class="dropdown icon"></i>
+        <div class="default text">No Aliases Specified</div>
+        <div class="menu">
+
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui green approve button">Set</div>
+      <div class="ui red deny button">Cancel</div>
+    </div>
+  </div>
 </script>
 
 <script id="player-detail-hero-summary-row" type="text/x-handlebars-template">

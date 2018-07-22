@@ -572,12 +572,13 @@ class Database {
     this._db.players.find({_id: id}, function(err, docs) {
       if (err) {
         console.log(err);
+        callback(err);
         return;
       }
 
       if (docs.length === 0) {
         console.log(`no player with id ${id}`);
-        callback();
+        callback(`no player with id ${id}`);
         return;
       }
 
@@ -593,6 +594,7 @@ class Database {
       self._db.players.update({ _id: { $in: player.aliases } }, { $set: { 'aliasedTo' : '' } }, { multi: true }, function(err) {
         if (err) {
           console.log(err);
+          callback(err);
           return;
         }
 
@@ -601,6 +603,7 @@ class Database {
         player.save(function(err) {
           if (err) {
             console.log(err);
+            callback(err);
             return;
           }
 

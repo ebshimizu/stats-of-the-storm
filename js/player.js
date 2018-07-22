@@ -325,6 +325,11 @@ function initPlayerPage() {
     onChange: handlePlayerExportAction
   });
 
+  $('#player-edit-menu').dropdown({
+    action: 'hide',
+    onChange: handlePlayerEditAction
+  });
+
   $('#player-alias-icon').popup();
 
   // graphs
@@ -417,6 +422,12 @@ function initPlayerPage() {
   });
 
   $('#player-print-sections .ui.dropdown').dropdown();
+
+  // allias editor
+  $('#player-alias-editor-menu').dropdown({
+    action: 'activate',
+    fullTextSearch: true
+  });
 }
 
 function initPlayerStatGraphMenus() {
@@ -449,6 +460,7 @@ function hidePlayerLoader() {
 function showPlayerPage() {
   $('#player-page-content table').floatThead('reflow');
   $('#player-export-menu').removeClass('is-hidden');
+  $('#player-edit-menu').removeClass('is-hidden');
 }
 
 function resetPlayerPage() {
@@ -1339,7 +1351,10 @@ function handlePlayerExportAction(action, text, $elem) {
       }
     });
   }
-  else if (action === 'nickname') {
+}
+
+function handlePlayerEditAction(action, text, $elem) {
+  if (action === 'nickname') {
     if (playerDetailID) {
       $('#player-set-nickname-modal').find('input').val(playerDetailInfo.nickname);
       $('#player-set-nickname-modal').modal({
@@ -1353,6 +1368,48 @@ function handlePlayerExportAction(action, text, $elem) {
           });
         }
       }).modal('show');
+    }
+  }
+  else if (action === 'alias') {
+    if (playerDetailID) {
+      // get current set of aliases with resolved player names
+      DB.getPlayers({ _id: { $in: playerDetailInfo.aliases } }, function(err, players) {
+        // update the menu
+        const menu = $('#player-alias-editor-menu');
+        let options = {values: []};
+        let selected = [];
+
+        for (let p of players) {
+          const tag = p.tag ? `#${p.tag}` : '';
+
+          options.values.push({
+            value: p._id,
+            text: `${p.name}${tag} (${RegionString[p.region]})`,
+            name: ''
+          });
+          selected.push(p._id);
+        }
+
+        menu.dropdown('setup menu', options);
+        menu.dropdown('set exactly', selected.join(','));
+
+        $('#player-alias-editor').modal({
+          onApprove: function() {
+            // get dropdown values, update aliases
+            const aliases = menu.dropdown('get value').split(',');
+            DB.updatePlayerAliases(playerDetailID, aliases, function(message) {
+              if (!message) {
+                showMessage('Aliases Update', 'Alias Update Complete', { class: 'positive' });
+                // trigger an update
+                preloadPlayerID(playerDetailID);
+              }
+              else {
+                showMessage('Alias Update Failed', message, { class: 'negative' });
+              }
+            });
+          }
+        }).modal('show');
+      });
     }
   }
 }

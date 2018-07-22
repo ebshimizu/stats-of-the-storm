@@ -473,10 +473,16 @@ function loadTeamRoster(playerStats) {
 
   // second iteration so players with no games end up at end
   for (let p in currentTeam.resolvedPlayers) {
-    let id = currentTeam.resolvedPlayers[p]._id;
+    let player = currentTeam.resolvedPlayers[p];
+    let id = player._id;
+    
+    if ('aliasedTo' in player && player.aliasedTo !== '') {
+      // player is an alias that was added to the team (either was aliased after add
+      // or some internal thing happened) so skip
+      continue;
+    }
 
     if (!(id in playerStats)) {
-      let player = currentTeam.resolvedPlayers[p];
       let context = {
         name: player.name,
         id: player._id
