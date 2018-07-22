@@ -317,19 +317,51 @@ class Database {
   }
 
   getTeam(id, callback) {
-    this._db.settings.findOne({_id: id}, callback);
+    var self = this;
+    this._db.settings.findOne({_id: id}, function(err, team) {
+      // teams need to resolve aliases as well, so the playeres array will consist
+      // of all actually assigned IDs and aliased IDs
+      // resolve all aliases for each player
+      self.getPlayers({ _id: { $in: team.players }}, function(err, players) {
+        // combine player ids and aliases
+        team.resolvedPlayers = players;
+        let ids = [];
+        for (let p of players) {
+          ids.push(p._id);
+
+          if ('aliases' in p) {
+            for (var alias of p.aliases) {
+              ids.push(alias);
+            }
+          }
+        }
+
+        team.players = ids;
+
+        callback(err, team);
+      });
+    });
   }
 
   // checks to see if all of the given players are on a team
   getTeamByPlayers(players, callback) {
-    let query = { $and: []};
-    query.type = 'team';
+    var self = this;
+    // resolve aliases first
+    this.getPlayers({ _id: { $in: players } }, function(err, docs) {
+      let query = { $and: []};
+      query.type = 'team';
 
-    for (let p of players) {
-      query.$and.push({ players: p });
-    }
+      for (let p of docs) {
+        if ('aliasedTo' in p && p.aliasedTo !== '') {
+          query.$and.push({ players: p.aliasedTo });
+        }
+        else {
+          query.$and.push({ players: p._id });
+        }
+      }
 
-    this._db.settings.find(query, callback);
+      self._db.settings.find(query, callback);
+    });
   }
 
   getPlayerTeams(id, callback) {
