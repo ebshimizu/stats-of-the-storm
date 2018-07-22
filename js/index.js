@@ -683,6 +683,23 @@ function showPlayerProfile(id) {
   changeSection('player', true);
 }
 
+// given just a random bunch of players, creates the mapping between
+// player ID and the alias target
+function createPlayerAliasMap(playerDocs) {
+  let key = {};
+  for (let p of playerDocs) {
+    if (p.aliasedTo && p.aliasedTo !== '') {
+      key[p._id] = p.aliasedTo;
+    }
+
+    if ('aliases' in p) {
+      for (let alias of p.aliases) {
+        key[alias] = p._id;
+      }
+    }
+  }
+  return key
+}
 
 function clearPrintLayout() {
   $('#print-window .contents').html('');

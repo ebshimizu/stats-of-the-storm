@@ -246,7 +246,7 @@ function loadTeamData(team, matches, heroData) {
 
   // compute hero stats
   let heroStats = summarizeHeroData(heroData);
-  teamPlayerStats = summarizePlayerData(heroData);
+  teamPlayerStats = summarizePlayerData(heroData, createPlayerAliasMap(team.resolvedPlayers));
   teamTeamStats = summarizeTeamData(team, matches, Heroes);
 
   // i'm uh, kind of lazy
@@ -423,8 +423,9 @@ function loadTeamRoster(playerStats) {
   if (currentTeam === undefined)
     return;
 
-  for (let p in currentTeam.players) {
-    let id = currentTeam.players[p];
+  // only show non-aliased players
+  for (let p in currentTeam.resolvedPlayers) {
+    let id = currentTeam.resolvedPlayers[p]._id;
 
     if (id in playerStats) {
       let player = playerStats[id];
@@ -471,30 +472,26 @@ function loadTeamRoster(playerStats) {
   }
 
   // second iteration so players with no games end up at end
-  for (let p in currentTeam.players) {
-    let id = currentTeam.players[p];
+  for (let p in currentTeam.resolvedPlayers) {
+    let id = currentTeam.resolvedPlayers[p]._id;
 
     if (!(id in playerStats)) {
-      DB.getPlayer(id, function(err, doc) {
-        if (doc.length === 0)
-          return;
+      let player = currentTeam.resolvedPlayers[p];
+      let context = {
+        name: player.name,
+        id: player._id
+      };
 
-        let context = {
-          name: doc[0].name,
-          id: doc[0]._id
-        };
+      if (player.nickname && player.nickname !== '') {
+        context.name = player.nickname;
+      }
 
-        if (doc[0].nickname && doc[0].nickname !== '') {
-          context.name = doc[0].nickname;
+      $('#team-roster-stats tbody').append(teamRosterRowTemplate(context));
+
+      $('#team-roster-stats .dropdown.button[player-id="' + player._id + '"]').dropdown({
+        onChange: function(value, text, $elem) {
+          handleTeamPlayerCallback(value, $elem.attr('player-id'), $elem.attr('player-name'));
         }
-
-        $('#team-roster-stats tbody').append(teamRosterRowTemplate(context));
-
-        $('#team-roster-stats .dropdown.button[player-id="' + doc[0]._id + '"]').dropdown({
-          onChange: function(value, text, $elem) {
-            handleTeamPlayerCallback(value, $elem.attr('player-id'), $elem.attr('player-name'));
-          }
-        });
       });
     }
   }
