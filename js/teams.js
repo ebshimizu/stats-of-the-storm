@@ -356,6 +356,10 @@ function loadTeamData(team, matches, heroData) {
     updateTeamStat(elem, 'T5', formatSeconds(teamStats.tierTimes.T5.average));
     updateTeamStat(elem, 'T6', formatSeconds(teamStats.tierTimes.T6.average));
 
+    updateTeamStat(elem, 'avgLevelDiff', formatStat('', teamStats.endOfGameLevels.combined.average, true));
+    updateTeamStat(elem, 'avgLevelDiffWin', formatStat('', teamStats.endOfGameLevels.win.average, true));
+    updateTeamStat(elem, 'avgLevelDiffLoss', formatStat('', teamStats.endOfGameLevels.loss.average, true));
+
     elem = $('#team-structure-stats');
     updateTeamStat(elem, 'forts-destroyed', teamStats.structures.Fort.destroyed);
     updateTeamStat(elem, 'forts-lost', teamStats.structures.Fort.lost);

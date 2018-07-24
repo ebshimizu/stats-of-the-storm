@@ -39,6 +39,11 @@ function summarizeTeamData(team, docs, HeroesTalents) {
       max: 0,
       medianTmp: []
     },
+    endOfGameLevels: {
+      win: { total: 0, min: 1e10, max: 0, medianTmp: [] },
+      loss: { total: 0, min: 1e10, max: 0, medianTmp: [] },
+      combined: { total: 0, min: 1e10, max: 0, medianTmp: [] }
+    },
     tierTimes: {
       T1: { total: 0, min: 1e10, max: 0, medianTmp: [], count: 0 },
       T2: { total: 0, min: 1e10, max: 0, medianTmp: [], count: 0 },
@@ -71,6 +76,17 @@ function summarizeTeamData(team, docs, HeroesTalents) {
       else continue;
     }
 
+    // level differential
+    let levelDiff = match.teams[0].level - match.teams[1].level;
+
+    // assumes 0 is current team. if not true invert
+    levelDiff = t === 0 ? levelDiff : -levelDiff;
+
+    data.endOfGameLevels.combined.total += levelDiff;
+    data.endOfGameLevels.combined.min = Math.min(data.endOfGameLevels.min, levelDiff);
+    data.endOfGameLevels.combined.max = Math.max(data.endOfGameLevels.max, levelDiff);
+    data.endOfGameLevels.combined.medianTmp.push(levelDiff);
+
     if (!(match.map in data.maps)) {
       data.maps[match.map] = { games: 0, wins: 0 };
     }
@@ -78,6 +94,17 @@ function summarizeTeamData(team, docs, HeroesTalents) {
     if (t === winner) {
       data.maps[match.map].wins += 1;
       data.wins += 1;
+
+      data.endOfGameLevels.win.total += levelDiff;
+      data.endOfGameLevels.win.min = Math.min(data.endOfGameLevels.min, levelDiff);
+      data.endOfGameLevels.win.max = Math.max(data.endOfGameLevels.max, levelDiff);
+      data.endOfGameLevels.win.medianTmp.push(levelDiff);
+    }
+    else {
+      data.endOfGameLevels.loss.total += levelDiff;
+      data.endOfGameLevels.loss.min = Math.min(data.endOfGameLevels.min, levelDiff);
+      data.endOfGameLevels.loss.max = Math.max(data.endOfGameLevels.max, levelDiff);
+      data.endOfGameLevels.loss.medianTmp.push(levelDiff);
     }
 
     data.matchLength.total += match.length;
@@ -360,6 +387,15 @@ function summarizeTeamData(team, docs, HeroesTalents) {
 
   data.deaths.median = median(data.deaths.medianTmp);
   data.deaths.average = data.deaths.total / data.totalMatches;
+
+  data.endOfGameLevels.combined.median = median(data.endOfGameLevels.combined.medianTmp);
+  data.endOfGameLevels.combined.average = data.endOfGameLevels.combined.total / data.endOfGameLevels.combined.medianTmp.length;
+
+  data.endOfGameLevels.win.median = median(data.endOfGameLevels.win.medianTmp);
+  data.endOfGameLevels.win.average = data.endOfGameLevels.win.total / data.endOfGameLevels.win.medianTmp.length;
+  
+  data.endOfGameLevels.loss.median = median(data.endOfGameLevels.loss.medianTmp);
+  data.endOfGameLevels.loss.average = data.endOfGameLevels.loss.total / data.endOfGameLevels.loss.medianTmp.length;
 
   // hero count
   data.heroesPlayed = 0;
