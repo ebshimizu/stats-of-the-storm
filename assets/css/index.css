@@ -119,6 +119,7 @@ body {
     position: absolute;
     right: 14px;
     top: 60px;
+    z-index: 10000000;
 }
 
 #message-container .message {

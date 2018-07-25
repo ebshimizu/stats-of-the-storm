@@ -174,6 +174,11 @@ function loadDatabase() {
     settings.set('dbPath', app.getPath('userData'));
   }
 
+  if (!fs.existsSync(settings.get('dbPath'))) {
+    showMessage('Reverted to Default DB Location', `Failed to load database at ${settings.get('dbPath')}. The Database location was reset. You may change the Database location in settings`, { sticky: true, class: 'negative' });
+    settings.set('dbPath', app.getPath('userData'));
+  }
+
   console.log('Loading Heroes Talents database');
   // load the heroes talents database
   Heroes = new HeroesTalents.HeroesTalents(path.join(__dirname, '/assets/heroes-talents'), path.join(__dirname, '/assets/data'));
