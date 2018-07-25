@@ -220,6 +220,11 @@ function updateTeamRankingData(err, matches, team) {
     teamStats.tierTimes[t].average = teamStats.tierTimes[t][mode];
   }
 
+  for (let l in teamStats.endOfGameLevels) {
+    teamStats.endOfGameLevels[l].format = formatStat(l, teamStats.endOfGameLevels[l][mode], true);
+    teamStats.endOfGameLevels[l].average = teamStats.endOfGameLevels[l][mode];
+  }
+
   teamStats.average = teamStats.stats[mode];
   teamStats.stats.takedowns = teamStats.takedowns[mode];
   teamStats.stats.deaths = teamStats.deaths[mode];

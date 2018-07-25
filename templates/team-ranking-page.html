@@ -111,11 +111,14 @@
           <div table-name="Team Fight and CC" class="section is-hidden" table-print="team">
             <div class="table-wrapper">
               <table class="ui inverted sortable selectable table" id="team-ranking-cc-table">
-                <thead>
+                <thead
                   <tr>
                     <th>Team</th>
                     <th class="center alligned stat">Win %</th>
                     <th class="center alligned stat">Games</th>
+                    <th class="center alligned stat">Lv Δ</th>
+                    <th class="center alligned stat">Win Lv Δ</th>
+                    <th class="center alligned stat">Loss Lv Δ</th>
                     <th class="center alligned stat">Team Fight Hero Damage</th>
                     <th class="center alligned stat">Team Fight Damage Taken</th>
                     <th class="center alligned stat">Team Fight Healing</th>
@@ -232,6 +235,9 @@
     <td data-sort-value="{{name}}"><h3 class="ui inverted header player-name" team-id="{{id}}">{{name}}</h3></td>
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
     <td class="center aligned" data-sort-value="{{totalMatches}}">{{totalMatches}}</td>
+    <td class="center aligned" data-sort-value="{{endOfGameLevels.combined.average}}">{{endOfGameLevels.combined.format}}</td>
+    <td class="center aligned" data-sort-value="{{endOfGameLevels.win.average}}">{{endOfGameLevels.win.format}}</td>
+    <td class="center aligned" data-sort-value="{{endOfGameLevels.loss.average}}">{{endOfGameLevels.loss.format}}</td>
     <td class="center aligned" data-sort-value="{{stats.average.TeamfightHeroDamage}}">{{TeamfightHeroDamage}}</td>
     <td class="center aligned" data-sort-value="{{stats.average.TeamfightDamageTaken}}">{{TeamfightDamageTaken}}</td>
     <td class="center aligned" data-sort-value="{{stats.average.TeamfightHealingDone}}">{{TeamfightHealingDone}}</td>

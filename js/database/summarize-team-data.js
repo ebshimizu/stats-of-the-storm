@@ -83,8 +83,8 @@ function summarizeTeamData(team, docs, HeroesTalents) {
     levelDiff = t === 0 ? levelDiff : -levelDiff;
 
     data.endOfGameLevels.combined.total += levelDiff;
-    data.endOfGameLevels.combined.min = Math.min(data.endOfGameLevels.min, levelDiff);
-    data.endOfGameLevels.combined.max = Math.max(data.endOfGameLevels.max, levelDiff);
+    data.endOfGameLevels.combined.min = Math.min(data.endOfGameLevels.combined.min, levelDiff);
+    data.endOfGameLevels.combined.max = Math.max(data.endOfGameLevels.combined.max, levelDiff);
     data.endOfGameLevels.combined.medianTmp.push(levelDiff);
 
     if (!(match.map in data.maps)) {
@@ -96,14 +96,14 @@ function summarizeTeamData(team, docs, HeroesTalents) {
       data.wins += 1;
 
       data.endOfGameLevels.win.total += levelDiff;
-      data.endOfGameLevels.win.min = Math.min(data.endOfGameLevels.min, levelDiff);
-      data.endOfGameLevels.win.max = Math.max(data.endOfGameLevels.max, levelDiff);
+      data.endOfGameLevels.win.min = Math.min(data.endOfGameLevels.win.min, levelDiff);
+      data.endOfGameLevels.win.max = Math.max(data.endOfGameLevels.win.max, levelDiff);
       data.endOfGameLevels.win.medianTmp.push(levelDiff);
     }
     else {
       data.endOfGameLevels.loss.total += levelDiff;
-      data.endOfGameLevels.loss.min = Math.min(data.endOfGameLevels.min, levelDiff);
-      data.endOfGameLevels.loss.max = Math.max(data.endOfGameLevels.max, levelDiff);
+      data.endOfGameLevels.loss.min = Math.min(data.endOfGameLevels.loss.min, levelDiff);
+      data.endOfGameLevels.loss.max = Math.max(data.endOfGameLevels.loss.max, levelDiff);
       data.endOfGameLevels.loss.medianTmp.push(levelDiff);
     }
 
