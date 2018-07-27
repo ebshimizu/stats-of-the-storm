@@ -761,5 +761,23 @@
     "icon": "storm_ui_icon_talent_autoattack_range.png",
     "sort": 4,
     "abilityId": "Raynor|Passive"
+  },
+  {
+    "tooltipId": "ArtanisBladeDashPsionicSynergyTalent",
+    "talentTreeId": "ArtanisBladeDashPsionicSynergy",
+    "name": "Psionic Synergy",
+    "description": "Increases Blade Dash's cooldown reduction of Shield Overload by hitting Heroes by 2 seconds.",
+    "icon": "storm_ui_icon_artanis_powerstrikes.png",
+    "sort": 1,
+    "abilityId": "Artanis|Q1"
+  },
+  {
+    "tooltipId": "ArtanisTwinBladesPsionicWoundTalent",
+    "talentTreeId": "ArtanisTwinBladesPsionicWound",
+    "name": "Psionic Wound",
+    "description": "Twin Blades final strike lowers a Hero's Armor by 25 for 2 seconds, increasing all damage taken by 25%.",
+    "icon": "storm_ui_icon_artanis_doubleslash_var2.png",
+    "sort": 3,
+    "abilityId": "Artanis|W1"
   }
 ]
