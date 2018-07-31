@@ -5,7 +5,7 @@ var teamBanSummaryRowTemplate;
 var teamRosterRowTemplate;
 var teamHeroPickRowTemplate;
 var currentTeam;
-var teamPlayerStats, teamTeamStats;
+var teamPlayerStats, teamTeamStats, teamHeroStats;
 var teamAvgData;
 var teamAvgTracker;
 var teamHeroMatchThresh = 0;
@@ -15,6 +15,11 @@ function initTeamsPage() {
     onChange: updateTeamData,
     fullTextSearch: true
   });
+  $('#team-set-team-compare').dropdown({
+    onChange: updateCompareTeamData,
+    fullTextSearch: true
+  });
+
   populateTeamMenu($('.team-menu'));
 
   $('#team-add-player-menu').dropdown({
@@ -26,6 +31,7 @@ function initTeamsPage() {
   teamBanSummaryRowTemplate = getHandlebars('teams', '#team-hero-ban-row');
   teamRosterRowTemplate = getHandlebars('teams', '#team-roster-row');
   teamHeroPickRowTemplate = getHandlebars('teams', '#team-hero-pick-row');
+  teamCompareHeroPickRowTemplate = getHandlebars('teams', '#team-roster-hero-compare-row');
 
   // filter popup
   let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template'));
@@ -177,84 +183,39 @@ function updateTeamData(value, text, $elem, force) {
   showTeamLoader();
   $('#teams-page-header .team-name').text(text);
 
-  // ok so matches get a special version of where for ids and here's how it works:
-  // - If the team is 5 people or less:
-  //   the ids array needs to have all of the ids specified (this is normal AND)
-  // - If the team is more than 5 people:
-  //   exactly 5 of the people in the match need to be in the team array
-  // all players must be on the same team
-  DB.getTeam(value, function(err, team) {
-    // get the match data
-    let query = Object.assign({}, teamsMapDataFilter);
-    currentTeam = team;
+  DB.getTeamData(value, teamsMapDataFilter, loadTeamData);
+}
 
-    let players = team.players;
+function updateCompareTeamData(value, text, $elem, force) {
+  if (value === '')
+    return;
 
-    if (!('$or' in query)) {
-      query.$or = [];
-    }
+  if (currentTeam && currentTeam._id === value && !force)
+    return;
 
-    let t0queries = [];
-    let t1queries = [];
-    if (team.players.length <= 5) {
-      // all players need to be in a team somewhere
-      for (const i in players) {
-        t0queries.push({ 'teams.0.ids': players[i] });
-        t1queries.push({ 'teams.1.ids': players[i] });
-      }
-    }
-    else {
-      // basically we need a match 5 of the players and then we're ok 
-      for (let i = 0; i < 5; i++) {
-        const t0key = 'teams.0.ids.' + i;
-        const t1key = 'teams.1.ids.' + i;
+  showTeamLoader();
 
-        let t0arg = { };
-        t0arg[t0key] = { $in: players };
-        let t1arg = {};
-        t1arg[t1key] = { $in: players };
-
-        t0queries.push(t0arg);
-        t1queries.push(t1arg);
-      }
-    }
-
-    query.$or.push({ $and: t0queries });
-    query.$or.push({ $and: t1queries });
-
-    // execute
-    DB.getMatches(query, function(err, matches) {
-      // then get the hero data
-      let matchIDs = [];
-      for (let i in matches) {
-        matchIDs.push(matches[i]._id);
-      }
-
-      // only want specific users
-      let query2 = { ToonHandle: { $in: team.players } };
-
-      DB.getHeroDataForMatches(matchIDs, query2, function(err, heroData) {
-        // and now finally load the team data
-        loadTeamData(team, matches, heroData);
-      });
-    });
-  });
+  DB.getTeamData(value, teamsMapDataFilter, loadTeamComparisonStats);
 }
 
 function loadTeamData(team, matches, heroData) {
   teamHeroMatchThresh = parseInt($('#teams-hero-thresh input').val());
 
   // compute hero stats
-  let heroStats = summarizeHeroData(heroData);
+  teamHeroStats = summarizeHeroData(heroData);
   teamPlayerStats = summarizePlayerData(heroData, createPlayerAliasMap(team.resolvedPlayers));
   teamTeamStats = summarizeTeamData(team, matches, Heroes);
 
   // i'm uh, kind of lazy
   let playerStats = teamPlayerStats;
   let teamStats = teamTeamStats;
+  let heroStats = teamHeroStats;
 
   // also lifting a little bit from player.js
   // team with stats are uh, a little useless? like it's all in the picks stats...
+
+  // clear comparison stuff
+  $('#team-comparison-stats tbody').html('');
 
   // team stats de-duplicate but need some formatting
   let against = {};
@@ -412,6 +373,170 @@ function loadTeamData(team, matches, heroData) {
   $('#team-detail-body table').floatThead('reflow');
   $('#team-detail-body th').removeClass('sorted ascending descending');
   hideTeamLoader();
+}
+
+function loadTeamComparisonStats(team2, team2Matches, team2Data) {
+  // team 1 stats are already loaded here
+  let team2HeroStats = summarizeHeroData(team2Data);
+  let team2PlayerStats = summarizePlayerData(team2Data, createPlayerAliasMap(team2.resolvedPlayers));
+  let team2TeamStats = summarizeTeamData(team2, team2Matches, Heroes);
+
+  // clear comparison stuff
+  $('#team-comparison-stats tbody').html('');
+
+  // replace names
+  $('#team-compare-stats .team1').text(`[1] ${$('#teams-page-header .team-name').text()}`);
+  $('#team-compare-stats .team2').text(`[2] ${team2.name}`);
+
+  $('#team-compare-header').text(`VS [2] ${team2.name}`);
+
+  // general stats
+  // this is admittedly a long manual list of stats, which is honestly kind of unfortunate
+  // but they pull data from a variety of places at the moment
+  // ok we'll put this all into an object and format it later
+  const team1CompareStats = getTeamCompareStats(teamTeamStats, teamHeroStats);
+  const team2CompareStats = getTeamCompareStats(team2TeamStats, team2HeroStats);
+  const statTable = $('#team-compare-stats tbody');
+  for (let k in team1CompareStats) {
+    const t1 = team1CompareStats[k];
+    const t2 = team2CompareStats[k];
+
+    statTable.append(`
+      <tr>
+        <td>${t1.name}</td>
+        <td class="center aligned" data-sort-value="${t1.val}">${t1.format}</td>
+        <td class="center aligned" data-sort-value="${t2.val}">${t2.format}</td>
+      </tr>`);
+  }
+
+  // map stats
+  // need to merge these things
+  const team1Maps = Object.keys(teamTeamStats.maps);
+  const team2Maps = Object.keys(team2TeamStats.maps);
+  const teamMaps = team1Maps.concat(team2Maps.filter(function (item) { return team1Maps.indexOf(item) < 0; }));
+
+  const mapTable = $('#team-compare-map-stats tbody');
+  for (let map of teamMaps) {
+    const t1 = teamTeamStats.maps[map];
+    const t2 = team2TeamStats.maps[map];
+
+    const t1Win = t1 ? t1.winPct : 0;
+    const t2Win = t2 ? t2.winPct : 0;
+    const t2WinPct = t2 ? t2.wins / t2.games  : 0
+
+    const t1Format = t1 ? `${t1.formatWinPct} (${t1.wins} - ${t1.games - t1.wins})` : '';
+    const t2Format = t2 ? `${formatStat('pct', t2WinPct)} (${t2.wins} - ${t2.games - t2.wins})` : '';
+
+    mapTable.append(`
+      <tr>
+        <td>${map}</td>
+        <td class="center aligned" data-sort-value="${t1Win}">${t1Format}</td>
+        <td class="center aligned" data-sort-value="${t2Win}">${t2Format}</td>
+      </tr>
+    `);
+  }
+
+  // pick/ban stats
+  const team1Heroes = Object.keys(teamTeamStats.heroes);
+  const team2Heroes = Object.keys(team2TeamStats.heroes);
+  const teamHeroes = team1Heroes.concat(team2Heroes.filter(function(item) { return team1Heroes.indexOf(item) < 0; }));
+
+  for (let hero of teamHeroes) {
+    // team 1 data
+    let context = {};
+    const t1 = teamTeamStats.heroes[hero];
+    const t2 = team2TeamStats.heroes[hero];
+
+    if (t1 && (t1.games > 0 || t1.bans > 0) || t2 && (t2.games > 0 || t2.bans > 0)) {
+      if (t1) {
+        context.team1 = getTeamHeroCompareStats(t1, teamTeamStats.totalMatches);
+      }
+
+      if (t2) {
+        context.team2 = getTeamHeroCompareStats(t2, team2TeamStats.totalMatches);
+      }
+
+      context.heroName = hero;
+      $('#team-compare-picks tbody').append(teamCompareHeroPickRowTemplate(context));
+    }
+  }
+
+  hideTeamLoader();
+}
+
+// returns formatted and sort data for the given team data block
+function getTeamCompareStats(teamStats, heroStats) {
+  let stats = {};
+
+  const picked = Object.keys(heroStats.heroes).length;
+
+  // all of this is kinda terrible because the stats are scattered everywhere
+  const winPct = formatStat('pct', teamStats.wins / teamStats.totalMatches);
+  stats.record = { name: 'Record', val: teamStats.wins / teamStats.totalMatches, format: `${winPct} (${teamStats.wins} - ${teamStats.totalMatches - teamStats.wins})` };
+  stats.overallTD = { name: 'Avg. TD', val: teamStats.takedowns.average, format: formatStat('', teamStats.takedowns.total, true) };
+  stats.overallDeaths = { name: 'Avg. Deaths', val: teamStats.deaths.average, format: formatStat('', teamStats.deaths.total, true) };
+
+  const KDA = teamStats.takedowns.total / Math.max(1, teamStats.deaths.total);
+  stats.overallKDA = { name: 'KDA', val: KDA, format: formatStat('KDA', KDA) };
+  stats.timeDead = { name: 'Avg. Time Dead', val: teamStats.stats.avgTimeSpentDead, format: formatSeconds(teamStats.stats.average.avgTimeSpentDead) };
+  stats.timeDeadPct = { name: 'Avg. % Time Dead', val: teamStats.stats.average.timeDeadPct, format: formatStat('pct', teamStats.stats.average.timeDeadPct) };
+  stats.heroPool = { name: 'Hero Pool', val: picked, format: picked };
+  stats.avgLength = { name: 'Avg. Length', val: teamStats.matchLength.average, format: formatSeconds(teamStats.matchLength.average) };
+  stats.ppk = { name: 'People Per Kill (PPK)', val: teamStats.stats.average.PPK, format: formatStat('KDA', teamStats.stats.average.PPK) };
+
+  stats.tt10 = { name: 'Avg. Time to 10', val: formatSeconds(teamStats.stats.average.timeTo10), format: formatSeconds(teamStats.stats.average.timeTo10) };
+  stats.tt20 = { name: 'Avg. Time to 20', val: formatSeconds(teamStats.stats.average.timeTo20), format: formatSeconds(teamStats.stats.average.timeTo20) };
+
+  stats.mercs = { name: 'Mercenary Captures', val: teamStats.stats.average.mercCaptures, format: formatStat('mercCaptures', teamStats.stats.average.mercCaptures, true) };
+  stats.mercUptime = { name: 'Mercenary Uptime', val: teamStats.stats.average.mercUptime, format: formatSeconds(teamStats.stats.average.mercUptime) };
+  stats.mercUptimePct = { name: 'Mercenary Uptime %', val: teamStats.stats.average.mercUptimePercent, format: formatStat('pct', teamStats.stats.average.mercUptimePercent) };
+
+  stats.T1 = { name: 'Time at Level 1', val: teamStats.tierTimes.T1.average, format: formatSeconds(teamStats.tierTimes.T1.average) };
+  stats.T2 = { name: 'Time at Level 4', val: teamStats.tierTimes.T2.average, format: formatSeconds(teamStats.tierTimes.T2.average) };
+  stats.T3 = { name: 'Time at Level 7', val: teamStats.tierTimes.T3.average, format: formatSeconds(teamStats.tierTimes.T3.average) };
+  stats.T4 = { name: 'Time at Level 10', val: teamStats.tierTimes.T4.average, format: formatSeconds(teamStats.tierTimes.T4.average) };
+  stats.T5 = { name: 'Time at Level 13', val: teamStats.tierTimes.T5.average, format: formatSeconds(teamStats.tierTimes.T5.average) };
+  stats.T6 = { name: 'Time at Level 16', val: teamStats.tierTimes.T6.average, format: formatSeconds(teamStats.tierTimes.T6.average) };
+
+  stats.levelDiff = { name: 'Avg. Level Diff at End', val: teamStats.endOfGameLevels.combined.average, format: formatStat('', teamStats.endOfGameLevels.combined.average, true) };
+  stats.levelDiffW = { name: 'Avg. Level Diff at End (win)', val: teamStats.endOfGameLevels.win.average, format: formatStat('', teamStats.endOfGameLevels.win.average, true) };
+  stats.levelDiffL = { name: 'Avg. Level Diff at End (loss)', val: teamStats.endOfGameLevels.loss.average, format: formatStat('', teamStats.endOfGameLevels.loss.average, true) };
+
+  stats.heroDamage = { name: 'Avg. Hero Damage', val: teamStats.stats.average.HeroDamage, format: formatStat('', teamStats.stats.average.HeroDamage, true) };
+  stats.siegeDamage = { name: 'Avg. Siege Damage', val: teamStats.stats.average.SiegeDamage, format: formatStat('', teamStats.stats.average.SiegeDamage, true) };
+  stats.creepDamage = { name: 'Avg. Creep Damage', val: teamStats.stats.average.CreepDamage, format: formatStat('', teamStats.stats.average.CreepDamage, true) };
+  stats.minionDamage = { name: 'Avg. Minion Damage', val: teamStats.stats.average.MinionDamage, format: formatStat('', teamStats.stats.average.MinionDamage, true) };
+  stats.healing = { name: 'Avg. Healing', val: teamStats.stats.average.Healing, format: formatStat('', teamStats.stats.average.Healing, true) };
+  stats.selfHealing = { name: 'Avg. Self Healing', val: teamStats.stats.average.SelfHealing, format: formatStat('', teamStats.stats.average.SelfHealing, true) };
+  stats.shields = { name: 'Avg. Shielding', val: teamStats.stats.average.ProtectionGivenToAllies, format: formatStat('', teamStats.stats.average.ProtectionGivenToAllies, true) };
+  stats.damageTaken = { name: 'Avg. Damage Taken', val: teamStats.stats.average.DamageTaken, format: formatStat('', teamStats.stats.average.DamageTaken, true) };
+
+  stats.tfHeroDamage = { name: 'Avg. Team Fight Hero Damage', val: teamStats.stats.average.TeamfightHeroDamage, format: formatStat('', teamStats.stats.average.TeamfightHeroDamage, true) };
+  stats.tfDamageTaken = { name: 'Avg. Team Fight Damage Taken', val: teamStats.stats.average.TeamfightDamageTaken, format: formatStat('', teamStats.stats.average.TeamfightDamageTaken, true) };
+  stats.tfHealing = { name: 'Avg. Team Fight Healing', val: teamStats.stats.average.TeamfightHealingDone, format: formatStat('', teamStats.stats.average.TeamfightHealingDone, true) };
+  stats.cc = { name: 'Avg. CC Time', val: teamStats.stats.average.TimeCCdEnemyHeroes, format: formatSeconds(teamStats.stats.average.TimeCCdEnemyHeroes) };
+  stats.root = { name: 'Avg. Root Time', val: teamStats.stats.average.TimeRootingEnemyHeroes, format: formatSeconds(teamStats.stats.average.TimeRootingEnemyHeroes) };
+  stats.silence = { name: 'Avg. Silence Time', val: teamStats.stats.average.TimeSilencingEnemyHeroes, format: formatSeconds(teamStats.stats.average.TimeSilencingEnemyHeroes) };
+  stats.stun = { name: 'Avg. Stun Time', val: teamStats.stats.average.TimeStunningEnemyHeroes, format: formatSeconds(teamStats.stats.average.TimeStunningEnemyHeroes) };
+
+  return stats;
+}
+
+function getTeamHeroCompareStats(t, totalMatches) {
+  let team = {};
+  team.pct = t.wins / t.games;
+  team.record = `${formatStat('pct', team.pct)} (${t.wins} - ${t.games - t.wins})`;
+  team.pickPct = t.games / totalMatches;
+  team.formatPickPct = `${formatStat('pct', team.pickPct)} (${t.games}/${totalMatches})`;
+  team.r1Pct = t.picks.round1.count / totalMatches;
+  team.r2Pct = t.picks.round2.count / totalMatches;
+  team.r3Pct = t.picks.round3.count / totalMatches;
+  team.banPct = t.bans / totalMatches;
+  team.formatBanPct = `${formatStat('pct', team.banPct)} (${t.bans} / ${totalMatches})`;
+  team.b1Pct = t.first / totalMatches;
+  team.b2Pct = t.second / totalMatches;
+
+  return team;
 }
 
 function toggleTeamRosterMode(elem) {

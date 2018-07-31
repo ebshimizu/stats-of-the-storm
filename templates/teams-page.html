@@ -43,6 +43,7 @@
       <div class="ui secondary inverted pointing menu" id="teams-submenu">
         <a class="active item" data-tab="team-overall-stats">Overall</a>
         <a class="item" data-tab="team-roster-stats">Roster</a>
+        <a class="item" data-tab="team-comparison-stats">Compare</a>
         <a class="item external-match-history"><i class="external icon"></i>Match History</a>
       </div>
       <div class="ui active tab" data-tab="team-overall-stats" id="team-overall-stats">
@@ -321,7 +322,7 @@
             </div>
             <div class="ui six wide column">
               <div class="ui inverted segment" id="team-detail-stats">
-                <div class="ui top attached label">Detailed Stats</div>
+                <div class="ui top attached label">wAvg. Macro Stats</div>
                 <div class="ui four inverted small statistics">
                   <div class="statistic" name="team-time-to-10">
                     <div class="value">###</div>
@@ -521,6 +522,99 @@
           </div>
         </div>
       </div>
+      <div class="ui tab" data-tab="team-comparison-stats" id="team-comparison-stats">
+        <div class="team-page-wrapper">
+          <div class="compare-header">
+            <div class="ui grid">
+              <div class="twelve wide column">
+                <h2 class="ui inverted header" id="team-compare-header"></h2>
+              </div>
+              <div class="four wide column">
+                <div class="ui fluid search selection dropdown team-menu" id="team-set-team-compare">
+                  <i class="dropdown icon"></i>
+                  <span class="default text">Select a Team to Compare Stats</span>
+                  <div class="menu">
+      
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ui grid">
+            <div class="eleven wide column">
+              <div class="ui inverted segment" id="team-compare-stats">
+                <div class="ui top attached label">Stats</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Stat</th>
+                        <th class="center aligned team1"></th>
+                        <th class="center aligned team2"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="five wide column">
+              <div class="ui inverted segment" id="team-compare-map-stats">
+                <div class="ui top attached label">Map Stats</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Map</th>
+                        <th class="team1">[1] Win % (W/L)</th>
+                        <th class="team2">[2] Win % (W/L)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="sixteen wide column">
+              <div class="ui inverted segment" id="team-compare-picks">
+                <div class="ui top attached label">Hero Picks and Bans</div>
+                <div class="table-wrapper">
+                  <table class="ui sortable selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Hero</th>
+                        <th>[1] Win % (W-L)</th>
+                        <th>[2] Win % (W-L)</th>
+                        <th>[1] Pick % (G)</th>
+                        <th>[2] Pick % (G)</th>
+                        <th>[1] R1 %</th>
+                        <th>[2] R1 %</th>
+                        <th>[1] R2 %</th>
+                        <th>[2] R2 %</th>
+                        <th>[1] R3 %</th>
+                        <th>[2] R3 %</th>
+                        <th>[1] Ban % (G)</th>
+                        <th>[2] Ban % (G)</th>
+                        <th>[1] R1 Ban %</th>
+                        <th>[2] R1 Ban %</th>
+                        <th>[1] R2 Ban %</th>
+                        <th>[2] R2 Ban %</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="ui dimmer" id="team-detail-dimmer">
         <div class="ui text loader">
           Loading Team Details
@@ -680,5 +774,34 @@
         </div>
       </div>
     </td>
+  </tr>
+</script>
+
+<script id="team-roster-hero-compare-row" type="text/x-handlebars-template">
+  <tr>
+    <td>
+      <h3 class="ui image inverted header">
+        <img src="{{heroImage heroName}}" class="ui rounded image">
+        <div class="content">
+          {{heroName}}
+        </div>
+      </h3>
+    </td>
+    <td class="center aligned" data-sort-value="{{team1.pct}}">{{team1.record}}</td>
+    <td class="center aligned" data-sort-value="{{team2.pct}}">{{team2.record}}</td>
+    <td class="center aligned" data-sort-value="{{team1.pickPct}}">{{team1.formatPickPct}}</td>
+    <td class="center aligned" data-sort-value="{{team2.pickPct}}">{{team2.formatPickPct}}</td>
+    <td class="center aligned" data-sort-value="{{team1.r1Pct}}">{{formatPct team1.r1Pct}}</td>
+    <td class="center aligned" data-sort-value="{{team2.r1Pct}}">{{formatPct team2.r1Pct}}</td>
+    <td class="center aligned" data-sort-value="{{team1.r2Pct}}">{{formatPct team1.r2Pct}}</td>
+    <td class="center aligned" data-sort-value="{{team2.r2Pct}}">{{formatPct team2.r2Pct}}</td>
+    <td class="center aligned" data-sort-value="{{team1.r3Pct}}">{{formatPct team1.r3Pct}}</td>
+    <td class="center aligned" data-sort-value="{{team2.r3Pct}}">{{formatPct team2.r3Pct}}</td>
+    <td class="center aligned" data-sort-value="{{team1.banPct}}">{{team1.formatBanPct}}</td>
+    <td class="center aligned" data-sort-value="{{team2.banPct}}">{{team2.formatBanPct}}</td>
+    <td class="center aligned" data-sort-value="{{team1.b1Pct}}">{{formatPct team1.b1Pct}}</td>
+    <td class="center aligned" data-sort-value="{{team2.b1Pct}}">{{formatPct team2.b1Pct}}</td>
+    <td class="center aligned" data-sort-value="{{team1.b2Pct}}">{{formatPct team1.b2Pct}}</td>
+    <td class="center aligned" data-sort-value="{{team2.b2Pct}}">{{formatPct team2.b2Pct}}</td>
   </tr>
 </script>

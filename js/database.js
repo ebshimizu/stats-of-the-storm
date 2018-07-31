@@ -385,6 +385,66 @@ class Database {
     this._db.settings.find({ type: 'team', players: id }, callback);
   }
 
+  // callback format: function(teamObject, matchData, heroData)
+  getTeamData(teamID, filter, callback) {
+    DB.getTeam(teamID, function(err, team) {
+      // get the match data
+      let query = Object.assign({}, filter);
+      currentTeam = team;
+  
+      let players = team.players;
+  
+      if (!('$or' in query)) {
+        query.$or = [];
+      }
+  
+      let t0queries = [];
+      let t1queries = [];
+      if (team.players.length <= 5) {
+        // all players need to be in a team somewhere
+        for (const i in players) {
+          t0queries.push({ 'teams.0.ids': players[i] });
+          t1queries.push({ 'teams.1.ids': players[i] });
+        }
+      }
+      else {
+        // basically we need a match 5 of the players and then we're ok 
+        for (let i = 0; i < 5; i++) {
+          const t0key = 'teams.0.ids.' + i;
+          const t1key = 'teams.1.ids.' + i;
+  
+          let t0arg = { };
+          t0arg[t0key] = { $in: players };
+          let t1arg = {};
+          t1arg[t1key] = { $in: players };
+  
+          t0queries.push(t0arg);
+          t1queries.push(t1arg);
+        }
+      }
+  
+      query.$or.push({ $and: t0queries });
+      query.$or.push({ $and: t1queries });
+  
+      // execute
+      DB.getMatches(query, function(err, matches) {
+        // then get the hero data
+        let matchIDs = [];
+        for (let i in matches) {
+          matchIDs.push(matches[i]._id);
+        }
+  
+        // only want specific users
+        let query2 = { ToonHandle: { $in: team.players } };
+  
+        DB.getHeroDataForMatches(matchIDs, query2, function(err, heroData) {
+          // and now finally load the team data
+          callback(team, matches, heroData);
+        });
+      });
+    });
+  }
+
   checkDuplicate(file, callback) {
     let header = Parser.getHeader(file);
 

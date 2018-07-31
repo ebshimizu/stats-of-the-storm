@@ -39,11 +39,13 @@
   height: 600px;
 }
 
+#team-compare-picks tbody td,
 #team-detail-body .player-win tbody td {
   font-size: 12pt;
 }
 
 #team-roster-stats tbody td,
+#team-compare-stats tbody td,
 #team-hero-summary tbody td {
   font-size: 13pt;
 }
@@ -53,8 +55,14 @@
 }
 
 #team-map-summary,
-#team-hero-summary {
+#team-hero-summary,
+#team-compare-stats,
+#team-compare-map-stats {
   height: 600px;
+}
+
+#team-compare-picks {
+  height: 800px;
 }
 
 #teams-page-content .table-wrapper-xy {
