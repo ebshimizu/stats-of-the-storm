@@ -430,6 +430,8 @@ function loadTeamComparisonStats(team2, team2Matches, team2Data) {
     mapTable.append(`
       <tr>
         <td>${map}</td>
+        <td class="center aligned">${t1 ? t1.games : 0}</td>
+        <td class="center aligned">${t2 ? t2.games : 0}</td>
         <td class="center aligned" data-sort-value="${t1Win}">${t1Format}</td>
         <td class="center aligned" data-sort-value="${t2Win}">${t2Format}</td>
       </tr>
