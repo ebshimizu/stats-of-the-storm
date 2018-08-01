@@ -1,7 +1,9 @@
 # Teams
 
 Teams are a way to track stats for multiple players playing on the same side. Team consist
-of any number of players.
+of any number of players. Teams will aggregate stats from matches that match the following conditions:
+* If the team consists of five or fewer players: Match must have a team that contains all of the team members.
+* If the team consists of more than five players: Match must have a team such that all of the members of the team (red or blue) belong to the same team.
 
 There are two ways to create teams in Stats of the Storm.
 
