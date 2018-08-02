@@ -45,9 +45,10 @@ Want to help develop? Found a bug? Check out the [project repository](https://gi
 ## How To
 * [Parse Replays](parser.md)
 * [Make a Team](teams.md)
-* [Load an External Database](external-db.md)
 * [Use Filters](filters.md)
 * [Use Collections](collections.md)
+* [Use Aliases](alias.md)
+* [Load an External Database](external-db.md)
 * [Do a Clean Uninstall](uninstall.md)
 
 ## Replay Reference
