@@ -235,3 +235,7 @@
   transform: translateY(-50%);
   float: right;
 }
+
+#player-page-content .high-z {
+    z-index: 50;
+}

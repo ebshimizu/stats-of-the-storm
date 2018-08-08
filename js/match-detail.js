@@ -512,7 +512,7 @@ function loadMatch(docs, doneLoadCallback) {
   // non-english hero name check
   for (let h of matchDetailMatch.heroes) {
     if (Heroes.role(h) === '') {
-      showMessage('Match Metadata Error', 'A hero name in this match\'s metadata is invalid. This only affects the ability to search for a hero in this match on the Matches page. Player Details and the Collection: Heroes pages are unaffected. To fix, you should re-import the match or re-create the database.', { class: 'negative', sticky: true });
+      showMessage('Match Metadata Error', 'A hero name in this match\'s metadata is invalid. This only affects the ability to search for a hero in this match on the Matches page. If the missing hero is newly released, the app should update within a few days with talent info and icons.', { class: 'negative', sticky: true });
       break;
     }
   }
