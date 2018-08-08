@@ -13,7 +13,7 @@ It also comes with a [HotsAPI](http://hotsapi.net/)/[HotsLogs](https://www.hotsl
 Stats of the Storm is available for Windows and macOS (experimental). You can download the latest build
 from the [Releases](https://github.com/ebshimizu/stats-of-the-storm/releases) page.
 
-Windowws users: Download the `stats-of-the-storm-setup-x.x.x.exe` file.
+Windows users: Download the `stats-of-the-storm-setup-x.x.x.exe` file.
 
 Mac users: Download either the `stats-of-the-storm-x.x.x.dmg` or `stats-of-the-storm-x.x.x-mac.zip`. 
 
