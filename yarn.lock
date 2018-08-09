@@ -3126,9 +3126,9 @@ hawk@~3.1.3:
     hoek "2.x.x"
     sntp "1.x.x"
 
-heroprotocol@^2.0.0-alpha.7:
-  version "2.0.0-alpha.7"
-  resolved "https://registry.yarnpkg.com/heroprotocol/-/heroprotocol-2.0.0-alpha.7.tgz#d5144e7efa8517cb56cc35de55911d802f16e2d8"
+heroprotocol@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/heroprotocol/-/heroprotocol-2.0.0.tgz#145a8d098e4ea8df6371f5826894e81c1c63f119"
   dependencies:
     download-github-repo "^0.1.3"
     empeeku "^1.0.2"

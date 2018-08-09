@@ -1,6 +1,6 @@
 {
   "name": "stats-of-the-storm",
-  "version": "2.4.0-dev",
+  "version": "2.3.4",
   "main": "main.js",
   "description": "A Heroes of the Storm stat tracking application.",
   "bugs": "falindrith@gmail.com",
@@ -32,7 +32,7 @@
     "form-data": "^2.3.2",
     "fs-extra": "^5.0.0",
     "handlebars": "^4.0.11",
-    "heroprotocol": "^1.0.1",
+    "heroprotocol": "^2.0.0",
     "jquery": "^3.3.1",
     "jquery-tablesort": "0.0.11",
     "level-js": "^2.2.4",
