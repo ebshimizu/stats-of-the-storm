@@ -779,5 +779,23 @@
     "icon": "storm_ui_icon_artanis_doubleslash_var2.png",
     "sort": 3,
     "abilityId": "Artanis|W1"
+  },
+  {
+    "tooltipId": "StukovWithinMyReachTalent",
+    "talentTreeId": "StukovWithinMyReach",
+    "name": "Within My Reach",
+    "description": "Increase the range of Lurking Arm by 50%.",
+    "icon": "storm_ui_icon_stukov_lurkingarm.png",
+    "sort": 2,
+    "abilityId": "Stukov|E1"
+  },
+  {
+    "tooltipId": "ChromieBronzeTalons",
+    "talentTreeId": "ChromieBronzeTalons",
+    "name": "Bronze Talons",
+    "description": "Increase Chromie's Basic Attack range by 35%. Using Sand Blast increases the damage of her next Basic Attack by 250%.",
+    "icon": "storm_ui_icon_talent_autoattack_damage.png",
+    "sort": 1,
+    "abilityId": "Chromie|Q1"
   }
 ]

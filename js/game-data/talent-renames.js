@@ -36,7 +36,17 @@ const TalentRenames = {
   JunkratSpreadVolley: 'JunkratFragLauncherSpreadVolley',
   "Kael'thasLivingBombIgnite": 'KaelthasLivingBombIgnite',   // lol
   AnubarakHeroicAbilityCarrionSwarm: 'AnubarakLocustSwarm',
-  AnubarakMasteryHiveMasterCarrionSwarm: 'AnubarakLocustSwarmHiveMaster'
+  AnubarakMasteryHiveMasterCarrionSwarm: 'AnubarakLocustSwarmHiveMaster',
+  KerriganMasteryRavageSiphoningImpact: 'KerriganSiphoningImpactRavage',                  // 2.36.0
+  KerriganMasteryImpalingBladesSharpenedBlades: 'KerriganSharpenedBladesImpalingBlades',
+  KerriganMasteryRavageCleanKill: 'KerriganCleanKillRavage',
+  KerriganMasteryPrimalGraspPsionicPulse: 'KerriganPsionicPulsePrimalGrasp',
+  KerriganMasteryImpalingBladesBladeTorrent: 'KerriganBladeTorrentImpalingBlades',
+  BattleMomentumKerrigan: 'KerriganBladedMomentum',
+  KerriganMasteryEviscerate: 'KerriganEviscerate',
+  KerriganMasteryAggressiveDefense: 'KerriganAggressiveDefense',
+  KerriganMasteryMaelstromOmegastorm: 'KerriganOmegastormMaelstrom',
+  KerriganMasteryTorrasqueSummonUltralisk: 'KerriganTorrasqueSummonUltralisk'
 };
 
 module.exports = TalentRenames;
