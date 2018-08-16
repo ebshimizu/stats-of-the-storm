@@ -902,4 +902,9 @@ class Database {
   }
 }
 
+function dateToWinTime(date) {
+  let ms = date.getTime();
+  return (ms + 11644473600000) * 10000 + 9999;
+}
+
 exports.HeroesDatabase = Database;

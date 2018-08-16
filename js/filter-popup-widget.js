@@ -71,6 +71,8 @@ function initPopup(elem) {
   //toggles
   elem.find('.filter-widget-hero-team').checkbox();
 
+  elem.find('.filter-widget-search-players').dropdown();
+
   // populate hero menu
   addHeroMenuOptions(elem.find('.filter-widget-hero-search')); 
   elem.find('.filter-widget-hero-search').dropdown({
@@ -129,7 +131,7 @@ function bindFilterResetButton(elem, callback) {
 function resetFilterWidget(elem) {
   elem.find('.dropdown').dropdown('restore defaults');
 
-  elem.find('.filter-widget-start-date').datepicker('setDate', new Date('1-1-2012'));
+  elem.find('.filter-widget-start-date').datepicker('setDate', new Date('1-1-2016'));
   elem.find('.filter-widget-end-date').datepicker('setDate', new Date()); 
 }
 
@@ -176,6 +178,8 @@ function getPopupQuery(elem, callback) {
   let team = elem.find('.filter-widget-team-menu').dropdown('get value');
   let teamWin = elem.find('.filter-widget-team-win').dropdown('get value');
 
+  let players = elem.find('.filter-widget-search-players').dropdown('get value').split(',');
+
   // tags
   let tags = elem.find('.filter-widget-tags').dropdown('get value').split(',');
 
@@ -205,12 +209,26 @@ function getPopupQuery(elem, callback) {
     query.tags = { $in: tags };
   }
 
+  
   // date  // dates
-  query.$and = [{ rawDate: { $gte: dateToWinTime(start) } }, { rawDate: { $lte: dateToWinTime(end) } }];
+  let incEnd = new Date(end);
+  incEnd.setDate(end.getDate() + 1);
+  query.$and = [{ rawDate: { $gte: dateToWinTime(start) } }, { rawDate: { $lte: dateToWinTime(incEnd) } }];
 
   // queries diverge here
   let map = Object.assign({}, query);
   let hero = Object.assign({}, query);
+
+  if (players[0] !== "") {
+    if (!('$or' in map))
+      map.$or = [];
+
+    for (let p in players) {
+      map.$or.push({ playerIDs: players[p] });
+    }
+
+    hero.ToonHandle = { $in: players };
+  }
 
   // heroes
   let heroArr = [];

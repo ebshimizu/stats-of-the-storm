@@ -249,7 +249,9 @@ function selectMatches() {
   }
 
   // dates
-  query.$and = [{ rawDate: { $gte: dateToWinTime(start) } }, { rawDate: { $lte: dateToWinTime(end) } }];
+  let incEnd = new Date(end);
+  incEnd.setDate(end.getDate() + 1);
+  query.$and = [{ rawDate: { $gte: dateToWinTime(start) } }, { rawDate: { $lte: dateToWinTime(incEnd) } }];
 
   // heroes
   if (heroes[0] !== "" && !requireHeroOnTeam) {

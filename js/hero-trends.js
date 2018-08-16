@@ -124,10 +124,16 @@ function loadTrends() {
 
   // update the queries
   let query1 = Object.assign({}, trendsMapDataFilter);
-  query1.$and = [{ rawDate: { $gte: dateToWinTime(trendsDateLimits['1-start']) } }, { rawDate: { $lte: dateToWinTime(trendsDateLimits['1-end']) } }];
+
+  let incEnd1 = new Date(trendsDateLimits['1-end']);
+  incEnd1.setDate(trendsDateLimits['1-end'].getDate() + 1);
+  
+  query1.$and = [{ rawDate: { $gte: dateToWinTime(trendsDateLimits['1-start']) } }, { rawDate: { $lte: dateToWinTime(incEnd1) } }];
 
   let query2 = Object.assign({}, trendsMapDataFilter);
-  query2.$and = [{ rawDate: { $gte: dateToWinTime(trendsDateLimits['2-start']) } }, { rawDate: { $lte: dateToWinTime(trendsDateLimits['2-end']) } }];
+  let incEnd2 = new Date(trendsDateLimits['2-end']);
+  incEnd2.setDate(trendsDateLimits['2-end'].getDate() + 1);
+  query2.$and = [{ rawDate: { $gte: dateToWinTime(trendsDateLimits['2-start']) } }, { rawDate: { $lte: dateToWinTime(incEnd2) } }];
 
 
   DB.getMatches(query1, function(err, dp1) {
