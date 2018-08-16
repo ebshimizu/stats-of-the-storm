@@ -69,3 +69,4 @@ parser/heroprotocol.spec
 test.pdf
 parser/test.json
 .npmrc
+filter.js
