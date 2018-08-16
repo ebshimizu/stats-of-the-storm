@@ -209,8 +209,11 @@ function getPopupQuery(elem, callback) {
     query.tags = { $in: tags };
   }
 
+  
   // date  // dates
-  query.$and = [{ rawDate: { $gte: dateToWinTime(start) } }, { rawDate: { $lte: dateToWinTime(end) } }];
+  let incEnd = new Date(end);
+  incEnd.setDate(end.getDate() + 1);
+  query.$and = [{ rawDate: { $gte: dateToWinTime(start) } }, { rawDate: { $lte: dateToWinTime(incEnd) } }];
 
   // queries diverge here
   let map = Object.assign({}, query);
