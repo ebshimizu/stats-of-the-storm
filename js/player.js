@@ -548,22 +548,22 @@ function updatePlayerPage(err, doc) {
 }
 
 function updatePlayerPageHeader() {
-  let formatName = playerDetailInfo.name;
+  let formatName = escapeHtml(playerDetailInfo.name);
   let menuName = formatName;
 
   if (playerDetailInfo.nickname && playerDetailInfo.nickname !== '') {
-    formatName = playerDetailInfo.nickname + '<span class="btag">' + formatName;
+    formatName = escapeHtml(playerDetailInfo.nickname) + '<span class="btag">' + formatName;
 
     if (playerDetailInfo.tag) {
-      formatName += '#' + playerDetailInfo.tag;
-      menuName += '#' + playerDetailInfo.tag;
+      formatName += '#' + escapeHtml(playerDetailInfo.tag);
+      menuName += '#' + escapeHtml(playerDetailInfo.tag);
     }
 
     formatName += '</span>';
   }
   else if (playerDetailInfo.tag) {
-    formatName += '<span class="btag">#' + playerDetailInfo.tag + '</span>';
-    menuName += '#' + playerDetailInfo.tag;
+    formatName += '<span class="btag">#' + escapeHtml(playerDetailInfo.tag) + '</span>';
+    menuName += '#' + escapeHtml(playerDetailInfo.tag);
   }
 
   menuName += ' (' + RegionString[playerDetailInfo.region] + ')';
@@ -572,8 +572,8 @@ function updatePlayerPageHeader() {
   if (playerDetailInfo.resolvedAliases.length > 0) {
     let popup = '<b>Active Aliases</b>';
     for (let p of playerDetailInfo.resolvedAliases) {
-      let tag = p.tag ? `#${p.tag}` : ''
-      popup += `<br>${p.name}${tag} (${RegionString[p.region]})`;
+      let tag = p.tag ? `#${escapeHtml(p.tag)}` : ''
+      popup += `<br>${escapeHtml(p.name)}${tag} (${RegionString[p.region]})`;
     }
 
     $('#player-alias-icon').attr('data-html', popup);

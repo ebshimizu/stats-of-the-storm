@@ -37,7 +37,8 @@ const {
   formatSeconds,
   formatStat,
   capitalize,
-  formatDelta
+  formatDelta,
+  escapeHtml
 } = require('./js/util/formatters');
 
 Handlebars.registerHelper('formatSeconds', formatSeconds);
@@ -391,9 +392,9 @@ function updatePlayerMenuOptions(elem, value) {
 
       let name = formatPlayerName(player);
 
-      let item = '<div class="item" data-value="' + player._id + '">';
+      let item = '<div class="item" data-value="' + escapeHtml(player._id) + '">';
       //item += '<div class="ui horizontal label"><i class="file outline icon"></i>' + player.matches + '</div>';
-      item += '<div class="item" data-value="' + player._id + '">' + name + ' (' + RegionString[player.region] + ')</div>'
+      item += '<div class="item" data-value="' + escapeHtml(player._id) + '">' + name + ' (' + RegionString[player.region] + ')</div>'
 
       menu.find('.menu').append(item);
       count += 1
@@ -411,7 +412,7 @@ function formatPlayerName(player, opts = {}) {
     name += '#' + player.tag;
   }
 
-  return name;
+  return escapeHtml(name);
 }
 
 // given a user id, returns 'focus-player' class if the player id is, well, the focus player
@@ -448,7 +449,7 @@ function addPatchMenuOptions(elem, callback) {
     elem.find('.menu').html('');
 
     for (let v in versions) {
-      elem.find('.menu').append('<div class="item" data-value="' + v + '">' + versions[v] + '</div>');
+      elem.find('.menu').append('<div class="item" data-value="' + escapeHtml(v) + '">' + escapeHtml(versions[v]) + '</div>');
     }
 
     callback();
@@ -473,7 +474,7 @@ function populateTeamMenu(elem) {
 
     for (let i of keys) {
       let d = i.index;
-      elem.find('.menu').append('<div class="item" data-value="' + docs[d]._id + '">' + docs[d].name + '</div>');
+      elem.find('.menu').append('<div class="item" data-value="' + escapeHtml(docs[d]._id) + '">' + escapeHtml(docs[d].name) + '</div>');
     }
 
     elem.dropdown('refresh');
@@ -595,7 +596,7 @@ function resetAllSections() {
 }
 
 function setLoadMessage(msg) {
-  $('.load-status').html(msg);
+  $('.load-status').text(msg);
 }
 
 function showLoader() {

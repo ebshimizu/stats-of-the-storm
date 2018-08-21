@@ -128,7 +128,7 @@ function populateTeamCollectionMenu() {
   DB.getCollections(function(err, collections) {
     for (let c in collections) {
       let col = collections[c];
-      $('#team-compare-collection .menu').append('<div class="item" data-value="' + col._id + '">' + col.name + '</div>');
+      $('#team-compare-collection .menu').append('<div class="item" data-value="' + escapeHtml(col._id) + '">' + escapeHtml(col.name) + '</div>');
     }
 
     $('#team-compare-collection').dropdown('refresh');
@@ -409,9 +409,9 @@ function loadTeamComparisonStats(team2, team2Matches, team2Data) {
 
     statTable.append(`
       <tr>
-        <td>${t1.name}</td>
-        <td class="center aligned" data-sort-value="${t1.val}">${t1.format}</td>
-        <td class="center aligned" data-sort-value="${t2.val}">${t2.format}</td>
+        <td>${escapeHtml(t1.name)}</td>
+        <td class="center aligned" data-sort-value="${escapeHtml(t1.val)}">${escapeHtml(t1.format)}</td>
+        <td class="center aligned" data-sort-value="${escapeHtml(t2.val)}">${escapeHtml(t2.format)}</td>
       </tr>`);
   }
 
