@@ -390,7 +390,6 @@ class Database {
     DB.getTeam(teamID, function(err, team) {
       // get the match data
       let query = Object.assign({}, filter);
-      currentTeam = team;
   
       let players = team.players;
   

@@ -5,6 +5,7 @@ var teamBanSummaryRowTemplate;
 var teamRosterRowTemplate;
 var teamHeroPickRowTemplate;
 var currentTeam;
+var cmpTeamVal;
 var teamPlayerStats, teamTeamStats, teamHeroStats;
 var teamAvgData;
 var teamAvgTracker;
@@ -193,12 +194,17 @@ function updateCompareTeamData(value, text, $elem, force) {
   if (currentTeam && currentTeam._id === value && !force)
     return;
 
+  if (value === cmpTeamVal)
+    return;
+  
+  cmpTeamVal = value;
   showTeamLoader();
 
   DB.getTeamData(value, teamsMapDataFilter, loadTeamComparisonStats);
 }
 
 function loadTeamData(team, matches, heroData) {
+  currentTeam = team;
   teamHeroMatchThresh = parseInt($('#teams-hero-thresh input').val());
 
   // compute hero stats
