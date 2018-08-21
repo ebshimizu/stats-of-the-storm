@@ -800,26 +800,22 @@ function loadTeamAverages(collectionID) {
   };
   teamAvgTracker = { target: 0, current: 0, actual: 0};
 
-  DB.getAllTeams(function(err, teams) {
-    teamAvgTracker.target = teams.length;
+  let query = {};
+  if (collectionID)
+    query.collection = collectionID;
 
-    // kinda terrible double calls to this but eh
-    // unfiltered
-    let query = {};
-    if (collectionID)
-      query.collection = collectionID;
+  DB.reduceTeams(query, initProcessTeamAverages, processTeamAverages, displayTeamAverages);
+}
 
-    getAllTeamData(query, processTeamAverages)
-  });
+function initProcessTeamAverages(teams) {
+  teamAvgTracker.target = teams.length;
+  $('#team-compare-table tbody').html('');
 }
 
 function processTeamAverages(err, matches, team) {
   teamAvgTracker.current += 1;
 
   if (matches.length === 0) {
-    if (teamAvgTracker.current === teamAvgTracker.target)
-      displayTeamAverages();
-
     return;
   }
 
@@ -849,8 +845,6 @@ function processTeamAverages(err, matches, team) {
   }
 
   // not sure about structures really, that's kinda just a fun fact
-  if (teamAvgTracker.current === teamAvgTracker.target)
-    displayTeamAverages();
 }
 
 function displayTeamAverages() {
@@ -862,7 +856,6 @@ function displayTeamAverages() {
     teamAvgData[s] /= teamAvgTracker.actual;
   }
 
-  $('#team-compare-table tbody').html('');
   for (let s in teamAvgData) {
     let context = {};
 

@@ -444,6 +444,76 @@ class Database {
     });
   }
 
+  // reduction function for iterating and processing each team
+  reduceTeams(filter, init, reduce, final) {
+    var self = this;
+
+    this.getAllTeams(function(err, teams) {
+      if (teams.length === 0) {
+        final();
+      }
+      else {
+        init(teams);
+        self.processTeamReduce(teams.pop(), teams, filter, reduce, final);
+      }
+    });
+  }
+
+  processTeamReduce(currentTeam, remaining, filter, reduce, final) {
+    if (!currentTeam) {
+      final();
+      return;
+    }
+
+    var self = this;
+    let team = currentTeam;
+    let query = Object.assign({}, filter);
+    let players = team.players;
+
+    if (!('$or' in query)) {
+      query.$or = [];
+    }
+
+    let t0queries = [];
+    let t1queries = [];
+    if (team.players.length <= 5) {
+      // all players need to be in a team somewhere
+      for (const i in players) {
+        t0queries.push({ 'teams.0.ids': players[i] });
+        t1queries.push({ 'teams.1.ids': players[i] });
+      }
+    }
+    else {
+      // basically we need a match 5 of the players and then we're ok
+      for (let i = 0; i < 5; i++) {
+        const t0key = 'teams.0.ids.' + i;
+        const t1key = 'teams.1.ids.' + i;
+
+        let t0arg = { };
+        t0arg[t0key] = { $in: players };
+        let t1arg = {};
+        t1arg[t1key] = { $in: players };
+
+        t0queries.push(t0arg);
+        t1queries.push(t1arg);
+      }
+    }
+
+    query.$or.push({ $and: t0queries });
+    query.$or.push({ $and: t1queries });
+
+    // execute
+    let opts = {};
+    if (query.collection) {
+      opts.collectionOverride = true;
+    }
+
+    DB.getMatches(query, function(err, docs) {
+      reduce(err, docs, team);
+      self.processTeamReduce(remaining.pop(), remaining, filter, reduce, final);
+    }, opts);
+  }
+
   checkDuplicate(file, callback) {
     let header = Parser.getHeader(file);
 

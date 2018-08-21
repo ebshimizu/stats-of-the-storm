@@ -64,7 +64,11 @@ function initTeamRankingPage() {
 }
 
 function resetTeamRankingPage() {
-  resetTeamRankingsFilter();
+  teamRankingMatchFilter = {};
+  teamRankingHeroFilter = {};
+
+  // html reset
+  $('#team-ranking-body tbody').html('');
 }
 
 function showTeamRankingSection() {
@@ -107,85 +111,31 @@ function toggleTeamRankingMode(elem) {
   updateTeamRanking();
 }
 
-function getAllTeamData(filter, callback, usingTeamRanking = false) {
-  DB.getAllTeams(function(err, teams) {
-    // do nothing, there are no teams
-    if (teams.length === 0)
-      return;
-
-    if (usingTeamRanking) {
-      disableWidget('team-ranking-filter');
-      $('#team-ranking-alt-search-button').addClass('disabled');
-      $('#team-progress-bar').transition('scale');
-      $('#team-progress-bar').progress('reset');
-      $('#team-progress-bar').progress('set total', teams.length);
-    }
-    for (let t in teams) {
-      let team = teams[t];
-      // ok for all the teams in order, we'll need to get a bunch of data
-      // this may or may not include all the hero data but we'll see.
-      // turns out past me included total stats for teams?
-      let query = Object.assign({}, filter);
-      let players = team.players;
-
-      if (!('$or' in query)) {
-        query.$or = [];
-      }
-
-      let t0queries = [];
-      let t1queries = [];
-      if (team.players.length <= 5) {
-        // all players need to be in a team somewhere
-        for (const i in players) {
-          t0queries.push({ 'teams.0.ids': players[i] });
-          t1queries.push({ 'teams.1.ids': players[i] });
-        }
-      }
-      else {
-        // basically we need a match 5 of the players and then we're ok
-        for (let i = 0; i < 5; i++) {
-          const t0key = 'teams.0.ids.' + i;
-          const t1key = 'teams.1.ids.' + i;
-
-          let t0arg = { };
-          t0arg[t0key] = { $in: players };
-          let t1arg = {};
-          t1arg[t1key] = { $in: players };
-
-          t0queries.push(t0arg);
-          t1queries.push(t1arg);
-        }
-      }
-
-      query.$or.push({ $and: t0queries });
-      query.$or.push({ $and: t1queries });
-
-      // execute
-      if (query.collection) {
-        DB.getMatches(query, function(err, docs) { callback(err, docs, team); }, { collectionOverride: true });
-      }
-      else {
-        DB.getMatches(query, function(err, docs) { callback(err, docs, team); });
-      }
-    }
-  });
-}
-
 function updateTeamRanking() {
   $('#team-ranking-body tbody').html('');
 
   // this is going to be... some shenanigans
   // first get the list of all the teams in the database
-  getAllTeamData(teamRankingMatchFilter, updateTeamRankingData, true);
+  disableWidget('team-ranking-filter');
+  $('#team-ranking-alt-search-button').addClass('disabled');
+  $('#team-progress-bar').transition('scale');
+  $('#team-progress-bar').progress('reset');
+
+  DB.reduceTeams(teamRankingMatchFilter, initTeamRankingData, updateTeamRankingData, finalizeTeamRankingData);
+}
+
+function initTeamRankingData(teams) {
+  $('#team-progress-bar').progress('set total', teams.length);
+}
+
+function finalizeTeamRankingData() {
+  setTimeout(() => { $('#team-progress-bar').transition('scale'); }, 2000);
+  enableWidget('team-ranking-filter');
+  $('#team-ranking-alt-search-button').removeClass('disabled');
 }
 
 function updateTeamRankingData(err, matches, team) {
   $('#team-progress-bar').progress('increment', 1);
-  if ($('#team-progress-bar').progress('is complete')) {
-    setTimeout(() => { $('#team-progress-bar').transition('scale'); }, 2000);
-    enableWidget('team-ranking-filter');
-    $('#team-ranking-alt-search-button').removeClass('disabled');
-  }
 
   // skip teams with no data
   if (matches.length === 0)
