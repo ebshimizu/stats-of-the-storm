@@ -2154,9 +2154,10 @@ function updateTeamStat(container, name, value) {
 
 function addNewTeamFromMatch(teamID, name) {
   if (matchDetailMatch) {
-    DB.addTeam(matchDetailMatch.teams[teamID].ids, name);
-    populateTeamMenu($('.team-menu'));
-    $('#team-set-team').dropdown('refresh');
+    DB.addTeam(matchDetailMatch.teams[teamID].ids, name, () => {
+      populateTeamMenu($('.team-menu'));
+      $('#team-set-team').dropdown('refresh');
+    });
   }
 }
 
