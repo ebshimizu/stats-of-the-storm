@@ -35,6 +35,8 @@ function initMapsPage() {
     onChange: handleMapsAction
   });
 
+  $('#map-overall-stats .statistic').popup();
+
   bindFilterButton(filterWidget, updateMapsFilter);
   bindFilterResetButton(filterWidget, resetMapsFilter);
   bindOtherSearchButton(filterWidget, $('#maps-alt-search-button'), updateMapsFilter);
@@ -77,6 +79,8 @@ function loadMapStats() {
     updateTeamStat(statContainer, 'firstObjectiveWins', formatStat('pct', mapData.aggregate.firstObjectiveWins / mapData.aggregate.games));
     updateTeamStat(statContainer, 'blueWin', formatStat('pct', mapData.aggregate.blueWin / mapData.aggregate.games));
     updateTeamStat(statContainer, 'redWin', formatStat('pct', mapData.aggregate.redWin / mapData.aggregate.games));
+    updateTeamStat(statContainer, 'firstFortWin', formatStat('pct', mapData.aggregate.firstFortWin / mapData.aggregate.games));
+    updateTeamStat(statContainer, 'firstKeepWin', formatStat('pct', mapData.aggregate.firstKeepWin / mapData.aggregate.nonToDTotal));
 
     $('#map-overall-stats .statistic[name="min"]').attr('matchID', mapData.aggregate.minId);
     $('#map-overall-stats .statistic[name="max"]').attr('matchID', mapData.aggregate.maxId);

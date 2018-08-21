@@ -1,4 +1,5 @@
 const { median } = require("../util/math");
+const ReplayTypes = require('../../hots-parser/constants');
 
 // mapData data
 function summarizeMapData(docs) {
@@ -20,7 +21,9 @@ function summarizeMapData(docs) {
         blueWin: 0,
         redWin: 0,
         firstPickWin: 0,
-        draftGames: 0
+        draftGames: 0,
+        firstFortWin: 0,
+        firstKeepWin: 0
       };
     }
 
@@ -43,8 +46,9 @@ function summarizeMapData(docs) {
 
     // first objective win
     if (match.firstObjectiveWin === true) stats[map].firstObjectiveWins += 1;
-
     if (match.firstPickWin === true) stats[map].firstPickWin += 1;
+    if (match.firstKeepWin === true) stats[map].firstKeepWin += 1;
+    if (match.firstFortWin === true) stats[map].firstFortWin += 1;
 
     if (match.winner === 0) stats[map].blueWin += 1;
     else stats[map].redWin += 1;
@@ -62,7 +66,10 @@ function summarizeMapData(docs) {
     blueWin: 0,
     redWin: 0,
     firstPickWin: 0,
-    draftGames: 0
+    draftGames: 0,
+    firstFortWin: 0,
+    firstKeepWin: 0,
+    nonToDTotal: 0    // necessary to adjust for first keep win stat (ToD has no keeps)
   };
 
   for (let map in stats) {
@@ -87,6 +94,11 @@ function summarizeMapData(docs) {
     aggregate.redWin += stats[map].redWin;
     aggregate.firstPickWin += stats[map].firstPickWin;
     aggregate.medianTmp = aggregate.medianTmp.concat(stats[map].medianTmp);
+    aggregate.firstFortWin += stats[map].firstFortWin;
+    aggregate.firstKeepWin += stats[map].firstKeepWin;
+
+    if (map !== ReplayTypes.MapType.TowersOfDoom)
+      aggregate.nonToDTotal += stats[map].games;
   }
 
   aggregate.median = median(aggregate.medianTmp);

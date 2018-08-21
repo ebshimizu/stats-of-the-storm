@@ -1007,6 +1007,10 @@ function renderPlayerHeroDetail() {
   $('#player-hero-detail-stats td').popup();
 }
 
+function renderPlayerHeroAwards() {
+  
+}
+
 function togglePlayerDetailMode(elem) {
   $('#player-hero-detail-stats .menu .item').removeClass('active');
   $(elem).addClass('active');
