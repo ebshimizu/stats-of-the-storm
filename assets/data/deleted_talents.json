@@ -797,5 +797,15 @@
     "icon": "storm_ui_icon_talent_autoattack_damage.png",
     "sort": 1,
     "abilityId": "Chromie|Q1"
+  },
+  {
+    "tooltipId": "KelThuzadGlacialSpike",
+    "talentTreeId": "KelThuzadGlacialSpike",
+    "name": "Glacial Spike",
+    "description": "Activate to create a spike that detonates after 4 seconds, dealing 60 (+2.5% per level) damage to nearby enemies. The spike can be affected by Chains of Kel'Thuzad.",
+    "icon": "storm_ui_icon_kel'thuzad_glacialspike.png",
+    "sort": 2,
+    "abilityId": "Kel'Thuzad|Active",
+    "cooldown": 30
   }
 ]
