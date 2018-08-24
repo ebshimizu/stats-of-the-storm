@@ -84,8 +84,14 @@ function summarizeHeroData(docs) {
       // booooo blackheart's
       if (statName === 'BlackheartDoubloonsCollected') {
         // sometimes the replay freaks out and returns a huge integer. Set that to 0 if it happens
-        if (match.gameStats[statName] > 200)
+        if (match.gameStats[statName] > 500)
           match.gameStats[statName] = 0;
+      }
+
+      // just... don't ask
+      // sometimes the replay files really screw up
+      if (match.gameStats[statName] > 4000000000) {
+        match.gameStats[statName] = 0;
       }
 
       playerDetailStats.heroes[match.hero].stats[statName] += match.gameStats[statName];
