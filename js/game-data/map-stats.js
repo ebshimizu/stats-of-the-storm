@@ -13,6 +13,7 @@ const PerMapStatList = {
   "Sky Temple" : ["TimeInTemple"],
   "Braxis Holdout" : ["DamageDoneToZerg"],
   "Hanamura" : [],
+  "Hanamura Temple" : [],
   "Alterac Pass" : ['CageUnlocksInterrupted']
 };
 

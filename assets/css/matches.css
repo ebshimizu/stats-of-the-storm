@@ -134,7 +134,8 @@
   background-image: url('../images/shrines-banner.png');
 }
 
-#match-list td.Hanamura {
+#match-list td.Hanamura,
+#match-list td.Hanamura-Temple {
   background-image: url('../images/hanamura-banner.png');
 }
 

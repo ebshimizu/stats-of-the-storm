@@ -301,6 +301,12 @@ matchDetailTimelineGroups.add([
     content: 'Sun Shrine',
     classname: 'dragon-sun-shrine',
     visible: false
+  },
+  {
+    id: 15,
+    content: 'Payload Control',
+    classname: 'hanamura-payload',
+    visible: false
   }
 ]);
 
@@ -1264,6 +1270,9 @@ function loadTimeline() {
   else if (matchDetailMatch.map === ReplayTypes.MapType.AlteracPass) {
     getAlteracEvents(items);
   }
+  else if (matchDetailMatch.map === ReplayTypes.MapType.Hanamura) {
+    getHanamuraEvents(items);
+  }
 
   let opts = {};
   opts.min = 0;
@@ -1787,6 +1796,60 @@ function getAlteracEvents(items) {
       items.push(item);
     }
   }
+}
+
+function getHanamuraEvents(items) {
+  // first check if there even are any objectives
+  if (matchDetailMatch.objective.events) {
+    for (let payload of matchDetailMatch.objective.events) {
+      // normal items for spawn. Need a neutral color though.
+      let item = {};
+      item.start = payload.born;
+      item.group = 5;
+      item.content = `Payload Spawned`;
+      items.push(item);
+
+      // winner, if applicable
+      if (payload.died) {
+        let endItem = {
+          start: payload.died,
+          className: payload.winner === 0 ? 'blue' : 'red',
+          content: `Payload Delivered`,
+          group: 5
+        };
+        items.push(endItem);
+      }
+
+      // ok now the control timings
+      for (let i = 0; i < payload.control.length; i++) {
+        let current = payload.control[i];
+
+        if (current.team === -1)
+          continue;
+
+        let endTime = payload.died ? payload.died : matchDetailMatch.length;
+
+        if (i + 1 < payload.control.length) {
+          let next = payload.control[i + 1];
+          endTime = next.time;
+        }
+
+        let item = {
+          group: 15,
+          className: current.team === 0 ? 'blue plus2' : 'red plus2',
+          type: 'background',
+          content: '',
+          start: current.time,
+          end: endTime
+        };
+
+        items.push(item);
+      }
+    }
+  }
+
+  matchDetailTimelineGroups.update({id: 5, nestedGroups: [15]});
+  matchDetailTimelineGroups.update({id: 15, visible: true});
 }
 
 function initTeamStatGraphs() {

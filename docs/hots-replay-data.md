@@ -365,6 +365,7 @@ The following list is non-exhasutive, but it should contain most of the units of
 | `WarheadDropped` | A warhead dropped by a player after they die. |
 | `HealingPulsePickup` | The healing pulse item on some of the newer maps |
 | `TurretPickup` | The turret item on some of the newer maps |
+| `Payload_Neutral` | Neutral Payload unit (Hanamura Temple). Can track unit ownership to figure out who's on the payload. |
 
 **Mercenaries**
 
@@ -388,6 +389,7 @@ death events to find out how long they were alive.
 | `MercLanerMeleeOgre` | Bruiser Camp unit |
 | `MercLanerMeleeKnight` | Knight Camp Unit |
 | `MercLanerRangedMage` | Knight Camp Mage Unit |
+| `MercLanerSentinel` | Sentinel (Hanamura Temple Siege camp) |
 
 **Structures**
 
