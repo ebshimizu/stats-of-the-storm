@@ -46,7 +46,19 @@ const TalentRenames = {
   KerriganMasteryEviscerate: 'KerriganEviscerate',
   KerriganMasteryAggressiveDefense: 'KerriganAggressiveDefense',
   KerriganMasteryMaelstromOmegastorm: 'KerriganOmegastormMaelstrom',
-  KerriganMasteryTorrasqueSummonUltralisk: 'KerriganTorrasqueSummonUltralisk'
+  KerriganMasteryTorrasqueSummonUltralisk: 'KerriganTorrasqueSummonUltralisk',
+  StitchesMasteryChewYourFood: 'StitchesChewYourFood',     // 2.37.0
+  StitchesMasteryHeavySlam: 'StitchesHeavySlam',
+  StitchesMasteryPutridGroundSlam: 'StitchesPutridGroundSlam',
+  StitchesMasterySavorTheFlavorDevour: 'StitchesSavortheFlavorDevour',
+  StitchesMasteryLastBiteDevour: 'StitchesLastBiteDevour',
+  StitchesMasteryMegaSmashSlam: 'StitchesMegaSmashSlam',
+  StitchesMasteryIndigestionDevour: 'StitchesIndigestionDevour',
+  StitchesMasteryPulverizeSlam: 'StitchesPulverizeSlam',
+  StitchesMasteryFishingHook: 'StitchesFishingHook',
+  StitchesMasteryShishKabobHook: 'StitchesShishKabobHook',
+  StitchesMasteryHungryHungryStitchesGorge: 'StitchesHungryHungryStitchesGorge'
 };
+
 
 module.exports = TalentRenames;

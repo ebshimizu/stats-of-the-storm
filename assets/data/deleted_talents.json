@@ -807,5 +807,14 @@
     "sort": 2,
     "abilityId": "Kel'Thuzad|Active",
     "cooldown": 30
+  },
+  {
+    "tooltipId": "TyrandeLightOfEluneOverflowingLightTalent",
+    "talentTreeId": "TyrandeOverflowingLight",
+    "name": "Overflowing Light",
+    "description": "While Tyrande is above 60% Health, Light of Elune's healing is increased by 30%.",
+    "icon": "storm_ui_icon_tyrande_lightofelune.png",
+    "sort": 1,
+    "abilityId": "Tyrande|Q1"
   }
 ]
