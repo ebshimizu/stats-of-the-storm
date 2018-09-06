@@ -3157,6 +3157,14 @@ hosted-git-info@^2.1.4, hosted-git-info@^2.6.0, hosted-git-info@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.6.1.tgz#6e4cee78b01bb849dcf93527708c69fdbee410df"
 
+hots-parser@^6.37.0:
+  version "6.37.0"
+  resolved "https://registry.yarnpkg.com/hots-parser/-/hots-parser-6.37.0.tgz#bb8620830a106fd4af41a3154b129d99f5ef66fe"
+  dependencies:
+    heroprotocol "^2.0.0"
+    pino "^4.17.5"
+    xregexp "^4.2.0"
+
 http-cache-semantics@^3.8.0, http-cache-semantics@^3.8.1:
   version "3.8.1"
   resolved "https://registry.yarnpkg.com/http-cache-semantics/-/http-cache-semantics-3.8.1.tgz#39b0e16add9b605bf0a9ef3d9daaf4843b4cacd2"
@@ -7360,7 +7368,7 @@ xregexp@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/xregexp/-/xregexp-4.0.0.tgz#e698189de49dd2a18cc5687b05e17c8e43943020"
 
-xregexp@^4.1.1:
+xregexp@^4.1.1, xregexp@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/xregexp/-/xregexp-4.2.0.tgz#33f09542b0d7cabed46728eeacac4d5bd764ccf5"
 

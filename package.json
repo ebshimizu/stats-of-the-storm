@@ -33,6 +33,7 @@
     "fs-extra": "^5.0.0",
     "handlebars": "^4.0.11",
     "heroprotocol": "^2.0.0",
+    "hots-parser": "^6.37.0",
     "jquery": "^3.3.1",
     "jquery-tablesort": "0.0.11",
     "level-js": "^2.2.4",
