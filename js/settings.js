@@ -276,6 +276,8 @@ function initSettingsPage() {
       startReplayScan();
     }
   }
+
+  $('#compact-and-reload-button').click(compactAndReload);
 }
 
 function showSettingsPage() {
@@ -968,4 +970,24 @@ function liveAddReplay(evt, name) {
       parseReplaysAsync(replayQueue.shift());
     }
   }
+}
+
+function compactAndReload() {
+  $('#settings-compact-and-reload').modal({
+    closable: false,
+    onDeny: function() {
+      return true;
+    },
+    onApprove: function() {
+      setTimeout(() =>  {
+        showLoader();
+        setLoadMessage('Compacting Database');
+        DB.compactAndReload(() =>  {
+          app.relaunch();
+          app.quit();
+        });
+      }, 1500);
+      return true;
+    }
+  }).modal('show');
 }

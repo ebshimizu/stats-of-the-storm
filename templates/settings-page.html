@@ -168,10 +168,13 @@
                                 </div>
                             </div>
                             <div class="four wide column"><div class="item">Database</div></div>
-                            <div class="eight wide column"><div class="item"></div></div>
-                            <div class="four wide column"><div class="item">
+                            <div class="four wide column"><div class="item"></div></div>
+                            <div class="four wide column">
+                                <div class="ui fluid button" id="compact-and-reload-button">Compact</div>
+                            </div>
+                            <div class="four wide column">
                                 <div class="ui fluid red button" id="delete-db-button">Delete</div>
-                            </div></div>
+                            </div>
                             <div class="four wide column">
                                 Dev Tools
                             </div>
@@ -314,6 +317,26 @@
                     <label>Auto-Import Replays</label>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="ui modal" id="settings-compact-and-reload">
+        <div class="header">Compact and Reload</div>
+        <div class="content">
+            <div class="description">
+                If you're having some problems with the database, for instance, deleted matches still show up
+                or matches that you imported are just not showing up anywhere, you can try compacting the database.
+                This process can take a little while, and the app will be locked down for the duration. Once the operation
+                is complete, the app will restart.
+                <br />
+                <b>
+                    DO NOT CLOSE THE APP WHILE COMPACTION IS IN PROGRESS. DOING SO 
+                    MAY RESULT IN DATA LOSS OR DATABASE CORRUPTION
+                </b>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui green approve button">Start Compaction</div>
+            <div class="ui red cancel button">Cancel</div>
         </div>
     </div>
 </script>

@@ -61,6 +61,7 @@ class Database {
                     self._db.settings = new LinvoDB('settings', {}, { filename: self._path + '/settings.ldb' });
         
                     self._db.matches.ensureIndex({ fieldName: 'map' });
+                    self._db.heroData.ensureIndex({ fieldName: 'hero' });
                     self._db.players.ensureIndex({ fieldName: 'hero' });
         
                     self._collection = null;
