@@ -306,6 +306,14 @@ function loadOverallHeroCollectionData() {
     $('#hero-collection-pool table').floatThead('reflow');
     $('#hero-collection-comps table').floatThead('reflow');
     $('#hero-collection-page-content th').removeClass('sorted ascending descending');
+
+    // visibility filter checks
+    for (let cls in RoleColorClass) {
+      if (!$(`#hero-collection-summary .ui.buttons .${cls}`).hasClass(RoleColorClass[cls])) {
+        $('#hero-collection-body table').find(`.${cls}`).addClass('is-hidden');
+      }
+    }
+
     hideHeroCollectionLoader();
   })
 }
