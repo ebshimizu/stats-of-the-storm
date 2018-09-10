@@ -669,7 +669,7 @@ function updateHeroTitle(container, value) {
 }
 
 function renderAllHeroSummary() {
-  $('#player-detail-hero-summary tbody').html('');
+  $('#player-detail-hero-summary tbody').empty();
   $('#player-detail-hero-summary table').floatThead('reflow');
   $('#player-detail-hero-summary-segment').removeClass('is-hidden');
   $('#player-detail-hero-talent').addClass('is-hidden');
@@ -761,7 +761,7 @@ function renderHeroTalentsTo(hero, container, docs) {
   let talentData = summarizeTalentData(docs, Heroes);
   let data = talentData.talentStats[hero];
 
-  container.find('tbody').html('');
+  container.find('tbody').empty();
 
   // picks
   for (let tier in data) {
@@ -824,10 +824,10 @@ function renderHeroTalentsTo(hero, container, docs) {
 }
 
 function renderPlayerSummary() {
-  $('#player-detail-friend-summary tbody').html('');
-  $('#player-detail-rival-summary tbody').html('');
-  $('#player-detail-skin-summary tbody').html('');
-  $('#player-detail-award-summary tbody').html('');
+  $('#player-detail-friend-summary tbody').empty();
+  $('#player-detail-rival-summary tbody').empty();
+  $('#player-detail-skin-summary tbody').empty();
+  $('#player-detail-award-summary tbody').empty();
 
   renderMapStatsTo($('#player-detail-map-summary'), playerDetailStats);
 
@@ -837,7 +837,7 @@ function renderPlayerSummary() {
       continue;
 
     // more than 1 game, filters out a lot of useless data
-    if (playerDetailStats.withPlayer[d].games < playerHeroMatchThreshold)
+    if (playerDetailStats.withPlayer[d].games < 1000)//playerHeroMatchThreshold)
       continue;
 
     let context = playerDetailStats.withPlayer[d];
@@ -848,7 +848,7 @@ function renderPlayerSummary() {
   }
 
   for (let d in playerDetailStats.againstPlayer) {
-    if (playerDetailStats.againstPlayer[d].games < playerHeroMatchThreshold)
+    if (playerDetailStats.againstPlayer[d].games < 1000) //playerHeroMatchThreshold)
       continue;
 
     // can't really be vs yourself huh
@@ -909,7 +909,7 @@ function renderPlayerSummary() {
 
 // expects stats to be from summarizeHeroData(docs).maps
 function renderMapStatsTo(container, stats) {
-  container.find('tbody').html('');
+  container.find('tbody').empty();
 
   for (let m in stats.maps) {
     let context = stats.maps[m];
@@ -929,7 +929,7 @@ function renderHeroVsStatsTo(container, stats, threshold) {
   if (threshold === undefined)
     threshold = 0;
 
-  container.find('tbody').html('');
+  container.find('tbody').empty();
 
   for (let h in stats) {
     let context = stats[h];
@@ -949,7 +949,7 @@ function renderHeroVsStatsTo(container, stats, threshold) {
 }
 
 function renderAwardsTo(container, stats) {
-  container.find('tbody').html('');
+  container.find('tbody').empty();
 
   for (let a in stats.awards) {
     let context = Heroes.awardInfo(a);
@@ -969,7 +969,7 @@ function setTauntStats(name, obj) {
 }
 
 function renderPlayerHeroDetail() {
-  $('#player-hero-detail-stats tbody').html('');
+  $('#player-hero-detail-stats tbody').empty();
 
   // active selected menu option
   let mode = $('#player-hero-detail-stats .menu .active.item').attr('data-mode');
@@ -1433,7 +1433,7 @@ function updatePlayerCollectionCompare(value, text, $elem) {
 }
 
 function processPlayerCollectionCompare(cache) {
-  $('#player-compare-table tbody').html('');
+  $('#player-compare-table tbody').empty();
   if (!cache) {
     showMessage('No Comparison Data Found', 'Compare to Collection Average panel has no data to compare to.');
   }

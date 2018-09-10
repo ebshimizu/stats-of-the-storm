@@ -80,7 +80,7 @@ acorn-jsx@^3.0.0:
 
 acorn@^3.0.4:
   version "3.3.0"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-3.3.0.tgz#45e37fb39e8da3f25baee3ff5369e2bb5f22017a"
+  resolved "http://registry.npmjs.org/acorn/-/acorn-3.3.0.tgz#45e37fb39e8da3f25baee3ff5369e2bb5f22017a"
 
 acorn@^5.5.0:
   version "5.7.2"
@@ -1232,6 +1232,79 @@ dashdash@^1.12.0:
   resolved "https://registry.yarnpkg.com/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
   dependencies:
     assert-plus "^1.0.0"
+
+datatables.net-fixedcolumns-se@^3.2.6:
+  version "3.2.6"
+  resolved "https://registry.yarnpkg.com/datatables.net-fixedcolumns-se/-/datatables.net-fixedcolumns-se-3.2.6.tgz#3c72137b1257562a482d0b3700f6fddd2d613c45"
+  dependencies:
+    datatables.net-fixedcolumns "3.2.6"
+    datatables.net-se "^1.10.15"
+    jquery ">=1.7"
+
+datatables.net-fixedcolumns@3.2.6, datatables.net-fixedcolumns@^3.2.6:
+  version "3.2.6"
+  resolved "https://registry.yarnpkg.com/datatables.net-fixedcolumns/-/datatables.net-fixedcolumns-3.2.6.tgz#7b9b2f40cfe689568fac9835db89385b482872cb"
+  dependencies:
+    datatables.net "^1.10.15"
+    jquery ">=1.7"
+
+datatables.net-fixedheader-se@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/datatables.net-fixedheader-se/-/datatables.net-fixedheader-se-3.1.5.tgz#1adeb8f4e9e33efd0f48f8c967f8d0fc93ad60ec"
+  dependencies:
+    datatables.net-fixedheader "3.1.5"
+    datatables.net-se "^1.10.15"
+    jquery ">=1.7"
+
+datatables.net-fixedheader@3.1.5, datatables.net-fixedheader@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/datatables.net-fixedheader/-/datatables.net-fixedheader-3.1.5.tgz#4b6051a877e2c625604f0847b4b7227faddcccea"
+  dependencies:
+    datatables.net "^1.10.15"
+    jquery ">=1.7"
+
+datatables.net-responsive-se@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/datatables.net-responsive-se/-/datatables.net-responsive-se-2.2.3.tgz#617ea45565da189f91459ea9d46771f1abb5803f"
+  dependencies:
+    datatables.net-responsive "2.2.3"
+    datatables.net-se "^1.10.15"
+    jquery ">=1.7"
+
+datatables.net-responsive@2.2.3, datatables.net-responsive@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/datatables.net-responsive/-/datatables.net-responsive-2.2.3.tgz#50a2b1b4955b16b32f573a3f00f473b0bfbee913"
+  dependencies:
+    datatables.net "^1.10.15"
+    jquery ">=1.7"
+
+datatables.net-scroller-se@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/datatables.net-scroller-se/-/datatables.net-scroller-se-1.5.1.tgz#ea58a9c3b0aea5ea49555c0de4627bb47fb1a2b2"
+  dependencies:
+    datatables.net-scroller "1.5.1"
+    datatables.net-se "^1.10.15"
+    jquery ">=1.7"
+
+datatables.net-scroller@1.5.1, datatables.net-scroller@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/datatables.net-scroller/-/datatables.net-scroller-1.5.1.tgz#6f993db9e1976b425c6d9dfe05efd4ab39327733"
+  dependencies:
+    datatables.net "^1.10.15"
+    jquery ">=1.7"
+
+datatables.net-se@^1.10.15, datatables.net-se@^1.10.19:
+  version "1.10.19"
+  resolved "https://registry.yarnpkg.com/datatables.net-se/-/datatables.net-se-1.10.19.tgz#3a451a0a7e2734204c88ce9471216d7a4d9e343e"
+  dependencies:
+    datatables.net "1.10.19"
+    jquery ">=1.7"
+
+datatables.net@1.10.19, datatables.net@^1.10.15, datatables.net@^1.10.19:
+  version "1.10.19"
+  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.10.19.tgz#97a1ed41c85e62d61040603481b59790a172dd1f"
+  dependencies:
+    jquery ">=1.7"
 
 dateformat@^1.0.7-1.2.3:
   version "1.0.12"
@@ -3643,7 +3716,7 @@ jquery-tablesort@0.0.11:
   version "0.0.11"
   resolved "https://registry.yarnpkg.com/jquery-tablesort/-/jquery-tablesort-0.0.11.tgz#b1167542ff0001e8bdd6a64e1c58d92208228301"
 
-jquery@^3.2.1, jquery@^3.3.1:
+jquery@>=1.7, jquery@^3.2.1, jquery@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
