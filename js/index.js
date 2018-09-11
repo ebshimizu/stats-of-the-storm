@@ -1,7 +1,16 @@
 // Global application logic
 // hopefully this doesn't get too big and page-specific actions can be kept within
 // their respective javascript files
+const {
+  formatSeconds,
+  formatStat,
+  capitalize,
+  formatDelta,
+  escapeHtml
+} = require('./js/util/formatters');
 
+const dt = require('datatables.net')(window, $);
+//const dtse = require('datatables.net-se')(window, $);
 const path = require('path');
 const settings = require('electron-settings');
 
@@ -27,19 +36,14 @@ const summarizeTalentData = require('./js/database/summarize-talent-data');
 const summarizeTeamData = require('./js/database/summarize-team-data');
 const summarizeTrendData = require('./js/database/summarize-trend-data');
 
+const TableDefs = require('./js/util/table-defs');
+const Table = TableDefs.Table;
+
 const heroDataCSV = require('./js/exporters/hero-csv');
 const heroDraftCSV = require('./js/exporters/hero-draft-csv');
 
 const convertNeDB = require('./js/database/convertNeDB');
 const migrateDatabase = require('./js/database/migrate');
-
-const {
-  formatSeconds,
-  formatStat,
-  capitalize,
-  formatDelta,
-  escapeHtml
-} = require('./js/util/formatters');
 
 Handlebars.registerHelper('formatSeconds', formatSeconds);
 Handlebars.registerHelper('formatPct', (value) => formatStat('pct', value));

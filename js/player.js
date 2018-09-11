@@ -17,6 +17,8 @@ var heroTalentRowTemplate;
 var playerDetailFilter = {};
 var playerHeroMatchThreshold = 0;
 
+var withTable, againstTable;
+
 const IntervalMode = {
   Month: 'month',
   Week: 'week',
@@ -238,8 +240,12 @@ function initPlayerPage() {
   $('#player-detail-map-summary table').tablesort();
   $('#player-detail-friend-summary table').tablesort();
   $('#player-detail-rival-summary table').tablesort();
-  $('#player-detail-with-summary table').tablesort();
-  $('#player-detail-against-summary table').tablesort();
+  
+  withTable = new Table('#player-detail-with-summary table', TableDefs.PlayerVsTableFormat);
+  againstTable = new Table('#player-detail-against-summary table', TableDefs.PlayerVsTableFormat);
+  //$('#player-detail-with-summary table').tablesort();
+  //$('#player-detail-against-summary table').tablesort();
+
   $('#player-detail-hero-talent table').tablesort();
   $('#player-detail-skin-summary table').tablesort();
   $('#player-detail-award-summary table').tablesort();
@@ -299,7 +305,7 @@ function initPlayerPage() {
   });
 
   // this apparently has to go after tablesort
-  $('#player-detail-body table').floatThead({
+  $('#player-detail-body table.ui.sortable.table').floatThead({
     scrollContainer: closestWrapper,
     autoReflow: true
   });
@@ -859,8 +865,10 @@ function renderPlayerSummary() {
     $('#player-detail-rival-summary tbody').append(playerWinRateRowTemplate(context));
   }
 
-  renderHeroVsStatsTo($('#player-detail-with-summary'), playerDetailStats.withHero, playerHeroMatchThreshold);
-  renderHeroVsStatsTo($('#player-detail-against-summary'), playerDetailStats.againstHero, playerHeroMatchThreshold);
+  //renderHeroVsStatsTo($('#player-detail-with-summary'), playerDetailStats.withHero, playerHeroMatchThreshold);
+  withTable.setDataFromObject(playerDetailStats.withHero);
+  againstTable.setDataFromObject(playerDetailStats.againstHero);
+  //renderHeroVsStatsTo($('#player-detail-against-summary'), playerDetailStats.againstHero, playerHeroMatchThreshold);
 
   // skins
   for (let s in playerDetailStats.skins) {

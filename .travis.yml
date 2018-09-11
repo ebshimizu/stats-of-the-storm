@@ -14,4 +14,4 @@ cache:
   - $HOME/.cache/electron-builder
 
 script:
-  - npm run publish
+  - yarn run publish
