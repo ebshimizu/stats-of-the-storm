@@ -364,26 +364,23 @@
             <div class="four wide column">
               <div class="ui inverted segment player-win" id="player-detail-with-summary">
                 <div class="ui top attached label">Win Rate With Hero</div>
-                <div class="table-wrapper">
-                  <table class="ui selectable compact inverted table">
-                    <thead>
-                      <tr>
-                        <th class="center aligned">Hero</th>
-                        <th class="center aligned stat">Win %</th>
-                        <th class="center aligned stat">Games</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                <table class="ui selectable compact inverted table">
+                  <thead>
+                    <tr>
+                      <th class="center aligned">Hero</th>
+                      <th class="center aligned stat">Win %</th>
+                      <th class="center aligned stat">Games</th>
+                    </tr>
+                  </thead>
+                  <tbody>
 
-                    </tbody>
-                  </table>
-                </div>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="four wide column">
               <div class="ui inverted segment player-win" id="player-detail-against-summary">
                 <div class="ui top attached label">Win Rate Against Hero</div>
-                <div class="table-wrapper">
                   <table class="ui selectable compact inverted table">
                     <thead>
                       <tr>
@@ -396,7 +393,6 @@
 
                     </tbody>
                   </table>
-                </div>
               </div>
             </div>
             <div class="eight wide column" id="player-compare-segment">
@@ -431,53 +427,32 @@
                 </div>
               </div>
             </div>
-            <div class="four wide column">
-              <div class="ui inverted segment player-win" id="player-detail-friend-summary">
-                <div class="ui top attached label">Win Rate With Player</div>
-                <div class="table-wrapper">
-                  <table class="ui sortable selectable inverted table">
-                    <thead>
-                      <tr>
-                        <th>Player</th>
-                        <th>Win %</th>
-                        <th>Games</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-            <div class="four wide column">
-              <div class="ui inverted segment player-win" id="player-detail-rival-summary">
-                <div class="ui top attached label">Win Rate Against Player</div>
-                <div class="table-wrapper">
-                  <table class="ui sortable selectable inverted table">
-                    <thead>
-                      <tr>
-                        <th>Player</th>
-                        <th>Win %</th>
-                        <th>Games</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-            <div class="four wide column">
+            <div class="seven wide column">
               <div class="ui inverted segment player-win" id="player-detail-skin-summary">
                 <div class="ui top attached label">Win Rate By Skin</div>
+                <table class="ui selectable inverted table">
+                  <thead>
+                    <tr>
+                      <th>Skin ID</th>
+                      <th>Win %</th>
+                      <th>Games</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="five wide column">
+              <div class="ui inverted segment player-win" id="player-detail-award-summary">
+                <div class="ui top attached label">Awards</div>
                 <div class="table-wrapper">
                   <table class="ui sortable selectable inverted table">
                     <thead>
                       <tr>
-                        <th>Skin ID</th>
-                        <th>Win %</th>
-                        <th>Games</th>
+                        <th>Award</th>
+                        <th class="center aligned stat">Award %</th>
+                        <th class="center aligned stat">Games</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -565,23 +540,38 @@
                 </div>
                 <div class="ui inverted divider"></div>
               </div>
+            </div>            
+            <div class="eight wide column">
+              <div class="ui inverted segment player-win" id="player-detail-friend-summary">
+                <div class="ui top attached label">Win Rate With Player</div>
+                <table class="ui selectable inverted table">
+                  <thead>
+                    <tr>
+                      <th>Player</th>
+                      <th>Win %</th>
+                      <th>Games</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class="five wide column">
-              <div class="ui inverted segment player-win" id="player-detail-award-summary">
-                <div class="ui top attached label">Awards</div>
-                <div class="table-wrapper">
-                  <table class="ui sortable selectable inverted table">
-                    <thead>
-                      <tr>
-                        <th>Award</th>
-                        <th class="center aligned stat">Award %</th>
-                        <th class="center aligned stat">Games</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
-                </div>
+            <div class="eight wide column">
+              <div class="ui inverted segment player-win" id="player-detail-rival-summary">
+                <div class="ui top attached label">Win Rate Against Player</div>
+                <table class="ui selectable inverted table">
+                  <thead>
+                    <tr>
+                      <th>Player</th>
+                      <th>Win %</th>
+                      <th>Games</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

@@ -11,13 +11,12 @@ var playerCompareRowTemplate;
 let playerHeroDetailRowTemplate;
 var currentPlayerHero = '';
 
-var playerWinRateRowTemplate;
 var heroWinRateRowTemplate;
 var heroTalentRowTemplate;
 var playerDetailFilter = {};
 var playerHeroMatchThreshold = 0;
 
-var withTable, againstTable;
+var withTable, againstTable, friendTable, rivalTable, skinTable;
 
 const IntervalMode = {
   Month: 'month',
@@ -221,7 +220,6 @@ function initPlayerPage() {
   // templates
   playerDetailHeroSummaryRowTemplate = getHandlebars('player', '#player-detail-hero-summary-row');
   playerDetailMapSummaryRowTemplate = getHandlebars('player', '#player-detail-map-summary-row');
-  playerWinRateRowTemplate = getHandlebars('player', '#player-detail-player-win-row');
   heroWinRateRowTemplate = getHandlebars('player', '#player-detail-hero-win-row');
   heroTalentRowTemplate = getHandlebars('player', '#player-detail-talent-row');
   playerAwardRowTemplate = getHandlebars('player', '#player-detail-hero-award-row');
@@ -238,16 +236,14 @@ function initPlayerPage() {
   });
 
   $('#player-detail-map-summary table').tablesort();
-  $('#player-detail-friend-summary table').tablesort();
-  $('#player-detail-rival-summary table').tablesort();
   
   withTable = new Table('#player-detail-with-summary table', TableDefs.PlayerVsTableFormat);
   againstTable = new Table('#player-detail-against-summary table', TableDefs.PlayerVsTableFormat);
-  //$('#player-detail-with-summary table').tablesort();
-  //$('#player-detail-against-summary table').tablesort();
+  friendTable = new Table('#player-detail-friend-summary table', TableDefs.PlayerVsPlayerFormat);
+  rivalTable = new Table('#player-detail-rival-summary table', TableDefs.PlayerVsPlayerFormat);
+  skinTable = new Table('#player-detail-skin-summary table', TableDefs.SkinFormat);
 
   $('#player-detail-hero-talent table').tablesort();
-  $('#player-detail-skin-summary table').tablesort();
   $('#player-detail-award-summary table').tablesort();
   $('#player-hero-detail-stats table').tablesort();
   $('#player-compare-table table').tablesort();
@@ -830,60 +826,30 @@ function renderHeroTalentsTo(hero, container, docs) {
 }
 
 function renderPlayerSummary() {
-  $('#player-detail-friend-summary tbody').empty();
-  $('#player-detail-rival-summary tbody').empty();
-  $('#player-detail-skin-summary tbody').empty();
-  $('#player-detail-award-summary tbody').empty();
-
   renderMapStatsTo($('#player-detail-map-summary'), playerDetailStats);
 
   // friends / rivals / hero matchups
-  for (let d in playerDetailStats.withPlayer) {
-    if (d === playerDetailID)
-      continue;
+  friendTable.setDataFromObject(playerDetailStats.withPlayer);
+  rivalTable.setDataFromObject(playerDetailStats.againstPlayer);
 
-    // more than 1 game, filters out a lot of useless data
-    if (playerDetailStats.withPlayer[d].games < 1000)//playerHeroMatchThreshold)
-      continue;
-
-    let context = playerDetailStats.withPlayer[d];
-    context.winPercent = context.wins / context.games;
-    context.formatWinPercent = formatStat('pct', context.winPercent);
-
-    $('#player-detail-friend-summary tbody').append(playerWinRateRowTemplate(context));
+  // filter step
+  let withTableData = [];
+  let againstTableData = [];
+  for (let h in playerDetailStats.withHero) {
+    if (playerDetailStats.withHero[h].games >= playerHeroMatchThreshold)
+      withTableData.push(playerDetailStats.withHero[h]);
   }
 
-  for (let d in playerDetailStats.againstPlayer) {
-    if (playerDetailStats.againstPlayer[d].games < 1000) //playerHeroMatchThreshold)
-      continue;
-
-    // can't really be vs yourself huh
-    let context = playerDetailStats.againstPlayer[d];
-    context.winPercent = context.defeated / context.games;
-    context.formatWinPercent = formatStat('pct', context.winPercent);
-
-    $('#player-detail-rival-summary tbody').append(playerWinRateRowTemplate(context));
+  for (let h in playerDetailStats.againstHero) {
+    if (playerDetailStats.againstHero[h].games > playerHeroMatchThreshold)
+      againstTableData.push(playerDetailStats.againstHero[h])
   }
 
-  //renderHeroVsStatsTo($('#player-detail-with-summary'), playerDetailStats.withHero, playerHeroMatchThreshold);
-  withTable.setDataFromObject(playerDetailStats.withHero);
-  againstTable.setDataFromObject(playerDetailStats.againstHero);
-  //renderHeroVsStatsTo($('#player-detail-against-summary'), playerDetailStats.againstHero, playerHeroMatchThreshold);
+  withTable.setData(withTableData);
+  againstTable.setData(againstTableData);
 
   // skins
-  for (let s in playerDetailStats.skins) {
-    let context = {};
-    context.name = s;
-
-    if (context.name === "")
-      context.name = "Default";
-
-    context.games = playerDetailStats.skins[s].games;
-    context.winPercent = playerDetailStats.skins[s].wins / context.games;
-    context.formatWinPercent = formatStat('pct', context.winPercent);
-
-    $('#player-detail-skin-summary tbody').append(playerWinRateRowTemplate(context));
-  }
+  skinTable.setDataFromObject(playerDetailStats.skins);
 
   // awards
   renderAwardsTo($('#player-detail-award-summary'), playerDetailStats);
@@ -1612,13 +1578,13 @@ function layoutPlayerPrint(sections) {
   if (sects.indexOf('with') !== -1) {
     addPrintPage('with');
     addPrintSubHeader('Win Rate With Hero', 'with');
-    copyFloatingTable($('#player-detail-with-summary .floatThead-wrapper'), getPrintPage('with'));
+    copyFloatingTable($('#player-detail-with-summary'), getPrintPage('with'));
   }
 
   if (sects.indexOf('against') !== -1) {
     addPrintPage('against');
     addPrintSubHeader('Win Rate Against Hero', 'against');
-    copyFloatingTable($('#player-detail-against-summary .floatThead-wrapper'), getPrintPage('against'));
+    copyFloatingTable($('#player-detail-against-summary'), getPrintPage('against'));
   }
 
   if (sects.indexOf('awards') !== -1) {
@@ -1636,19 +1602,19 @@ function layoutPlayerPrint(sections) {
   if (sects.indexOf('with-player') !== -1) {
     addPrintPage('with-player');
     addPrintSubHeader('Win Rate With Player', 'with-player');
-    copyFloatingTable($('#player-detail-friend-summary .floatThead-wrapper'), getPrintPage('with-player'));
+    copyFloatingTable($('#player-detail-friend-summary'), getPrintPage('with-player'));
   }
 
   if (sects.indexOf('against-player') !== -1) {
     addPrintPage('against-player');
     addPrintSubHeader('Win Rate Against Player', 'against-player');
-    copyFloatingTable($('#player-detail-rival-summary .floatThead-wrapper'), getPrintPage('against-player'));
+    copyFloatingTable($('#player-detail-rival-summary'), getPrintPage('against-player'));
   }
 
   if (sects.indexOf('skins') !== -1) {
     addPrintPage('skins');
     addPrintSubHeader('Win Rate By Skin', 'skins');
-    copyFloatingTable($('#player-detail-skin-summary .floatThead-wrapper'), getPrintPage('skins'));
+    copyFloatingTable($('#player-detail-skin-summary'), getPrintPage('skins'));
   }
 
   if (sects.indexOf('taunts') !== -1) {

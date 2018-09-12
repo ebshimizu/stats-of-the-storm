@@ -17,6 +17,7 @@ class Table {
   setDataFromObject(data) {
     let dataArr = [];
     for (var key in data) {
+      data[key].key = key;
       dataArr.push(data[key]);
     }
 
@@ -67,10 +68,61 @@ const PlayerVsTableFormat = {
   ],
   paging: false,
   searching: false,
-  scrollY: 480,
+  scrollY: 450,
   info: false,
   responsive: true
-}
+};
+
+const PlayerVsPlayerFormat = {
+  columns: [
+    {
+      title: 'Player',
+      data: 'name'
+    },
+    {
+      title: 'Win %',
+      data: playerVsWinPctData,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Games',
+      data: 'games'
+    }
+  ],
+  paging: true,
+  pageLength: 50,
+  searching: true,
+  info: true,
+  scrollY: 360,
+  responsive: true
+};
+
+const SkinFormat = {
+  columns: [
+    {
+      title: 'Skin ID',
+      data: 'key'
+    },
+    {
+      title: 'Win %',
+      data: playerVsWinPctData,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Games',
+      data: 'games'
+    }
+  ],
+  paging: true,
+  searching: true,
+  info: true,
+  scrollY: 360,
+  pageLength: 50,
+  responsive: true
+};
+
 
 exports.Table = Table;
 exports.PlayerVsTableFormat = PlayerVsTableFormat;
+exports.PlayerVsPlayerFormat = PlayerVsPlayerFormat;
+exports.SkinFormat = SkinFormat;

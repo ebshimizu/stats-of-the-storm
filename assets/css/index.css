@@ -169,3 +169,11 @@ p.status {
     text-align: center;
     font-weight: bold;
 }
+
+.dt.table-wrapper {
+    overflow-x: hidden!important;
+}
+
+.hjhhokdt-semanticUI .ui.stackable.grid {
+    margin-right: 0;
+}

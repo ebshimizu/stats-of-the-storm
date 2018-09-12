@@ -10,7 +10,7 @@ const {
 } = require('./js/util/formatters');
 
 const dt = require('datatables.net')(window, $);
-//const dtse = require('datatables.net-se')(window, $);
+const dtse = require('datatables.net-se')(window, $);
 const path = require('path');
 const settings = require('electron-settings');
 
