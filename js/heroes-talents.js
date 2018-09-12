@@ -41,6 +41,15 @@ class HeroesTalents {
       let data = JSON.parse(fs.readFileSync(file));  // eslint-disable-line global-require
 
       // sort everything, some data is replicated but that's ok
+
+      // this is a stats of the storm specific hack because I keyed off of lucio's unaccented hero name
+      // this has been regarded as a mistake but we are at version 2.3.x+ so here we are
+      // with apologies to the proper accent
+      if (data.name === 'Lúcio') {
+        data.name = 'Lucio';
+      }
+      // end hack
+
       this._heroes[data.name] = data;
       this._heroAttr[data.attributeId] = data.name;
       this._lcAttr[data.attributeId.toLowerCase()] = data.name;

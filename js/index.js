@@ -434,6 +434,7 @@ function addHeroMenuOptions(menu) {
 
   menu.find('.menu').html('');
   for (let i in heroes) {
+    let val = heroes[i];
     let elem = '<div class="item" data-value="' + heroes[i] + '"><img class="ui avatar image" src="assets/heroes-talents/images/heroes/';
     elem += Heroes.heroIcon(heroes[i]) + '">' + heroes[i] + '</div>';
     menu.find('.menu').append(elem);
