@@ -66,6 +66,7 @@ const PlayerVsTableFormat = {
       data: 'games'
     }
   ],
+  order: [[1, 'desc'], [2, 'desc']],
   paging: false,
   searching: false,
   scrollY: 450,
@@ -89,6 +90,7 @@ const PlayerVsPlayerFormat = {
       data: 'games'
     }
   ],
+  order: [[1, 'desc'], [2, 'desc']],
   paging: true,
   pageLength: 50,
   searching: true,
@@ -113,6 +115,7 @@ const SkinFormat = {
       data: 'games'
     }
   ],
+  order: [[1, 'desc'], [2, 'desc']],
   paging: true,
   searching: true,
   info: true,
