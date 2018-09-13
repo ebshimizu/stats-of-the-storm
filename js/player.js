@@ -932,7 +932,7 @@ function renderPlayerHeroDetail() {
   let mode = $('#player-hero-detail-stats .menu .active.item').attr('data-mode');
 
   for (let h in playerDetailStats[mode]) {
-    playerDetailStats[mode][h].games = playerDetailStats.games;
+    playerDetailStats[mode][h].games = playerDetailStats.heroes[h].games;
   }
 
   playerTables.detailStatTable.setDataFromObject(playerDetailStats[mode]);
