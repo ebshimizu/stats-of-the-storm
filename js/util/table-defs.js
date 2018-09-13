@@ -318,6 +318,10 @@ function playerDetailStatFormat() {
     title: 'Hero',
     data: 'key',
     render: (data) => heroHeader(data, '200px')
+  },
+  {
+    title: 'Games',
+    data: 'games'
   }];
 
   let allStats = DetailStatList;

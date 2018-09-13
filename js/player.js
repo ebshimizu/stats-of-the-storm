@@ -481,7 +481,7 @@ function createDetailTableHeader() {
 
   // add the headings n stuff
   $('#player-hero-detail-stats thead tr').append('<th style="width: 200px;">Hero</th>');
-  //$('#player-hero-detail-stats thead tr').append('<th>Games</th>');
+  $('#player-hero-detail-stats thead tr').append('<th>Games</th>');
   for (let i in allDetailStats) {
     $('#player-hero-detail-stats thead tr').append('<th class="stat">' + DetailStatString[allDetailStats[i]] + '</th>');
   }
@@ -930,6 +930,10 @@ function setTauntStats(name, obj) {
 function renderPlayerHeroDetail() {
   // active selected menu option
   let mode = $('#player-hero-detail-stats .menu .active.item').attr('data-mode');
+
+  for (let h in playerDetailStats[mode]) {
+    playerDetailStats[mode][h].games = playerDetailStats.games;
+  }
 
   playerTables.detailStatTable.setDataFromObject(playerDetailStats[mode]);
   playerTables.detailStatTable.filterByMinGames(playerHeroMatchThreshold);
