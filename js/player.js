@@ -15,9 +15,18 @@ var heroTalentRowTemplate;
 var playerDetailFilter = {};
 var playerHeroMatchThreshold = 0;
 
-var withTable, againstTable, friendTable, rivalTable,
-    skinTable, mapTable, awardTable, playerCmpTable,
-    heroSummaryTable;
+var playerTables ={
+  withTable: null,
+  againstTable: null,
+  friendTable: null,
+  rivalTable: null,
+  skinTable: null,
+  mapTable: null,
+  awardTable: null,
+  playerCmpTable: null,
+  heroSummaryTable: null,
+  detailStatTable: null
+}
 
 const IntervalMode = {
   Month: 'month',
@@ -229,34 +238,24 @@ function initPlayerPage() {
   createDetailTableHeader();
 
   // plugins and callbacks
-  mapTable = new Table('#player-detail-map-summary table', TableDefs.MapFormat);
-  withTable = new Table('#player-detail-with-summary table', TableDefs.PlayerVsTableFormat);
-  againstTable = new Table('#player-detail-against-summary table', TableDefs.PlayerVsTableFormat);
-  friendTable = new Table('#player-detail-friend-summary table', TableDefs.PlayerVsPlayerFormat);
-  rivalTable = new Table('#player-detail-rival-summary table', TableDefs.PlayerVsPlayerFormat);
-  skinTable = new Table('#player-detail-skin-summary table', TableDefs.SkinFormat);
-  awardTable = new Table('#player-detail-award-summary table', TableDefs.AwardFormat);
-  playerCmpTable = new Table('#player-compare-table table', TableDefs.PlayerCompareToAvgFormat);
-  heroSummaryTable = new Table('#player-detail-hero-summary table', TableDefs.HeroSummaryFormat);
+  playerTables.mapTable = new Table('#player-detail-map-summary table', TableDefs.MapFormat);
+  playerTables.withTable = new Table('#player-detail-with-summary table', TableDefs.PlayerVsTableFormat);
+  playerTables.againstTable = new Table('#player-detail-against-summary table', TableDefs.PlayerVsTableFormat);
+  playerTables.friendTable = new Table('#player-detail-friend-summary table', TableDefs.PlayerVsPlayerFormat);
+  playerTables.rivalTable = new Table('#player-detail-rival-summary table', TableDefs.PlayerVsPlayerFormat);
+  playerTables.skinTable = new Table('#player-detail-skin-summary table', TableDefs.SkinFormat);
+  playerTables.awardTable = new Table('#player-detail-award-summary table', TableDefs.AwardFormat);
+  playerTables.playerCmpTable = new Table('#player-compare-table table', TableDefs.PlayerCompareToAvgFormat);
+  playerTables.heroSummaryTable = new Table('#player-detail-hero-summary table', TableDefs.HeroSummaryFormat);
 
   $('#player-detail-hero-talent table').tablesort();
-  $('#player-hero-detail-stats table').tablesort();
-  $('#player-hero-detail-stats table th.stat').data('sortBy', function(th, td, tablesort) {
-    return parseFloat(td.attr('data-sort-value'));
-  });
-  $('#player-hero-detail-stats table').on('tablesort:complete', function(event, tablesort) {
-    $('#player-hero-detail-stats td').popup();
-  });
-  $('#player-hero-detail-stats table').floatThead({
-    scrollContainer: function($table) {
-      return $('#player-hero-detail-stats .table-wrapper-xy');
-    },
-    autoReflow: true
-  });
+
+  playerTables.detailStatTable = new Table('#player-hero-detail-stats table', TableDefs.PlayerDetailStatFormat);
 
   $('#player-detail-submenu .item').tab();
   $('#player-detail-submenu .item').click(function() {
-    $('#player-detail-body table').floatThead('reflow');
+    $('#player-detail-body table.ui.sortable.table').floatThead('reflow');
+    redrawPlayerTables();
   });
 
   $('#player-hero-select-menu').dropdown({
@@ -287,7 +286,7 @@ function initPlayerPage() {
 
   $('#player-detail-hero-talent .menu .item').tab();
   $('#player-detail-hero-talent .menu .item').click(function() {
-    $('#player-detail-body table').floatThead('reflow');
+    $('#player-detail-body table.ui.sortable.table').floatThead('reflow');
   });
   $('#player-detail-hero-talent .talent-build table').tablesort();
   $('#player-detail-hero-talent .talent-build table').on('tablesort:complete', function(event, tablesort) {
@@ -454,9 +453,16 @@ function hidePlayerLoader() {
 }
 
 function showPlayerPage() {
-  $('#player-page-content table').floatThead('reflow');
+  $('#player-page-content table.ui.sortable.table').floatThead('reflow');
+  redrawPlayerTables();
   $('#player-export-menu').removeClass('is-hidden');
   $('#player-edit-menu').removeClass('is-hidden');
+}
+
+function redrawPlayerTables() {
+  for (let t in playerTables) {
+    playerTables[t].draw();
+  }
 }
 
 function resetPlayerPage() {
@@ -474,8 +480,8 @@ function createDetailTableHeader() {
   }
 
   // add the headings n stuff
-  $('#player-hero-detail-stats thead tr').append('<th style="width: 500px;">Hero</th>');
-  $('#player-hero-detail-stats thead tr').append('<th>Games</th>');
+  $('#player-hero-detail-stats thead tr').append('<th style="width: 200px;">Hero</th>');
+  //$('#player-hero-detail-stats thead tr').append('<th>Games</th>');
   for (let i in allDetailStats) {
     $('#player-hero-detail-stats thead tr').append('<th class="stat">' + DetailStatString[allDetailStats[i]] + '</th>');
   }
@@ -668,8 +674,8 @@ function renderAllHeroSummary() {
   $('#player-detail-hero-summary-segment').removeClass('is-hidden');
   $('#player-detail-hero-talent').addClass('is-hidden');
 
-  heroSummaryTable.setDataFromObject(playerDetailStats.heroes);
-  heroSummaryTable.filterByMinGames(playerHeroMatchThreshold);
+  playerTables.heroSummaryTable.setDataFromObject(playerDetailStats.heroes);
+  playerTables.heroSummaryTable.filterByMinGames(playerHeroMatchThreshold);
   let roleData = {};
 
   for (let h in playerDetailStats.heroes) {
@@ -805,11 +811,11 @@ function renderHeroTalentsTo(hero, container, docs) {
 }
 
 function renderPlayerSummary() {
-  mapTable.setDataFromObject(playerDetailStats.maps);
+  playerTables.mapTable.setDataFromObject(playerDetailStats.maps);
 
   // friends / rivals / hero matchups
-  friendTable.setDataFromObject(playerDetailStats.withPlayer);
-  rivalTable.setDataFromObject(playerDetailStats.againstPlayer);
+  playerTables.friendTable.setDataFromObject(playerDetailStats.withPlayer);
+  playerTables.rivalTable.setDataFromObject(playerDetailStats.againstPlayer);
 
   // filter step
   let withTableData = [];
@@ -824,15 +830,15 @@ function renderPlayerSummary() {
       againstTableData.push(playerDetailStats.againstHero[h])
   }
 
-  withTable.setData(withTableData);
-  againstTable.setData(againstTableData);
+  playerTables.withTable.setData(withTableData);
+  playerTables.againstTable.setData(againstTableData);
 
   // skins
-  skinTable.setDataFromObject(playerDetailStats.skins);
+  playerTables.skinTable.setDataFromObject(playerDetailStats.skins);
 
   // awards
   // lil bit of processing
-  awardTable.setData(TableDefs.preprocessAwards(playerDetailStats));
+  playerTables.awardTable.setData(TableDefs.preprocessAwards(playerDetailStats));
 
   // individual stats
   $('#player-detail-misc-summary .statistic[name="overallWin"] .value').text(formatStat('pct', playerDetailStats.wins / playerDetailStats.games));
@@ -922,42 +928,11 @@ function setTauntStats(name, obj) {
 }
 
 function renderPlayerHeroDetail() {
-  $('#player-hero-detail-stats tbody').empty();
-
   // active selected menu option
   let mode = $('#player-hero-detail-stats .menu .active.item').attr('data-mode');
 
-  for (let h in playerDetailStats[mode]) {
-    let statData = playerDetailStats[mode][h];
-    let context = {};
-    context.heroName = h;
-    context.stat = [];
-
-    context.stat.push({
-      avg: playerDetailStats.heroes[h].games,
-      name: 'Games',
-      render: playerDetailStats.heroes[h].games
-    });
-
-    for (let s in allDetailStats) {
-      if (allDetailStats[s] in statData) {
-        context.stat.push({
-          avg: statData[allDetailStats[s]].toFixed(2),
-          name: DetailStatString[allDetailStats[s]],
-          render: formatStat(allDetailStats[s], statData[allDetailStats[s]], true)
-        });
-      }
-      else {
-        context.stat.push({avg: '', name: DetailStatString[allDetailStats[s]], render: ''});
-      }
-    }
-
-    if (playerDetailStats.heroes[h].games >= playerHeroMatchThreshold)
-      $('#player-hero-detail-stats tbody').append(playerHeroDetailRowTemplate(context));
-  }
-
-  $('#player-hero-detail-stats table').floatThead('reflow');
-  $('#player-hero-detail-stats td').popup();
+  playerTables.detailStatTable.setDataFromObject(playerDetailStats[mode]);
+  playerTables.detailStatTable.filterByMinGames(playerHeroMatchThreshold);
 }
 
 function renderPlayerHeroAwards() {
@@ -1386,7 +1361,7 @@ function updatePlayerCollectionCompare(value, text, $elem) {
 }
 
 function processPlayerCollectionCompare(cache) {
-  playerCmpTable.clear();
+  playerTables.playerCmpTable.clear();
   if (!cache) {
     showMessage('No Comparison Data Found', 'Compare to Collection Average panel has no data to compare to.');
   }
@@ -1483,7 +1458,7 @@ function processPlayerCollectionCompare(cache) {
     cmpTableData.push(context);
   }
 
-  playerCmpTable.setData(cmpTableData);  
+  playerTables.playerCmpTable.setData(cmpTableData);  
   $('#player-compare-collection').removeClass('loading disabled');
 }
 

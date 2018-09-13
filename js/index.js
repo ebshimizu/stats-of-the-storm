@@ -1,6 +1,8 @@
 // Global application logic
 // hopefully this doesn't get too big and page-specific actions can be kept within
 // their respective javascript files
+
+// helpers and constants
 const {
   formatSeconds,
   formatStat,
@@ -9,8 +11,38 @@ const {
   escapeHtml
 } = require('./js/util/formatters');
 
+const RegionString = {
+  1: 'NA',
+  2: 'EU',
+  3: 'KR',
+  5: 'CN',
+  98: 'PTR/TR'
+}
+
+const RoleColor = {
+  'Assassin' : '#db2828',
+  'Warrior' : '#2185d0',
+  'Support' : '#00b5ad',
+  'Specialist' : '#6435c9',
+  'Multiclass' : '#a333c8'
+}
+
+const RoleColorClass = {
+  'Assassin' : 'red',
+  'Warrior' : 'blue',
+  'Support' : 'teal',
+  'Specialist' : 'violet',
+  'Multiclass' : 'purple'
+}
+
+const DetailStatList = require('./js/game-data/detail-stat-list');
+const PerMapStatList = require('./js/game-data/map-stats');
+const DetailStatString = require('./js/game-data/detail-stat-string');
+
+// modules
 const dt = require('datatables.net')(window, $);
 const dtse = require('datatables.net-se')(window, $);
+const dtfc = require('datatables.net-fixedcolumns')(window, $);
 const path = require('path');
 const settings = require('electron-settings');
 
@@ -55,36 +87,6 @@ Handlebars.registerHelper('heroImage', (name) => `assets/heroes-talents/images/h
 $.fn.datepicker.setDefaults({
   autoHide: true
 });
-
-const RegionString = {
-  1: 'NA',
-  2: 'EU',
-  3: 'KR',
-  5: 'CN',
-  98: 'PTR/TR'
-}
-
-const DetailStatList = require('./js/game-data/detail-stat-list');
-
-const PerMapStatList = require('./js/game-data/map-stats');
-
-const DetailStatString = require('./js/game-data/detail-stat-string');
-
-const RoleColor = {
-  'Assassin' : '#db2828',
-  'Warrior' : '#2185d0',
-  'Support' : '#00b5ad',
-  'Specialist' : '#6435c9',
-  'Multiclass' : '#a333c8'
-}
-
-const RoleColorClass = {
-  'Assassin' : 'red',
-  'Warrior' : 'blue',
-  'Support' : 'teal',
-  'Specialist' : 'violet',
-  'Multiclass' : 'purple'
-}
 
 var DB;
 var Heroes;

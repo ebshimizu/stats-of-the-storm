@@ -71,9 +71,11 @@ function heroImage(name) {
   return `assets/heroes-talents/images/heroes/${Heroes.heroIcon(name)}`;
 }
 
-function heroHeader(heroName) {
+function heroHeader(heroName, minWidth) {
+  let widthStyle = minWidth ? ` style="width: ${minWidth};"` : '';
+
   return `
-    <h3 class="ui image inverted header">
+    <h3 class="ui image inverted header"${widthStyle}>
       <img src="${heroImage(heroName)}" class="ui rounded image">
       <div class="content">
         ${heroName}
@@ -147,16 +149,19 @@ const SkinFormat = {
   columns: [
     {
       title: 'Skin ID',
-      data: 'key'
+      data: 'key',
+      width: '50%'
     },
     {
       title: 'Win %',
       data: playerVsWinPctData,
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
+      width: '25%'
     },
     {
       title: 'Games',
-      data: 'games'
+      data: 'games',
+      width: '25%'
     }
   ],
   order: [[1, 'desc'], [2, 'desc']],
@@ -299,6 +304,49 @@ const HeroSummaryFormat = {
   searching: false
 }
 
+function getHeroStatSafe(target, row) {
+  if (target in row) {
+    return row[target].toFixed(2);
+  }
+
+  return 0;
+}
+
+// this one's large, and also can be automated.
+function playerDetailStatFormat() {
+  let columns = [{
+    title: 'Hero',
+    data: 'key',
+    render: (data) => heroHeader(data, '200px')
+  }];
+
+  let allStats = DetailStatList;
+  for (let m in PerMapStatList) {
+    allStats = allStats.concat(PerMapStatList[m]);
+  }
+
+  for (let i in allStats) {
+    columns.push({
+      title: DetailStatString[allStats[i]],
+      data: (row) => getHeroStatSafe(allStats[i], row),
+      render: (data) => formatStat(allStats[i], data, true)
+    });
+  }
+
+  return {
+    columns,
+    order: [[0, 'asc']],
+    paging: false,
+    info: false,
+    scrollY: '60vh',
+    scrollX: true,
+    searching: false,
+    fixedColumns: true,
+    scrollCollapse: true,
+    buttons: ['excel', 'pdf']
+  };
+}
+
 exports.Table = Table;
 exports.PlayerVsTableFormat = PlayerVsTableFormat;
 exports.PlayerVsPlayerFormat = PlayerVsPlayerFormat;
@@ -307,4 +355,5 @@ exports.MapFormat = MapFormat;
 exports.AwardFormat = AwardFormat;
 exports.PlayerCompareToAvgFormat = PlayerCompareToAvgFormat;
 exports.HeroSummaryFormat = HeroSummaryFormat;
+exports.PlayerDetailStatFormat = playerDetailStatFormat();
 exports.preprocessAwards = preprocessAwards;
