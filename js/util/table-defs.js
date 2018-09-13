@@ -342,7 +342,7 @@ function playerDetailStatFormat() {
     order: [[0, 'asc']],
     paging: false,
     info: false,
-    scrollY: '60vh',
+    scrollY: '50vh',
     scrollX: true,
     searching: false,
     fixedColumns: true,
