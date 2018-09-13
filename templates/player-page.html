@@ -86,27 +86,25 @@
                   <a class="item" data-tab="player-hero-pool">Hero Pool</a>
                 </div>
                 <div class="ui active tab inverted attached segment" data-tab="player-hero-summary" id="player-detail-hero-summary">
-                  <div class="table-wrapper">
-                    <table class="ui sortable selectable inverted table">
-                      <thead>
-                        <tr>
-                          <th>Hero</th>
-                          <th class="center aligned stat">Win %</th>
-                          <th class="center aligned stat">Games</th>
-                          <th class="center aligned stat">KDA</th>
-                          <th class="center aligned stat">Takedowns</th>
-                          <th class="center aligned stat">Kills</th>
-                          <th class="center aligned stat">Assists</th>
-                          <th class="center aligned stat">Deaths</th>
-                          <th class="center aligned stat">MVP %</th>
-                          <th class="center aligned stat">Award %</th>
-                        </tr>
-                      </thead>
-                      <tbody>
+                  <table class="ui selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Hero</th>
+                        <th class="center aligned stat">Win %</th>
+                        <th class="center aligned stat">Games</th>
+                        <th class="center aligned stat">KDA</th>
+                        <th class="center aligned stat">Takedowns</th>
+                        <th class="center aligned stat">Kills</th>
+                        <th class="center aligned stat">Assists</th>
+                        <th class="center aligned stat">Deaths</th>
+                        <th class="center aligned stat">MVP %</th>
+                        <th class="center aligned stat">Award %</th>
+                      </tr>
+                    </thead>
+                    <tbody>
 
-                      </tbody>
-                    </table>
-                  </div>
+                    </tbody>
+                  </table>
                 </div>
                 <div class="ui tab inverted attached segment" data-tab="player-hero-pool" id="player-detail-hero-pool">
                   <h2 class="ui inverted dividing header">Hero Pool</h2>
@@ -286,20 +284,18 @@
             <div class="four wide column">
               <div class="ui inverted segment" id="player-detail-map-summary">
                 <div class="ui top attached label">Map Summary</div>
-                <div class="table-wrapper">
-                  <table class="ui sortable selectable inverted table">
-                    <thead>
-                      <tr>
-                        <th class="center aligned">Map</th>
-                        <th class="center aligned stat">Win %</th>
-                        <th class="center aligned stat">Games</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                <table class="ui selectable inverted table">
+                  <thead>
+                    <tr>
+                      <th class="center aligned">Map</th>
+                      <th class="center aligned stat">Win %</th>
+                      <th class="center aligned stat">Games</th>
+                    </tr>
+                  </thead>
+                  <tbody>
 
-                    </tbody>
-                  </table>
-                </div>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="two wide column">
@@ -411,20 +407,18 @@
                 </div>
               </div>
               <div class="ui attached inverted segment" id="player-compare-table">
-                <div class="table-wrapper">
-                  <table class="ui sortable selectable inverted table">
-                    <thead>
-                      <tr>
-                        <th>Stat</th>
-                        <th class="center aligned stat" name="player">Player</th>
-                        <th class="center aligned stat">Diff</th>
-                        <th class="center aligned stat">Average</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
-                </div>
+                <table class="ui selectable inverted table">
+                  <thead>
+                    <tr>
+                      <th>Stat</th>
+                      <th class="center aligned stat" name="player">Player</th>
+                      <th class="center aligned stat">Diff</th>
+                      <th class="center aligned stat">Average</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="seven wide column">
@@ -446,19 +440,17 @@
             <div class="five wide column">
               <div class="ui inverted segment player-win" id="player-detail-award-summary">
                 <div class="ui top attached label">Awards</div>
-                <div class="table-wrapper">
-                  <table class="ui sortable selectable inverted table">
-                    <thead>
-                      <tr>
-                        <th>Award</th>
-                        <th class="center aligned stat">Award %</th>
-                        <th class="center aligned stat">Games</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
-                </div>
+                <table class="ui selectable inverted table">
+                  <thead>
+                    <tr>
+                      <th>Award</th>
+                      <th class="center aligned stat">Award %</th>
+                      <th class="center aligned stat">Games</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="four wide column">
@@ -861,14 +853,5 @@
     </td>
     <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
     <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
-  </tr>
-</script>
-
-<script id="player-compare-table-row" type="text/x-handlebars-template">
-  <tr>
-    <td><h3 class="ui inverted header">{{statName}}</h3></td>
-    <td class="center aligned" data-sort-value="{{pDataSort}}">{{pData}}</td>
-    <td class="center aligned" data-sort-value="{{pctDiff}}">{{pctDiffFormat}}</td>
-    <td class="center aligned" data-sort-value="{{cmpDataSort}}">{{cmpData}}</td>
   </tr>
 </script>

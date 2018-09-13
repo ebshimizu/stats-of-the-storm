@@ -1,3 +1,8 @@
+const STANDARD_SEGMENT_HEIGHT = 480;
+const TALL_SEGMENT_HEIGHT = 560;
+const STANDARD_SEGMENT_WITH_SEARCH = STANDARD_SEGMENT_HEIGHT - 50;
+const STANDARD_SEGMENT_ALL = STANDARD_SEGMENT_HEIGHT - 100;
+
 class Table {
   constructor(id, opts) {
     this.id = id;
@@ -8,9 +13,9 @@ class Table {
   }
 
   setData(data) {
-    this.table.DataTable().clear();
+    this.clear();
     this.table.DataTable().rows.add(data);
-    this.table.DataTable().draw();
+    this.draw();
   }
 
   // if the data is coming in as an object not an array
@@ -23,6 +28,34 @@ class Table {
 
     this.setData(dataArr);
   }
+
+  clear() {
+    this.table.DataTable().clear();
+  }
+
+  draw() {
+    this.table.DataTable().draw();
+  }
+
+  // mostly for the min matches field in player for now
+  filterByMinGames(threshold) {
+    this.table.DataTable().rows(function(idx, data, node) {
+      return data.games < threshold;
+    }).remove().draw();
+  }
+}
+
+function preprocessAwards(data) {
+  let awardsData = [];
+  for (let award in data.awards) {
+    awardsData.push({
+      key: award,
+      games: data.games,
+      wins: data.awards[award]
+    });
+  }
+
+  return awardsData;
 }
 
 function playerVsWinPctData(row) {
@@ -49,12 +82,25 @@ function heroHeader(heroName) {
   `;
 }
 
+function awardHeader(awardKey) {
+  let awardData = Heroes.awardInfo(awardKey);
+  return `
+    <h3 class="ui image inverted header">
+      <img src="assets/images/${awardData.image}" class="ui rounded small image">
+      <div class="content">
+        ${awardData.name}
+        <div class="sub header">${awardData.subtitle}</div>
+      </div>
+    </h3>
+  `;
+}
+
 const PlayerVsTableFormat = {
   columns: [
     {
       title: 'Hero',
       data: 'name',
-      render: (data) => heroHeader(data)
+      render: heroHeader
     },
     {
       title: 'Win %',
@@ -66,12 +112,11 @@ const PlayerVsTableFormat = {
       data: 'games'
     }
   ],
-  order: [[1, 'desc'], [2, 'desc']],
+  order: [[2, 'desc'], [1, 'desc']],
   paging: false,
   searching: false,
-  scrollY: 450,
-  info: false,
-  responsive: true
+  scrollY: STANDARD_SEGMENT_HEIGHT,
+  info: false
 };
 
 const PlayerVsPlayerFormat = {
@@ -90,13 +135,12 @@ const PlayerVsPlayerFormat = {
       data: 'games'
     }
   ],
-  order: [[1, 'desc'], [2, 'desc']],
+  order: [[2, 'desc'], [1, 'desc']],
   paging: true,
   pageLength: 50,
   searching: true,
   info: true,
-  scrollY: 360,
-  responsive: true
+  scrollY: STANDARD_SEGMENT_ALL
 };
 
 const SkinFormat = {
@@ -119,13 +163,148 @@ const SkinFormat = {
   paging: true,
   searching: true,
   info: true,
-  scrollY: 360,
-  pageLength: 50,
-  responsive: true
+  scrollY: STANDARD_SEGMENT_ALL,
+  pageLength: 50
 };
 
+const MapFormat = {
+  columns: [
+    {
+      title: 'Map',
+      data: 'key'
+    },
+    {
+      title: 'Win %',
+      data: playerVsWinPctData,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Games',
+      data: 'games'
+    }
+  ],
+  order: [[1, 'desc'], [2, 'desc']],
+  paging: false,
+  info: false,
+  scrollY: TALL_SEGMENT_HEIGHT,
+  searching: false
+};
+
+const AwardFormat = {
+  columns: [
+    {
+      title: 'Award',
+      data: 'key',
+      render: (data) => awardHeader(data)
+    },
+    {
+      title: 'Award %',
+      data: playerVsWinPctData,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Games',
+      data: 'wins'
+    }
+  ],
+  order: [[1, 'desc'], [2, 'desc']],
+  paging: false,
+  info: false,
+  scrollY: STANDARD_SEGMENT_HEIGHT,
+  searching: false
+};
+
+const PlayerCompareToAvgFormat = {
+  columns: [
+    {
+      title: 'Stat',
+      data: 'statName',
+      render: (data) => `<h3 class="ui inverted header">${data}</h3>`
+    },
+    {
+      title: 'Player',
+      data: 'pDataSort',
+      render: (data, type, row) => row.pData
+    },
+    {
+      title: 'Diff',
+      data: 'pctDiff',
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Average',
+      data: 'cmpDataSort',
+      render: (data, type, row) => row.cmpData
+    }
+  ],
+  order: [[0, 'asc']],
+  paging: false,
+  info: false,
+  scrollY: STANDARD_SEGMENT_WITH_SEARCH,
+  searching: true
+};
+
+const HeroSummaryFormat = {
+  columns: [
+    {
+      title: 'Hero',
+      data: 'key',
+      render: heroHeader
+    },
+    {
+      title: 'Win %',
+      data: playerVsWinPctData,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Games',
+      data: 'games'
+    },
+    {
+      title: 'KDA',
+      data: 'stats.totalKDA',
+      render: (data) => formatStat('KDA', data)
+    },
+    {
+      title: 'Takedowns',
+      data: 'stats.Takedowns'
+    },
+    {
+      title: 'Kills',
+      data: 'stats.SoloKill'
+    },
+    {
+      title: 'Assists',
+      data: 'stats.Assists'
+    },
+    {
+      title: 'Deaths',
+      data: 'stats.Deaths'
+    },
+    {
+      title: 'MVP %',
+      data: 'stats.MVPPct',
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Award %',
+      data: 'stats.AwardPct',
+      render: (data) => formatStat('pct', data)
+    }
+  ],
+  order: [[1, 'desc'], [2, 'desc']],
+  paging: false,
+  info: false,
+  scrollY: TALL_SEGMENT_HEIGHT,
+  searching: false
+}
 
 exports.Table = Table;
 exports.PlayerVsTableFormat = PlayerVsTableFormat;
 exports.PlayerVsPlayerFormat = PlayerVsPlayerFormat;
 exports.SkinFormat = SkinFormat;
+exports.MapFormat = MapFormat;
+exports.AwardFormat = AwardFormat;
+exports.PlayerCompareToAvgFormat = PlayerCompareToAvgFormat;
+exports.HeroSummaryFormat = HeroSummaryFormat;
+exports.preprocessAwards = preprocessAwards;
