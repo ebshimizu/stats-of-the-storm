@@ -1,21 +1,5 @@
 <script src="../js/player.js"></script>
 
-<script id="player-hero-detail-row"  type="text/x-handlebars-template">
-  <tr>
-    <td data-sort-value="{{heroName}}">
-      <h3 class="ui inverted header">
-        <div class="content">{{heroName}}</div>
-      </h3>
-    </td>
-    </td>
-    {{#each stat}}
-    <td class="center aligned" data-sort-value="{{avg}}" data-position="left center" data-variation="wide" data-html='<h4 class="ui image header"><img class="ui rounded image" src="{{heroImage ../heroName}}"><div class="content">{{../heroName}}<div class="ui sub header">{{name}}</div></div></h4>'>
-      {{render}}
-    </td>
-    {{/each}}
-  </tr>
-</script>
-
 <script id="player-page" type="text/x-handlebars-template">
   <div id="player-page-content" class="is-page transition hidden" section-name="player">
     <div id="player-page-header">
@@ -756,28 +740,6 @@
       <div class="ui red deny button">Cancel</div>
     </div>
   </div>
-</script>
-
-<script id="player-detail-hero-summary-row" type="text/x-handlebars-template">
-  <tr class="player-detail-summary-row">
-    <td data-sort-value="{{heroName}}">
-      <h3 class="ui image inverted header">
-        <img src="{{heroImage heroName}}" class="ui rounded image">
-        <div class="content">
-          {{heroName}}
-        </div>
-      </h3>
-    </td>
-    <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
-    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
-    <td class="center aligned" data-sort-value="{{stats.totalKDA}}">{{stats.totalKDA}}</td>
-    <td class="center aligned" data-sort-value="{{stats.Takedowns}}">{{stats.Takedowns}}</td>
-    <td class="center aligned" data-sort-value="{{stats.SoloKill}}">{{stats.SoloKill}}</td>
-    <td class="center aligned" data-sort-value="{{stats.Assists}}">{{stats.Assists}}</td>
-    <td class="center aligned" data-sort-value="{{stats.Deaths}}">{{stats.Deaths}}</td>
-    <td class="center aligned" data-sort-value="{{stats.MVPPct}}">{{stats.formatMVPPct}}</td>
-    <td class="center aligned" data-sort-value="{{stats.AwardPct}}">{{stats.formatAwardPct}}</td>
-  </tr>
 </script>
 
 <script id="player-detail-map-summary-row" type="text/x-handlebars-template">

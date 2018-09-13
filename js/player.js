@@ -3,11 +3,9 @@ const moment = require('moment');
 var playerDetailID;
 var playerDetailStats;
 var playerDetailInfo;
-var playerDetailHeroSummaryRowTemplate;
 var playerDetailMapSummaryRowTemplate;
 var allDetailStats;
 var playerAwardRowTemplate;
-let playerHeroDetailRowTemplate;
 var currentPlayerHero = '';
 
 var heroWinRateRowTemplate;
@@ -228,12 +226,10 @@ function initPlayerPage() {
   //$('#players-set-player').dropdown('set selected', selectedPlayerID);
 
   // templates
-  playerDetailHeroSummaryRowTemplate = getHandlebars('player', '#player-detail-hero-summary-row');
   playerDetailMapSummaryRowTemplate = getHandlebars('player', '#player-detail-map-summary-row');
   heroWinRateRowTemplate = getHandlebars('player', '#player-detail-hero-win-row');
   heroTalentRowTemplate = getHandlebars('player', '#player-detail-talent-row');
   playerAwardRowTemplate = getHandlebars('player', '#player-detail-hero-award-row');
-  playerHeroDetailRowTemplate = getHandlebars('player', '#player-hero-detail-row');
 
   createDetailTableHeader();
 
