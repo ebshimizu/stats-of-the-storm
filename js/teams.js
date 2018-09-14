@@ -1,15 +1,20 @@
 var teamsHeroDataFilter = {};
 var teamsMapDataFilter = {};
-var teamHeroSummaryRowTemplate;
-var teamBanSummaryRowTemplate;
 var teamRosterRowTemplate;
-var teamHeroPickRowTemplate;
 var currentTeam;
 var cmpTeamVal;
 var teamPlayerStats, teamTeamStats, teamHeroStats;
 var teamAvgData;
 var teamAvgTracker;
 var teamHeroMatchThresh = 0;
+
+var teamTables = {
+  heroSummary: null,
+  bans: null,
+  againstHero: null,
+  compareVsAvg: null,
+  maps: null
+}
 
 function initTeamsPage() {
   $('#team-set-team').dropdown({
@@ -28,10 +33,13 @@ function initTeamsPage() {
     fullTextSearch: true
   });
 
-  teamHeroSummaryRowTemplate = getHandlebars('teams', '#team-hero-summary-row');
-  teamBanSummaryRowTemplate = getHandlebars('teams', '#team-hero-ban-row');
+  teamTables.maps = new Table('#team-map-summary table', TableDefs.MapFormat);
+  teamTables.againstHero = new Table('#team-against-summary table', TableDefs.PlayerVsTableFormat);
+  teamTables.heroSummary = new Table('#team-hero-summary-table table', TableDefs.TeamHeroSummaryFormat);
+  teamTables.bans = new Table('#team-ban-summary table', TableDefs.TeamBanSummaryFormat);
+  teamTables.compareVsAvg = new Table('#team-compare-table table', TableDefs.TeamCompareToAvgFormat);
+
   teamRosterRowTemplate = getHandlebars('teams', '#team-roster-row');
-  teamHeroPickRowTemplate = getHandlebars('teams', '#team-hero-pick-row');
   teamCompareHeroPickRowTemplate = getHandlebars('teams', '#team-roster-hero-compare-row');
 
   // filter popup
@@ -53,8 +61,8 @@ function initTeamsPage() {
   bindFilterResetButton(filterWidget, resetTeamsFilter);
   bindOtherSearchButton(filterWidget, $('#team-alt-search-button'), updateTeamsFilter);
 
-  $('#team-detail-body table').tablesort();
-  $('#team-detail-body table').floatThead({
+  $('#team-detail-body table.sortable').tablesort();
+  $('#team-detail-body table.sortable').floatThead({
     scrollContainer: closestWrapper,
     autoReflow: true
   });
@@ -65,17 +73,20 @@ function initTeamsPage() {
 
   $('#teams-submenu .item').tab();
   $('#teams-submenu .item').click(function() {
-    $('#team-detail-body table').floatThead('reflow');
+    $('#team-detail-body table.sortable').floatThead('reflow');
+    redrawTeamTables();
   });
+
+  $('#team-hero-summary .menu .item').tab();
   $('#team-hero-summary .item').click(function() {
-    $('#team-detail-body table').floatThead('reflow');
+    $('#team-detail-body table.sortable').floatThead('reflow');
+    teamTables.heroSummary.draw();
+    teamTables.bans.draw();
   });
 
   $('#teams-submenu .external-match-history').click(function() {
     showMatchHistory();
   });
-
-  $('#team-hero-summary .menu .item').tab();
 
   $('#team-edit-menu').dropdown({
     onChange: function(value, text, $elem) {
@@ -135,6 +146,12 @@ function populateTeamCollectionMenu() {
   });
 }
 
+function redrawTeamTables() {
+  for (let t in teamTables) {
+    teamTables[t].draw();
+  }
+}
+
 function resetTeamsPage() {
   resetTeamsFilter();
 }
@@ -143,6 +160,7 @@ function teamShowSection() {
   // basically just expose the proper menu options here
   $('#team-edit-menu').removeClass('is-hidden');
   $('#team-file-menu').removeClass('is-hidden');
+  redrawTeamTables();
 }
 
 function showTeamLoader() {
@@ -232,65 +250,35 @@ function loadTeamData(team, matches, heroData) {
     }
   }
 
-  renderMapStatsTo($('#team-map-summary'), teamStats)
-  renderHeroVsStatsTo($('#team-against-summary'), against, teamHeroMatchThresh);
+  teamTables.maps.setDataFromObject(teamStats.maps);
+  teamTables.againstHero.setDataFromObject(against);
 
-  $('#team-hero-summary-table tbody').html('');
   let picked = 0;
+  let heroSummaryData = []
   for (let h in heroStats.heroes) {
     picked += 1;
     const hero = heroStats.heroes[h];
 
-    if (hero.games >= teamHeroMatchThresh) {
-      const context = {
-        Takedowns: hero.stats.Takedowns,
-        Deaths: hero.stats.Deaths,
-        KDA: hero.stats.Takedowns / Math.max(1, hero.stats.Deaths),
-        TimeSpentDead: heroStats.averages[h].TimeSpentDead,
-        timeDeadPct: hero.stats.timeDeadPct / hero.games,
-        games: hero.games,
-        winPercent: hero.wins / hero.games,
-        pickPercent: hero.games / teamStats.totalMatches,
-        heroName: h
-      };
-      $('#team-hero-summary-table tbody').append(teamHeroSummaryRowTemplate(context));
-    }
+    hero.heroName = h;
+    hero.totalMatches = teamStats.totalMatches;
+    hero.picks = teamStats.heroes[h].picks;
+    heroSummaryData.push(hero);
   }
+  teamTables.heroSummary.setData(heroSummaryData);
+  teamTables.heroSummary.filterByMinGames(teamHeroMatchThresh);
 
   // picks and bans
+  let heroBanData = [];
   $('#team-ban-summary tbody').html('');
-  $('#team-draft-table tbody').html('');
   for (let h in teamStats.heroes) {
     const hero = teamStats.heroes[h];
 
-    if (hero.bans > 0 && hero.bans >= teamHeroMatchThresh) {
-      const context = {
-        heroName: h,
-        banPercent: hero.bans / teamStats.totalMatches,
-        bans: hero.bans,
-        ban1Percent: hero.first / teamStats.totalMatches,
-        ban1: hero.first,
-        ban2Percent: hero.second / teamStats.totalMatches,
-        ban2: hero.second
-      };
-
-      $('#team-ban-summary tbody').append(teamBanSummaryRowTemplate(context));
-    }
-
-    if (hero.games > 0 && hero.games >= teamHeroMatchThresh) {
-      const context = {
-        heroName: h,
-        winPercent: hero.wins / hero.games,
-        games: hero.games
-      };
-
-      for (let p in hero.picks) {
-        context[p + 'Percent'] = hero.picks[p].count / teamStats.totalMatches;
-      }
-
-      $('#team-draft-table tbody').append(teamHeroPickRowTemplate(context));
-    }
+    hero.totalMatches = teamStats.totalMatches;
+    hero.heroName = h;
+    heroBanData.push(hero);
   }
+  teamTables.bans.setData(heroBanData);
+  teamTables.bans.filterByMinGames(teamHeroMatchThresh);
 
   // other stats
   try {
@@ -376,7 +364,7 @@ function loadTeamData(team, matches, heroData) {
   // average comparison
   updateTeamCollectionCompare($('#team-compare-collection').dropdown('get value'), null, null);
 
-  $('#team-detail-body table').floatThead('reflow');
+  $('#team-detail-body table.sortable').floatThead('reflow');
   $('#team-detail-body th').removeClass('sorted ascending descending');
   hideTeamLoader();
 }
@@ -809,7 +797,7 @@ function loadTeamAverages(collectionID) {
 
 function initProcessTeamAverages(teams) {
   teamAvgTracker.target = teams.length;
-  $('#team-compare-table tbody').html('');
+  teamTables.compareVsAvg.clear();
 }
 
 function processTeamAverages(err, matches, team) {
@@ -856,6 +844,7 @@ function displayTeamAverages() {
     teamAvgData[s] /= teamAvgTracker.actual;
   }
 
+  let teamCmpTableData = [];
   for (let s in teamAvgData) {
     let context = {};
 
@@ -904,13 +893,11 @@ function displayTeamAverages() {
     else
       context.pctDiff = (context.pDataSort - context.cmpDataSort) / context.cmpDataSort;
 
-    context.pctDiffFormat = formatStat('pct', context.pctDiff);
-
-    $('#team-compare-table tbody').append(playerCompareRowTemplate(context));
+    teamCmpTableData.push(context);
   }
+  teamTables.compareVsAvg.setData(teamCmpTableData);
 
   $('#team-compare-collection').removeClass('loading disabled');
-  $('#team-compare-table table').floatThead('reflow');
 }
 
 function layoutTeamDetailPrint(sections) {
@@ -948,29 +935,25 @@ function layoutTeamDetailPrint(sections) {
   if (sects.indexOf('maps') !== -1) {
     addPrintPage('maps');
     addPrintSubHeader('Maps', 'maps');
-    copyFloatingTable($('#team-map-summary .floatThead-wrapper'), getPrintPage('maps'));
+    copyFloatingTable($('#team-map-summary'), getPrintPage('maps'));
   }
 
   if (sects.indexOf('summary') !== -1) {
     addPrintPage('summary');
     addPrintSubHeader('Hero Summary', 'summary');
-    copyFloatingTable($('#team-hero-summary-table .floatThead-wrapper'), getPrintPage('summary'));
+    copyFloatingTable($('#team-hero-summary-table'), getPrintPage('summary'));
   }
 
   if (sects.indexOf('draft') !== -1) {
-    addPrintPage('picks');
-    addPrintSubHeader('Pick Priority', 'picks');
-    copyFloatingTable($('#team-draft-table .floatThead-wrapper'), getPrintPage('picks'));
-
     addPrintPage('bans');
     addPrintSubHeader('Ban Priority', 'bans');
-    copyFloatingTable($('#team-ban-summary .floatThead-wrapper'), getPrintPage('bans'));
+    copyFloatingTable($('#team-ban-summary'), getPrintPage('bans'));
   }
 
   if (sects.indexOf('against') !== -1) {
     addPrintPage('against');
     addPrintSubHeader('Win Rate Against Hero', 'against');
-    copyFloatingTable($('#team-against-summary .floatThead-wrapper'), getPrintPage('against'));
+    copyFloatingTable($('#team-against-summary'), getPrintPage('against'));
   }
 
   if (sects.indexOf('roster') !== -1) {
@@ -982,7 +965,7 @@ function layoutTeamDetailPrint(sections) {
   if (sects.indexOf('compare') !== -1) {
     addPrintPage('compare');
     addPrintSubHeader('Comparison to Collection Average: ' + $('#team-compare-collection').dropdown('get text'), 'compare');
-    copyFloatingTable($('#team-compare-table .floatThead-wrapper'), getPrintPage('compare'));
+    copyFloatingTable($('#team-compare-table'), getPrintPage('compare'));
   }
 }
 

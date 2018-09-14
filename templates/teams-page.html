@@ -54,81 +54,24 @@
                 <div class="ui top attached small menu">
                   <a class="active item" data-tab="team-hero-summary">Hero Summary</a>
                   <a class="item" data-tab="team-ban-summary">Bans</a>
-                  <a class="item" data-tab="team-draft-summary">Pick Priority</a>
                 </div>
                 <div class="ui active tab inverted attached segment" data-tab="team-hero-summary" id="team-hero-summary-table">
-                  <div class="table-wrapper">
-                    <table class="ui sortable selectable inverted table">
-                      <thead>
-                        <tr>
-                          <th>Hero</th>
-                          <th class="center aligned stat">Win %</th>
-                          <th class="center aligned stat">Pick %</th>
-                          <th class="center aligned stat">Games</th>
-                          <th class="center aligned stat">Takedowns</th>
-                          <th class="center aligned stat">Deaths</th>
-                          <th class="center aligned stat">KDA</th>
-                          <th class="center aligned stat">Avg. Time Dead</th>
-                          <th class="center aligned stat">Avg. % Dead</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div class="ui tab inverted attached segment" data-tab="team-draft-summary" id="team-draft-table">
-                  <div class="table-wrapper">
-                    <table class="ui sortable selectable inverted table">
-                      <thead>
-                        <tr>
-                          <th>Hero</th>
-                          <th class="center aligned stat">Win %</th>
-                          <th class="center aligned stat">Games</th>
-                          <th class="center aligned stat">Round 1 Pick %</th>
-                          <th class="center aligned stat">Round 2 Pick %</th>
-                          <th class="center aligned stat">Round 3 Pick %</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div class="ui tab inverted attached segment" id="team-ban-summary" data-tab="team-ban-summary">
-                  <div class="table-wrapper">
-                    <table class="ui sortable selectable inverted table">
-                      <thead>
-                        <tr>
-                          <th>Hero</th>
-                          <th class="center aligned stat">Ban %</th>
-                          <th class="center aligned stat">Bans</th>
-                          <th class="center aligned stat">1st Ban %</th>
-                          <th class="center aligned stat">1st Bans</th>
-                          <th class="center aligned stat">2nd Ban %</th>
-                          <th class="center aligned stat">2nd Bans</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="four wide column">
-              <div class="ui inverted segment" id="team-map-summary">
-                <div class="ui top attached label">Map Summary</div>
-                <div class="table-wrapper">
-                  <table class="ui sortable selectable inverted table">
+                  <table class="ui selectable inverted table">
                     <thead>
                       <tr>
-                        <th>Map</th>
-                        <th>Win %</th>
-                        <th>Games</th>
+                        <th>Hero</th>
+                        <th class="center aligned stat">Win %</th>
+                        <th class="center aligned stat">Pick %</th>
+                        <th class="center aligned stat">Games</th>
+                        <th class="center aligned stat">TD</th>
+                        <th class="center aligned stat">D</th>
+                        <th class="center aligned stat">K</th>
+                        <th class="center aligned stat">KDA</th>
+                        <th class="center aligned stat">Avg. Time Dead</th>
+                        <th class="center aligned stat">Avg. % Dead</th>
+                        <th class="center aligned stat">Round 1 Pick %</th>
+                        <th class="center aligned stat">Round 2 Pick %</th>
+                        <th class="center aligned stat">Round 3 Pick %</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -136,6 +79,41 @@
                     </tbody>
                   </table>
                 </div>
+                <div class="ui tab inverted attached segment" id="team-ban-summary" data-tab="team-ban-summary">
+                  <table class="ui selectable inverted table">
+                    <thead>
+                      <tr>
+                        <th>Hero</th>
+                        <th class="center aligned stat">Ban %</th>
+                        <th class="center aligned stat">Bans</th>
+                        <th class="center aligned stat">1st Ban %</th>
+                        <th class="center aligned stat">1st Bans</th>
+                        <th class="center aligned stat">2nd Ban %</th>
+                        <th class="center aligned stat">2nd Bans</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="four wide column">
+              <div class="ui inverted segment" id="team-map-summary">
+                <div class="ui top attached label">Map Summary</div>
+                <table class="ui selectable inverted table">
+                  <thead>
+                    <tr>
+                      <th>Map</th>
+                      <th>Win %</th>
+                      <th>Games</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="two wide column">
@@ -192,20 +170,18 @@
             <div class="four wide column">
               <div class="ui inverted segment player-win" id="team-against-summary">
                 <div class="ui top attached label">Win Rate Against Hero</div>
-                <div class="table-wrapper">
-                  <table class="ui sortable compact selectable inverted table">
-                    <thead>
-                      <tr>
-                        <th>Hero</th>
-                        <th class="center aligned stat">Win %</th>
-                        <th class="center aligned stat">Games</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                <table class="ui compact selectable inverted table">
+                  <thead>
+                    <tr>
+                      <th>Hero</th>
+                      <th class="center aligned stat">Win %</th>
+                      <th class="center aligned stat">Games</th>
+                    </tr>
+                  </thead>
+                  <tbody>
 
-                    </tbody>
-                  </table>
-                </div>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="ui six wide column" id="team-compare-segment">
@@ -224,20 +200,18 @@
                 </div>
               </div>
               <div class="ui attached inverted segment" id="team-compare-table">
-                <div class="table-wrapper">
-                  <table class="ui sortable selectable inverted table">
-                    <thead>
-                      <tr>
-                        <th>Stat</th>
-                        <th class="center aligned stat" name="player">Team</th>
-                        <th class="center aligned stat">Diff</th>
-                        <th class="center aligned stat">Average</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
-                </div>
+                <table class="ui selectable inverted table">
+                  <thead>
+                    <tr>
+                      <th>Stat</th>
+                      <th class="center aligned stat" name="player">Team</th>
+                      <th class="center aligned stat">Diff</th>
+                      <th class="center aligned stat">Average</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="ui six wide column">
@@ -685,64 +659,6 @@
       <div class="ui red deny button">Cancel</div>
     </div>
   </div>
-</script>
-
-<script id="team-hero-summary-row" type="text/x-handlebars-template">
-  <tr>
-    <td>
-      <h3 class="ui image inverted header">
-        <img src="{{heroImage heroName}}" class="ui rounded image">
-        <div class="content">
-          {{heroName}}
-        </div>
-      </h3>
-    </td>
-    <td class="center aligned" data-sort-value="{{winPercent}}">{{formatPct winPercent}}</td>
-    <td class="center aligned" data-sort-value="{{pickPercent}}">{{formatPct pickPercent}}</td>
-    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
-    <td class="center aligned" data-sort-value="{{Takedowns}}">{{Takedowns}}</td>
-    <td class="center aligned" data-sort-value="{{Deaths}}">{{Deaths}}</td>
-    <td class="center aligned" data-sort-value="{{KDA}}">{{formatKDA KDA}}</td>
-    <td class="center aligned" data-sort-value="{{TimeSpentDead}}">{{formatSeconds TimeSpentDead}}</td>
-    <td class="center aligned" data-sort-value="{{timeDeadPct}}">{{formatPct timeDeadPct}}</td>
-  </tr>
-</script>
-
-<script id="team-hero-pick-row" type="text/x-handlebars-template">
-  <tr>
-    <td>
-      <h3 class="ui image inverted header">
-        <img src="{{heroImage heroName}}" class="ui rounded image">
-        <div class="content">
-          {{heroName}}
-        </div>
-      </h3>
-    </td>
-    <td class="center aligned" data-sort-value="{{winPercent}}">{{formatPct winPercent}}</td>
-    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
-    <td class="center aligned" data-sort-value="{{round1Percent}}">{{formatPct round1Percent}}</td>
-    <td class="center aligned" data-sort-value="{{round2Percent}}">{{formatPct round2Percent}}</td>
-    <td class="center aligned" data-sort-value="{{round3Percent}}">{{formatPct round3Percent}}</td>
-  </tr>
-</script>
-
-<script id="team-hero-ban-row" type="text/x-handlebars-template">
-  <tr>
-    <td>
-      <h3 class="ui image inverted header">
-        <img src="{{heroImage heroName}}" class="ui rounded image">
-        <div class="content">
-          {{heroName}}
-        </div>
-      </h3>
-    </td>
-    <td class="center aligned" data-sort-value="{{banPercent}}">{{formatPct banPercent}}</td>
-    <td class="center aligned" data-sort-value="{{bans}}">{{bans}}</td>
-    <td class="center aligned" data-sort-value="{{ban1Percent}}">{{formatPct ban1Percent}}</td>
-    <td class="center aligned" data-sort-value="{{ban1}}">{{ban1}}</td>
-    <td class="center aligned" data-sort-value="{{ban2Percent}}">{{formatPct ban2Percent}}</td>
-    <td class="center aligned" data-sort-value="{{ban2}}">{{ban2}}</td>
-  </tr>
 </script>
 
 <script id="team-roster-row" type="text/x-handlebars-template">

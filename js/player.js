@@ -250,7 +250,7 @@ function initPlayerPage() {
 
   $('#player-detail-submenu .item').tab();
   $('#player-detail-submenu .item').click(function() {
-    $('#player-detail-body table.ui.sortable.table').floatThead('reflow');
+    $('#player-detail-body table.floating').floatThead('reflow');
     redrawPlayerTables();
   });
 
@@ -282,7 +282,7 @@ function initPlayerPage() {
 
   $('#player-detail-hero-talent .menu .item').tab();
   $('#player-detail-hero-talent .menu .item').click(function() {
-    $('#player-detail-body table.ui.sortable.table').floatThead('reflow');
+    $('#player-detail-body table.floating').floatThead('reflow');
   });
   $('#player-detail-hero-talent .talent-build table').tablesort();
   $('#player-detail-hero-talent .talent-build table').on('tablesort:complete', function(event, tablesort) {
@@ -290,7 +290,7 @@ function initPlayerPage() {
   });
 
   // this apparently has to go after tablesort
-  $('#player-detail-body table.ui.sortable.table').floatThead({
+  $('#player-detail-body table.floating').floatThead({
     scrollContainer: closestWrapper,
     autoReflow: true
   });
@@ -449,7 +449,7 @@ function hidePlayerLoader() {
 }
 
 function showPlayerPage() {
-  $('#player-page-content table.ui.sortable.table').floatThead('reflow');
+  $('#player-page-content table.floating').floatThead('reflow');
   redrawPlayerTables();
   $('#player-export-menu').removeClass('is-hidden');
   $('#player-edit-menu').removeClass('is-hidden');
@@ -813,21 +813,10 @@ function renderPlayerSummary() {
   playerTables.friendTable.setDataFromObject(playerDetailStats.withPlayer);
   playerTables.rivalTable.setDataFromObject(playerDetailStats.againstPlayer);
 
-  // filter step
-  let withTableData = [];
-  let againstTableData = [];
-  for (let h in playerDetailStats.withHero) {
-    if (playerDetailStats.withHero[h].games >= playerHeroMatchThreshold)
-      withTableData.push(playerDetailStats.withHero[h]);
-  }
-
-  for (let h in playerDetailStats.againstHero) {
-    if (playerDetailStats.againstHero[h].games > playerHeroMatchThreshold)
-      againstTableData.push(playerDetailStats.againstHero[h])
-  }
-
-  playerTables.withTable.setData(withTableData);
-  playerTables.againstTable.setData(againstTableData);
+  playerTables.withTable.setDataFromObject(playerDetailStats.withHero);
+  playerTables.withTable.filterByMinGames(playerHeroMatchThreshold);
+  playerTables.againstTable.setDataFromObject(playerDetailStats.againstHero);
+  playerTables.againstTable.filterByMinGames(playerHeroMatchThreshold);
 
   // skins
   playerTables.skinTable.setDataFromObject(playerDetailStats.skins);

@@ -342,7 +342,7 @@ function playerDetailStatFormat() {
     order: [[0, 'asc']],
     paging: false,
     info: false,
-    scrollY: '50vh',
+    scrollY: 'calc(100vh - 380px)',
     scrollX: true,
     searching: false,
     fixedColumns: true,
@@ -350,6 +350,149 @@ function playerDetailStatFormat() {
     buttons: ['excel', 'pdf']
   };
 }
+
+const TeamHeroSummaryFormat = {
+  columns: [
+    {
+      title: 'Hero',
+      data: 'heroName',
+      render: heroHeader
+    },
+    {
+      title: 'Win %',
+      data: playerVsWinPctData,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Pick %',
+      data: (row) => row.games / row.totalMatches,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Games',
+      data: 'games'
+    },
+    {
+      title: 'TD',
+      data: 'stats.Takedowns'
+    },
+    {
+      title: 'D',
+      data: 'stats.Deaths'
+    },
+    {
+      title: 'K',
+      data: 'stats.SoloKill'
+    },
+    {
+      title: 'KDA',
+      data: (row) => row.stats.Takedowns / Math.max(1, row.stats.Deaths),
+      render: (data) => formatStat('KDA', data)
+    },
+    {
+      title: 'Avg. Time Dead',
+      data: 'TimeSpentDead',
+      render: (data) => formatStat('Time', data)
+    },
+    {
+      title: 'Avg. % Dead',
+      data: (row) => row.stats.timeDeadPct / row.games,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Round 1 %',
+      data: (row) => row.picks.round1.count / row.totalMatches,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Round 2 %',
+      data: (row) => row.picks.round2.count / row.totalMatches,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Round 3 %',
+      data: (row) => row.picks.round3.count / row.totalMatches,
+      render: (data) => formatStat('pct', data)
+    }
+  ],
+  scrollY: STANDARD_SEGMENT_HEIGHT,
+  paging: false,
+  info: false,
+  searching: false,
+  order: [[1, 'desc'], [2, 'desc']]
+}
+
+const TeamBanSummaryFormat = {
+  columns: [
+    {
+      title: 'Hero',
+      data: 'heroName',
+      render: heroHeader
+    },
+    {
+      title: 'Ban %',
+      data: (row) => row.bans / row.totalMatches,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Bans',
+      data: 'bans'
+    },
+    {
+      title: '1st Ban %',
+      data: (row) => row.first / row.totalMatches,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: '1st Bans',
+      data: 'first'
+    },
+    {
+      title: '2nd Ban %',
+      data: (row) => row.second / row.totalMatches,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: '2nd Bans',
+      data: 'second'
+    }
+  ],
+  scrollY: STANDARD_SEGMENT_HEIGHT,
+  paging: false,
+  info: false,
+  searching: false,
+  order: [[1, 'desc'], [2, 'desc']]
+}
+
+const TeamCompareToAvgFormat = {
+  columns: [
+    {
+      title: 'Stat',
+      data: 'statName',
+      render: (data) => `<h3 class="ui inverted header">${data}</h3>`
+    },
+    {
+      title: 'Team',
+      data: 'pDataSort',
+      render: (data, type, row) => row.pData
+    },
+    {
+      title: 'Diff',
+      data: 'pctDiff',
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Average',
+      data: 'cmpDataSort',
+      render: (data, type, row) => row.cmpData
+    }
+  ],
+  order: [[0, 'asc']],
+  paging: false,
+  info: false,
+  scrollY: STANDARD_SEGMENT_WITH_SEARCH,
+  searching: true
+};
 
 exports.Table = Table;
 exports.PlayerVsTableFormat = PlayerVsTableFormat;
@@ -360,4 +503,7 @@ exports.AwardFormat = AwardFormat;
 exports.PlayerCompareToAvgFormat = PlayerCompareToAvgFormat;
 exports.HeroSummaryFormat = HeroSummaryFormat;
 exports.PlayerDetailStatFormat = playerDetailStatFormat();
+exports.TeamHeroSummaryFormat = TeamHeroSummaryFormat;
+exports.TeamBanSummaryFormat = TeamBanSummaryFormat;
+exports.TeamCompareToAvgFormat = TeamCompareToAvgFormat;
 exports.preprocessAwards = preprocessAwards;
