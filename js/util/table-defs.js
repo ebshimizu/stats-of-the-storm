@@ -459,7 +459,6 @@ function playerRankingStatFormat() {
   base.lengthMenu = [25, 50, 100, 250, 500];
   base.scrollY = 'calc(100vh - 370px)';
   base.buttons = ['csv', 'excel'];
-  base.colReorder = true;
 
   return base;
 }

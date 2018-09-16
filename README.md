@@ -13,12 +13,13 @@ Stats of the Storm is available for Windows and macOS (experimental).
 Check out the [Releases Page](https://github.com/ebshimizu/hots-analysis/releases) to download the latest installer.
 
 ## Development
-Here's what you'll need to develop the app.
+You'll need node.js and (optionally) yarn installed. If you don't want to use yarn,
+the standard `npm` commands should work in its place.
 
 * Install node
 * Clone the repository and initialize the submodules
-* Run `npm install` inthe repository root (the one with `package.json` in it)
-* From the root directory, run `npm run app`
+* Run `yarn install` inthe repository root (the one with `package.json` in it)
+* From the root directory, run `yarn app`
 
 ## Feedback
 
@@ -34,3 +35,4 @@ Bugs? Feature Requests? File an issue on GitHub or send an email to falindrith@g
 * [jquery.tablesort](https://github.com/kylefox/jquery-tablesort)
 * [jquery](https://jquery.com/)
 * [electron](https://electronjs.org/)
+* [datatables.net](https://datatables.net/)
