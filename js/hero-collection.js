@@ -13,7 +13,8 @@ var heroCollectionTables = {
   maps: null,
   winsWith: null,
   winsAgainst: null,
-  awards: null
+  awards: null,
+  players: null
 }
 
 function initHeroCollectionPage() {
@@ -29,6 +30,7 @@ function initHeroCollectionPage() {
   heroCollectionTables.awards = new Table('#hero-collection-award-summary table', TableDefs.AwardFormat);
   heroCollectionTables.winsWith = new Table('#hero-collection-detail-with-summary table', TableDefs.HeroDetailCompareFormat);
   heroCollectionTables.winsAgainst = new Table('#hero-collection-detail-against-summary table', TableDefs.HeroDetailCompareFormat);
+  heroCollectionTables.players = new Table('#hero-collection-top-players table', TableDefs.HeroDetailPlayerFormat);
 
   heroCollectionSummaryRowTemplate = getHandlebars('hero-collection', '#hero-collection-hero-summary-row-template');
   heroCollectionPickRowTemplate = getHandlebars('hero-collection', '#hero-collection-hero-pick-row-template');
@@ -393,6 +395,9 @@ function loadHeroCollectionData(value, text, $elem, force) {
 
     $('#hero-collection-page-content .table-wrapper table').floatThead('reflow');
     $('#hero-collection-page-content th').removeClass('sorted ascending descending');
+
+    let playerData = summarizePlayerData(docs);
+    heroCollectionTables.players.setDataFromObject(playerData);
 
     hideHeroCollectionLoader();
   });

@@ -512,6 +512,31 @@
                 </table>
               </div>
             </div>
+            <div class="sixteen wide column">
+              <div class="ui inverted segment player-win" id="hero-collection-top-players">
+                <div class="ui top attached label">Players</div>
+                <table class="ui selectable inverted table">
+                  <thead>
+                    <tr>
+                      <th>Player</th>
+                      <th>Win %</th>
+                      <th>Games</th>
+                      <th>KDA</th>
+                      <th>TD</th>
+                      <th>K</th>
+                      <th>A</th>
+                      <th>D</th>
+                      <th>Avg. Time Dead %</th>
+                      <th>Avg. DPM</th>
+                      <th>Avg. HPM</th>
+                      <th>Clutch Heals</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -588,22 +613,6 @@
     <td class="center aligned" data-sort-value="{{picks.round3.count}}">{{picks.round3.count}}</td>
     <td class="center aligned" data-sort-value="{{picks.round3.pct}}">{{picks.round3.formatPct}}</td>
     <td class="center aligned" data-sort-value="{{picks.round3.wins}}">{{picks.round3.wins}}</td>
-  </tr>
-</script>
-
-<script id="hero-collection-detail-hero-win-row" type="text/x-handlebars-template">
-  <tr>
-    <td data-sort-value="{{name}}">
-      <h3 class="ui image inverted header">
-        <img src="{{heroImage name}}" class="ui rounded image">
-        <div class="content">
-          {{name}}
-        </div>
-      </h3>
-    </td>
-    <td class="center aligned" data-sort-value="{{winPercent}}">{{formatWinPercent}}</td>
-    <td class="center aligned" data-sort-value="{{games}}">{{games}}</td>
-    <td class="center aligned {{deltaClass}}" data-sort-value="{{avgDelta}}">{{formatAvgDelta}}</td>
   </tr>
 </script>
 

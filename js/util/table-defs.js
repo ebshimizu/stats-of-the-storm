@@ -528,6 +528,70 @@ const HeroDetailCompareFormat = {
   info: false
 };
 
+const HeroDetailPlayerFormat = {
+  columns: [
+    {
+      title: 'Player',
+      data: 'name'
+    },
+    {
+      title: 'Win %',
+      data: playerVsWinPctData,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Games',
+      data: 'games'
+    },
+    {
+      title: 'KDA',
+      data: 'totalKDA',
+      render: (data) => formatStat('KDA', data)
+    },
+    {
+      title: 'TD',
+      data: 'total.Takedowns'
+    },
+    {
+      title: 'K',
+      data: 'total.SoloKill'
+    },
+    {
+      title: 'A',
+      data: 'total.Assists'
+    },
+    {
+      title: 'D',
+      data: 'total.Deaths'
+    },
+    {
+      title: 'Avg. Time Dead %',
+      data: 'averages.timeDeadPct',
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Avg. DPM',
+      data: 'averages.DPM',
+      render: (data) => formatStat('DPM', data, true)
+    },
+    {
+      title: 'Avg. HPM',
+      data: 'averages.HPM',
+      render: (data) => formatStat('HPM', data, true)
+    },
+    {
+      title: 'Clutch Heals',
+      data: 'total.ClutchHealsPerformed'
+    }
+  ],
+  order: [[2, 'desc'], [1, 'desc']],
+  paging: true,
+  pageLength: 50,
+  searching: true,
+  info: true,
+  scrollY: STANDARD_SEGMENT_ALL
+}
+
 exports.Table = Table;
 exports.PlayerVsTableFormat = PlayerVsTableFormat;
 exports.PlayerVsPlayerFormat = PlayerVsPlayerFormat;
@@ -541,4 +605,5 @@ exports.TeamHeroSummaryFormat = TeamHeroSummaryFormat;
 exports.TeamBanSummaryFormat = TeamBanSummaryFormat;
 exports.TeamCompareToAvgFormat = TeamCompareToAvgFormat;
 exports.HeroDetailCompareFormat = HeroDetailCompareFormat;
+exports.HeroDetailPlayerFormat = HeroDetailPlayerFormat;
 exports.preprocessAwards = preprocessAwards;
