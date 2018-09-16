@@ -20,7 +20,7 @@
 }
 
 #player-ranking-body .section-wrapper .segment {
-  height: calc(100% - 30px);
+  height: 100%;
 }
 
 #player-ranking-body .table-wrapper {

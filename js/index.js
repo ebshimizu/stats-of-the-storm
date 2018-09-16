@@ -43,6 +43,9 @@ const DetailStatString = require('./js/game-data/detail-stat-string');
 const dt = require('datatables.net')(window, $);
 const dtse = require('datatables.net-se')(window, $);
 const dtfc = require('datatables.net-fixedcolumns')(window, $);
+const dtbt = require('datatables.net-buttons')(window, $);
+const dtbtse = require('datatables.net-buttons-se')(window, $);
+require('datatables.net-buttons/js/buttons.html5.js')(window, $);  // HTML 5 file export
 const path = require('path');
 const settings = require('electron-settings');
 
@@ -234,6 +237,10 @@ function initGlobalUIHandlers() {
   $(document).on('click', 'a[href^="http"]', function(event) {
       event.preventDefault();
       shell.openExternal(this.href);
+  });
+
+  $(document).on('click', 'h3.player-name.link-to-player', function(event) {
+    showPlayerProfile($(this).attr('player-id'));
   });
 }
 

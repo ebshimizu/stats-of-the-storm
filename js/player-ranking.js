@@ -1,17 +1,16 @@
 var playerRankingsHeroFilter = {};
 // this might not actually need to be used
 var playerRankingsMapFilter = {};
-var playerRankingGeneralTemplate;
-var playerRankingTeamfightTemplate;
-var playerRankingMiscTemplate;
-var playerRankingAdditionalTemplate;
+
+var playerRankingTable;
 
 function initPlayerRankingPage() {
-  // templates
-  playerRankingGeneralTemplate = getHandlebars('player-ranking', '#player-ranking-row-template');
-  playerRankingTeamfightTemplate = getHandlebars('player-ranking', '#player-ranking-teamfight-row-template');
-  playerRankingMiscTemplate = getHandlebars('player-ranking', '#player-ranking-misc-row-template');
-  playerRankingAdditionalTemplate = getHandlebars('player-ranking', '#player-ranking-additional-row-template');
+  // need to add the headers
+  for (let c of TableDefs.PlayerRankingStatFormat.columns) {
+    $('#player-ranking-general-table thead tr').append(`<th>${c.title}</th>`);
+  }
+
+  playerRankingTable = new Table('#player-ranking-general-table', TableDefs.PlayerRankingStatFormat);
 
   // filter popup
   let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template'));
@@ -47,51 +46,14 @@ function initPlayerRankingPage() {
   $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="all">All Heroes</div>');
   $('#player-ranking-hero-filter-menu').dropdown('refresh');
 
-  $('#player-ranking-general-table').tablesort();
-  $('#player-ranking-teamfight-table').tablesort();
-  $('#player-ranking-misc-table').tablesort();
-  $('#player-ranking-additional-table').tablesort();
-
-  $('#player-ranking-general-table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
-  $('#player-ranking-teamfight-table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
-  $('#player-ranking-misc-table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
-  $('#player-ranking-additional-table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
-  $('#player-ranking-match-thresh input').val(settings.get('playerThreshold'));
+  $('#player-ranking-match-thresh input').val(1);
   $('#player-ranking-match-thresh input').popup({
     on: 'focus'
-  });
-
-  $('#player-ranking-body .buttons .button').click(togglePlayerRankingSection);
-
-  $('#player-ranking-body table th.stat').data('sortBy', function(th, td, tablesort) {
-    return parseFloat(td.attr('data-sort-value'));
-  });
-
-  $('#player-ranking-body .top.attached.menu .item').click(function() {
-    togglePlayerRankingMode(this);
   });
 
   $('#players-file-menu').dropdown({
     onChange: handlePlayerRankingAction
   });
-
-  $('#players-print-sections .ui.dropdown').dropdown();
 }
 
 function resetPlayerRankingPage() {
@@ -144,20 +106,6 @@ function updateHeroFilter(value, text, $elem) {
   // don't update until search happens since you can definitely accidentally query to much stuff
 }
 
-function togglePlayerRankingSection() {
-  let section = $(this).text();
-
-  if ($(this).hasClass('violet')) {
-    return;
-  }
-
-  $('#player-ranking-body .buttons .button').removeClass('violet');
-  $('#player-ranking-body .section').addClass('is-hidden');
-  $('#player-ranking-body .section[table-name="' + section + '"]').removeClass('is-hidden');
-  $(this).addClass('violet');
-  $('#player-ranking-body table').floatThead('reflow');
-}
-
 function togglePlayerRankingMode(elem) {
   $('#player-ranking-body .top.attached.menu .item').removeClass('active');
   $(elem).addClass('active');
@@ -175,119 +123,61 @@ function loadPlayerRankings() {
 
       let mode = $('#player-ranking-body .top.attached.menu .active.item').attr('data-mode');
 
+      let tableData = [];
       for (let p in data) {
         let player = data[p];
 
         if (player.games < threshold)
           continue;
 
-        let context = {value: player[mode]};
+        let context = player[mode];
         context.id = p;
         context.name = player.name;
-        context.value.winPercent = player.wins / player.games;
-        context.formatWinPercent = formatStat('pct', context.value.winPercent);
+        context.winPercent = player.wins / player.games;
 
         if (mode === 'total' || mode === 'averages') {
-          context.value.totalKDA = player.totalKDA;
           context.totalKDA = player.totalKDA;
 
           if (mode === 'total') {
             // context replacement for a few stats
-            context.value.damageDonePerDeath = context.value.HeroDamage / Math.max(1, context.value.Deaths);
-            context.value.damageTakenPerDeath = context.value.DamageTaken / Math.max(1, context.value.Deaths);
-            context.value.healingDonePerDeath = (context.value.Healing + context.value.SelfHealing + context.value.ProtectionGivenToAllies) / Math.max(1, context.value.Deaths);
-            context.value.DPM = context.value.HeroDamage / (player.totalTime / 60);
-            context.value.HPM = (context.value.Healing + context.value.SelfHealing + context.value.ProtectionGivenToAllies) / (player.totalTime / 60);
-            context.value.XPM = context.value.ExperienceContribution / (player.totalTime / 60);
+            context.damageDonePerDeath = context.HeroDamage / Math.max(1, context.Deaths);
+            context.damageTakenPerDeath = context.DamageTaken / Math.max(1, context.Deaths);
+            context.healingDonePerDeath = (context.Healing + context.SelfHealing + context.ProtectionGivenToAllies) / Math.max(1, context.Deaths);
+            context.DPM = context.HeroDamage / (player.totalTime / 60);
+            context.HPM = (context.Healing + context.SelfHealing + context.ProtectionGivenToAllies) / (player.totalTime / 60);
+            context.XPM = context.ExperienceContribution / (player.totalTime / 60);
           }
         }
         else {
-          context.value.totalKDA = player[mode].KDA;
-          context.totalKDA = formatStat('KDA', context.value.totalKDA);
+          context.totalKDA = player[mode].KDA;
         }
 
-        context.value.games = player.games;
         context.games = player.games
         context.votes = player.votes;
 
-        for (let v in context.value) {
-          context[v] = formatStat(v, context.value[v], true);
-        }
-
         context.totalAwards = player.totalAwards;
-        context.value.awardPct = context.totalAwards / player.games;
-        context.awardPct = formatStat('pct', context.value.awardPct);
-        context.value.MVPPct = player.totalMVP / player.games;
-        context.MVPPct = formatStat('pct', context.value.MVPPct);
+        context.awardPct = context.totalAwards / player.games;
+        context.totalMVP = player.totalMVP ? player.totalMVP : 0;
+        context.MVPPct = context.totalMVP / player.games;
         context.taunts = player.taunts;
         context.Pool = Object.keys(player.heroes).length;
-        context.value.Pool = context.Pool;
 
-        $('#player-ranking-general-table tbody').append(playerRankingGeneralTemplate(context));
-        $('#player-ranking-teamfight-table tbody').append(playerRankingTeamfightTemplate(context));
-        $('#player-ranking-misc-table tbody').append(playerRankingMiscTemplate(context));
-        $('#player-ranking-additional-table tbody').append(playerRankingAdditionalTemplate(context));
+        tableData.push(context);
       }
 
-      $('#player-ranking-body .player-name').click(function() {
-        showPlayerProfile($(this).attr('playerID'));
-      });
+      playerRankingTable.setData(tableData);
+      playerRankingTable.filterByMinGames(threshold);
 
-      $('#player-ranking-body th').removeClass('sorted ascending descending');
       hidePlayerRankingLoader();
     });
   });
 }
 
-function layoutPlayerRankingPrint(sections) {
-  let sects = sections;
-  // well i did these backwards but i'm not changing it now i guess
-  if (!sects) {
-    sects = ['General', 'Damage Stats', 'Team Fight and CC', 'Awards and Taunts'];
-  }
-
-  clearPrintLayout();
-  addPrintHeader('Player Statistics');
-  addPrintDate();
-
-  for (section of sects) {
-    let sectionID = $('#player-ranking-body div[table-name="' + section + '"]').attr('table-print');
-    addPrintPage(sectionID);
-    addPrintSubHeader(section, sectionID);
-    copyFloatingTable($('#player-ranking-body div[table-name="' + section + '"] .floatThead-wrapper'), getPrintPage(sectionID));
-  }
-}
-
-function printPlayerRanking(filename, sections) {
-  layoutPlayerRankingPrint(sections);
-  renderAndPrint(filename, 'Legal', true);
-}
-
 function handlePlayerRankingAction(value, text, $elem) {
-  if (value === 'print') {
-    dialog.showSaveDialog({
-      title: 'Print Player Stats',
-      filters: [{name: 'pdf', extensions: ['pdf']}]
-    }, function(filename) {
-      if (filename) {
-        printPlayerRanking(filename, null);
-      }
-    });
+  if (value === 'csv') {
+    playerRankingTable.table.DataTable().button('0').trigger();
   }
-  else if (value === 'print-sections') {
-    $('#players-print-sections').modal({
-      onApprove: function() {
-        dialog.showSaveDialog({
-          title: 'Print Player Stats',
-          filters: [{name: 'pdf', extensions: ['pdf']}]
-        }, function(filename) {
-          if (filename) {
-            let sections = $('#players-print-sections .ui.dropdown').dropdown('get value').split(',');
-            printPlayerRanking(filename, sections);
-          }
-        });
-      },
-      closable: false
-    }).modal('show');
+  else if (value === 'excel') {
+    playerRankingTable.table.DataTable().button('1').trigger();
   }
 }

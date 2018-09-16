@@ -9,8 +9,10 @@
     <link rel="stylesheet" type="text/css" href="node_modules/vis/dist/vis.css">
     <link rel="stylesheet" type="text/css" href="node_modules/datatables.net-se/css/dataTables.semanticui.min.css">
     <link rel="stylesheet" type="text/css" href="node_modules/datatables.net-fixedcolumns-se/css/fixedColumns.semanticui.min.css">
+    <link rel="stylesheet" type="text/css" href="node_modules/datatables.net-buttons-se/css/buttons.semanticui.min.css">
     <script>window.$ = window.jQuery = require('jquery');</script>
     <script src="assets/semantic/dist/semantic.min.js"></script>
+    <script src="js/util/jszip.min.js"></script>
     <script src="node_modules/floatthead/dist/jquery.floatThead.js"></script>
     <script src="node_modules/jquery-tablesort/jquery.tablesort.min.js"></script>
     <script src="node_modules/@fengyuanchen/datepicker/dist/datepicker.min.js"></script>
@@ -219,14 +221,8 @@
           File
           <i class="dropdown icon"></i>
           <div class="menu">
-            <div class="item">
-              <i class="dropdown icon"></i>
-              <span class="text">Export PDF</span>
-              <div class="menu">
-                <div class="item" data-value="print">Player Stats</div>
-                <div class="item" data-value="print-sections">Selected Sections...</div>
-              </div>
-            </div>
+            <div class="item" data-value="csv">Export CSV</div>
+            <div class="item" data-value="excel">Export Excel</div>
           </div>
         </div>
         <div class="ui dropdown link item is-hidden section-submenu" id="team-ranking-file-menu">

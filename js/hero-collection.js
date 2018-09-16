@@ -1,6 +1,5 @@
 var heroCollectionSummaryRowTemplate;
 var heroCollectionPickRowTemplate;
-var heroCollectionHeroWinRowTemplate;
 
 // by default this screen containrs games played in official modes with bans
 var heroCollectionHeroDataFilter;
@@ -34,7 +33,6 @@ function initHeroCollectionPage() {
 
   heroCollectionSummaryRowTemplate = getHandlebars('hero-collection', '#hero-collection-hero-summary-row-template');
   heroCollectionPickRowTemplate = getHandlebars('hero-collection', '#hero-collection-hero-pick-row-template');
-  heroCollectionHeroWinRowTemplate = getHandlebars('hero-collection', '#hero-collection-detail-hero-win-row');
 
   $('#hero-collection-summary table').tablesort();
   $('#hero-collection-picks table').tablesort();

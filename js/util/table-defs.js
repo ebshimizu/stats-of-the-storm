@@ -43,6 +43,10 @@ class Table {
       return data.games < threshold;
     }).remove().draw();
   }
+
+  insertButtons() {
+    this.table.DataTable().buttons().container().appendTo($('div.eight.column:eq(0)', this.table.DataTable().table().container()));
+  }
 }
 
 function preprocessAwards(data) {
@@ -338,7 +342,7 @@ function playerDetailStatFormat() {
     columns.push({
       title: DetailStatString[allStats[i]],
       data: (row) => getHeroStatSafe(allStats[i], row),
-      render: (data) => formatStat(allStats[i], data, true)
+      render: (data) => formatStat(allStats[i], data)
     });
   }
 
@@ -351,9 +355,113 @@ function playerDetailStatFormat() {
     scrollX: true,
     searching: false,
     fixedColumns: true,
-    scrollCollapse: true,
-    buttons: ['excel', 'pdf']
+    scrollCollapse: true
   };
+}
+
+function playerRankingStatFormat() {
+  let base = playerDetailStatFormat();
+  base.columns[0] = {
+    title: 'Player',
+    data: 'name',
+    render: (data, type, row) => {
+      return `<h3 class="ui inverted header player-name link-to-player" player-id="${row.id}">${data}</h4>`
+    }
+  };
+  base.columns.push({
+    title: 'Hero Pool',
+    data: 'Pool'
+  });
+
+  // awards n stuff
+  let awardsColumns = [
+    {
+      title: 'Votes',
+      data: 'votes'
+    },
+    {
+      title: 'Awards',
+      data: 'totalAwards'
+    },
+    {
+      title: 'Award %',
+      data: 'awardPct',
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'MVP',
+      data: 'totalMVP'
+    },
+    {
+      title: 'MVP %',
+      data: 'MVPPct',
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Bsteps',
+      data: 'taunts.bsteps.count'
+    },
+    {
+      title: 'Bstep TD',
+      data: 'taunts.bsteps.takedowns'
+    },
+    {
+      title: 'Bstep Deaths',
+      data: 'taunts.bsteps.deaths'
+    },
+    {
+      title: 'Taunts',
+      data: 'taunts.taunts.count'
+    },
+    {
+      title: 'Taunt TD',
+      data: 'taunts.taunts.takedowns'
+    },
+    {
+      title: 'Taunt Deaths',
+      data: 'taunts.taunts.deaths'
+    },
+    {
+      title: 'Sprays',
+      data: 'taunts.sprays.count'
+    },
+    {
+      title: 'Spray TD',
+      data: 'taunts.sprays.takedowns'
+    },
+    {
+      title: 'Spray Deaths',
+      data: 'taunts.sprays.deaths'
+    },
+    {
+      title: 'Dances',
+      data: 'taunts.dances.count'
+    },
+    {
+      title: 'Dance TD',
+      data: 'taunts.dances.takedowns'
+    },
+    {
+      title: 'Dance Deaths',
+      data: 'taunts.dances.deaths'
+    }
+  ];
+
+  base.columns = base.columns.concat(awardsColumns);
+
+  // eventually, need setup first
+  base.order = [[1, 'desc']];
+  base.paging = true;
+  base.info = true;
+  base.searching = true;
+  base.scrollCollapse = false;
+  base.pageLength = 100;
+  base.lengthMenu = [25, 50, 100, 250, 500];
+  base.scrollY = 'calc(100vh - 370px)';
+  base.buttons = ['csv', 'excel'];
+  base.colReorder = true;
+
+  return base;
 }
 
 const TeamHeroSummaryFormat = {
@@ -606,4 +714,5 @@ exports.TeamBanSummaryFormat = TeamBanSummaryFormat;
 exports.TeamCompareToAvgFormat = TeamCompareToAvgFormat;
 exports.HeroDetailCompareFormat = HeroDetailCompareFormat;
 exports.HeroDetailPlayerFormat = HeroDetailPlayerFormat;
+exports.PlayerRankingStatFormat = playerRankingStatFormat();
 exports.preprocessAwards = preprocessAwards;

@@ -8,6 +8,7 @@ const DetailStatList = [
   'HighestKillStreak',
   'VengeancesPerformed',
   'TimeSpentDead',
+  'timeDeadPct',
   'OutnumberedDeaths',
   'EscapesPerformed',
   'TeamfightEscapesPerformed',
