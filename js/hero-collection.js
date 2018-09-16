@@ -9,6 +9,13 @@ var heroCollectionHeroMatchThresh = 0;
 var currentHeroCollectionHero = '';
 var heroDataWinCache;
 
+var heroCollectionTables = {
+  maps: null,
+  winsWith: null,
+  winsAgainst: null,
+  awards: null
+}
+
 function initHeroCollectionPage() {
   // by default this screen containrs games played in official modes with bans
   heroCollectionHeroDataFilter = {
@@ -18,22 +25,23 @@ function initHeroCollectionPage() {
     mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague, ReplayTypes.GameMode.Custom]}
   }
 
+  heroCollectionTables.maps = new Table('#hero-collection-detail-map-summary table', TableDefs.MapFormat);
+  heroCollectionTables.awards = new Table('#hero-collection-award-summary table', TableDefs.AwardFormat);
+  heroCollectionTables.winsWith = new Table('#hero-collection-detail-with-summary table', TableDefs.HeroDetailCompareFormat);
+  heroCollectionTables.winsAgainst = new Table('#hero-collection-detail-against-summary table', TableDefs.HeroDetailCompareFormat);
+
   heroCollectionSummaryRowTemplate = getHandlebars('hero-collection', '#hero-collection-hero-summary-row-template');
   heroCollectionPickRowTemplate = getHandlebars('hero-collection', '#hero-collection-hero-pick-row-template');
   heroCollectionHeroWinRowTemplate = getHandlebars('hero-collection', '#hero-collection-detail-hero-win-row');
 
   $('#hero-collection-summary table').tablesort();
   $('#hero-collection-picks table').tablesort();
-  $('#hero-collection-detail-map-summary table').tablesort();
-  $('#hero-collection-detail-with-summary table').tablesort();
-  $('#hero-collection-detail-against-summary table').tablesort();
-  $('#hero-collection-award-summary table').tablesort();
   $('#hero-collection-comps table').tablesort();
   $('#hero-collection-detail-hero-talent .talent-build table').tablesort();
   $('#hero-collection-detail-hero-talent .talent-build table').on('tablesort:complete', function(event, tablesort) {
     $('#hero-collection-detail-hero-talent .talent-build img').popup();
   });
-  $('#hero-collection-body table').floatThead({
+  $('#hero-collection-body .table-wrapper table').floatThead({
     scrollContainer: closestWrapper,
     autoReflow: true
   });
@@ -47,10 +55,10 @@ function initHeroCollectionPage() {
 
   $('#hero-collection-submenu .item').tab();
   $('#hero-collection-submenu .item').click(function() {
-    $('#hero-collection-body table').floatThead('reflow');
+    $('#hero-collection-body .table-wrapper table').floatThead('reflow');
   });
   $('#hero-collection-detail-hero-talent .item').click(function() {
-    $('#hero-collection-body table').floatThead('reflow');
+    $('#hero-collection-body .table-wrapper table').floatThead('reflow');
   });
 
   // filter popup
@@ -119,8 +127,14 @@ function initHeroCollectionPage() {
   $('#hero-collection-print-sections .ui.dropdown').dropdown();
 }
 
+function heroCollectionRedrawTables() {
+  for (var t in heroCollectionTables) {
+    heroCollectionTables[t].draw();
+  }
+}
+
 function heroCollectionShowSection() {
-  $('#hero-collection-body table').floatThead('reflow');
+  $('#hero-collection-body .table-wrapper table').floatThead('reflow');
   $('#hero-collection-file-menu').removeClass('is-hidden');
 }
 
@@ -145,7 +159,7 @@ function updateCollectionFilter(map, hero) {
   heroCollectionMapDataFilter = map;
 
   loadOverallHeroCollectionData();
-  loadHeroCollectionData($('#hero-collection-hero-select-menu').dropdown('get value'), null, null);
+  loadHeroCollectionData($('#hero-collection-hero-select-menu').dropdown('get value'), null, null, true);
 }
 
 function resetCollectionFilter() {
@@ -326,8 +340,8 @@ function toggleHeroCollectionType(tableID, active, container) {
 }
 
 // many of the functions here are borrowed from player.js
-function loadHeroCollectionData(value, text, $elem) {
-  if (value === currentHeroCollectionHero)
+function loadHeroCollectionData(value, text, $elem, force) {
+  if (value === currentHeroCollectionHero && !force)
     return;
 
   showHeroCollectionLoader();
@@ -346,16 +360,27 @@ function loadHeroCollectionData(value, text, $elem) {
     renderHeroTalentsTo(query.hero, $('#hero-collection-detail-hero-talent'), docs);
 
     // map stats
-    renderMapStatsTo($('#hero-collection-detail-map-summary'), stats);
+    heroCollectionTables.maps.setDataFromObject(stats.maps);
 
     // vs stats
     let val = $('#hero-collection-detail-with-summary .cache-collections').dropdown('get value');
-    updateHeroCollectionVsStats(val, $('#hero-collection-detail-with-summary .cache-collections .item[data-value="' + val + '"]'), 'with', $('#hero-collection-detail-with-summary'));;
+    updateHeroCollectionVsStats(
+      val,
+      $('#hero-collection-detail-with-summary .cache-collections .item[data-value="' + val + '"]'),
+      'with',
+      $('#hero-collection-detail-with-summary'),
+      heroCollectionTables.winsWith
+    );
 
     val = $('#hero-collection-detail-against-summary .cache-collections').dropdown('get value');
-    updateHeroCollectionVsStats(val, $('#hero-collection-detail-against-summary .cache-collections .item[data-value="' + val + '"]'), 'against', $('#hero-collection-detail-against-summary'));
+    updateHeroCollectionVsStats(val,
+      $('#hero-collection-detail-against-summary .cache-collections .item[data-value="' + val + '"]'),
+      'against',
+      $('#hero-collection-detail-against-summary'),
+      heroCollectionTables.winsAgainst
+    );
 
-    renderAwardsTo($('#hero-collection-award-summary'), stats);
+    heroCollectionTables.awards.setData(TableDefs.preprocessAwards(stats));
 
     // these are annoying
     $('#hero-collection-detail-misc-summary .statistic[name="overallWin"] .value').text(formatStat('pct', stats.wins / stats.games));
@@ -366,14 +391,14 @@ function loadHeroCollectionData(value, text, $elem) {
     $('#hero-collection-detail-misc-summary .statistic[name="overallMVP"] .value').text(formatStat('pct', stats.totalMVP / Math.max(stats.games, 1)));
     $('#hero-collection-detail-misc-summary .statistic[name="overallAward"] .value').text(formatStat('pct', stats.totalAward / Math.max(stats.games)));
 
-    $('#hero-collection-page-content table').floatThead('reflow');
+    $('#hero-collection-page-content .table-wrapper table').floatThead('reflow');
     $('#hero-collection-page-content th').removeClass('sorted ascending descending');
 
     hideHeroCollectionLoader();
   });
 }
 
-function updateHeroCollectionVsStats(value, $elem, key, container) {
+function updateHeroCollectionVsStats(value, $elem, key, container, table) {
   if (heroDataWinCache === undefined)
     return;
 
@@ -383,46 +408,36 @@ function updateHeroCollectionVsStats(value, $elem, key, container) {
 
   if ($elem.attr('data-type') === 'external')
     DB.getExternalCacheCollectionHeroStats(cid, function(cache) {
-      renderHeroCollectionVsStatsTo(container, heroDataWinCache[key], heroCollectionHeroMatchThresh, cache);
+      renderHeroCollectionVsStatsTo(table, heroDataWinCache[key], heroCollectionHeroMatchThresh, cache);
       container.find('.dropdown.cache-collections').removeClass('loading disabled');
     });
   else
     DB.getCachedCollectionHeroStats(cid, function(cache) {
-      renderHeroCollectionVsStatsTo(container, heroDataWinCache[key], heroCollectionHeroMatchThresh, cache);
+      renderHeroCollectionVsStatsTo(table, heroDataWinCache[key], heroCollectionHeroMatchThresh, cache);
       container.find('.dropdown.cache-collections').removeClass('loading disabled');
     });
 }
 
-function renderHeroCollectionVsStatsTo(container, stats, threshold, avg) {
+function renderHeroCollectionVsStatsTo(table, stats, threshold, avg) {
   if (threshold === undefined)
     threshold = 0;
 
-  container.find('tbody').html('');
-
+  let tableData = [];
   for (let h in stats) {
     let context = stats[h];
 
-    if ('defeated' in context) {
-      context.winPercent = context.defeated / context.games;
-    }
-    else {
-      context.winPercent = context.wins / context.games;
-    }
-    context.formatWinPercent = formatStat('pct', context.winPercent);
-
     if (h in avg.heroData.heroes) {
-      context.avgDelta = context.winPercent - (avg.heroData.heroes[h].wins / avg.heroData.heroes[h].games);
+      context.avgWinPct = avg.heroData.heroes[h].wins / avg.heroData.heroes[h].games;
     }
     else {
-      context.avgDelta = 0;
+      context.avgWinPct = 0;
     }
 
-    context.formatAvgDelta = (context.avgDelta > 0 ? '+' : '') + formatStat('pct', context.avgDelta);
-    context.deltaClass = (context.avgDelta > 0) ? 'plus' : ((context.avgDelta < 0) ? 'minus' : '');
-
-    if (context.games >= threshold)
-      container.find('tbody').append(heroCollectionHeroWinRowTemplate(context));
+    tableData.push(context);
   }
+
+  table.setData(tableData);
+  table.filterByMinGames(threshold);
 }
 
 function getCompositionElement(roles) {
@@ -512,7 +527,7 @@ function layoutHeroCollectionDetailPrint() {
 
   addPrintPage('maps');
   addPrintSubHeader('Maps', 'maps');
-  copyFloatingTable($('#hero-collection-detail-map-summary .floatThead-wrapper'), getPrintPage('maps'));
+  copyFloatingTable($('#hero-collection-detail-map-summary'), getPrintPage('maps'));
 
   addPrintPage('with');
   addPrintSubHeader('Win Rate With Hero', 'with');
@@ -524,7 +539,7 @@ function layoutHeroCollectionDetailPrint() {
 
   addPrintPage('awards');
   addPrintSubHeader('Awards', 'awards');
-  copyFloatingTable($('#hero-collection-award-summary .floatThead-wrapper'), getPrintPage('awards'));
+  copyFloatingTable($('#hero-collection-award-summary'), getPrintPage('awards'));
 
   $('#print-window').removeClass('is-hidden');
 }

@@ -97,6 +97,11 @@ function awardHeader(awardKey) {
   `;
 }
 
+function deltaPctRender(data) {
+  let pct = `${data > 0 ? '+' : ''}${formatStat('pct', data)}`;
+  return `<span class="${(data === 0) ? '' : ((data > 0) ? 'plus' : 'minus')}">${pct}</span>`;
+}
+
 const PlayerVsTableFormat = {
   columns: [
     {
@@ -494,6 +499,35 @@ const TeamCompareToAvgFormat = {
   searching: true
 };
 
+const HeroDetailCompareFormat = {
+  columns: [
+    {
+      title: 'Hero',
+      data: 'name',
+      render: heroHeader
+    },
+    {
+      title: 'Win %',
+      data: playerVsWinPctData,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Games',
+      data: 'games'
+    },
+    {
+      title: 'Win % Δ',
+      data: (row) => playerVsWinPctData(row) - row.avgWinPct,
+      render: deltaPctRender
+    }
+  ],
+  order: [[2, 'desc'], [1, 'desc']],
+  paging: false,
+  searching: false,
+  scrollY: STANDARD_SEGMENT_HEIGHT,
+  info: false
+};
+
 exports.Table = Table;
 exports.PlayerVsTableFormat = PlayerVsTableFormat;
 exports.PlayerVsPlayerFormat = PlayerVsPlayerFormat;
@@ -506,4 +540,5 @@ exports.PlayerDetailStatFormat = playerDetailStatFormat();
 exports.TeamHeroSummaryFormat = TeamHeroSummaryFormat;
 exports.TeamBanSummaryFormat = TeamBanSummaryFormat;
 exports.TeamCompareToAvgFormat = TeamCompareToAvgFormat;
+exports.HeroDetailCompareFormat = HeroDetailCompareFormat;
 exports.preprocessAwards = preprocessAwards;
