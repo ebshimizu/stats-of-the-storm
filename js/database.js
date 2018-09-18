@@ -635,6 +635,37 @@ class Database {
     this.getHeroDataForPlayerWithFilter(playerID, {}, callback);
   }
 
+  // Aliases are a bit of a pain. We'll need to inspect the query and figure out if
+  // it needs to be updated with aliases. If yes, then it proceeds with updating,
+  // If not, it directly skips to the callback function
+  // this function specifically looks at filters returned by the hero filter from the filter popup widget.
+  resolveHeroFilterAliases(query, next) {
+    // condition is if ToonHandle exists
+    if (!query.ToonHandle) {
+      next(query);
+      return;
+    }
+
+    this.getAliasedPlayers(function(err, aliases) {
+      // add aliases to the query (which is ToonHandle = {$in : [] }) or a single string
+      let toAdd = [];
+      query.ToonHandle = query.ToonHandle.$in ? query.ToonHandle.$in : { $in: [query.ToonHandle] };
+      for (let p of query.ToonHandle.$in) {
+        // cycle through aliases
+        for (let a of aliases) {
+          // if the player that was aliased has its parent in the query, add the alias to the query.
+          // interface only allows players that have 
+          if (p === a.aliasedTo) {
+            toAdd.push(a._id);
+          }
+        }
+      }
+
+      query.ToonHandle.$in = query.ToonHandle.$in.concat(toAdd);
+      next(query);
+    });
+  }
+
   getHeroDataForPlayerWithFilter(playerID, filter, callback) {
     var self = this;
 
@@ -669,7 +700,11 @@ class Database {
 
   getHeroData(query, callback) {
     this.preprocessQuery(query);
-    this._db.heroData.find(query, callback);
+    
+    var self = this;
+    this.resolveHeroFilterAliases(query, function(updatedQuery) {
+      self._db.heroData.find(updatedQuery, callback);
+    });
   }
 
   getHeroDataForMatches(ids, query, callback) {
