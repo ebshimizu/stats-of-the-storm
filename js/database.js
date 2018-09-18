@@ -558,7 +558,11 @@ class Database {
   // counts the given matches
   countMatches(query, callback) {
     this.preprocessQuery(query);
-    this._db.matches.count(query, callback);
+
+    let self = this;
+    this.resolveMatchFilterAliases(query, function(newQuery) {
+      self._db.matches.count(newQuery, callback);
+    });
   }
 
   // collections basically add an additional requirement to all player and match related
@@ -594,11 +598,84 @@ class Database {
     }
   }
 
+  aliasResolutionUpdater(field, p1, p2) {
+    let id1 = {};
+    id1[field] = p1;
+
+    let o = { $or: [id1] };
+    for (let id of p2) {
+      let tmp = {};
+      tmp[field] = id;
+      o.$or.push(tmp);
+    }
+
+    return o;
+  }
+
+  // this one's pretty nasty.
+  // if we have any players with aliases we'll need to do spot replacements.
+  resolveMatchFilterAliases(query, next) {
+    // gather players that are in the query.
+    let ids = [];
+    if (query.$and) {
+      for (let qa of query.$and) {
+        if (qa.winningPlayers) ids.push(qa.winningPlayers);
+        if (qa.playerIDs) ids.push(qa.playerIDs);
+        if (qa.$not && qa.$not.winningPlayers) ids.push(qa.$not.winningPlayers);
+      }
+    }
+
+    if (query.$or) {
+      for (let qo of query.$or) {
+        if (qo.winningPlayers) ids.push(qo.winningPlayers);
+        if (qo.playerIDs) ids.push(qo.playerIDs);
+        if (qo.$not && qo.$not.winningPlayers) ids.push(qo.$not.winningPlayers);
+      }
+    }
+
+    // resolve
+    var self = this;
+    this.getPlayers({ _id : { $in: ids }}, function(err, players) {
+      for (let player of players) {
+        if (player.aliases && player.aliases.length > 0) {
+          // replace
+          if (query.$and) {
+            for (let i in query.$and) {
+              if (query.$and[i].winningPlayers === player._id)
+                query.$and[i] = self.aliasResolutionUpdater('winningPlayers', player._id, player.aliases);
+              if (query.$and[i].playerIDs === player._id)
+                query.$and[i] = self.aliasResolutionUpdater('playerIDs', player._id, player.aliases);
+              if (query.$and[i].$not && qa.$not.winningPlayers === player._id)
+                query.$and[i].$not = self.aliasResolutionUpdater('winningPlayers', player._id, player.aliases);
+            }
+          }
+
+          if (query.$or) {
+            for (let i in query.$or) {
+              if (query.$or[i].winningPlayers === player._id)
+                query.$or[i] = self.aliasResolutionUpdater('winningPlayers', player._id, player.aliases);
+              if (query.$or[i].playerIDs === player._id)
+                query.$or[i] = self.aliasResolutionUpdater('playerIDs', player._id, player.aliases);
+              if (query.$or[i].$not && qa.$not.winningPlayers === player._id)
+                query.$or[i].$not = self.aliasResolutionUpdater('winningPlayers', player._id, player.aliases);
+            }
+          }
+        }
+      }
+
+      next(query);
+    });
+  }
+
   getMatchPage(query, pageNum, limit, projection, callback) {
     this.preprocessQuery(query);
 
     let skip = pageNum * limit;
-    this._db.matches.find(query, projection).skip(skip).limit(limit).sort({date: -1}).exec(callback);
+
+    let self = this;
+    this.resolveMatchFilterAliases(query, function(newQuery) {
+      self._db.matches.find(newQuery, projection).skip(skip).limit(limit).sort({date: -1}).exec(callback);
+    });
   }
 
   // updates the entire match
