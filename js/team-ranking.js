@@ -3,16 +3,16 @@ var teamRankingMatchFilter = {};
 // pretty sure teams keys off of the matches so hero filter is probably
 // not going to be used
 var teamRankingHeroFilter = {};
-var teamRankingGeneralTemplate;
-var teamRankingMatchTemplate;
-var teamRankingCCTemplate;
-var teamRankingStructureTemplate;
+
+var teamRankingTable;
 
 function initTeamRankingPage() {
-  teamRankingGeneralTemplate = getHandlebars('team-ranking', '#team-ranking-row-template');
-  teamRankingMatchTemplate = getHandlebars('team-ranking', '#team-ranking-match-row-template');
-  teamRankingCCTemplate = getHandlebars('team-ranking', '#team-ranking-cc-row-template');
-  teamRankingStructureTemplate = getHandlebars('team-ranking', '#team-ranking-structure-row-template');
+  // populate headers
+  for (let c of TableDefs.TeamRankingFormat.columns) {
+    $('#team-ranking-general-table thead tr').append(`<th>${c.title}</th>`);
+  }
+
+  teamRankingTable = new Table('#team-ranking-general-table', TableDefs.TeamRankingFormat);
 
   // filter popup
   let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template'));
@@ -33,18 +33,7 @@ function initTeamRankingPage() {
     closable: false
   });
 
-  $('#team-ranking-body table').tablesort();
-  $('#team-ranking-body table').floatThead({
-    scrollContainer: closestWrapper,
-    autoReflow: true
-  });
-
   $('#team-ranking-body .buttons .button').click(toggleTeamRankingSection);
-
-  $('#player-ranking-body table th.stat').data('sortBy', function(th, td, tablesort) {
-    return parseFloat(td.attr('data-sort-value'));
-  });
-
   $('#team-ranking-body .top.attached.menu .item').click(function() {
     toggleTeamRankingMode(this);
   });
@@ -102,7 +91,6 @@ function toggleTeamRankingSection() {
   $('#team-ranking-body .section').addClass('is-hidden');
   $('#team-ranking-body .section[table-name="' + section + '"]').removeClass('is-hidden');
   $(this).addClass('violet');
-  $('#team-ranking-body table').floatThead('reflow');
 }
 
 function toggleTeamRankingMode(elem) {
@@ -112,7 +100,7 @@ function toggleTeamRankingMode(elem) {
 }
 
 function updateTeamRanking() {
-  $('#team-ranking-body tbody').html('');
+  teamRankingTable.clear();
 
   // this is going to be... some shenanigans
   // first get the list of all the teams in the database
@@ -132,6 +120,7 @@ function finalizeTeamRankingData() {
   setTimeout(() => { $('#team-progress-bar').transition('scale'); }, 2000);
   enableWidget('team-ranking-filter');
   $('#team-ranking-alt-search-button').removeClass('disabled');
+  teamRankingTable.draw();
 }
 
 function updateTeamRankingData(err, matches, team) {
@@ -148,7 +137,6 @@ function updateTeamRankingData(err, matches, team) {
   teamStats.name = team.name;
   teamStats.id = team._id;
   teamStats.winPercent = teamStats.wins / teamStats.totalMatches;
-  teamStats.formatWinPercent = formatStat('pct', teamStats.winPercent);
 
   if (mode === 'averages' || mode === 'total') {
     teamStats.stats.total.totalKDA = teamStats.takedowns.total / teamStats.deaths.total;
@@ -156,98 +144,42 @@ function updateTeamRankingData(err, matches, team) {
   else {
     teamStats.stats.total.totalKDA = teamStats.stats[mode].KDA;
   }
-  teamStats.totalKDA = formatStat('KDA', teamStats.stats.total.totalKDA);
-
-  teamStats.matchLength.format = formatSeconds(teamStats.matchLength[mode]);
   teamStats.matchLength.val = teamStats.matchLength[mode];
 
-  for (let s in teamStats.stats[mode]) {
-    teamStats[s] = formatStat(s, teamStats.stats[mode][s], true);
-  }
-
   for (let t in teamStats.tierTimes) {
-    teamStats[t] = formatSeconds(teamStats.tierTimes[t][mode]);
     teamStats.tierTimes[t].average = teamStats.tierTimes[t][mode];
   }
 
   for (let l in teamStats.endOfGameLevels) {
-    teamStats.endOfGameLevels[l].format = formatStat(l, teamStats.endOfGameLevels[l][mode], true);
     teamStats.endOfGameLevels[l].average = teamStats.endOfGameLevels[l][mode];
   }
 
-  teamStats.average = teamStats.stats[mode];
+  teamStats.selectedStats = teamStats.stats[mode];
+  teamStats.selectedStats.totalKDA = teamStats.stats.total.totalKDA;
+  
   teamStats.stats.takedowns = teamStats.takedowns[mode];
   teamStats.stats.deaths = teamStats.deaths[mode];
-  teamStats.takedowns = formatStat('', teamStats.stats.takedowns, true);
-  teamStats.deaths = formatStat('', teamStats.stats.deaths, true);
 
   teamStats.structures.Fort.first /= Math.max(1, teamStats.structures.Fort.gamesWithFirst);
   teamStats.structures.Keep.first /= Math.max(1, teamStats.structures.Keep.gamesWithFirst);
   teamStats.structures.Fort.formatFirst = formatSeconds(teamStats.structures.Fort.first);
   teamStats.structures.Keep.formatFirst = formatSeconds(teamStats.structures.Keep.first);
 
-  $('#team-ranking-general-table tbody').append(teamRankingGeneralTemplate(teamStats));
-  $('#team-ranking-match-table tbody').append(teamRankingMatchTemplate(teamStats));
-  $('#team-ranking-cc-table tbody').append(teamRankingCCTemplate(teamStats));
-  $('#team-ranking-structure-table tbody').append(teamRankingStructureTemplate(teamStats));
-  $('#team-ranking-body th').removeClass('sorted ascending descending');
+  teamRankingTable.addRow(teamStats);
 
-  $('#team-ranking-body h3[team-id="' + team._id + '"]').click(function() {
-    $('#team-set-team').dropdown('set text', team.name);
-    $('#team-set-team').dropdown('set value', team._id);
-    $('#teams-page-header .team-name').text(team.name);
-    changeSection('teams', true);
-  })
-}
-
-function layoutTeamRankingPrint(sections) {
-  let sects = sections;
-  if (!sects) {
-    sects = ['general', 'match', 'team', 'struct'];
-  }
-
-  clearPrintLayout();
-  addPrintHeader('Team Statistics');
-  addPrintDate();
-
-  for (let section of sects) {
-    let sectionName = $('#team-ranking-body div[table-print="' + section + '"]').attr('table-name');
-    addPrintPage(section);
-    addPrintSubHeader(sectionName, section);
-    copyFloatingTable($('#team-ranking-body div[table-print="' + section + '"] .floatThead-wrapper'), getPrintPage(section));
-  }
-}
-
-function printTeamRanking(filename, sections) {
-  layoutTeamRankingPrint(sections);
-  renderAndPrint(filename, 'Legal', true);
+  //$('#team-ranking-body h3[team-id="' + team._id + '"]').click(function() {
+  //  $('#team-set-team').dropdown('set text', team.name);
+  //  $('#team-set-team').dropdown('set value', team._id);
+  //  $('#teams-page-header .team-name').text(team.name);
+  //  changeSection('teams', true);
+  //})
 }
 
 function handleTeamRankingAction(value, text, $elem) {
-  if (value === 'print') {
-    dialog.showSaveDialog({
-      title: 'Print Team Stats',
-      filters: [{name: 'pdf', extensions: ['pdf']}]
-    }, function(filename) {
-      if (filename) {
-        printTeamRanking(filename, null);
-      }
-    });
+  if (value === 'csv') {
+    teamRankingTable.table.DataTable().button('0').trigger();
   }
-  else if (value === 'print-sections') {
-    $('#team-ranking-print-sections').modal({
-      onApprove: function() {
-        dialog.showSaveDialog({
-          title: 'Print Player Stats',
-          filters: [{name: 'pdf', extensions: ['pdf']}]
-        }, function(filename) {
-          if (filename) {
-            let sections = $('#team-ranking-print-sections .ui.dropdown').dropdown('get value').split(',');
-            printTeamRanking(filename, sections);
-          }
-        });
-      },
-      closable: false
-    }).modal('show');
+  else if (value === 'excel') {
+    teamRankingTable.table.DataTable().button('1').trigger();
   }
 }

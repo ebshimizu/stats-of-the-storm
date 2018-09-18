@@ -36,3 +36,7 @@ my defense maybe this page will someday be completely different?
 #team-progress-bar .progress.active .label {
   color: #FFFFFF!important;
 }
+
+#team-ranking-body table th {
+  min-width: 80px;
+}

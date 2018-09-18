@@ -37,6 +37,10 @@ class Table {
     this.table.DataTable().draw();
   }
 
+  addRow(data) {
+    this.table.DataTable().row.add(data);
+  }
+
   // mostly for the min matches field in player for now
   filterByMinGames(threshold) {
     this.table.DataTable().rows(function(idx, data, node) {
@@ -449,7 +453,6 @@ function playerRankingStatFormat() {
 
   base.columns = base.columns.concat(awardsColumns);
 
-  // eventually, need setup first
   base.order = [[1, 'desc']];
   base.paging = true;
   base.info = true;
@@ -699,6 +702,259 @@ const HeroDetailPlayerFormat = {
   scrollY: STANDARD_SEGMENT_ALL
 }
 
+// this one sucks a lil, there's no list of team stats and they're all over the place.
+const TeamRankingFormat = {
+  columns: [
+    {
+      title: 'Team Name',
+      data: 'name',
+      width: '300px',
+      render: (data, type, row) => `<h3 class="ui inverted header player-name" team-id="${row.id}">${data}</h3>`
+    },
+    {
+      title: 'Win %',
+      data: (row) => row.wins / row.totalMatches,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Games',
+      data: 'totalMatches'
+    },
+    {
+      title: 'KDA',
+      data: 'selectedStats.totalKDA',
+      render: (data) => formatStat('KDA', data)
+    },
+    {
+      title: 'Takedowns',
+      data: 'selectedStats.Takedowns',
+      render: (data) => formatStat('Takedowns', data)
+    },
+    {
+      title: 'Deaths',
+      data: 'selectedStats.Deaths',
+      render: (data) => formatStat('Deaths', data)
+    },
+    {
+      title: 'Hero Pool',
+      data: 'heroesPlayed'
+    },
+    {
+      title: 'People Per Kill',
+      data: 'selectedStats.PPK',
+      render: (data) => formatStat('PPK', data)
+    },
+    {
+      title: 'Time Spent Dead',
+      data: 'selectedStats.TimeSpentDead',
+      render: (data) => formatStat('TimeSpentDead', data)
+    },
+    {
+      title: '% Time Dead',
+      data: 'selectedStats.timeDeadPct',
+      render: (data) => formatStat('timeDeadPct', data)
+    },
+    {
+      title: 'Hero Damage',
+      data: 'selectedStats.HeroDamage',
+      render: (data) => formatStat('HeroDamage', data)
+    },
+    {
+      title: 'Siege Damage',
+      data: 'selectedStats.SiegeDamage',
+      render: (data) => formatStat('SiegeDamage', data)
+    },
+    {
+      title: 'Minion Damage',
+      data: 'selectedStats.MinionDamage',
+      render: (data) => formatStat('MinionDamage', data)
+    },
+    {
+      title: 'Creep Damage',
+      data: 'selectedStats.CreepDamage',
+      render: (data) => formatStat('CreepDamage', data)
+    },
+    {
+      title: 'Damage Taken',
+      data: 'selectedStats.DamageTaken',
+      render: (data) => formatStat('DamageTaken', data)
+    },
+    {
+      title: 'Healing',
+      data: 'selectedStats.Healing',
+      render: (data) => formatStat('Healing', data)
+    },
+    {
+      title: 'Self Healing',
+      data: 'selectedStats.SelfHealing',
+      render: (data) => formatStat('SelfHealing', data)
+    },
+    {
+      title: 'Shielding',
+      data: 'selectedStats.ProtectionGivenToAllies',
+      render: (data) => formatStat('ProtectionGivenToAllies', data)
+    },
+    {
+      title: 'Team Fight Hero Damage',
+      data: 'selectedStats.TeamfightHeroDamage',
+      render: (data) => formatStat('TeamfightHeroDamage', data)
+    },
+    {
+      title: 'Team Fight Damage Taken',
+      data: 'selectedStats.TeamfightDamageTaken',
+      render: (data) => formatStat('TeamfightDamageTaken', data)
+    },
+    {
+      title: 'Teamfight Healing',
+      data: 'selectedStats.TeamfightHealingDone',
+      render: (data) => formatStat('TeamfightHealingDone', data)
+    },
+    {
+      title: 'CC Time',
+      data: 'selectedStats.TimeCCdEnemyHeroes',
+      render: (data) => formatStat('TimeCCdEnemyHeroes', data)
+    },
+    {
+      title: 'Root Time',
+      data: 'selectedStats.TimeRootingEnemyHeroes',
+      render: (data) => formatStat('TimeRootingEnemyHeroes', data)
+    },
+    {
+      title: 'Silence Time',
+      data: 'selectedStats.TimeSilencingEnemyHeroes',
+      render: (data) => formatStat('TimeSilencingEnemyHeroes', data)
+    },
+    {
+      title: 'Stun Time',
+      data: 'selectedStats.TimeStunningEnemyHeroes',
+      render: (data) => formatStat('TimeStunningEnemyHeroes', data)
+    },
+    {
+      title: 'Match Length',
+      data: 'matchLength.val'
+    },
+    {
+      title: 'Time to Level 10',
+      data: 'selectedStats.timeTo10',
+      render: (data) => formatStat('timeTo10', data)
+    },
+    {
+      title: 'Games Reached Level 10',
+      data: 'level10Games'
+    },
+    {
+      title: 'Time to Level 20',
+      data: 'selectedStats.timeTo20',
+      render: (data) => formatStat('timeTo20', data)
+    },
+    {
+      title: 'Games Reached Level 20',
+      data: 'level20Games'
+    },
+    {
+      title: 'Time @ Level 1',
+      data: 'tierTimes.T1.average',
+      render: formatSeconds
+    },
+    {
+      title: 'Time @ Level 4',
+      data: 'tierTimes.T2.average',
+      render: formatSeconds
+    },
+    {
+      title: 'Time @ Level 7',
+      data: 'tierTimes.T3.average',
+      render: formatSeconds
+    },
+    {
+      title: 'Time @ Level 10',
+      data: 'tierTimes.T4.average',
+      render: formatSeconds
+    },
+    {
+      title: 'Time @ Level 13',
+      data: 'tierTimes.T5.average',
+      render: formatSeconds
+    },
+    {
+      title: 'Time @ Level 16',
+      data: 'tierTimes.T6.average',
+      render: formatSeconds
+    },
+    {
+      title: 'Mercenary Captures',
+      data: 'selectedStats.mercCaptures',
+      render: (data) => formatStat('mercCaptures', data)
+    },
+    {
+      title: 'Mercenary Uptime',
+      data: 'selectedStats.mercUptime',
+      render: (data) => formatStat('mercUptime', data)
+    },
+    {
+      title: 'Mercenary Uptime %',
+      data: 'selectedStats.mercUptimePercent',
+      render: (data) => formatStat('mercUptimePercent', data)
+    },
+    {
+      title: 'Lv Δ',
+      data: 'endOfGameLevels.combined.average',
+      render: (data) => formatStat('', data, true)
+    },
+    {
+      title: 'Win Lv Δ',
+      data: 'endOfGameLevels.win.average',
+      render: (data) => formatStat('', data, true)
+    },
+    {
+      title: 'Loss Lv Δ',
+      data: 'endOfGameLevels.loss.average',
+      render: (data) => formatStat('', data, true)
+    },
+    {
+      title: 'Forts Destroyed',
+      data: 'structures.Fort.destroyed',
+      render: (data) => formatStat('', data, true)
+    },
+    {
+      title: 'Time to First Fort',
+      data: 'structures.Fort.first',
+      render: (data) => formatStat('time', data)
+    },
+    {
+      title: 'Forts Lost',
+      data: 'structures.Fort.lost',
+      render: (data) => formatStat('', data, true)
+    },
+    {
+      title: 'Keeps Destroyed',
+      data: 'structures.Keep.destroyed',
+      render: (data) => formatStat('', data, true)
+    },
+    {
+      title: 'Time to First Keep',
+      data: 'structures.Keep.first',
+      render: (data) => formatStat('time', data)
+    },
+    {
+      title: 'Keeps Lost',
+      data: 'structures.Keep.lost',
+      render: (data) => formatStat('', data, true)
+    }
+  ],
+  order: [[0, 'asc']],
+  paging: true,
+  info: true,
+  searching: true,
+  scrollCollapse: false,
+  pageLength: 100,
+  lengthMenu: [25, 50, 100, 250, 500],
+  scrollY: 'calc(100vh - 430px)',
+  scrollX: true,
+  buttons: ['csv', 'excel'],
+  fixedColumns: true
+}
+
 exports.Table = Table;
 exports.PlayerVsTableFormat = PlayerVsTableFormat;
 exports.PlayerVsPlayerFormat = PlayerVsPlayerFormat;
@@ -714,4 +970,5 @@ exports.TeamCompareToAvgFormat = TeamCompareToAvgFormat;
 exports.HeroDetailCompareFormat = HeroDetailCompareFormat;
 exports.HeroDetailPlayerFormat = HeroDetailPlayerFormat;
 exports.PlayerRankingStatFormat = playerRankingStatFormat();
+exports.TeamRankingFormat = TeamRankingFormat;
 exports.preprocessAwards = preprocessAwards;
