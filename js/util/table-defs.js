@@ -1,3 +1,5 @@
+const Awards = require('../game-data/awards');
+
 const STANDARD_SEGMENT_HEIGHT = 480;
 const TALL_SEGMENT_HEIGHT = 560;
 const STANDARD_SEGMENT_WITH_SEARCH = STANDARD_SEGMENT_HEIGHT - 50;
@@ -955,6 +957,60 @@ const TeamRankingFormat = {
   fixedColumns: true
 }
 
+function safeAwardAccess(key, data) {
+  if (key in data.awards)
+    return data.awards[key];
+  
+  return 0;
+}
+
+function awardsTrackerFormat() {
+  // scrolling full height table that has the award stuff
+  let columns = [
+    {
+      title: 'Hero',
+      data: 'key',
+      render: heroHeader
+    },
+    {
+      title: 'Total',
+      data: 'totalAwards',
+      render: (data) => `<span class="award">${data}</span>`
+    },
+    {
+      title: 'MVP',
+      data: (row) => safeAwardAccess('EndOfMatchAwardMVPBoolean', row),
+      render: (data) => `<span class="award">${data}</span>`
+    }
+  ];
+
+  // ok now the awards
+  for (let awardKey in Awards) {
+    if (awardKey === 'EndOfMatchAwardMVPBoolean')
+      continue;
+
+    columns.push({
+      title: Awards[awardKey].name,
+      data: (row) => safeAwardAccess(awardKey, row),
+      render: (data) => `<span class="award">${data}</span>`
+    });
+  }
+
+  return {
+    columns,
+    order: [[0, 'asc']],
+    paging: false,
+    info: false,
+    scrollY: 'calc(100vh - 380px)',
+    scrollX: true,
+    searching: false,
+    fixedColumns: {
+      leftColumns: 2
+    },
+    scrollCollapse: true
+  }
+}
+
 exports.Table = Table;
 exports.PlayerVsTableFormat = PlayerVsTableFormat;
 exports.PlayerVsPlayerFormat = PlayerVsPlayerFormat;
@@ -971,4 +1027,5 @@ exports.HeroDetailCompareFormat = HeroDetailCompareFormat;
 exports.HeroDetailPlayerFormat = HeroDetailPlayerFormat;
 exports.PlayerRankingStatFormat = playerRankingStatFormat();
 exports.TeamRankingFormat = TeamRankingFormat;
+exports.AwardsTrackerFormat = awardsTrackerFormat();
 exports.preprocessAwards = preprocessAwards;

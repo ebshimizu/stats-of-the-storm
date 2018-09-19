@@ -100,8 +100,21 @@
   font-size: 14pt;
 }
 
-#player-hero-detail-stats {
+#player-hero-detail-stats,
+#player-detail-award-tracker {
   height: calc(100% - 90px);
+}
+
+#player-detail-award-tracker h3.image.header {
+  width: 200px;
+}
+
+#player-detail-award-tracker .segment {
+  height: 100%;
+}
+
+#player-detail-award-tracker .award {
+  font-size: 14pt;
 }
 
 #player-hero-detail-stats .segment {

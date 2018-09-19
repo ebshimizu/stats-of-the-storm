@@ -23,7 +23,8 @@ var playerTables ={
   awardTable: null,
   playerCmpTable: null,
   heroSummaryTable: null,
-  detailStatTable: null
+  detailStatTable: null,
+  awardTrackerTable: null
 }
 
 const IntervalMode = {
@@ -243,6 +244,7 @@ function initPlayerPage() {
   playerTables.awardTable = new Table('#player-detail-award-summary table', TableDefs.AwardFormat);
   playerTables.playerCmpTable = new Table('#player-compare-table table', TableDefs.PlayerCompareToAvgFormat);
   playerTables.heroSummaryTable = new Table('#player-detail-hero-summary table', TableDefs.HeroSummaryFormat);
+  playerTables.awardTrackerTable = new Table('#player-detail-award-tracker table', TableDefs.AwardsTrackerFormat);
 
   $('#player-detail-hero-talent table').tablesort();
 
@@ -604,6 +606,9 @@ function processPlayerData(err, docs) {
   renderPlayerSummary();
   renderPlayerHeroDetail();
   renderProgression();
+
+  playerTables.awardTrackerTable.clear();
+  playerTables.awardTrackerTable.setDataFromObject(playerDetailStats.heroes);
 
   let val = $('#player-compare-collection').dropdown('get value');
   updatePlayerCollectionCompare(val, null, $('#player-compare-collection .menu .item[data-value="' + val + '"]'));
