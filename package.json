@@ -74,7 +74,7 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "app": "electron ./",
-    "publish": "electron-builder --publish always",
+    "publish": "electron-builder --x64 --publish always",
     "protocol": "node ./node_modules/heroprotocol/postinstall.js"
   },
   "build": {
