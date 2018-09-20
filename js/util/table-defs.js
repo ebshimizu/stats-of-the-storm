@@ -644,7 +644,8 @@ const HeroDetailPlayerFormat = {
   columns: [
     {
       title: 'Player',
-      data: 'name'
+      data: 'name',
+      render: (data, type, row) => `<h3 class="ui inverted header player-name link-to-player" player-id="${row.key}">${data}</h3>`
     },
     {
       title: 'Win %',
@@ -711,7 +712,7 @@ const TeamRankingFormat = {
       title: 'Team Name',
       data: 'name',
       width: '300px',
-      render: (data, type, row) => `<h3 class="ui inverted header player-name" team-id="${row.id}">${data}</h3>`
+      render: (data, type, row) => `<h3 class="ui inverted header player-name link-to-team" team-id="${row.id}">${data}</h3>`
     },
     {
       title: 'Win %',

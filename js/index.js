@@ -239,9 +239,16 @@ function initGlobalUIHandlers() {
       shell.openExternal(this.href);
   });
 
-  $(document).on('click', 'h3.player-name.link-to-player', function(event) {
+  $(document).on('click', '.link-to-player', function(event) {
     showPlayerProfile($(this).attr('player-id'));
   });
+
+  $(document).on('click', '.link-to-team', function(event) {
+    $('#team-set-team').dropdown('set text', $(this).text());
+    $('#team-set-team').dropdown('set value', $(this).attr('team-id'));
+    $('#teams-page-header .team-name').text($(this).text());
+    changeSection('teams', true);
+  })
 }
 
 function loadSections() {
