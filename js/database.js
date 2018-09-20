@@ -726,7 +726,8 @@ class Database {
     this.getAliasedPlayers(function(err, aliases) {
       // add aliases to the query (which is ToonHandle = {$in : [] }) or a single string
       let toAdd = [];
-      query.ToonHandle = query.ToonHandle.$in ? query.ToonHandle.$in : { $in: [query.ToonHandle] };
+
+      query.ToonHandle = query.ToonHandle.$in ? query.ToonHandle : { $in: [query.ToonHandle] };
       for (let p of query.ToonHandle.$in) {
         // cycle through aliases
         for (let a of aliases) {
