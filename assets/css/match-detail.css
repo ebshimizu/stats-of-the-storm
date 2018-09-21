@@ -56,6 +56,10 @@
   display: none;
 }
 
+#match-detail-draft .draft-display-expanded {
+  margin-top: 20px;
+}
+
 #match-detail-draft .images {
   margin-left: 40px;
   margin-top: 0.5rem!important;
@@ -65,12 +69,52 @@
   margin-right: 10px;
 }
 
-#match-detail-draft .images .blue.image img {
+#match-detail-draft .blue-team-draft .image {
+  margin-right: 15px;
+}
+
+#match-detail-draft .red-team-draft .image {
+  margin-left: 15px;
+}
+
+#match-detail-draft .draft-display-expanded .image[ban-slot="blue-2"] {
+  margin-left: 20px;
+}
+
+#match-detail-draft .draft-display-expanded .image[ban-slot="red-2"] {
+  margin-right: 20px;  
+}
+
+#match-detail-draft .blue-team-draft.first .image[pick-slot="blue-1"],
+#match-detail-draft .blue-team-draft.first .image[pick-slot="blue-3"] {
+  margin-right: 35px;
+}
+
+#match-detail-draft .blue-team-draft.second .image[pick-slot="blue-2"],
+#match-detail-draft .blue-team-draft.second .image[pick-slot="blue-4"] {
+  margin-right: 35px;
+}
+
+#match-detail-draft .red-team-draft.first .image[pick-slot="red-1"],
+#match-detail-draft .red-team-draft.first .image[pick-slot="red-3"] {
+  margin-left: 35px;
+}
+
+#match-detail-draft .red-team-draft.second .image[pick-slot="red-2"],
+#match-detail-draft .red-team-draft.second .image[pick-slot="red-4"] {
+  margin-left: 35px;
+}
+
+#match-detail-draft .blue.image img {
   border: 2px solid #2185d0;
 }
 
-#match-detail-draft .images .red.image img {
+#match-detail-draft .red.image img {
   border: 2px solid #db2828;
+}
+
+#match-detail-draft .draft-display-expanded .red.rounded.image {
+  float: right
 }
 
 #match-detail-summary tr.blue,

@@ -553,6 +553,10 @@ function updateBasicInfo() {
   $('#match-detail-red-takedowns').text(matchDetailMatch.teams[1].takedowns);
   $('#match-detail-duration').text(formatSeconds(matchDetailMatch.length));
 
+  updateDraft();
+}
+
+function updateDraft() {
   // bans
   if (matchDetailMatch.mode !== ReplayTypes.GameMode.QuickMatch) {
     $('#match-detail-draft').removeClass('hidden');
@@ -565,65 +569,135 @@ function updateBasicInfo() {
       showMessage('Outdated Replay!', 'Draft Picks have been added to version 0.2.0 but you will need to re-import your replays to see the pick order.', { class: 'negative', sticky: true});
     }
 
-    for (let t in matchDetailMatch.bans) {
-      let bans = matchDetailMatch.bans[t];
-      for (let b in bans) {
-        let h = bans[b];
-        let slot = (parseInt(t) === first ? 'first' : 'second') + '-' + h.order;
+    // check which draft version we're viewing
+    if (settings.get('matchDetailDraftDisplay') === 'expanded') {
+      $('#match-detail-draft .draft-display-compact').addClass('is-hidden');
+      $('#match-detail-draft .draft-display-expanded').removeClass('is-hidden');
 
-        if (bans.length > 2 && b === "1") {
-          slot += 'a';
+      // fill in the blanks
+      for (let t in matchDetailMatch.bans) {
+        let bans = matchDetailMatch.bans[t];
+        let team = t === "0" ? 'blue' : 'red';
+
+        for (let b in bans) {
+          let h = bans[b];
+          let slot = `${team}-${h.order}`;
+
+          if (bans.length > 2 && b === "1") {
+            slot += 'a';
+          }
+
+          let icon = Heroes.heroIcon(Heroes.heroNameFromAttr(h.hero));
+          $(`div[ban-slot="${slot}"] img`).attr('src', `assets/heroes-talents/images/heroes/${icon}`);
         }
-
-        let icon = Heroes.heroIcon(Heroes.heroNameFromAttr(h.hero));
-        $('div[ban-slot="' + slot + '"] img').attr('src', 'assets/heroes-talents/images/heroes/' + icon);
       }
-    }
 
-    if ('picks' in matchDetailMatch && matchDetailMatch.picks[0].length === 5 && matchDetailMatch.picks[1].length === 5) {
-      for (let t in [0, 1]) {
-        let picks = matchDetailMatch.picks[t];
-        for (let p = 0; p < picks.length; p++) {
-          let h = picks[p];
-          let slot = (parseInt(t) === first ? 'first' : 'second') + '-' + (p + 1);
-          let icon = Heroes.heroIcon(h);
-          $('div[pick-slot="' + slot + '"] img').attr('src','assets/heroes-talents/images/heroes/' + icon);
+      if ('picks' in matchDetailMatch && matchDetailMatch.picks[0].length === 5 && matchDetailMatch.picks[1].length === 5) {
+        for (let t of [0, 1]) {
+          let picks = matchDetailMatch.picks[t];
+          let team = t === 0 ? 'blue' : 'red';
+
+          for (let p = 0; p < picks.length; p++) {
+            let h = picks[p];
+            let slot = `${team}-${p + 1}`;
+
+            let icon = Heroes.heroIcon(h);
+            $(`div[pick-slot="${slot}"] img`).attr('src',`assets/heroes-talents/images/heroes/${icon}`);
+          }
         }
+      }
+      else {
+        $('div[pick-slot^="red"] img').attr('src', '');
+        $('div[pick-slot^="blue"] img').attr('src', '');
+
+        if ('picks' in matchDetailMatch) {
+          showMessage('Missing Draft Data', 'This replay has corrupted draft data, or was not played in a draft mode (custom game). No draft data is available.');
+        }
+      }
+
+      if (matchDetailMatch.bans[0].length <= 2 || matchDetailMatch.bans[1].length <= 2) {
+        $('div[ban-slot="blue-1a"]').addClass('is-hidden');
+        $('div[ban-slot="red-1a"]').addClass('is-hidden');
+      }
+      else {
+        $('div[ban-slot="blue-1a"]').removeClass('is-hidden');
+        $('div[ban-slot="red-1a"]').removeClass('is-hidden');
+      }
+
+      if (first === 0) {
+        $('#match-detail-draft .blue-team-draft').removeClass('first second').addClass('first');
+        $('#match-detail-draft .red-team-draft').removeClass('first second').addClass('second');
+      }
+      else {
+        $('#match-detail-draft .blue-team-draft').removeClass('first second').addClass('second');
+        $('#match-detail-draft .red-team-draft').removeClass('first second').addClass('first');
       }
     }
     else {
-      $('div[pick-slot^="first"] img').attr('src', '');
-      $('div[pick-slot^="second"] img').attr('src', '');
+      $('#match-detail-draft .draft-display-compact').removeClass('is-hidden');
+      $('#match-detail-draft .draft-display-expanded').addClass('is-hidden');
 
-      if ('picks' in matchDetailMatch) {
-        showMessage('Missing Draft Data', 'This replay has corrupted draft data, or was not played in a draft mode (custom game). No draft data is available.');
+      for (let t in matchDetailMatch.bans) {
+        let bans = matchDetailMatch.bans[t];
+        for (let b in bans) {
+          let h = bans[b];
+          let slot = (parseInt(t) === first ? 'first' : 'second') + '-' + h.order;
+
+          if (bans.length > 2 && b === "1") {
+            slot += 'a';
+          }
+
+          let icon = Heroes.heroIcon(Heroes.heroNameFromAttr(h.hero));
+          $('div[ban-slot="' + slot + '"] img').attr('src', 'assets/heroes-talents/images/heroes/' + icon);
+        }
       }
-    }
 
-    let firstClass = first === 0 ? 'blue' : 'red';
-    let secondClass = first === 0? 'red' : 'blue';
+      if ('picks' in matchDetailMatch && matchDetailMatch.picks[0].length === 5 && matchDetailMatch.picks[1].length === 5) {
+        for (let t in [0, 1]) {
+          let picks = matchDetailMatch.picks[t];
+          for (let p = 0; p < picks.length; p++) {
+            let h = picks[p];
+            let slot = (parseInt(t) === first ? 'first' : 'second') + '-' + (p + 1);
+            let icon = Heroes.heroIcon(h);
+            $('div[pick-slot="' + slot + '"] img').attr('src','assets/heroes-talents/images/heroes/' + icon);
+          }
+        }
+      }
+      else {
+        $('div[pick-slot^="first"] img').attr('src', '');
+        $('div[pick-slot^="second"] img').attr('src', '');
 
-    $('div[pick-slot^="first"]').removeClass(secondClass).addClass(firstClass);
-    $('div[pick-slot^="first"] .label').removeClass(secondClass).addClass(firstClass);
-    $('div[pick-slot^="second"]').removeClass(firstClass).addClass(secondClass);
-    $('div[pick-slot^="second"] .label').removeClass(firstClass).addClass(secondClass);
-    $('div[ban-slot^="first"]').removeClass(secondClass).addClass(firstClass);
-    $('div[ban-slot^="first"] .label').removeClass(secondClass).addClass(firstClass);
-    $('div[ban-slot^="second"]').removeClass(firstClass).addClass(secondClass);
-    $('div[ban-slot^="second"] .label').removeClass(firstClass).addClass(secondClass);
+        if ('picks' in matchDetailMatch) {
+          showMessage('Missing Draft Data', 'This replay has corrupted draft data, or was not played in a draft mode (custom game). No draft data is available.');
+        }
+      }
 
-    if (matchDetailMatch.bans[0].length <= 2 || matchDetailMatch.bans[1].length <= 2) {
-      $('div[ban-slot="first-1a"]').addClass('is-hidden');
-      $('div[ban-slot="second-1a"]').addClass('is-hidden');
-    }
-    else {
-      $('div[ban-slot="first-1a"]').removeClass('is-hidden');
-      $('div[ban-slot="second-1a"]').removeClass('is-hidden');
+      let firstClass = first === 0 ? 'blue' : 'red';
+      let secondClass = first === 0? 'red' : 'blue';
+
+      $('div[pick-slot^="first"]').removeClass(secondClass).addClass(firstClass);
+      $('div[pick-slot^="first"] .label').removeClass(secondClass).addClass(firstClass);
+      $('div[pick-slot^="second"]').removeClass(firstClass).addClass(secondClass);
+      $('div[pick-slot^="second"] .label').removeClass(firstClass).addClass(secondClass);
+      $('div[ban-slot^="first"]').removeClass(secondClass).addClass(firstClass);
+      $('div[ban-slot^="first"] .label').removeClass(secondClass).addClass(firstClass);
+      $('div[ban-slot^="second"]').removeClass(firstClass).addClass(secondClass);
+      $('div[ban-slot^="second"] .label').removeClass(firstClass).addClass(secondClass);
+
+      if (matchDetailMatch.bans[0].length <= 2 || matchDetailMatch.bans[1].length <= 2) {
+        $('div[ban-slot="first-1a"]').addClass('is-hidden');
+        $('div[ban-slot="second-1a"]').addClass('is-hidden');
+      }
+      else {
+        $('div[ban-slot="first-1a"]').removeClass('is-hidden');
+        $('div[ban-slot="second-1a"]').removeClass('is-hidden');
+      }
     }
   }
   else {
     $('#match-detail-draft').addClass('hidden');
   }
+
 }
 
 function popuplateMatchDetailTeamNameplate(matchID, teamID, players) {
@@ -2313,6 +2387,14 @@ function matchDetailFileAction(value, text, $elem) {
       },
       closable: false
     }).modal('show');
+  }
+  else if (value === 'standard') {
+    settings.set('matchDetailDraftDisplay', 'standard');
+    updateDraft();
+  }
+  else if (value === 'expanded') {
+    settings.set('matchDetailDraftDisplay', 'expanded');
+    updateDraft();
   }
 }
 
