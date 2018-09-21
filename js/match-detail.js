@@ -573,6 +573,7 @@ function updateDraft() {
     if (settings.get('matchDetailDraftDisplay') === 'expanded') {
       $('#match-detail-draft .draft-display-compact').addClass('is-hidden');
       $('#match-detail-draft .draft-display-expanded').removeClass('is-hidden');
+      $('#match-detail-draft .divider').removeClass('is-hidden');
 
       // fill in the blanks
       for (let t in matchDetailMatch.bans) {
@@ -612,6 +613,7 @@ function updateDraft() {
 
         if ('picks' in matchDetailMatch) {
           showMessage('Missing Draft Data', 'This replay has corrupted draft data, or was not played in a draft mode (custom game). No draft data is available.');
+          $('#match-detail-draft').addClass('hidden');
         }
       }
 
@@ -636,6 +638,7 @@ function updateDraft() {
     else {
       $('#match-detail-draft .draft-display-compact').removeClass('is-hidden');
       $('#match-detail-draft .draft-display-expanded').addClass('is-hidden');
+      $('#match-detail-draft .divider').addClass('is-hidden');
 
       for (let t in matchDetailMatch.bans) {
         let bans = matchDetailMatch.bans[t];
@@ -669,6 +672,7 @@ function updateDraft() {
 
         if ('picks' in matchDetailMatch) {
           showMessage('Missing Draft Data', 'This replay has corrupted draft data, or was not played in a draft mode (custom game). No draft data is available.');
+          $('#match-detail-draft').addClass('hidden');
         }
       }
 
