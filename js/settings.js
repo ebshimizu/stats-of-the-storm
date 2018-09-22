@@ -1070,7 +1070,7 @@ function extractZipFromUrl() {
   // check that it exists
   let fileLoc = path.join(app.getPath('userData'), 'downloadedFile.zip');
   let extractLoc = path.join(app.getPath('userData'), 'download-tmp');
-  if (fs.statSync) {
+  if (fs.statSync(fileLoc)) {
     // attempt extraction
     // ensure download-tmp is empty
     fs.emptyDir(extractLoc, function(err) {
@@ -1088,6 +1088,7 @@ function extractZipFromUrl() {
         });
       }
       else {
+        setDownloadProgress(100, 'Downloaded file not found. Restarting.');
         cleanUpDownload();
       }
     });
