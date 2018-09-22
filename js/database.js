@@ -43,6 +43,19 @@ class Database {
     });
   }
 
+  close(callback) {
+    var self = this;
+    this._db.heroData.store.close(function () {
+      self._db.matches.store.close(function () {
+        self._db.players.store.close(function () {
+          self._db.settings.store.close(function () {
+            callback();
+          });
+        });
+      });
+    });
+  }
+
   compactAndReload(callback) {
     var self = this;
     this._db.heroData.store.close(function () {

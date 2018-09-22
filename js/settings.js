@@ -1,4 +1,6 @@
 const FormData = require('form-data');
+const request = require('request');
+const extractZip = require('extract-zip');
 
 var settingsRowTemplate;
 var replayQueue = [];
@@ -278,6 +280,7 @@ function initSettingsPage() {
   }
 
   $('#compact-and-reload-button').click(compactAndReload);
+  $('#settings-update-from-url-button').click(startUpdateFromUrl);
 }
 
 function showSettingsPage() {
@@ -990,4 +993,167 @@ function compactAndReload() {
       return true;
     }
   }).modal('show');
+}
+
+function startUpdateFromUrl() {
+  $('#settings-update-from-url .actions').removeClass('is-hidden');
+  $('#settings-update-from-url .update-status').addClass('is-hidden');
+
+  let lastURL = settings.get('updateURL');
+  let path = settings.get('dbPath');
+  if (lastURL && (path in lastURL)) {
+    $('#settings-update-from-url input').val(lastURL[path]);
+  }
+
+  $('#settings-update-from-url').modal({
+    closable: false,
+    onDeny: function() {
+      return true;
+    },
+    onApprove: function() {
+      $('#settings-update-from-url .actions').addClass('is-hidden');
+      let url = $('#settings-update-from-url input').val();
+      updateUpdateURL(url);
+      downloadZipFromUrl(url, extractZipFromUrl);
+      initDownloadProgress();
+
+      // don't actually dismiss
+      return false;
+    }
+  }).
+  modal('show');
+}
+
+function initDownloadProgress() {
+  $('#settings-update-from-url .update-status').removeClass('is-hidden');
+
+  $('#settings-update-from-url .update-status .progress').progress();
+  setDownloadProgress(0, 'Downloading File...');
+}
+
+function setDownloadProgress(val, label) {
+  $('#settings-update-from-url .update-status .progress').progress('set progress', val);
+  $('#settings-update-from-url .update-status .progress').progress('set label', label);
+}
+
+function updateUpdateURL(url) {
+  let urls = settings.get('updateURL');
+  let path = settings.get('dbPath');
+
+  if (!urls) {
+    urls = { };
+  }
+  urls[path] = url;
+
+  settings.set('updateURL', urls);
+}
+
+// part of the set of functions that'll auto-update a database
+function downloadZipFromUrl(url, next) {
+  let fileLoc = path.join(app.getPath('userData'), 'downloadedFile.zip');
+
+  request.
+    get(url).
+    on('response', function(response) {
+      console.log(response.statusCode);
+    }).
+    on('error', function(err) {
+      console.log(err);
+    }).
+    pipe(fs.createWriteStream(fileLoc)).
+    on('finish', next);
+}
+
+function extractZipFromUrl() {
+  setDownloadProgress(33, 'Checking Downloaded File...');
+
+  // check that it exists
+  let fileLoc = path.join(app.getPath('userData'), 'downloadedFile.zip');
+  let extractLoc = path.join(app.getPath('userData'), 'download-tmp');
+  if (fs.statSync) {
+    // attempt extraction
+    // ensure download-tmp is empty
+    fs.emptyDir(extractLoc, function(err) {
+      if (!err) {
+        setDownloadProgress(33, 'Extracting Downloaded File...');
+        extractZip(fileLoc, { dir: extractLoc }, function(err) {
+          if (!err) {
+            console.log('extracted file');
+            copyZipContents();
+          }
+          else {
+            setDownloadProgress(100, 'Failed to Extract. Restarting.')
+            cleanUpDownload();
+          }
+        });
+      }
+      else {
+        cleanUpDownload();
+      }
+    });
+  }
+}
+
+function copyZipContents() {
+  setDownloadProgress(66, 'Copying Downloaded Files...');
+  console.log('proceeding to copy');
+
+  DB.close(function() {
+    // expected files
+    for (let db of ['matches.ldb', 'hero.ldb', 'players.ldb', 'settings.ldb']) {
+      if (!fs.statSync(path.join(app.getPath('userData'), 'download-tmp', db))) {
+        cleanUpDownload();
+        return;
+      }
+    }
+
+    let idx = 0;
+    for (let db of ['matches.ldb', 'hero.ldb', 'players.ldb', 'settings.ldb']) {
+      setDownloadProgress(66 + 33 / 4 * idx, `Copying ${db}`);
+
+      let res = tryCopyDatabaseFolder(db);
+
+      if (!res) {
+        console.log('Copy error, aborting');
+        setDownloadProgress(100, 'Extraction error. Rebooting.');
+        cleanUpDownload();
+        return;
+      }
+
+      idx = idx + 1;
+    }
+
+    setDownloadProgress(100, 'Complete. Cleaning up and Restarting...');
+    cleanUpDownload();
+  });
+}
+
+function tryCopyDatabaseFolder(dbFolder) {
+  let folderLoc = path.join(app.getPath('userData'), 'download-tmp', dbFolder);
+  let folderDest = path.join(settings.get('dbPath'), dbFolder);
+  if (fs.statSync(folderLoc)) {
+    console.log(`Copying ${dbFolder}`);
+
+    fs.emptyDirSync(folderDest);
+    fs.copySync(folderLoc, folderDest);
+    return true;
+  }
+
+  return false;
+}
+
+function cleanUpDownload() {
+  console.log('cleaining up download files');
+
+  // delete downloadFile
+  let fileLoc = path.join(app.getPath('userData'), 'downloadedFile.zip');
+  fs.removeSync(fileLoc);
+
+  let extractLoc = path.join(app.getPath('userData'), 'download-tmp');
+  fs.removeSync(extractLoc);
+
+  setTimeout(() => {
+    app.relaunch();
+    app.quit();
+  }, 2000);
 }

@@ -1,6 +1,6 @@
 {
   "name": "stats-of-the-storm",
-  "version": "2.4.0",
+  "version": "2.5.0-dev",
   "main": "main.js",
   "description": "A Heroes of the Storm stat tracking application.",
   "bugs": "falindrith@gmail.com",
@@ -40,6 +40,7 @@
     "electron-updater": "^3.0.3",
     "electron-util": "^0.6.0",
     "electron-window-state": "^4.1.1",
+    "extract-zip": "^1.6.7",
     "floatthead": "^2.1.2",
     "form-data": "^2.3.2",
     "fs-extra": "^5.0.0",
@@ -56,6 +57,7 @@
     "nedb": "^1.8.0",
     "node-watch": "^0.5.8",
     "npm": "^5.8.0",
+    "request": "^2.88.0",
     "semantic-ui": "^2.3.1",
     "vis": "^4.21.0",
     "xregexp": "^4.1.1"

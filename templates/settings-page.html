@@ -168,12 +168,17 @@
                                 </div>
                             </div>
                             <div class="four wide column"><div class="item">Database</div></div>
-                            <div class="four wide column"><div class="item"></div></div>
+                            <div class="four wide column">
+                            </div>
                             <div class="four wide column">
                                 <div class="ui fluid button" id="compact-and-reload-button">Compact</div>
                             </div>
                             <div class="four wide column">
                                 <div class="ui fluid red button" id="delete-db-button">Delete</div>
+                            </div>
+                            <div class="eight wide column"></div>
+                            <div class="eight wide column">
+                                <div class="ui fluid button" id="settings-update-from-url-button">Download External DB</div>
                             </div>
                             <div class="four wide column">
                                 Dev Tools
@@ -336,6 +341,34 @@
         </div>
         <div class="actions">
             <div class="ui green approve button">Start Compaction</div>
+            <div class="ui red cancel button">Cancel</div>
+        </div>
+    </div>
+    <div class="ui modal" id="settings-update-from-url">
+        <div class="header">Update from URL</div>
+        <div class="content">
+            <div class="description">
+                <p>Download a zip file of a Stats of the Storm database from the given URL and update the current database.
+                Note that this will replace the current database if successful, and the app will restart.
+                In the event of an error, the app will do its best to clean up, and then restart if necessary.</p>
+            </div>
+            <div class="ui segment">
+                <div class="ui fluid labeled input">
+                    <div class="ui label">URL</div>
+                    <input type="text" placeholder="Enter a URL to a ZIP file">
+                </div>
+            </div>
+            <div class="is-hidden update-status">
+                <div class="ui active blue progress">
+                    <div class="bar">
+                        <div class="progress"></div>
+                    </div>
+                    <div class="label">Downloading File</div>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui green approve button">Start</div>
             <div class="ui red cancel button">Cancel</div>
         </div>
     </div>
