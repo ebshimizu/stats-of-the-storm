@@ -416,9 +416,10 @@ function loadTeamComparisonStats(team2, team2Matches, team2Data) {
 
     const t1Win = t1 ? t1.winPct : 0;
     const t2Win = t2 ? t2.winPct : 0;
-    const t2WinPct = t2 ? t2.wins / t2.games  : 0
+    const t1WinPct = t1 ? t1.wins / t1.games : 0;
+    const t2WinPct = t2 ? t2.wins / t2.games : 0;
 
-    const t1Format = t1 ? `${t1.formatWinPct} (${t1.wins} - ${t1.games - t1.wins})` : '';
+    const t1Format = t1 ? `${formatStat('pct', t1WinPct)} (${t1.wins} - ${t1.games - t1.wins})` : '';
     const t2Format = t2 ? `${formatStat('pct', t2WinPct)} (${t2.wins} - ${t2.games - t2.wins})` : '';
 
     mapTable.append(`
