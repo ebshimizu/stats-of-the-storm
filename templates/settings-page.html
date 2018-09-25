@@ -349,7 +349,10 @@
         <div class="content">
             <div class="description">
                 <p>Download a zip file of a Stats of the Storm database from the given URL and update the current database.
-                Note that this will replace the current database if successful, and the app will restart.
+                Note that <strong>this will delete the current database and replace the contents with the downloaded database</strong>.
+                Data may be lost if the app fails to copy the proper database files,
+                so if this is a database you are the author of, maybe back it up first.
+                The app will restart when the operation is complete.
                 In the event of an error, the app will do its best to clean up, and then restart if necessary.</p>
             </div>
             <div class="ui segment">
