@@ -1523,6 +1523,24 @@ function getGardenEvents(items) {
       item.content += '</div>';
       items.push(item);
     }
+
+    // new terror has just plain units
+    for (let u in matchDetailMatch.objective[t].units) {
+      let unit = matchDetailMatch.objective[t].units[u];
+
+      let item = {};
+      item.start = unit.time;
+      item.end = unit.end ? unit.end : matchDetailMatch.length;
+      item.className = t === '0' ? 'blue' : 'red';
+      item.group = 5;
+
+      let pop = "<h3 class='ui header'>";
+      pop += "<div class='content'>Garden Terror<div class='sub header'>Spawned at: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(item.end - item.start);
+      pop += "</div></div></h3>";
+
+      item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">Garden Terror</div>';
+      items.push(item);
+    }
   }
 }
 

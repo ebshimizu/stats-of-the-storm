@@ -27,6 +27,7 @@ const Awards = {
   EndOfMatchAwardMostImmortalDamageBoolean: {name: 'Immortal Slayer', subtitle: 'Most Immortal Damage Done', image: 'storm_ui_mvp_icons_rewards_immortalslayer.png'},
   EndOfMatchAwardMostDamageDoneToZergBoolean: {name: 'Zerg Crusher', subtitle: 'Most Damage Done To Zerg', image: 'storm_ui_mvp_icons_rewards_zergcrusher.png'},
   EndOfMatchAwardMostDamageToPlantsBoolean: {name: 'Garden Terror', subtitle: 'Most Damage To Plants', image: 'storm_ui_mvp_icons_rewards_gardenterror.png'},
+  EndOfMatchAwardMostSeedsCollectedBoolean: {name: 'Most Seeds Collected', subtitle: 'Most Seeds Collected', image: 'storm_ui_mvp_icons_rewards_gardenterror.png'},
   EndOfMatchAwardMostDamageToMinionsBoolean: {name: 'Guardian Slayer', subtitle: 'Most Damage To Shrine Minions', image: 'storm_ui_mvp_icons_rewards_guardianslayer.png'},
   EndOfMatchAwardMostTimeInTempleBoolean: {name: 'Temple Master', subtitle: 'Most Time In Temple', image: 'storm_ui_mvp_icons_rewards_templemaster.png'},
   EndOfMatchAwardMostGemsTurnedInBoolean: {name: 'Jeweler', subtitle: 'Most Gems Turned In', image: 'storm_ui_mvp_icons_rewards_jeweler.png'},
