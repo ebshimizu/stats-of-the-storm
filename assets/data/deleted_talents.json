@@ -816,5 +816,264 @@
     "icon": "storm_ui_icon_tyrande_lightofelune.png",
     "sort": 1,
     "abilityId": "Tyrande|Q1"
+  },
+  {
+    "tooltipId": "BrightwingMistifiedTalent",
+    "talentTreeId": "BrightwingMistifiedSoothingMist",
+    "name": "Mistified",
+    "description": "Reduces the cooldown of Soothing Mist by 0.5 seconds every time Brightwing casts a Basic Ability.",
+    "icon": "storm_ui_icon_brightwing_soothingmist.png",
+    "sort": 1,
+    "abilityId": "Brightwing|D1"
+  },
+  {
+    "tooltipId": "BrightwingManicPixieTalent",
+    "talentTreeId": "BrightwingManicPixiePixieDust",
+    "name": "Manic Pixie",
+    "description": "When Soothing Mist heals an ally with Pixie Dust on them, they heal for an additional 104 (+4% per level) over 4 seconds.",
+    "icon": "storm_ui_icon_brightwing_pixiedust.png",
+    "sort": 2,
+    "abilityId": "Brightwing|E1"
+  },
+  {
+    "tooltipId": "BrightwingPhaseShiftPhaseShield",
+    "talentTreeId": "BrightwingPhaseShiftPhaseShield",
+    "name": "Phase Shield",
+    "description": "After finishing the teleport, both Brightwing and her target gain a 335 (+4% per level) point Shield for 10 seconds.",
+    "icon": "storm_ui_icon_brightwing_hypershift.png",
+    "sort": 2,
+    "abilityId": "Brightwing|Z1"
+  },
+  {
+    "tooltipId": "GenericCleanse",
+    "talentTreeId": "GenericTalentCleanse",
+    "name": "Cleanse",
+    "description": "Activate to make target ally Unstoppable for 1 second. Cannot be cast on yourself.",
+    "icon": "storm_ui_icon_talent_cleanse.png",
+    "sort": 3,
+    "abilityId": "Brightwing|Active",
+    "cooldown": 60
+  },
+  {
+    "tooltipId": "BrightwingArcaneFlareStickyFlareTalent",
+    "talentTreeId": "FaerieDragonMasteryStickyFlare",
+    "name": "Sticky Flare",
+    "description": "Enemies hit by Arcane Flare have their Movement Speed slowed by 40% for 2 seconds.",
+    "icon": "storm_ui_icon_brightwing_arcaneflare.png",
+    "sort": 1,
+    "abilityId": "Brightwing|Q1"
+  },
+  {
+    "tooltipId": "BrightwingPixieDustShieldDustTalent",
+    "talentTreeId": "FaerieDragonMasteryShieldDust",
+    "name": "Shield Dust",
+    "description": "Pixie Dust grants 50 Physical Armor for 3 seconds, reducing Physical damage taken by 50%.",
+    "icon": "storm_ui_icon_brightwing_pixiedust_var1.png",
+    "sort": 3,
+    "abilityId": "Brightwing|E1"
+  },
+  {
+    "tooltipId": "GenericIceBlockTalent",
+    "talentTreeId": "GenericTalentIceBlock",
+    "name": "Ice Block",
+    "description": "Activate to place yourself in Stasis and gain Invulnerability for 3 seconds.",
+    "icon": "storm_ui_icon_talent_iceblock.png",
+    "sort": 4,
+    "abilityId": "Brightwing|Active",
+    "cooldown": 60
+  },
+  {
+    "tooltipId": "BrightwingBouncyDustTalent",
+    "talentTreeId": "BrightwingBouncyDustPixieDust",
+    "name": "Bouncy Dust",
+    "description": "Pixie Dust bounces to another nearby ally upon impact.",
+    "icon": "storm_ui_icon_brightwing_pixiedust.png",
+    "sort": 3,
+    "abilityId": "Brightwing|E1"
+  },
+  {
+    "tooltipId": "GenericHardenedFocusTalent",
+    "talentTreeId": "FaerieDragonHardenedFocus",
+    "name": "Hardened Focus",
+    "description": "While above 80% life, your Basic Ability cooldowns regenerate 50% faster.",
+    "icon": "storm_ui_icon_talent_hardenedfocus.png",
+    "sort": 4,
+    "abilityId": "Brightwing|Passive"
+  },
+  {
+    "tooltipId": "BrightwingDoubleWyrmholeTalent",
+    "talentTreeId": "BrightwingDoubleWyrmholeBlinkHeal",
+    "name": "Double Wyrmhole",
+    "description": "Blink Heal can be cast a second time on a different target within 2 seconds without consuming a charge.",
+    "icon": "storm_ui_icon_brightwing_blinkheal.png",
+    "sort": 1,
+    "abilityId": "Brightwing|R1"
+  },
+  {
+    "tooltipId": "BrightwingEmeraldWindContinuousWindsTalent",
+    "talentTreeId": "FaerieDragonMasteryContinuousWinds",
+    "name": "Continuous Winds",
+    "description": "Emerald Wind releases two additional novas that deal 25% damage. Also further increases the healing bonus of Soothing Mist by 7%.",
+    "icon": "storm_ui_icon_brightwing_emeraldwind.png",
+    "sort": 2,
+    "abilityId": "Brightwing|R2"
+  },
+  {
+    "tooltipId": "BrightwingRevitalizingMistTalent",
+    "talentTreeId": "BrightwingRevitalizingMistSoothingMist",
+    "name": "Revitalizing Mist",
+    "description": "Healing another Hero with Soothing Mist increases their healing received from Soothing Mist by 25% for 6 seconds. Stacks 3 times.",
+    "icon": "storm_ui_icon_brightwing_soothingmist.png",
+    "sort": 3,
+    "abilityId": "Brightwing|D1"
+  },
+  {
+    "tooltipId": "GenericStormShield",
+    "talentTreeId": "GenericTalentStormShield",
+    "name": "Storm Shield",
+    "description": "Activate to give all nearby allied Heroes a Shield for 20% of their max Health for 3 seconds.",
+    "icon": "storm_ui_icon_talent_stormshield.png",
+    "sort": 4,
+    "abilityId": "Brightwing|Active",
+    "cooldown": 45
+  },
+  {
+    "tooltipId": "KerriganRavageSiphoningImpactTalent",
+    "talentTreeId": "KerriganSiphoningImpactRavage",
+    "name": "Siphoning Impact (old)",
+    "description": "If the targeted enemy dies within 1.5 seconds, Kerrigan heals for 10% of her maximum Health.",
+    "icon": "storm_ui_icon_kerrigan_ravage.png",
+    "sort": 1,
+    "abilityId": "Kerrigan|Q1"
+  },
+  {
+    "tooltipId": "KerriganImpalingBladesSharpenedBladesTalent",
+    "talentTreeId": "KerriganSharpenedBladesImpalingBlades",
+    "name": "Sharpened Blades",
+    "description": "Impaling Blades deals 25% more damage.",
+    "icon": "storm_ui_icon_kerrigan_impalingblades.png",
+    "sort": 2,
+    "abilityId": "Kerrigan|W1"
+  },
+  {
+    "tooltipId": "GenericBlockTalent",
+    "talentTreeId": "GenericTalentBlock",
+    "name": "Block",
+    "description": "Every 5 seconds, gain 75 Physical Armor against the next enemy Hero Basic Attack, reducing the damage taken by 75%.  Stores up to 2 charges.",
+    "icon": "storm_ui_icon_talent_block.png",
+    "sort": 3,
+    "abilityId": "Kerrigan|Passive"
+  },
+  {
+    "tooltipId": "KerriganRavageCleanKillTalent",
+    "talentTreeId": "KerriganCleanKillRavage",
+    "name": "Clean Kill",
+    "description": "If Ravage kills the target, it restores 75% of its Mana cost and increases the damage of the next Ravage by 25%.",
+    "icon": "storm_ui_icon_kerrigan_ravage.png",
+    "sort": 1,
+    "abilityId": "Kerrigan|Q1"
+  },
+  {
+    "tooltipId": "KerriganPrimalGraspPsionicPulseTalent",
+    "talentTreeId": "KerriganPsionicPulsePrimalGrasp",
+    "name": "Psionic Pulse",
+    "description": "After casting Primal Grasp, deal 36 (+4% per level) damage per second to nearby enemies. Lasts 5 seconds.",
+    "icon": "storm_ui_icon_kerrigan_primalgrasp.png",
+    "sort": 2,
+    "abilityId": "Kerrigan|E1"
+  },
+  {
+    "tooltipId": "KerriganAssimilationFuryOfTheSwarmTalent",
+    "talentTreeId": "KerriganCombatStyleFuryoftheSwarm",
+    "name": "Fury of the Swarm",
+    "description": "Kerrigan's Basic Attacks splash for 60% damage around the target.",
+    "icon": "storm_ui_icon_talent_autoattack_aoe.png",
+    "sort": 3,
+    "abilityId": "Kerrigan|Passive"
+  },
+  {
+    "tooltipId": "GenericEnvenomTalent",
+    "talentTreeId": "GenericTalentEnvenom",
+    "name": "Envenom",
+    "description": "Activate to poison an enemy Hero, dealing 352 (+4% per level) damage over 10 seconds.",
+    "icon": "storm_ui_icon_talent_envenom.png",
+    "sort": 4,
+    "abilityId": "Kerrigan|Active",
+    "cooldown": 60
+  },
+  {
+    "tooltipId": "KerriganImpalingBladesBladeTorrentTalent",
+    "talentTreeId": "KerriganBladeTorrentImpalingBlades",
+    "name": "Blade Torrent",
+    "description": "Increases Impaling Blades' radius by 30%.",
+    "icon": "storm_ui_icon_kerrigan_impalingblades.png",
+    "sort": 1,
+    "abilityId": "Kerrigan|W1"
+  },
+  {
+    "tooltipId": "KerriganRavageEviscerateTalent",
+    "talentTreeId": "KerriganEviscerate",
+    "name": "Eviscerate",
+    "description": "Increases Ravage's range by 40%.",
+    "icon": "storm_ui_icon_kerrigan_ravage.png",
+    "sort": 1,
+    "abilityId": "Kerrigan|Q1"
+  },
+  {
+    "tooltipId": "KerriganAssimilationDoubleStrikeTalent",
+    "talentTreeId": "KerriganCombatStyleDoubleStrike",
+    "name": "Double Strike",
+    "description": "When a Basic Ability damages an enemy, Kerrigan's next Basic Attack hits for 75% bonus damage.",
+    "icon": "storm_ui_icon_kerrigan_ravage_a.png",
+    "sort": 2,
+    "abilityId": "Kerrigan|Passive"
+  },
+  {
+    "tooltipId": "KerriganQueensRushHotbar",
+    "talentTreeId": "KerriganQueensRush",
+    "name": "Queen's Rush",
+    "description": "Activate to gain 30% Movement Speed for 4 seconds. Queen's Rush is also applied for free on Takedowns.",
+    "icon": "storm_ui_icon_kerrigan_queensrush.png",
+    "sort": 3,
+    "abilityId": "Kerrigan|Active",
+    "cooldown": 50
+  },
+  {
+    "tooltipId": "KerriganAggressiveDefenseTalent",
+    "talentTreeId": "KerriganAggressiveDefense",
+    "name": "Aggressive Defense",
+    "description": "Increases base Shield amount gained from Assimilation by 100%.",
+    "icon": "storm_ui_icon_kerrigan_assimilation.png",
+    "sort": 1,
+    "abilityId": "Kerrigan|D1"
+  },
+  {
+    "tooltipId": "KerriganEssenceForEssenceHotbar",
+    "talentTreeId": "KerriganEssenceForEssence",
+    "name": "Essence for Essence",
+    "description": "Activate to deal 10% of target enemy Hero's Max Health and gain Assimilation Shields for twice that amount.",
+    "icon": "storm_ui_icon_kerrigan_assimilation_a.png",
+    "sort": 2,
+    "abilityId": "Kerrigan|Active",
+    "cooldown": 60
+  },
+  {
+    "tooltipId": "GenericOverdriveTalent",
+    "talentTreeId": "GenericTalentOverdrive",
+    "name": "Overdrive",
+    "description": "Activate to increase Spell Power by 25% and Mana costs by 40% for 5 seconds.",
+    "icon": "storm_ui_icon_talent_overdrive.png",
+    "sort": 3,
+    "abilityId": "Kerrigan|Active",
+    "cooldown": 25
+  },
+  {
+    "tooltipId": "NexusBladesTalent",
+    "talentTreeId": "GenericTalentNexusBlades",
+    "name": "Nexus Blades",
+    "description": "Basic Attacks deal 20% more damage and Slow enemy Movement Speed by 20% for 1 second.",
+    "icon": "storm_ui_icon_talent_autoattack_slow.png",
+    "sort": 3,
+    "abilityId": "Kerrigan|Passive"
   }
 ]
