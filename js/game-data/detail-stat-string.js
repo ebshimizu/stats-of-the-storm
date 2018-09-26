@@ -73,7 +73,10 @@ const DetailStatString = {
   'HPM' : 'HPM',
   'XPM' : 'XPM',
   'DamageSoaked' : 'Damage Soaked',
-  'CageUnlocksInterrupted' : 'Cage Unlocks Interrupted'
+  'CageUnlocksInterrupted' : 'Cage Unlocks Interrupted',
+  'SpellDamage' : 'Ability Damage',
+  'PhysicalDamage' : 'Physical Damage',
+  'GardenSeedsCollectedByPlayer' : 'Garden Seeds Collected'
 };
 
 module.exports = DetailStatString;

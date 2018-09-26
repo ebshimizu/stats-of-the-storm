@@ -5,7 +5,7 @@ const PerMapStatList = {
   "Blackheart's Bay" : ["BlackheartDoubloonsCollected", "BlackheartDoubloonsTurnedIn"],
   "Haunted Mines" : ["MinesSkullsCollected"],
   "Infernal Shrines" : ["DamageDoneToShrineMinions"],
-  "Garden of Terror" : ["GardensPlantDamage", "GardensSeedsCollected"],
+  "Garden of Terror" : ["GardensPlantDamage", "GardensSeedsCollected", "GardenSeedsCollectedByPlayer"],
   "Tomb of the Spider Queen" : ["GemsTurnedIn"],
   "Warhead Junction" : ["NukeDamageDone"],
   "Cursed Hollow" : ["CurseDamageDone"],

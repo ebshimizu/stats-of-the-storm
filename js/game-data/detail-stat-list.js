@@ -14,6 +14,8 @@ const DetailStatList = [
   'TeamfightEscapesPerformed',
   'HeroDamage',
   'DPM',
+  'PhysicalDamage',
+  'SpellDamage',
   'damageDonePerDeath',
   'TeamfightHeroDamage',
   'SiegeDamage',
