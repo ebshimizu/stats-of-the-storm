@@ -620,7 +620,7 @@ function updateDraft() {
         $('div[pick-slot^="blue"] img').attr('src', '');
 
         if ('picks' in matchDetailMatch) {
-          showMessage('Missing Draft Data', 'This replay has corrupted draft data, or was not played in a draft mode (custom game). No draft data is available.');
+          showMessage('Missing Draft Data', 'This replay has corrupted draft data, or was not played in a draft mode (custom game). No draft data is available. You can add draft info using File > Modify Draft...');
           $('#match-detail-draft').addClass('hidden');
         }
       }
@@ -2583,7 +2583,7 @@ function resetDraftModal() {
 
   let bluePicks = matchDetailMatch.picks[ReplayTypes.TeamType.Blue];
   let redPicks = matchDetailMatch.picks[ReplayTypes.TeamType.Red];
-  if (!matchDetailMatch.picks) {
+  if (!matchDetailMatch.picks || matchDetailMatch.picks[0].length === 0 || matchDetailMAtch.picks[1].length === 0) {
     bluePicks = matchDetailMatch.teams[ReplayTypes.TeamType.Blue].heroes;
     redPicks = matchDetailMatch.teams[ReplayTypes.TeamType.Red].heroes;
   }
@@ -2696,6 +2696,15 @@ function validateDraftModal() {
   // will highlight the bad parts
   let valid = true;
   $(`#match-detail-fix-draft .pick-order.dropdown`).removeClass('error');
+
+  // check pick
+  $('#match-detail-fix-draft .first-pick').removeClass('error');
+  let pickVal = $('#match-detail-fix-draft .first-pick').dropdown('get value');
+
+  if (pickVal !== '1' && pickVal !== '2') {
+    $('#match-detail-fix-draft .first-pick').addClass('error');
+    valid = false;
+  }
 
   // check teams
   let bluePicks = {};
