@@ -701,6 +701,19 @@ class Database {
     }
   }
 
+  updateMatchDraft(matchId, picks, bans, callback) {
+    this._db.matches.update(
+      { _id: matchId },
+      {
+        $set: {
+          picks,
+          bans
+        }
+      },
+      {},
+      callback);
+  }
+
   // retrieves matches by id
   getMatchesByID(ids, callback, opts = {}) {
     let query = {$or: []};

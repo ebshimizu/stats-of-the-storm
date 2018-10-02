@@ -2634,6 +2634,10 @@ function updateDraftModal() {
 
   // assuming that returned, collect the new draft data.
   // first pick
+  if (!matchDetailMatch.picks) {
+    matchDetailMatch.picks = { 0: [], 1: [], first: 0 };
+  }
+
   matchDetailMatch.picks.first = parseInt($('#match-detail-fix-draft .first-pick').dropdown('get value')) - 1;
 
   // picks
@@ -2648,6 +2652,17 @@ function updateDraftModal() {
   }
 
   // bans
+  if (!matchDetailMatch.bans) {
+    matchDetailMatch.bans = { 0: [], 1: [] };
+    // lil annoying
+    let banOrders = [1, 1, 2];
+    for (let i = 0; i < 3; i++) {
+      let order = banOrders[i];
+      matchDetailMatch.bans[0].push({ absolute: i, order, hero: ''});
+      matchDetailMatch.bans[1].push({ absolute: i, order, hero: ''});
+    }
+  }
+
   for (let i = 0; i < 3; i++) {
     let blueBan = $(`#match-detail-fix-draft .blue-${i+1} .ban-order.dropdown`).dropdown('get value');
     let redBan = $(`#match-detail-fix-draft .red-${i+1} .ban-order.dropdown`).dropdown('get value');
@@ -2666,8 +2681,11 @@ function updateDraftModal() {
   }
 
   // do a database update
-
-  updateDraft();
+  DB.updateMatchDraft(matchDetailMatch._id, matchDetailMatch.picks, matchDetailMatch.bans, () => {
+    updateDraft();
+    showMessage('Draft Updated', 'Draft on matches list will update when reloaded.', { class: 'positive' });    
+    $('#match-detail-fix-draft').modal('hide');
+  });
 
   // this actually always returns false, but will close the modal on a successful update.
   return false;
