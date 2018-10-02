@@ -2583,7 +2583,7 @@ function resetDraftModal() {
 
   let bluePicks = matchDetailMatch.picks[ReplayTypes.TeamType.Blue];
   let redPicks = matchDetailMatch.picks[ReplayTypes.TeamType.Red];
-  if (!matchDetailMatch.picks || matchDetailMatch.picks[0].length === 0 || matchDetailMAtch.picks[1].length === 0) {
+  if (!matchDetailMatch.picks || matchDetailMatch.picks[0].length === 0 || matchDetailMatch.picks[1].length === 0) {
     bluePicks = matchDetailMatch.teams[ReplayTypes.TeamType.Blue].heroes;
     redPicks = matchDetailMatch.teams[ReplayTypes.TeamType.Red].heroes;
   }
