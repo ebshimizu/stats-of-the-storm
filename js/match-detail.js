@@ -414,6 +414,14 @@ function initMatchDetailPage() {
 
   $('#match-detail-print-sections .dropdown.search').dropdown();
 
+  $('#match-detail-fix-draft .dropdown.first-pick').dropdown();
+  $('#match-detail-fix-draft .dropdown.pick-order').dropdown();
+  addHeroMenuOptions($('#match-detail-fix-draft .dropdown.ban-order'));
+  $('#match-detail-fix-draft .dropdown.ban-order').find('.menu').append('<div class="item" data-value="none">No Ban</div>');
+  $('#match-detail-fix-draft .dropdown.ban-order').dropdown({
+    direction: 'upward'
+  });
+
   // DEBUG - LOAD SPECIFIC MATCH
   //loadMatchData("RtTPtP5mHaBoFJW2", function() { console.log("done loading"); });
 }
@@ -2418,6 +2426,9 @@ function matchDetailFileAction(value, text, $elem) {
     settings.set('matchDetailDraftDisplay', 'expanded');
     updateDraft();
   }
+  else if (value === 'change-draft') {
+    showChangeDraftModal();
+  }
 }
 
 function matchDetailAddTag(tagValue, tagText, $added) {
@@ -2547,4 +2558,150 @@ function layoutMatchDetailPrint(sections) {
 function printMatchDetail(filename, sections) {
   layoutMatchDetailPrint(sections);
   renderAndPrint(filename, 'Letter', true);
+}
+
+function showChangeDraftModal() {
+  // if game is qm we should disallow draft edits (it's not a draft queue)
+  if (matchDetailMatch.mode === ReplayTypes.GameMode.QuickMatch) {
+    showMessage(`Unable to Edit Draft`, 'Quick Match games are a non-draft queue. Draft data cannot be added.', { class: 'negative' });
+    return;
+  }
+
+  // reset modal here
+  resetDraftModal();
+
+  $('#match-detail-fix-draft').modal({
+    onApprove: updateDraftModal,
+    closable: false
+  }).
+  modal('show');
+}
+
+function resetDraftModal() {
+  // reset hero picks and bans to current data
+  $('#match-detail-fix-draft .first-pick').dropdown('set exactly', matchDetailMatch.picks.first + 1);
+
+  let bluePicks = matchDetailMatch.picks[ReplayTypes.TeamType.Blue];
+  let redPicks = matchDetailMatch.picks[ReplayTypes.TeamType.Red];
+  if (!matchDetailMatch.picks) {
+    bluePicks = matchDetailMatch.teams[ReplayTypes.TeamType.Blue].heroes;
+    redPicks = matchDetailMatch.teams[ReplayTypes.TeamType.Red].heroes;
+  }
+
+  for (let i = 0; i < bluePicks.length; i++) {
+    let elem = $(`#match-detail-fix-draft .blue-${i+1} .pick-order.dropdown`);
+    let elemImg = $(`#match-detail-fix-draft .blue-${i+1} .draft-pick.image`);
+
+    elem.dropdown('set exactly', i+1);
+    elemImg.attr('src', `assets/heroes-talents/images/heroes/${Heroes.heroIcon(bluePicks[i])}`);
+    elemImg.attr('heroName', bluePicks[i]);
+  }
+
+  for (let i = 0; i < redPicks.length; i++) {
+    let elem = $(`#match-detail-fix-draft .red-${i+1} .pick-order.dropdown`);
+    let elemImg = $(`#match-detail-fix-draft .red-${i+1} .draft-pick.image`);
+
+    elem.dropdown('set exactly', i+1);
+    elemImg.attr('src', `assets/heroes-talents/images/heroes/${Heroes.heroIcon(redPicks[i])}`);
+    elemImg.attr('heroName', redPicks[i]);
+  }
+
+  // bans, if they exist. otherwise we just leave it blank/no-ban
+  if (matchDetailMatch.bans) {
+    for (let t of [ReplayTypes.TeamType.Blue, ReplayTypes.TeamType.Red]) {
+      let bans = matchDetailMatch.bans[t];
+      let team = t === ReplayTypes.TeamType.Blue ? 'blue' : 'red';
+
+      for (let i = 0; i < bans.length; i++) {
+        let elem = $(`#match-detail-fix-draft .${team}-${i+1} .ban-order.dropdown`);
+        if (bans[i].hero !== '') {
+          elem.dropdown('set exactly', Heroes.heroNameFromAttr(bans[i].hero));
+        }
+        else {
+          elem.dropdown('set exactly', 'none');
+        }
+      }
+    }
+  }
+  else {
+    $(`#match-detail-fix-draft ban-order.dropdown`).dropdown('set exactly', 'none');
+  }
+}
+
+function updateDraftModal() {
+  if (!validateDraftModal())
+    return false;
+
+  // assuming that returned, collect the new draft data.
+  // first pick
+  matchDetailMatch.picks.first = parseInt($('#match-detail-fix-draft .first-pick').dropdown('get value')) - 1;
+
+  // picks
+  for (let i = 1; i < 6; i++) {
+    let blueVal = $(`#match-detail-fix-draft .blue-${i} .pick-order.dropdown`).dropdown('get value');
+    let redVal = $(`#match-detail-fix-draft .red-${i} .pick-order.dropdown`).dropdown('get value');
+    let blueHero = $(`#match-detail-fix-draft .blue-${i} .draft-pick`).attr('heroName');
+    let redHero = $(`#match-detail-fix-draft .red-${i} .draft-pick`).attr('heroName');
+
+    matchDetailMatch.picks[ReplayTypes.TeamType.Blue][blueVal -1] = blueHero
+    matchDetailMatch.picks[ReplayTypes.TeamType.Red][redVal -1] = redHero;
+  }
+
+  // bans
+  for (let i = 0; i < 3; i++) {
+    let blueBan = $(`#match-detail-fix-draft .blue-${i+1} .ban-order.dropdown`).dropdown('get value');
+    let redBan = $(`#match-detail-fix-draft .red-${i+1} .ban-order.dropdown`).dropdown('get value');
+
+    if (i < matchDetailMatch.bans[ReplayTypes.TeamType.Blue].length) {
+      if (blueBan !== 'none')
+        matchDetailMatch.bans[ReplayTypes.TeamType.Blue][i].hero = Heroes._heroes[blueBan].attributeId;
+      else
+        matchDetailMatch.bans[ReplayTypes.TeamType.Blue][i].hero = '';
+
+      if (redBan !== 'none')
+        matchDetailMatch.bans[ReplayTypes.TeamType.Red][i].hero = Heroes._heroes[redBan].attributeId;
+      else
+        matchDetailMatch.bans[ReplayTypes.TeamType.Red][i].hero = '';
+    }
+  }
+
+  // do a database update
+
+  updateDraft();
+
+  // this actually always returns false, but will close the modal on a successful update.
+  return false;
+}
+
+function validateDraftModal() {
+  // validates that the draft is in the right order n stuff
+  // will highlight the bad parts
+  let valid = true;
+  $(`#match-detail-fix-draft .pick-order.dropdown`).removeClass('error');
+
+  // check teams
+  let bluePicks = {};
+  let redPicks = {};
+  for (let i = 1; i < 6; i++) {
+    blueVal = $(`#match-detail-fix-draft .blue-${i} .pick-order.dropdown`).dropdown('get value');
+    redVal = $(`#match-detail-fix-draft .red-${i} .pick-order.dropdown`).dropdown('get value');
+
+    // duplicates are errors
+    if (blueVal in bluePicks) {
+      $(`#match-detail-fix-draft .blue-${i} .pick-order.dropdown`).addClass('error');
+      $(`#match-detail-fix-draft .blue-${bluePicks[blueVal]} .pick-order.dropdown`).addClass('error');
+      valid = false;
+    }
+    
+    if (redVal in redPicks) {
+      $(`#match-detail-fix-draft .red-${i} .pick-order.dropdown`).addClass('error');
+      $(`#match-detail-fix-draft .red-${redPicks[redVal]} .pick-order.dropdown`).addClass('error');
+      valid = false;
+    }
+
+    bluePicks[blueVal] = i;
+    redPicks[redVal] = i;
+  }
+
+  return valid;
 }
