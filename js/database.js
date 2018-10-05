@@ -56,6 +56,19 @@ class Database {
     });
   }
 
+  destroy(callback) {
+    var self = this;
+    medea.destroy(path.join(self._path, 'matches.ldb'), function() {
+      medea.destroy(path.join(self._path, 'hero.ldb'), function() {
+        medea.destroy(path.join(self._path, 'players.ldb'), function() {
+          medea.destroy(path.join(self._path, 'settings.ldb'), function() {
+            callback();
+          });
+        });
+      });
+    });
+  }
+
   compactAndReload(callback) {
     var self = this;
     this._db.heroData.store.close(function () {

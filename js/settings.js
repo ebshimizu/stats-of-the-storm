@@ -1099,7 +1099,7 @@ function copyZipContents() {
   setDownloadProgress(66, 'Copying Downloaded Files...');
   console.log('proceeding to copy');
 
-  DB.close(function() {
+  DB.destroy(function() {
     // expected files
     for (let db of ['matches.ldb', 'hero.ldb', 'players.ldb', 'settings.ldb']) {
       if (!fs.statSync(path.join(app.getPath('userData'), 'download-tmp', db))) {
