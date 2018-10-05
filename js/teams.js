@@ -470,8 +470,8 @@ function getTeamCompareStats(teamStats, heroStats) {
   // all of this is kinda terrible because the stats are scattered everywhere
   const winPct = formatStat('pct', teamStats.wins / teamStats.totalMatches);
   stats.record = { name: 'Record', val: teamStats.wins / teamStats.totalMatches, format: `${winPct} (${teamStats.wins} - ${teamStats.totalMatches - teamStats.wins})` };
-  stats.overallTD = { name: 'Avg. TD', val: teamStats.takedowns.average, format: formatStat('', teamStats.takedowns.total, true) };
-  stats.overallDeaths = { name: 'Avg. Deaths', val: teamStats.deaths.average, format: formatStat('', teamStats.deaths.total, true) };
+  stats.overallTD = { name: 'Avg. TD', val: teamStats.takedowns.average, format: formatStat('', teamStats.takedowns.average, true) };
+  stats.overallDeaths = { name: 'Avg. Deaths', val: teamStats.deaths.average, format: formatStat('', teamStats.deaths.average, true) };
 
   const KDA = teamStats.takedowns.total / Math.max(1, teamStats.deaths.total);
   stats.overallKDA = { name: 'KDA', val: KDA, format: formatStat('KDA', KDA) };

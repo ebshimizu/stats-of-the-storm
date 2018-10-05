@@ -1135,6 +1135,7 @@ function tryCopyDatabaseFolder(dbFolder) {
   if (fs.statSync(folderLoc)) {
     console.log(`Copying ${dbFolder}`);
 
+    // i don't think we have to copy hint files
     fs.emptyDirSync(folderDest);
     fs.copySync(folderLoc, folderDest);
     return true;
