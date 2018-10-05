@@ -189,6 +189,12 @@ function loadDatabase() {
     settings.set('dbPath', app.getPath('userData'));
   }
 
+  if (settings.get('completeDownload') === true) {
+    setLoadMessage('Completing Download and Extraction of Online DB');
+    finishCopyZipContents();
+    settings.set('completeDownload', false);
+  }
+
   console.log('Loading Heroes Talents database');
   // load the heroes talents database
   Heroes = new HeroesTalents.HeroesTalents(path.join(__dirname, '/assets/heroes-talents'), path.join(__dirname, '/assets/data'));

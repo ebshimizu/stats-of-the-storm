@@ -1096,37 +1096,62 @@ function extractZipFromUrl() {
 }
 
 function copyZipContents() {
-  setDownloadProgress(66, 'Copying Downloaded Files...');
+  setDownloadProgress(100, 'Rebooting to Complete Operation');
   console.log('proceeding to copy');
 
-  DB.destroy(function() {
-    // expected files
-    for (let db of ['matches.ldb', 'hero.ldb', 'players.ldb', 'settings.ldb']) {
-      if (!fs.statSync(path.join(app.getPath('userData'), 'download-tmp', db))) {
-        cleanUpDownload();
-        return;
-      }
-    }
-
-    let idx = 0;
-    for (let db of ['matches.ldb', 'hero.ldb', 'players.ldb', 'settings.ldb']) {
-      setDownloadProgress(66 + 33 / 4 * idx, `Copying ${db}`);
-
-      let res = tryCopyDatabaseFolder(db);
-
-      if (!res) {
-        console.log('Copy error, aborting');
-        setDownloadProgress(100, 'Extraction error. Rebooting.');
-        cleanUpDownload();
-        return;
-      }
-
-      idx = idx + 1;
-    }
-
-    setDownloadProgress(100, 'Complete. Cleaning up and Restarting...');
-    cleanUpDownload();
+  DB.close(function() {
+    DB.destroy(function() {
+      // reboot now and continue later
+      settings.set('completeDownload', true);
+      setTimeout(() => {
+        app.relaunch();
+        app.quit();
+      }, 1000);
+    });
   });
+}
+
+function finishCopyZipContents() {
+  $('#settings-update-from-url .actions').addClass('is-hidden');
+  $('#settings-update-from-url').modal({
+    closable: false
+  }).
+  modal('show');
+
+  // expected files
+  for (let db of ['matches.ldb', 'hero.ldb', 'players.ldb', 'settings.ldb']) {
+    if (!fs.statSync(path.join(app.getPath('userData'), 'download-tmp', db))) {
+      showMessage(`External DB download failed`, `Missing expected files. Database may be in inconsistent state`, { class: 'negative', sticky: true });
+      cleanUpDownload();
+      return;
+    }
+  }
+
+  let idx = 0;
+  for (let db of ['matches.ldb', 'hero.ldb', 'players.ldb', 'settings.ldb']) {
+    setDownloadProgress(66 + 33 / 4 * idx, `Copying ${db}`);
+
+    let res = tryCopyDatabaseFolder(db);
+
+    if (!res) {
+      console.log('Copy error, aborting');
+      showMessage(`External DB copy failed`, `Error copying ${db}. Database may be in inconsistent state.`, { class: 'negative', sticky: true });
+      return;
+    }
+
+    idx = idx + 1;
+  }
+
+  console.log('cleaining up download files');
+
+  // delete downloadFile
+  let fileLoc = path.join(app.getPath('userData'), 'downloadedFile.zip');
+  fs.removeSync(fileLoc);
+
+  let extractLoc = path.join(app.getPath('userData'), 'download-tmp');
+  fs.removeSync(extractLoc);
+
+  showMessage(`External DB Downloaded`, `Successfully updated database.`, { class: 'positive', sticky: true });
 }
 
 function tryCopyDatabaseFolder(dbFolder) {
