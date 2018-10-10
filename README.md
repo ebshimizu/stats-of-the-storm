@@ -18,7 +18,7 @@ the standard `npm` commands should work in its place.
 
 * Install node
 * Clone the repository and initialize the submodules
-* Run `yarn install` inthe repository root (the one with `package.json` in it)
+* Run `yarn install` in the repository root (the one with `package.json` in it)
 * From the root directory, run `yarn app`
 
 ## Feedback
@@ -30,6 +30,7 @@ If you're feeling generous, you can drop in a tip at Ko-fi (even though I'm more
 [![ko-fi](https://www.ko-fi.com/img/donate_sm.png)](https://ko-fi.com/E1E2KHZ3)
 
 ## Third-Party Libraries
+* [hots-parser](https://github.com/ebshimizu/hots-parser) (not third party because I also wrote it, but of interest)
 * [heroprotocol.js](https://github.com/nydus/heroprotocol)
 * [heroes-talents](https://github.com/heroespatchnotes/heroes-talents)
 * [LinvoDB](https://github.com/Ivshti/linvodb3)
