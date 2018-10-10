@@ -25,6 +25,10 @@ the standard `npm` commands should work in its place.
 
 Bugs? Feature Requests? File an issue on GitHub or send an email to falindrith@gmail.com.
 
+If you're feeling generous, you can drop in a tip at Ko-fi (even though I'm more of a tea person)
+
+[![ko-fi](https://www.ko-fi.com/img/donate_sm.png)](https://ko-fi.com/E1E2KHZ3)
+
 ## Third-Party Libraries
 * [heroprotocol.js](https://github.com/nydus/heroprotocol)
 * [heroes-talents](https://github.com/heroespatchnotes/heroes-talents)
