@@ -2,732 +2,899 @@
   <div id="about-page-content" class="is-page transition hidden" section-name="about">
     <div class="ui inverted segment">
       <h1 class="ui inverted header">About</h1>
-      <h2 class="ui inverted header">Stats of the Storm - Version <span class="app-version-number"></span></h2>
-      <div class="about-wrapper">
-        <p>Stats of the Storm is maintained by Falindrith on GitHub.</p>
-        <p>Found a bug? Want to help? Check out the <a href="https://github.com/ebshimizu/hots-analysis" type="github-external">project page</a>.</p>
-        <p>
-          If you found a bug with the parser, please include the replay file that caused the error with
-          your report! The release builds have the development console available from the settings page, so please also check if there are any
-          errors displayed there when reporting bugs.</p>
-        <p>If you want to suggest features, or just chat, contact @falindrith on Twitter/Telegram, or Falindrith#0623 on Discord.</p>
-        <p>
-          Stats of the Storm uses Blizzard's <a href="https://github.com/Blizzard/heroprotocol">heroprotocol</a> via
-          <a href="https://github.com/nydus/heroprotocol">heroprotocol.js</a> as its parser, and
-          gets talent info, hero info, and images from <a href="https://github.com/heroespatchnotes/heroes-talents">heroes-talents</a>.
-        </p>
-        <div class="ui inverted horizontal divider">Change Log</div>
-        <div class="ui inverted dividing header">Version 2.4.7</div>
-        <p>
-          Parser: Updated for 2.39.0
-        </p>
-        <div class="ui inverted dividing header">Version 2.4.6</div>
-        <p>Parser: Updated for 2.38.3</p>
-        <div class="ui inverted dividing header">Version 2.4.5</div>
-        <p>
-          Parser: Updated for 2.38.2
-        </p>
-        <div class="ui inverted dividing header">Version 2.4.4</div>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/248">#248</a> Match Details: Draft can be updated.
-          Pick order can be changed, and the bans can be modified. Quick Match games cannot be changed.
-        </p>
-        <p>
-          Auto-Download DB: Adjusted how the app extracts the files. You'll notice that it reboots faster,
-          and will notify of any extraction problems after the reboot.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/249">#249</a> Bugfix: Average deaths and TDs in Team Deatils: compare
-          now show averages instead of totals.
-        </p>
-        <p>
-          Bugfix: Corrected display issue with Time Dead % on Match Details page
-        </p>
-        <div class="ui inverted dividing header">Version 2.4.3</div>
-        <p>
-          Parser: Updated for 2.38.1
-        </p>
-        <p>
-          heroes-talents: updated for 2.38.1
-        </p>
-        <div class="ui inverted dividing header">Version 2.4.2</div>
-        <p>
-          Parser: Updated to capture new Garden of Terror events.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/246">#246</a> App: Added new stats
-        </p>
-        <div class="ui inverted dividing header">Version 2.4.1</div>
-        <p>
-          Parser: Updated for 2.38.0
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/243">#243</a> App: Now includes option to update from URL.
-          Please see the linked issue page for instructions (docs will be up eventually).
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/244">#244</a> Bugfix: Collection: Heroes - Hero Details
-          map summary no longer overflows container.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/245">#245</a> Bugfix: Team Details - Fixed map record
-          for home team in vs other team comparison.
-        </p>
-        <div class="ui inverted dividing header">Version 2.4.0</div>
-        <p>
-          heroes-talents: metadata updated for 2.37.1
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/223">#223</a> Match Details: Draft display option
-          now changeable between pick order and by team displays.
-        </p>
-        <div class="ui inverted dividing header">Version 2.3.12</div>
-        <p>
-          Hotfix: Collection: Teams - Team name now links to team page again
-        </p>
-        <p>
-          Collection: Heroes - Player names under Hero Details will link to player profiles
-        </p>
-        <div class="ui inverted dividing header">Version 2.3.11</div>
-        <p>
-          Hotfix: Corrected error when filtering by player in Collection: Players
-        </p>
-        <div class="ui inverted dividing header">Version 2.3.10</div>
-        <p>
-          Parser: Patch 2.37.1 (build 68509)
-        </p>
-        <p>
-          Parser: b-step detection criteria tightened. Old: 16 frame window (1s). New: 6 frame window (0.375s). Will
-          be monitoring this one for a little bit. The replay files include b-button presses even wehn
-          the b action is already happening.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/151">#151</a> App: A long-standing issue regarding overall app performance
-          has been addressed. You may notice that some tables in the app look different and have new features. These tables should
-          provide better performance, memory usage, and usability than prior versions.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/224">#224</a> Player Details: Awards table added.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/235">#235</a> Collection: Heroes: Hero details now displays a list of players
-          and a stat summary for each hero selected.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/237">#237</a> Bugfix: An out of memory error related to tables
-          on the Player Details page has been fixed.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/238">#238</a> Bugfix: Collection: Heroes -
-          Role filters will still be active when a new search is run.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/241">#241</a> Bugfix: The "Search Subdirectories" option
-          in the parser settings now no longer culls folders older than the replay start date.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/242">#242</a> Bugfix: Player aliases are now properly resolved when
-          searching for matches and using the Collection: Players page.
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.3.9</h3>
-        <p>
-          Parser: Patch 2.37.0 (build 67985)
-        </p>
-        <p>
-          heroes-talents: Update for 2.37.0
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.3.8</h3>
-        <p>
-          Parser: Patch 2.36.2 (build 67621) support.
-        </p>
-        <p>
-          heroes-talents: Update for 2.36.2
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.3.7</h3>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/230">#230</a> Hotfix: Resolved issue with Team Details page state.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/231">#231</a> Bugfix: Resolved issue with new teams not showing up after using the "Create from Red/Blue" option on Match Details page.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/200">#200</a> Bugfix: Collection: Teams should be better behaved.
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.3.6</h3>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/229">#229</a> Hotfix: Second ban count display error in Hero Collection fixed.
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.3.5</h3>
-        <p>
-          Parser: Patch 2.36.1 (build 67462) support.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/228">#288</a> App: End dates on searches are now inclusive.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/225">#255</a> App: Player search options have been added to the filter widgets.
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.3.4</h3>
-        <p>heroes-talents: Updated for patch 2.36.0</p>
-        <h3 class="ui inverted dividing header">Version 2.3.3</h3>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/201">#201</a> Team Details: A head-to-head team comparison page has been added.
-        </p>
-        <p>
-          Parser: Patch 2.36.0 (build 67143) support. Note that Whitemane will appear as a '?' icon until heroes-talents updates, but will parse correctly.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/227">#227</a> Bugfix: Filter menu for Player Details page is not longer clipped by other page elements.
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.3.2</h3>
-        <p>
-          Parser: Hotfix patch 2.35.2 support.
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.3.1</h3>
-        <p>
-          heroes-talents: Updated for patch 2.35.1
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.3.0</h3>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/169">#169</a> App: Now supports combined player profiles via aliases. Add a player alias in the Player Details page.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/215">#215</a> Team Stats: Added level differential at end of game stat.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/180">#180</a> App: Search buttons are now next to the filter buttons.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/200">#200</a> Collection: Teams: Reduced scenarios where the page could lock up after loading teams.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/211">#211</a> Bugfix: Delete database now properly empties database directories.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/218">#218</a> Bugfix: If the database is set to an invalid folder on launch, the database location will be reset instead of the app locking up forever.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/220">#220</a> Parser support for 2.35.1 (build 66810)
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.2.0</h3>
-        <p>
-          App: Third ban now supported in draft modes. The Matches page layout has been updated accordingly.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/203">#203</a> Parser: Updated for 2.35.0 (build 66488)
-        </p>
-        <p>
-          heroes-talents: Updated for 2.35.0
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/209">#209</a> Braxis Holdout: Wave composition Updated
-          for game version 2.35.0
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/210">#210</a> Bugfix: Team Details filters now work correctly
-          when applying to a team that has already been loaded.
-        </p>
-        <p>
-          Settings: Delete database updated to delete version 2 databases. Warning: there are still a few quirks with this,
-          for now, manual database deletion is recommended.
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.1.2</h3>
-        <p>
-          Heroes Talents (tooltips): Updated for 2.34.3
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.1.1</h3>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/204">#204</a> Parser: Support for patch 2.34.3 (build 66182)
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.1.0</h3>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/186">#186</a> Alterac Pass added to supported maps.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/200">#200</a> Resolved issue that caused Collection: Teams to lock up.
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.0.8</h3>
-        <p>
-          Parser: Support for hotfix 2.34.2 (build 65943)
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.0.7</h3>
-        <p>
-          Database: Updated to verion 6 due to <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/194">#194</a>.
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/194">#194</a> Adjusted how first objective is determined
-          for the following maps:<br>
-          Sky Temple: Majority of the first 90 temple shots.<br>
-          Warhead Junction: Majority of <i>successful</i> first 4 nuke launches.<br>
-          Towers of Doom: Majority of the first 3 altars.<br>
-          Cursed Hollow: First curse (instead of first tribute)
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/199">#199</a> Parser: Support through patch 2.34.1 (build 65846)
-        </p>
-        <p>
-          <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/198">#198</a> Database: compact only after database update.
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.0.6</h3>
-        <p>
-          Parser: Support for Tournament Realm version 2.33.1.65654
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.0.5</h3>
-        <p>
-          heroes-talents: Updated for 2.33.1
-        </p>
-        <p>
-          Matches: default start date shifted to 1-1-2016 from 1-1-2012
-        </p>
-        <p>
-          App: Updated to Election 2.0
-        </p>
-        <p>
-          App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/187">#187</a> Window position and size will be remembered between application launches.
-        </p>
-        <p>
-          Parser: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/193">#193</a> Replays can be uploaded
-          just to HotsAPI/HotsLogs without importing them.
-        </p>
-        <p>
-          Collection: Teams: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/192">#192</a> Team names
-          now link to the team detail page.
-        </p>
-        <p>
-          App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/181">#181</a> Database compaction
-          run on load to prevent old data from previous upgrades from causing a duplicate update.
-        </p>
-        <p>
-          Collection: Players: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/185">#185</a> Player
-          hero pool added to the player data tables.
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.0.4</h3>
-        <p>
-          Parser: Patch 2.33.1 (build 65617) support.
-        </p>
-        <p>
-          Player Details: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/187">#187</a> Minimum required matches filter behavior corrected.
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.0.3</h3>
-        <p>
-          Bugfix: Tags now properly populate in search areas.
-        </p>
-        <p>
-          App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/184">#184</a> Added Damage Soaked stat.
-          According to Blizzard, this stat is equal to damage soaked minus HP at time of death for each death.
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.0.2</h3>
-        <p>
-          Hotfix: corrected issue with database migration.
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.0.1</h3>
-        <p>
-          Hotfix: replay import list properly clears.
-        </p>
-        <h3 class="ui inverted dividing header">Version 2.0.0</h3>
-        <p>
-          2.0 so soon? It's all due to a change to the database format that Stats of the Storm uses.
-        </p>
-        <p>
-          With this update, databases will no longer have a maximum size limit and the application
-          will use less memory for larger databases. This comes with a tradeoff of slower database queries,
-          however as databases can grow without bound, it seems like an ok one to make. As always, if you run into
-          bugs or problems, send in a bug report. The database conversion operation is non-destructive, so
-          don't panic if something goes wrong!
-        </p>
-        <p>
-          App: Parser update to version 5. This contains updates related to the new database format, and adds
-          two additional flags for future use.
-        </p>
-        <p>
-          Bugfix: Import sets and collections format error correction.
-        </p>
-        <p>
-          Matches: now shows 20 matches at a time.
-        </p>
-        <p>
-          Match Details: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/179">#179</a> XP soak graph adjusted, graph tick interval fixed to 1 minute.
-        </p>
-        <h3 class="ui inverted dividing header">Version 1.1.1</h3>
-        <p>
-          heroes-talents: Talents updated for 2.33.0
-        </p>
-        <h3 class="ui inverted dividing header">Version 1.1.0</h3>
-        <p>All issues assigned to the 1.1.0 milestone are complete in this release.</p>
-        <p>
-          Parser: Support for patch 2.33.0 (build 65285)
-        </p>
-        <p>
-          Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/163">#163</a> Player Details dropdown now shows player name correctly.
-        </p>
-        <p>
-          App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/152">#152</a> Player Aliases can be added from the Player
-          Details page and are shown in various parts of the app. Aliases will also be used for player search purposes.
-        </p>
-        <p>
-          Team Roster: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/178">#178</a> Team Roster display issues corrected
-        </p>
-        <p>
-          App: Various behind-the-scenes code cleanup. Thanks to rduenasf on GitHub for helping out with this!
-        </p>
-        <h3 class="ui inverted dividing header">Version 1.0.3</h3>
-        <p>
-          Parser: Support for hotfix 2.32.3 (build 65006)
-        </p>
-        <p>
-          heroes-talents: Talents updated for 2.32.3
-        </p>
-        <p>
-          Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/164">#164</a> Auto-import now works for regular folders, not just import sets
-        </p>
-        <p>
-          App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/162">#162</a> Datepickers will close after date picked (except on Trends)
-        </p>
-        <p>
-          Import: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/165">#165</a> HotsAPI upload will happen after checking for defaults, and will be
-          skipped if the match is a duplicate.
-        </p>
-        <h3 class="ui inverted dividing header">Version 1.0.2</h3>
-        <p>
-          Parser: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/161">#161</a> Support for balance patch 2.32.2 (build 64863)
-        </p>
-        <p>
-          App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/154">#154</a> App can now watch folders for new files and auto-import them
-          while the app is running.
-        </p>
-        <p>
-          Import: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/158">#158</a> .StormReplay extension detection is now case-insensitive
-        </p>
-        <p>
-          Import: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/160">#160</a> Slight performance improvement to replay list filtering
-        </p>
-        <p>
-          App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/153">#153</a> All player menus will now search all players. If you
-          need a list of all the players in your database, use the Collection: Players page.
-        </p>
-        <h3 class="ui inverted dividing header">Version 1.0.1</h3>
-        <p>
-          Parser: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/155">#155</a> Support for hotfix 2.32.1 (build 64657).
-        </p>
-        <p>
-          App: Various small performance adjustments.
-        </p>
-        <h3 class="ui inverted dividing header">Version 1.0.0</h3>
-        <p>
-          This release marks the completion of all features originally planned for Stats of the Storm.
-          And also brings support for patch 2.32.0.
-        </p>
-        <p>
-          Parser: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/147">#147</a> New Stats. Updated to version 4. Added Damage Per Minute (DPM),
-          Healing/Shielding Per Minute (HPM), XP Per Minute (XPM), Damage Done per Death, Healing Done per Death, and Damage Taken per Death.
-        </p>
-        <p>
-          Parser: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/149">#151</a> Support for Deckard Cain patch 2.32.0 (build 64455)
-        </p>
-        <p>
-          Parser: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/42">#42</a> Battletags will now be extracted
-          from the replays. Older match data will be missing the tags, however if a player is recognized in a future import,
-          their data will be updated accordingly.
-        </p>
-        <p>
-          Parser: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/148">#148</a> Resolved edge case with missing
-          required replay IDs.
-        </p>
-        <p>
-          Match Details: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/54">#54</a> Timeline for Braxis Holdout
-          and Dragon Shire now show which teams occupied the shrines at every point in time.
-        </p>
-        <p>
-          Match Details: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/150">#150</a> Team names are now shown in
-          match details if applicable.
-        </p>
-        <p>
-          App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/140">#140</a> Select CSV data can now be exported
-          from the app. If you want something that's not available to be exported as a CSV, please let me know.
-        </p>
-        <h3 class="ui inverted dividing header">Version 0.6.4</h3>
-        <p>
-          Bugfix: Import sets now properly add replays to the specified collections if also searching through subfolders
-        </p>
-        <p>
-          App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/144">#144</a> Most widgets now let you filter
-          by specific hero. Also added controls for <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/141">#141</a>.
-        </p>
-        <h3 class="ui inverted dividing header">Version 0.6.3</h3>
-        <p>
-          Bugfix: Stat totals on Collection: Player and Team Roster pages have been corrected.
-        </p>
-        <h3 class="ui inverted dividing header">Version 0.6.2</h3>
-        <p>
-          Settings: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/146">#146</a> Added Import Sets. Can set
-          folders to be imported to one or more collections automatically. Import sets are set per-database and are stored
-          locally (so they don't interfere with sharing databases).
-        </p>
-        <h3 class="ui inverted dividing header">Version 0.6.1</h3>
-        <p>
-          Parser: Updated up to patch 2.31.3 (build 64129)
-        </p>
-        <p>
-          heroes-talents: Updated up to patch 2.31.3 (build 64129)
-        </p>
-        <p>
-          Matches: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/141">#141</a>
-          If searching by team, you can now restrict shown matches to those that have the selected heroes
-          played by the selected team. This is a partial implementation, and the other filter widgets
-          will be updated in a future patch.
-        </p>
-        <p>
-          Settings: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/142">#142</a> Replay folders
-          can now be scanned recursively (optional).
-        </p>
-        <p>
-          Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/145">#145</a> Filter widgets
-          will now be displayable on more resolutions.
-        </p>
-        <h3 class="ui inverted dividing header">Version 0.6.0</h3>
-        <p>
-          Version 0.6.0 brings the ability to export PDF reports for most sections of the application.
-          The feature snapshots the current section that you're looking at, so you'll have to set your tables to
-          the proper sort order before printing (the exporter does not assume how you want your tables sorted).
-        </p>
-        <p>
-          When using this feature, please
-          note that the paper size will vary between Letter and Legal in order to fit all of the information on the page. Note also
-          that the app will briefly change appearance while the print process completes.
-        </p>
-        <p>
-          App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/139">#139</a> Data can now be exported in PDF format
-          from the file menu on most sections.
-        </p>
-        <h3 class="ui inverted dividing header">Version 0.5.5</h3>
-        <p>
-          Parser: Updated for hotfix patch 2.31.1 (build 63635)
-        </p>
-        <h3 class="ui inverted dividing header">Version 0.5.4</h3>
-        <p>
-          Parser: Updated for Fenix patch 2.31.0 (build 63507)
-        </p>
-        <p>
-          heroes-talents: Updated for Fenix patch 2.31.0 (build 63507)
-        </p>
-        <p>
-          App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/126">#126</a> Table headers are now centered properly
-          and incorrect sort headers on data reload have been removed.
-        </p>
-        <p>
-          Trends: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/136">#136</a> Table now has no undefined values.
-        </p>
-        <p>
-          Trends: No longer crashes when compositions are not present in period 1, but are present in period 2.
-        </p>
-        <p>
-          Settings: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/138">#138</a> My ID menu now opens down to prevent clipping top menu options.
-        </p>
-        <h3 class="ui inverted dividing header">Version 0.5.3</h3>
-        <p>
-          macOS: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/135">#135</a> Build server should now properly re-fetch available parsing protocols.
-        </p>
-        <p>
-          Matches: Backgrounds have been added to the match screen. They might show up in other parts of the app eventually.
-        </p>
-        <p>
-          App: Some deleted talents have been added back into the database. If you see a talent marked as deleted, let me know! I only
-          went back to December to update missing talents.
-        </p>
-        <p>
-          heroes-talents: Updated for balance patch 2.30.6 (build 63402).
-        </p>
-        <h3 class="ui inverted dividing header">Version 0.5.2</h3>
-        <p>
-          Parser: Updated to handle balance patch 2.30.6 (build 63402).
-        </p>
-        <p>
-          App: Numbers are now formatted to have commas.
-        </p>
-        <p>
-          Matches: The option to delete an individual match or selected matches has been added under the "File"
-          menu on the Matches and Match Details pages. Additionally, the "Export" menu has been renamed to "File" for those pages.
-        </p>
-        <p>
-          Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/133">#133</a> The database migration to version
-          3 will now continue processing matches even if one of them throws an exception during processing. This bug
-          only occasionally affected users migrating from version 2 to version 3.
-        </p>
-        <p>
-          macOS: The app is now signed with a development license, and the auto-update might start working. We'll see in the next version
-          if this is true.
-        </p>
-        <h3 class="ui inverted dividing header">Version 0.5.1</h3>
-        <p>
-          Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/131">#131</a> Non-english replays now have searchable heroes on the Matches screen.
-          The fix for this requires an optional re-import to restore this functionality. Player Details and most other sections are unaffected by this bug.
-        </p>
-        <p>
-          Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/130">#130</a> Parser now properly identifies the same
-          match recorded on different computers.
-        </p>
-        <h3 class="ui inverted dividing header">Version 0.5.0</h3>
-        <p>
-          Version 0.5.0 brings overall map stats, team composition stats,
-          and external database comparison support to Stats of the Storm. This version also corrects the match lengths
-          in the database. You do not need to re-import your matches to get the extra stats in this version.
-          <br>
-          Thanks again to AlexNewell on GitHub for finding some bugs this time around.
-        </p>
-        <p>
-          Version 0.5.0 is also the first version of Stats of the Storm available on Mac. This app
-          should be considered experimental on macOS, as I have only been able to test on a VM.
-          Let me know what problems you encounter with the app on macOS!
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/120">#120</a>
-          New Feature: Battlegrounds. Stats related to match outcomes and lengths for each map.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/116">#116</a>
-          New Feature: Team Compositions. See win rate and popularity for team compositions in the Hero Details
-          page, and see how those compositions change over time in the Trends page.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/118">#118</a>
-          Collection: Heroes: Now shows overall hero pool stats.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/114">#114</a>
-          App: Can load external databases and cache hero stats for comparison. See the new tabs in the Settings page,
-          and also the <a href="https://ebshimizu.github.io/stats-of-the-storm/external-db.html">Using External Databases</a>
-          docs page.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/125">#125</a>
-          Match Details: Import path is now shown for each replay.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/124">#124</a>
-          Parser: Corrected match lengths. Note that the graphs still extend past the match end. This is due
-          to the last XP breakdown occuring after the game technically ends. For completeness, I have let the graphs
-          extend to this duration instead of clamping them.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/122">#122</a>
-          Parser: b-step detection corrected for newer builds. If you really want this stat, you'll have to re-import the matches.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/115">#115</a>
-          Settings: Setting the Player Threshold option now gives visual confirmation that something changed.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/123">#123</a>
-          Bugfix: Blackheart's Bay Doubloons held at end stats showed unreasonable values due to bad data in replay.
-        </p>
-        <h3 class="ui inverted dividing header">Version 0.4.0</h3>
-        <p>
-          Version 0.4.0 brings another set of features, and takes the app closer to a full 1.0 release. Big changes in this update include
-          a re-designed matches list to help out with smaller screen sizes, a new trends section to see how pick and ban rates change
-          over time, player hero pool stats, and the ability to plot any average player stat over time. For a full list of changes,
-          check out the list below.
+      <div class="ui secondary inverted menu" id="about-tab-menu">
+        <a class="active item" data-tab="release">Release Notes</a>
+        <a class="item" data-tab="stat-defs">Stat Definitions</a>
+      </div>
+      <div class="ui active tab" data-tab="release">
+        <h2 class="ui inverted header">Stats of the Storm - Version <span class="app-version-number"></span></h2>
+        <div class="about-wrapper">
+          <p>Stats of the Storm is maintained by Falindrith on GitHub.</p>
+          <p>Found a bug? Want to help? Check out the <a href="https://github.com/ebshimizu/hots-analysis" type="github-external">project page</a>.</p>
+          <p>
+            If you found a bug with the parser, please include the replay file that caused the error with
+            your report! The release builds have the development console available from the settings page, so please also check if there are any
+            errors displayed there when reporting bugs.</p>
+          <p>If you want to suggest features, or just chat, contact @falindrith on Twitter/Telegram, or Falindrith#0623 on Discord.</p>
+          <p>
+            Stats of the Storm uses Blizzard's <a href="https://github.com/Blizzard/heroprotocol">heroprotocol</a> via
+            <a href="https://github.com/nydus/heroprotocol">heroprotocol.js</a> as its parser, and
+            gets talent info, hero info, and images from <a href="https://github.com/heroespatchnotes/heroes-talents">heroes-talents</a>.
+          </p>
+          <div class="ui inverted horizontal divider">Change Log</div>
+          <div class="ui inverted dividing header">Version 2.4.7</div>
+          <p>
+            Parser: Updated for 2.39.0
+          </p>
+          <div class="ui inverted dividing header">Version 2.4.6</div>
+          <p>Parser: Updated for 2.38.3</p>
+          <div class="ui inverted dividing header">Version 2.4.5</div>
+          <p>
+            Parser: Updated for 2.38.2
+          </p>
+          <div class="ui inverted dividing header">Version 2.4.4</div>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/248">#248</a> Match Details: Draft can be updated.
+            Pick order can be changed, and the bans can be modified. Quick Match games cannot be changed.
+          </p>
+          <p>
+            Auto-Download DB: Adjusted how the app extracts the files. You'll notice that it reboots faster,
+            and will notify of any extraction problems after the reboot.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/249">#249</a> Bugfix: Average deaths and TDs in Team Deatils: compare
+            now show averages instead of totals.
+          </p>
+          <p>
+            Bugfix: Corrected display issue with Time Dead % on Match Details page
+          </p>
+          <div class="ui inverted dividing header">Version 2.4.3</div>
+          <p>
+            Parser: Updated for 2.38.1
+          </p>
+          <p>
+            heroes-talents: updated for 2.38.1
+          </p>
+          <div class="ui inverted dividing header">Version 2.4.2</div>
+          <p>
+            Parser: Updated to capture new Garden of Terror events.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/246">#246</a> App: Added new stats
+          </p>
+          <div class="ui inverted dividing header">Version 2.4.1</div>
+          <p>
+            Parser: Updated for 2.38.0
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/243">#243</a> App: Now includes option to update from URL.
+            Please see the linked issue page for instructions (docs will be up eventually).
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/244">#244</a> Bugfix: Collection: Heroes - Hero Details
+            map summary no longer overflows container.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/245">#245</a> Bugfix: Team Details - Fixed map record
+            for home team in vs other team comparison.
+          </p>
+          <div class="ui inverted dividing header">Version 2.4.0</div>
+          <p>
+            heroes-talents: metadata updated for 2.37.1
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/223">#223</a> Match Details: Draft display option
+            now changeable between pick order and by team displays.
+          </p>
+          <div class="ui inverted dividing header">Version 2.3.12</div>
+          <p>
+            Hotfix: Collection: Teams - Team name now links to team page again
+          </p>
+          <p>
+            Collection: Heroes - Player names under Hero Details will link to player profiles
+          </p>
+          <div class="ui inverted dividing header">Version 2.3.11</div>
+          <p>
+            Hotfix: Corrected error when filtering by player in Collection: Players
+          </p>
+          <div class="ui inverted dividing header">Version 2.3.10</div>
+          <p>
+            Parser: Patch 2.37.1 (build 68509)
+          </p>
+          <p>
+            Parser: b-step detection criteria tightened. Old: 16 frame window (1s). New: 6 frame window (0.375s). Will
+            be monitoring this one for a little bit. The replay files include b-button presses even wehn
+            the b action is already happening.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/151">#151</a> App: A long-standing issue regarding overall app performance
+            has been addressed. You may notice that some tables in the app look different and have new features. These tables should
+            provide better performance, memory usage, and usability than prior versions.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/224">#224</a> Player Details: Awards table added.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/235">#235</a> Collection: Heroes: Hero details now displays a list of players
+            and a stat summary for each hero selected.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/237">#237</a> Bugfix: An out of memory error related to tables
+            on the Player Details page has been fixed.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/238">#238</a> Bugfix: Collection: Heroes -
+            Role filters will still be active when a new search is run.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/241">#241</a> Bugfix: The "Search Subdirectories" option
+            in the parser settings now no longer culls folders older than the replay start date.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/242">#242</a> Bugfix: Player aliases are now properly resolved when
+            searching for matches and using the Collection: Players page.
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.3.9</h3>
+          <p>
+            Parser: Patch 2.37.0 (build 67985)
+          </p>
+          <p>
+            heroes-talents: Update for 2.37.0
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.3.8</h3>
+          <p>
+            Parser: Patch 2.36.2 (build 67621) support.
+          </p>
+          <p>
+            heroes-talents: Update for 2.36.2
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.3.7</h3>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/230">#230</a> Hotfix: Resolved issue with Team Details page state.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/231">#231</a> Bugfix: Resolved issue with new teams not showing up after using the "Create from Red/Blue" option on Match Details page.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/200">#200</a> Bugfix: Collection: Teams should be better behaved.
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.3.6</h3>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/229">#229</a> Hotfix: Second ban count display error in Hero Collection fixed.
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.3.5</h3>
+          <p>
+            Parser: Patch 2.36.1 (build 67462) support.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/228">#288</a> App: End dates on searches are now inclusive.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/225">#255</a> App: Player search options have been added to the filter widgets.
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.3.4</h3>
+          <p>heroes-talents: Updated for patch 2.36.0</p>
+          <h3 class="ui inverted dividing header">Version 2.3.3</h3>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/201">#201</a> Team Details: A head-to-head team comparison page has been added.
+          </p>
+          <p>
+            Parser: Patch 2.36.0 (build 67143) support. Note that Whitemane will appear as a '?' icon until heroes-talents updates, but will parse correctly.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/227">#227</a> Bugfix: Filter menu for Player Details page is not longer clipped by other page elements.
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.3.2</h3>
+          <p>
+            Parser: Hotfix patch 2.35.2 support.
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.3.1</h3>
+          <p>
+            heroes-talents: Updated for patch 2.35.1
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.3.0</h3>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/169">#169</a> App: Now supports combined player profiles via aliases. Add a player alias in the Player Details page.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/215">#215</a> Team Stats: Added level differential at end of game stat.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/180">#180</a> App: Search buttons are now next to the filter buttons.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/200">#200</a> Collection: Teams: Reduced scenarios where the page could lock up after loading teams.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/211">#211</a> Bugfix: Delete database now properly empties database directories.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/218">#218</a> Bugfix: If the database is set to an invalid folder on launch, the database location will be reset instead of the app locking up forever.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/220">#220</a> Parser support for 2.35.1 (build 66810)
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.2.0</h3>
+          <p>
+            App: Third ban now supported in draft modes. The Matches page layout has been updated accordingly.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/203">#203</a> Parser: Updated for 2.35.0 (build 66488)
+          </p>
+          <p>
+            heroes-talents: Updated for 2.35.0
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/209">#209</a> Braxis Holdout: Wave composition Updated
+            for game version 2.35.0
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/210">#210</a> Bugfix: Team Details filters now work correctly
+            when applying to a team that has already been loaded.
+          </p>
+          <p>
+            Settings: Delete database updated to delete version 2 databases. Warning: there are still a few quirks with this,
+            for now, manual database deletion is recommended.
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.1.2</h3>
+          <p>
+            Heroes Talents (tooltips): Updated for 2.34.3
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.1.1</h3>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/204">#204</a> Parser: Support for patch 2.34.3 (build 66182)
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.1.0</h3>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/186">#186</a> Alterac Pass added to supported maps.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/200">#200</a> Resolved issue that caused Collection: Teams to lock up.
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.0.8</h3>
+          <p>
+            Parser: Support for hotfix 2.34.2 (build 65943)
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.0.7</h3>
+          <p>
+            Database: Updated to verion 6 due to <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/194">#194</a>.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/194">#194</a> Adjusted how first objective is determined
+            for the following maps:<br>
+            Sky Temple: Majority of the first 90 temple shots.<br>
+            Warhead Junction: Majority of <i>successful</i> first 4 nuke launches.<br>
+            Towers of Doom: Majority of the first 3 altars.<br>
+            Cursed Hollow: First curse (instead of first tribute)
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/199">#199</a> Parser: Support through patch 2.34.1 (build 65846)
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/198">#198</a> Database: compact only after database update.
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.0.6</h3>
+          <p>
+            Parser: Support for Tournament Realm version 2.33.1.65654
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.0.5</h3>
+          <p>
+            heroes-talents: Updated for 2.33.1
+          </p>
+          <p>
+            Matches: default start date shifted to 1-1-2016 from 1-1-2012
+          </p>
+          <p>
+            App: Updated to Election 2.0
+          </p>
+          <p>
+            App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/187">#187</a> Window position and size will be remembered between application launches.
+          </p>
+          <p>
+            Parser: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/193">#193</a> Replays can be uploaded
+            just to HotsAPI/HotsLogs without importing them.
+          </p>
+          <p>
+            Collection: Teams: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/192">#192</a> Team names
+            now link to the team detail page.
+          </p>
+          <p>
+            App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/181">#181</a> Database compaction
+            run on load to prevent old data from previous upgrades from causing a duplicate update.
+          </p>
+          <p>
+            Collection: Players: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/185">#185</a> Player
+            hero pool added to the player data tables.
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.0.4</h3>
+          <p>
+            Parser: Patch 2.33.1 (build 65617) support.
+          </p>
+          <p>
+            Player Details: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/187">#187</a> Minimum required matches filter behavior corrected.
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.0.3</h3>
+          <p>
+            Bugfix: Tags now properly populate in search areas.
+          </p>
+          <p>
+            App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/184">#184</a> Added Damage Soaked stat.
+            According to Blizzard, this stat is equal to damage soaked minus HP at time of death for each death.
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.0.2</h3>
+          <p>
+            Hotfix: corrected issue with database migration.
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.0.1</h3>
+          <p>
+            Hotfix: replay import list properly clears.
+          </p>
+          <h3 class="ui inverted dividing header">Version 2.0.0</h3>
+          <p>
+            2.0 so soon? It's all due to a change to the database format that Stats of the Storm uses.
+          </p>
+          <p>
+            With this update, databases will no longer have a maximum size limit and the application
+            will use less memory for larger databases. This comes with a tradeoff of slower database queries,
+            however as databases can grow without bound, it seems like an ok one to make. As always, if you run into
+            bugs or problems, send in a bug report. The database conversion operation is non-destructive, so
+            don't panic if something goes wrong!
+          </p>
+          <p>
+            App: Parser update to version 5. This contains updates related to the new database format, and adds
+            two additional flags for future use.
+          </p>
+          <p>
+            Bugfix: Import sets and collections format error correction.
+          </p>
+          <p>
+            Matches: now shows 20 matches at a time.
+          </p>
+          <p>
+            Match Details: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/179">#179</a> XP soak graph adjusted, graph tick interval fixed to 1 minute.
+          </p>
+          <h3 class="ui inverted dividing header">Version 1.1.1</h3>
+          <p>
+            heroes-talents: Talents updated for 2.33.0
+          </p>
+          <h3 class="ui inverted dividing header">Version 1.1.0</h3>
+          <p>All issues assigned to the 1.1.0 milestone are complete in this release.</p>
+          <p>
+            Parser: Support for patch 2.33.0 (build 65285)
+          </p>
+          <p>
+            Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/163">#163</a> Player Details dropdown now shows player name correctly.
+          </p>
+          <p>
+            App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/152">#152</a> Player Aliases can be added from the Player
+            Details page and are shown in various parts of the app. Aliases will also be used for player search purposes.
+          </p>
+          <p>
+            Team Roster: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/178">#178</a> Team Roster display issues corrected
+          </p>
+          <p>
+            App: Various behind-the-scenes code cleanup. Thanks to rduenasf on GitHub for helping out with this!
+          </p>
+          <h3 class="ui inverted dividing header">Version 1.0.3</h3>
+          <p>
+            Parser: Support for hotfix 2.32.3 (build 65006)
+          </p>
+          <p>
+            heroes-talents: Talents updated for 2.32.3
+          </p>
+          <p>
+            Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/164">#164</a> Auto-import now works for regular folders, not just import sets
+          </p>
+          <p>
+            App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/162">#162</a> Datepickers will close after date picked (except on Trends)
+          </p>
+          <p>
+            Import: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/165">#165</a> HotsAPI upload will happen after checking for defaults, and will be
+            skipped if the match is a duplicate.
+          </p>
+          <h3 class="ui inverted dividing header">Version 1.0.2</h3>
+          <p>
+            Parser: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/161">#161</a> Support for balance patch 2.32.2 (build 64863)
+          </p>
+          <p>
+            App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/154">#154</a> App can now watch folders for new files and auto-import them
+            while the app is running.
+          </p>
+          <p>
+            Import: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/158">#158</a> .StormReplay extension detection is now case-insensitive
+          </p>
+          <p>
+            Import: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/160">#160</a> Slight performance improvement to replay list filtering
+          </p>
+          <p>
+            App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/153">#153</a> All player menus will now search all players. If you
+            need a list of all the players in your database, use the Collection: Players page.
+          </p>
+          <h3 class="ui inverted dividing header">Version 1.0.1</h3>
+          <p>
+            Parser: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/155">#155</a> Support for hotfix 2.32.1 (build 64657).
+          </p>
+          <p>
+            App: Various small performance adjustments.
+          </p>
+          <h3 class="ui inverted dividing header">Version 1.0.0</h3>
+          <p>
+            This release marks the completion of all features originally planned for Stats of the Storm.
+            And also brings support for patch 2.32.0.
+          </p>
+          <p>
+            Parser: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/147">#147</a> New Stats. Updated to version 4. Added Damage Per Minute (DPM),
+            Healing/Shielding Per Minute (HPM), XP Per Minute (XPM), Damage Done per Death, Healing Done per Death, and Damage Taken per Death.
+          </p>
+          <p>
+            Parser: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/149">#151</a> Support for Deckard Cain patch 2.32.0 (build 64455)
+          </p>
+          <p>
+            Parser: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/42">#42</a> Battletags will now be extracted
+            from the replays. Older match data will be missing the tags, however if a player is recognized in a future import,
+            their data will be updated accordingly.
+          </p>
+          <p>
+            Parser: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/148">#148</a> Resolved edge case with missing
+            required replay IDs.
+          </p>
+          <p>
+            Match Details: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/54">#54</a> Timeline for Braxis Holdout
+            and Dragon Shire now show which teams occupied the shrines at every point in time.
+          </p>
+          <p>
+            Match Details: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/150">#150</a> Team names are now shown in
+            match details if applicable.
+          </p>
+          <p>
+            App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/140">#140</a> Select CSV data can now be exported
+            from the app. If you want something that's not available to be exported as a CSV, please let me know.
+          </p>
+          <h3 class="ui inverted dividing header">Version 0.6.4</h3>
+          <p>
+            Bugfix: Import sets now properly add replays to the specified collections if also searching through subfolders
+          </p>
+          <p>
+            App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/144">#144</a> Most widgets now let you filter
+            by specific hero. Also added controls for <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/141">#141</a>.
+          </p>
+          <h3 class="ui inverted dividing header">Version 0.6.3</h3>
+          <p>
+            Bugfix: Stat totals on Collection: Player and Team Roster pages have been corrected.
+          </p>
+          <h3 class="ui inverted dividing header">Version 0.6.2</h3>
+          <p>
+            Settings: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/146">#146</a> Added Import Sets. Can set
+            folders to be imported to one or more collections automatically. Import sets are set per-database and are stored
+            locally (so they don't interfere with sharing databases).
+          </p>
+          <h3 class="ui inverted dividing header">Version 0.6.1</h3>
+          <p>
+            Parser: Updated up to patch 2.31.3 (build 64129)
+          </p>
+          <p>
+            heroes-talents: Updated up to patch 2.31.3 (build 64129)
+          </p>
+          <p>
+            Matches: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/141">#141</a>
+            If searching by team, you can now restrict shown matches to those that have the selected heroes
+            played by the selected team. This is a partial implementation, and the other filter widgets
+            will be updated in a future patch.
+          </p>
+          <p>
+            Settings: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/142">#142</a> Replay folders
+            can now be scanned recursively (optional).
+          </p>
+          <p>
+            Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/145">#145</a> Filter widgets
+            will now be displayable on more resolutions.
+          </p>
+          <h3 class="ui inverted dividing header">Version 0.6.0</h3>
+          <p>
+            Version 0.6.0 brings the ability to export PDF reports for most sections of the application.
+            The feature snapshots the current section that you're looking at, so you'll have to set your tables to
+            the proper sort order before printing (the exporter does not assume how you want your tables sorted).
+          </p>
+          <p>
+            When using this feature, please
+            note that the paper size will vary between Letter and Legal in order to fit all of the information on the page. Note also
+            that the app will briefly change appearance while the print process completes.
+          </p>
+          <p>
+            App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/139">#139</a> Data can now be exported in PDF format
+            from the file menu on most sections.
+          </p>
+          <h3 class="ui inverted dividing header">Version 0.5.5</h3>
+          <p>
+            Parser: Updated for hotfix patch 2.31.1 (build 63635)
+          </p>
+          <h3 class="ui inverted dividing header">Version 0.5.4</h3>
+          <p>
+            Parser: Updated for Fenix patch 2.31.0 (build 63507)
+          </p>
+          <p>
+            heroes-talents: Updated for Fenix patch 2.31.0 (build 63507)
+          </p>
+          <p>
+            App: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/126">#126</a> Table headers are now centered properly
+            and incorrect sort headers on data reload have been removed.
+          </p>
+          <p>
+            Trends: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/136">#136</a> Table now has no undefined values.
+          </p>
+          <p>
+            Trends: No longer crashes when compositions are not present in period 1, but are present in period 2.
+          </p>
+          <p>
+            Settings: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/138">#138</a> My ID menu now opens down to prevent clipping top menu options.
+          </p>
+          <h3 class="ui inverted dividing header">Version 0.5.3</h3>
+          <p>
+            macOS: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/135">#135</a> Build server should now properly re-fetch available parsing protocols.
+          </p>
+          <p>
+            Matches: Backgrounds have been added to the match screen. They might show up in other parts of the app eventually.
+          </p>
+          <p>
+            App: Some deleted talents have been added back into the database. If you see a talent marked as deleted, let me know! I only
+            went back to December to update missing talents.
+          </p>
+          <p>
+            heroes-talents: Updated for balance patch 2.30.6 (build 63402).
+          </p>
+          <h3 class="ui inverted dividing header">Version 0.5.2</h3>
+          <p>
+            Parser: Updated to handle balance patch 2.30.6 (build 63402).
+          </p>
+          <p>
+            App: Numbers are now formatted to have commas.
+          </p>
+          <p>
+            Matches: The option to delete an individual match or selected matches has been added under the "File"
+            menu on the Matches and Match Details pages. Additionally, the "Export" menu has been renamed to "File" for those pages.
+          </p>
+          <p>
+            Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/133">#133</a> The database migration to version
+            3 will now continue processing matches even if one of them throws an exception during processing. This bug
+            only occasionally affected users migrating from version 2 to version 3.
+          </p>
+          <p>
+            macOS: The app is now signed with a development license, and the auto-update might start working. We'll see in the next version
+            if this is true.
+          </p>
+          <h3 class="ui inverted dividing header">Version 0.5.1</h3>
+          <p>
+            Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/131">#131</a> Non-english replays now have searchable heroes on the Matches screen.
+            The fix for this requires an optional re-import to restore this functionality. Player Details and most other sections are unaffected by this bug.
+          </p>
+          <p>
+            Bugfix: <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/130">#130</a> Parser now properly identifies the same
+            match recorded on different computers.
+          </p>
+          <h3 class="ui inverted dividing header">Version 0.5.0</h3>
+          <p>
+            Version 0.5.0 brings overall map stats, team composition stats,
+            and external database comparison support to Stats of the Storm. This version also corrects the match lengths
+            in the database. You do not need to re-import your matches to get the extra stats in this version.
+            <br>
+            Thanks again to AlexNewell on GitHub for finding some bugs this time around.
+          </p>
+          <p>
+            Version 0.5.0 is also the first version of Stats of the Storm available on Mac. This app
+            should be considered experimental on macOS, as I have only been able to test on a VM.
+            Let me know what problems you encounter with the app on macOS!
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/120">#120</a>
+            New Feature: Battlegrounds. Stats related to match outcomes and lengths for each map.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/116">#116</a>
+            New Feature: Team Compositions. See win rate and popularity for team compositions in the Hero Details
+            page, and see how those compositions change over time in the Trends page.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/118">#118</a>
+            Collection: Heroes: Now shows overall hero pool stats.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/114">#114</a>
+            App: Can load external databases and cache hero stats for comparison. See the new tabs in the Settings page,
+            and also the <a href="https://ebshimizu.github.io/stats-of-the-storm/external-db.html">Using External Databases</a>
+            docs page.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/125">#125</a>
+            Match Details: Import path is now shown for each replay.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/124">#124</a>
+            Parser: Corrected match lengths. Note that the graphs still extend past the match end. This is due
+            to the last XP breakdown occuring after the game technically ends. For completeness, I have let the graphs
+            extend to this duration instead of clamping them.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/122">#122</a>
+            Parser: b-step detection corrected for newer builds. If you really want this stat, you'll have to re-import the matches.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/115">#115</a>
+            Settings: Setting the Player Threshold option now gives visual confirmation that something changed.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/123">#123</a>
+            Bugfix: Blackheart's Bay Doubloons held at end stats showed unreasonable values due to bad data in replay.
+          </p>
+          <h3 class="ui inverted dividing header">Version 0.4.0</h3>
+          <p>
+            Version 0.4.0 brings another set of features, and takes the app closer to a full 1.0 release. Big changes in this update include
+            a re-designed matches list to help out with smaller screen sizes, a new trends section to see how pick and ban rates change
+            over time, player hero pool stats, and the ability to plot any average player stat over time. For a full list of changes,
+            check out the list below.
 
-          Thanks to AlexNewell and sakurinha on GitHub for suggesting some of the features in this release.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/89">#89</a>
-          New Feature: Trends. Specify two time spans and see changes in the win, pick, and ban rates of all heroes in the collection.
-          All standard filters are available, so you can see stats for specific maps as well.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/99">#99</a>
-          Player Details: Hero pool stats added. This is a new tab in the All Hero Summary view.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/109">#109</a>
-          Player Details: Progression tab now allows the graphing of any non-map-specific stat.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/95">#95</a>
-          Matches: Re-designed the match list. Matches now scroll, and text does not shrink. Should help
-          with viewing the match list on a small screen. Also added team nameplates (if there are any applicable teams).
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/110">#110</a>
-          Match Details: Team XP graph can be toggled between 'Total XP vs Time' mode and 'Levels vs Time' mode.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/108">#108</a>
-          Player Details, Team Details, Collection: Heroes: A threshold can be set to filter out heroes that have fewer games
-          than the specified threshold.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/111">#111</a>
-          Matches: Matches can be searched conditioned on the win/loss of a specified player or team.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/112">#112</a>
-          Heroes, Team Details: Pick stats have been changed to round based instead of the strict 1-5 order.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/103">#103</a>
-          App: Player names now link to their in-app profile.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/97">#97</a>
-          Player Details: Detailed stats table should no longer show NaN if a stat was missing from the replay.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/107">#107</a>
-          App: Database loading order has been changed in order to produce more detailed errors in case a database
-          fails to load. If you see one of these errors, please report it on GitHub.
-        </p>
-        <p>
-          Talent Descriptions: Updated heroes-talents to handle changes in most recent build 63070.
-        </p>
-        <h3 class="ui inverted dividing header">Version 0.3.1</h3>
-        <p>Parser update for build 63070.</p>
-        <h3 class="ui inverted dividing header">Version 0.3.0</h3>
-        <p>
-          Version 0.3.0 fixes a few bugs, adds additional data views for players and teams, lets you parse replays from
-          any language, and also allows you to
-          compare player and team performance to the overall collection averages. Data for players and matches can
-          now be exported in json format from the UI. If you have additional data you'd like to see in those exports,
-          let me know what you'd like to see.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/85">#85</a>
-          Parser: Able to parse replays in all languages.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/90">#90</a>
-          Players and Teams: Overall aggregate data now shows the average, total, min, max, and median for listed stats.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/86">#86</a>
-          Player and Team Details: Collection averages and comparison between selected collection averages
-          now available. Player collection average comparison can be filtered by hero by selecting a hero from
-          the player detail hero dropdown menu.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/94">#94</a>
-          App: Raw player and match data used by the app can now be exported in JSON format
-          from Player Details, Matches, and Match Details.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/100">#100</a>
-          App: More dropdown menus are fully searchable
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/101">#101</a>
-          Team Details: Roster list now scrolls properly.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/106">#106</a>
-          Player Details: Header displays what teams the player is on, if any.
-        </p>
-        <h3 class="ui inverted dividing header">Version 0.2.6</h3>
-        <p>Parser updated to handle builds up to 2.30.4.62833.</p>
-        <p>heroes-talents data updated.</p>
-        <h3 class="ui inverted dividing header">Version 0.2.5</h3>
-        <p>Teams: Corrected issue with pick priority not showing all heroes.</p>
-        <h3 class="ui inverted dividing header">Version 0.2.4</h3>
-        <p>Parser: Switch heroprotocol libraries to <a href="https://github.com/nydus/heroprotocol">nydus/heroprotocol</a>. Parser is way faster.</p>
-        <p>App: Dev tools accessible from Settings menu.</p>
-        <h3 class="ui inverted dividing header">Version 0.2.3</h3>
-        <p>Parser: Corrected an issue where the path to the parser executable was accidentally left on dev settings.</p>
-        <h3 class="ui inverted dividing header">Version 0.2.2</h3>
-        <p>Match Details: Corrected an issue for Braxis Holdout, where beacons would spawn but the game would end before a wave would spawn, causing a crash in the timeline view</p>
-        <h3 class="ui inverted dividing header">Version 0.2.1</h3>
-        <p>Draft Stats: hotfix for pre-2.0 (client version 2.25.0) replays missing draft pick and ban data.</p>
-        <p>Correctly applied player game threshold to Player Details with/against player tables.</p>
-        <h3 class="ui inverted dividing header">Version 0.2.0</h3>
-        <p>
-          Version 0.2.0 brings talent builds and the full draft data to Stats of the Storm, along
-          with a few changes that improve the general performance of the app. Since the draft data is contained
-          in the replay file itself, you'll have to re-import your replays to use the new features. Unfortunately you'll
-          have to do that any time the parser backend changes, so I'll try to keep those changes to a minimum.
-        </p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/92">#92</a> Parser: Added draft order. Parser is now at Version 2. Note: To use this feature you have to re-import your matches. Pick order stats are now shown on team summary pages and the Collection Stats: Heroes page. Thanks to /u/SlapJack1337 on Reddit for showing me where this data is.</p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/93">#93</a> Allow re-import of duplicate</p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/87">#87</a> Match Details: Shows time per talent tier for each team. Additionally, team summaries show average time per talent tier.</p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/59">#59</a> Heroes: Added build stats, which display talent combinations and win rates. Available on Player summary pages and overall hero stat pages.</p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/88">#88</a> App: Any menu that lets you select a player now has a threshold of required matches in the database. This improves the general performance of the app. This is adjustable in settings.</p>
-        <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/91">#91</a> Collection Stats: Players: Changing the focued hero data requires users to click the search button in the filters tab. Accidentally changing that menu's values could lead to an app hang with large databases.</p>
-        <h3 class="ui inverted dividing header">Version 0.1.2</h3>
-        <p>Parser: Corrected an issue where kills were incorrectly attributed to "Nexus Forces" (and also corrected an occasional crash).</p>
-        <h3 class="ui inverted dividing header">Version 0.1.1</h3>
-        <p>Teams: Corrected issue where players could not be added to teams with the Add Player button.</p>
-        <h3 class="ui inverted dividing header">Version 0.1.0</h3>
-        <p>This is the first public release of Stats of the Storm. See the <a href="https://ebshimizu.github.io/stats-of-the-storm/">project page</a> for a full list of features in this release.</p>
+            Thanks to AlexNewell and sakurinha on GitHub for suggesting some of the features in this release.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/89">#89</a>
+            New Feature: Trends. Specify two time spans and see changes in the win, pick, and ban rates of all heroes in the collection.
+            All standard filters are available, so you can see stats for specific maps as well.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/99">#99</a>
+            Player Details: Hero pool stats added. This is a new tab in the All Hero Summary view.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/109">#109</a>
+            Player Details: Progression tab now allows the graphing of any non-map-specific stat.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/95">#95</a>
+            Matches: Re-designed the match list. Matches now scroll, and text does not shrink. Should help
+            with viewing the match list on a small screen. Also added team nameplates (if there are any applicable teams).
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/110">#110</a>
+            Match Details: Team XP graph can be toggled between 'Total XP vs Time' mode and 'Levels vs Time' mode.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/108">#108</a>
+            Player Details, Team Details, Collection: Heroes: A threshold can be set to filter out heroes that have fewer games
+            than the specified threshold.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/111">#111</a>
+            Matches: Matches can be searched conditioned on the win/loss of a specified player or team.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/112">#112</a>
+            Heroes, Team Details: Pick stats have been changed to round based instead of the strict 1-5 order.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/103">#103</a>
+            App: Player names now link to their in-app profile.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/97">#97</a>
+            Player Details: Detailed stats table should no longer show NaN if a stat was missing from the replay.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/107">#107</a>
+            App: Database loading order has been changed in order to produce more detailed errors in case a database
+            fails to load. If you see one of these errors, please report it on GitHub.
+          </p>
+          <p>
+            Talent Descriptions: Updated heroes-talents to handle changes in most recent build 63070.
+          </p>
+          <h3 class="ui inverted dividing header">Version 0.3.1</h3>
+          <p>Parser update for build 63070.</p>
+          <h3 class="ui inverted dividing header">Version 0.3.0</h3>
+          <p>
+            Version 0.3.0 fixes a few bugs, adds additional data views for players and teams, lets you parse replays from
+            any language, and also allows you to
+            compare player and team performance to the overall collection averages. Data for players and matches can
+            now be exported in json format from the UI. If you have additional data you'd like to see in those exports,
+            let me know what you'd like to see.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/85">#85</a>
+            Parser: Able to parse replays in all languages.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/90">#90</a>
+            Players and Teams: Overall aggregate data now shows the average, total, min, max, and median for listed stats.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/86">#86</a>
+            Player and Team Details: Collection averages and comparison between selected collection averages
+            now available. Player collection average comparison can be filtered by hero by selecting a hero from
+            the player detail hero dropdown menu.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/94">#94</a>
+            App: Raw player and match data used by the app can now be exported in JSON format
+            from Player Details, Matches, and Match Details.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/100">#100</a>
+            App: More dropdown menus are fully searchable
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/101">#101</a>
+            Team Details: Roster list now scrolls properly.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/106">#106</a>
+            Player Details: Header displays what teams the player is on, if any.
+          </p>
+          <h3 class="ui inverted dividing header">Version 0.2.6</h3>
+          <p>Parser updated to handle builds up to 2.30.4.62833.</p>
+          <p>heroes-talents data updated.</p>
+          <h3 class="ui inverted dividing header">Version 0.2.5</h3>
+          <p>Teams: Corrected issue with pick priority not showing all heroes.</p>
+          <h3 class="ui inverted dividing header">Version 0.2.4</h3>
+          <p>Parser: Switch heroprotocol libraries to <a href="https://github.com/nydus/heroprotocol">nydus/heroprotocol</a>. Parser is way faster.</p>
+          <p>App: Dev tools accessible from Settings menu.</p>
+          <h3 class="ui inverted dividing header">Version 0.2.3</h3>
+          <p>Parser: Corrected an issue where the path to the parser executable was accidentally left on dev settings.</p>
+          <h3 class="ui inverted dividing header">Version 0.2.2</h3>
+          <p>Match Details: Corrected an issue for Braxis Holdout, where beacons would spawn but the game would end before a wave would spawn, causing a crash in the timeline view</p>
+          <h3 class="ui inverted dividing header">Version 0.2.1</h3>
+          <p>Draft Stats: hotfix for pre-2.0 (client version 2.25.0) replays missing draft pick and ban data.</p>
+          <p>Correctly applied player game threshold to Player Details with/against player tables.</p>
+          <h3 class="ui inverted dividing header">Version 0.2.0</h3>
+          <p>
+            Version 0.2.0 brings talent builds and the full draft data to Stats of the Storm, along
+            with a few changes that improve the general performance of the app. Since the draft data is contained
+            in the replay file itself, you'll have to re-import your replays to use the new features. Unfortunately you'll
+            have to do that any time the parser backend changes, so I'll try to keep those changes to a minimum.
+          </p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/92">#92</a> Parser: Added draft order. Parser is now at Version 2. Note: To use this feature you have to re-import your matches. Pick order stats are now shown on team summary pages and the Collection Stats: Heroes page. Thanks to /u/SlapJack1337 on Reddit for showing me where this data is.</p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/93">#93</a> Allow re-import of duplicate</p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/87">#87</a> Match Details: Shows time per talent tier for each team. Additionally, team summaries show average time per talent tier.</p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/59">#59</a> Heroes: Added build stats, which display talent combinations and win rates. Available on Player summary pages and overall hero stat pages.</p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/88">#88</a> App: Any menu that lets you select a player now has a threshold of required matches in the database. This improves the general performance of the app. This is adjustable in settings.</p>
+          <p><a href="https://github.com/ebshimizu/stats-of-the-storm/issues/91">#91</a> Collection Stats: Players: Changing the focued hero data requires users to click the search button in the filters tab. Accidentally changing that menu's values could lead to an app hang with large databases.</p>
+          <h3 class="ui inverted dividing header">Version 0.1.2</h3>
+          <p>Parser: Corrected an issue where kills were incorrectly attributed to "Nexus Forces" (and also corrected an occasional crash).</p>
+          <h3 class="ui inverted dividing header">Version 0.1.1</h3>
+          <p>Teams: Corrected issue where players could not be added to teams with the Add Player button.</p>
+          <h3 class="ui inverted dividing header">Version 0.1.0</h3>
+          <p>This is the first public release of Stats of the Storm. See the <a href="https://ebshimizu.github.io/stats-of-the-storm/">project page</a> for a full list of features in this release.</p>
+        </div>
+      </div>
+      <div class="ui tab" data-tab="stat-defs">
+        <h2 class="ui inverted header">Stat Definitions</h2>
+        <div class="about-wrapper">
+          <p>
+            The following is a list of stats and their definitions.
+            Not all stats are listed, just ones that may need some additional explanation.
+          </p>
+          <div class="ui inverted relaxed divided list">
+            <div class="item">
+              <div class="header">Takedown</div>
+              A Kill or an Assist. Granted to heroes upon an enemy hero death if the hero has
+              damaged the dead hero within a short time, or are near the enemy hero when they died.
+            </div>
+            <div class="item">
+              <div class="header">Kill</div>
+              Got the last hit that killed a hero.
+            </div>
+            <div class="item">
+              <div class="header">Assist</div>
+              A Takedown (but not the last hit).
+            </div>
+            <div class="item">
+              <div class="header">Kill Participation</div>
+              Percentage of total takedowns the unit participated in. This is [Takedowns] / [Total Team Takedowns].
+              Note that this may sometimes be over 100%, if heroes like Murky, D.Va, or the Lost Vikings are in play
+              due to some odd counting of fractional takedowns.
+            </div>
+            <div class="item">
+              <div class="header">KDA</div>
+              Ratio of Takedowns to Deaths. This is [Takedowns] / [Deaths].
+            </div>
+            <div class="item">
+              <div class="header">Vengeances</div>
+              Internal stat, used for awards. Number of times this hero killed an enemy hero that recently killed an allied hero (I think).
+            </div>
+            <div class="item">
+              <div class="header">Time Dead %</div>
+              [Time Dead] / [Match Length in Seconds]
+            </div>
+            <div class="item">
+              <div class="header">Deaths While Outnumbered (DWO)</div>
+              Number of times the hero died while outnumbered. This may be due to a gank, or they were possibly the last
+              unit standing in a team fight.
+            </div>
+            <div class="item">
+              <div class="header">Escapes</div>
+              Internal stat. Number of times a hero escaped with little health or escaped from an attempted gank?
+              Not actually 100% sure how the game defined an escape.
+            </div>
+            <div class="item">
+              <div class="header">Team Fight Escapes</div>
+              Same as Escapes but specifically from team fights. Team fights are defined internally.
+            </div>
+            <div class="item">
+              <div class="header">Damage per Minute (DPM)</div>
+              [Hero Damage] / [Match Length in Minutes]
+            </div>
+            <div class="item">
+              <div class="header">Physical Damage</div>
+              Physical damage dealt to <em>all units</em> (not just heroes).
+            </div>
+            <div class="item">
+              <div class="header">Ability Damage</div>
+              Ability damage dealth to <em>all units</em> (not just heroes).
+            </div>
+            <div class="item">
+              <div class="header">Damage per Death</div>
+              Damage dealt to heroes per death. [Hero Damage] / [Deaths]
+            </div>
+            <div class="item">
+              <div class="header">Team Fight Hero Damage</div>
+              Damage dealt to heroes in team fights.
+            </div>
+            <div class="item">
+              <div class="header">Siege Damage</div>
+              [Structure Damage] + [Minion Damage] + [Summon Damage]
+            </div>
+            <div class="item">
+              <div class="header">Summon Damage</div>
+              Damage dealt to summons (from Zagara, Nazeebo, etc.).
+            </div>
+            <div class="item">
+              <div class="header">Creep Damage</div>
+              Damage dealt to mercenary camps. Once captured, damage to mercs counts as Minion Damage.
+            </div>
+            <div class="item">
+              <div class="header">Healing Per Mintue</div>
+              [Healing] / [Match Length in Minutes]
+            </div>
+            <div class="item">
+              <div class="header">Healing Per Death</div>
+              [Healing] / [Deaths]
+            </div>
+            <div class="item">
+              <div class="header">Team Fight Healing</div>
+              Healing done during team fights.
+            </div>
+            <div class="item">
+              <div class="header">Damage Soaked</div>
+              This is [Damage Soaked] - [the sum of HP at time of Death]. I remember reading this from Blizzard at one point, but it's been a while.
+            </div>
+            <div class="item">
+              <div class="header">Damage Taken per Death</div>
+              [Damage Taken] / [Deaths]
+            </div>
+            <div class="item">
+              <div class="header">Team Fight Damage Taken</div>
+              Damage taken in team fights. 
+            </div>
+            <div class="item">
+              <div class="header">CC Time</div>
+              Total time that CCs that are not roots, silences, or stuns applied to enemy team.
+              Slows are included as CC.
+            </div>
+            <div class="item">
+              <div class="header">Stun Time</div>
+              Counts sleep as a stun.
+            </div>
+            <div class="item">
+              <div class="header">Time on Fire</div>
+              Only relevant for matchmade games. Time a hero had the flames border around their portrait.
+            </div>
+            <div class="item">
+              <div class="header">Experience per Minute (XPM)</div>
+              [Experience Contribution] / [Match Length in Minutes]
+            </div>
+            <div class="item">
+              <div class="header">People Per Kill (PPK)</div>
+              Team Stat. Number of heroes involved in a takedown on average.
+            </div>
+            <div class="item">
+              <div class="header">Mercenary Uptime</div>
+              Team stat. Percentags of the match length that at least one captured mercenary was active for a team.
+              Note that sappers will probably have a low uptime, due to them blowing themselves up.
+            </div>
+            <div class="item">
+              <div class="header">Time Per Talent Tier</div>
+              Team stat. Length of time a team spent at each talent tier.
+            </div>
+            <div class="item">
+              <div class="header">End of Game Level Differential</div>
+              Team stat. Difference in levels relative to the team at the end of the game.
+              Additional stats for games where the team won and lost are provided.
+            </div>
+            <div class="item">
+              <div class="header">Round [x] %</div>
+              Draft stat. Percentage of the picks where the hero was picked at round [x].
+              Note that round 1 includes the absolute first pick and also the two picks from the
+              other team (that's the first round of draft).
+            </div>
+            <div class="item">
+              <div class="header">First Objective Win</div>
+              Battleground stat. Number of times the team that got the first objective won.
+              For Sky Temple, this is determined by the number of shots each team got. If both teams got the same amount,
+              no team won the objective. For Warhead Junction, this is the team that launched the most out of the first 4 nukes,
+              if both teams launched the same, no team won the objective. For Towers of Doom, this is the team that
+              won 2/3 towers.
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -254,7 +254,7 @@ function initGlobalUIHandlers() {
     $('#team-set-team').dropdown('set value', $(this).attr('team-id'));
     $('#teams-page-header .team-name').text($(this).text());
     changeSection('teams', true);
-  })
+  });
 }
 
 function loadSections() {
@@ -308,6 +308,8 @@ function loadSections() {
   // this can be changed for development to test specific pages of course.
   // this is the dev setting.
   //changeSection('hero-collection');
+
+  $('#about-tab-menu .item').tab();
 
   // this is the release default
   changeSection('matches');
