@@ -51,8 +51,9 @@ Want to help develop? Found a bug? Check out the [project repository](https://gi
 * [Load an External Database](external-db.md)
 * [Do a Clean Uninstall](uninstall.md)
 
-## Replay Reference
+## Reference
 * [Replay File Format Reference](hots-replay-data.md)
+* [Stat Definitions](stat-defs.md)
 
 ## FAQ
 
