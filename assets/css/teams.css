@@ -77,3 +77,11 @@
 #team-roster-stats .section-wrapper {
   height: calc(100% - 30px);
 }
+
+#team-compare-picks tr.contested {
+  background-color: rgb(101, 78, 0);
+}
+
+#team-compare-picks tr.contested:hover {
+  background-color: rgb(138, 117, 0) !important;
+}

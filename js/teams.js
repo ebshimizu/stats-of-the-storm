@@ -454,11 +454,36 @@ function loadTeamComparisonStats(team2, team2Matches, team2Data) {
       }
 
       context.heroName = hero;
+      context.contested = checkContestedPick(context);
+
       $('#team-compare-picks tbody').append(teamCompareHeroPickRowTemplate(context));
     }
   }
 
   hideTeamLoader();
+}
+
+function checkContestedPick(context) {
+  if (!context.team1 || !context.team2) {
+    return '';
+  }
+
+  // current criteria:
+  // - pick rate for one team > 30% + pick % within 10%
+  // - one team pick % large, other team ban % large
+  if (context.team1.pickPct > 0.25 || context.team2.pickPct > 0.25) {
+    if (Math.abs(context.team1.pickPct - context.team2.pickPct) <= 0.1) {
+      return 'contested';
+    }
+  }
+
+  if (context.team1.pickPct > 0.3 && context.team2.banPct > 0.3 ||
+      context.team2.pickPct > 0.3 && context.team1.banPct > 0.3)
+  {
+    return 'contested';
+  }
+
+  return '';
 }
 
 // returns formatted and sort data for the given team data block
