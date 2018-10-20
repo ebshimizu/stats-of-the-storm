@@ -104,4 +104,7 @@ Draft stat. Percentage of the picks where the hero was picked at round [x]. Note
 ### First Objective Win
 Battleground stat. Number of times the team that got the first objective won. For Sky Temple, this is determined by the number of shots each team got. If both teams got the same amount, no team won the objective. For Warhead Junction, this is the team that launched the most out of the first 4 nukes, if both teams launched the same, no team won the objective. For Towers of Doom, this is the team that won 2/3 towers.
 
+### Contested Hero
+Team Details: Compare. Highlighted row in the heroes table on that page. Defined as a hero where both teams have pick %s within 10%, and pick a hero at least 25% of the time, or where one team prioritizes banning a hero that the other team picks (30% threshold for pick and ban rates).
+
 [Back](https://ebshimizu.github.io/stats-of-the-storm/
