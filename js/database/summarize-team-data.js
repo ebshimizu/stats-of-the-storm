@@ -6,6 +6,8 @@ function summarizeTeamData(team, docs, HeroesTalents) {
     totalMatches: docs.length,
     wins: 0,
     totalBans: 0,
+    firstPicks: 0,
+    firstPickWins: 0,
     heroes: {},
     stats: {
       average: {},
@@ -160,6 +162,8 @@ function summarizeTeamData(team, docs, HeroesTalents) {
 
       if (picks.length === 5) {
         if (first) {
+          data.firstPicks += 1;
+
           data.heroes[picks[0]].picks.round1.count += 1;
           data.heroes[picks[1]].picks.round2.count += 1;
           data.heroes[picks[2]].picks.round2.count += 1;
@@ -167,6 +171,8 @@ function summarizeTeamData(team, docs, HeroesTalents) {
           data.heroes[picks[4]].picks.round3.count += 1;
 
           if (t === winner) {
+            data.firstPickWins += 1;
+
             data.heroes[picks[0]].picks.round1.wins += 1;
             data.heroes[picks[1]].picks.round2.wins += 1;
             data.heroes[picks[2]].picks.round2.wins += 1;
