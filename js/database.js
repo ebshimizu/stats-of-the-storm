@@ -1138,6 +1138,7 @@ class Database {
   importDB(otherPath, importTypes, progress, final) {
     const self = this;
     const otherDB = new Database(otherPath);
+    progress('Loading other Database');
     otherDB.load(function() {
       // basically a straight copy with some settings determined by import types
       // import types:
@@ -1147,6 +1148,7 @@ class Database {
       // we're gonna do this all sequentially just to keep things clean (so team data may be accessed even if not copying)
       
       // collections, if applicable
+      progress('Getting Collections');
       otherDB.getCollections(function(err, otherCol) {
         let toInsert = otherCol;
 
@@ -1156,6 +1158,7 @@ class Database {
         }
         self.importCollections(toInsert.pop(), toInsert, progress, function() {
           // teams (and players)
+          progress('Getting Teams');
           otherDB._db.settings.find({ type: 'team' }, function(err, otherTeams) {
             otherDB._db.players.find({}, function(err, otherPlayers) {
               let toInsert = otherTeams;
@@ -1174,6 +1177,7 @@ class Database {
                   }
 
                   // use the regular insert match function, but the data comes from the other database
+                  progress('Getting Matches');
                   otherDB._db.matches.find({}, function(err, otherMatches) {
                     self.importMatches(otherDB, otherMatches.pop(), otherMatches, progress, importTypes.indexOf(ImportType.Collections) !== -1, final);
                   });
