@@ -14,6 +14,12 @@ const LinvoDB = require('linvodb3');
 const medea = require('medea');
 LinvoDB.defaults.store = { db: require('medeadown') };
 
+const ImportType = {
+  Matches: 1,
+  Collections: 2,
+  Teams: 3
+};
+
 // ok so you should never call raw db ops on the _db object unless you are debugging.
 // the Database is able to restrict results to a specified collection, allowing multiple views
 // of the same data. This is automatically handled by the database if you use the DB.query ops
@@ -200,7 +206,7 @@ class Database {
     }
   }
 
-  insertReplay(match, players, collection) {
+  insertReplay(match, players, collection, final) {
     var self = this;
 
     if (!collection) {
@@ -216,33 +222,39 @@ class Database {
         console.log("Duplicate match found, skipping player update");
       }
       else {
-        console.log("Inserted new match " + newDoc._id);
-
         // update and insert players
         for (var i in players) {
           players[i].matchID = newDoc._id;
           players[i].collection = newDoc.collection;
-
-          self._db.heroData.insert(players[i]);
-
-          // log unique players in the player database
-          var playerDbEntry = {};
-          playerDbEntry._id = players[i].ToonHandle;
-          playerDbEntry.name = players[i].name;
-          playerDbEntry.uuid = players[i].uuid;
-          playerDbEntry.region = players[i].region;
-          playerDbEntry.realm = players[i].realm;
-
-          // in general this will ensure the most recent tag gets associated with each player
-          playerDbEntry.tag = players[i].tag;
-
-          var updateEntry = { $set: playerDbEntry, $inc: { matches: 1}};
-
-          self._db.players.update({ _id: playerDbEntry._id }, updateEntry, {upsert: true}, function(err, numReplaced, upsert) {
-            if (err)
-              console.log(err);
-          });
         }
+
+        self._db.heroData.insert(players, function(err, docs) {
+          console.log("Inserted new match " + newDoc._id);
+
+          for (var i in players) {
+            // log unique players in the player database
+            var playerDbEntry = {};
+            playerDbEntry._id = players[i].ToonHandle;
+            playerDbEntry.name = players[i].name;
+            playerDbEntry.uuid = players[i].uuid;
+            playerDbEntry.region = players[i].region;
+            playerDbEntry.realm = players[i].realm;
+
+            // in general this will ensure the most recent tag gets associated with each player
+            playerDbEntry.tag = players[i].tag;
+
+            var updateEntry = { $set: playerDbEntry, $inc: { matches: 1}};
+
+            self._db.players.update({ _id: playerDbEntry._id }, updateEntry, {upsert: true}, function(err, numReplaced, upsert) {
+              if (err)
+                console.log(err);
+            });
+          }
+
+          if (final) {
+            final();
+          }
+        })
       }
     });
   }
@@ -1122,6 +1134,169 @@ class Database {
         callback();
     });
   }
+
+  importDB(otherPath, importTypes, progress, final) {
+    const self = this;
+    const otherDB = new Database(otherPath);
+    otherDB.load(function() {
+      // basically a straight copy with some settings determined by import types
+      // import types:
+      // - matches: copy matches & hero data
+      // - collections: also copy collections if matches selected, just drop matches in if not.
+      // - teams: imports teams (this will also insert players into the database)
+      // we're gonna do this all sequentially just to keep things clean (so team data may be accessed even if not copying)
+      
+      // collections, if applicable
+      otherDB.getCollections(function(err, otherCol) {
+        let toInsert = otherCol;
+
+        // insert
+        if (importTypes.indexOf(ImportType.Collections) === -1) {
+          toInsert = [];
+        }
+        self.importCollections(toInsert.pop(), toInsert, progress, function() {
+          // teams (and players)
+          otherDB._db.settings.find({ type: 'team' }, function(err, otherTeams) {
+            otherDB._db.players.find({}, function(err, otherPlayers) {
+              let toInsert = otherTeams;
+              let playersToInsert = otherPlayers;
+
+              if (importTypes.indexOf(ImportType.Teams) === -1) {
+                toInsert = [];
+                playersToInsert = [];
+              }
+              self.importTeams(toInsert.pop(), toInsert, progress, function() {
+                self.importPlayers(playersToInsert.pop(), playersToInsert, progress, function() {
+                  // matches are complicated a little, but if we're not importing them we can leave now
+                  if (importTypes.indexOf(ImportType.Matches) === -1) {
+                    final();
+                    return;
+                  }
+
+                  // use the regular insert match function, but the data comes from the other database
+                  otherDB._db.matches.find({}, function(err, otherMatches) {
+                    self.importMatches(otherDB, otherMatches.pop(), otherMatches, progress, importTypes.indexOf(ImportType.Collections) !== -1, final);
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    }, () => { });
+  }
+
+  importTeams(team, remaining, progress, final) {
+    if (!team) {
+      final();
+      return;
+    }
+
+    const self = this;
+    progress(`Importing team ${team.name}. Remaining: ${remaining.length}`);
+
+    delete team._id;
+    this._db.settings.update({ type: 'team', name: team.name }, team, { upsert: true }, function(err, changed) {
+      if (err) {
+        console.log(err);
+        final(err);
+        return;
+      }
+
+      if (remaining.length === 0) {
+        final();
+      }
+      else {
+        self.importTeams(remaining.pop(), remaining, progress, final);
+      }
+    });
+  }
+
+  importCollections(collection, remaining, progress, final) {
+    if (!collection) {
+      final();
+      return;
+    }
+
+    const self = this;
+    progress(`Importing collection ${collection.name}. Remaining: ${remaining.length}`);
+
+    delete collection._id;
+    this._db.settings.update({ type: 'collection', name: collection.name }, collection, { upsert: true }, function(err, changed) {
+      if (err) {
+        console.log(err);
+        final(err);
+        return;
+      }
+
+      if (remaining.length === 0) {
+        final();
+      }
+      else {
+        self.importCollections(remaining.pop(), remaining, progress, final);
+      }
+    });
+  }
+
+  importPlayers(player, remaining, progress, final) {
+    if (!player) {
+      final();
+      return;
+    }
+
+    const self = this;
+    progress(`Importing player ${player._id}. Remaining: ${remaining.length}`);
+    
+    this._db.players.update({ _id: player._id }, player, { upsert: true }, function(err, changed) {
+      if (err) {
+        console.log(err);
+        final(err);
+        return;
+      }
+
+      if (remaining.length === 0) {
+        final();
+      }  
+      else {
+        self.importPlayers(remaining.pop(), remaining, progress, final);
+      }
+    });
+  }
+
+  importMatches(otherDB, match, remaining, progress, useCollection, final) {
+    // this one is a bit different than the previous...
+    if (!match) {
+      final();
+      return;
+    }
+
+    progress(`Importing match ${match._id}. Remaining: ${remaining.length}`);
+    const self = this;
+    // need to get the player entries
+    otherDB.getHeroDataForID(match._id, function(err, docs) {
+      if (err) {
+        console.log(err);
+        final(err);
+        return;
+      }
+
+      delete match._id;
+      let collection = useCollection ? match.collection : [];
+
+      for (let i = 0; i < docs.length; i++) {
+        delete docs[i]._id;
+      }
+
+      self.insertReplay(match, docs, collection, function() {
+        if (remaining.length === 0) {
+          final();
+        }
+        else {
+          self.importMatches(otherDB, remaining.pop(), remaining, progress, useCollection, final);
+        }
+      });
+    });
+  }
 }
 
 function dateToWinTime(date) {
@@ -1130,3 +1305,4 @@ function dateToWinTime(date) {
 }
 
 exports.HeroesDatabase = Database;
+exports.ImportType = ImportType;

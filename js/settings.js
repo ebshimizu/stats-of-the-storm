@@ -555,10 +555,11 @@ function loadReplay(data) {
       collection = listedReplays[data.idx].collections;
     }
 
-    DB.insertReplay(data.match, data.players, collection);
-    $('tr[replay-id="' + listedReplays[data.idx].id + '"] .replay-status').
-      text('Success').
-      addClass('positive');
+    DB.insertReplay(data.match, data.players, collection, function() {
+      $('tr[replay-id="' + listedReplays[data.idx].id + '"] .replay-status').
+        text('Success').
+        addClass('positive');
+    });
   }
   else {
     $('tr[replay-id="' + listedReplays[data.idx].id + '"] .replay-status').
