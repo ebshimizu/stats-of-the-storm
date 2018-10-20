@@ -469,7 +469,7 @@ function checkContestedPick(context) {
   }
 
   // current criteria:
-  // - pick rate for one team > 30% + pick % within 10%
+  // - pick rate for one team > 25% + pick % within 10%
   // - one team pick % large, other team ban % large
   if (context.team1.pickPct > 0.25 || context.team2.pickPct > 0.25) {
     if (Math.abs(context.team1.pickPct - context.team2.pickPct) <= 0.1) {
