@@ -177,18 +177,23 @@
                                 <div class="ui fluid red button" id="delete-db-button">Delete</div>
                             </div>
                             <div class="eight wide column"></div>
-                            <div class="eight wide column">
-                                <div class="ui fluid button" id="settings-update-from-url-button">Download External DB</div>
+                            <div class="four wide column">
+                                <div class="ui fluid button" id="settings-import-db-button">
+                                    Import
+                                </div>
+                            </div>
+                            <div class="four wide column">
+                                <div class="ui fluid button" id="settings-update-from-url-button">Download</div>
                             </div>
                             <div class="four wide column">
                                 Dev Tools
                             </div>
-                            <div class="two wide column"></div>
-                            <div class="five wide column">
-                                <div class="ui fluid button" id="show-app-dev-tools">App Dev Tools</div>
+                            <div class="four wide column"></div>
+                            <div class="four wide column">
+                                <div class="ui fluid button" id="show-app-dev-tools">App</div>
                             </div>
-                            <div class="five wide column">
-                                <div class="ui fluid button" id="show-parser-dev-tools">Parser Dev Tools</div>
+                            <div class="four wide column">
+                                <div class="ui fluid button" id="show-parser-dev-tools">Parser</div>
                             </div>
                         </div>
                     </div>
@@ -367,6 +372,60 @@
                         <div class="progress"></div>
                     </div>
                     <div class="label">Downloading File</div>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui green approve button">Start</div>
+            <div class="ui red cancel button">Cancel</div>
+        </div>
+    </div>
+    <div class="ui modal" id="settings-import-other-db">
+        <div class="header">Import Database</div>
+        <div class="content">
+            <div class="description">
+                <p>Merge the contents of a different database with the current database.</p>
+                <p><strong>It is strongly recommended that you back up your current database before importing data.</strong></p>
+                <p>
+                    You may import match data, collections, or teams.
+                    You may also choose to only import a subset of the available options.
+                    The app will reboot when the operation is complete.
+                </p>
+            </div>
+            <div class="ui segment">
+                <form class="ui form">
+                    <div class="fields">
+                        <div class="twelve wide disabled field">
+                            <label>Path of Database to Import</label>
+                            <input type="text" id="settings-import-other-db-path">
+                        </div>
+                        <div class="four wide field">
+                            <label>Select Database</label>
+                            <div class="ui fluid labeled blue icon button" id="settings-import-other-db-browse">
+                                <i class="folder icon"></i>
+                                Browse
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Data to Import</label>
+                        <div class="ui fluid multiple selection dropdown" id="settings-import-other-db-menu">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">All</div>
+                            <div class="menu">
+                                <div class="item" data-value="1">Matches</div>
+                                <div class="item" data-value="2">Collections</div>
+                                <div class="item" data-value="3">Teams</div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="ui icon message is-hidden">
+                <i class="notched circle loading icon"></i>
+                <div class="content">
+                    <div class="header">Import Status</div>
+                    <p id="settings-import-other-db-status"></p>
                 </div>
             </div>
         </div>

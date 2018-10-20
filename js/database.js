@@ -1150,17 +1150,37 @@ class Database {
       // collections, if applicable
       progress('Getting Collections');
       otherDB.getCollections(function(err, otherCol) {
+        if (err) {
+          final(err);
+          return;
+        }
+
         let toInsert = otherCol;
 
         // insert
         if (importTypes.indexOf(ImportType.Collections) === -1) {
           toInsert = [];
         }
-        self.importCollections(toInsert.pop(), toInsert, progress, function() {
+        self.importCollections(toInsert.pop(), toInsert, progress, function(err) {
+          if (err) {
+            final(err);
+            return;
+          }
+
           // teams (and players)
           progress('Getting Teams');
           otherDB._db.settings.find({ type: 'team' }, function(err, otherTeams) {
+            if (err) {
+              final(err);
+              return;
+            }
+
             otherDB._db.players.find({}, function(err, otherPlayers) {
+              if (err) {
+                final(err);
+                return;
+              }
+
               let toInsert = otherTeams;
               let playersToInsert = otherPlayers;
 
@@ -1168,8 +1188,18 @@ class Database {
                 toInsert = [];
                 playersToInsert = [];
               }
-              self.importTeams(toInsert.pop(), toInsert, progress, function() {
-                self.importPlayers(playersToInsert.pop(), playersToInsert, progress, function() {
+              self.importTeams(toInsert.pop(), toInsert, progress, function(err) {
+                if (err) {
+                  final(err);
+                  return;
+                }
+
+                self.importPlayers(playersToInsert.pop(), playersToInsert, progress, function(err) {
+                  if (err) {
+                    final(err);
+                    return;
+                  }
+
                   // matches are complicated a little, but if we're not importing them we can leave now
                   if (importTypes.indexOf(ImportType.Matches) === -1) {
                     final();
@@ -1179,6 +1209,10 @@ class Database {
                   // use the regular insert match function, but the data comes from the other database
                   progress('Getting Matches');
                   otherDB._db.matches.find({}, function(err, otherMatches) {
+                    if (err) {
+                      final(err);
+                      return;
+                    }
                     self.importMatches(otherDB, otherMatches.pop(), otherMatches, progress, importTypes.indexOf(ImportType.Collections) !== -1, final);
                   });
                 });

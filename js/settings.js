@@ -281,6 +281,12 @@ function initSettingsPage() {
 
   $('#compact-and-reload-button').click(compactAndReload);
   $('#settings-update-from-url-button').click(startUpdateFromUrl);
+
+  // import db handles
+  $('#settings-import-other-db-menu').dropdown();
+  $('#settings-import-other-db-browse').click(selectDBToImport);
+
+  $('#settings-import-db-button').click(importOtherDatabase);
 }
 
 function showSettingsPage() {
@@ -1184,4 +1190,62 @@ function cleanUpDownload() {
     app.relaunch();
     app.quit();
   }, 2000);
+}
+
+function selectDBToImport() {
+  dialog.showOpenDialog({
+    title: 'Select Database to Import',
+    properties: ["openDirectory"]
+  }, function(files) {
+    if (files) {
+      // pick the first, should only be 1 dir
+      let path = files[0];
+      $('#settings-import-other-db-path').val(path);
+    }
+  });
+}
+
+function importOtherDatabase() {
+  $('#settings-import-other-db-menu').dropdown('set exactly', ['1','2','3']);
+  $('#settings-import-other-db .message').addClass('is-hidden');
+
+  $('#settings-import-other-db').modal({
+    closable: false,
+    onApprove: function() {
+      // collect data
+      let path = $('#settings-import-other-db-path').val();
+      let importData = $('#settings-import-other-db-menu').dropdown('get value').split(',');
+      for (let i = 0; i < importData.length; i++) {
+        importData[i] = parseInt(importData[i]);
+      }
+
+      $('#settings-import-other-db .message').removeClass('is-hidden');
+      $('#settings-import-other-db .form .field').addClass('disabled');
+
+      // run the thing
+      DB.importDB(
+        path,
+        importData,
+        function(msg) {
+          $('#settings-import-other-db-status').text(msg);
+        },
+        function(err) {
+          // then reboot
+          if (err) {
+            $('#settings-import-other-db-status').text(`Error: ${err}. Please file a bug report and reboot the app.`);
+          }
+          else {
+            $('#settings-import-other-db-status').text(`Cleaning up. App will restart shortly.`);
+            setTimeout(() => {
+              app.relaunch();
+              app.quit();
+            }, 5000);
+          }
+        }
+      );
+
+      return false;
+    }
+  }).
+  modal('show');
 }
