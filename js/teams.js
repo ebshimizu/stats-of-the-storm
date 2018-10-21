@@ -353,6 +353,9 @@ function loadTeamData(team, matches, heroData) {
     updateTeamStat(elem, 'root', formatSeconds(teamStats.stats.average.TimeRootingEnemyHeroes));
     updateTeamStat(elem, 'silence', formatSeconds(teamStats.stats.average.TimeSilencingEnemyHeroes));
     updateTeamStat(elem, 'stun', formatSeconds(teamStats.stats.average.TimeStunningEnemyHeroes));
+
+    updateTeamStat(elem, 'first-pick-pct', formatStat('pct', teamStats.firstPicks / teamStats.totalMatches));
+    updateTeamStat(elem, 'first-pick-win', formatStat('pct', teamStats.firstPicks === 0 ? 0 : teamStats.firstPickWins / teamStats.firstPicks));
   }
   catch (e) {
     // basically if a team has no people this will likely throw an exception.

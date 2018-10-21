@@ -724,6 +724,16 @@ const TeamRankingFormat = {
       data: 'totalMatches'
     },
     {
+      title: 'First Pick %',
+      data: (row) => row.firstPicks / row.totalMatches,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'First Pick Win %',
+      data: (row) => { return row.firstPicks === 0 ? 0 : row.firstPickWins / row.firstPicks },
+      render: (data) => formatStat('pct', data)
+    },
+    {
       title: 'KDA',
       data: 'selectedStats.totalKDA',
       render: (data) => formatStat('KDA', data)
