@@ -50,7 +50,9 @@ function summarizeHeroData(docs) {
         awards: {},
         totalTime: 0,
         votes: 0,
-        highestStreak: 0
+        highestStreak: 0,
+        with: {},
+        against: {}
       };
       playerDetailStats.max[match.hero] = { timeDeadPct: 0 };
       playerDetailStats.min[match.hero] = { timeDeadPct: 100 };
@@ -151,9 +153,16 @@ function summarizeHeroData(docs) {
         playerDetailStats.withPlayer[match.with.ids[j]].games += 1;
         playerDetailStats.withHero[match.with.heroes[j]].games += 1;
 
+        if (!(match.with.heroes[j] in playerDetailStats.heroes[match.hero].with)) {
+          playerDetailStats.heroes[match.hero].with[match.with.heroes[j]] = { games: 0, wins: 0 };
+        }
+
+        playerDetailStats.heroes[match.hero].with[match.with.heroes[j]].games += 1;
+
         if (match.win) {
           playerDetailStats.withPlayer[match.with.ids[j]].wins += 1;
           playerDetailStats.withHero[match.with.heroes[j]].wins += 1;
+          playerDetailStats.heroes[match.hero].with[match.with.heroes[j]].wins += 1;
         }
       }
 
@@ -164,12 +173,19 @@ function summarizeHeroData(docs) {
         playerDetailStats.againstHero[match.against.heroes[j]] = { name: match.against.heroes[j], games: 0, defeated: 0 };
       }
 
+      if (!(match.against.heroes[j] in playerDetailStats.heroes[match.hero].against)) {
+        playerDetailStats.heroes[match.hero].against[match.against.heroes[j]] = { games: 0, wins: 0 };
+      }
+
+      playerDetailStats.heroes[match.hero].against[match.against.heroes[j]].games += 1;
+
       playerDetailStats.againstPlayer[match.against.ids[j]].games += 1;
       playerDetailStats.againstHero[match.against.heroes[j]].games += 1;
 
       if (match.win) {
         playerDetailStats.againstPlayer[match.against.ids[j]].defeated += 1;
         playerDetailStats.againstHero[match.against.heroes[j]].defeated += 1;
+        playerDetailStats.heroes[match.hero].against[match.against.heroes[j]].wins += 1;
       }
     }
 
