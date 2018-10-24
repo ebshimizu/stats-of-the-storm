@@ -508,7 +508,7 @@ const TeamHeroSummaryFormat = {
     },
     {
       title: 'Avg. Time Dead',
-      data: 'TimeSpentDead',
+      data: 'stats.TimeSpentDead',
       render: (data) => formatStat('Time', data)
     },
     {
@@ -1083,5 +1083,5 @@ exports.PlayerRankingStatFormat = playerRankingStatFormat();
 exports.TeamRankingFormat = TeamRankingFormat;
 exports.AwardsTrackerFormat = awardsTrackerFormat();
 exports.preprocessAwards = preprocessAwards;
-exports.PlayerDuoWithFormat = playerHeroDuoFormat('with');
-exports.PlayerDuoAgainstFormat = playerHeroDuoFormat('against');
+//exports.PlayerDuoWithFormat = playerHeroDuoFormat('with');
+//exports.PlayerDuoAgainstFormat = playerHeroDuoFormat('against');
