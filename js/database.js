@@ -223,12 +223,14 @@ class Database {
       }
       else {
         // update and insert players
+        let parr = [];
         for (var i in players) {
           players[i].matchID = newDoc._id;
           players[i].collection = newDoc.collection;
+          parr.push(players[i]);
         }
 
-        self._db.heroData.insert(players, function(err, docs) {
+        self._db.heroData.insert(parr, function(err, docs) {
           console.log("Inserted new match " + newDoc._id);
 
           for (var i in players) {
