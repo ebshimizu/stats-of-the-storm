@@ -1,6 +1,7 @@
 const { median } = require("../util/math");
 const DetailStatList = require("../game-data/detail-stat-list");
 const PerMapStatList = require("../game-data/map-stats.js");
+const ReplayTypes = require('../../hots-parser/constants');
 
 // this will go an process a set of heroData into a set of stats divided
 // by hero, and by map

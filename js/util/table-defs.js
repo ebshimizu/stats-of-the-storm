@@ -1022,6 +1022,49 @@ function awardsTrackerFormat() {
   }
 }
 
+function playerHeroDuoFormat(type) {
+  let columns = [
+    {
+      title: 'Hero',
+      data: 'key',
+      render: heroHeader
+    }
+  ];
+
+  // aaaand now the heroes
+  for (let hero in Heroes.allHeroNames()) {
+    columns.push({
+      title: hero,
+      data: (row) => {
+        if (hero in row[type]) {
+          return row[type].wins / row[type].games;
+        }
+        
+        return 0;
+      },
+      render: (data, type, row) => {
+        if (hero in row[type]) {
+          return `<span class="player-duo-cell">${formatStat('pct', data)} (${row[type].wins} - ${row[type].games - row[type].wins})</span>`;
+        }
+
+        return '';
+      }
+    });
+  }
+
+  return {
+    columns,
+    order: [[0, 'asc']],
+    paging: false,
+    info: false,
+    scrollY: 'calc(100vh - 360px)',
+    scrollyX: true,
+    searching: false,
+    fixedColumns: true,
+    scrollCollapse: true
+  };
+}
+
 exports.Table = Table;
 exports.PlayerVsTableFormat = PlayerVsTableFormat;
 exports.PlayerVsPlayerFormat = PlayerVsPlayerFormat;
@@ -1040,3 +1083,5 @@ exports.PlayerRankingStatFormat = playerRankingStatFormat();
 exports.TeamRankingFormat = TeamRankingFormat;
 exports.AwardsTrackerFormat = awardsTrackerFormat();
 exports.preprocessAwards = preprocessAwards;
+exports.PlayerDuoWithFormat = playerHeroDuoFormat('with');
+exports.PlayerDuoAgainstFormat = playerHeroDuoFormat('against');
