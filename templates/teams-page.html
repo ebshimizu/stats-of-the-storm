@@ -43,6 +43,7 @@
       <div class="ui secondary inverted pointing menu" id="teams-submenu">
         <a class="active item" data-tab="team-overall-stats">Overall</a>
         <a class="item" data-tab="team-roster-stats">Roster</a>
+        <a class="item" data-tab="team-duos">Duos</a>
         <a class="item" data-tab="team-comparison-stats">Compare</a>
         <a class="item external-match-history"><i class="external icon"></i>Match History</a>
       </div>
@@ -459,6 +460,38 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ui tab" data-tab="team-duos" id="team-duos">
+        <div class="section-wrapper">
+          <div class="ui secondary inverted menu" id="team-duos-sub">
+            <a class="active item" data-tab="duo-with">With</a>
+            <a class="item" data-tab="duo-against">Against</a>
+          </div>
+          <div class="ui active tab" data-tab="duo-with">
+            <div class="ui inverted segment">
+              <div class="ui top attached label">Duos: With Hero</div>
+              <table class="ui selectable celled inverted table" id="team-duo-with">
+                <thead>
+                </thead>
+                <tbody>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="ui tab" data-tab="duo-against">
+            <div class="ui inverted segment">
+              <div class="ui top attached label">Duos: Against Hero</div>
+              <table class="ui selectable celled inverted table" id="team-duo-against">
+                <thead>
+                </thead>
+                <tbody>
+
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

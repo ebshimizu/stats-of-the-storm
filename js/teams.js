@@ -13,7 +13,9 @@ var teamTables = {
   bans: null,
   againstHero: null,
   compareVsAvg: null,
-  maps: null
+  maps: null,
+  duosWith: null,
+  duosAgainst: null
 }
 
 function initTeamsPage() {
@@ -38,6 +40,8 @@ function initTeamsPage() {
   teamTables.heroSummary = new Table('#team-hero-summary-table table', TableDefs.TeamHeroSummaryFormat);
   teamTables.bans = new Table('#team-ban-summary table', TableDefs.TeamBanSummaryFormat);
   teamTables.compareVsAvg = new Table('#team-compare-table table', TableDefs.TeamCompareToAvgFormat);
+  teamTables.duosWith = new Table('#team-duo-with', TableDefs.PlayerDuoWithFormat);
+  teamTables.duosAgainst = new Table('#team-duo-against', TableDefs.PlayerDuoAgainstFormat);
 
   teamRosterRowTemplate = getHandlebars('teams', '#team-roster-row');
   teamCompareHeroPickRowTemplate = getHandlebars('teams', '#team-roster-hero-compare-row');
@@ -69,6 +73,12 @@ function initTeamsPage() {
 
   $('#team-detail-body th.stat').data('sortBy', function(th, td, tablesort) {
     return parseFloat(td.attr('data-sort-value'));
+  });
+
+  $('#team-duos-sub .item').tab();
+  $('#team-duos-sub .item').click(function() {
+    teamTables.duosWith.draw();
+    teamTables.duosAgainst.draw();
   });
 
   $('#teams-submenu .item').tab();
@@ -279,6 +289,9 @@ function loadTeamData(team, matches, heroData) {
   }
   teamTables.bans.setData(heroBanData);
   teamTables.bans.filterByMinGames(teamHeroMatchThresh);
+
+  teamTables.duosWith.setDataFromObject(teamStats.heroes);
+  teamTables.duosAgainst.setDataFromObject(teamStats.heroes);
 
   // other stats
   try {

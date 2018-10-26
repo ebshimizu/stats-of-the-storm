@@ -1,5 +1,26 @@
 const { median } = require("../util/math");
 
+function newHeroData() {
+  return {
+    first: 0,
+    second: 0,
+    wins: 0,
+    bans: 0,
+    games: 0,
+    involved: 0,
+    gamesAgainst: 0,
+    defeated: 0,
+    with: {},
+    against: {},
+    banAgainst: 0,
+    picks: {
+      round1: { count: 0, wins: 0 },
+      round2: { count: 0, wins: 0 },
+      round3: { count: 0, wins: 0 }
+    }
+  };
+}
+
 // special version of summarize match data that only pulls stats from one of the teams
 function summarizeTeamData(team, docs, HeroesTalents) {
   const data = {
@@ -131,27 +152,31 @@ function summarizeTeamData(team, docs, HeroesTalents) {
       let hero = teamHeroes[h];
 
       if (!(hero in data.heroes)) {
-        data.heroes[hero] = {
-          first: 0,
-          second: 0,
-          wins: 0,
-          bans: 0,
-          games: 0,
-          involved: 0,
-          gamesAgainst: 0,
-          defeated: 0,
-          picks: {
-            round1: { count: 0, wins: 0 },
-            round2: { count: 0, wins: 0 },
-            round3: { count: 0, wins: 0 }
-          }
-        };
+        data.heroes[hero] = newHeroData();
       }
 
       data.heroes[hero].games += 1;
       data.heroes[hero].involved += 1;
       if (t === winner) {
         data.heroes[hero].wins += 1;
+      }
+
+      // with stats
+      for (let h2 in teamHeroes) {
+        let hero2 = teamHeroes[h2];
+        
+        if (hero2 === hero)
+          continue;
+
+        if (!(hero2 in data.heroes[hero].with)) {
+          data.heroes[hero].with[hero2] = { name: hero2, games: 0, wins: 0 };
+        }
+
+        data.heroes[hero].with[hero2].games += 1;
+
+        if (t === winner) {
+          data.heroes[hero].with[hero2].wins += 1;
+        }
       }
     }
 
@@ -202,25 +227,26 @@ function summarizeTeamData(team, docs, HeroesTalents) {
     for (let h in otherTeamHeroes) {
       let hero = otherTeamHeroes[h];
       if (!(hero in data.heroes)) {
-        data.heroes[hero] = {
-          first: 0,
-          second: 0,
-          wins: 0,
-          bans: 0,
-          games: 0,
-          involved: 0,
-          gamesAgainst: 0,
-          defeated: 0,
-          picks: {
-            round1: { count: 0, wins: 0 },
-            round2: { count: 0, wins: 0 },
-            round3: { count: 0, wins: 0 }
-          }
-        };
+        data.heroes[hero] = newHeroData();
       }
       data.heroes[hero].gamesAgainst += 1;
       if (t === winner) {
         data.heroes[hero].defeated += 1;
+      }
+
+      // against stats
+      for (let teamHero in teamHeroes) {
+        let th = teamHeroes[teamHero];
+
+        if (!(hero in data.heroes[th].against)) {
+          data.heroes[th].against[hero] = { name: hero, games: 0, wins: 0 };
+        }
+
+        data.heroes[th].against[hero].games += 1;
+
+        if (t === winner) {
+          data.heroes[th].against[hero].wins += 1;
+        }
       }
     }
 
@@ -234,21 +260,7 @@ function summarizeTeamData(team, docs, HeroesTalents) {
         let hero = HeroesTalents.heroNameFromAttr(match.bans[t][b].hero);
 
         if (!(hero in data.heroes)) {
-          data.heroes[hero] = {
-            first: 0,
-            second: 0,
-            wins: 0,
-            bans: 0,
-            games: 0,
-            involved: 0,
-            gamesAgainst: 0,
-            defeated: 0,
-            picks: {
-              round1: { count: 0, wins: 0 },
-              round2: { count: 0, wins: 0 },
-              round3: { count: 0, wins: 0 }
-            }
-          };
+          data.heroes[hero] = newHeroData();
         }
 
         data.heroes[hero].involved += 1;
@@ -260,6 +272,21 @@ function summarizeTeamData(team, docs, HeroesTalents) {
         } else if (match.bans[t][b].order === 2) {
           data.heroes[hero].second += 1;
         }
+      }
+
+      // bans against
+      let otherTeamBans = t === 0 ? match.bans[1] : match.bans[0];
+      for (let b in otherTeamBans) {
+        if (otherTeamBans[b].hero === '')
+          continue;
+
+        let hero = HeroesTalents.heroNameFromAttr(otherTeamBans[b].hero);
+        if (!(hero in data.heroes)) {
+          data.heroes[hero] = newHeroData();
+        }
+
+        // that's it that's all the data we wanted out of this
+        data.heroes[hero].banAgainst += 1;
       }
     } catch (e) {
       // usually thrown for quick match. if picks aren't being recorded, uncomment this.

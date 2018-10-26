@@ -251,7 +251,10 @@ function initPlayerPage() {
   playerTables.duoAgainstTable = new Table('#player-duo-against', TableDefs.PlayerDuoAgainstFormat);
 
   $('#player-big-table-sub .item').tab();
-  $('#player-big-table-sub .item').click(redrawPlayerTables);
+  $('#player-big-table-sub .item').click(function() {
+    playerTables.duoWithTable.draw();
+    playerTables.duoAgainstTable.draw();
+  });
   $('#player-detail-hero-talent table').tablesort();
 
   playerTables.detailStatTable = new Table('#player-hero-detail-stats table', TableDefs.PlayerDetailStatFormat);
