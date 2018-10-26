@@ -203,6 +203,7 @@ p.status {
   left: 0;
   top: 0;
   z-index: 2;
+  font-size: 0.8vw;
 }
 
 .DTFC_LeftWrapper {

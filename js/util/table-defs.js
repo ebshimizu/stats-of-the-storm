@@ -1064,7 +1064,7 @@ function playerHeroDuoFormat(type) {
 
           return `
             <div class="player-duo-cell">
-              <div class="cell-text">${formatStat('pct', data)} (${row[type][hero].wins} - ${row[type][hero].games - row[type][hero].wins})</div>
+              <div class="cell-text">${formatStat('pct', data)}<br />${row[type][hero].wins} - ${row[type][hero].games - row[type][hero].wins}</div>
             </div>
             <div class="duo-bg ${classname}"></div>
           `;
@@ -1080,7 +1080,7 @@ function playerHeroDuoFormat(type) {
     order: [[0, 'asc']],
     paging: false,
     info: false,
-    scrollY: 'calc(100vh - 360px)',
+    scrollY: 'calc(100vh - 380px)',
     scrollX: true,
     searching: false,
     fixedColumns: true,
