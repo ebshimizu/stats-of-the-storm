@@ -105,9 +105,13 @@
   height: calc(100% - 90px);
 }
 
-#player-detail-award-tracker h3.image.header {
+#player-detail-award-tracker h3.image.header,
+#player-duo-with h3.image.header,
+#player-duo-against h3.image.header
+{
   width: 200px;
 }
+
 
 #player-detail-award-tracker .segment {
   height: 100%;

@@ -1032,22 +1032,45 @@ function playerHeroDuoFormat(type) {
   ];
 
   // aaaand now the heroes
-  for (let hero in Heroes.allHeroNames()) {
+  for (let hero of Heroes.allHeroNames) {
     columns.push({
       title: hero,
+      className: 'duo-cell',
       data: (row) => {
         if (hero in row[type]) {
-          return row[type].wins / row[type].games;
+          return row[type][hero].wins / row[type][hero].games;
         }
         
         return 0;
       },
-      render: (data, type, row) => {
+      render: (data, t, row) => {
         if (hero in row[type]) {
-          return `<span class="player-duo-cell">${formatStat('pct', data)} (${row[type].wins} - ${row[type].games - row[type].wins})</span>`;
+          // determine the class out of the five options based on win rate
+          // fail (0-25), bad (25-35), poor (35-45), neutral (45-55), good (55-65), great (65-75), excellent (75+)
+          let classname = 'fail';
+
+          if (data > 0.25)
+            classname = 'bad';
+          if (data > 0.35)
+            classname = 'poor'
+          if (data > 0.45)
+            classname = 'neutral';
+          if (data > 0.55)
+            classname = 'good';
+          if (data > 0.65)
+            classname = 'great';
+          if (data > 0.75)
+            classname = 'excellent';
+
+          return `
+            <div class="player-duo-cell">
+              <div class="cell-text">${formatStat('pct', data)} (${row[type][hero].wins} - ${row[type][hero].games - row[type][hero].wins})</div>
+            </div>
+            <div class="duo-bg ${classname}"></div>
+          `;
         }
 
-        return '';
+        return '<div class="player-duo-cell empty"></div>';
       }
     });
   }
@@ -1058,7 +1081,7 @@ function playerHeroDuoFormat(type) {
     paging: false,
     info: false,
     scrollY: 'calc(100vh - 360px)',
-    scrollyX: true,
+    scrollX: true,
     searching: false,
     fixedColumns: true,
     scrollCollapse: true
@@ -1083,5 +1106,5 @@ exports.PlayerRankingStatFormat = playerRankingStatFormat();
 exports.TeamRankingFormat = TeamRankingFormat;
 exports.AwardsTrackerFormat = awardsTrackerFormat();
 exports.preprocessAwards = preprocessAwards;
-//exports.PlayerDuoWithFormat = playerHeroDuoFormat('with');
-//exports.PlayerDuoAgainstFormat = playerHeroDuoFormat('against');
+exports.PlayerDuoWithFormat = playerHeroDuoFormat('with');
+exports.PlayerDuoAgainstFormat = playerHeroDuoFormat('against');

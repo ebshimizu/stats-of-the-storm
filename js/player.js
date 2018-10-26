@@ -24,7 +24,9 @@ var playerTables ={
   playerCmpTable: null,
   heroSummaryTable: null,
   detailStatTable: null,
-  awardTrackerTable: null
+  awardTrackerTable: null,
+  duoWithTable: null,
+  duoAgainstTable: null
 }
 
 const IntervalMode = {
@@ -245,7 +247,11 @@ function initPlayerPage() {
   playerTables.playerCmpTable = new Table('#player-compare-table table', TableDefs.PlayerCompareToAvgFormat);
   playerTables.heroSummaryTable = new Table('#player-detail-hero-summary table', TableDefs.HeroSummaryFormat);
   playerTables.awardTrackerTable = new Table('#player-detail-award-tracker table', TableDefs.AwardsTrackerFormat);
+  playerTables.duoWithTable = new Table('#player-duo-with', TableDefs.PlayerDuoWithFormat);
+  playerTables.duoAgainstTable = new Table('#player-duo-against', TableDefs.PlayerDuoAgainstFormat);
 
+  $('#player-big-table-sub .item').tab();
+  $('#player-big-table-sub .item').click(redrawPlayerTables);
   $('#player-detail-hero-talent table').tablesort();
 
   playerTables.detailStatTable = new Table('#player-hero-detail-stats table', TableDefs.PlayerDetailStatFormat);
@@ -601,20 +607,7 @@ function processPlayerData(err, docs) {
   }
   $('#player-hero-select-menu').dropdown('refresh');
 
-  // render to the proper spots
-  renderAllHeroSummary();
-  renderPlayerSummary();
-  renderPlayerHeroDetail();
-  renderProgression();
-
-  playerTables.awardTrackerTable.clear();
-  playerTables.awardTrackerTable.setDataFromObject(playerDetailStats.heroes);
-
-  let val = $('#player-compare-collection').dropdown('get value');
-  updatePlayerCollectionCompare(val, null, $('#player-compare-collection .menu .item[data-value="' + val + '"]'));
-  $('#player-detail-body th').removeClass('sorted ascending descending');
-
-  hidePlayerLoader();
+  renderPlayerData();
 }
 
 // callback for hero select menu
@@ -625,15 +618,7 @@ function showHeroDetails(value, text, $selectedItem) {
     showPlayerLoader();
     DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, playerDetailFilter, function(err, docs) {
       playerDetailStats = summarizeHeroData(docs);
-      renderAllHeroSummary();
-      renderPlayerSummary();
-      renderProgression();
-      updateHeroTitle($('#player-detail-summary-header'), value);
-      
-      let val = $('#player-compare-collection').dropdown('get value');
-      updatePlayerCollectionCompare(val, null, $('#player-compare-collection .menu .item[data-value="' + val + '"]'));
-
-      hidePlayerLoader();
+      renderPlayerData();
     });
   }
   else if (currentPlayerHero !== value) {
@@ -644,21 +629,39 @@ function showHeroDetails(value, text, $selectedItem) {
 
     DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, query, function(err, docs) {
       playerDetailStats = summarizeHeroData(docs);
-
-      renderHeroTalents(value, docs);
-      renderPlayerSummary();
-      renderProgression();
-      updateHeroTitle($('#player-detail-summary-header'), value);
-
-      let val = $('#player-compare-collection').dropdown('get value');
-      updatePlayerCollectionCompare(val, null, $('#player-compare-collection .menu .item[data-value="' + val + '"]'));
-
-      hidePlayerLoader();
+      renderPlayerData(value, docs);
     });
   }
 
   currentPlayerHero = value;
   $('#player-detail-body th').removeClass('sorted ascending descending');
+}
+
+function renderPlayerData(value, talents) {
+  // render to the proper spots
+  if (value) {
+    renderHeroTalents(value, talents);
+    updateHeroTitle($('#player-detail-summary-header'), value);
+  }
+  else {
+    renderAllHeroSummary();
+    updateHeroTitle($('#player-detail-summary-header'), 'all');
+  }
+
+  renderPlayerSummary();
+  renderPlayerHeroDetail();
+  renderProgression();
+
+  playerTables.awardTrackerTable.clear();
+  playerTables.awardTrackerTable.setDataFromObject(playerDetailStats.heroes);
+  playerTables.duoWithTable.setDataFromObject(playerDetailStats.heroes);
+  playerTables.duoAgainstTable.setDataFromObject(playerDetailStats.heroes);
+
+  let val = $('#player-compare-collection').dropdown('get value');
+  updatePlayerCollectionCompare(val, null, $('#player-compare-collection .menu .item[data-value="' + val + '"]'));
+  $('#player-detail-body th').removeClass('sorted ascending descending');
+
+  hidePlayerLoader();
 }
 
 function updateHeroTitle(container, value) {

@@ -48,6 +48,7 @@
       <div class="ui secondary inverted pointing menu" id="player-detail-submenu">
         <a class="active item" data-tab="player-summary">Summary</a>
         <a class="item" data-tab="player-hero-detail">Detailed Hero Stats Table</a>
+        <a class="item" data-tab="player-big-tables">Duos</a>
         <a class="item" data-tab="player-hero-award-tracker">Award Tracker</a>
         <a class="item" data-tab="player-progression">Progression</a>
       </div>
@@ -570,6 +571,36 @@
                 </tr>
               </thead>
               <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="ui tab player-detail-wrapper" data-tab="player-big-tables" id="player-big-tables">
+        <div class="ui secondary inverted menu" id="player-big-table-sub">
+          <a class="active item" data-tab="duo-with">With</a>
+          <a class="item" data-tab="duo-against">Against</a>
+        </div>
+        <div class="ui active tab" data-tab="duo-with">
+          <div class="ui inverted segment">
+            <div class="ui top attached label">Duos: With Hero</div>
+            <table class="ui selectable celled inverted table" id="player-duo-with">
+              <thead>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="ui tab" data-tab="duo-against">
+          <div class="ui inverted segment">
+            <div class="ui top attached label">Duos: Against Hero</div>
+            <table class="ui selectable celled inverted table" id="player-duo-against">
+              <thead>
+              </thead>
+              <tbody>
+
               </tbody>
             </table>
           </div>

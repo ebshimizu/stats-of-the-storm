@@ -61,6 +61,12 @@ const cp = require('child_process');
 const HeroesDB = require('./js/database.js');
 const Parser = require('./hots-parser/parser.js');
 const HeroesTalents = require('./js/heroes-talents.js');
+
+// load the heroes talents database
+// i need to do this earlier, so uh, here we are.
+console.log('Loading Heroes Talents database');
+const Heroes = new HeroesTalents.HeroesTalents(path.join(__dirname, '/assets/heroes-talents'), path.join(__dirname, '/assets/data'));
+
 const ReplayTypes = require('./hots-parser/constants.js');
 
 const summarizeHeroData = require('./js/database/summarize-hero-data');
@@ -92,7 +98,6 @@ $.fn.datepicker.setDefaults({
 });
 
 var DB;
-var Heroes;
 var sections = {};
 var prevSections = [];
 
@@ -194,10 +199,6 @@ function loadDatabase() {
     finishCopyZipContents();
     settings.set('completeDownload', false);
   }
-
-  console.log('Loading Heroes Talents database');
-  // load the heroes talents database
-  Heroes = new HeroesTalents.HeroesTalents(path.join(__dirname, '/assets/heroes-talents'), path.join(__dirname, '/assets/data'));
 
   const dbPath = settings.get('dbPath');
   console.log("Database loading from " + dbPath);
