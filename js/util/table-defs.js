@@ -556,22 +556,31 @@ const TeamBanSummaryFormat = {
       data: 'bans'
     },
     {
-      title: '1st Ban %',
+      title: '1st %',
       data: (row) => row.first / row.totalMatches,
       render: (data) => formatStat('pct', data)
     },
     {
-      title: '1st Bans',
+      title: '1st',
       data: 'first'
     },
     {
-      title: '2nd Ban %',
+      title: '2nd %',
       data: (row) => row.second / row.totalMatches,
       render: (data) => formatStat('pct', data)
     },
     {
-      title: '2nd Bans',
+      title: '2nd',
       data: 'second'
+    },
+    {
+      title: 'Against %',
+      data: (row) => row.banAgainst / row.totalMatches,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Against',
+      data: 'banAgainst'
     }
   ],
   scrollY: STANDARD_SEGMENT_HEIGHT,

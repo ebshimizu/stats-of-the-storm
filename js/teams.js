@@ -283,6 +283,10 @@ function loadTeamData(team, matches, heroData) {
   for (let h in teamStats.heroes) {
     const hero = teamStats.heroes[h];
 
+    // filter out only when a hero was faced without draft involvement
+    if (hero.bans === 0 && hero.banAgainst === 0)
+      continue;
+
     hero.totalMatches = teamStats.totalMatches;
     hero.heroName = h;
     heroBanData.push(hero);
