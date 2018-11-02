@@ -20,6 +20,7 @@ var matchRowTemplate;
 var enableTagEdit = true;
 var requireHeroOnTeam = false;
 var matchSearchQuery = {};
+var matchTeamActiveIDs = null;
 
 function initMatchesPage() {
   // player menu init
@@ -192,6 +193,8 @@ function resetMatchFilters() {
 
 // using the current search settings, search for matches
 function selectMatches() {
+  matchTeamActiveIDs = null;
+
   // mode
   let modes = $('#match-mode-select').dropdown('get value').split(',');
   for (let m in modes) {
@@ -328,6 +331,7 @@ function selectMatches() {
   if (team !== "") {
     // get the team, then run the query as normal
     DB.getTeam(team, function(err, team) {
+      matchTeamActiveIDs = team.players;
       let players = team.players;
 
       if (!('$or' in query)) {
@@ -487,12 +491,20 @@ function showPage(pageNum) {
   });
 }
 
-function renderToSlot(gameData, slot) {
+function renderToSlot(gameData, slot, swap) {
   let context = {};
   context.map = gameData.map;
   context.mapClass = gameData.map.replace(/[^A-Z0-9]/ig, "-");
   context.mode = ReplayTypes.GameModeStrings[gameData.mode];
   context.id = gameData._id;
+
+  // swap will visually change the position of red and blue.
+  // this will happen if a team was searched, and the selected team is on the other side
+  if (swap === true) {
+    gameData.teams = [ gameData.teams[1], gameData.teams[0] ];
+    gameData.bans = [ gameData.bans[1], gameData.bans[0] ];
+    context.swap = 'swap';
+  }
 
   // if player id is defined, highlight if present, otherwise red/blue
   let focusId = settings.get('selectedPlayerID');

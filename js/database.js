@@ -848,6 +848,13 @@ class Database {
     this.getHeroData(query, callback);
   }
 
+  getMatchesFromComplexQuery(matchQuery, heroQuery, callback) {
+    // this one is fun.
+    // first, filter matches based on match query
+    // then, run the hero query but only look at entries with matching match id
+    // finally, re-query for the now-filtered matches. callback returns both data sets.
+  }
+
   getPlayers(query, callback, opts = {}) {
     if ('sort' in opts) {
       let cursor;
