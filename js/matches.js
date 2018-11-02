@@ -398,6 +398,23 @@ function selectMatches() {
   }
 }
 
+function teamsShouldSwap(data) {
+  if (!matchTeamActiveIDs) {
+    return false;
+  }
+
+  // we need to swap if team 1 (red) is the active team
+  for (let i = 0; i < data.teams[1].ids.length; i++) {
+    // all ids need to match, 
+    if (matchTeamActiveIDs.indexOf(data.teams[1].ids[i]) === -1) {
+      return false;
+    }
+  }
+
+  // todo: fill this in with an actual function
+  return true;
+}
+
 function showPage(pageNum) {
   showMatchLoader();
   DB.countMatches(matchSearchQuery, function(err, count) {
