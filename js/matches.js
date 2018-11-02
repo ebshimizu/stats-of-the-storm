@@ -430,7 +430,7 @@ function showPage(pageNum) {
 
         // so like pick the correct range and just render it
         for (let i = 0; i < selectedMatches.length; i++) {
-            renderToSlot(selectedMatches[i], i);
+          renderToSlot(selectedMatches[i], i, teamsShouldSwap(selectedMatches[i]));
         }
         currentPage = pageNum;
 

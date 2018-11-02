@@ -211,10 +211,19 @@
   border: 3px solid #2185d0;
 }
 
-#match-list .match-summary .match-details .red-hero.image{
+#match-list .swap.match-summary .match-details .blue-hero.image {
+  border-color: #db2828;
+}
+
+#match-list .match-summary .match-details .red-hero.image {
   border: 3px solid #db2828;
   float: right;
 }
+
+#match-list .swap.match-summary .match-details .red-hero.image {
+  border-color: #2185d0;
+}
+
 
 #match-list .red-team-nameplate {
   position: absolute;
@@ -224,6 +233,10 @@
   bottom: 0px;
   color: #db2828;
   font-size: 12pt;
+}
+
+#match-list .swap .red-team-nameplate {
+  color: #2185d0;
 }
 
 #match-list .blue-team-nameplate {
@@ -236,6 +249,10 @@
   font-size: 12pt;
 }
 
+#match-list .swap .blue-team-nameplate {
+  color: #db2828;
+}
+
 #match-list .match-summary .match-details .focus-player.image {
   border: 3px solid #ffd400!important;
 }
@@ -245,9 +262,17 @@
   text-align: left;
 }
 
+#match-list .swap .match-center-stats .blue {
+  color: #db2828;
+}
+
 #match-list .match-center-stats .red {
   color: #db2828;
   text-align: right;
+}
+
+#match-list .swap .match-center-stats .red {
+  color: #2185d0;
 }
 
 #match-list .match-center-stats .match-game-length {
