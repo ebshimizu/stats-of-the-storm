@@ -1075,5 +1075,14 @@
     "icon": "storm_ui_icon_talent_autoattack_slow.png",
     "sort": 3,
     "abilityId": "Kerrigan|Passive"
+  },
+  {
+    "tooltipId": "LucioCrossfadeSpeedBoostWeMoveTogether",
+    "talentTreeId": "LucioCrossfadeSpeedBoostWeMoveTogether",
+    "name": "We Move Together",
+    "description": "Increase the base Movement Speed bonus of Crossfade's Speed Boost to 20%.",
+    "icon": "storm_ui_icon_lucio_crossfadespeed.png",
+    "sort": 1,
+    "abilityId": "Lucio|W1"
   }
 ]
