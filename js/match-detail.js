@@ -1337,8 +1337,6 @@ function loadTimeline() {
   else if (matchDetailMatch.map === ReplayTypes.MapType.BattlefieldOfEternity) {
     getBOEEvents(items);
   }
-  // NOTE: Blackheart's bay has no discernable objective data so it's not listed here right now
-  // i hope one day we find it.
   else if (matchDetailMatch.map === ReplayTypes.MapType.CursedHollow) {
     getCursedEvents(items);
   }
@@ -1368,6 +1366,9 @@ function loadTimeline() {
   }
   else if (matchDetailMatch.map === ReplayTypes.MapType.Hanamura) {
     getHanamuraEvents(items);
+  }
+  else if (matchDetailMatch.map === ReplayTypes.MapType.BlackheartsBay) {
+    getBhbEvents(items);
   }
 
   let opts = {};
@@ -1889,7 +1890,7 @@ function getWarheadEvents(items) {
 function getAlteracEvents(items) {
   for (let t of [0, 1]) {
     for (let cavalry of matchDetailMatch.objective[t].events) {
-      let pop = `
+      const pop = `
         <h3 class='ui header'>
           <div class='content'>Cavalry
             <div class='sub header'>Spawn: ${formatSeconds(cavalry.born)}, Duration: ${formatSeconds(cavalry.died - cavalry.born)}</div>
@@ -1897,9 +1898,9 @@ function getAlteracEvents(items) {
         </h3>
       `;
 
-      let content = `<div class="timeline-popup" data-variation="wide" data-html="${pop}">Cavalry</div>`;
+      const content = `<div class="timeline-popup" data-variation="wide" data-html="${pop}">Cavalry</div>`;
     
-      let item = {
+      const item = {
         start: cavalry.born,
         group: 5,
         className: t === 0 ? 'blue' : 'red',
@@ -1908,6 +1909,33 @@ function getAlteracEvents(items) {
       }
 
       items.push(item);
+    }
+  }
+}
+
+function getBhbEvents(items) {
+  for (const t of [0, 1]) {
+    if (matchDetailMatch.objective[t]) {
+      for (const event of matchDetailMatch.objective[t].events) {
+        const pop = `
+          <h3 class='ui header'>
+            <div class='content'>Coins Turned In
+              <div class='sub header'>Time: ${formatSeconds(event.time)}, Cost: ${event.teamScore}</div>
+            </div>
+          </h3>
+        `;
+
+        const content = `<div class="timeline-popup" data-variation="wide" data-html="${pop}">Turnin</div>`;
+
+        const item = {
+          start: event.time,
+          group: 5,
+          className: t === 0 ? 'blue' : 'red',
+          content
+        };
+
+        items.push(item);
+      }
     }
   }
 }
