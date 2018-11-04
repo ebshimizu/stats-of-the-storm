@@ -1,0 +1,7 @@
+function initFiltersPage() {
+
+}
+
+function onShowFiltersPage() {
+
+}

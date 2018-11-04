@@ -292,6 +292,9 @@ function loadSections() {
   $('#main-content').append(getTemplate('maps', '#maps-page'));
   initMapsPage();
 
+  $('#main-content').append(getTemplate('filters', '#filters-page'));
+  initFiltersPage();
+
   // register sections
   sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false, onShow: showSettingsPage };
   sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false, reset: resetMatchesPage, onShow: showMatchesPage };
@@ -304,6 +307,7 @@ function loadSections() {
   sections.about = { id: '#about-page-content', title: 'About', showBack: false };
   sections.trends = { id: '#hero-trends-page-content', title: 'Hero Trends', showBack: false, onShow: showTrendsSection };
   sections.maps = { id: '#maps-page-content', title: 'Battlegrounds', showBack: false, onShow: onShowMapsPage };
+  sections.filters = { id: '#filters-page-content', title: 'Filters', showBack: false, onShow: onShowFiltersPage };
 
   // Matches should be the default view of the app.
   // this can be changed for development to test specific pages of course.
