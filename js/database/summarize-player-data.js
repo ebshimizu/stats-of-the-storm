@@ -1,6 +1,7 @@
 const { median } = require("../util/math");
 const DetailStatList = require("../game-data/detail-stat-list");
 const PerMapStatList = require("../game-data/map-stats.js");
+const ReplayTypes = require('../../hots-parser/constants');
 
 // get average stats by player (not by hero)
 // otherwise this is basically summarizeHeroData but it doesn't track some stuff
