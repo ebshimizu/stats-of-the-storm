@@ -90,7 +90,7 @@ function loadMapStats() {
       let context = Object.assign({}, mapData.stats[map]);
 
       context.firstPickWinPct = context.firstPickWin / context.draftGames;
-      if (map === ReplayTypes.MapType.BlackheartsBay || map === ReplayTypes.MapType.HauntedMines) {
+      if (map === ReplayTypes.MapType.HauntedMines) {
         context.firstObjectiveWinsPct = NaN;
       } else {
         context.firstObjectiveWinsPct = context.firstObjectiveWins / context.games;
