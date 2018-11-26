@@ -95,10 +95,11 @@ function summarizeMapData(docs) {
     aggregate.firstPickWin += stats[map].firstPickWin;
     aggregate.medianTmp = aggregate.medianTmp.concat(stats[map].medianTmp);
     aggregate.firstFortWin += stats[map].firstFortWin;
-    aggregate.firstKeepWin += stats[map].firstKeepWin;
 
-    if (map !== ReplayTypes.MapType.TowersOfDoom)
+    if (map !== ReplayTypes.MapType.TowersOfDoom) {
       aggregate.nonToDTotal += stats[map].games;
+      aggregate.firstKeepWin += stats[map].firstKeepWin;
+    }
   }
 
   aggregate.median = median(aggregate.medianTmp);
