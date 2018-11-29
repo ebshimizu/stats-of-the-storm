@@ -208,6 +208,19 @@ Location: `initdata.m_syncLobbyState.m_lobbyState.m_slots[].m_spray`
 
 Value: bool
 
+#### Is Blizzard Staff
+
+Location: `initdata.m_syncLobbyState.m_lobbyState.m_slots[].m_isBlizzardStaff`
+
+Value: bool
+
+#### Has Active Boost
+
+Location: `initdata.m_syncLobbyState.m_lobbyState.m_slots[].m_hasActiveBoost`
+
+Value: bool
+As of 2.40
+
 ### Talents
 See `EndOfGameTalentChoices` Tracker Event.
 
