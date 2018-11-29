@@ -288,7 +288,10 @@
       </div>
       <div class="ui grid match-details">
         <div class="ui two wide column blue-bans">
-          <div class="ui inverted blue horizontal divider {{hideBans}}">Blue Bans</div>
+          <div class="ui inverted blue horizontal divider {{hideBans}}">
+            <span class="default">Blue Bans</span>
+            <span class="swapped">Red Bans</span>
+          </div>
           <div class="ui three column grid {{hideBans}}">
             <div class="column">
               <img class="ui circular blue-hero middle-align image" src="{{heroImage bban1Hero}}">
@@ -334,7 +337,10 @@
         </div>
         {{/each}}
         <div class="ui two wide column red-bans">
-          <div class="ui inverted red horizontal divider {{hideBans}}">Red Bans</div>
+          <div class="ui inverted red horizontal divider {{hideBans}}">
+            <span class="swapped">Blue Bans</span>
+            <span class="default">Red Bans</span>
+          </div>
           <div class="ui three column grid {{hideBans}}">
             <div class="column">
               <img class="ui circular red-hero middle-align image" src="{{heroImage rban1Hero}}">

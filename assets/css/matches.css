@@ -275,6 +275,18 @@
   color: #2185d0;
 }
 
+#match-list .divider .swapped {
+  display: none;
+}
+
+#match-list .swap .divider .default {
+  display: none;
+}
+
+#match-list .swap .divider .swapped {
+  display: block;
+}
+
 #match-list .match-center-stats .match-game-length {
   font-size: 16pt;
   text-align: center;

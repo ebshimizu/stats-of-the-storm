@@ -518,8 +518,8 @@ function renderToSlot(gameData, slot, swap) {
   // swap will visually change the position of red and blue.
   // this will happen if a team was searched, and the selected team is on the other side
   if (swap === true) {
-    gameData.teams = [ gameData.teams[1], gameData.teams[0] ];
-    gameData.bans = [ gameData.bans[1], gameData.bans[0] ];
+    gameData.teams = [gameData.teams[1], gameData.teams[0]];
+    gameData.bans = [gameData.bans[1], gameData.bans[0]];
     context.swap = 'swap';
   }
 
@@ -589,8 +589,14 @@ function renderToSlot(gameData, slot, swap) {
   $('tr[slot="' + slot + '"] .match-details .ui.image').popup();
 
   // team nameplates
-  populateTeamNameplate(gameData._id, 0, gameData.teams[0].ids, gameData.winner === 0);
-  populateTeamNameplate(gameData._id, 1, gameData.teams[1].ids, gameData.winner === 1);
+  if (swap) {
+    populateTeamNameplate(gameData._id, 0, gameData.teams[0].ids, gameData.winner === 1);
+    populateTeamNameplate(gameData._id, 1, gameData.teams[1].ids, gameData.winner === 0);
+  }
+  else {
+    populateTeamNameplate(gameData._id, 0, gameData.teams[0].ids, gameData.winner === 0);
+    populateTeamNameplate(gameData._id, 1, gameData.teams[1].ids, gameData.winner === 1);
+  }
 }
 
 function populateTeamNameplate(matchID, teamID, players, won) {
