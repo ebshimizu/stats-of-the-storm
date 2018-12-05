@@ -1084,5 +1084,178 @@
     "icon": "storm_ui_icon_lucio_crossfadespeed.png",
     "sort": 1,
     "abilityId": "Lucio|W1"
+  },
+  {
+    "tooltipId": "SylvanasWitheringFireOverflowingQuiverTalent",
+    "talentTreeId": "SylvanasTalentOverflowingQuiver",
+    "name": "Overflowing Quiver",
+    "description": "When a nearby enemy Minion dies, a free Withering Fire is shot. This cannot hit Heroes.",
+    "icon": "storm_ui_icon_sylvanas_witheringfire.png",
+    "sort": 1,
+    "abilityId": "Sylvanas|Q1"
+  },
+  {
+    "tooltipId": "SylvanasDreadfulWake",
+    "talentTreeId": "SylvanasDreadfulWake",
+    "name": "Dreadful Wake",
+    "description": "Haunting Wave's application of Black Arrow on Minions and Mercenaries increases the duration to 7 seconds. Haunting Wave restores 5 Mana per Minion or Mercenary hit.",
+    "icon": "storm_ui_icon_sylvanas_hauntingwave.png",
+    "sort": 2,
+    "abilityId": "Sylvanas|E1"
+  },
+  {
+    "tooltipId": "SylvanasWitheringFireWithTheWindTalent",
+    "talentTreeId": "SylvanasTalentWithTheWind",
+    "name": "With the Wind",
+    "description": "Increases Withering Fire's range by 25%.",
+    "icon": "storm_ui_icon_sylvanas_witheringfire_var1.png",
+    "sort": 2,
+    "abilityId": "Sylvanas|Q1"
+  },
+  {
+    "tooltipId": "GenericSpellShieldTalent",
+    "talentTreeId": "GenericTalentSpellShield",
+    "name": "Spell Shield",
+    "description": "Every 30 seconds, gain 50 Spell Armor against the next enemy Ability and subsequent Abilities for 3 seconds, reducing the damage taken by 50%.  Can be toggled to allow or prevent this talent from triggering automatically.",
+    "icon": "storm_ui_icon_talent_spellshield.png",
+    "sort": 4,
+    "abilityId": "Sylvanas|Active"
+  },
+  {
+    "tooltipId": "StitchesDevourChewYourFoodTalent",
+    "talentTreeId": "StitchesChewYourFood",
+    "name": "Chew Your Food",
+    "description": "Using Devour also heals Stitches for 10% of his max Health over 3 seconds.",
+    "icon": "storm_ui_icon_stitches_devour.png",
+    "sort": 1,
+    "abilityId": "Stitches|E1"
+  },
+  {
+    "tooltipId": "TalentDampenMagic",
+    "talentTreeId": "GenericDampenMagic",
+    "name": "Dampen Magic",
+    "description": "Every 8 seconds, gain 50 Spell Armor against the next enemy Ability and subsequent Abilities for 1.5 seconds, reducing the damage taken by 50%.",
+    "icon": "storm_ui_icon_talent_dampenmagic.png",
+    "sort": 2,
+    "abilityId": "Stitches|Passive"
+  },
+  {
+    "tooltipId": "StitchesSlamHeavySlamTalent",
+    "talentTreeId": "StitchesHeavySlam",
+    "name": "Heavy Slam",
+    "description": "Slam damage increased by 40%.",
+    "icon": "storm_ui_icon_stitches_slam.png",
+    "sort": 4,
+    "abilityId": "Stitches|W1"
+  },
+  {
+    "tooltipId": "GenericAmplifiedHealingTalent",
+    "talentTreeId": "GenericTalentAmplifiedHealing",
+    "name": "Amplified Healing",
+    "description": "Increases regeneration effects and all healing received by 30%.",
+    "icon": "storm_ui_icon_talent_amplifiedhealing.png",
+    "sort": 1,
+    "abilityId": "Stitches|Passive"
+  },
+  {
+    "tooltipId": "StitchesRestorativeFumes",
+    "talentTreeId": "StitchesRestorativeFumes",
+    "name": "Restorative Fumes",
+    "description": "Whenever Vile Gas damages an enemy Hero, Stitches is healed for 27 (+4% per level) Health.",
+    "icon": "storm_ui_icon_stitches_acidcloud.png",
+    "sort": 2,
+    "abilityId": "Stitches|D1"
+  },
+  {
+    "tooltipId": "StitchesSlamPutridGroundTalent",
+    "talentTreeId": "StitchesPutridGroundSlam",
+    "name": "Putrid Ground",
+    "description": "Enemies hit by Slam are infected with Vile Gas.",
+    "icon": "storm_ui_icon_stitches_slam.png",
+    "sort": 3,
+    "abilityId": "Stitches|W1"
+  },
+  {
+    "tooltipId": "StitchesDevourLastBiteTalent",
+    "talentTreeId": "StitchesLastBiteDevour",
+    "name": "Last Bite",
+    "description": "If an enemy dies within 3 seconds of being damaged by Devour, its cooldown is reduced by 12 seconds.",
+    "icon": "storm_ui_icon_stitches_devour_var1.png",
+    "sort": 2,
+    "abilityId": "Stitches|E1"
+  },
+  {
+    "tooltipId": "StitchesFleaBag",
+    "talentTreeId": "StitchesFleaBag",
+    "name": "Flea Bag",
+    "description": "Whenever Stitches is stunned or rooted, his Basic Ability cooldowns are reduced by 6 seconds.",
+    "icon": "storm_ui_icon_talent_relentless.png",
+    "sort": 1,
+    "abilityId": "Stitches|Passive"
+  },
+  {
+    "tooltipId": "StitchesSlamMegaSmashTalent",
+    "talentTreeId": "StitchesMegaSmashSlam",
+    "name": "Mega Smash",
+    "description": "Range and arc of Slam increased by 25%.",
+    "icon": "storm_ui_icon_stitches_slam.png",
+    "sort": 2,
+    "abilityId": "Stitches|W1"
+  },
+  {
+    "tooltipId": "StitchesDevourIndigestionTalent",
+    "talentTreeId": "StitchesIndigestionDevour",
+    "name": "Indigestion",
+    "description": "Using Devour also creates a Retchling that applies Vile Gas Poison when it attacks.",
+    "icon": "storm_ui_icon_stitches_devour.png",
+    "sort": 3,
+    "abilityId": "Stitches|E1"
+  },
+  {
+    "tooltipId": "StitchesHookShishKabobTalent",
+    "talentTreeId": "StitchesShishKabobHook",
+    "name": "Shish Kabob",
+    "description": "Hook can pull up to 2 targets.",
+    "icon": "storm_ui_icon_stitches_hook_var1.png",
+    "sort": 3,
+    "abilityId": "Stitches|Q1"
+  },
+  {
+    "tooltipId": "GenericStoneskin",
+    "talentTreeId": "GenericTalentStoneskin",
+    "name": "Stoneskin",
+    "description": "Activate to gain 30% of your maximum Health as a Shield for 5 seconds.",
+    "icon": "storm_ui_icon_talent_stoneskin.png",
+    "sort": 4,
+    "abilityId": "Stitches|Active",
+    "cooldown": 60
+  },
+  {
+    "tooltipId": "HardenedShieldTalent",
+    "talentTreeId": "GenericTalentHardenedShield",
+    "name": "Hardened Shield",
+    "description": "Activate to gain 75 Armor for 4 seconds, taking 75% less damage.",
+    "icon": "storm_ui_icon_talent_hardenedshield.png",
+    "sort": 3,
+    "abilityId": "Stitches|Active",
+    "cooldown": 60
+  },
+  {
+    "tooltipId": "StitchesCannibalize",
+    "talentTreeId": "StitchesCannibalize",
+    "name": "Cannibalize",
+    "description": "Basic Attacks against Heroes heal Stitches for 5% of his maximum Health.",
+    "icon": "storm_ui_icon_talent_autoattack_heal.png",
+    "sort": 4,
+    "abilityId": "Stitches|Passive"
+  },
+  {
+    "tooltipId": "FenixWarpConduit",
+    "talentTreeId": "FenixWarpConduit",
+    "name": "Warp Conduit",
+    "description": "Hero Takedowns reset Warp's cooldown.",
+    "icon": "storm_ui_icon_fenix_teleport.png",
+    "sort": 3,
+    "abilityId": "Fenix|E1"
   }
 ]

@@ -57,7 +57,8 @@ const TalentRenames = {
   StitchesMasteryPulverizeSlam: 'StitchesPulverizeSlam',
   StitchesMasteryFishingHook: 'StitchesFishingHook',
   StitchesMasteryShishKabobHook: 'StitchesShishKabobHook',
-  StitchesMasteryHungryHungryStitchesGorge: 'StitchesHungryHungryStitchesGorge'
+  StitchesMasteryHungryHungryStitchesGorge: 'StitchesHungryHungryStitchesGorge',
+  SylvanasHeroicAbilityMindControl: 'SylvanasMindControl'
 };
 
 
