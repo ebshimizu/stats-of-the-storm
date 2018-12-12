@@ -853,7 +853,8 @@ const TeamRankingFormat = {
     },
     {
       title: 'Match Length',
-      data: 'matchLength.val'
+      data: 'matchLength.val',
+      render: formatSeconds
     },
     {
       title: 'Time to Level 10',
@@ -941,7 +942,7 @@ const TeamRankingFormat = {
     {
       title: 'Time to First Fort',
       data: 'structures.Fort.first',
-      render: (data) => formatStat('time', data)
+      render: (data) => formatStat('Time', data)
     },
     {
       title: 'Forts Lost',
@@ -956,7 +957,7 @@ const TeamRankingFormat = {
     {
       title: 'Time to First Keep',
       data: 'structures.Keep.first',
-      render: (data) => formatStat('time', data)
+      render: (data) => formatStat('Time', data)
     },
     {
       title: 'Keeps Lost',
