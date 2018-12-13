@@ -51,6 +51,10 @@ function initPlayerRankingPage() {
     on: 'focus'
   });
 
+  $('#player-ranking-body .top.attached.menu .item').click(function() {
+    togglePlayerRankingMode(this);
+  });
+
   $('#players-file-menu').dropdown({
     onChange: handlePlayerRankingAction
   });
