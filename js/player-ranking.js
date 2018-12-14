@@ -140,7 +140,7 @@ function loadPlayerRankings() {
         context.winPercent = player.wins / player.games;
 
         if (mode === 'total' || mode === 'averages') {
-          context.totalKDA = player.totalKDA;
+          context.KDA = context.Deaths === 0 ? context.Takedowns : context.Takedowns / context.Deaths;
 
           if (mode === 'total') {
             // context replacement for a few stats
