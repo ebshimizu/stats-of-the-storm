@@ -66,7 +66,7 @@ const xpSoakOpts = {
   responsive: true,
   tooltips: {
     position: 'nearest',
-    mode: 'index',
+    mode: 'x',
     intersect: false,
     callbacks : {
       title: function(tooltipItem, data) {
