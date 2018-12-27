@@ -344,11 +344,11 @@ function loadTeamData(team, matches, heroData) {
     elem = $('#team-structure-stats');
     updateTeamStat(elem, 'forts-destroyed', teamStats.structures.Fort.destroyed);
     updateTeamStat(elem, 'forts-lost', teamStats.structures.Fort.lost);
-    updateTeamStat(elem, 'first-fort', teamStats.structures.Fort.destroyed === 0 ? 'N/A' : formatSeconds(teamStats.structures.Fort.first / teamStats.structures.Fort.gamesWithFirst));
+    updateTeamStat(elem, 'first-fort', teamStats.structures.Fort.destroyed === 0 ? '-' : formatSeconds(teamStats.structures.Fort.first / teamStats.structures.Fort.gamesWithFirst));
 
     updateTeamStat(elem, 'keeps-destroyed', teamStats.structures.Keep.destroyed);
     updateTeamStat(elem, 'keeps-lost', teamStats.structures.Keep.lost);
-    updateTeamStat(elem, 'first-keep', teamStats.structures.Keep.destroyed === 0 ? 'N/A' : formatSeconds(teamStats.structures.Keep.first / teamStats.structures.Keep.gamesWithFirst));
+    updateTeamStat(elem, 'first-keep', teamStats.structures.Keep.destroyed === 0 ? '-' : formatSeconds(teamStats.structures.Keep.first / teamStats.structures.Keep.gamesWithFirst));
 
     updateTeamStat(elem, 'wells-destroyed', teamStats.structures['Fort Well'].destroyed + teamStats.structures['Keep Well'].destroyed);
     updateTeamStat(elem, 'wells-lost', teamStats.structures['Fort Well'].lost + teamStats.structures['Keep Well'].lost);

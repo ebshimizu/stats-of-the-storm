@@ -507,11 +507,6 @@ const TeamHeroSummaryFormat = {
       render: (data) => formatStat('KDA', data)
     },
     {
-      title: 'Avg. Time Dead',
-      data: 'stats.TimeSpentDead',
-      render: (data) => formatStat('Time', data)
-    },
-    {
       title: 'Avg. % Dead',
       data: (row) => row.stats.timeDeadPct / row.games,
       render: (data) => formatStat('pct', data)
