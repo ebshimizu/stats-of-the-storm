@@ -772,6 +772,61 @@ const TeamRankingFormat = {
       render: (data) => formatStat('timeDeadPct', data)
     },
     {
+      title: 'Time w/ Level Adv.',
+      data: 'selectedStats.levelAdvTime',
+      render: formatSeconds
+    },
+    {
+      title: '% of Game w/ Level Adv.',
+      data: 'selectedStats.levelAdvPct',
+      render: (data) => formatStat('pct', data, true)
+    },
+    {
+      title: 'Avg. Level Adv.',
+      data: 'selectedStats.avgLevelAdv',
+      render: (data) => formatStat('avgLevelAdv', data, true)
+    },
+    {
+      title: 'Avg. Heroes Alive',
+      data: 'selectedStats.avgHeroesAlive',
+      render: (data) => formatStat('avgHeroesAlive', data, true)
+    },
+    {
+      title: 'Time w/ Hero Adv.',
+      data: 'selectedStats.timeWithHeroAdv',
+      render: formatSeconds
+    },
+    {
+      title: '% of Game w/ Hero Adv.',
+      data: 'selectedStats.pctWithHeroAdv',
+      render: (data) => formatStat('pct', data, true)
+    },
+    {
+      title: 'Aces',
+      data: 'selectedStats.aces',
+      render: (data) => formatStat('aces', data, true)
+    },
+    {
+      title: 'Wipes',
+      data: 'selectedStats.wipes',
+      render: (data) => formatStat('wipes', data, true)
+    },
+    {
+      title: 'Passive XP/s',
+      data: 'selectedStats.passiveXPRate',
+      render: (data) => formatStat('passiveXPRate', data, true)
+    },
+    {
+      title: 'Passive XP % Gain',
+      data: 'selectedStats.passiveXPDiff',
+      render: (data) => formatStat('passiveXPDiff', data, true)
+    },
+    {
+      title: 'Passive XP Gain',
+      data: 'selectedStats.passiveXPGain',
+      render: (data) => formatStat('passiveXPGain', data, true)
+    },
+    {
       title: 'Hero Damage',
       data: 'selectedStats.HeroDamage',
       render: (data) => formatStat('HeroDamage', data)
@@ -900,6 +955,36 @@ const TeamRankingFormat = {
       render: formatSeconds
     },
     {
+      title: '% of Game w/ 0 Heroes',
+      data: 'selectedStats.pctWith0HeroesAlive',
+      render: (data) => formatStat('pctWith0HeroesAlive', data)
+    },
+    {
+      title: '% of Game w/ 1 Heroes',
+      data: 'selectedStats.pctWith1HeroesAlive',
+      render: (data) => formatStat('pctWith1HeroesAlive', data)
+    },
+    {
+      title: '% of Game w/ 2 Heroes',
+      data: 'selectedStats.pctWith2HeroesAlive',
+      render: (data) => formatStat('pctWith2HeroesAlive', data)
+    },
+    {
+      title: '% of Game w/ 3 Heroes',
+      data: 'selectedStats.pctWith3HeroesAlive',
+      render: (data) => formatStat('pctWith3HeroesAlive', data)
+    },
+    {
+      title: '% of Game w/ 4 Heroes',
+      data: 'selectedStats.pctWith4HeroesAlive',
+      render: (data) => formatStat('pctWith4HeroesAlive', data)
+    },
+    {
+      title: '% of Game w/ 5 Heroes',
+      data: 'selectedStats.pctWith5HeroesAlive',
+      render: (data) => formatStat('pctWith5HeroesAlive', data)
+    },
+    {
       title: 'Mercenary Captures',
       data: 'selectedStats.mercCaptures',
       render: (data) => formatStat('mercCaptures', data)
@@ -928,6 +1013,11 @@ const TeamRankingFormat = {
       title: 'Loss Lv Δ',
       data: 'endOfGameLevels.loss.average',
       render: (data) => formatStat('', data, true)
+    },
+    {
+      title: 'Max Level Adv.',
+      data: 'selectedStats.maxLevelAdv',
+      render: (data) => formatStat('maxLevelAdv', data)
     },
     {
       title: 'Forts Destroyed',

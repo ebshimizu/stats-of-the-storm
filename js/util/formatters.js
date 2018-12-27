@@ -26,7 +26,7 @@ function formatStat(field, val, allFixed = false) {
   if (val === undefined)
     return 0;
 
-  if (field.startsWith('pct') || field === 'KillParticipation' || field === 'timeDeadPct') {
+  if (field.startsWith('pct') || field === 'mercUptimePercent' || field === 'KillParticipation' || field === 'timeDeadPct') {
     if (val > 1) {
       return `${val.toLocaleString(undefined, {maximumFractionDigits: 1})}%`;
     }
