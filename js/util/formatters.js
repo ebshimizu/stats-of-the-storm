@@ -1,5 +1,8 @@
 // formats to mm:ss
 function formatSeconds(val) {
+  if (isNaN(val))
+    return '--:--';
+
   let invert = false;
   if (val < 0)
     invert = true;
