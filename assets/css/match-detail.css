@@ -319,6 +319,52 @@
   border-color: rgba(229, 229, 229, 0.25);
 }
 
+#match-detail-timeline-wrapper .vis-item.vis-background.blue.hero-0,
+#match-detail-timeline-wrapper .vis-item.vis-background.red.hero-0
+{
+  background-color: rgba(0, 0, 0, 0);
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background.blue.hero-1 {
+  background-color: rgba(33, 133, 208, 0.2);
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background.blue.hero-2 {
+  background-color: rgba(33, 133, 208, 0.4);
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background.blue.hero-3 {
+  background-color: rgba(33, 133, 208, 0.6);
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background.blue.hero-4 {
+  background-color: rgba(33, 133, 208, 0.8);
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background.blue.hero-5 {
+  background-color: rgba(33, 133, 208, 1);
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background.red.hero-1 {
+  background-color: rgba(219, 40, 40, 0.2);
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background.red.hero-2 {
+  background-color: rgba(219, 40, 40, 0.4);
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background.red.hero-3 {
+  background-color: rgba(219, 40, 40, 0.6);
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background.red.hero-4 {
+  background-color: rgba(219, 40, 40, 0.8);
+}
+
+#match-detail-timeline-wrapper .vis-item.vis-background.red.hero-5 {
+  background-color: rgba(219, 40, 40, 1);
+}
+
 #match-detail-timeline-wrapper .vis-item.merc-unit,
 #match-detail-timeline-wrapper .vis-item.temple-shot {
   font-size: 9pt;

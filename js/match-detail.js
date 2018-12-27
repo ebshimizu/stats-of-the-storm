@@ -308,6 +308,18 @@ matchDetailTimelineGroups.add([
     content: 'Payload Control',
     classname: 'hanamura-payload',
     visible: false
+  },
+  {
+    id: 16,
+    content: 'Blue Heroes Alive',
+    classname: 'blue-hero-uptime',
+    visible: true
+  },
+  {
+    id: 17,
+    content: 'Red Heroes Alive',
+    classname: 'red-hero-uptime',
+    visible: true
   }
 ]);
 
@@ -1317,12 +1329,51 @@ function loadTimeline() {
     item.group = 7;
     items.push(item);
   }
+  
+  // hero uptime
+  // parser v7
+  if (matchDetailMatch.teams[0].stats.uptime) {
+    for (let t of [0, 1]) {
+      const teamUptime = matchDetailMatch.teams[t].stats.uptime;
+      const groupID = t === 0 ? 16 : 17;
+      const teamClass = t === 0 ? 'blue' : 'red';
+
+      for (let i = 0; i < teamUptime.length; i++) {
+        const current = teamUptime[i];
+
+        const item = {
+          start: current.time,
+          content: `${current.heroes}`,
+          type: 'background',
+          group: groupID,
+          className: `${teamClass} hero-${current.heroes}`
+        };
+
+        if (i + 1 < teamUptime.length) {
+          item.end = teamUptime[i + 1].time;
+        }
+        else {
+          item.end = matchDetailMatch.length;
+        }
+
+        items.push(item);
+      }
+    }
+    matchDetailTimelineGroups.update({id: 16, visible: true});
+    matchDetailTimelineGroups.update({id: 17, visible: true});
+    matchDetailTimelineGroups.update({id: 3, nestedGroups: [16, 17]});
+  }
+  else {
+    matchDetailTimelineGroups.update({id: 16, visible: false});
+    matchDetailTimelineGroups.update({id: 17, visible: false});
+    matchDetailTimelineGroups.update({id: 3, nestedGroups: null});
+  }
 
   // group config
-  matchDetailTimelineGroups.update({id: 11, visible: false})
-  matchDetailTimelineGroups.update({id: 12, visible: false})
-  matchDetailTimelineGroups.update({id: 13, visible: false})
-  matchDetailTimelineGroups.update({id: 14, visible: false})
+  matchDetailTimelineGroups.update({id: 11, visible: false});
+  matchDetailTimelineGroups.update({id: 12, visible: false});
+  matchDetailTimelineGroups.update({id: 13, visible: false});
+  matchDetailTimelineGroups.update({id: 14, visible: false});
   matchDetailTimelineGroups.update({id: 5, nestedGroups: null});
 
   // objectives...
