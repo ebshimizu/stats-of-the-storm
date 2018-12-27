@@ -30,6 +30,9 @@ function formatStat(field, val, allFixed = false) {
   else if (field.startsWith('Time') || field === 'OnFireTimeOnFire' || field === 'timeTo10' ||
     field === 'timeTo20' || field === 'mercUptime' || field === 'avgTimeSpentDead')
     return formatSeconds(val);
+  else if (field === 'passiveXPDiff') {
+    return `+${((val - 1) * 100).toLocaleString(undefined, { maximumFractionDigits: 1 })}%`;
+  }
 
   if (allFixed) {
     return val.toLocaleString(undefined, { maximumFractionDigits: 1});

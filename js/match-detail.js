@@ -2290,6 +2290,8 @@ function updateTeamStats() {
     let elem = t === '0' ? $('#match-detail-blue-team-stats') : $('#match-detail-red-team-stats');
 
     // team stats
+    renderV7TeamStats(elem, stats);
+
     updateTeamStat(elem, 'team-kda', formatStat('KDA', stats.KDA));
     updateTeamStat(elem, 'team-ppk', formatStat('KDA', stats.PPK));
 
@@ -2350,6 +2352,35 @@ function updateTeamStats() {
       let hideTowerTime = (stats.structures['Fort Tower'].destroyed + stats.structures['Keep Tower'].destroyed) === 0;
       updateTeamStat(elem, 'first-tower', hideTowerTime ? 'N/A' : formatSeconds(Math.min(stats.structures['Fort Tower'].first, stats.structures['Keep Tower'].first)));
     }
+  }
+}
+
+function renderV7TeamStats(elem, stats) {
+  // check for a single key from the v7 parser output
+  if ('aces' in stats) {
+    updateTeamStat(elem, 'team-hero-wipes', stats.wipes);
+    updateTeamStat(elem, 'team-hero-aces', stats.aces);
+    updateTeamStat(elem, 'team-hero-alive', formatStat('avgHeroesAlive', stats.avgHeroesAlive, true));
+    updateTeamStat(elem, 'team-hero-time-adv', formatSeconds(stats.timeWithHeroAdv));
+    updateTeamStat(elem, 'team-avg-level-adv', formatStat('avgLevelAdv', stats.avgLevelAdv, true));
+    updateTeamStat(elem, 'team-max-level-adv', stats.maxLevelAdv);
+    updateTeamStat(elem, 'team-time-level-adv', formatSeconds(stats.levelAdvTime));
+    updateTeamStat(elem, 'team-passive-xp-rate', formatStat('passiveXPRate', stats.passiveXPRate, true));
+    updateTeamStat(elem, 'team-passive-xp-diff', formatStat('passiveXPDiff', stats.passiveXPDiff, true));
+    updateTeamStat(elem, 'team-passive-xp-total', formatStat('passiveXPGain', stats.passiveXPGain, true));
+  }
+  // if not present, write empty
+  else {
+    updateTeamStat(elem, 'team-hero-wipes', 'N/A');
+    updateTeamStat(elem, 'team-hero-aces', 'N/A');
+    updateTeamStat(elem, 'team-hero-alive', 'N/A');
+    updateTeamStat(elem, 'team-hero-time-adv', 'N/A');
+    updateTeamStat(elem, 'team-avg-level-adv', 'N/A');
+    updateTeamStat(elem, 'team-max-level-adv', 'N/A');
+    updateTeamStat(elem, 'team-time-level-adv', 'N/A');
+    updateTeamStat(elem, 'team-passive-xp-rate', 20);
+    updateTeamStat(elem, 'team-passive-xp-diff', 0);
+    updateTeamStat(elem, 'team-passive-xp-total', 0);
   }
 }
 
