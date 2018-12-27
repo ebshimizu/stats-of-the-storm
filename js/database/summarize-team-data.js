@@ -295,6 +295,9 @@ function summarizeTeamData(team, docs, HeroesTalents) {
 
     // stat aggregation
     for (let stat in match.teams[t].stats) {
+      if (stat === 'uptime')
+        continue;
+
       if (stat === "structures") {
         for (let struct in match.teams[t].stats.structures) {
           if (!(struct in data.structures)) {
@@ -317,7 +320,8 @@ function summarizeTeamData(team, docs, HeroesTalents) {
             data.structures[struct].gamesWithFirst += 1;
           }
         }
-      } else if (stat === "totals") {
+      }
+      else if (stat === "totals") {
         for (let total in match.teams[t].stats.totals) {
           if (!(total in data.stats.total)) {
             data.stats.total[total] = 0;
@@ -338,7 +342,37 @@ function summarizeTeamData(team, docs, HeroesTalents) {
           );
           data.stats.medianTmp[total].push(match.teams[t].stats.totals[total]);
         }
-      } else {
+      }
+      else if (stat === 'uptimeHistogram') {
+        // bif of extra work to format these to cleanly fit in app
+        for (let i = 0; i <= 5; i++) {
+          const statName = `pctWith${i}HeroesAlive`;
+          const time = match.teams[t].stats[stat][i] / match.length;
+          
+          // if undefined, set to 0
+          if (!time)
+            time = 0;
+
+          if (!(statName in data.stats.total)) {
+            data.stats.total[statName] = 0;
+  
+            data.stats.min[statName] = time;
+            data.stats.max[statName] = time;
+            data.stats.medianTmp[statName] = [];
+          }
+          data.stats.total[statName] += time;
+          data.stats.min[statName] = Math.min(
+            data.stats.min[statName],
+            time
+          );
+          data.stats.max[statName] = Math.max(
+            data.stats.max[statName],
+            time
+          );
+          data.stats.medianTmp[statName].push(time);
+        }
+      }
+      else {
         if (!(stat in data.stats.total)) {
           data.stats.total[stat] = 0;
 

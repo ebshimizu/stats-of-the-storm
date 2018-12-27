@@ -59,7 +59,7 @@ const DetailStatString = {
   'mercUptimePercent' : 'Mercenary Uptime %',
   'timeTo10' : 'Time to Level 10',
   'timeTo20' : 'Time to Level 20',
-  'avgTimeSpentDead' : 'Average Time Spent Dead',
+  'avgTimeSpentDead' : 'Avg. Time Spent Dead',
   'T1' : 'Time at Level 1',
   'T2' : 'Time at Level 4',
   'T3' : 'Time at Level 7',
@@ -76,7 +76,23 @@ const DetailStatString = {
   'CageUnlocksInterrupted' : 'Cage Unlocks Interrupted',
   'SpellDamage' : 'Ability Damage',
   'PhysicalDamage' : 'Physical Damage',
-  'GardenSeedsCollectedByPlayer' : 'Garden Seeds Collected'
+  'GardenSeedsCollectedByPlayer' : 'Garden Seeds Collected',
+  'pctWith0HeroesAlive' : 'Game % 0 Heroes Alive',
+  'pctWith1HeroesAlive' : 'Game % 1 Hero Alive',
+  'pctWith2HeroesAlive' : 'Game % 2 Heroes Alive',
+  'pctWith3HeroesAlive' : 'Game % 3 Heroes Alive',
+  'pctWith4HeroesAlive' : 'Game % 4 Heroes Alive',
+  'pctWith5HeroesAlive' : 'Game % 5 Heroes Alive',
+  'wipes' : 'Wipes',
+  'aces' : 'Aces',
+  'timeWithHeroAdv' : 'Time with Hero Advantage',
+  'avgHeroesAlive' : 'Avg. Heroes Alive',
+  'passiveXPRate' : 'Passive XP/Second',
+  'passiveXPDiff' : 'Passive XP % Gain',
+  'passiveXPGain' : 'Passive XP Gained',
+  'levelAdvTime' : 'Time with Level Advantage',
+  'maxLevelAdv' : 'Max Level Advantage',
+  'avgLevelAdv' : 'Avg. Level Advantage'
 };
 
 module.exports = DetailStatString;

@@ -321,6 +321,14 @@ function loadTeamData(team, matches, heroData) {
     $('#team-detail-stats .statistic[name="merc-uptime"] .value').text(formatSeconds(teamStats.stats.average.mercUptime));
     $('#team-detail-stats .statistic[name="merc-uptime-percent"] .value').text(formatStat('pct', teamStats.stats.average.mercUptimePercent));
 
+    updateTeamStat(elem, 'team-passive-rate', formatStat('passiveXPRate', teamStats.stats.average.passiveXPRate, true));
+    updateTeamStat(elem, 'team-passive-gain', formatStat('passiveXPDiff', teamStats.stats.average.passiveXPDiff, true));
+    updateTeamStat(elem, 'team-passive-total', formatStat('passiveXPGain', teamStats.stats.average.passiveXPGain, true));
+
+    updateTeamStat(elem, 'team-level-adv-time', formatStat('levelAdvTime', teamStats.stats.average.levelAdvTime, true));
+    updateTeamStat(elem, 'team-avg-level-adv', formatStat('avgLevelAdv', teamStats.stats.average.avgLevelAdv, true));
+    updateTeamStat(elem, 'team-avg-level-lead', formatStat('maxLevelAdv', teamStats.stats.average.maxLevelAdv, true));
+
     updateTeamStat(elem, 'T1', formatSeconds(teamStats.tierTimes.T1.average));
     updateTeamStat(elem, 'T2', formatSeconds(teamStats.tierTimes.T2.average));
     updateTeamStat(elem, 'T3', formatSeconds(teamStats.tierTimes.T3.average));
@@ -345,13 +353,19 @@ function loadTeamData(team, matches, heroData) {
     updateTeamStat(elem, 'wells-lost', teamStats.structures['Fort Well'].lost + teamStats.structures['Keep Well'].lost);
 
     let hideWellTime = teamStats.structures['Fort Well'].destroyed + teamStats.structures['Keep Well'].destroyed === 0
-    updateTeamStat(elem, 'first-well', hideWellTime ? 'N/A' : formatSeconds(Math.min(teamStats.structures['Fort Well'].first / teamStats.structures['Fort Well'].gamesWithFirst, teamStats.structures['Keep Well'].first / teamStats.structures['Keep Well'].gamesWithFirst)));
+    updateTeamStat(elem, 'first-well', hideWellTime ? '--:--' : formatSeconds(Math.min(
+      teamStats.structures['Fort Well'].first / teamStats.structures['Fort Well'].gamesWithFirst,
+      teamStats.structures['Keep Well'].gamesWithFirst === 0 ? 1e10 : teamStats.structures['Keep Well'].first / teamStats.structures['Keep Well'].gamesWithFirst)
+    ));
 
     updateTeamStat(elem, 'towers-destroyed', teamStats.structures['Fort Tower'].destroyed + teamStats.structures['Keep Tower'].destroyed);
     updateTeamStat(elem, 'towers-lost', teamStats.structures['Fort Tower'].lost + teamStats.structures['Keep Tower'].lost);
 
     let hideTowerTime = teamStats.structures['Fort Tower'].destroyed + teamStats.structures['Keep Tower'].destroyed === 0;
-    updateTeamStat(elem, 'first-tower', hideTowerTime ? 'N/A' : formatSeconds(Math.min(teamStats.structures['Fort Tower'].first / teamStats.structures['Fort Tower'].gamesWithFirst, teamStats.structures['Keep Tower'].first / teamStats.structures['Keep Tower'].gamesWithFirst)));
+    updateTeamStat(elem, 'first-tower', hideTowerTime ? '--:--' : formatSeconds(Math.min(
+      teamStats.structures['Fort Tower'].first / teamStats.structures['Fort Tower'].gamesWithFirst,
+      teamStats.structures['Keep Tower'].gamesWithFirst === 0 ? 1e10 : teamStats.structures['Keep Tower'].first / teamStats.structures['Keep Tower'].gamesWithFirst)
+    ));
 
     elem = $('#team-damage-stats');
     updateTeamStat(elem, 'hero-damage',  formatStat('', teamStats.stats.average.HeroDamage, true));
@@ -373,6 +387,18 @@ function loadTeamData(team, matches, heroData) {
 
     updateTeamStat(elem, 'first-pick-pct', formatStat('pct', teamStats.firstPicks / teamStats.totalMatches));
     updateTeamStat(elem, 'first-pick-win', formatStat('pct', teamStats.firstPicks === 0 ? 0 : teamStats.firstPickWins / teamStats.firstPicks));
+    updateTeamStat(elem, 'team-aces', formatStat('aces', teamStats.stats.total.aces, true));
+    updateTeamStat(elem, 'team-wipes', formatStat('wipes', teamStats.stats.total.wipes, true));
+
+    updateTeamStat(elem, 'team-time-hero-adv', formatSeconds(teamStats.stats.average.timeWithHeroAdv));
+    updateTeamStat(elem, 'team-heroes-alive', formatStat('avgHeroesAlive', teamStats.stats.average.avgHeroesAlive, true));
+
+    updateTeamStat(elem, 'team-pct-0-hero', formatStat('pctWith0HeroesAlive', teamStats.stats.average.pctWith0HeroesAlive, true));
+    updateTeamStat(elem, 'team-pct-1-hero', formatStat('pctWith1HeroesAlive', teamStats.stats.average.pctWith1HeroesAlive, true));
+    updateTeamStat(elem, 'team-pct-2-hero', formatStat('pctWith2HeroesAlive', teamStats.stats.average.pctWith2HeroesAlive, true));
+    updateTeamStat(elem, 'team-pct-3-hero', formatStat('pctWith3HeroesAlive', teamStats.stats.average.pctWith3HeroesAlive, true));
+    updateTeamStat(elem, 'team-pct-4-hero', formatStat('pctWith4HeroesAlive', teamStats.stats.average.pctWith4HeroesAlive, true));
+    updateTeamStat(elem, 'team-pct-5-hero', formatStat('pctWith5HeroesAlive', teamStats.stats.average.pctWith5HeroesAlive, true));
   }
   catch (e) {
     // basically if a team has no people this will likely throw an exception.
@@ -526,8 +552,16 @@ function getTeamCompareStats(teamStats, heroStats) {
   stats.avgLength = { name: 'Avg. Length', val: teamStats.matchLength.average, format: formatSeconds(teamStats.matchLength.average) };
   stats.ppk = { name: 'People Per Kill (PPK)', val: teamStats.stats.average.PPK, format: formatStat('KDA', teamStats.stats.average.PPK) };
 
-  stats.tt10 = { name: 'Avg. Time to 10', val: formatSeconds(teamStats.stats.average.timeTo10), format: formatSeconds(teamStats.stats.average.timeTo10) };
-  stats.tt20 = { name: 'Avg. Time to 20', val: formatSeconds(teamStats.stats.average.timeTo20), format: formatSeconds(teamStats.stats.average.timeTo20) };
+  stats.tt10 = { name: 'Avg. Time to 10', val: teamStats.stats.average.timeTo10, format: formatSeconds(teamStats.stats.average.timeTo10) };
+  stats.tt20 = { name: 'Avg. Time to 20', val: teamStats.stats.average.timeTo20, format: formatSeconds(teamStats.stats.average.timeTo20) };
+
+  stats.passiveRate = { name: 'Passive XP/Second', val: teamStats.stats.average.passiveXPRate, format: formatStat('passiveXPRate', teamStats.stats.average.passiveXPRate, true) };
+  stats.passiveGain = { name: 'Passive XP % Gain', val: teamStats.stats.average.passiveXPDiff, format: formatStat('passiveXPDiff', teamStats.stats.average.passiveXPDiff, true) };
+  stats.passiveTotal = { name: 'Passive XP Gain', val: teamStats.stats.average.passiveXPRate, format: formatStat('passiveXPGain', teamStats.stats.average.passiveXPGain, true) };
+
+  stats.levelAdvTime = { name: 'Avg. Time w/ Level Adv.', val: teamStats.stats.average.levelAdvTime, format: formatSeconds(teamStats.stats.average.levelAdvTime) };
+  stats.levelAdv = { name: 'Avg. Level Adv.', val: teamStats.stats.average.avgLevelAdv, format: formatStat('avgLevelAdv', teamStats.stats.average.avgLevelAdv, true) };
+  stats.levelLead = { name: 'Avg. Max Level Lead', val: teamStats.stats.average.maxLevelAdv, format: formatSeconds('maxLevelAdv', teamStats.stats.average.maxLevelAdv, true) };
 
   stats.mercs = { name: 'Mercenary Captures', val: teamStats.stats.average.mercCaptures, format: formatStat('mercCaptures', teamStats.stats.average.mercCaptures, true) };
   stats.mercUptime = { name: 'Mercenary Uptime', val: teamStats.stats.average.mercUptime, format: formatSeconds(teamStats.stats.average.mercUptime) };
@@ -560,6 +594,19 @@ function getTeamCompareStats(teamStats, heroStats) {
   stats.root = { name: 'Avg. Root Time', val: teamStats.stats.average.TimeRootingEnemyHeroes, format: formatSeconds(teamStats.stats.average.TimeRootingEnemyHeroes) };
   stats.silence = { name: 'Avg. Silence Time', val: teamStats.stats.average.TimeSilencingEnemyHeroes, format: formatSeconds(teamStats.stats.average.TimeSilencingEnemyHeroes) };
   stats.stun = { name: 'Avg. Stun Time', val: teamStats.stats.average.TimeStunningEnemyHeroes, format: formatSeconds(teamStats.stats.average.TimeStunningEnemyHeroes) };
+
+  stats.aces = { name : 'Aces', val: teamStats.stats.total.aces, format: formatStat('Aces', teamStats.stats.total.aces, true) };
+  stats.wipes = { name : 'Wipes', val: teamStats.stats.total.wipes, format: formatStat('Wipes', teamStats.stats.total.wipes, true) };
+
+  stats.timeWithHeroAdv = { name : 'Avg. Time w/ Hero Adv.', val: teamStats.stats.average.timeWithHeroAdv, format: formatSeconds(teamStats.stats.average.timeWithHeroAdv) };
+  stats.avgHeroesAlive = { name : 'Avg. Heroes Alive', val: teamStats.stats.average.avgHeroesAlive, format: formatStat('avgHeroesAlive', teamStats.stats.average.avgHeroesAlive, true) };
+
+  stats.pct0Hero = { name: 'Avg. % 0 Heroes Alive', val: teamStats.stats.average.pctWith0HeroesAlive, format: formatStat('pctWith0HeroesAlive', teamStats.stats.average.pctWith0HeroesAlive, true) };
+  stats.pct1Hero = { name: 'Avg. % 1 Hero Alive', val: teamStats.stats.average.pctWith1HeroesAlive, format: formatStat('pctWith1HeroesAlive', teamStats.stats.average.pctWith1HeroesAlive, true) };
+  stats.pct2Hero = { name: 'Avg. % 2 Heroes Alive', val: teamStats.stats.average.pctWith2HeroesAlive, format: formatStat('pctWith2HeroesAlive', teamStats.stats.average.pctWith2HeroesAlive, true) };
+  stats.pct3Hero = { name: 'Avg. % 3 Heroes Alive', val: teamStats.stats.average.pctWith3HeroesAlive, format: formatStat('pctWith3HeroesAlive', teamStats.stats.average.pctWith3HeroesAlive, true) };
+  stats.pct4Hero = { name: 'Avg. % 4 Heroes Alive', val: teamStats.stats.average.pctWith4HeroesAlive, format: formatStat('pctWith4HeroesAlive', teamStats.stats.average.pctWith4HeroesAlive, true) };
+  stats.pct5Hero = { name: 'Avg. % 5 Heroes Alive', val: teamStats.stats.average.pctWith5HeroesAlive, format: formatStat('pctWith5HeroesAlive', teamStats.stats.average.pctWith5HeroesAlive, true) };
 
   return stats;
 }

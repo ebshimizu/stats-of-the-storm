@@ -26,7 +26,7 @@ function formatStat(field, val, allFixed = false) {
   if (val === undefined)
     return 0;
 
-  if (field === 'KillParticipation' || field === 'timeDeadPct' || field === 'mercUptimePercent' || field === 'pct') {
+  if (field.startsWith('pct') || field === 'KillParticipation' || field === 'timeDeadPct') {
     if (val > 1) {
       return `${val.toLocaleString(undefined, {maximumFractionDigits: 1})}%`;
     }
@@ -36,9 +36,11 @@ function formatStat(field, val, allFixed = false) {
   }
   else if (field === 'KDA')
     return val.toLocaleString(undefined, { maximumFractionDigits: 1});
-  else if (field.startsWith('Time') || field === 'OnFireTimeOnFire' || field === 'timeTo10' ||
-    field === 'timeTo20' || field === 'mercUptime' || field === 'avgTimeSpentDead')
+  else if (field.startsWith('Time') || field.startsWith('time') ||
+    field === 'OnFireTimeOnFire' || field === 'timeTo10' || field == 'levelAdvTime' ||
+    field === 'timeTo20' || field === 'mercUptime' || field === 'avgTimeSpentDead') {
     return formatSeconds(val);
+  }
   else if (field === 'passiveXPDiff') {
     return `+${((val - 1) * 100).toLocaleString(undefined, { maximumFractionDigits: 1 })}%`;
   }
