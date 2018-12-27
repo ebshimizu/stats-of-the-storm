@@ -2445,7 +2445,7 @@ function updateTeamStats() {
     // mercs
     updateTeamStat(elem, 'merc-capture', stats.mercCaptures);
     updateTeamStat(elem, 'merc-uptime', formatSeconds(stats.mercUptime));
-    updateTeamStat(elem, 'merc-uptime-pct', formatStat('mercUptimePercent', stats.mercUptimePercent));
+    updateTeamStat(elem, 'merc-uptime-pct', formatStat('pct', stats.mercUptimePercent));
 
     updateTeamStat(elem, 'forts-destroyed', stats.structures.Fort.destroyed ? stats.structures.Fort.destroyed : '0');
     updateTeamStat(elem, 'forts-lost', stats.structures.Fort.lost);
@@ -2494,10 +2494,10 @@ function renderV7TeamStats(elem, stats) {
     updateTeamStat(elem, 'team-hero-wipes', stats.wipes);
     updateTeamStat(elem, 'team-hero-aces', stats.aces);
     updateTeamStat(elem, 'team-hero-alive', formatStat('avgHeroesAlive', stats.avgHeroesAlive, true));
-    updateTeamStat(elem, 'team-hero-time-adv', formatSeconds(stats.timeWithHeroAdv));
+    updateTeamStat(elem, 'team-hero-time-adv', formatStat('pct', stats.pctWithHeroAdv));
     updateTeamStat(elem, 'team-avg-level-adv', formatStat('avgLevelAdv', stats.avgLevelAdv, true));
     updateTeamStat(elem, 'team-max-level-adv', stats.maxLevelAdv);
-    updateTeamStat(elem, 'team-time-level-adv', formatSeconds(stats.levelAdvTime));
+    updateTeamStat(elem, 'team-time-level-adv', formatStat('pct', stats.levelAdvPct));
     updateTeamStat(elem, 'team-passive-xp-rate', formatStat('passiveXPRate', stats.passiveXPRate, true));
     updateTeamStat(elem, 'team-passive-xp-diff', formatStat('passiveXPDiff', stats.passiveXPDiff, true));
     updateTeamStat(elem, 'team-passive-xp-total', formatStat('passiveXPGain', stats.passiveXPGain, true));

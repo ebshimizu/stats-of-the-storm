@@ -92,7 +92,9 @@ const DetailStatString = {
   'passiveXPGain' : 'Passive XP Gained',
   'levelAdvTime' : 'Time with Level Advantage',
   'maxLevelAdv' : 'Max Level Advantage',
-  'avgLevelAdv' : 'Avg. Level Advantage'
+  'avgLevelAdv' : 'Avg. Level Advantage',
+  'pctWithHeroAdv' : '% of Game with Hero Adv.',
+  'levelAdvPct' : '% of Game with Level Adv.'
 };
 
 module.exports = DetailStatString;

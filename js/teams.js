@@ -325,7 +325,8 @@ function loadTeamData(team, matches, heroData) {
     updateTeamStat(elem, 'team-passive-gain', formatStat('passiveXPDiff', teamStats.stats.average.passiveXPDiff, true));
     updateTeamStat(elem, 'team-passive-total', formatStat('passiveXPGain', teamStats.stats.average.passiveXPGain, true));
 
-    updateTeamStat(elem, 'team-level-adv-time', formatStat('levelAdvTime', teamStats.stats.average.levelAdvTime, true));
+    updateTeamStat(elem, 'team-level-adv-time', formatSeconds(teamStats.stats.average.levelAdvTime));
+    updateTeamStat(elem, 'team-level-adv-pct', formatStat('levelAdvPct', teamStats.stats.average.levelAdvPct, true));
     updateTeamStat(elem, 'team-avg-level-adv', formatStat('avgLevelAdv', teamStats.stats.average.avgLevelAdv, true));
     updateTeamStat(elem, 'team-avg-level-lead', formatStat('maxLevelAdv', teamStats.stats.average.maxLevelAdv, true));
 
@@ -391,6 +392,7 @@ function loadTeamData(team, matches, heroData) {
     updateTeamStat(elem, 'team-wipes', formatStat('wipes', teamStats.stats.total.wipes, true));
 
     updateTeamStat(elem, 'team-time-hero-adv', formatSeconds(teamStats.stats.average.timeWithHeroAdv));
+    updateTeamStat(elem, 'team-time-hero-advp', formatStat('pct', teamStats.stats.average.pctWithHeroAdv, true));
     updateTeamStat(elem, 'team-heroes-alive', formatStat('avgHeroesAlive', teamStats.stats.average.avgHeroesAlive, true));
 
     updateTeamStat(elem, 'team-pct-0-hero', formatStat('pctWith0HeroesAlive', teamStats.stats.average.pctWith0HeroesAlive, true));
@@ -560,6 +562,7 @@ function getTeamCompareStats(teamStats, heroStats) {
   stats.passiveTotal = { name: 'Passive XP Gain', val: teamStats.stats.average.passiveXPRate, format: formatStat('passiveXPGain', teamStats.stats.average.passiveXPGain, true) };
 
   stats.levelAdvTime = { name: 'Avg. Time w/ Level Adv.', val: teamStats.stats.average.levelAdvTime, format: formatSeconds(teamStats.stats.average.levelAdvTime) };
+  stats.levelAdvPct = { name: 'Avg. % of Game w/ Level Adv.', val: teamStats.stats.average.levelAdvPct, format: formatStat('pct', teamStats.stats.average.levelAdvPct, true) };
   stats.levelAdv = { name: 'Avg. Level Adv.', val: teamStats.stats.average.avgLevelAdv, format: formatStat('avgLevelAdv', teamStats.stats.average.avgLevelAdv, true) };
   stats.levelLead = { name: 'Avg. Max Level Lead', val: teamStats.stats.average.maxLevelAdv, format: formatSeconds('maxLevelAdv', teamStats.stats.average.maxLevelAdv, true) };
 
@@ -599,6 +602,7 @@ function getTeamCompareStats(teamStats, heroStats) {
   stats.wipes = { name : 'Wipes', val: teamStats.stats.total.wipes, format: formatStat('Wipes', teamStats.stats.total.wipes, true) };
 
   stats.timeWithHeroAdv = { name : 'Avg. Time w/ Hero Adv.', val: teamStats.stats.average.timeWithHeroAdv, format: formatSeconds(teamStats.stats.average.timeWithHeroAdv) };
+  stats.pctWithHeroAdv = { name: 'Avg. % of Game w/ Hero Adv.', val: teamStats.stats.average.pctWithHeroAdv, format: formatStat('pctWithHeroAdv', teamStats.stats.average.pctWithHeroAdv, true) };
   stats.avgHeroesAlive = { name : 'Avg. Heroes Alive', val: teamStats.stats.average.avgHeroesAlive, format: formatStat('avgHeroesAlive', teamStats.stats.average.avgHeroesAlive, true) };
 
   stats.pct0Hero = { name: 'Avg. % 0 Heroes Alive', val: teamStats.stats.average.pctWith0HeroesAlive, format: formatStat('pctWith0HeroesAlive', teamStats.stats.average.pctWith0HeroesAlive, true) };
