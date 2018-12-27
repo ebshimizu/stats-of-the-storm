@@ -17,6 +17,7 @@ var teamOverallStatGraph, teamOverallStatGraphData;
 var teamfightStatGraph, teamfightStatGraphData;
 var teamCCGraph, teamCCGraphData;
 var timePerTierGraphData, timePerTierGraph;
+var heroUptimeGraphData, heroUptimeGraph;
 var overallLevelGraphData, overallLevelGraph;
 const xpBreakdownOpts = {
   maintainAspectRatio: false,
@@ -2043,8 +2044,11 @@ function initTeamStatGraphs() {
     },
     options: {
       tooltips: {
-        intersect: true,
-        mode: 'point'
+        callbacks : {
+          label: function(tooltipItem, data) {
+            return `${data.datasets[tooltipItem.datasetIndex].label}: ${formatSeconds(tooltipItem.yLabel)}`;
+          }
+        }
       },
       responsive: true,
       maintainAspectRatio: false,
@@ -2064,7 +2068,12 @@ function initTeamStatGraphs() {
         }],
         yAxes: [{
           ticks: {
-            fontColor: '#FFFFFF'
+            fontColor: '#FFFFFF',
+            callback: function(value, index, values) {
+              return formatSeconds(value);
+            },
+            stepSize: 60,
+            min: 0
           },
           gridLines: {
             display: false
@@ -2073,6 +2082,56 @@ function initTeamStatGraphs() {
       }
     }
   }
+
+  heroUptimeGraphData = {
+    type: 'bar',
+    data: {
+      labels: ['0', '1', '2', '3', '4', '5']
+    },
+    options: {
+      tooltips: {
+        callbacks : {
+          label: function(tooltipItem, data) {
+            return `${data.datasets[tooltipItem.datasetIndex].label}: ${formatSeconds(tooltipItem.yLabel)}`;
+          }
+        }
+      },
+      responsive: true,
+      maintainAspectRatio: false,
+      legend: {
+        labels: {
+          fontColor: '#FFFFFF'
+        }
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
+            fontColor: '#FFFFFF'
+          },
+          gridLines: {
+            color: '#ababab'
+          },
+          scaleLabel: {
+            display: true,
+            labelString: 'Heroes Alive',
+            fontColor: '#FFFFFF'
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            fontColor: '#FFFFFF',
+            callback: function(value, index, values) {
+              return formatSeconds(value);
+            },
+            min: 0
+          },
+          gridLines: {
+            display: false
+          }
+        }]
+      }
+    }
+  };
 
   teamfightStatGraphData = {
     type: 'horizontalBar',
@@ -2158,6 +2217,7 @@ function initTeamStatGraphs() {
   teamfightStatGraph = new Chart($('#match-detail-teamfight-numbers'), teamfightStatGraphData);
   teamCCGraph = new Chart($('#match-detail-team-cc'), teamCCGraphData);
   timePerTierGraph = new Chart($('#match-detail-time-per-tier'), timePerTierGraphData);
+  heroUptimeGraph = new Chart($('#match-detail-hero-uptime'), heroUptimeGraphData);
 }
 
 function loadTeamStats() {
@@ -2170,6 +2230,7 @@ function drawTeamStatGraphs() {
   teamfightStatGraphData.data.datasets = [];
   teamCCGraphData.data.datasets = [];
   timePerTierGraphData.data.datasets = [];
+  heroUptimeGraphData.data.datasets = [];
 
   // since it's stacked i can just kinda dump everything in the right plcae hopefully
   var blueCt = 0;
@@ -2251,6 +2312,18 @@ function drawTeamStatGraphs() {
     data: []
   });
 
+  heroUptimeGraphData.data.datasets.push({
+    label: 'Blue Team',
+    backgroundColor: '#2185d0',
+    data: []
+  });
+  heroUptimeGraphData.data.datasets.push({
+    label: 'Red Team',
+    backgroundColor: '#db2828',
+    data: []
+  });
+  
+
   for (let i in intervals) {
     let interval = intervals[i];
 
@@ -2277,10 +2350,19 @@ function drawTeamStatGraphs() {
     }
   }
 
+  // parser v7 data
+  if (matchDetailMatch.teams[0].stats.uptimeHistogram) {
+    for (let i = 0; i <= 5; i++) {
+      heroUptimeGraphData.data.datasets[0].data.push(matchDetailMatch.teams[0].stats.uptimeHistogram[i]);
+      heroUptimeGraphData.data.datasets[1].data.push(matchDetailMatch.teams[1].stats.uptimeHistogram[i]);
+    }
+  }
+
   teamOverallStatGraph.update();
   teamfightStatGraph.update();
   teamCCGraph.update();
   timePerTierGraph.update();
+  heroUptimeGraph.update();
 }
 
 function updateTeamStats() {
