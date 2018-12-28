@@ -157,8 +157,8 @@ function updateTeamRankingData(err, matches, team) {
   teamStats.selectedStats = teamStats.stats[mode];
   teamStats.selectedStats.totalKDA = teamStats.stats.total.totalKDA;
   
-  teamStats.stats.takedowns = teamStats.takedowns[mode];
-  teamStats.stats.deaths = teamStats.deaths[mode];
+  teamStats.selectedStats.Takedowns = teamStats.takedowns[mode];
+  teamStats.selectedStats.Deaths = teamStats.deaths[mode];
 
   teamStats.structures.Fort.first /= Math.max(1, teamStats.structures.Fort.gamesWithFirst);
   teamStats.structures.Keep.first /= Math.max(1, teamStats.structures.Keep.gamesWithFirst);

@@ -95,6 +95,9 @@ function loadMapStats() {
       } else {
         context.firstObjectiveWinsPct = context.firstObjectiveWins / context.games;
       }
+      context.firstFortWinPct = context.firstFortWin / context.games;
+      context.firstKeepWinPct = context.firstKeepWin / context.games;
+
       context.blueWinPct = context.blueWin / context.games;
       context.redWinPct = context.redWin / context.games;
       context.map = map;

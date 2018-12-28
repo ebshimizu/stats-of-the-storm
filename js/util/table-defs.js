@@ -745,12 +745,12 @@ const TeamRankingFormat = {
     {
       title: 'Takedowns',
       data: 'selectedStats.Takedowns',
-      render: (data) => formatStat('Takedowns', data)
+      render: (data) => formatStat('Takedowns', data, true)
     },
     {
       title: 'Deaths',
       data: 'selectedStats.Deaths',
-      render: (data) => formatStat('Deaths', data)
+      render: (data) => formatStat('Deaths', data, true)
     },
     {
       title: 'Hero Pool',
@@ -769,7 +769,7 @@ const TeamRankingFormat = {
     {
       title: '% Time Dead',
       data: 'selectedStats.timeDeadPct',
-      render: (data) => formatStat('timeDeadPct', data)
+      render: (data) => formatStat('timeDeadPct', data, true)
     },
     {
       title: 'Time w/ Level Adv.',

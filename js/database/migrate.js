@@ -150,7 +150,8 @@ module.exports = function(DB, callback) {
     setLoadMessage('Version 7 Upgrade Complete');
     showMessage(
       'Parser Updated to Version 7',
-      `Version 7 of the parser adds additional stats (mostly related to teams)
+      `Running "Compact Database" from settings is recommended after an update.<br>
+      Version 7 of the parser adds additional stats (mostly related to teams)
       and contains additional location information for heroes and mercs.
       In order to utilize this data, you will need to <strong>re-parse</strong> your matches.<br>
       If you have teams that you would like to save, the recommended process is to make
@@ -450,7 +451,7 @@ module.exports = function(DB, callback) {
         migrateVersion5ToVersion6();
         return;
       }
-      else if (dbVer ===6 ) {
+      else if (dbVer === 6) {
         migrateVersion6ToVersion7();
         return;
       }

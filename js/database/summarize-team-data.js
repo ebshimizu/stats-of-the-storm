@@ -347,7 +347,7 @@ function summarizeTeamData(team, docs, HeroesTalents) {
         // bif of extra work to format these to cleanly fit in app
         for (let i = 0; i <= 5; i++) {
           const statName = `pctWith${i}HeroesAlive`;
-          const time = match.teams[t].stats[stat][i] / match.length;
+          let time = match.teams[t].stats[stat][i] / match.length;
           
           // if undefined, set to 0
           if (!time)
