@@ -44,8 +44,14 @@ const DetailStatList = [
   'XPM',
   'MercCampCaptures',
   //'TownKills',
-  'WatchTowerCaptures'
+  'WatchTowerCaptures',
   //'Role'
+  'aces',
+  'wipes',
+  'levelAdvPct',
+  'pctWithHeroAdv',
+  'passiveXPRate',
+  'passiveXPGain'
 ];
 
 module.exports = DetailStatList;

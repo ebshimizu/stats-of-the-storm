@@ -842,12 +842,16 @@ function renderPlayerSummary() {
   $('#player-detail-misc-summary .statistic[name="overallTD"] .value').text(formatStat('', playerDetailStats.totalTD, true));
   $('#player-detail-misc-summary .statistic[name="overallDeaths"] .value').text(formatStat('', playerDetailStats.totalDeaths, true));
   $('#player-detail-misc-summary .statistic[name="overallKDA"] .value').text(formatStat('KDA', playerDetailStats.totalTD / Math.max(playerDetailStats.totalDeaths, 1)));
-  $('#player-detail-misc-summary .statistic[name="overallMVP"] .value').text(formatStat('pct', playerDetailStats.totalMVP / Math.max(playerDetailStats.games, 1)));
-  $('#player-detail-misc-summary .statistic[name="overallAward"] .value').text(formatStat('pct', playerDetailStats.totalAward / Math.max(playerDetailStats.games)));
   $('#player-detail-misc-summary .statistic[name="timeDead"] .value').text(formatSeconds(playerDetailStats.totalTimeDead / playerDetailStats.games));
-  $('#player-detail-misc-summary .statistic[name="votes"] .value').text(formatStat('', playerDetailStats.totalVotes, true));
   $('#player-detail-misc-summary .statistic[name="pctTimeDead"] .value').text(formatStat('pct', playerDetailStats.avgTimeDeadPct));
   $('#player-detail-misc-summary .statistic[name="highestStreak"] .value').text(formatStat('', playerDetailStats.highestStreak, true));
+  $('#player-detail-misc-summary .statistic[name="passiveXPRate"] .value').text(formatStat('passiveXPRate', playerDetailStats.avgPassiveXP, true));
+  $('#player-detail-misc-summary .statistic[name="levelAdvPct"] .value').text(formatStat('levelAdvPct', playerDetailStats.avgLevelAdv, true));
+  $('#player-detail-misc-summary .statistic[name="pctWithHeroAdv"] .value').text(formatStat('pctWithHeroAdv', playerDetailStats.avgHeroAdv, true));
+
+  $('#player-detail-taunt-summary .statistic[name="votes"] .value').text(formatStat('', playerDetailStats.totalVotes, true));
+  $('#player-detail-taunt-summary .statistic[name="overallMVP"] .value').text(formatStat('pct', playerDetailStats.totalMVP / Math.max(playerDetailStats.games, 1)));
+  $('#player-detail-taunt-summary .statistic[name="overallAward"] .value').text(formatStat('pct', playerDetailStats.totalAward / Math.max(playerDetailStats.games)));
 
   // taunts
   setTauntStats('bstep', playerDetailStats.taunts.bsteps);

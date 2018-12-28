@@ -237,6 +237,9 @@ function summarizeHeroData(docs) {
   playerDetailStats.totalMatchLength = 0;
   playerDetailStats.totalVotes = 0;
   playerDetailStats.avgTimeDeadPct = 0;
+  playerDetailStats.avgPassiveXP = 0;
+  playerDetailStats.avgLevelAdv = 0;
+  playerDetailStats.avgHeroAdv = 0;
   playerDetailStats.total = {};
 
   for (let h in playerDetailStats.heroes) {
@@ -267,8 +270,14 @@ function summarizeHeroData(docs) {
     playerDetailStats.totalMatchLength += playerDetailStats.heroes[h].totalTime;
     playerDetailStats.totalVotes += playerDetailStats.heroes[h].votes;
     playerDetailStats.avgTimeDeadPct += playerDetailStats.heroes[h].stats.timeDeadPct;
+    playerDetailStats.avgPassiveXP += playerDetailStats.heroes[h].stats.passiveXPRate;
+    playerDetailStats.avgLevelAdv += playerDetailStats.heroes[h].stats.levelAdvPct;
+    playerDetailStats.avgHeroAdv += playerDetailStats.heroes[h].stats.pctWithHeroAdv;
   }
   playerDetailStats.avgTimeDeadPct /= playerDetailStats.games;
+  playerDetailStats.avgPassiveXP /= playerDetailStats.games;
+  playerDetailStats.avgLevelAdv /= playerDetailStats.games;
+  playerDetailStats.avgHeroAdv /= playerDetailStats.games;
 
   return playerDetailStats;
 }
