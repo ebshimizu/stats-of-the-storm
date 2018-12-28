@@ -144,6 +144,23 @@ module.exports = function(DB, callback) {
     });
   }
 
+  // version 7's mostly a formality, the parser adds new data so things have
+  // to be re-imported for best results
+  function migrateVersion6ToVersion7() {
+    setLoadMessage('Version 7 Upgrade Complete');
+    showMessage(
+      'Parser Updated to Version 7',
+      `Version 7 of the parser adds additional stats (mostly related to teams)
+      and contains additional location information for heroes and mercs.
+      In order to utilize this data, you will need to <strong>re-parse</strong> your matches.<br>
+      If you have teams that you would like to save, the recommended process is to make
+      a new database, re-parse the matches, then import only the teams from the old database
+      using the Database Import feature in settings.`,
+      { sticky: true, class: 'positive' }
+    );
+    DB.setDBVersion(7, checkDBVersion(7));
+  }
+
   function updateMatchToVersion3(match, remaining) {
     try {
       console.log('updating match ' + match._id);
@@ -431,6 +448,10 @@ module.exports = function(DB, callback) {
       }
       else if (dbVer === 5) {
         migrateVersion5ToVersion6();
+        return;
+      }
+      else if (dbVer ===6 ) {
+        migrateVersion6ToVersion7();
         return;
       }
     }
