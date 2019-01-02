@@ -24,6 +24,25 @@
             gets talent info, hero info, and images from <a href="https://github.com/heroespatchnotes/heroes-talents">heroes-talents</a>.
           </p>
           <div class="ui inverted horizontal divider">Change Log</div>
+          <div class="ui inverted dividing header">Version 2.5.0</div>
+          <p>
+            Parser: Updated to version 7. Resolves <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/256">#256</a>. <br>
+            Version 7 enables some new stats focused on team performance. These stats
+            include passive XP gains, team aces, team wipes, team hero uptime tracking,
+            and level advantage tracking. The parser also extracts some more detailed
+            location data, however that data is not displayed in the app yet.
+            You will need to re-parse your matches to take full advantage of the parser update.
+          </p>
+          <p>
+            Parser: Updated for 2.42.0
+          </p>
+          <p>
+            Collection: Battlegrounds: Added first fort/keep win % columns to individual maps.
+          </p>
+          <p>
+            <a href="https://github.com/ebshimizu/stats-of-the-storm/issues/268">#268</a> Bugfix:
+            corrected display issue with Braxis Holdout wave percentages on Match Details.
+          </p>
           <div class="ui inverted dividing header">Version 2.4.14</div>
           <p>Parser: Updated for 2.41.2</p>
           <div class="ui inverted dividing header">Version 2.4.13</div>
@@ -976,6 +995,46 @@
               Defined as a hero where both teams have pick %s within 10%, and pick a hero at least 25%
               of the time, or where one team prioritizes banning a hero that the other team picks (30%
               threshold for pick and ban rates).
+            </div>
+            <div class="item">
+              <div class="header">Passive XP</div>
+              This stat comes in three flavors. Passive XP/second is the average amount of
+              passive XP/second earned over the entire game. The baseline is 20 XP/s.
+              Passive XP % Gain is the percentage of passive exp earned above the baseline.
+              So as an example, if your team averaged 25 XP/s, your passive XP gain would be +25%.
+              Passive XP Gain is the absolute amount of XP gained over the baseline during a match.
+            </div>
+            <div class="item">
+              <div class="header">Aces</div>
+              Number of times a team managed to remove all heroes on the other team
+              from play at the same time. This means that if respawn timers are short,
+              a 5 man team wipe may not be recorded as an ace.
+            </div>
+            <div class="item">
+              <div class="header">Wipes</div>
+              Number of times a team had all of their heroes removed
+              from play at the same time. This means that if respawn timers are short,
+              a 5 man team wipe may not be recorded as an wipe.
+            </div>
+            <div class="item">
+              <div class="header">Level Advantage % (Level Adv. %)</div>
+              Percent of the match that a team had a level advantage.
+            </div>
+            <div class="item">
+              <div class="header">Level Advantage (Level Adv.)</div>
+              Indicates the level lead for a given team. Average level advantage
+              counts the average positive level lead across the entire game. Max level
+              advantage counts the maximum attained level lead. This value is never negative.
+            </div>
+            <div class="item">
+              <div class="header">Average Heroes Alive</div>
+              Average number of heroes alive on the team
+              across the entire game. 5 indicates a perfect game.
+            </div>
+            <div class="item">
+              <div class="header">Hero Advantage % (Hero Adv. %)</div>
+              Percent of the match that a team had strictly more
+              more heroes alive than the other team.
             </div>
           </div>
         </div>
