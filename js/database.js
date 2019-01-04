@@ -475,7 +475,16 @@ class Database {
         }
   
         // only want specific users
-        let query2 = { ToonHandle: { $in: team.players } };
+        let query2 = {
+          $and: [
+            { ToonHandle: { $in: team.players } },
+            { "with.ids.0": { $in: team.players } },
+            { "with.ids.1": { $in: team.players } },
+            { "with.ids.2": { $in: team.players } },
+            { "with.ids.3": { $in: team.players } },
+            { "with.ids.4": { $in: team.players } }
+          ]
+        };
   
         DB.getHeroDataForMatches(matchIDs, query2, function(err, heroData) {
           // and now finally load the team data
