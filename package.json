@@ -58,12 +58,12 @@
     "node-watch": "^0.5.8",
     "npm": "^5.8.0",
     "request": "^2.88.0",
-    "semantic-ui": "^2.3.1",
+    "semantic-ui": "^2.4.0",
     "vis": "^4.21.0",
     "xregexp": "^4.1.1"
   },
   "devDependencies": {
-    "electron": "^2.0.2",
+    "electron": "^4.0.0",
     "electron-builder": "^20.11.1",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",

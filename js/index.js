@@ -328,7 +328,15 @@ function getTemplate(name, selector) {
 
 function createBGWindow() {
   let bgPath = 'file://' + path.join(__dirname, './background.html');
-  bgWindow = new BrowserWindow({width: 400, height: 400, show: false});
+  bgWindow = new BrowserWindow({
+    width: 400,
+    height: 400,
+    show: false,
+    webPreferences: {
+      nodeIntegration: true,
+      devTools: true
+    }
+  });
   bgWindow.loadURL(bgPath);
   //bgWindow.webContents.openDevTools();
 }

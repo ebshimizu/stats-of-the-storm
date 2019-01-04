@@ -31,7 +31,11 @@ function createWindow () {
     width: mainWindowState.width,
     height: mainWindowState.height,
     frame: false,
-    backgroundColor: '#1b1c1d'
+    backgroundColor: '#1b1c1d',
+    webPreferences: {
+      nodeIntegration: true,
+      devTools: true
+    }
   });
 
   // Let us register listeners on the window, so we can update the state
