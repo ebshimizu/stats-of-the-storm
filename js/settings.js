@@ -1127,9 +1127,16 @@ function finishCopyZipContents() {
 
   // expected files
   for (let db of ['matches.ldb', 'hero.ldb', 'players.ldb', 'settings.ldb']) {
-    if (!fs.statSync(path.join(app.getPath('userData'), 'download-tmp', db))) {
+    try {
+      fs.statSync(path.join(app.getPath('userData'), 'download-tmp', db));
+    }
+    catch (e) {
       showMessage(`External DB download failed`, `Missing expected files. Database may be in inconsistent state`, { class: 'negative', sticky: true });
-      cleanUpDownload();
+      let fileLoc = path.join(app.getPath('userData'), 'downloadedFile.zip');
+      fs.removeSync(fileLoc);
+    
+      let extractLoc = path.join(app.getPath('userData'), 'download-tmp');
+      fs.removeSync(extractLoc);
       return;
     }
   }
@@ -1146,7 +1153,7 @@ function finishCopyZipContents() {
       return;
     }
 
-    idx = idx + 1;
+    idx += 1;
   }
 
   console.log('cleaining up download files');
@@ -1164,7 +1171,8 @@ function finishCopyZipContents() {
 function tryCopyDatabaseFolder(dbFolder) {
   let folderLoc = path.join(app.getPath('userData'), 'download-tmp', dbFolder);
   let folderDest = path.join(settings.get('dbPath'), dbFolder);
-  if (fs.statSync(folderLoc)) {
+  try {
+    fs.statSync(folderLoc);
     console.log(`Copying ${dbFolder}`);
 
     // i don't think we have to copy hint files
@@ -1172,8 +1180,9 @@ function tryCopyDatabaseFolder(dbFolder) {
     fs.copySync(folderLoc, folderDest);
     return true;
   }
-
-  return false;
+  catch (e) {
+    return false;
+  }
 }
 
 function cleanUpDownload() {
