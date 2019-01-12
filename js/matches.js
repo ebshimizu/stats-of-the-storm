@@ -185,6 +185,7 @@ function resetMatchFilters() {
   $('#match-search-team').dropdown('restore defaults');
   $('#match-search-players-win').dropdown('restore defaults');
   $('#match-search-team-win').dropdown('restore defaults');
+  $('#search-hero-on-team').checkbox('uncheck');
 
   $('#match-search-start-date').datepicker('setDate', new Date('1-1-2012'));
   $('#match-search-end-date').datepicker('setDate', new Date());
