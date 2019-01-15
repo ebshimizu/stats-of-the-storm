@@ -257,6 +257,8 @@ function loadOverallHeroCollectionData() {
       for (let p in banContext.picks) {
         banContext.picks[p].pct = banContext.picks[p].count / overallStats.totalMatches;
         banContext.picks[p].formatPct = formatStat('pct', banContext.picks[p].pct);
+        banContext.picks[p].winPct = banContext.picks[p].wins / banContext.picks[p].count;
+        banContext.picks[p].formatWinPct = formatStat('pct', banContext.picks[p].winPct);
       }
 
       $('#hero-collection-picks tbody').append(heroCollectionPickRowTemplate(banContext));

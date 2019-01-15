@@ -26,6 +26,10 @@
   font-size: 14pt;
 }
 
+#hero-collection-picks tbody {
+  font-size: 12pt;
+}
+
 #hero-collection-detail-map-summary
 {
   height: 689px;

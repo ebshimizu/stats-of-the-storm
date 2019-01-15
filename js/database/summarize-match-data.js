@@ -1,3 +1,23 @@
+function newMatchHeroData() {
+  return {
+    wins: 0,
+    bans: {
+      first: 0,
+      second: 0,
+      total: 0
+    },
+    games: 0,
+    involved: 0,
+    picks: {
+      round1: { count: 0, wins: 0 },
+      round2: { count: 0, wins: 0 },
+      round3: { count: 0, wins: 0 },
+      preMid: { count: 0, wins: 0 },
+      postMid: { count: 0, wins: 0 }
+    }
+  }
+}
+
 // this returns an object containing hero name and various pick
 // and win stats for the given collection of matches
 // need a heroes talents instance to process the bans
@@ -21,21 +41,7 @@ function summarizeMatchData(docs, HeroesTalents) {
         let hero = teamHeroes[h];
 
         if (!(hero in data)) {
-          data[hero] = {
-            wins: 0,
-            bans: {
-              first: 0,
-              second: 0,
-              total: 0
-            },
-            games: 0,
-            involved: 0,
-            picks: {
-              round1: { count: 0, wins: 0 },
-              round2: { count: 0, wins: 0 },
-              round3: { count: 0, wins: 0 }
-            }
-          };
+          data[hero] = newMatchHeroData();
         }
         comp.push(HeroesTalents.role(hero));
 
@@ -77,18 +83,42 @@ function summarizeMatchData(docs, HeroesTalents) {
         data[pickData[second][3]].picks.round2.count += 1;
         data[pickData[second][4]].picks.round3.count += 1;
 
+        data[pickData[first][0]].picks.preMid.count += 1;
+        data[pickData[first][1]].picks.preMid.count += 1;
+        data[pickData[first][2]].picks.preMid.count += 1;
+        data[pickData[first][3]].picks.postMid.count += 1;
+        data[pickData[first][4]].picks.postMid.count += 1;
+
+        data[pickData[second][0]].picks.preMid.count += 1;
+        data[pickData[second][1]].picks.preMid.count += 1;
+        data[pickData[second][2]].picks.postMid.count += 1;
+        data[pickData[second][3]].picks.postMid.count += 1;
+        data[pickData[second][4]].picks.postMid.count += 1;
+
         if (first === winner) {
           data[pickData[first][0]].picks.round1.wins += 1;
           data[pickData[first][1]].picks.round2.wins += 1;
           data[pickData[first][2]].picks.round2.wins += 1;
           data[pickData[first][3]].picks.round3.wins += 1;
           data[pickData[first][4]].picks.round3.wins += 1;
+
+          data[pickData[first][0]].picks.preMid.wins += 1;
+          data[pickData[first][1]].picks.preMid.wins += 1;
+          data[pickData[first][2]].picks.preMid.wins += 1;
+          data[pickData[first][3]].picks.postMid.wins += 1;
+          data[pickData[first][4]].picks.postMid.wins += 1;
         } else {
           data[pickData[second][0]].picks.round1.wins += 1;
           data[pickData[second][1]].picks.round1.wins += 1;
           data[pickData[second][2]].picks.round2.wins += 1;
           data[pickData[second][3]].picks.round2.wins += 1;
           data[pickData[second][4]].picks.round3.wins += 1;
+
+          data[pickData[second][0]].picks.preMid.wins += 1;
+          data[pickData[second][1]].picks.preMid.wins += 1;
+          data[pickData[second][2]].picks.postMid.wins += 1;
+          data[pickData[second][3]].picks.postMid.wins += 1;
+          data[pickData[second][4]].picks.postMid.wins += 1;
         }
       } else {
         console.log(
@@ -110,21 +140,7 @@ function summarizeMatchData(docs, HeroesTalents) {
           let hero = HeroesTalents.heroNameFromAttr(match.bans[t][b].hero);
 
           if (!(hero in data)) {
-            data[hero] = {
-              wins: 0,
-              bans: {
-                first: 0,
-                second: 0,
-                total: 0
-              },
-              games: 0,
-              involved: 0,
-              picks: {
-                round1: { count: 0, wins: 0 },
-                round2: { count: 0, wins: 0 },
-                round3: { count: 0, wins: 0 }
-              }
-            };
+            data[hero] = newMatchHeroData();
           }
 
           if (match.bans[t][b].order === 1) {
