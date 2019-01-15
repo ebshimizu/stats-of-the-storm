@@ -16,9 +16,75 @@ function newHeroData() {
     picks: {
       round1: { count: 0, wins: 0 },
       round2: { count: 0, wins: 0 },
-      round3: { count: 0, wins: 0 }
+      round3: { count: 0, wins: 0 },
+      preMid: { count: 0, wins: 0 },
+      postMid: { count: 0, wins: 0 }
     }
   };
+}
+
+function recordFirstPickStats(data, picks, winner) {
+  data.firstPicks += 1;
+
+  data.heroes[picks[0]].picks.round1.count += 1;
+  data.heroes[picks[1]].picks.round2.count += 1;
+  data.heroes[picks[2]].picks.round2.count += 1;
+  data.heroes[picks[3]].picks.round3.count += 1;
+  data.heroes[picks[4]].picks.round3.count += 1;
+
+  // pre/post mid ban stats
+  data.heroes[picks[0]].picks.preMid.count += 1;
+  data.heroes[picks[1]].picks.preMid.count += 1;
+  data.heroes[picks[2]].picks.preMid.count += 1;
+  data.heroes[picks[3]].picks.postMid.count += 1;
+  data.heroes[picks[4]].picks.postMid.count += 1;
+
+  if (winner) {
+    data.firstPickWins += 1;
+
+    data.heroes[picks[0]].picks.round1.wins += 1;
+    data.heroes[picks[1]].picks.round2.wins += 1;
+    data.heroes[picks[2]].picks.round2.wins += 1;
+    data.heroes[picks[3]].picks.round3.wins += 1;
+    data.heroes[picks[4]].picks.round3.wins += 1;
+
+    // pre/post mid ban stats
+    data.heroes[picks[0]].picks.preMid.wins += 1;
+    data.heroes[picks[1]].picks.preMid.wins += 1;
+    data.heroes[picks[2]].picks.preMid.wins += 1;
+    data.heroes[picks[3]].picks.postMid.wins += 1;
+    data.heroes[picks[4]].picks.postMid.wins += 1;
+  }
+}
+
+function recordSecondPickStats(data, picks, winner) {
+  data.heroes[picks[0]].picks.round1.count += 1;
+  data.heroes[picks[1]].picks.round1.count += 1;
+  data.heroes[picks[2]].picks.round2.count += 1;
+  data.heroes[picks[3]].picks.round2.count += 1;
+  data.heroes[picks[4]].picks.round3.count += 1;
+
+  // pre/post mid ban stats
+  data.heroes[picks[0]].picks.preMid.count += 1;
+  data.heroes[picks[1]].picks.preMid.count += 1;
+  data.heroes[picks[2]].picks.postMid.count += 1;
+  data.heroes[picks[3]].picks.postMid.count += 1;
+  data.heroes[picks[4]].picks.postMid.count += 1;
+
+  if (winner) {
+    data.heroes[picks[0]].picks.round1.wins += 1;
+    data.heroes[picks[1]].picks.round1.wins += 1;
+    data.heroes[picks[2]].picks.round2.wins += 1;
+    data.heroes[picks[3]].picks.round2.wins += 1;
+    data.heroes[picks[4]].picks.round3.wins += 1;
+
+    // pre/post mid ban stats
+    data.heroes[picks[0]].picks.preMid.wins += 1;
+    data.heroes[picks[1]].picks.preMid.wins += 1;
+    data.heroes[picks[2]].picks.postMid.wins += 1;
+    data.heroes[picks[3]].picks.postMid.wins += 1;
+    data.heroes[picks[4]].picks.postMid.wins += 1;
+  }
 }
 
 // special version of summarize match data that only pulls stats from one of the teams
@@ -106,8 +172,14 @@ function summarizeTeamData(team, docs, HeroesTalents) {
     levelDiff = t === 0 ? levelDiff : -levelDiff;
 
     data.endOfGameLevels.combined.total += levelDiff;
-    data.endOfGameLevels.combined.min = Math.min(data.endOfGameLevels.combined.min, levelDiff);
-    data.endOfGameLevels.combined.max = Math.max(data.endOfGameLevels.combined.max, levelDiff);
+    data.endOfGameLevels.combined.min = Math.min(
+      data.endOfGameLevels.combined.min,
+      levelDiff
+    );
+    data.endOfGameLevels.combined.max = Math.max(
+      data.endOfGameLevels.combined.max,
+      levelDiff
+    );
     data.endOfGameLevels.combined.medianTmp.push(levelDiff);
 
     if (!(match.map in data.maps)) {
@@ -119,14 +191,25 @@ function summarizeTeamData(team, docs, HeroesTalents) {
       data.wins += 1;
 
       data.endOfGameLevels.win.total += levelDiff;
-      data.endOfGameLevels.win.min = Math.min(data.endOfGameLevels.win.min, levelDiff);
-      data.endOfGameLevels.win.max = Math.max(data.endOfGameLevels.win.max, levelDiff);
+      data.endOfGameLevels.win.min = Math.min(
+        data.endOfGameLevels.win.min,
+        levelDiff
+      );
+      data.endOfGameLevels.win.max = Math.max(
+        data.endOfGameLevels.win.max,
+        levelDiff
+      );
       data.endOfGameLevels.win.medianTmp.push(levelDiff);
-    }
-    else {
+    } else {
       data.endOfGameLevels.loss.total += levelDiff;
-      data.endOfGameLevels.loss.min = Math.min(data.endOfGameLevels.loss.min, levelDiff);
-      data.endOfGameLevels.loss.max = Math.max(data.endOfGameLevels.loss.max, levelDiff);
+      data.endOfGameLevels.loss.min = Math.min(
+        data.endOfGameLevels.loss.min,
+        levelDiff
+      );
+      data.endOfGameLevels.loss.max = Math.max(
+        data.endOfGameLevels.loss.max,
+        levelDiff
+      );
       data.endOfGameLevels.loss.medianTmp.push(levelDiff);
     }
 
@@ -164,9 +247,8 @@ function summarizeTeamData(team, docs, HeroesTalents) {
       // with stats
       for (let h2 in teamHeroes) {
         let hero2 = teamHeroes[h2];
-        
-        if (hero2 === hero)
-          continue;
+
+        if (hero2 === hero) continue;
 
         if (!(hero2 in data.heroes[hero].with)) {
           data.heroes[hero].with[hero2] = { name: hero2, games: 0, wins: 0 };
@@ -187,37 +269,9 @@ function summarizeTeamData(team, docs, HeroesTalents) {
 
       if (picks.length === 5) {
         if (first) {
-          data.firstPicks += 1;
-
-          data.heroes[picks[0]].picks.round1.count += 1;
-          data.heroes[picks[1]].picks.round2.count += 1;
-          data.heroes[picks[2]].picks.round2.count += 1;
-          data.heroes[picks[3]].picks.round3.count += 1;
-          data.heroes[picks[4]].picks.round3.count += 1;
-
-          if (t === winner) {
-            data.firstPickWins += 1;
-
-            data.heroes[picks[0]].picks.round1.wins += 1;
-            data.heroes[picks[1]].picks.round2.wins += 1;
-            data.heroes[picks[2]].picks.round2.wins += 1;
-            data.heroes[picks[3]].picks.round3.wins += 1;
-            data.heroes[picks[4]].picks.round3.wins += 1;
-          }
+          recordFirstPickStats(data, picks, t === winner);
         } else {
-          data.heroes[picks[0]].picks.round1.count += 1;
-          data.heroes[picks[1]].picks.round1.count += 1;
-          data.heroes[picks[2]].picks.round2.count += 1;
-          data.heroes[picks[3]].picks.round2.count += 1;
-          data.heroes[picks[4]].picks.round3.count += 1;
-
-          if (t === winner) {
-            data.heroes[picks[0]].picks.round1.wins += 1;
-            data.heroes[picks[1]].picks.round1.wins += 1;
-            data.heroes[picks[2]].picks.round2.wins += 1;
-            data.heroes[picks[3]].picks.round2.wins += 1;
-            data.heroes[picks[4]].picks.round3.wins += 1;
-          }
+          recordSecondPickStats(data, picks, t === winner);
         }
       }
     }
@@ -277,8 +331,7 @@ function summarizeTeamData(team, docs, HeroesTalents) {
       // bans against
       let otherTeamBans = t === 0 ? match.bans[1] : match.bans[0];
       for (let b in otherTeamBans) {
-        if (otherTeamBans[b].hero === '')
-          continue;
+        if (otherTeamBans[b].hero === "") continue;
 
         let hero = HeroesTalents.heroNameFromAttr(otherTeamBans[b].hero);
         if (!(hero in data.heroes)) {
@@ -295,8 +348,7 @@ function summarizeTeamData(team, docs, HeroesTalents) {
 
     // stat aggregation
     for (let stat in match.teams[t].stats) {
-      if (stat === 'uptime')
-        continue;
+      if (stat === "uptime") continue;
 
       if (stat === "structures") {
         for (let struct in match.teams[t].stats.structures) {
@@ -320,8 +372,7 @@ function summarizeTeamData(team, docs, HeroesTalents) {
             data.structures[struct].gamesWithFirst += 1;
           }
         }
-      }
-      else if (stat === "totals") {
+      } else if (stat === "totals") {
         for (let total in match.teams[t].stats.totals) {
           if (!(total in data.stats.total)) {
             data.stats.total[total] = 0;
@@ -342,37 +393,28 @@ function summarizeTeamData(team, docs, HeroesTalents) {
           );
           data.stats.medianTmp[total].push(match.teams[t].stats.totals[total]);
         }
-      }
-      else if (stat === 'uptimeHistogram') {
+      } else if (stat === "uptimeHistogram") {
         // bif of extra work to format these to cleanly fit in app
         for (let i = 0; i <= 5; i++) {
           const statName = `pctWith${i}HeroesAlive`;
           let time = match.teams[t].stats[stat][i] / match.length;
-          
+
           // if undefined, set to 0
-          if (!time)
-            time = 0;
+          if (!time) time = 0;
 
           if (!(statName in data.stats.total)) {
             data.stats.total[statName] = 0;
-  
+
             data.stats.min[statName] = time;
             data.stats.max[statName] = time;
             data.stats.medianTmp[statName] = [];
           }
           data.stats.total[statName] += time;
-          data.stats.min[statName] = Math.min(
-            data.stats.min[statName],
-            time
-          );
-          data.stats.max[statName] = Math.max(
-            data.stats.max[statName],
-            time
-          );
+          data.stats.min[statName] = Math.min(data.stats.min[statName], time);
+          data.stats.max[statName] = Math.max(data.stats.max[statName], time);
           data.stats.medianTmp[statName].push(time);
         }
-      }
-      else {
+      } else {
         if (!(stat in data.stats.total)) {
           data.stats.total[stat] = 0;
 
@@ -456,13 +498,18 @@ function summarizeTeamData(team, docs, HeroesTalents) {
   data.deaths.average = data.deaths.total / data.totalMatches;
 
   data.endOfGameLevels.combined.median = median(data.endOfGameLevels.combined.medianTmp);
-  data.endOfGameLevels.combined.average = data.endOfGameLevels.combined.total / data.endOfGameLevels.combined.medianTmp.length;
+  data.endOfGameLevels.combined.average =
+    data.endOfGameLevels.combined.total /
+    data.endOfGameLevels.combined.medianTmp.length;
 
   data.endOfGameLevels.win.median = median(data.endOfGameLevels.win.medianTmp);
-  data.endOfGameLevels.win.average = data.endOfGameLevels.win.total / data.endOfGameLevels.win.medianTmp.length;
-  
+  data.endOfGameLevels.win.average =
+    data.endOfGameLevels.win.total / data.endOfGameLevels.win.medianTmp.length;
+
   data.endOfGameLevels.loss.median = median(data.endOfGameLevels.loss.medianTmp);
-  data.endOfGameLevels.loss.average = data.endOfGameLevels.loss.total / data.endOfGameLevels.loss.medianTmp.length;
+  data.endOfGameLevels.loss.average =
+    data.endOfGameLevels.loss.total /
+    data.endOfGameLevels.loss.medianTmp.length;
 
   // hero count
   data.heroesPlayed = 0;

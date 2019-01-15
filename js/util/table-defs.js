@@ -112,6 +112,14 @@ function deltaPctRender(data) {
   return `<span class="${(data === 0) ? '' : ((data > 0) ? 'plus' : 'minus')}">${pct}</span>`;
 }
 
+function combinedNumericPct(pct, count, type) {
+  if (type === 'sort') {
+    return pct;
+  }
+  
+  return `${formatStat('pct', pct)} (${count})`;
+}
+
 const PlayerVsTableFormat = {
   columns: [
     {
@@ -512,19 +520,82 @@ const TeamHeroSummaryFormat = {
       render: (data) => formatStat('pct', data)
     },
     {
-      title: 'Round 1 %',
+      title: 'Pick Pre-Mid',
+      data: (row) => row.picks.preMid.count / row.totalMatches,
+      render: (data, type, row) => {
+        return combinedNumericPct(data, row.picks.preMid.count, type);
+      }
+    },
+    {
+      title: 'Pick Post-Mid',
+      data: (row) => row.picks.postMid.count / row.totalMatches,
+      render: (data, type, row) => {
+        return combinedNumericPct(data, row.picks.postMid.count, type);
+      }
+    }
+  ],
+  scrollY: STANDARD_SEGMENT_HEIGHT,
+  paging: false,
+  info: false,
+  searching: false,
+  order: [[1, 'desc'], [2, 'desc']]
+}
+
+const TeamHeroPickDetailFormat = {
+  columns: [
+    {
+      title: 'Hero',
+      data: 'heroName',
+      render: heroHeader
+    },
+    {
+      title: 'Win %',
+      data: playerVsWinPctData,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Pick %',
+      data: (row) => row.games / row.totalMatches,
+      render: (data) => formatStat('pct', data)
+    },
+    {
+      title: 'Games',
+      data: 'games'
+    },
+    {
+      title: 'Pick Pre-Mid',
+      data: (row) => row.picks.preMid.count / row.totalMatches,
+      render: (data, type, row) => {
+        return combinedNumericPct(data, row.picks.preMid.count, type);
+      }
+    },
+    {
+      title: 'Pick Post-Mid',
+      data: (row) => row.picks.postMid.count / row.totalMatches,
+      render: (data, type, row) => {
+        return combinedNumericPct(data, row.picks.postMid.count, type);
+      }
+    },
+    {
+      title: 'Pick R1',
       data: (row) => row.picks.round1.count / row.totalMatches,
-      render: (data) => formatStat('pct', data)
+      render: (data, type, row) => {
+        return combinedNumericPct(data, row.picks.round1.count, type);
+      }
     },
     {
-      title: 'Round 2 %',
+      title: 'Pick R2',
       data: (row) => row.picks.round2.count / row.totalMatches,
-      render: (data) => formatStat('pct', data)
+      render: (data, type, row) => {
+        return combinedNumericPct(data, row.picks.round2.count, type);
+      }
     },
     {
-      title: 'Round 3 %',
+      title: 'Pick R3',
       data: (row) => row.picks.round3.count / row.totalMatches,
-      render: (data) => formatStat('pct', data)
+      render: (data, type, row) => {
+        return combinedNumericPct(data, row.picks.round3.count, type);
+      }
     }
   ],
   scrollY: STANDARD_SEGMENT_HEIGHT,
@@ -542,40 +613,32 @@ const TeamBanSummaryFormat = {
       render: heroHeader
     },
     {
-      title: 'Ban %',
-      data: (row) => row.bans / row.totalMatches,
-      render: (data) => formatStat('pct', data)
-    },
-    {
       title: 'Bans',
-      data: 'bans'
+      data: (row) => row.bans / row.totalMatches,
+      render: (data, type, row) => {
+        return combinedNumericPct(data, row.bans, type);
+      }
     },
     {
-      title: '1st %',
+      title: '1st Ban',
       data: (row) => row.first / row.totalMatches,
-      render: (data) => formatStat('pct', data)
+      render: (data, type, row) => {
+        return combinedNumericPct(data, row.first, type);
+      }
     },
     {
-      title: '1st',
-      data: 'first'
-    },
-    {
-      title: '2nd %',
+      title: '2nd Ban',
       data: (row) => row.second / row.totalMatches,
-      render: (data) => formatStat('pct', data)
+      render: (data, type, row) => {
+        return combinedNumericPct(data, row.second, type);
+      }
     },
     {
-      title: '2nd',
-      data: 'second'
-    },
-    {
-      title: 'Against %',
+      title: 'Ban Vs.',
       data: (row) => row.banAgainst / row.totalMatches,
-      render: (data) => formatStat('pct', data)
-    },
-    {
-      title: 'Against',
-      data: 'banAgainst'
+      render: (data, type, row) => {
+        return combinedNumericPct(data, row.banAgainst, type);
+      }
     }
   ],
   scrollY: STANDARD_SEGMENT_HEIGHT,
@@ -1203,3 +1266,4 @@ exports.AwardsTrackerFormat = awardsTrackerFormat();
 exports.preprocessAwards = preprocessAwards;
 exports.PlayerDuoWithFormat = playerHeroDuoFormat('with');
 exports.PlayerDuoAgainstFormat = playerHeroDuoFormat('against');
+exports.TeamHeroPickDetailFormat = TeamHeroPickDetailFormat;
