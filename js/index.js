@@ -634,7 +634,7 @@ function resetAllSections() {
 }
 
 function setLoadMessage(msg) {
-  $('.load-status').text(msg);
+  $('.load-status').html(msg);
 }
 
 function showLoader() {
