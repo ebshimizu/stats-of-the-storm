@@ -58,7 +58,8 @@ const TalentRenames = {
   StitchesMasteryFishingHook: 'StitchesFishingHook',
   StitchesMasteryShishKabobHook: 'StitchesShishKabobHook',
   StitchesMasteryHungryHungryStitchesGorge: 'StitchesHungryHungryStitchesGorge',
-  SylvanasHeroicAbilityMindControl: 'SylvanasMindControl'
+  SylvanasHeroicAbilityMindControl: 'SylvanasMindControl',
+  ImperiusSolarionsFireBurnTheImpure: 'ImperiusValorousBrandBurnTheImpure'    // 2.42.1
 };
 
 

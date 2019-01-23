@@ -1257,5 +1257,18 @@
     "icon": "storm_ui_icon_fenix_teleport.png",
     "sort": 3,
     "abilityId": "Fenix|E1"
+  },
+  {
+    "tooltipId": "AnubarakResilientScarabs",
+    "talentTreeId": "AnubarakResilientScarabs",
+    "name": "Resilient Scarabs",
+    "description": "Beetles have 50 Spell Armor.",
+    "icon": "storm_ui_icon_anubarak_scarabhost.png",
+    "type": "Trait",
+    "sort": 1,
+    "abilityId": "Anub'arak|D1",
+    "abilityLinks": [
+      "Anub'arak|D1"
+    ]
   }
 ]
