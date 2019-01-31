@@ -356,7 +356,12 @@ function playerDetailStatFormat() {
     columns.push({
       title: DetailStatString[allStats[i]],
       data: (row) => getHeroStatSafe(allStats[i], row),
-      render: (data) => formatStat(allStats[i], data)
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat(allStats[i], data);
+
+        return parseFloat(data);
+      }
     });
   }
 
@@ -827,7 +832,12 @@ const TeamRankingFormat = {
     {
       title: 'Time Spent Dead',
       data: 'selectedStats.TimeSpentDead',
-      render: (data) => formatStat('TimeSpentDead', data)
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('TimeSpentDead', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: '% Time Dead',
@@ -837,7 +847,12 @@ const TeamRankingFormat = {
     {
       title: 'Time w/ Level Adv.',
       data: 'selectedStats.levelAdvTime',
-      render: formatSeconds
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('Time', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: '% of Game w/ Level Adv.',
@@ -857,7 +872,12 @@ const TeamRankingFormat = {
     {
       title: 'Time w/ Hero Adv.',
       data: 'selectedStats.timeWithHeroAdv',
-      render: formatSeconds
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('Time', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: '% of Game w/ Hero Adv.',
@@ -947,32 +967,62 @@ const TeamRankingFormat = {
     {
       title: 'CC Time',
       data: 'selectedStats.TimeCCdEnemyHeroes',
-      render: (data) => formatStat('TimeCCdEnemyHeroes', data)
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('TimeCCdEnemyHeroes', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: 'Root Time',
       data: 'selectedStats.TimeRootingEnemyHeroes',
-      render: (data) => formatStat('TimeRootingEnemyHeroes', data)
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('TimeRootingEnemyHeroes', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: 'Silence Time',
       data: 'selectedStats.TimeSilencingEnemyHeroes',
-      render: (data) => formatStat('TimeSilencingEnemyHeroes', data)
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('TimeSilencingEnemyHeroes', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: 'Stun Time',
       data: 'selectedStats.TimeStunningEnemyHeroes',
-      render: (data) => formatStat('TimeStunningEnemyHeroes', data)
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('TimeStunningEnemyHeroes', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: 'Match Length',
       data: 'matchLength.val',
-      render: formatSeconds
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('Time', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: 'Time to Level 10',
       data: 'selectedStats.timeTo10',
-      render: (data) => formatStat('timeTo10', data)
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('timeTo10', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: 'Games Reached Level 10',
@@ -981,7 +1031,12 @@ const TeamRankingFormat = {
     {
       title: 'Time to Level 20',
       data: 'selectedStats.timeTo20',
-      render: (data) => formatStat('timeTo20', data)
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('timeTo20', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: 'Games Reached Level 20',
@@ -990,32 +1045,62 @@ const TeamRankingFormat = {
     {
       title: 'Time @ Level 1',
       data: 'tierTimes.T1.average',
-      render: formatSeconds
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('Time', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: 'Time @ Level 4',
       data: 'tierTimes.T2.average',
-      render: formatSeconds
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('Time', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: 'Time @ Level 7',
       data: 'tierTimes.T3.average',
-      render: formatSeconds
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('Time', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: 'Time @ Level 10',
       data: 'tierTimes.T4.average',
-      render: formatSeconds
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('Time', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: 'Time @ Level 13',
       data: 'tierTimes.T5.average',
-      render: formatSeconds
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('Time', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: 'Time @ Level 16',
       data: 'tierTimes.T6.average',
-      render: formatSeconds
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('Time', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: '% of Game w/ 0 Heroes',
@@ -1055,7 +1140,12 @@ const TeamRankingFormat = {
     {
       title: 'Mercenary Uptime',
       data: 'selectedStats.mercUptime',
-      render: (data) => formatStat('mercUptime', data)
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('mercUptime', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: 'Mercenary Uptime %',
@@ -1090,7 +1180,12 @@ const TeamRankingFormat = {
     {
       title: 'Time to First Fort',
       data: 'structures.Fort.first',
-      render: (data) => formatStat('Time', data)
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('Time', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: 'Forts Lost',
@@ -1105,7 +1200,12 @@ const TeamRankingFormat = {
     {
       title: 'Time to First Keep',
       data: 'structures.Keep.first',
-      render: (data) => formatStat('Time', data)
+      render: (data, type) => {
+        if (type === 'display')
+          return formatStat('Time', data);
+
+        return parseFloat(data);
+      }
     },
     {
       title: 'Keeps Lost',
