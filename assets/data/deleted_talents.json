@@ -1270,5 +1270,244 @@
     "abilityLinks": [
       "Anub'arak|D1"
     ]
+  },
+  {
+    "tooltipId": "AbathurLocustStrainSurvivalInstinctsTalent",
+    "talentTreeId": "AbathurCombatStyleSurvivalInstincts",
+    "name": "Survival Instincts",
+    "description": "Increases Locust's Health by 40% and duration by 40%.",
+    "icon": "storm_ui_icon_abathur_spawnlocust.png",
+    "type": "Trait",
+    "sort": 2,
+    "abilityId": "Abathur|D1",
+    "abilityLinks": [
+      "Abathur|D1"
+    ]
+  },
+  {
+    "tooltipId": "AbathurSymbioteRegenerativeMicrobesTalent",
+    "talentTreeId": "AbathurMasteryRegenerativeMicrobes",
+    "name": "Regenerative Microbes",
+    "description": "Symbiote's Carapace heals the target for 62 (+4% per level) Health per second over 4 seconds.",
+    "icon": "storm_ui_icon_abathur_carapace.png",
+    "type": "E",
+    "sort": 3,
+    "abilityId": "Abathur|Q1",
+    "abilityLinks": [
+      "Abathur|Q1",
+      "Abathur|E1"
+    ]
+  },
+  {
+    "tooltipId": "AbathurToxicNestBallistosporesTalent",
+    "talentTreeId": "AbathurMasteryBallistospores",
+    "name": "Ballistospores",
+    "description": "Increases Toxic Nest's range to global and increases duration by 25%.",
+    "icon": "storm_ui_icon_abathur_toxicnest_var1.png",
+    "type": "W",
+    "sort": 2,
+    "abilityId": "Abathur|W1",
+    "abilityLinks": [
+      "Abathur|W1"
+    ]
+  },
+  {
+    "tooltipId": "AbathurSymbioteCarapaceSustainedCarapaceTalent",
+    "talentTreeId": "AbathurSymbioteCarapaceSustainedCarapace",
+    "name": "Sustained Carapace",
+    "description": "Increases the Shield amount of Symbiote's Carapace by 40% and allows it to persist after Symbiote ends.",
+    "icon": "storm_ui_icon_abathur_carapace.png",
+    "type": "E",
+    "sort": 3,
+    "abilityId": "Abathur|Q1",
+    "abilityLinks": [
+      "Abathur|Q1",
+      "Abathur|E1"
+    ]
+  },
+  {
+    "tooltipId": "AbathurLocustStrainAssaultStrainTalent",
+    "talentTreeId": "AbathurCombatStyleAssaultStrain",
+    "name": "Assault Strain",
+    "description": "Locust Basic Attacks cleave for 50% damage, and explode on death for 102 (+4% per level) damage.",
+    "icon": "storm_ui_icon_abathur_spawnlocust.png",
+    "type": "Trait",
+    "sort": 1,
+    "abilityId": "Abathur|D1",
+    "abilityLinks": [
+      "Abathur|D1"
+    ]
+  },
+  {
+    "tooltipId": "AbathurLocustStrainBombardStrainTalent",
+    "talentTreeId": "AbathurCombatStyleBombardStrain",
+    "name": "Bombard Strain",
+    "description": "Locust's Basic Attacks become a long-range siege attack that deal 70% more damage.",
+    "icon": "storm_ui_icon_abathur_spawnlocust_var1.png",
+    "type": "Trait",
+    "sort": 2,
+    "abilityId": "Abathur|D1",
+    "abilityLinks": [
+      "Abathur|D1"
+    ]
+  },
+  {
+    "tooltipId": "AnaBioticGrenadeGrenadeCalibration",
+    "talentTreeId": "AnaBioticGrenadeGrenadeCalibration",
+    "name": "Grenade Calibration",
+    "description": "Quest: Hit enemy Heroes with Biotic Grenade.  Reward: After hitting 10 Heroes, Biotic Grenade does 75% more damage per allied and enemy Hero hit.  Reward: After hitting 20 Heroes, Biotic Grenade's duration on allies is increased from 4 seconds to 12 seconds, its healing radius is increased by 100%, and its healing amplification applies to all sources.",
+    "icon": "storm_ui_icon_ana_biotic_grenade.png",
+    "type": "W",
+    "sort": 1,
+    "isQuest": true,
+    "abilityId": "Ana|W1",
+    "abilityLinks": [
+      "Ana|W1"
+    ]
+  },
+  {
+    "tooltipId": "AnaPiercingDarts",
+    "talentTreeId": "AnaPiercingDarts",
+    "name": "Piercing Darts",
+    "description": "Quest: Hit Heroes with Sleep Dart.  Reward: After hitting 10 Heroes, Sleep Dart now hits 2 Heroes and its range is increased by 25%.  Reward: After hitting 20 Heroes, Healing Dart now hits 2 Heroes and its range is increased by 25%.",
+    "icon": "storm_ui_icon_ana_sleep_dart.png",
+    "type": "E",
+    "sort": 2,
+    "isQuest": true,
+    "abilityId": "Ana|E1",
+    "abilityLinks": [
+      "Ana|E1"
+    ]
+  },
+  {
+    "tooltipId": "AnaDetachableBoxMagazine",
+    "talentTreeId": "AnaDetachableBoxMagazine",
+    "name": "Detachable Box Magazine",
+    "description": "Quest: Stack 5 Doses on an enemy Hero.  Reward: After reaching maximum Dosage 12 times, unlock the Active Reload Ability, which can be activated to instantly gain 3 charges of Healing Dart.",
+    "icon": "storm_ui_icon_ana_detachableboxmagazine.png",
+    "type": "Passive",
+    "sort": 3,
+    "isQuest": true,
+    "abilityId": "Ana|Passive",
+    "abilityLinks": [
+      "Ana|D1"
+    ]
+  },
+  {
+    "tooltipId": "AnaAimDownSights",
+    "talentTreeId": "AnaAimDownSights",
+    "name": "Aim Down Sights",
+    "description": "Shrike can be activated to increase vision radius by 100% and Basic Attack range by 2 but reduce Movement Speed by 20%. Lasts until canceled.",
+    "icon": "storm_ui_icon_ana_aim_down_sights.png",
+    "type": "Trait",
+    "sort": 2,
+    "cooldown": 3,
+    "abilityId": "Ana|D1",
+    "abilityLinks": [
+      "Ana|D1"
+    ]
+  },
+  {
+    "tooltipId": "AnaBioticGrenadeAirStrike",
+    "talentTreeId": "AnaBioticGrenadeAirStrike",
+    "name": "Air Strike",
+    "description": "Activate to use Biotic Grenade with a 275% increased range, but Grenades thrown this way take 3 seconds to land.  Passive: Reduce Biotic Grenade cooldown by 4 seconds.",
+    "icon": "storm_ui_icon_ana_biotic_grenade.png",
+    "type": "Active",
+    "sort": 3,
+    "cooldown": 12,
+    "abilityId": "Ana|W1",
+    "abilityLinks": [
+      "Ana|W1"
+    ]
+  },
+  {
+    "tooltipId": "AnaSleepingDartTemporaryBlindness",
+    "talentTreeId": "AnaSleepingDartTemporaryBlindness",
+    "name": "Temporary Blindness",
+    "description": "After Sleep Dart's effects wear off, targets are Blinded for 2 seconds.",
+    "icon": "storm_ui_icon_ana_sleep_dart.png",
+    "type": "E",
+    "sort": 1,
+    "abilityId": "Ana|E1",
+    "abilityLinks": [
+      "Ana|E1"
+    ]
+  },
+  {
+    "tooltipId": "AnaDebilitatingDart",
+    "talentTreeId": "AnaDebilitatingDart",
+    "name": "Debilitating Dart",
+    "description": "Activate to fire a dart which Slows the Movement Speed and reduces the damage dealt by the first enemy Hero it hits by 50% for 3 seconds.",
+    "icon": "storm_ui_icon_ana_debilitatingdart.png",
+    "type": "Active",
+    "sort": 3,
+    "cooldown": 20,
+    "abilityId": "Ana|Active"
+  },
+  {
+    "tooltipId": "AnaBioticGrenadeContactHealing",
+    "talentTreeId": "AnaBioticGrenadeContactHealing",
+    "name": "Contact Healing",
+    "description": "Biotic Grenade heals for 30% more per allied and enemy Hero hit.",
+    "icon": "storm_ui_icon_ana_biotic_grenade.png",
+    "type": "W",
+    "sort": 3,
+    "abilityId": "Ana|W1",
+    "abilityLinks": [
+      "Ana|W1"
+    ]
+  },
+  {
+    "tooltipId": "AnaEyeOfHorusBallisticAdvantage",
+    "talentTreeId": "AnaEyeOfHorusBallisticAdvantage",
+    "name": "Ballistic Advantage",
+    "description": "Eye of Horus rounds explode upon impacting a Hero, healing nearby allies for 300 (+4% per level) and dealing 150 (+4% per level) damage to nearby enemy Heroes.",
+    "icon": "storm_ui_icon_ana_overwatch.png",
+    "type": "Heroic",
+    "sort": 2,
+    "abilityId": "Ana|R2",
+    "abilityLinks": [
+      "Ana|R2"
+    ]
+  },
+  {
+    "tooltipId": "AnaSomnolentDoses",
+    "talentTreeId": "AnaSomnolentDoses",
+    "name": "Somnolent Doses",
+    "description": "Upon stacking 5 Doses, Heroes are put to Sleep for 2 seconds.",
+    "icon": "storm_ui_icon_ana_shrike.png",
+    "type": "Trait",
+    "sort": 3,
+    "abilityId": "Ana|D1",
+    "abilityLinks": [
+      "Ana|D1"
+    ]
+  },
+  {
+    "tooltipId": "AnaDynamicShooting",
+    "talentTreeId": "AnaDynamicShooting",
+    "name": "Dynamic Shooting",
+    "description": "Basic Attacks increase Attack Speed by 10% for 4 seconds, up to 100%.",
+    "icon": "storm_ui_icon_talent_autoattack_speed.png",
+    "type": "Passive",
+    "sort": 4,
+    "abilityId": "Ana|Passive",
+    "abilityLinks": [
+      "Ana|D1"
+    ]
+  },
+  {
+    "tooltipId": "AnaAimDownSightsCustomOptics",
+    "talentTreeId": "AnaAimDownSightsCustomOptics",
+    "name": "Custom Optics",
+    "description": "Increase the Aim Down Sights Basic Attack range bonus from 2 to 4.",
+    "icon": "storm_ui_icon_ana_aim_down_sights.png",
+    "type": "Trait",
+    "sort": 5,
+    "abilityId": "Ana|D1",
+    "abilityLinks": [
+      "Ana|D1"
+    ]
   }
 ]
