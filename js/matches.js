@@ -520,7 +520,11 @@ function renderToSlot(gameData, slot, swap) {
   // this will happen if a team was searched, and the selected team is on the other side
   if (swap === true) {
     gameData.teams = [gameData.teams[1], gameData.teams[0]];
-    gameData.bans = [gameData.bans[1], gameData.bans[0]];
+
+    if (gameData.bans) {
+      gameData.bans = [gameData.bans[1], gameData.bans[0]];
+    }
+
     context.swap = 'swap';
   }
 
