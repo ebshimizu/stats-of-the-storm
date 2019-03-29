@@ -38,12 +38,13 @@
         <a class="item" data-tab="hero-collection-hero">Hero Details</a>
       </div>
       <div class="ui active tab" data-tab="hero-collection-overall" id="hero-collection-summary">
-        <div class="five ui buttons">
-          <div class="ui Assassin red button">Assassin</div>
-          <div class="ui Warrior blue button">Warrior</div>
+        <div class="six ui buttons">
+          <div class="ui Melee-Assassin orange button">Melee Assassin</div>
+          <div class="ui Ranged-Assassin red button">Ranged Assassin</div>
+          <div class="ui Tank blue button">Tank</div>
+          <div class="ui Bruiser violet button">Bruiser</div>
+          <div class="ui Healer green button">Healer</div>
           <div class="ui Support teal button">Support</div>
-          <div class="ui Specialist violet button">Specialist</div>
-          <div class="ui Multiclass purple button">Multiclass</div>
         </div>
         <div class="hero-collection-wrapper">
           <div class="table-wrapper">
@@ -68,12 +69,13 @@
         </div>
       </div>
       <div class="ui tab" data-tab="hero-collection-picks" id="hero-collection-picks">
-        <div class="five ui buttons">
-          <div class="ui Assassin red button">Assassin</div>
-          <div class="ui Warrior blue button">Warrior</div>
+        <div class="six ui buttons">
+          <div class="ui Melee-Assassin orange button">Melee Assassin</div>
+          <div class="ui Ranged-Assassin red button">Ranged Assassin</div>
+          <div class="ui Tank blue button">Tank</div>
+          <div class="ui Bruiser violet button">Bruiser</div>
+          <div class="ui Healer green button">Healer</div>
           <div class="ui Support teal button">Support</div>
-          <div class="ui Specialist violet button">Specialist</div>
-          <div class="ui Multiclass purple button">Multiclass</div>
         </div>
         <div class="hero-collection-wrapper">
           <div class="table-wrapper">
@@ -106,7 +108,7 @@
       <div class="ui tab" data-tab="hero-collection-pool" id="hero-collection-pool">
         <div class="ui inverted segment">
           <div class="ui top attached label">Hero Pool Stats</div>
-          <div class="ui six column grid">
+          <div class="ui seven column grid">
             <div class="ui column" role="all">
               <h3 class="ui dividing inverted header">
                 <div class="content">
@@ -124,11 +126,33 @@
                 </div>
               </div>
             </div>
-            <div class="ui column" role="Assassin">
-              <h3 class="ui dividing inverted red header">
-                <img class="ui image" src="./assets/images/role_assassin.png">
+            <div class="ui column" role="Melee Assassin">
+              <h3 class="ui dividing inverted orange header">
+                <img class="ui image" src="./assets/images/role_massassin.png">
                 <div class="content">
-                  Assassin
+                  Melee Assassin
+                </div>
+              </h3>
+              <div class="ui horizontal mini inverted orange statistics">
+                <div class="ui statistic" name="pool">
+                  <div class="value">###</div>
+                  <div class="label">Heroes Played</div>
+                </div>
+                <div class="ui statistic" name="ban">
+                  <div class="value">###</div>
+                  <div class="label">Heroes Banned</div>
+                </div>
+                <div class="ui statistic" name="games">
+                  <div class="value">###</div>
+                  <div class="label">Games</div>
+                </div>
+              </div>
+            </div>
+            <div class="ui column" role="Ranged Assassin">
+              <h3 class="ui dividing inverted red header">
+                <img class="ui image" src="./assets/images/role_rassassin.png">
+                <div class="content">
+                  Ranged Assassin
                 </div>
               </h3>
               <div class="ui horizontal mini inverted red statistics">
@@ -146,11 +170,11 @@
                 </div>
               </div>
             </div>
-            <div class="ui column" role="Warrior">
+            <div class="ui column" role="Tank">
               <h3 class="ui dividing inverted blue header">
-                <img class="ui image" src="./assets/images/role_warrior.png">
+                <img class="ui image" src="./assets/images/role_tank.png">
                 <div class="content">
-                  Warrior
+                  Tank
                 </div>
               </h3>
               <div class="ui horizontal mini inverted blue statistics">
@@ -168,33 +192,11 @@
                 </div>
               </div>
             </div>
-            <div class="ui column" role="Support">
-              <h3 class="ui dividing inverted teal header">
-                <img class="ui image" src="./assets/images/role_support.png">
-                <div class="content">
-                  Support
-                </div>
-              </h3>
-              <div class="ui horizontal mini inverted teal statistics">
-                <div class="ui statistic" name="pool">
-                  <div class="value">###</div>
-                  <div class="label">Heroes Played</div>
-                </div>
-                <div class="ui statistic" name="ban">
-                  <div class="value">###</div>
-                  <div class="label">Heroes Banned</div>
-                </div>
-                <div class="ui statistic" name="games">
-                  <div class="value">###</div>
-                  <div class="label">Games</div>
-                </div>
-              </div>
-            </div>
-            <div class="ui column" role="Specialist">
+            <div class="ui column" role="Bruiser">
               <h3 class="ui dividing inverted violet header">
-                <img class="ui image" src="./assets/images/role_specialist.png">
+                <img class="ui image" src="./assets/images/role_bruiser.png">
                 <div class="content">
-                  Specialist
+                  Bruiser
                 </div>
               </h3>
               <div class="ui horizontal mini inverted violet statistics">
@@ -212,14 +214,36 @@
                 </div>
               </div>
             </div>
-            <div class="ui column" role="Multiclass">
-              <h3 class="ui dividing inverted purple header">
-                <img class="ui image" src="./assets/images/role_specialist.png">
+            <div class="ui column" role="Healer">
+              <h3 class="ui dividing inverted green header">
+                <img class="ui image" src="./assets/images/role_healer.png">
                 <div class="content">
-                  Multiclass
+                  Healer
                 </div>
               </h3>
-              <div class="ui horizontal mini inverted purple statistics">
+              <div class="ui horizontal mini inverted green statistics">
+                <div class="ui statistic" name="pool">
+                  <div class="value">###</div>
+                  <div class="label">Heroes Played</div>
+                </div>
+                <div class="ui statistic" name="ban">
+                  <div class="value">###</div>
+                  <div class="label">Heroes Banned</div>
+                </div>
+                <div class="ui statistic" name="games">
+                  <div class="value">###</div>
+                  <div class="label">Games</div>
+                </div>
+              </div>
+            </div>
+            <div class="ui column" role="Support">
+              <h3 class="ui dividing inverted teal header">
+                <img class="ui image" src="./assets/images/role_support2.png">
+                <div class="content">
+                  Support
+                </div>
+              </h3>
+              <div class="ui horizontal mini inverted teal statistics">
                 <div class="ui statistic" name="pool">
                   <div class="value">###</div>
                   <div class="label">Heroes Played</div>

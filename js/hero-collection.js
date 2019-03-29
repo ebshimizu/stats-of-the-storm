@@ -89,7 +89,7 @@ function initHeroCollectionPage() {
   addHeroMenuOptions($('#hero-collection-hero-select-menu'));
   $('#hero-collection-hero-select-menu').dropdown('refresh');
 
-  $('#hero-collection-body .five.ui.buttons .button').click(function() {
+  $('#hero-collection-body .six.ui.buttons .button').click(function() {
     toggleHeroCollectionType('#hero-collection-body', $(this), '#hero-collection-body');
   });
 
@@ -234,7 +234,7 @@ function loadOverallHeroCollectionData() {
       context.win = hero.wins;
       context.loss = hero.games - hero.wins;
       context.bans = hero.bans.total;
-      context.heroRole = Heroes.role(h);
+      context.heroRole = Heroes.role(h).split(' ').join('-');
 
       $('#hero-collection-summary tbody').append(heroCollectionSummaryRowTemplate(context));
 
@@ -325,8 +325,9 @@ function loadOverallHeroCollectionData() {
 
     // visibility filter checks
     for (let cls in RoleColorClass) {
-      if (!$(`#hero-collection-summary .ui.buttons .${cls}`).hasClass(RoleColorClass[cls])) {
-        $('#hero-collection-body table').find(`.${cls}`).addClass('is-hidden');
+      const classname = cls.split(' ').join('-');
+      if (!$(`#hero-collection-summary .ui.buttons .${classname}`).hasClass(RoleColorClass[cls])) {
+        $('#hero-collection-body table').find(`.${classname}`).addClass('is-hidden');
       }
     }
 
@@ -336,9 +337,10 @@ function loadOverallHeroCollectionData() {
 
 function toggleHeroCollectionType(tableID, active, container) {
   let type = active.text();
-  let elem = $(container).find('.button.' + type);
+  const classname = type.split(' ').join('-');
+  let elem = $(container).find('.button.' + classname);
   elem.toggleClass(RoleColorClass[type]);
-  $(tableID + ' table').find('.' + type).toggleClass('is-hidden');
+  $(tableID + ' table').find('.' + classname).toggleClass('is-hidden');
 }
 
 // many of the functions here are borrowed from player.js

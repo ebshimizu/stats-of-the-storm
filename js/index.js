@@ -20,19 +20,21 @@ const RegionString = {
 }
 
 const RoleColor = {
-  'Assassin' : '#db2828',
-  'Warrior' : '#2185d0',
-  'Support' : '#00b5ad',
-  'Specialist' : '#6435c9',
-  'Multiclass' : '#a333c8'
+  'Melee Assassin' : '#f2711c',
+  'Ranged Assassin' : '#db2828',
+  'Tank' : '#2185d0',
+  'Bruiser' : '#6435c9',
+  'Healer' : '#21ba45',
+  'Support' : '#00b5ad'
 }
 
 const RoleColorClass = {
-  'Assassin' : 'red',
-  'Warrior' : 'blue',
-  'Support' : 'teal',
-  'Specialist' : 'violet',
-  'Multiclass' : 'purple'
+  'Melee Assassin' : 'orange',
+  'Ranged Assassin' : 'red',
+  'Tank' : 'blue',
+  'Bruiser' : 'violet',
+  'Healer' : 'green',
+  'Support' : 'teal'
 }
 
 const DetailStatList = require('./js/game-data/detail-stat-list');

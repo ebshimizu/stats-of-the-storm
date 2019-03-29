@@ -60,11 +60,11 @@ class HeroesTalents {
         }
       }
 
-      if (!(data.role in this._roles))
-        this._roles[data.role] = { all: [], Ranged: [], Melee: [] };
+      if (!(data.expandedRole in this._roles))
+        this._roles[data.expandedRole] = { all: [], Ranged: [], Melee: [] };
 
-      this._roles[data.role].all.push(data.name);
-      this._roles[data.role][data.type].push(data.name);
+      this._roles[data.expandedRole].all.push(data.name);
+      this._roles[data.expandedRole][data.type].push(data.name);
     }
   }
 
@@ -100,6 +100,14 @@ class HeroesTalents {
   }
 
   role(name) {
+    if (name in this._heroes) {
+      return this._heroes[name].expandedRole;
+    }
+
+    return '';
+  }
+
+  oldRole(name) {
     if (name in this._heroes) {
       return this._heroes[name].role;
     }
