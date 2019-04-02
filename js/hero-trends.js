@@ -83,7 +83,7 @@ function initTrendsPage() {
     $('#hero-trends-body table').floatThead('reflow');
   });
 
-  $('#hero-trends-body .five.ui.buttons .button').click(function() {
+  $('#hero-trends-body .six.ui.buttons .button').click(function() {
     toggleHeroCollectionType('#hero-trends-body', $(this), '#hero-trends-body');
   });
 
