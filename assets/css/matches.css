@@ -30,15 +30,15 @@
 }
 
 #match-list .no-bottom-pad {
-  padding-bottom: 0!important;
+  padding-bottom: 0 !important;
 }
 
 #match-list .no-right-pad {
-  padding-right: 0!important;
+  padding-right: 0 !important;
 }
 
 #match-list .no-left-pad {
-  padding-left: 0!important;
+  padding-left: 0 !important;
 }
 
 #matches-page-header {
@@ -190,7 +190,7 @@
   margin-top: 0;
 }
 
-#match-list .ui.match-details.grid>.column:not(.row) {
+#match-list .ui.match-details.grid > .column:not(.row) {
   padding: 0.5rem;
 }
 
@@ -224,7 +224,6 @@
   border-color: #2185d0;
 }
 
-
 #match-list .red-team-nameplate {
   position: absolute;
   width: 400px;
@@ -254,7 +253,7 @@
 }
 
 #match-list .match-summary .match-details .focus-player.image {
-  border: 3px solid #ffd400!important;
+  border: 3px solid #ffd400 !important;
 }
 
 #match-list .match-center-stats .blue {
@@ -315,11 +314,11 @@
   float: right;
 }
 
-.ui.toggle.checkbox.inverted input:focus:checked~label,
-.ui.toggle.checkbox.inverted input:checked~label,
+.ui.toggle.checkbox.inverted input:focus:checked ~ label,
+.ui.toggle.checkbox.inverted input:checked ~ label,
 .ui.toggle.checkbox.inverted label,
 .ui.toggle.checkbox.inverted.checked label {
-  color: #FFF!important;
+  color: #fff !important;
 }
 
 .match-filter-popup-wrapper {
@@ -330,4 +329,17 @@
   padding: 5px;
   overflow-x: hidden;
   min-height: 300px;
+}
+
+.red-fp,
+.blue-fp {
+  margin-top: 5px;
+}
+
+.red-fp {
+  float: right;
+}
+
+.blue-fp {
+  float: left;
 }

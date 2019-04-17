@@ -1,4 +1,3 @@
-
 <script src="../js/matches.js"></script>
 
 <script id="matches-page" type="text/x-handlebars-template">
@@ -331,6 +330,16 @@
               <div class="red match-levels">Level {{level.red}}</div>
             </div>
           </div>
+          {{#if rbanFirst}}
+          <div class="red-fp">
+            <div class="ui tiny red label">First Pick</div>
+          </div>
+          {{/if}}
+          {{#if bbanFirst}}
+          <div class="blue-fp">
+            <div class="ui tiny blue label">First Pick</div>
+          </div>
+          {{/if}}
         </div>
         {{#each redHeroes}}
         <div class="ui column">
