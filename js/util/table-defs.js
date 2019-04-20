@@ -1,4 +1,5 @@
 const Awards = require('../game-data/awards');
+const ComputedStatsList = require('../game-data/computed-stats-list');
 
 const STANDARD_SEGMENT_HEIGHT = 480;
 const TALL_SEGMENT_HEIGHT = 560;
@@ -45,13 +46,27 @@ class Table {
 
   // mostly for the min matches field in player for now
   filterByMinGames(threshold) {
-    this.table.DataTable().rows(function(idx, data, node) {
-      return data.games < threshold;
-    }).remove().draw();
+    this.table.
+      DataTable().
+      rows(function(idx, data, node) {
+        return data.games < threshold;
+      }).
+      remove().
+      draw();
   }
 
   insertButtons() {
-    this.table.DataTable().buttons().container().appendTo($('div.eight.column:eq(0)', this.table.DataTable().table().container()));
+    this.table.
+      DataTable().
+      buttons().
+      container().
+      appendTo($(
+          'div.eight.column:eq(0)',
+          this.table.
+            DataTable().
+            table().
+            container()
+        ));
   }
 }
 
@@ -69,10 +84,8 @@ function preprocessAwards(data) {
 }
 
 function playerVsWinPctData(row) {
-  if (row.wins)
-    return row.wins / row.games;
-  else if (row.defeated)
-    return row.defeated / row.games;
+  if (row.wins) return row.wins / row.games;
+  else if (row.defeated) return row.defeated / row.games;
 
   return 0;
 }
@@ -98,7 +111,9 @@ function awardHeader(awardKey) {
   let awardData = Heroes.awardInfo(awardKey);
   return `
     <h3 class="ui image inverted header">
-      <img src="assets/images/${awardData.image}" class="ui rounded small image">
+      <img src="assets/images/${
+        awardData.image
+      }" class="ui rounded small image">
       <div class="content">
         ${awardData.name}
         <div class="sub header">${awardData.subtitle}</div>
@@ -109,14 +124,16 @@ function awardHeader(awardKey) {
 
 function deltaPctRender(data) {
   let pct = `${data > 0 ? '+' : ''}${formatStat('pct', data)}`;
-  return `<span class="${(data === 0) ? '' : ((data > 0) ? 'plus' : 'minus')}">${pct}</span>`;
+  return `<span class="${
+    data === 0 ? '' : data > 0 ? 'plus' : 'minus'
+  }">${pct}</span>`;
 }
 
 function combinedNumericPct(pct, count, type) {
   if (type === 'sort') {
     return pct;
   }
-  
+
   return `${formatStat('pct', pct)} (${count})`;
 }
 
@@ -325,7 +342,7 @@ const HeroSummaryFormat = {
   info: false,
   scrollY: TALL_SEGMENT_HEIGHT,
   searching: false
-}
+};
 
 function getHeroStatSafe(target, row) {
   if (target in row) {
@@ -337,15 +354,17 @@ function getHeroStatSafe(target, row) {
 
 // this one's large, and also can be automated.
 function playerDetailStatFormat() {
-  let columns = [{
-    title: 'Hero',
-    data: 'key',
-    render: (data) => heroHeader(data, '200px')
-  },
-  {
-    title: 'Games',
-    data: 'games'
-  }];
+  let columns = [
+    {
+      title: 'Hero',
+      data: 'key',
+      render: (data) => heroHeader(data, '200px')
+    },
+    {
+      title: 'Games',
+      data: 'games'
+    }
+  ];
 
   let allStats = DetailStatList;
   for (let m in PerMapStatList) {
@@ -357,8 +376,7 @@ function playerDetailStatFormat() {
       title: DetailStatString[allStats[i]],
       data: (row) => getHeroStatSafe(allStats[i], row),
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat(allStats[i], data);
+        if (type === 'display') return formatStat(allStats[i], data);
 
         return parseFloat(data);
       }
@@ -378,14 +396,32 @@ function playerDetailStatFormat() {
   };
 }
 
+function addnlPlayerStats() {
+  const columns = [];
+
+  for (let stat of ComputedStatsList) {
+    columns.push({
+      title: DetailStatString[stat],
+      data: (row) => getHeroStatSafe(stat, row),
+      render: (data, type) => {
+        if (type === 'display') return formatStat(stat, data);
+
+        return parseFloat(data);
+      }
+    });
+  }
+
+  return columns;
+}
+
 function playerRankingStatFormat() {
   let base = playerDetailStatFormat();
   base.columns[0] = {
     title: 'Player',
     data: 'name',
-    render: (data, type, row) => {
-      return `<h3 class="ui inverted header player-name link-to-player" player-id="${row.id}">${data}</h4>`
-    }
+    render: (data, type, row) => `<h3 class="ui inverted header player-name link-to-player" player-id="${
+        row.id
+      }">${data}</h4>`
   };
   base.columns.push({
     title: 'Hero Pool',
@@ -393,7 +429,7 @@ function playerRankingStatFormat() {
   });
 
   // awards n stuff
-  let awardsColumns = [
+  const awardsColumns = [
     {
       title: 'Votes',
       data: 'votes'
@@ -466,7 +502,7 @@ function playerRankingStatFormat() {
     }
   ];
 
-  base.columns = base.columns.concat(awardsColumns);
+  base.columns = base.columns.concat(addnlPlayerStats(), awardsColumns);
 
   base.order = [[1, 'desc']];
   base.paging = true;
@@ -527,16 +563,12 @@ const TeamHeroSummaryFormat = {
     {
       title: 'Pick Pre-Mid',
       data: (row) => row.picks.preMid.count / row.totalMatches,
-      render: (data, type, row) => {
-        return combinedNumericPct(data, row.picks.preMid.count, type);
-      }
+      render: (data, type, row) => combinedNumericPct(data, row.picks.preMid.count, type)
     },
     {
       title: 'Pick Post-Mid',
       data: (row) => row.picks.postMid.count / row.totalMatches,
-      render: (data, type, row) => {
-        return combinedNumericPct(data, row.picks.postMid.count, type);
-      }
+      render: (data, type, row) => combinedNumericPct(data, row.picks.postMid.count, type)
     }
   ],
   scrollY: STANDARD_SEGMENT_HEIGHT,
@@ -544,7 +576,7 @@ const TeamHeroSummaryFormat = {
   info: false,
   searching: false,
   order: [[1, 'desc'], [2, 'desc']]
-}
+};
 
 const TeamHeroPickDetailFormat = {
   columns: [
@@ -570,37 +602,27 @@ const TeamHeroPickDetailFormat = {
     {
       title: 'Pick Pre-Mid',
       data: (row) => row.picks.preMid.count / row.totalMatches,
-      render: (data, type, row) => {
-        return combinedNumericPct(data, row.picks.preMid.count, type);
-      }
+      render: (data, type, row) => combinedNumericPct(data, row.picks.preMid.count, type)
     },
     {
       title: 'Pick Post-Mid',
       data: (row) => row.picks.postMid.count / row.totalMatches,
-      render: (data, type, row) => {
-        return combinedNumericPct(data, row.picks.postMid.count, type);
-      }
+      render: (data, type, row) => combinedNumericPct(data, row.picks.postMid.count, type)
     },
     {
       title: 'Pick R1',
       data: (row) => row.picks.round1.count / row.totalMatches,
-      render: (data, type, row) => {
-        return combinedNumericPct(data, row.picks.round1.count, type);
-      }
+      render: (data, type, row) => combinedNumericPct(data, row.picks.round1.count, type)
     },
     {
       title: 'Pick R2',
       data: (row) => row.picks.round2.count / row.totalMatches,
-      render: (data, type, row) => {
-        return combinedNumericPct(data, row.picks.round2.count, type);
-      }
+      render: (data, type, row) => combinedNumericPct(data, row.picks.round2.count, type)
     },
     {
       title: 'Pick R3',
       data: (row) => row.picks.round3.count / row.totalMatches,
-      render: (data, type, row) => {
-        return combinedNumericPct(data, row.picks.round3.count, type);
-      }
+      render: (data, type, row) => combinedNumericPct(data, row.picks.round3.count, type)
     }
   ],
   scrollY: STANDARD_SEGMENT_HEIGHT,
@@ -608,7 +630,7 @@ const TeamHeroPickDetailFormat = {
   info: false,
   searching: false,
   order: [[1, 'desc'], [2, 'desc']]
-}
+};
 
 const TeamBanSummaryFormat = {
   columns: [
@@ -620,30 +642,22 @@ const TeamBanSummaryFormat = {
     {
       title: 'Bans',
       data: (row) => row.bans / row.totalMatches,
-      render: (data, type, row) => {
-        return combinedNumericPct(data, row.bans, type);
-      }
+      render: (data, type, row) => combinedNumericPct(data, row.bans, type)
     },
     {
       title: '1st Ban',
       data: (row) => row.first / row.totalMatches,
-      render: (data, type, row) => {
-        return combinedNumericPct(data, row.first, type);
-      }
+      render: (data, type, row) => combinedNumericPct(data, row.first, type)
     },
     {
       title: '2nd Ban',
       data: (row) => row.second / row.totalMatches,
-      render: (data, type, row) => {
-        return combinedNumericPct(data, row.second, type);
-      }
+      render: (data, type, row) => combinedNumericPct(data, row.second, type)
     },
     {
       title: 'Ban Vs.',
       data: (row) => row.banAgainst / row.totalMatches,
-      render: (data, type, row) => {
-        return combinedNumericPct(data, row.banAgainst, type);
-      }
+      render: (data, type, row) => combinedNumericPct(data, row.banAgainst, type)
     }
   ],
   scrollY: STANDARD_SEGMENT_HEIGHT,
@@ -651,7 +665,7 @@ const TeamBanSummaryFormat = {
   info: false,
   searching: false,
   order: [[1, 'desc'], [2, 'desc']]
-}
+};
 
 const TeamCompareToAvgFormat = {
   columns: [
@@ -717,7 +731,9 @@ const HeroDetailPlayerFormat = {
     {
       title: 'Player',
       data: 'name',
-      render: (data, type, row) => `<h3 class="ui inverted header player-name link-to-player" player-id="${row.key}">${data}</h3>`
+      render: (data, type, row) => `<h3 class="ui inverted header player-name link-to-player" player-id="${
+          row.key
+        }">${data}</h3>`
     },
     {
       title: 'Win %',
@@ -775,7 +791,7 @@ const HeroDetailPlayerFormat = {
   searching: true,
   info: true,
   scrollY: STANDARD_SEGMENT_ALL
-}
+};
 
 // this one sucks a lil, there's no list of team stats and they're all over the place.
 const TeamRankingFormat = {
@@ -784,7 +800,9 @@ const TeamRankingFormat = {
       title: 'Team Name',
       data: 'name',
       width: '300px',
-      render: (data, type, row) => `<h3 class="ui inverted header player-name link-to-team" team-id="${row.id}">${data}</h3>`
+      render: (data, type, row) => `<h3 class="ui inverted header player-name link-to-team" team-id="${
+          row.id
+        }">${data}</h3>`
     },
     {
       title: 'Win %',
@@ -802,7 +820,7 @@ const TeamRankingFormat = {
     },
     {
       title: 'First Pick Win %',
-      data: (row) => { return row.firstPicks === 0 ? 0 : row.firstPickWins / row.firstPicks },
+      data: (row) => row.firstPicks === 0 ? 0 : row.firstPickWins / row.firstPicks,
       render: (data) => formatStat('pct', data)
     },
     {
@@ -833,8 +851,7 @@ const TeamRankingFormat = {
       title: 'Time Spent Dead',
       data: 'selectedStats.TimeSpentDead',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('TimeSpentDead', data);
+        if (type === 'display') return formatStat('TimeSpentDead', data);
 
         return parseFloat(data);
       }
@@ -848,8 +865,7 @@ const TeamRankingFormat = {
       title: 'Time w/ Level Adv.',
       data: 'selectedStats.levelAdvTime',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('Time', data);
+        if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
       }
@@ -873,8 +889,7 @@ const TeamRankingFormat = {
       title: 'Time w/ Hero Adv.',
       data: 'selectedStats.timeWithHeroAdv',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('Time', data);
+        if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
       }
@@ -968,8 +983,7 @@ const TeamRankingFormat = {
       title: 'CC Time',
       data: 'selectedStats.TimeCCdEnemyHeroes',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('TimeCCdEnemyHeroes', data);
+        if (type === 'display') return formatStat('TimeCCdEnemyHeroes', data);
 
         return parseFloat(data);
       }
@@ -1008,8 +1022,7 @@ const TeamRankingFormat = {
       title: 'Match Length',
       data: 'matchLength.val',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('Time', data);
+        if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
       }
@@ -1018,8 +1031,7 @@ const TeamRankingFormat = {
       title: 'Time to Level 10',
       data: 'selectedStats.timeTo10',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('timeTo10', data);
+        if (type === 'display') return formatStat('timeTo10', data);
 
         return parseFloat(data);
       }
@@ -1032,8 +1044,7 @@ const TeamRankingFormat = {
       title: 'Time to Level 20',
       data: 'selectedStats.timeTo20',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('timeTo20', data);
+        if (type === 'display') return formatStat('timeTo20', data);
 
         return parseFloat(data);
       }
@@ -1046,8 +1057,7 @@ const TeamRankingFormat = {
       title: 'Time @ Level 1',
       data: 'tierTimes.T1.average',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('Time', data);
+        if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
       }
@@ -1056,8 +1066,7 @@ const TeamRankingFormat = {
       title: 'Time @ Level 4',
       data: 'tierTimes.T2.average',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('Time', data);
+        if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
       }
@@ -1066,8 +1075,7 @@ const TeamRankingFormat = {
       title: 'Time @ Level 7',
       data: 'tierTimes.T3.average',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('Time', data);
+        if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
       }
@@ -1076,8 +1084,7 @@ const TeamRankingFormat = {
       title: 'Time @ Level 10',
       data: 'tierTimes.T4.average',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('Time', data);
+        if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
       }
@@ -1086,8 +1093,7 @@ const TeamRankingFormat = {
       title: 'Time @ Level 13',
       data: 'tierTimes.T5.average',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('Time', data);
+        if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
       }
@@ -1096,8 +1102,7 @@ const TeamRankingFormat = {
       title: 'Time @ Level 16',
       data: 'tierTimes.T6.average',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('Time', data);
+        if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
       }
@@ -1141,8 +1146,7 @@ const TeamRankingFormat = {
       title: 'Mercenary Uptime',
       data: 'selectedStats.mercUptime',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('mercUptime', data);
+        if (type === 'display') return formatStat('mercUptime', data);
 
         return parseFloat(data);
       }
@@ -1181,8 +1185,7 @@ const TeamRankingFormat = {
       title: 'Time to First Fort',
       data: 'structures.Fort.first',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('Time', data);
+        if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
       }
@@ -1201,8 +1204,7 @@ const TeamRankingFormat = {
       title: 'Time to First Keep',
       data: 'structures.Keep.first',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('Time', data);
+        if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
       }
@@ -1224,12 +1226,11 @@ const TeamRankingFormat = {
   scrollX: true,
   buttons: ['csv', 'excel'],
   fixedColumns: true
-}
+};
 
 function safeAwardAccess(key, data) {
-  if (key in data.awards)
-    return data.awards[key];
-  
+  if (key in data.awards) return data.awards[key];
+
   return 0;
 }
 
@@ -1255,8 +1256,7 @@ function awardsTrackerFormat() {
 
   // ok now the awards
   for (let awardKey in Awards) {
-    if (awardKey === 'EndOfMatchAwardMVPBoolean')
-      continue;
+    if (awardKey === 'EndOfMatchAwardMVPBoolean') continue;
 
     columns.push({
       title: Awards[awardKey].name,
@@ -1277,7 +1277,7 @@ function awardsTrackerFormat() {
       leftColumns: 2
     },
     scrollCollapse: true
-  }
+  };
 }
 
 function playerHeroDuoFormat(type) {
@@ -1298,7 +1298,7 @@ function playerHeroDuoFormat(type) {
         if (hero in row[type]) {
           return row[type][hero].wins / row[type][hero].games;
         }
-        
+
         return 0;
       },
       render: (data, t, row) => {
@@ -1307,22 +1307,18 @@ function playerHeroDuoFormat(type) {
           // fail (0-25), bad (25-35), poor (35-45), neutral (45-55), good (55-65), great (65-75), excellent (75+)
           let classname = 'fail';
 
-          if (data > 0.25)
-            classname = 'bad';
-          if (data > 0.35)
-            classname = 'poor'
-          if (data > 0.45)
-            classname = 'neutral';
-          if (data > 0.55)
-            classname = 'good';
-          if (data > 0.65)
-            classname = 'great';
-          if (data > 0.75)
-            classname = 'excellent';
+          if (data > 0.25) classname = 'bad';
+          if (data > 0.35) classname = 'poor';
+          if (data > 0.45) classname = 'neutral';
+          if (data > 0.55) classname = 'good';
+          if (data > 0.65) classname = 'great';
+          if (data > 0.75) classname = 'excellent';
 
           return `
             <div class="player-duo-cell">
-              <div class="cell-text">${formatStat('pct', data)}<br />${row[type][hero].wins} - ${row[type][hero].games - row[type][hero].wins}</div>
+              <div class="cell-text">${formatStat('pct', data)}<br />${
+            row[type][hero].wins
+          } - ${row[type][hero].games - row[type][hero].wins}</div>
             </div>
             <div class="duo-bg ${classname}"></div>
           `;

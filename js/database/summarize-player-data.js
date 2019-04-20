@@ -1,18 +1,30 @@
-const { median } = require("../util/math");
-const DetailStatList = require("../game-data/detail-stat-list");
-const PerMapStatList = require("../game-data/map-stats.js");
+const { median } = require('../util/math');
+const DetailStatList = require('../game-data/detail-stat-list');
+const ComputedStatsList = require('../game-data/computed-stats-list');
+const PerMapStatList = require('../game-data/map-stats.js');
 const ReplayTypes = require('../../hots-parser/constants');
 
 // get average stats by player (not by hero)
 // otherwise this is basically summarizeHeroData but it doesn't track some stuff
 // Aliases are resolved by the playerData key. If this isn't present, everything
 // will be separate.
+// this function also now computes a few extra stats (derived from data). They are:
+// - DDRatio - Damage Dealt / Damage Taken
+// - DPct - Damage Dealt / with.stats.totals.HeroDamage
+// - DTPct - Damage Taken / with.stats.totals.DamageTaken
+// - HPct - [Healing + shielding] / [with.stats.totals.DamageTaken]
+// - CCPct - [sum All CC] / match length
 function summarizePlayerData(docs, playerAliases = {}) {
   let playerDetailStats = {};
 
   for (let i = 0; i < docs.length; i++) {
-    let match = docs[i];
-    let statList = DetailStatList.concat(PerMapStatList[match.map]);
+    const match = docs[i];
+
+    // concat a few extra computed properties
+    const statList = DetailStatList.concat(
+      PerMapStatList[match.map],
+      ComputedStatsList
+    );
 
     // alias resolution
     let playerID = match.ToonHandle;
@@ -57,6 +69,24 @@ function summarizePlayerData(docs, playerAliases = {}) {
       playerDetailStats[playerID].heroes[match.hero] = 0;
     playerDetailStats[playerID].heroes[match.hero] += 1;
 
+    // preprocess stats
+    match.gameStats.DDRatio =
+      match.gameStats.HeroDamage / match.gameStats.DamageTaken; // allowed to be inf
+    match.gameStats.DPct =
+      match.gameStats.HeroDamage / match.with.stats.totals.HeroDamage;
+    match.gameStats.DTPct =
+      match.gameStats.DamageTaken / match.with.stats.totals.DamageTaken;
+    match.gameStats.HPct =
+      (match.gameStats.Healing + match.gameStats.ProtectionGivenToAllies) /
+      match.with.stats.totals.DamageTaken;
+    match.gameStats.SoftCCPct =
+      match.gameStats.TimeCCdEnemyHeroes / match.length;
+    match.gameStats.HardCCPct =
+      (match.gameStats.TimeRootingEnemyHeroes +
+        match.gameStats.TimeSilencingEnemyHeroes +
+        match.gameStats.TimeStunningEnemyHeroes) /
+      match.length;
+
     for (let s in statList) {
       let statName = statList[s];
 
@@ -65,35 +95,21 @@ function summarizePlayerData(docs, playerAliases = {}) {
 
       if (!(statName in playerDetailStats[playerID].stats)) {
         playerDetailStats[playerID].stats[statName] = 0;
-        playerDetailStats[playerID].max[statName] =
-          match.gameStats[statName];
-        playerDetailStats[playerID].min[statName] =
-          match.gameStats[statName];
+        playerDetailStats[playerID].max[statName] = match.gameStats[statName];
+        playerDetailStats[playerID].min[statName] = match.gameStats[statName];
         playerDetailStats[playerID].total[statName] = 0;
         playerDetailStats[playerID].medianTmp[statName] = [];
       }
 
-      playerDetailStats[playerID].stats[statName] +=
-        match.gameStats[statName];
-      playerDetailStats[playerID].total[statName] +=
-        match.gameStats[statName];
-      playerDetailStats[playerID].medianTmp[statName].push(
-        match.gameStats[statName]
-      );
+      playerDetailStats[playerID].stats[statName] += match.gameStats[statName];
+      playerDetailStats[playerID].total[statName] += match.gameStats[statName];
+      playerDetailStats[playerID].medianTmp[statName].push(match.gameStats[statName]);
 
-      if (
-        match.gameStats[statName] >
-        playerDetailStats[playerID].max[statName]
-      )
-        playerDetailStats[playerID].max[statName] =
-          match.gameStats[statName];
+      if (match.gameStats[statName] > playerDetailStats[playerID].max[statName])
+        playerDetailStats[playerID].max[statName] = match.gameStats[statName];
 
-      if (
-        match.gameStats[statName] <
-        playerDetailStats[playerID].min[statName]
-      )
-        playerDetailStats[playerID].min[statName] =
-          match.gameStats[statName];
+      if (match.gameStats[statName] < playerDetailStats[playerID].min[statName])
+        playerDetailStats[playerID].min[statName] = match.gameStats[statName];
     }
     let tdp = match.gameStats.TimeSpentDead / match.length;
     playerDetailStats[playerID].stats.timeDeadPct += tdp;
@@ -114,7 +130,7 @@ function summarizePlayerData(docs, playerAliases = {}) {
     // you only ever get 1 but just in case...
     // ALSO custom games don't get counted here since you can't get awards
     if (match.mode !== ReplayTypes.GameMode.Custom) {
-      if ("awards" in match.gameStats) {
+      if ('awards' in match.gameStats) {
         for (let a in match.gameStats.awards) {
           let awardName = match.gameStats.awards[a];
           if (!(awardName in playerDetailStats[playerID].awards))
@@ -135,9 +151,8 @@ function summarizePlayerData(docs, playerAliases = {}) {
         playerDetailStats[playerID].taunts[t].takedowns += bm[j].kills;
         playerDetailStats[playerID].taunts[t].deaths += bm[j].deaths;
 
-        if ("duration" in bm[j]) {
-          playerDetailStats[playerID].taunts[t].duration +=
-            bm[j].duration;
+        if ('duration' in bm[j]) {
+          playerDetailStats[playerID].taunts[t].duration += bm[j].duration;
         }
       }
     }
@@ -161,15 +176,13 @@ function summarizePlayerData(docs, playerAliases = {}) {
     for (let s in playerDetailStats[p].stats) {
       playerDetailStats[p].averages[s] =
         playerDetailStats[p].stats[s] / playerDetailStats[p].games;
-      playerDetailStats[p].median[s] = median(
-        playerDetailStats[p].medianTmp[s]
-      );
+      playerDetailStats[p].median[s] = median(playerDetailStats[p].medianTmp[s]);
     }
     playerDetailStats[p].totalKDA =
       playerDetailStats[p].stats.Takedowns /
       Math.max(playerDetailStats[p].stats.Deaths, 1);
 
-    if ("EndOfMatchAwardMVPBoolean" in playerDetailStats[p].awards) {
+    if ('EndOfMatchAwardMVPBoolean' in playerDetailStats[p].awards) {
       playerDetailStats[p].stats.MVPPct =
         playerDetailStats[p].awards.EndOfMatchAwardMVPBoolean /
         playerDetailStats[p].games;
