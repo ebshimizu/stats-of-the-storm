@@ -71,7 +71,8 @@ function summarizePlayerData(docs, playerAliases = {}) {
 
     // preprocess stats
     match.gameStats.DDRatio =
-      match.gameStats.HeroDamage / match.gameStats.DamageTaken; // allowed to be inf
+      match.gameStats.HeroDamage /
+      (match.gameStats.DamageTaken === 0 ? 1 : match.gameStats.DamageTaken);
     match.gameStats.DPct =
       match.gameStats.HeroDamage / match.with.stats.totals.HeroDamage;
     match.gameStats.DTPct =
