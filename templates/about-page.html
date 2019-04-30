@@ -24,6 +24,14 @@
             gets talent info, hero info, and images from <a href="https://github.com/heroespatchnotes/heroes-talents">heroes-talents</a>.
           </p>
           <div class="ui inverted horizontal divider">Change Log</div>
+          <div class="ui inverted dividing header">Version 2.6.2</div>
+          <p>Parser: Updated for 2.45.0</p>
+          <p>heroes-talents: Metadata updated for 2.45.0</p>
+          <p>
+            Collection: Players: Added six additional stats: Damage Ratio, % of Team Damage,
+            % of Team Damage Taken, % of Team Damage Healed, % of Time Slow CC,
+            % of Time Non-Slow CC. See Stat Definitions for more details.
+          </p>
           <div class="ui inverted dividing header">Version 2.6.1</div>
           <p>Parser: Updated for 2.44.1</p>
           <p>heroes-talents: Metadata updated for 2.44.1</p>
@@ -1108,6 +1116,33 @@
               <div class="header">Hero Advantage % (Hero Adv. %)</div>
               Percent of the match that a team had strictly more
               more heroes alive than the other team.
+            </div>
+            <div class="item">
+              <div class="header">Damage Ratio</div>
+              Ratio of damage dealt to damage taken. Note that this value is invalid for Gall (can't take damage)
+              and may be skewed by Abathur.
+            </div>
+            <div class="item">
+              <div class="header">% of Team Damage</div>
+              Percentage of the total team hero damage dealt done by the player.
+            </div>
+            <div class="item">
+              <div class="header">% of Team Damage Taken</div>
+              Percentage of the total team hero damage taken absorbed by the player.
+            </div>
+            <div class="item">
+              <div class="header">% of Team Damage Healed</div>
+              Percentage of the total team hero damage taken healed by the player.
+            </div>
+            <div class="item">
+              <div class="header">% of Time Slow CC</div>
+              Percentage of the match where the player had applied a form of slowing CC.
+              This value may be over 100% (there are at least 5 other heroes in play).
+            </div>
+            <div class="item">
+              <div class="header">% of Time Non-Slow CC</div>
+              Percentage of the match where the player had applied a form of hard CC (stuns, roots, silences).
+              This value may be over 100% (there are at least 5 other heroes in play).
             </div>
           </div>
         </div>
