@@ -13,7 +13,7 @@
 #team-hero-summary .table-wrapper {
   height: 100%;
   overflow: auto;
-  margin-top: 0!important;
+  margin-top: 0 !important;
 }
 
 #team-detail-body #team-roster-stats .floatThead-wrapper {
@@ -21,7 +21,7 @@
 }
 
 #team-detail-body #team-roster-stats .table-wrapper {
-  margin-top: 0!important;
+  margin-top: 0 !important;
   height: 100%;
 }
 
@@ -87,7 +87,10 @@
 }
 
 #team-duo-with h3.image.header,
-#team-duo-against h3.image.header
-{
+#team-duo-against h3.image.header {
   width: 200px;
+}
+
+#team-map-summary .dataTables_wrapper {
+  height: 100%;
 }
