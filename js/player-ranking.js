@@ -10,7 +10,10 @@ function initPlayerRankingPage() {
     $('#player-ranking-general-table thead tr').append(`<th>${c.title}</th>`);
   }
 
-  playerRankingTable = new Table('#player-ranking-general-table', TableDefs.PlayerRankingStatFormat);
+  playerRankingTable = new Table(
+    '#player-ranking-general-table',
+    TableDefs.PlayerRankingStatFormat
+  );
 
   // filter popup
   let filterWidget = $(getTemplate('filter', '#filter-popup-widget-template'));
@@ -22,7 +25,11 @@ function initPlayerRankingPage() {
 
   bindFilterButton(filterWidget, updatePlayerRankingsFilter);
   bindFilterResetButton(filterWidget, resetPlayerRankingsFilter);
-  bindOtherSearchButton(filterWidget, $('#player-ranking-alt-search-button'), updatePlayerRankingsFilter);
+  bindOtherSearchButton(
+    filterWidget,
+    $('#player-ranking-alt-search-button'),
+    updatePlayerRankingsFilter
+  );
 
   $('#player-ranking-filter-button').popup({
     popup: '.filter-popup-widget[widget-name="player-ranking-filter"]',
@@ -37,11 +44,12 @@ function initPlayerRankingPage() {
   addHeroMenuOptions($('#player-ranking-hero-filter-menu'));
 
   $('#player-ranking-hero-filter-menu .menu').prepend('<div class="ui divider"></div>');
-  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Multiclass">Multiclass</div>');
-  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Specialist"><div class="ui avatar image"><img class="ui avatar image" src="./assets/images/role_specialist.png"></div>Specialist</div>');
-  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Support"><div class="ui avatar image"><img class="ui avatar image" src="./assets/images/role_support.png"></div>Support</div>');
-  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Warrior"><div class="ui avatar image"><img class="ui avatar image" src="./assets/images/role_warrior.png"></div>Warrior</div>');
-  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Assassin"><div class="ui avatar image"><img class="ui avatar image" src="./assets/images/role_assassin.png"></div>Assassin</div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Support"><div class="ui avatar image"><img class="ui avatar image" src="./assets/images/role_support2.png"></div>Support</div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Healer"><div class="ui avatar image"><img class="ui avatar image" src="./assets/images/role_healer.png"></div>Healer</div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Bruiser"><div class="ui avatar image"><img class="ui avatar image" src="./assets/images/role_bruiser.png"></div>Bruiser</div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Tank"><div class="ui avatar image"><img class="ui avatar image" src="./assets/images/role_tank.png"></div>Tank</div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Ranged Assassin"><div class="ui avatar image"><img class="ui avatar image" src="./assets/images/role_rassassin.png"></div>Ranged Assassin</div>');
+  $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="Melee Assassin"><div class="ui avatar image"><img class="ui avatar image" src="./assets/images/role_massassin.png"></div>Melee Assassin</div>');
   $('#player-ranking-hero-filter-menu .menu').prepend('<div class="ui divider"></div>');
   $('#player-ranking-hero-filter-menu .menu').prepend('<div class="item" data-value="all">All Heroes</div>');
   $('#player-ranking-hero-filter-menu').dropdown('refresh');
@@ -82,7 +90,11 @@ function updatePlayerRankingsFilter(map, hero) {
   playerRankingsHeroFilter = hero;
   playerRankingsMapFilter = map;
   $('#player-ranking-filter-button').addClass('green');
-  updateHeroFilter($('#player-ranking-hero-filter-menu').dropdown('get value'), null, null);
+  updateHeroFilter(
+    $('#player-ranking-hero-filter-menu').dropdown('get value'),
+    null,
+    null
+  );
 
   loadPlayerRankings();
 }
@@ -92,18 +104,27 @@ function resetPlayerRankingsFilter() {
   playerRankingsMapFilter = {};
   $('#player-ranking-filter-button').removeClass('green');
 
-  updateHeroFilter($('#player-ranking-hero-filter-menu').dropdown('get value'), null, null);
+  updateHeroFilter(
+    $('#player-ranking-hero-filter-menu').dropdown('get value'),
+    null,
+    null
+  );
 }
 
 function updateHeroFilter(value, text, $elem) {
-  if (value === "" || value === 'all') {
+  if (value === '' || value === 'all') {
     delete playerRankingsHeroFilter.hero;
-  }
-  else if (value === "Assassin" || value === "Warrior" || value === "Support" || value === "Specialist" || value === "Multiclass") {
+  } else if (
+    value === 'Melee Assassin' ||
+    value === 'Ranged Assassin' ||
+    value === 'Support' ||
+    value === 'Healer' ||
+    value === 'Bruiser' ||
+    value === 'Tank'
+  ) {
     let heroes = Heroes.heroRole({ role: value });
     playerRankingsHeroFilter.hero = { $in: heroes };
-  }
-  else {
+  } else {
     playerRankingsHeroFilter.hero = value;
   }
 
@@ -131,8 +152,7 @@ function loadPlayerRankings() {
       for (let p in data) {
         let player = data[p];
 
-        if (player.games < threshold)
-          continue;
+        if (player.games < threshold) continue;
 
         let context = player[mode];
         context.id = p;
@@ -141,24 +161,37 @@ function loadPlayerRankings() {
 
         if (mode === 'total' || mode === 'averages') {
           if (mode === 'total') {
-            context.KDA = player.totalDeaths === 0 ? player.totalTD : player.totalTD / player.totalDeaths;
+            context.KDA =
+              player.totalDeaths === 0
+                ? player.totalTD
+                : player.totalTD / player.totalDeaths;
           }
 
           if (mode === 'total') {
             // context replacement for a few stats
-            context.damageDonePerDeath = context.HeroDamage / Math.max(1, context.Deaths);
-            context.damageTakenPerDeath = context.DamageTaken / Math.max(1, context.Deaths);
-            context.healingDonePerDeath = (context.Healing + context.SelfHealing + context.ProtectionGivenToAllies) / Math.max(1, context.Deaths);
+            context.damageDonePerDeath =
+              context.HeroDamage / Math.max(1, context.Deaths);
+            context.damageTakenPerDeath =
+              context.DamageTaken / Math.max(1, context.Deaths);
+            context.healingDonePerDeath =
+              (context.Healing +
+                context.SelfHealing +
+                context.ProtectionGivenToAllies) /
+              Math.max(1, context.Deaths);
             context.DPM = context.HeroDamage / (player.totalTime / 60);
-            context.HPM = (context.Healing + context.SelfHealing + context.ProtectionGivenToAllies) / (player.totalTime / 60);
-            context.XPM = context.ExperienceContribution / (player.totalTime / 60);
+            context.HPM =
+              (context.Healing +
+                context.SelfHealing +
+                context.ProtectionGivenToAllies) /
+              (player.totalTime / 60);
+            context.XPM =
+              context.ExperienceContribution / (player.totalTime / 60);
           }
-        }
-        else {
+        } else {
           context.totalKDA = player[mode].KDA;
         }
 
-        context.games = player.games
+        context.games = player.games;
         context.votes = player.votes;
 
         context.totalAwards = player.totalAwards;
@@ -181,9 +214,14 @@ function loadPlayerRankings() {
 
 function handlePlayerRankingAction(value, text, $elem) {
   if (value === 'csv') {
-    playerRankingTable.table.DataTable().button('0').trigger();
-  }
-  else if (value === 'excel') {
-    playerRankingTable.table.DataTable().button('1').trigger();
+    playerRankingTable.table.
+      DataTable().
+      button('0').
+      trigger();
+  } else if (value === 'excel') {
+    playerRankingTable.table.
+      DataTable().
+      button('1').
+      trigger();
   }
 }
