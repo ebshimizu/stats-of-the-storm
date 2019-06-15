@@ -146,6 +146,29 @@ class Database {
     });
   }
 
+  dump(dir, final) {
+    // exports all database data to json files
+    var self = this;
+    this._db.matches.find({}, function (err, docs) {
+      fs.writeFileSync(path.join(dir, 'matches.json'), JSON.stringify(docs, null, 2));
+
+      self._db.heroData.find({}, function(err, docs2) {
+        fs.writeFileSync(path.join(dir, 'heroData.json'), JSON.stringify(docs2, null, 2));
+
+        self._db.players.find({}, function(err, docs3) {
+          fs.writeFileSync(path.join(dir, 'players.json'), JSON.stringify(docs3, null, 2));
+
+          self._db.settings.find({}, function(err, docs4) {
+            fs.writeFileSync(path.join(dir, 'settings.json'), JSON.stringify(docs4, null, 2));
+
+            if (final)
+              final();
+          });
+        });
+      })
+    });
+  }
+
   // i don't think the next two need callbacks but if so i guess i'll have to add it
   addMatchToCollection(matchID, collectionID) {
     // this actually needs to modify two databases to ensure proper data aggregation
