@@ -3685,6 +3685,17 @@ hat@0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/hat/-/hat-0.0.3.tgz#bb014a9e64b3788aed8005917413d4ff3d502d8a"
 
+heroprotocol-fallback@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/heroprotocol-fallback/-/heroprotocol-fallback-1.0.0.tgz#607890922848fc04ab67486d96b1e4a122691757"
+  integrity sha512-52EP55grR5xdUM1rF9dTshcXC8fgyccjJM+n1apZjkIqHjRU2klrsLveG3aVsUSvtKgZuhzZajY63OpxKF6hAw==
+  dependencies:
+    download-github-repo "^0.1.3"
+    empeeku "^1.0.2"
+    fs-extra "^0.26.7"
+    long "^3.0.3"
+    yargs "^3.32.0"
+
 heroprotocol@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/heroprotocol/-/heroprotocol-2.0.0.tgz#145a8d098e4ea8df6371f5826894e81c1c63f119"
