@@ -46,7 +46,7 @@
     "fs-extra": "^5.0.0",
     "handlebars": "^4.0.11",
     "heroprotocol-fallback": "^1.0.0",
-    "hots-parser-fallback": "^6.37.0",
+    "hots-parser-fallback": "^7.46.0",
     "jquery": "^3.3.1",
     "jquery-tablesort": "0.0.11",
     "level-js": "^2.2.4",
