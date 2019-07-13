@@ -77,7 +77,7 @@
     "dist": "electron-builder",
     "app": "electron ./",
     "publish": "electron-builder --x64 --publish always",
-    "protocol": "node ./node_modules/heroprotocol/postinstall.js"
+    "protocol": "node ./node_modules/heroprotocol-fallback/postinstall.js"
   },
   "build": {
     "appId": "com.stats-of-the-storm.app",
