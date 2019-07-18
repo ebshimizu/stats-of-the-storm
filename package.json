@@ -1,6 +1,6 @@
 {
   "name": "stats-of-the-storm",
-  "version": "2.6.5",
+  "version": "2.6.6",
   "main": "main.js",
   "description": "A Heroes of the Storm stat tracking application.",
   "bugs": "falindrith@gmail.com",
@@ -45,8 +45,8 @@
     "form-data": "^2.3.2",
     "fs-extra": "^5.0.0",
     "handlebars": "^4.0.11",
-    "heroprotocol-fallback": "^1.0.0",
-    "hots-parser-fallback": "^7.46.0",
+    "heroprotocol": "^1.0.0",
+    "hots-parser": "^7.46.0",
     "jquery": "^3.3.1",
     "jquery-tablesort": "0.0.11",
     "level-js": "^2.2.4",
@@ -77,7 +77,7 @@
     "dist": "electron-builder",
     "app": "electron ./",
     "publish": "electron-builder --x64 --publish always",
-    "protocol": "node ./node_modules/heroprotocol-fallback/postinstall.js"
+    "protocol": "node ./node_modules/heroprotocol/postinstall.js"
   },
   "build": {
     "appId": "com.stats-of-the-storm.app",
