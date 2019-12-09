@@ -783,7 +783,7 @@ in this table.
 | `TeamTakedowns` | Team Takedowns | Total Team Takedowns |
 | `ExperienceContribution` | Experience Contribution | |
 | `Healing` | Healing | Usually 0 unless it's displayed on the scoreboard. Blaze is an exception to this. |
-| `SiegeDamage` | Seige Damage | |
+| `SiegeDamage` | Siege Damage | |
 | `StructureDamage` | Structure Damage | Damage specifically to structures |
 | `MinionDamage` | Minion Damage | Damage to lane minions |
 | `HeroDamage` | Hero Damage | |
