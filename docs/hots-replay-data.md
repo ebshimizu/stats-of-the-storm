@@ -988,7 +988,9 @@ presses are fast enough (within 16 frames), it marks the series of presses as a 
 | ---------- | ------------------- | --------- |
 | 27 | 200 | <61872, this was around the first time I noticed it break so this period is a little iffy |
 | 27 | 119 | >= 61872 I think, if not that build number then definitely >= 63070, < 68740 |
-| 27 | 116 | Current |
+| 27 | 116 | >= 68740, < 70682 |
+| 27 | 112 | >= 70682, < 77525 |
+| 27 | 114 | Current |
 
 ### Player Taunt
 `m_abil` may be null so check that before accessing.
@@ -1007,7 +1009,7 @@ in the tracker events.
 | `_eventid` | `m_abil.m_abilLink` | `m_abilCmdIndex` | For Build |
 | ---------- | ------------------- | ---------------- | --------- |
 | 27 | 19 | 3 | < 68740 |
-| 27 | 22 | 3 | <= Current |
+| 27 | 22 | 3 | Current |
 
 ## Special Cases for Map Objectives
 Sometimes the tracker doesn't have the data, but other places do.
@@ -1033,9 +1035,15 @@ in the following pseudocode:
 
 ```javascript
 function braxisWaveStrength(units) {
-  let score = 0.05 * (units.Zerglings - 6) + (units.Banelings) * 0.05;
-  score = Math.max(score, units.Hydralisks * 0.14);
-  return Math.max(score, units.Guardians * 0.3);
+  score = 0.1 * types[ReplayTypes.BraxisUnitType.ZergBaneling];
+  score = Math.max(
+    score,
+    0.25 * (types[ReplayTypes.BraxisUnitType.ZergHydralisk] - 2)
+  );
+  score = Math.max(
+    score,
+    0.35 * (types[ReplayTypes.BraxisUnitType.ZergGuardian] - 1)
+  );
 }
 ```
 For a reference implementation, see the [braxisWaveStrength function](https://github.com/ebshimizu/stats-of-the-storm/blob/master/parser/parser.js#L1565) in the parser.
