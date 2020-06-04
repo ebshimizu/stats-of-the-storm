@@ -3693,21 +3693,23 @@ hat@0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/hat/-/hat-0.0.3.tgz#bb014a9e64b3788aed8005917413d4ff3d502d8a"
 
-heroprotocol@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/heroprotocol/-/heroprotocol-1.0.1.tgz#d91c197dcc995f248584e53d35f0edd782a8e9df"
-  integrity sha1-2RwZfcyZXySFhOU9NfDt14Ko6d8=
+heroprotocol@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/heroprotocol/-/heroprotocol-2.0.0.tgz#145a8d098e4ea8df6371f5826894e81c1c63f119"
+  integrity sha512-LTI/8dRHSggCV0eFhR+RKr7eLyr3xBdaPO3FP4VAx2QUbbBYeuCwx+q5ABOmIkdTyIKdBP0tBrTzENAVUbTl9w==
   dependencies:
     download-github-repo "^0.1.3"
     empeeku "^1.0.2"
     fs-extra "^0.26.7"
     long "^3.0.3"
+    pino "^4.17.5"
     yargs "^3.32.0"
+  optionalDependencies:
+    storm-replay "^0.3.0-alpha.3"
 
-heroprotocol@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/heroprotocol/-/heroprotocol-2.0.0.tgz#145a8d098e4ea8df6371f5826894e81c1c63f119"
-  integrity sha512-LTI/8dRHSggCV0eFhR+RKr7eLyr3xBdaPO3FP4VAx2QUbbBYeuCwx+q5ABOmIkdTyIKdBP0tBrTzENAVUbTl9w==
+"heroprotocol@github:ebshimizu/heroprotocol-1#develop":
+  version "2.0.1"
+  resolved "https://codeload.github.com/ebshimizu/heroprotocol-1/tar.gz/bbb07b51e2e644892eee2783d76639c789e2e06b"
   dependencies:
     download-github-repo "^0.1.3"
     empeeku "^1.0.2"
