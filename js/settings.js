@@ -424,7 +424,7 @@ function addReplaysToList(path, collections) {
 
       let lcstr = file.toLowerCase();
       if (lcstr.endsWith('.stormreplay')) {
-        if (new Date(stats.birthtime) < currentDate) {
+        if (new Date(stats.mtime) < currentDate) {
           continue;
         }
 
