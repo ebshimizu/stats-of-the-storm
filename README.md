@@ -18,6 +18,7 @@ the standard `npm` commands should work in its place.
 
 * Install node
 * Clone the repository and initialize the submodules
+  * Initialize submodules by running `git submodule init` and then `git submodule update`. Don't forget to keep these submodules updated when pulling changes for this project.
 * Run `yarn install` in the repository root (the one with `package.json` in it)
 * From the root directory, run `yarn app`
 
