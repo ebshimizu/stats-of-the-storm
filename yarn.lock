@@ -4150,24 +4150,9 @@ hat@0.0.3:
   resolved "https://registry.yarnpkg.com/hat/-/hat-0.0.3.tgz#bb014a9e64b3788aed8005917413d4ff3d502d8a"
   integrity sha1-uwFKnmSzeIrtgAWRdBPU/z1QLYo=
 
-heroprotocol-fallback@ebshimizu/heroprotocol-1, "heroprotocol-fallback@github:ebshimizu/heroprotocol-1":
+heroprotocol@^2.0.0, "heroprotocol@github:GaryIrick/heroprotocol":
   version "2.0.2"
-  uid fe294aa7e39f2d10dd88cb7301213ef4760f6a32
-  resolved "https://codeload.github.com/ebshimizu/heroprotocol-1/tar.gz/fe294aa7e39f2d10dd88cb7301213ef4760f6a32"
-  dependencies:
-    download-github-repo "^0.1.3"
-    empeeku "^1.0.2"
-    fs-extra "^0.26.7"
-    long "^3.0.3"
-    pino "^4.17.5"
-    yargs "^3.32.0"
-  optionalDependencies:
-    storm-replay ">=0.3.0"
-
-heroprotocol@^2.0.0:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/heroprotocol/-/heroprotocol-2.0.2.tgz#7cacaca42a5cb4dfe88854f6c10d25e1cfcc84b5"
-  integrity sha512-egIW3lr/KFgj0s7faIBG30UVDx4siBvvkf1KsyKqgw8h37SU7BdUyi7HdH34INklwaux9iy/kjh+ER/uiJ0J3A==
+  resolved "https://codeload.github.com/GaryIrick/heroprotocol/tar.gz/2b0135be0e9f3d210411b7e33ebcad1f0c683f65"
   dependencies:
     download-github-repo "^0.1.3"
     empeeku "^1.0.2"

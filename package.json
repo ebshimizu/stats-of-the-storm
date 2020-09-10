@@ -45,8 +45,7 @@
     "form-data": "^2.3.2",
     "fs-extra": "^5.0.0",
     "handlebars": "^4.0.11",
-    "heroprotocol": "^2.0.0",
-    "heroprotocol-fallback": "ebshimizu/heroprotocol-1",
+    "heroprotocol": "github:GaryIrick/heroprotocol",
     "hots-parser": "^7.46.0",
     "jquery": "^3.3.1",
     "jquery-tablesort": "0.0.11",
@@ -78,7 +77,7 @@
     "dist": "electron-builder",
     "app": "electron ./",
     "publish": "electron-builder --x64 --publish always",
-    "protocol": "node ./node_modules/heroprotocol-fallback/postinstall.js"
+    "protocol": "node ./node_modules/heroprotocol/postinstall.js"
   },
   "build": {
     "appId": "com.stats-of-the-storm.app",
