@@ -423,6 +423,15 @@ function playerRankingStatFormat() {
         row.id
       }">${data}</h4>`
   };
+
+  const wins = {
+    title: 'Win %',
+    data: 'winPercent',
+    render: (data) => formatStat('pct', data)
+  };
+
+  base.columns.splice(2, 0, wins);
+
   base.columns.push({
     title: 'Hero Pool',
     data: 'Pool'
