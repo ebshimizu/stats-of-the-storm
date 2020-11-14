@@ -100,6 +100,8 @@ $.fn.datepicker.setDefaults({
 });
 
 var DB;
+var dbVersions;
+var dbTags;
 var sections = {};
 var prevSections = [];
 
@@ -167,23 +169,31 @@ function resumeInitApp() {
   setLoadMessage('Initializing Handlers');
   initGlobalUIHandlers();
 
-  // sections
-  setLoadMessage('Loading Sections');
-  loadSections();
-  $('.app-version-number').text(app.getVersion());
+  setLoadMessage('Retrieving versions');
+  DB.getVersions(function(versions) {
+    dbVersions = versions;
+    setLoadMessage('Retrieving tags');
+    DB.getTags(function(tags) {
+      dbTags = tags;
+      // sections
+      setLoadMessage('Loading Sections');
+      loadSections();
+      $('.app-version-number').text(app.getVersion());
 
-  // populate some menus
-  setLoadMessage('Populating Menus');
-  globalDBUpdate();
+      // populate some menus
+      setLoadMessage('Populating Menus');
+      globalDBUpdate();
 
-  $('.player-menu input.search').keyup(function(e) {
-    if (e.which === 38 || e.which === 40 || e.which === 13)
-      return;
+      $('.player-menu input.search').keyup(function(e) {
+        if (e.which === 38 || e.which === 40 || e.which === 13)
+          return;
 
-    updatePlayerMenuOptions(this, $(this).val());
+        updatePlayerMenuOptions(this, $(this).val());
+      });
+
+      removeLoader();
+    });
   });
-
-  removeLoader();
 }
 
 function loadDatabase() {
@@ -485,15 +495,13 @@ function addMapMenuOptions(menu) {
 }
 
 function addPatchMenuOptions(elem, callback) {
-  DB.getVersions(function(versions) {
-    elem.find('.menu').html('');
+  elem.find('.menu').html('');
 
-    for (let v in versions) {
-      elem.find('.menu').append('<div class="item" data-value="' + escapeHtml(v) + '">' + escapeHtml(versions[v]) + '</div>');
-    }
+  for (let v in dbVersions) {
+    elem.find('.menu').append('<div class="item" data-value="' + escapeHtml(v) + '">' + escapeHtml(dbVersions[v]) + '</div>');
+  }
 
-    callback();
-  });
+  callback();
 }
 
 function populateTeamMenu(elem) {
@@ -596,18 +604,16 @@ function populateStatCollectionMenus() {
 
 // populates the tag menu with available tags
 function populateTagMenu(menu, callback) {
-  DB.getTags(function(tags) {
-    menu.find('.menu').html('');
+  menu.find('.menu').html('');
 
-    for (let tag of tags) {
-      menu.find('.menu').append('<div class="item" data-value="' + tag + '">' + tag + '</div>');
-    }
+  for (let tag of dbTags) {
+    menu.find('.menu').append('<div class="item" data-value="' + tag + '">' + tag + '</div>');
+  }
 
-    menu.dropdown('refresh');
+  menu.dropdown('refresh');
 
-    if (callback)
-      callback();
-  });
+  if (callback)
+    callback();
 }
 
 function setAppCollection(value, text, $elem) {
