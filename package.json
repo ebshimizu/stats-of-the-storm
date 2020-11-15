@@ -79,6 +79,9 @@
     "publish": "electron-builder --x64 --publish always",
     "protocol": "node ./node_modules/heroprotocol/postinstall.js"
   },
+  "resolutions": {
+    "graceful-fs": "^4.2.4"
+  },
   "build": {
     "appId": "com.stats-of-the-storm.app",
     "productName": "Stats of the Storm",
