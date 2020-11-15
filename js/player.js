@@ -215,7 +215,7 @@ heroPoolWinsGraphData = {
   }
 }
 
-function initPlayerPage() {
+function initPlayerPage(tags) {
   // player menu init
   let selectedPlayerID = settings.get('selectedPlayerID');
   let initOpt = '<div class="item" data-value="' + selectedPlayerID + '">' + selectedPlayerID + '</div>';
@@ -312,7 +312,7 @@ function initPlayerPage() {
   playerWidget.find('.filter-widget-team').addClass('is-hidden');
 
   $('#filter-widget').append(playerWidget);
-  initPopup(playerWidget);
+  initPopup(playerWidget, tags);
 
   bindFilterButton($('.filter-popup-widget[widget-name="player-filter"]'), updatePlayerFilter);
   bindFilterResetButton($('.filter-popup-widget[widget-name="player-filter"]'), resetPlayerFilter);

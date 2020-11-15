@@ -101,7 +101,6 @@ $.fn.datepicker.setDefaults({
 
 var DB;
 var dbVersions;
-var dbTags;
 var sections = {};
 var prevSections = [];
 
@@ -174,10 +173,9 @@ function resumeInitApp() {
     dbVersions = versions;
     setLoadMessage('Retrieving tags');
     DB.getTags(function(tags) {
-      dbTags = tags;
       // sections
       setLoadMessage('Loading Sections');
-      loadSections();
+      loadSections(tags);
       $('.app-version-number').text(app.getVersion());
 
       // populate some menus
@@ -270,39 +268,39 @@ function initGlobalUIHandlers() {
   });
 }
 
-function loadSections() {
+function loadSections(tags) {
   // settings
   $('#main-content').append(getTemplate('settings', '#settings-page'));
   initSettingsPage();
 
   $('#main-content').append(getTemplate('matches', '#matches-page'));
-  initMatchesPage();
+  initMatchesPage(tags);
 
   $('#main-content').append(getTemplate('match-detail', '#match-detail-page'));
   initMatchDetailPage();
 
   $('#main-content').append(getTemplate('player', '#player-page'));
-  initPlayerPage();
+  initPlayerPage(tags);
 
   $('#main-content').append(getTemplate('hero-collection', '#hero-collection-page'));
-  initHeroCollectionPage();
+  initHeroCollectionPage(tags);
 
   $('#main-content').append(getTemplate('player-ranking', '#player-ranking-page'));
-  initPlayerRankingPage();
+  initPlayerRankingPage(tags);
 
   $('#main-content').append(getTemplate('teams', '#teams-page'));
-  initTeamsPage();
+  initTeamsPage(tags);
 
   $('#main-content').append(getTemplate('team-ranking', '#team-ranking-page'))
-  initTeamRankingPage();
+  initTeamRankingPage(tags);
 
   $('#main-content').append(getTemplate('about', '#about-page'));
 
   $('#main-content').append(getTemplate('trends', '#hero-trends-page'));
-  initTrendsPage();
+  initTrendsPage(tags);
 
   $('#main-content').append(getTemplate('maps', '#maps-page'));
-  initMapsPage();
+  initMapsPage(tags);
 
   // register sections
   sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false, onShow: showSettingsPage };
@@ -602,18 +600,24 @@ function populateStatCollectionMenus() {
   });
 }
 
-// populates the tag menu with available tags
-function populateTagMenu(menu, callback) {
+function populateTagMenuWithValues (menu, tags) {
   menu.find('.menu').html('');
 
-  for (let tag of dbTags) {
+  for (let tag of tags) {
     menu.find('.menu').append('<div class="item" data-value="' + tag + '">' + tag + '</div>');
   }
 
   menu.dropdown('refresh');
+}
 
-  if (callback)
-    callback();
+// populates the tag menu with available tags
+function populateTagMenu(menu, callback) {
+  DB.getTags(function(tags) {
+    populateTagMenuWithValues(menu, tags)
+
+    if (callback)
+      callback();
+  });
 }
 
 function setAppCollection(value, text, $elem) {

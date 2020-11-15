@@ -6,7 +6,7 @@ var teamRankingHeroFilter = {};
 
 var teamRankingTable;
 
-function initTeamRankingPage() {
+function initTeamRankingPage(tags) {
   // populate headers
   for (let c of TableDefs.TeamRankingFormat.columns) {
     $('#team-ranking-general-table thead tr').append(`<th>${c.title}</th>`);
@@ -20,7 +20,7 @@ function initTeamRankingPage() {
   filterWidget.find('.filter-widget-team').addClass('is-hidden');
 
   $('#filter-widget').append(filterWidget);
-  initPopup(filterWidget);
+  initPopup(filterWidget, tags);
 
   bindFilterButton(filterWidget, updateTeamRankingFilter);
   bindFilterResetButton(filterWidget, resetTeamRankingsFilter);

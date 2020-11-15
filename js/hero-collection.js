@@ -16,7 +16,7 @@ var heroCollectionTables = {
   players: null
 }
 
-function initHeroCollectionPage() {
+function initHeroCollectionPage(tags) {
   // by default this screen containrs games played in official modes with bans
   heroCollectionHeroDataFilter = {
     mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague, ReplayTypes.GameMode.Custom]}
@@ -66,7 +66,7 @@ function initHeroCollectionPage() {
   filterWidget.attr('widget-name', 'hero-collection-filter');
 
   $('#filter-widget').append(filterWidget);
-  initPopup(filterWidget);
+  initPopup(filterWidget, tags);
 
   $('#hero-collection-filter-button').popup({
     popup: '.filter-popup-widget[widget-name="hero-collection-filter"]',

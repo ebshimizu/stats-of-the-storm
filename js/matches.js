@@ -22,7 +22,7 @@ var requireHeroOnTeam = false;
 var matchSearchQuery = {};
 var matchTeamActiveIDs = null;
 
-function initMatchesPage() {
+function initMatchesPage(tags) {
   // player menu init
   $('#match-search-players').dropdown({
     action: 'activate',
@@ -115,8 +115,8 @@ function initMatchesPage() {
     fullTextSearch: true
   });
 
-  populateTagMenu($('#matches-tags-popup .search.dropdown'));
-  populateTagMenu($('#match-search-tags'));
+  populateTagMenuWithValues($('#matches-tags-popup .search.dropdown'), tags);
+  populateTagMenuWithValues($('#match-search-tags'), tags);
 
   $('#matches-collection-select').modal();
 

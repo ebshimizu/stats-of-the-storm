@@ -4,7 +4,7 @@ var playerRankingsMapFilter = {};
 
 var playerRankingTable;
 
-function initPlayerRankingPage() {
+function initPlayerRankingPage(tags) {
   // need to add the headers
   for (let c of TableDefs.PlayerRankingStatFormat.columns) {
     $('#player-ranking-general-table thead tr').append(`<th>${c.title}</th>`);
@@ -21,7 +21,7 @@ function initPlayerRankingPage() {
   filterWidget.find('.filter-widget-hero').addClass('is-hidden');
 
   $('#filter-widget').append(filterWidget);
-  initPopup(filterWidget);
+  initPopup(filterWidget, tags);
 
   bindFilterButton(filterWidget, updatePlayerRankingsFilter);
   bindFilterResetButton(filterWidget, resetPlayerRankingsFilter);
