@@ -16,7 +16,6 @@ Check out the [Releases Page](https://github.com/ebshimizu/hots-analysis/release
 You'll need node.js and (optionally) yarn installed. If you don't want to use yarn,
 the standard `npm` commands should work in its place.
 
-* Install node v10 (Semantic-ui installation requires `primordials` from node v10; have not replaced library yet)
 * Clone the repository and initialize the submodules
   * Initialize submodules by running `git submodule init` and then `git submodule update`. Don't forget to keep these submodules updated when pulling changes for this project.
 * Run `yarn install` in the repository root (the one with `package.json` in it)
