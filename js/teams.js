@@ -19,7 +19,7 @@ var teamTables = {
   pickDetail: null
 }
 
-function initTeamsPage() {
+function initTeamsPage(tags) {
   $('#team-set-team').dropdown({
     onChange: updateTeamData,
     fullTextSearch: true
@@ -54,7 +54,7 @@ function initTeamsPage() {
   filterWidget.find('.filter-widget-team').addClass('is-hidden');
 
   $('#filter-widget').append(filterWidget);
-  initPopup(filterWidget);
+  initPopup(filterWidget, tags);
 
   $('#team-filter-button').popup({
     popup: '.filter-popup-widget[widget-name="teams-filter"]',

@@ -1,6 +1,6 @@
 var popupWidgetResetCallback = null;
 
-function initPopup(elem) {
+function initPopup(elem, tags) {
   // modes
   elem.find('.filter-widget-mode').dropdown({
     action: 'activate',
@@ -79,7 +79,7 @@ function initPopup(elem) {
     fullTextSearch: true
   });
 
-  populateTagMenu(elem.find('.filter-widget-tags'));
+  populateTagMenuWithValues(elem.find('.filter-widget-tags'), tags);
 
   // the buttons get rebound depending on the page
   elem.find('.filter-widget-reset').click(function() { resetFilterWidget(elem) });

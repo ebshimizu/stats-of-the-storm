@@ -11,7 +11,7 @@ var trendsDateLimits = {
   '2-end': new Date()
 };
 
-function initTrendsPage() {
+function initTrendsPage(tags) {
   trendsHeroDataFilter = {
     mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague, ReplayTypes.GameMode.Custom]}
   }
@@ -38,7 +38,7 @@ function initTrendsPage() {
   filterWidget.attr('widget-name', 'hero-trends-filter');
 
   $('#filter-widget').append(filterWidget);
-  initPopup(filterWidget);
+  initPopup(filterWidget, tags);
 
   $('#hero-trends-filter-button').popup({
     popup: '.filter-popup-widget[widget-name="hero-trends-filter"]',

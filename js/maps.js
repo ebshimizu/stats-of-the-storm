@@ -2,7 +2,7 @@ var mapsHeroDataFilter;
 var mapsMapDataFilter;
 var mapsMapRowTemplate;
 
-function initMapsPage() {
+function initMapsPage(tags) {
 
   // templates
   mapsMapRowTemplate = getHandlebars('maps', '#map-table-row-template');
@@ -22,7 +22,7 @@ function initMapsPage() {
   filterWidget.attr('widget-name', 'maps-filter');
 
   $('#filter-widget').append(filterWidget);
-  initPopup(filterWidget);
+  initPopup(filterWidget, tags);
 
   $('#maps-filter-button').popup({
     popup: '.filter-popup-widget[widget-name="maps-filter"]',

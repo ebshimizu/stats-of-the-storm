@@ -100,6 +100,7 @@ $.fn.datepicker.setDefaults({
 });
 
 var DB;
+var dbVersions;
 var sections = {};
 var prevSections = [];
 
@@ -167,23 +168,30 @@ function resumeInitApp() {
   setLoadMessage('Initializing Handlers');
   initGlobalUIHandlers();
 
-  // sections
-  setLoadMessage('Loading Sections');
-  loadSections();
-  $('.app-version-number').text(app.getVersion());
+  setLoadMessage('Retrieving versions');
+  DB.getVersions(function(versions) {
+    dbVersions = versions;
+    setLoadMessage('Retrieving tags');
+    DB.getTags(function(tags) {
+      // sections
+      setLoadMessage('Loading Sections');
+      loadSections(tags);
+      $('.app-version-number').text(app.getVersion());
 
-  // populate some menus
-  setLoadMessage('Populating Menus');
-  globalDBUpdate();
+      // populate some menus
+      setLoadMessage('Populating Menus');
+      globalDBUpdate();
 
-  $('.player-menu input.search').keyup(function(e) {
-    if (e.which === 38 || e.which === 40 || e.which === 13)
-      return;
+      $('.player-menu input.search').keyup(function(e) {
+        if (e.which === 38 || e.which === 40 || e.which === 13)
+          return;
 
-    updatePlayerMenuOptions(this, $(this).val());
+        updatePlayerMenuOptions(this, $(this).val());
+      });
+
+      removeLoader();
+    });
   });
-
-  removeLoader();
 }
 
 function loadDatabase() {
@@ -260,39 +268,39 @@ function initGlobalUIHandlers() {
   });
 }
 
-function loadSections() {
+function loadSections(tags) {
   // settings
   $('#main-content').append(getTemplate('settings', '#settings-page'));
   initSettingsPage();
 
   $('#main-content').append(getTemplate('matches', '#matches-page'));
-  initMatchesPage();
+  initMatchesPage(tags);
 
   $('#main-content').append(getTemplate('match-detail', '#match-detail-page'));
   initMatchDetailPage();
 
   $('#main-content').append(getTemplate('player', '#player-page'));
-  initPlayerPage();
+  initPlayerPage(tags);
 
   $('#main-content').append(getTemplate('hero-collection', '#hero-collection-page'));
-  initHeroCollectionPage();
+  initHeroCollectionPage(tags);
 
   $('#main-content').append(getTemplate('player-ranking', '#player-ranking-page'));
-  initPlayerRankingPage();
+  initPlayerRankingPage(tags);
 
   $('#main-content').append(getTemplate('teams', '#teams-page'));
-  initTeamsPage();
+  initTeamsPage(tags);
 
   $('#main-content').append(getTemplate('team-ranking', '#team-ranking-page'))
-  initTeamRankingPage();
+  initTeamRankingPage(tags);
 
   $('#main-content').append(getTemplate('about', '#about-page'));
 
   $('#main-content').append(getTemplate('trends', '#hero-trends-page'));
-  initTrendsPage();
+  initTrendsPage(tags);
 
   $('#main-content').append(getTemplate('maps', '#maps-page'));
-  initMapsPage();
+  initMapsPage(tags);
 
   // register sections
   sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false, onShow: showSettingsPage };
@@ -485,15 +493,13 @@ function addMapMenuOptions(menu) {
 }
 
 function addPatchMenuOptions(elem, callback) {
-  DB.getVersions(function(versions) {
-    elem.find('.menu').html('');
+  elem.find('.menu').html('');
 
-    for (let v in versions) {
-      elem.find('.menu').append('<div class="item" data-value="' + escapeHtml(v) + '">' + escapeHtml(versions[v]) + '</div>');
-    }
+  for (let v in dbVersions) {
+    elem.find('.menu').append('<div class="item" data-value="' + escapeHtml(v) + '">' + escapeHtml(dbVersions[v]) + '</div>');
+  }
 
-    callback();
-  });
+  callback();
 }
 
 function populateTeamMenu(elem) {
@@ -594,16 +600,20 @@ function populateStatCollectionMenus() {
   });
 }
 
+function populateTagMenuWithValues (menu, tags) {
+  menu.find('.menu').html('');
+
+  for (let tag of tags) {
+    menu.find('.menu').append('<div class="item" data-value="' + tag + '">' + tag + '</div>');
+  }
+
+  menu.dropdown('refresh');
+}
+
 // populates the tag menu with available tags
 function populateTagMenu(menu, callback) {
   DB.getTags(function(tags) {
-    menu.find('.menu').html('');
-
-    for (let tag of tags) {
-      menu.find('.menu').append('<div class="item" data-value="' + tag + '">' + tag + '</div>');
-    }
-
-    menu.dropdown('refresh');
+    populateTagMenuWithValues(menu, tags)
 
     if (callback)
       callback();
