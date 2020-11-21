@@ -66,8 +66,8 @@
     "publish": "electron-builder --x64 --publish always",
     "protocol": "node ./node_modules/heroprotocol/postinstall.js",
     "format": "prettier -c --write \"js/**/*.js\" \"main.js\"",
-    "test:eslint": "npx eslint \"js/**/*.js\" \"main.js\"",
-    "test:prettier": "npx prettier -c \"js/**/*.js\" \"main.js\"",
+    "test:eslint": "eslint \"js/**/*.js\" \"main.js\"",
+    "test:prettier": "prettier -c \"js/**/*.js\" \"main.js\"",
     "test": "run-s test:eslint test:prettier"
   },
   "resolutions": {
