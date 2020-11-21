@@ -15,7 +15,7 @@ function deltaMax(v1, v2) {
 function summarizeTrendData(p1stats, p2stats) {
   const stats = {
     period1: p1stats.data,
-    period2: p2stats.data
+    period2: p2stats.data,
   };
 
   const hContext = [];
@@ -26,7 +26,7 @@ function summarizeTrendData(p1stats, p2stats) {
     const data = stats[period];
 
     for (let heroName in data) {
-      if (heroName === "totalMatches" || heroName === "totalBans") continue;
+      if (heroName === 'totalMatches' || heroName === 'totalBans') continue;
       aggr[heroName] = aggr[heroName] || {};
 
       const hero = data[heroName];
@@ -41,9 +41,7 @@ function summarizeTrendData(p1stats, p2stats) {
         win: hero.wins,
         loss: hero.games - hero.wins,
         bans: hero.bans.total,
-        heroRole: Heroes.role(heroName).
-          split(" ").
-          join("-")
+        heroRole: Heroes.role(heroName).split(' ').join('-'),
       };
 
       // picks and bans
@@ -57,7 +55,7 @@ function summarizeTrendData(p1stats, p2stats) {
         bans: hero.bans,
         firstBanPercent: hero.bans.first / data.totalMatches,
         secondBanPercent: hero.bans.second / data.totalMatches,
-        picks: hero.picks
+        picks: hero.picks,
       };
 
       for (let pick in draft.picks) {
@@ -73,120 +71,90 @@ function summarizeTrendData(p1stats, p2stats) {
     stats.period1[heroName] = stats.period1[heroName] || { involved: 0 };
     stats.period2[heroName] = stats.period2[heroName] || { involved: 0 };
 
-    if (
-      stats.period1[heroName].involved + stats.period2[heroName].involved <
-      trendsHeroMatchThreshold
-    )
-      continue;
+    if (stats.period1[heroName].involved + stats.period2[heroName].involved < trendsHeroMatchThreshold) continue;
 
     const context = {
       heroName,
-      heroRole: Heroes.role(heroName).
-        split(" ").
-        join("-"),
+      heroRole: Heroes.role(heroName).split(' ').join('-'),
       period1: aggr[heroName].period1 || {
         win: {
           winPercent: 0,
           banPercent: 0,
           popPercent: 0,
-          games: 0
+          games: 0,
         },
         draft: {
           picks: {
             round1: {
-              pct: 0
+              pct: 0,
             },
             round2: {
-              pct: 0
+              pct: 0,
             },
             round3: {
-              pct: 0
-            }
+              pct: 0,
+            },
           },
           firstBanPercent: 0,
-          secondBanPercent: 0
-        }
+          secondBanPercent: 0,
+        },
       },
       period2: aggr[heroName].period2 || {
         win: {
           winPercent: 0,
           banPercent: 0,
           popPercent: 0,
-          games: 0
+          games: 0,
         },
         draft: {
           picks: {
             round1: {
-              pct: 0
+              pct: 0,
             },
             round2: {
-              pct: 0
+              pct: 0,
             },
             round3: {
-              pct: 0
-            }
+              pct: 0,
+            },
           },
           firstBanPercent: 0,
-          secondBanPercent: 0
-        }
+          secondBanPercent: 0,
+        },
       },
       delta: {},
       deltaFmt: {},
-      statSign: {}
+      statSign: {},
     };
 
     // note that percentage deltas are linear
     context.delta = {
-      winPercent: delta(
-        context.period1.win.winPercent,
-        context.period2.win.winPercent
-      ),
-      popPercent: delta(
-        context.period1.win.popPercent,
-        context.period2.win.popPercent
-      ),
-      banPercent: delta(
-        context.period1.win.banPercent,
-        context.period2.win.banPercent
-      ),
+      winPercent: delta(context.period1.win.winPercent, context.period2.win.winPercent),
+      popPercent: delta(context.period1.win.popPercent, context.period2.win.popPercent),
+      banPercent: delta(context.period1.win.banPercent, context.period2.win.banPercent),
       win: deltaMax(context.period1.win.win, context.period2.win.win),
       loss: deltaMax(context.period1.win.loss, context.period2.win.loss),
       games: deltaMax(context.period1.win.games, context.period2.win.games),
-      r1: delta(
-        context.period1.draft.picks.round1.pct,
-        context.period2.draft.picks.round1.pct
-      ),
-      r2: delta(
-        context.period1.draft.picks.round2.pct,
-        context.period2.draft.picks.round2.pct
-      ),
-      r3: delta(
-        context.period1.draft.picks.round3.pct,
-        context.period2.draft.picks.round3.pct
-      ),
-      firstBanPercent: delta(
-        context.period1.draft.firstBanPercent,
-        context.period2.draft.firstBanPercent
-      ),
-      secondBanPercent: delta(
-        context.period1.draft.secondBanPercent,
-        context.period2.draft.secondBanPercent
-      )
+      r1: delta(context.period1.draft.picks.round1.pct, context.period2.draft.picks.round1.pct),
+      r2: delta(context.period1.draft.picks.round2.pct, context.period2.draft.picks.round2.pct),
+      r3: delta(context.period1.draft.picks.round3.pct, context.period2.draft.picks.round3.pct),
+      firstBanPercent: delta(context.period1.draft.firstBanPercent, context.period2.draft.firstBanPercent),
+      secondBanPercent: delta(context.period1.draft.secondBanPercent, context.period2.draft.secondBanPercent),
     };
 
     for (let stat in context.delta) {
       if (isNaN(context.delta[stat])) {
-        context.deltaFmt[stat] = "0.0%";
-        context.delta[stat] = "0";
+        context.deltaFmt[stat] = '0.0%';
+        context.delta[stat] = '0';
       } else {
-        context.deltaFmt[stat] = formatStat("pct", context.delta[stat]);
+        context.deltaFmt[stat] = formatStat('pct', context.delta[stat]);
       }
 
       if (context.delta[stat] > 0) {
-        context.deltaFmt[stat] = "+" + context.deltaFmt[stat];
-        context.statSign[stat] = "plus";
+        context.deltaFmt[stat] = '+' + context.deltaFmt[stat];
+        context.statSign[stat] = 'plus';
       } else if (context.delta[stat] < 0) {
-        context.statSign[stat] = "minus";
+        context.statSign[stat] = 'minus';
       }
     }
 
@@ -207,7 +175,7 @@ function summarizeTrendData(p1stats, p2stats) {
       p2Pop: 0,
       winDelta: -1,
       popDelta: -1,
-      roles: comp.roles
+      roles: comp.roles,
     };
   }
 
@@ -218,7 +186,7 @@ function summarizeTrendData(p1stats, p2stats) {
       comps[c] = {
         p1Win: 0,
         p1Pop: 0,
-        roles: comp.roles
+        roles: comp.roles,
       };
     }
 

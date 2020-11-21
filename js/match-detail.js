@@ -3,7 +3,8 @@ var matchDetailPlayers;
 var matchSummaryRowTemplate;
 var matchDetailHeaderTemplate;
 var matchDetailRowTemplate;
-const matchDetailRowTemplateSrc = '<tr class="center aligned"><td>{{fieldName}}</td>{{#each stats}}<td>{{this}}</td>{{/each}}</tr>';
+const matchDetailRowTemplateSrc =
+  '<tr class="center aligned"><td>{{fieldName}}</td>{{#each stats}}<td>{{this}}</td>{{/each}}</tr>';
 var matchTalentRowTitleTemplate;
 var matchTalentRowCellTemplate;
 var matchChatEntryTemplate;
@@ -26,42 +27,46 @@ const xpBreakdownOpts = {
     position: 'nearest',
     mode: 'index',
     intersect: false,
-    callbacks : {
-      title: function(tooltipItem, data) {
+    callbacks: {
+      title: function (tooltipItem, data) {
         return formatSeconds(tooltipItem[0].xLabel);
-      }
-    }
+      },
+    },
   },
   legend: {
     labels: {
-      fontColor: 'white'
-    }
+      fontColor: 'white',
+    },
   },
   scales: {
-    yAxes: [{
-      stacked: true,
-      ticks: {
-        fontColor: '#FFFFFF'
-      },
-      gridLines: {
-        color: '#ababab'
-      }
-    }],
-    xAxes: [{
-      ticks: {
-        fontColor: '#FFFFFF',
-        callback: function(value, index, values) {
-          return formatSeconds(value);
+    yAxes: [
+      {
+        stacked: true,
+        ticks: {
+          fontColor: '#FFFFFF',
         },
-        stepSize: 60
+        gridLines: {
+          color: '#ababab',
+        },
       },
-      type: 'linear',
-      gridLines: {
-        color: '#ababab'
-      }
-    }]
-  }
-}
+    ],
+    xAxes: [
+      {
+        ticks: {
+          fontColor: '#FFFFFF',
+          callback: function (value, index, values) {
+            return formatSeconds(value);
+          },
+          stepSize: 60,
+        },
+        type: 'linear',
+        gridLines: {
+          color: '#ababab',
+        },
+      },
+    ],
+  },
+};
 const xpSoakOpts = {
   maintainAspectRatio: false,
   responsive: true,
@@ -69,63 +74,70 @@ const xpSoakOpts = {
     position: 'nearest',
     mode: 'x',
     intersect: false,
-    callbacks : {
-      title: function(tooltipItem, data) {
+    callbacks: {
+      title: function (tooltipItem, data) {
         return formatSeconds(tooltipItem[0].xLabel);
-      }
-    }
+      },
+    },
   },
   legend: {
     labels: {
-      fontColor: 'white'
-    }
+      fontColor: 'white',
+    },
   },
   scales: {
-    yAxes: [{
-      stacked: false,
-      ticks: {
-        fontColor: '#FFFFFF'
-      },
-      gridLines: {
-        color: '#ababab'
-      }
-    }],
-    xAxes: [{
-      ticks: {
-        fontColor: '#FFFFFF',
-        callback: function(value, index, values) {
-          return formatSeconds(value);
+    yAxes: [
+      {
+        stacked: false,
+        ticks: {
+          fontColor: '#FFFFFF',
         },
-        stepSize: 60
+        gridLines: {
+          color: '#ababab',
+        },
       },
-      type: 'linear',
-      gridLines: {
-        color: '#ababab'
-      }
-    }]
-  }
-}
+    ],
+    xAxes: [
+      {
+        ticks: {
+          fontColor: '#FFFFFF',
+          callback: function (value, index, values) {
+            return formatSeconds(value);
+          },
+          stepSize: 60,
+        },
+        type: 'linear',
+        gridLines: {
+          color: '#ababab',
+        },
+      },
+    ],
+  },
+};
 
 overallLevelGraphData = {
   type: 'line',
   data: {
-    datasets: [{
-      label: 'Blue Team',
-      borderColor: '#2185d0',
-      backgroundColor: '#2185d0',
-      borderWidth: 4,
-      steppedLine: true,
-      fill: false,
-      cubicInterpolationMode: 'monotone'
-    }, {
-      label: 'Red Team',
-      borderColor: '#db2828',
-      backgroundColor: '#db2828',
-      steppedLine: true,
-      borderWidth: 4,
-      fill: false,
-      cubicInterpolationMode: 'monotone'
-    }]
+    datasets: [
+      {
+        label: 'Blue Team',
+        borderColor: '#2185d0',
+        backgroundColor: '#2185d0',
+        borderWidth: 4,
+        steppedLine: true,
+        fill: false,
+        cubicInterpolationMode: 'monotone',
+      },
+      {
+        label: 'Red Team',
+        borderColor: '#db2828',
+        backgroundColor: '#db2828',
+        steppedLine: true,
+        borderWidth: 4,
+        fill: false,
+        cubicInterpolationMode: 'monotone',
+      },
+    ],
   },
   options: {
     responsive: true,
@@ -134,61 +146,68 @@ overallLevelGraphData = {
       position: 'nearest',
       mode: 'nearest',
       intersect: false,
-      callbacks : {
-        title: function(tooltipItem, data) {
+      callbacks: {
+        title: function (tooltipItem, data) {
           return formatSeconds(tooltipItem[0].xLabel);
-        }
-      }
+        },
+      },
     },
     legend: {
       labels: {
-        fontColor: 'white'
-      }
+        fontColor: 'white',
+      },
     },
     scales: {
-      yAxes: [{
-        ticks: {
-          fontColor: '#FFFFFF'
-        },
-        gridLines: {
-          color: '#ababab'
-        }
-      }],
-      xAxes: [{
-        ticks: {
-          fontColor: '#FFFFFF',
-          callback: function(value, index, values) {
-            return formatSeconds(value);
+      yAxes: [
+        {
+          ticks: {
+            fontColor: '#FFFFFF',
           },
-          stepSize: 60
+          gridLines: {
+            color: '#ababab',
+          },
         },
-        type: 'linear',
-        gridLines: {
-          color: '#ababab'
-        }
-      }]
-    }
-  }
+      ],
+      xAxes: [
+        {
+          ticks: {
+            fontColor: '#FFFFFF',
+            callback: function (value, index, values) {
+              return formatSeconds(value);
+            },
+            stepSize: 60,
+          },
+          type: 'linear',
+          gridLines: {
+            color: '#ababab',
+          },
+        },
+      ],
+    },
+  },
 };
 
 overallXPGraphData = {
   type: 'line',
   data: {
-    datasets: [{
-      label: 'Blue Team',
-      borderColor: '#2185d0',
-      backgroundColor: '#2185d0',
-      borderWidth: 4,
-      fill: false,
-      cubicInterpolationMode: 'monotone'
-    }, {
-      label: 'Red Team',
-      borderColor: '#db2828',
-      backgroundColor: '#db2828',
-      borderWidth: 4,
-      fill: false,
-      cubicInterpolationMode: 'monotone'
-    }]
+    datasets: [
+      {
+        label: 'Blue Team',
+        borderColor: '#2185d0',
+        backgroundColor: '#2185d0',
+        borderWidth: 4,
+        fill: false,
+        cubicInterpolationMode: 'monotone',
+      },
+      {
+        label: 'Red Team',
+        borderColor: '#db2828',
+        backgroundColor: '#db2828',
+        borderWidth: 4,
+        fill: false,
+        cubicInterpolationMode: 'monotone',
+      },
+    ],
   },
   options: {
     responsive: true,
@@ -197,42 +216,46 @@ overallXPGraphData = {
       position: 'nearest',
       mode: 'index',
       intersect: false,
-      callbacks : {
-        title: function(tooltipItem, data) {
+      callbacks: {
+        title: function (tooltipItem, data) {
           return formatSeconds(tooltipItem[0].xLabel);
-        }
-      }
+        },
+      },
     },
     legend: {
       labels: {
-        fontColor: 'white'
-      }
+        fontColor: 'white',
+      },
     },
     scales: {
-      yAxes: [{
-        ticks: {
-          fontColor: '#FFFFFF'
-        },
-        gridLines: {
-          color: '#ababab'
-        }
-      }],
-      xAxes: [{
-        ticks: {
-          fontColor: '#FFFFFF',
-          callback: function(value, index, values) {
-            return formatSeconds(value);
+      yAxes: [
+        {
+          ticks: {
+            fontColor: '#FFFFFF',
           },
-          stepSize: 60
+          gridLines: {
+            color: '#ababab',
+          },
         },
-        type: 'linear',
-        gridLines: {
-          color: '#ababab'
-        }
-      }]
-    }
-  }
-}
+      ],
+      xAxes: [
+        {
+          ticks: {
+            fontColor: '#FFFFFF',
+            callback: function (value, index, values) {
+              return formatSeconds(value);
+            },
+            stepSize: 60,
+          },
+          type: 'linear',
+          gridLines: {
+            color: '#ababab',
+          },
+        },
+      ],
+    },
+  },
+};
 
 var matchDetailTimelineGroups = new vis.DataSet({});
 matchDetailTimelineGroups.add([
@@ -240,87 +263,87 @@ matchDetailTimelineGroups.add([
     id: 1,
     content: 'Takedowns',
     classname: 'timeline-tds',
-    visible: true
+    visible: true,
   },
   {
     id: 2,
     content: 'Levels',
     classname: 'timeiine-levels',
-    visible: true
+    visible: true,
   },
   {
     id: 3,
     content: 'Level Advantage',
     classname: 'timeline-level-adv',
-    visible: true
+    visible: true,
   },
   {
     id: 4,
     content: 'Structures Destroyed',
     classname: 'timeline-structures',
-    visible: true
+    visible: true,
   },
   {
     id: 5,
     content: 'Objective',
     classname: 'timeline-objective',
     visible: true,
-    nestedGroups: []
+    nestedGroups: [],
   },
   {
     id: 6,
     content: 'Mercenary Captures',
     classname: 'timeline-mercs',
-    visible: true
+    visible: true,
   },
   {
     id: 7,
     content: 'Mercenary Units',
     classname: 'timeline-merc-units',
-    visible: false
+    visible: false,
   },
   {
     id: 11,
     content: 'Top Beacon',
     classname: 'braxis-top-beacon',
-    visible: false
+    visible: false,
   },
   {
     id: 12,
     content: 'Bottom Beacon',
     classname: 'braxis-bot-beacon',
-    visible: false
+    visible: false,
   },
   {
     id: 13,
     content: 'Moon Shrine',
     classname: 'dragon-moon-shrine',
-    visible: false
+    visible: false,
   },
   {
     id: 14,
     content: 'Sun Shrine',
     classname: 'dragon-sun-shrine',
-    visible: false
+    visible: false,
   },
   {
     id: 15,
     content: 'Payload Control',
     classname: 'hanamura-payload',
-    visible: false
+    visible: false,
   },
   {
     id: 16,
     content: 'Blue Heroes Alive',
     classname: 'blue-hero-uptime',
-    visible: true
+    visible: true,
   },
   {
     id: 17,
     content: 'Red Heroes Alive',
     classname: 'red-hero-uptime',
-    visible: true
-  }
+    visible: true,
+  },
 ]);
 
 function initMatchDetailPage() {
@@ -338,34 +361,33 @@ function initMatchDetailPage() {
   $('#match-detail-taunt-table').tablesort();
   $('#match-detail-taunt-table').floatThead({
     scrollContainer: closestWrapper,
-    autoReflow: true
+    autoReflow: true,
   });
-  $('#player-hero-detail-stats table th.time-sort').data('sortBy', function(th, td, tablesort) {
+  $('#player-hero-detail-stats table th.time-sort').data('sortBy', function (th, td, tablesort) {
     return parseInt(td.attr('data-sort-value'));
   });
 
-  $('#match-detail-body a[data-tab="details"]').click(function() {
+  $('#match-detail-body a[data-tab="details"]').click(function () {
     $('#match-detail-details table').floatThead('reflow');
   });
-  $('#match-detail-body a[data-tab="match-detail-log"]').click(function() {
+  $('#match-detail-body a[data-tab="match-detail-log"]').click(function () {
     $('#match-detail-taunt-table').floatThead('reflow');
   });
-
 
   redTeamXPGraphData = {
     type: 'line',
     data: {},
-    options: xpBreakdownOpts
+    options: xpBreakdownOpts,
   };
   blueTeamXPGraphData = {
     type: 'line',
     data: {},
-    options: xpBreakdownOpts
+    options: xpBreakdownOpts,
   };
   teamXPSoakGraphData = {
     type: 'line',
     data: {},
-    options: xpSoakOpts
+    options: xpSoakOpts,
   };
   overallXPGraph = new Chart($('#match-detail-overall-xp'), overallXPGraphData);
   redTeamXPGraph = new Chart($('#match-detail-red-xpb'), redTeamXPGraphData);
@@ -382,30 +404,30 @@ function initMatchDetailPage() {
     }
   }
 
-  $('#match-detail-timeline-buttons .button').click(function() {
+  $('#match-detail-timeline-buttons .button').click(function () {
     toggleGroup(parseInt($(this).attr('button-id')));
   });
 
   $('#match-detail-teams').dropdown({
     action: 'hide',
-    onChange: function(value, text, $elem) {
+    onChange: function (value, text, $elem) {
       matchDetailTeamAction(value);
-    }
+    },
   });
 
   $('#match-detail-collection').dropdown({
     action: 'hide',
-    onChange: matchDetailCollectionAction
+    onChange: matchDetailCollectionAction,
   });
 
   $('#match-detail-file-menu').dropdown({
     action: 'hide',
-    onChange: matchDetailFileAction
+    onChange: matchDetailFileAction,
   });
 
   $('#match-detail-existing-team').modal();
   $('#match-detail-existing-team .team-menu').dropdown({
-    fullTextSearch: true
+    fullTextSearch: true,
   });
 
   // xp graph tabs
@@ -416,13 +438,13 @@ function initMatchDetailPage() {
     fullTextSearch: true,
     allowAdditions: true,
     onAdd: matchDetailAddTag,
-    onRemove: matchDetailRemoveTag
+    onRemove: matchDetailRemoveTag,
   });
 
   $('#match-tags').popup({
     inline: true,
     position: 'bottom left',
-    on: 'click'
+    on: 'click',
   });
 
   $('#match-detail-print-sections .dropdown.search').dropdown();
@@ -430,9 +452,11 @@ function initMatchDetailPage() {
   $('#match-detail-fix-draft .dropdown.first-pick').dropdown();
   $('#match-detail-fix-draft .dropdown.pick-order').dropdown();
   addHeroMenuOptions($('#match-detail-fix-draft .dropdown.ban-order'));
-  $('#match-detail-fix-draft .dropdown.ban-order').find('.menu').append('<div class="item" data-value="none">No Ban</div>');
+  $('#match-detail-fix-draft .dropdown.ban-order')
+    .find('.menu')
+    .append('<div class="item" data-value="none">No Ban</div>');
   $('#match-detail-fix-draft .dropdown.ban-order').dropdown({
-    direction: 'upward'
+    direction: 'upward',
   });
 
   // DEBUG - LOAD SPECIFIC MATCH
@@ -449,43 +473,43 @@ function matchDetailsShowSection() {
 function matchDetailTeamAction(action) {
   if (action === 'new-from-blue' || action === 'new-from-red') {
     // uh maybe it's bad practice (?) but i'm totally stealing existing modals
-    $('#team-text-input .header').text('Create New Team')
+    $('#team-text-input .header').text('Create New Team');
     $('#team-text-input .input .label').text('Team Name');
     $('#team-text-input input').val('');
 
-    $('#team-text-input').modal({
-      onApprove: function() {
-        let name = $('#team-text-input input').val();
-        let teamID = action === 'new-from-blue' ? 0 : 1;
+    $('#team-text-input')
+      .modal({
+        onApprove: function () {
+          let name = $('#team-text-input input').val();
+          let teamID = action === 'new-from-blue' ? 0 : 1;
 
-        addNewTeamFromMatch(teamID, name);
-      }
-    }).
-    modal('show');
-  }
-  else if (action === 'add-existing-blue' || action === 'add-existing-red') {
-    $('#match-detail-existing-team').modal({
-      onApprove: function() {
-        let team = $('#match-detail-existing-team .team-menu').dropdown('get value');
-        let teamID = action === 'add-existing-blue' ? 0 : 1;
-        for (let p in matchDetailMatch.teams[teamID].ids) {
-          DB.addPlayerToTeam(team, matchDetailMatch.teams[teamID].ids[p]);
-        }
-      }
-    }).
-    modal('show');
+          addNewTeamFromMatch(teamID, name);
+        },
+      })
+      .modal('show');
+  } else if (action === 'add-existing-blue' || action === 'add-existing-red') {
+    $('#match-detail-existing-team')
+      .modal({
+        onApprove: function () {
+          let team = $('#match-detail-existing-team .team-menu').dropdown('get value');
+          let teamID = action === 'add-existing-blue' ? 0 : 1;
+          for (let p in matchDetailMatch.teams[teamID].ids) {
+            DB.addPlayerToTeam(team, matchDetailMatch.teams[teamID].ids[p]);
+          }
+        },
+      })
+      .modal('show');
   }
 }
 
 // retrieves the proper data and then renders to the page
 function loadMatchData(id, doneLoadCallback) {
   // this is actually a series of callbacks...
-  DB.getMatchesByID([id], function(err, doc) {
-    if (doc === [])
-      return;
+  DB.getMatchesByID([id], function (err, doc) {
+    if (doc === []) return;
 
     matchDetailMatch = doc[0];
-    DB.getHeroDataForID(id, function(err, docs) {
+    DB.getHeroDataForID(id, function (err, docs) {
       loadMatch(docs, doneLoadCallback);
     });
   });
@@ -499,7 +523,7 @@ function loadMatch(docs, doneLoadCallback) {
     matchDetailPlayers[docs[p].ToonHandle] = docs[p];
   }
 
-  populateTagMenu($('#match-tags-popup .search.dropdown'), function() {
+  populateTagMenu($('#match-tags-popup .search.dropdown'), function () {
     // tags
     let tags = [];
     for (let d of docs) {
@@ -539,7 +563,11 @@ function loadMatch(docs, doneLoadCallback) {
   // non-english hero name check
   for (let h of matchDetailMatch.heroes) {
     if (Heroes.role(h) === '') {
-      showMessage('Match Metadata Error', 'A hero name in this match\'s metadata is invalid. This only affects the ability to search for a hero in this match on the Matches page. If the missing hero is newly released, the app should update within a few days with talent info and icons.', { class: 'negative', sticky: true });
+      showMessage(
+        'Match Metadata Error',
+        "A hero name in this match's metadata is invalid. This only affects the ability to search for a hero in this match on the Matches page. If the missing hero is newly released, the app should update within a few days with talent info and icons.",
+        { class: 'negative', sticky: true },
+      );
       break;
     }
   }
@@ -553,15 +581,14 @@ function loadMatch(docs, doneLoadCallback) {
 function updateBasicInfo() {
   $('#match-detail-map-name').text(matchDetailMatch.map);
 
-  popuplateMatchDetailTeamNameplate(matchDetailMatch._id, 0, matchDetailMatch.teams[0].ids)
-  popuplateMatchDetailTeamNameplate(matchDetailMatch._id, 1, matchDetailMatch.teams[1].ids)
+  popuplateMatchDetailTeamNameplate(matchDetailMatch._id, 0, matchDetailMatch.teams[0].ids);
+  popuplateMatchDetailTeamNameplate(matchDetailMatch._id, 1, matchDetailMatch.teams[1].ids);
 
   let winnerHeader = $('#match-detail-victor');
   if (matchDetailMatch.winner === 0) {
-    winnerHeader.removeClass('red').addClass('blue').text("Blue Team Victory");
-  }
-  else {
-    winnerHeader.removeClass('blue').addClass('red').text("Red Team Victory");
+    winnerHeader.removeClass('red').addClass('blue').text('Blue Team Victory');
+  } else {
+    winnerHeader.removeClass('blue').addClass('red').text('Red Team Victory');
   }
 
   $('#match-detail-mode').text(ReplayTypes.GameModeStrings[matchDetailMatch.mode]);
@@ -584,10 +611,13 @@ function updateDraft() {
 
     // ok parser version 2 supports this so we'll go back and make 1 compatible
     let first = 0;
-    if ('picks' in matchDetailMatch)
-      first = matchDetailMatch.picks.first;
+    if ('picks' in matchDetailMatch) first = matchDetailMatch.picks.first;
     else {
-      showMessage('Outdated Replay!', 'Draft Picks have been added to version 0.2.0 but you will need to re-import your replays to see the pick order.', { class: 'negative', sticky: true});
+      showMessage(
+        'Outdated Replay!',
+        'Draft Picks have been added to version 0.2.0 but you will need to re-import your replays to see the pick order.',
+        { class: 'negative', sticky: true },
+      );
     }
 
     // check which draft version we're viewing
@@ -599,13 +629,13 @@ function updateDraft() {
       // fill in the blanks
       for (let t in matchDetailMatch.bans) {
         let bans = matchDetailMatch.bans[t];
-        let team = t === "0" ? 'blue' : 'red';
+        let team = t === '0' ? 'blue' : 'red';
 
         for (let b in bans) {
           let h = bans[b];
           let slot = `${team}-${h.order}`;
 
-          if (bans.length > 2 && b === "1") {
+          if (bans.length > 2 && b === '1') {
             slot += 'a';
           }
 
@@ -614,7 +644,11 @@ function updateDraft() {
         }
       }
 
-      if ('picks' in matchDetailMatch && matchDetailMatch.picks[0].length === 5 && matchDetailMatch.picks[1].length === 5) {
+      if (
+        'picks' in matchDetailMatch &&
+        matchDetailMatch.picks[0].length === 5 &&
+        matchDetailMatch.picks[1].length === 5
+      ) {
         for (let t of [0, 1]) {
           let picks = matchDetailMatch.picks[t];
           let team = t === 0 ? 'blue' : 'red';
@@ -624,16 +658,18 @@ function updateDraft() {
             let slot = `${team}-${p + 1}`;
 
             let icon = Heroes.heroIcon(h);
-            $(`div[pick-slot="${slot}"] img`).attr('src',`assets/heroes-talents/images/heroes/${icon}`);
+            $(`div[pick-slot="${slot}"] img`).attr('src', `assets/heroes-talents/images/heroes/${icon}`);
           }
         }
-      }
-      else {
+      } else {
         $('div[pick-slot^="red"] img').attr('src', '');
         $('div[pick-slot^="blue"] img').attr('src', '');
 
         if ('picks' in matchDetailMatch) {
-          showMessage('Missing Draft Data', 'This replay has corrupted draft data, or was not played in a draft mode (custom game). No draft data is available. You can add draft info using File > Modify Draft...');
+          showMessage(
+            'Missing Draft Data',
+            'This replay has corrupted draft data, or was not played in a draft mode (custom game). No draft data is available. You can add draft info using File > Modify Draft...',
+          );
           $('#match-detail-draft').addClass('hidden');
         }
       }
@@ -641,8 +677,7 @@ function updateDraft() {
       if (matchDetailMatch.bans[0].length <= 2 || matchDetailMatch.bans[1].length <= 2) {
         $('div[ban-slot="blue-1a"]').addClass('is-hidden');
         $('div[ban-slot="red-1a"]').addClass('is-hidden');
-      }
-      else {
+      } else {
         $('div[ban-slot="blue-1a"]').removeClass('is-hidden');
         $('div[ban-slot="red-1a"]').removeClass('is-hidden');
       }
@@ -650,13 +685,11 @@ function updateDraft() {
       if (first === 0) {
         $('#match-detail-draft .blue-team-draft').removeClass('first second').addClass('first');
         $('#match-detail-draft .red-team-draft').removeClass('first second').addClass('second');
-      }
-      else {
+      } else {
         $('#match-detail-draft .blue-team-draft').removeClass('first second').addClass('second');
         $('#match-detail-draft .red-team-draft').removeClass('first second').addClass('first');
       }
-    }
-    else {
+    } else {
       $('#match-detail-draft .draft-display-compact').removeClass('is-hidden');
       $('#match-detail-draft .draft-display-expanded').addClass('is-hidden');
       $('#match-detail-draft .divider').addClass('is-hidden');
@@ -667,7 +700,7 @@ function updateDraft() {
           let h = bans[b];
           let slot = (parseInt(t) === first ? 'first' : 'second') + '-' + h.order;
 
-          if (bans.length > 2 && b === "1") {
+          if (bans.length > 2 && b === '1') {
             slot += 'a';
           }
 
@@ -676,29 +709,35 @@ function updateDraft() {
         }
       }
 
-      if ('picks' in matchDetailMatch && matchDetailMatch.picks[0].length === 5 && matchDetailMatch.picks[1].length === 5) {
+      if (
+        'picks' in matchDetailMatch &&
+        matchDetailMatch.picks[0].length === 5 &&
+        matchDetailMatch.picks[1].length === 5
+      ) {
         for (let t in [0, 1]) {
           let picks = matchDetailMatch.picks[t];
           for (let p = 0; p < picks.length; p++) {
             let h = picks[p];
             let slot = (parseInt(t) === first ? 'first' : 'second') + '-' + (p + 1);
             let icon = Heroes.heroIcon(h);
-            $('div[pick-slot="' + slot + '"] img').attr('src','assets/heroes-talents/images/heroes/' + icon);
+            $('div[pick-slot="' + slot + '"] img').attr('src', 'assets/heroes-talents/images/heroes/' + icon);
           }
         }
-      }
-      else {
+      } else {
         $('div[pick-slot^="first"] img').attr('src', '');
         $('div[pick-slot^="second"] img').attr('src', '');
 
         if ('picks' in matchDetailMatch) {
-          showMessage('Missing Draft Data', 'This replay has corrupted draft data, or was not played in a draft mode (custom game). No draft data is available.');
+          showMessage(
+            'Missing Draft Data',
+            'This replay has corrupted draft data, or was not played in a draft mode (custom game). No draft data is available.',
+          );
           $('#match-detail-draft').addClass('hidden');
         }
       }
 
       let firstClass = first === 0 ? 'blue' : 'red';
-      let secondClass = first === 0? 'red' : 'blue';
+      let secondClass = first === 0 ? 'red' : 'blue';
 
       $('div[pick-slot^="first"]').removeClass(secondClass).addClass(firstClass);
       $('div[pick-slot^="first"] .label').removeClass(secondClass).addClass(firstClass);
@@ -712,17 +751,14 @@ function updateDraft() {
       if (matchDetailMatch.bans[0].length <= 2 || matchDetailMatch.bans[1].length <= 2) {
         $('div[ban-slot="first-1a"]').addClass('is-hidden');
         $('div[ban-slot="second-1a"]').addClass('is-hidden');
-      }
-      else {
+      } else {
         $('div[ban-slot="first-1a"]').removeClass('is-hidden');
         $('div[ban-slot="second-1a"]').removeClass('is-hidden');
       }
     }
-  }
-  else {
+  } else {
     $('#match-detail-draft').addClass('hidden');
   }
-
 }
 
 function popuplateMatchDetailTeamNameplate(matchID, teamID, players) {
@@ -730,14 +766,13 @@ function popuplateMatchDetailTeamNameplate(matchID, teamID, players) {
   elem = `.match-detail-team-names ${elem}`;
   $('#match-detail-summary').find(elem).text('');
 
-  DB.getTeamByPlayers(players, function(err, docs) {
+  DB.getTeamByPlayers(players, function (err, docs) {
     if (docs.length > 0) {
       // take first team found, not room for all
       let team = docs[0];
       $('#match-detail-summary').find(elem).text(team.name);
       $('#match-detail-summary .match-detail-team-names').removeClass('is-hidden');
-    }
-    else {
+    } else {
       $('#match-detail-summary .match-detail-team-names').addClass('is-hidden');
     }
   });
@@ -751,13 +786,13 @@ function loadPlayers() {
   $('#match-detail-talents tbody').html('');
 
   for (let i in matchDetailMatch.teams[0].ids) {
-    appendSummaryRow("blue", matchDetailMatch.teams[0].ids[i]);
-    appendDetailHeader("blue", matchDetailMatch.teams[0].ids[i]);
+    appendSummaryRow('blue', matchDetailMatch.teams[0].ids[i]);
+    appendDetailHeader('blue', matchDetailMatch.teams[0].ids[i]);
     appendTalentRow('blue', matchDetailMatch.teams[0].ids[i]);
   }
 
   for (let i in matchDetailMatch.teams[1].ids) {
-    appendSummaryRow("red", matchDetailMatch.teams[1].ids[i]);
+    appendSummaryRow('red', matchDetailMatch.teams[1].ids[i]);
     appendDetailHeader('red', matchDetailMatch.teams[1].ids[i]);
     appendTalentRow('red', matchDetailMatch.teams[1].ids[i]);
   }
@@ -766,7 +801,7 @@ function loadPlayers() {
   $('#match-detail-talents .tiny.image').popup();
 
   // links to profiles
-  $('#match-detail-page-content .player-name').click(function() {
+  $('#match-detail-page-content .player-name').click(function () {
     showPlayerProfile($(this).attr('playerID'));
   });
 }
@@ -781,7 +816,7 @@ function appendSummaryRow(color, id) {
   context.playerName = data.name + (data.tag ? '#' + data.tag : '');
   context.kills = data.gameStats.SoloKill;
   context.gameStats = data.gameStats;
-  context.hasAwardClass = "is-hidden"
+  context.hasAwardClass = 'is-hidden';
   context.format = {};
 
   for (let s in context.gameStats) {
@@ -793,7 +828,7 @@ function appendSummaryRow(color, id) {
     context.awardImg = award.image;
     context.awardName = award.name;
     context.awardSub = award.subtitle;
-    context.hasAwardClass = "";
+    context.hasAwardClass = '';
   }
 
   $('#match-detail-summary table tbody').append(matchSummaryRowTemplate(context));
@@ -820,10 +855,10 @@ function loadDetailedStats() {
   }
 
   $('#match-detail-details table').floatThead({
-    scrollContainer: function($table) {
+    scrollContainer: function ($table) {
       return $('#match-detail-details');
     },
-    autoReflow: true
+    autoReflow: true,
   });
   $('#match-detail-details table').floatThead('reflow');
 }
@@ -880,8 +915,7 @@ function appendTalentRow(color, id) {
       context.description = Heroes.talentDesc(data.talents[keys[i]]);
       context.name = Heroes.talentName(data.talents[keys[i]]);
       row.append(matchTalentRowCellTemplate(context));
-    }
-    else {
+    } else {
       row.append('<td></td>');
     }
   }
@@ -904,8 +938,7 @@ function loadChat() {
         context.playerName = matchDetailPlayers[msg.player].name;
         context.heroName = matchDetailPlayers[msg.player].hero;
         context.showImg = '';
-      }
-      else {
+      } else {
         context.showImg = 'is-hidden';
         context.playerName = msg.player;
       }
@@ -948,8 +981,7 @@ function addTauntEntry(type, player, data) {
 
   if ('time' in data) {
     context.time = formatSeconds(data.time);
-  }
-  else {
+  } else {
     context.loop = data.start;
     context.time = formatSeconds(data.start / 16);
   }
@@ -997,14 +1029,19 @@ function graphXP() {
 }
 
 function getTotalXPSet(teamID) {
-  let data = [{x: 0, y: 0}];
+  let data = [{ x: 0, y: 0 }];
   for (let xp in matchDetailMatch.XPBreakdown) {
     let x = matchDetailMatch.XPBreakdown[xp];
 
     if (x.team === teamID) {
       // we want the total here.
-      let y = x.breakdown.CreepXP + x.breakdown.HeroXP + x.breakdown.MinionXP + x.breakdown.StructureXP + x.breakdown.TrickleXP
-      data.push({x: x.time, y: parseInt(y) });
+      let y =
+        x.breakdown.CreepXP +
+        x.breakdown.HeroXP +
+        x.breakdown.MinionXP +
+        x.breakdown.StructureXP +
+        x.breakdown.TrickleXP;
+      data.push({ x: x.time, y: parseInt(y) });
     }
   }
 
@@ -1012,13 +1049,12 @@ function getTotalXPSet(teamID) {
 }
 
 function getLevelsXPSet(teamID) {
-  let data = [{x: 0, y: 1}];
+  let data = [{ x: 0, y: 1 }];
 
   let levels = matchDetailMatch.levelTimes[teamID];
   for (let l in levels) {
     let level = levels[l];
-    if (level.level === 1)
-      continue;
+    if (level.level === 1) continue;
 
     data.push({ x: level.time, y: level.level });
   }
@@ -1035,37 +1071,43 @@ function getTeamXPBGraphData(teamID) {
   // - creep
   // - minion
   // - hero
-  let data = [{
-    label: 'Trickle XP',
-    borderColor: '#264653',
-    backgroundColor: '#264653',
-    cubicInterpolationMode: 'monotone',
-    data: [{x: 0, y: 0}]
-  }, {
-    label: 'Structure XP',
-    borderColor: '#2A9D8F',
-    backgroundColor: '#2A9D8F',
-    cubicInterpolationMode: 'monotone',
-    data: [{x: 0, y: 0}]
-  }, {
-    label: 'Creep XP',
-    borderColor: '#E9C46A',
-    backgroundColor: '#E9C46A',
-    cubicInterpolationMode: 'monotone',
-    data: [{x: 0, y: 0}]
-  }, {
-    label: 'Minion XP',
-    borderColor: '#F4A261',
-    backgroundColor: '#F4A261',
-    cubicInterpolationMode: 'monotone',
-    data: [{x: 0, y: 0}]
-  }, {
-    label: 'Hero XP',
-    borderColor: '#E76F51',
-    backgroundColor: '#E76F51',
-    cubicInterpolationMode: 'monotone',
-    data: [{x: 0, y: 0}]
-  }];
+  let data = [
+    {
+      label: 'Trickle XP',
+      borderColor: '#264653',
+      backgroundColor: '#264653',
+      cubicInterpolationMode: 'monotone',
+      data: [{ x: 0, y: 0 }],
+    },
+    {
+      label: 'Structure XP',
+      borderColor: '#2A9D8F',
+      backgroundColor: '#2A9D8F',
+      cubicInterpolationMode: 'monotone',
+      data: [{ x: 0, y: 0 }],
+    },
+    {
+      label: 'Creep XP',
+      borderColor: '#E9C46A',
+      backgroundColor: '#E9C46A',
+      cubicInterpolationMode: 'monotone',
+      data: [{ x: 0, y: 0 }],
+    },
+    {
+      label: 'Minion XP',
+      borderColor: '#F4A261',
+      backgroundColor: '#F4A261',
+      cubicInterpolationMode: 'monotone',
+      data: [{ x: 0, y: 0 }],
+    },
+    {
+      label: 'Hero XP',
+      borderColor: '#E76F51',
+      backgroundColor: '#E76F51',
+      cubicInterpolationMode: 'monotone',
+      data: [{ x: 0, y: 0 }],
+    },
+  ];
 
   for (let xp in matchDetailMatch.XPBreakdown) {
     let x = matchDetailMatch.XPBreakdown[xp];
@@ -1074,8 +1116,8 @@ function getTeamXPBGraphData(teamID) {
       data[0].data.push({ y: parseInt(x.breakdown.TrickleXP), x: x.time });
       data[1].data.push({ y: parseInt(x.breakdown.StructureXP), x: x.time });
       data[2].data.push({ y: parseInt(x.breakdown.CreepXP), x: x.time });
-      data[3].data.push({ y: parseInt(x.breakdown.MinionXP), x: x.time});
-      data[4].data.push({ y: parseInt(x.breakdown.HeroXP), x: x.time});
+      data[3].data.push({ y: parseInt(x.breakdown.MinionXP), x: x.time });
+      data[4].data.push({ y: parseInt(x.breakdown.HeroXP), x: x.time });
     }
   }
 
@@ -1084,29 +1126,33 @@ function getTeamXPBGraphData(teamID) {
 
 function getTeamXPSoakData() {
   let labels = [0];
-  let data = [{
-    label: 'Maximum Possible Minion XP',
-    fill: false,
-    borderColor: '#E9C46A',
-    backgroundColor: '#E9C46A',
-    cubicInterpolationMode: 'monotone',
-    steppedLine: true,
-    data: []
-  }, {
-    label: 'Blue Team',
-    fill: false,
-    borderColor: '#2185d0',
-    backgroundColor: '#2185d0',
-    lineTension: 0,
-    data: [{x: 0, y: 0}]
-  }, {
-    label: 'Red Team',
-    fill: false,
-    borderColor: '#db2828',
-    backgroundColor: '#db2828',
-    lineTension: 0,
-    data: [{x: 0, y: 0}]
-  }];
+  let data = [
+    {
+      label: 'Maximum Possible Minion XP',
+      fill: false,
+      borderColor: '#E9C46A',
+      backgroundColor: '#E9C46A',
+      cubicInterpolationMode: 'monotone',
+      steppedLine: true,
+      data: [],
+    },
+    {
+      label: 'Blue Team',
+      fill: false,
+      borderColor: '#2185d0',
+      backgroundColor: '#2185d0',
+      lineTension: 0,
+      data: [{ x: 0, y: 0 }],
+    },
+    {
+      label: 'Red Team',
+      fill: false,
+      borderColor: '#db2828',
+      backgroundColor: '#db2828',
+      lineTension: 0,
+      data: [{ x: 0, y: 0 }],
+    },
+  ];
 
   let minionXP = [];
   for (let xp in matchDetailMatch.XPBreakdown) {
@@ -1116,8 +1162,7 @@ function getTeamXPSoakData() {
       data[1].data.push({ x: x.time, y: x.breakdown.MinionXP });
       // theoretical minion xp processed later due to some complications
       minionXP.push(x);
-    }
-    else if (x.team === 1) {
+    } else if (x.team === 1) {
       data[2].data.push({ x: x.time, y: x.breakdown.MinionXP });
     }
   }
@@ -1129,10 +1174,9 @@ function getTeamXPSoakData() {
     if (i < minionXP.length - 1) {
       let prev = i === 0 ? 0 : minionXP[i - 1].theoreticalMinionXP;
       const delta = minionXP[i].theoreticalMinionXP - prev;
-      data[0].data.push({ x: minionXP[i].time - 60, y: minionXP[i].theoreticalMinionXP - delta / 2});
+      data[0].data.push({ x: minionXP[i].time - 60, y: minionXP[i].theoreticalMinionXP - delta / 2 });
       data[0].data.push({ x: minionXP[i].time - 30, y: minionXP[i].theoreticalMinionXP });
-    }
-    else {
+    } else {
       data[0].data.push({ x: minionXP[i].time, y: minionXP[i].theoreticalMinionXP });
     }
   }
@@ -1156,10 +1200,9 @@ function loadTimeline() {
     // the parser doesn't uh, actually store what team the person died is on but
     // it's not too bad to figure out
     if (matchDetailMatch.teams[0].ids.indexOf(td.victim.player) >= 0) {
-      item.className = "red";
-    }
-    else {
-      item.className = "blue";
+      item.className = 'red';
+    } else {
+      item.className = 'blue';
     }
 
     item.start = td.time;
@@ -1176,13 +1219,12 @@ function loadTimeline() {
       level.team = t;
       adv.push(level);
 
-      if (level.level === 1)
-        continue;
+      if (level.level === 1) continue;
 
       let item = {};
-      item.className = t === "0" ? "blue" : "red";
+      item.className = t === '0' ? 'blue' : 'red';
       item.start = level.time;
-      item.content = "Level " + level.level;
+      item.content = 'Level ' + level.level;
       item.group = 2;
       items.push(item);
     }
@@ -1192,17 +1234,15 @@ function loadTimeline() {
     adv.push({
       team: t,
       time: matchDetailMatch.length,
-      level: matchDetailMatch.levelTimes[t][last].level
+      level: matchDetailMatch.levelTimes[t][last].level,
     });
   }
 
   // level advantage
   // calculate the intervals and the level diff at each interval
-  adv.sort(function(a, b) {
-    if (a.time === b.time)
-      return 0;
-    if (a.time < b.time)
-      return -1;
+  adv.sort(function (a, b) {
+    if (a.time === b.time) return 0;
+    if (a.time < b.time) return -1;
 
     return 1;
   });
@@ -1213,10 +1253,9 @@ function loadTimeline() {
   for (let i = 0; i < adv.length; i++) {
     let event = adv[i];
 
-    if (event.team === "0") {
+    if (event.team === '0') {
       blueLevel = event.level;
-    }
-    else {
+    } else {
       redLevel = event.level;
     }
 
@@ -1228,16 +1267,14 @@ function loadTimeline() {
       item.end = event.time;
 
       if (currentLevelDiff === 0) {
-        item.content = "0";
-      }
-      else if (currentLevelDiff < 0) {
+        item.content = '0';
+      } else if (currentLevelDiff < 0) {
         // negative means red > blue
-        item.content = "+" + Math.abs(currentLevelDiff);
-        item.className = "red";
-      }
-      else {
-        item.content = "+" + Math.abs(currentLevelDiff);
-        item.className = "blue";
+        item.content = '+' + Math.abs(currentLevelDiff);
+        item.className = 'red';
+      } else {
+        item.content = '+' + Math.abs(currentLevelDiff);
+        item.className = 'blue';
       }
 
       item.className = item.className + ' level-adv plus' + Math.abs(currentLevelDiff);
@@ -1256,16 +1293,14 @@ function loadTimeline() {
   lastItem.end = matchDetailMatch.length;
   let lastLevelDiff = blueLevel - redLevel;
   if (lastLevelDiff === 0) {
-    lastItem.content = "0";
-  }
-  else if (lastLevelDiff < 0) {
+    lastItem.content = '0';
+  } else if (lastLevelDiff < 0) {
     // negative means red > blue
-    lastItem.content = "+" + Math.abs(lastLevelDiff);
-    lastItem.className = "red";
-  }
-  else {
-    lastItem.content = "+" + Math.abs(lastLevelDiff);
-    lastItem.className = "blue";
+    lastItem.content = '+' + Math.abs(lastLevelDiff);
+    lastItem.className = 'red';
+  } else {
+    lastItem.content = '+' + Math.abs(lastLevelDiff);
+    lastItem.className = 'blue';
   }
   lastItem.className = lastItem.className + ' level-adv plus' + Math.abs(lastLevelDiff);
   lastItem.type = 'background';
@@ -1282,8 +1317,7 @@ function loadTimeline() {
       item.content = struct.name;
       if (struct.team === 0) {
         item.className = 'red';
-      }
-      else {
+      } else {
         item.className = 'blue';
       }
       item.group = 4;
@@ -1300,8 +1334,7 @@ function loadTimeline() {
 
     if (merc.team === 0) {
       item.className = 'blue';
-    }
-    else {
+    } else {
       item.className = 'red';
     }
 
@@ -1320,8 +1353,7 @@ function loadTimeline() {
 
     if (merc.team === 0) {
       item.className = 'blue';
-    }
-    else {
+    } else {
       item.className = 'red';
     }
     item.className += ' merc-unit';
@@ -1329,7 +1361,7 @@ function loadTimeline() {
     item.group = 7;
     items.push(item);
   }
-  
+
   // hero uptime
   // parser v7
   if (matchDetailMatch.teams[0].stats.uptime) {
@@ -1346,80 +1378,64 @@ function loadTimeline() {
           content: `${current.heroes}`,
           type: 'background',
           group: groupID,
-          className: `${teamClass} hero-${current.heroes}`
+          className: `${teamClass} hero-${current.heroes}`,
         };
 
         if (i + 1 < teamUptime.length) {
           item.end = teamUptime[i + 1].time;
-        }
-        else {
+        } else {
           item.end = matchDetailMatch.length;
         }
 
         items.push(item);
       }
     }
-    matchDetailTimelineGroups.update({id: 16, visible: true});
-    matchDetailTimelineGroups.update({id: 17, visible: true});
-    matchDetailTimelineGroups.update({id: 3, nestedGroups: [16, 17]});
-  }
-  else {
-    matchDetailTimelineGroups.update({id: 16, visible: false});
-    matchDetailTimelineGroups.update({id: 17, visible: false});
-    matchDetailTimelineGroups.update({id: 3, nestedGroups: null});
+    matchDetailTimelineGroups.update({ id: 16, visible: true });
+    matchDetailTimelineGroups.update({ id: 17, visible: true });
+    matchDetailTimelineGroups.update({ id: 3, nestedGroups: [16, 17] });
+  } else {
+    matchDetailTimelineGroups.update({ id: 16, visible: false });
+    matchDetailTimelineGroups.update({ id: 17, visible: false });
+    matchDetailTimelineGroups.update({ id: 3, nestedGroups: null });
   }
 
   // group config
-  matchDetailTimelineGroups.update({id: 11, visible: false});
-  matchDetailTimelineGroups.update({id: 12, visible: false});
-  matchDetailTimelineGroups.update({id: 13, visible: false});
-  matchDetailTimelineGroups.update({id: 14, visible: false});
-  matchDetailTimelineGroups.update({id: 5, nestedGroups: null});
+  matchDetailTimelineGroups.update({ id: 11, visible: false });
+  matchDetailTimelineGroups.update({ id: 12, visible: false });
+  matchDetailTimelineGroups.update({ id: 13, visible: false });
+  matchDetailTimelineGroups.update({ id: 14, visible: false });
+  matchDetailTimelineGroups.update({ id: 5, nestedGroups: null });
 
   // objectives...
   if (matchDetailMatch.map === ReplayTypes.MapType.ControlPoints) {
     getSkyTempleEvents(items);
-  }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.TowersOfDoom) {
+  } else if (matchDetailMatch.map === ReplayTypes.MapType.TowersOfDoom) {
     getTowersEvents(items);
-  }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.HauntedMines) {
+  } else if (matchDetailMatch.map === ReplayTypes.MapType.HauntedMines) {
     getMinesEvents(items);
-  }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.BattlefieldOfEternity) {
+  } else if (matchDetailMatch.map === ReplayTypes.MapType.BattlefieldOfEternity) {
     getBOEEvents(items);
-  }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.CursedHollow) {
+  } else if (matchDetailMatch.map === ReplayTypes.MapType.CursedHollow) {
     getCursedEvents(items);
-  }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.DragonShire) {
+  } else if (matchDetailMatch.map === ReplayTypes.MapType.DragonShire) {
     getDragonEvents(items);
-  }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.HauntedWoods) {
+  } else if (matchDetailMatch.map === ReplayTypes.MapType.HauntedWoods) {
     getGardenEvents(items);
-  }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.Shrines) {
+  } else if (matchDetailMatch.map === ReplayTypes.MapType.Shrines) {
     getShrinesEvents(items);
-  }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.Crypts) {
+  } else if (matchDetailMatch.map === ReplayTypes.MapType.Crypts) {
     getTombEvents(items);
-  }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.Volskaya) {
+  } else if (matchDetailMatch.map === ReplayTypes.MapType.Volskaya) {
     getVolskayaEvents(items);
-  }
-  else if (matchDetailMatch.map === ReplayTypes.MapType['Warhead Junction']) {
+  } else if (matchDetailMatch.map === ReplayTypes.MapType['Warhead Junction']) {
     getWarheadEvents(items);
-  }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.BraxisHoldout) {
+  } else if (matchDetailMatch.map === ReplayTypes.MapType.BraxisHoldout) {
     getBraxisEvents(items);
-  }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.AlteracPass) {
+  } else if (matchDetailMatch.map === ReplayTypes.MapType.AlteracPass) {
     getAlteracEvents(items);
-  }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.Hanamura) {
+  } else if (matchDetailMatch.map === ReplayTypes.MapType.Hanamura) {
     getHanamuraEvents(items);
-  }
-  else if (matchDetailMatch.map === ReplayTypes.MapType.BlackheartsBay) {
+  } else if (matchDetailMatch.map === ReplayTypes.MapType.BlackheartsBay) {
     getBhbEvents(items);
   }
 
@@ -1427,25 +1443,30 @@ function loadTimeline() {
   opts.min = 0;
   opts.max = matchDetailMatch.length + 10;
   opts.showMajorLabels = false;
-  opts.maxHeight = "100%";
+  opts.maxHeight = '100%';
   opts.format = {
-    minorLabels: function(date, scale, step) {
+    minorLabels: function (date, scale, step) {
       if (date._d < new Date(0)) {
-        return formatSeconds(-(1000-date._d.getUTCMilliseconds()));
+        return formatSeconds(-(1000 - date._d.getUTCMilliseconds()));
       }
 
       return formatSeconds(date._d.getUTCMilliseconds() + date._d.getUTCSeconds() * 1000);
-    }
-  }
-  opts.onInitialDrawComplete = function() {
+    },
+  };
+  opts.onInitialDrawComplete = function () {
     $('.timeline-popup').popup();
-  }
+  };
 
-  matchDetailTimeline = new vis.Timeline($('#match-detail-timeline-wrapper')[0], new vis.DataSet(items), matchDetailTimelineGroups, opts);
-  matchDetailTimeline.on('rangechanged', function(props) {
+  matchDetailTimeline = new vis.Timeline(
+    $('#match-detail-timeline-wrapper')[0],
+    new vis.DataSet(items),
+    matchDetailTimelineGroups,
+    opts,
+  );
+  matchDetailTimeline.on('rangechanged', function (props) {
     $('.timeline-popup').popup();
   });
-  matchDetailTimelineGroups.on('update', function() {
+  matchDetailTimelineGroups.on('update', function () {
     matchDetailTimeline.redraw();
   });
 }
@@ -1454,11 +1475,10 @@ function toggleGroup(idx) {
   let elem = $('#match-detail-timeline-buttons .button[button-id="' + idx + '"]');
   if (elem.hasClass('violet')) {
     elem.removeClass('violet');
-    matchDetailTimelineGroups.update({id: idx + 1, visible: false});
-  }
-  else {
+    matchDetailTimelineGroups.update({ id: idx + 1, visible: false });
+  } else {
     elem.addClass('violet');
-    matchDetailTimelineGroups.update({id: idx + 1, visible: true});
+    matchDetailTimelineGroups.update({ id: idx + 1, visible: true });
   }
 
   //matchDetailTimeline.setGroups(matchDetailTimelineGroups);
@@ -1468,9 +1488,12 @@ function toggleGroup(idx) {
 // not a template because i'm kind of lazy? I dunno
 function generateTDTimeline(data) {
   let pop = "<h3 class='ui image header'>";
-  pop += "<img src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(data.victim.hero) + "' class='ui large circular image'>";
+  pop +=
+    "<img src='assets/heroes-talents/images/heroes/" +
+    Heroes.heroIcon(data.victim.hero) +
+    "' class='ui large circular image'>";
   pop += "<div class='content'>" + data.victim.hero + "<div class='sub header player-name'>Killed at ";
-  pop += formatSeconds(data.time) + "</div></div></h3>";
+  pop += formatSeconds(data.time) + '</div></div></h3>';
   pop += "<h3 class='ui header second'>Killed By</h3>";
   pop += "<div class='ui mini circular images'>";
 
@@ -1478,10 +1501,13 @@ function generateTDTimeline(data) {
     let k = data.killers[a];
     pop += "<img class='ui image' src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(k.hero) + "'>";
   }
-  pop += "</div>";
+  pop += '</div>';
 
   let text = '<div class="timeline-popup" data-html="' + pop + '">';
-  text += '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(data.victim.hero) + '" class="ui circular avatar image">';
+  text +=
+    '<img src="assets/heroes-talents/images/heroes/' +
+    Heroes.heroIcon(data.victim.hero) +
+    '" class="ui circular avatar image">';
   text += data.victim.hero + '</div>';
   return text;
 }
@@ -1505,12 +1531,24 @@ function getBraxisEvents(items) {
       let t1 = formatStat('pct', wave.startScore[1]) + ' Zerg Wave';
 
       let pop0 = "<h3 class='ui header'>";
-      pop0 += "<div class='content'>" + t0 + "<div class='sub header'>Spawned at: " + formatSeconds(item0.start) + ", Duration: " + formatSeconds(item0.end - item0.start);
-      pop0 += "</div></div></h3>";
+      pop0 +=
+        "<div class='content'>" +
+        t0 +
+        "<div class='sub header'>Spawned at: " +
+        formatSeconds(item0.start) +
+        ', Duration: ' +
+        formatSeconds(item0.end - item0.start);
+      pop0 += '</div></div></h3>';
 
       let pop1 = "<h3 class='ui header'>";
-      pop1 += "<div class='content'>" + t1 + "<div class='sub header'>Spawned at: " + formatSeconds(item1.start) + ", Duration: " + formatSeconds(item1.end - item1.start);
-      pop1 += "</div></div></h3>";
+      pop1 +=
+        "<div class='content'>" +
+        t1 +
+        "<div class='sub header'>Spawned at: " +
+        formatSeconds(item1.start) +
+        ', Duration: ' +
+        formatSeconds(item1.end - item1.start);
+      pop1 += '</div></div></h3>';
 
       item0.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop0 + '">' + t0 + '</div>';
       item1.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop1 + '">' + t1 + '</div>';
@@ -1524,7 +1562,7 @@ function getBraxisEvents(items) {
       // spawns
       sitem = {};
       sitem.start = wave.initTime;
-      sitem.content = "Beacons Active";
+      sitem.content = 'Beacons Active';
       sitem.type = 'background';
       sitem.group = 5;
       sitem.end = wave.startTime;
@@ -1566,9 +1604,9 @@ function getBraxisEvents(items) {
   }
 
   // activate groups
-  matchDetailTimelineGroups.update({id: 5, nestedGroups: [11, 12]});
-  matchDetailTimelineGroups.update({id: 11, visible: true});
-  matchDetailTimelineGroups.update({id: 12, visible: true});
+  matchDetailTimelineGroups.update({ id: 5, nestedGroups: [11, 12] });
+  matchDetailTimelineGroups.update({ id: 11, visible: true });
+  matchDetailTimelineGroups.update({ id: 12, visible: true });
 }
 
 function getGardenEvents(items) {
@@ -1579,18 +1617,26 @@ function getGardenEvents(items) {
       let item = {};
       item.start = terror.time;
       item.end = item.start + terror.duration;
-      item.className = t === "0" ? 'blue' : 'red';
+      item.className = t === '0' ? 'blue' : 'red';
       item.group = 5;
 
       let hero = matchDetailMatch.teams[t].heroes[matchDetailMatch.teams[t].ids.indexOf(terror.player)];
 
       let pop = "<h3 class='ui image header'>";
-      pop += "<img src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(hero) + "' class='ui large circular image'>";
-      pop += "<div class='content'>Garden Terror<div class='sub header'>Spawned at: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(terror.duration);
-      pop += "</div></div></h3>";
+      pop +=
+        "<img src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(hero) + "' class='ui large circular image'>";
+      pop +=
+        "<div class='content'>Garden Terror<div class='sub header'>Spawned at: " +
+        formatSeconds(item.start) +
+        ', Duration: ' +
+        formatSeconds(terror.duration);
+      pop += '</div></div></h3>';
 
       item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">';
-      item.content += '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(hero) + '" class="ui circular avatar image">Garden Terror';
+      item.content +=
+        '<img src="assets/heroes-talents/images/heroes/' +
+        Heroes.heroIcon(hero) +
+        '" class="ui circular avatar image">Garden Terror';
       item.content += '</div>';
       items.push(item);
     }
@@ -1606,8 +1652,12 @@ function getGardenEvents(items) {
       item.group = 5;
 
       let pop = "<h3 class='ui header'>";
-      pop += "<div class='content'>Garden Terror<div class='sub header'>Spawned at: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(item.end - item.start);
-      pop += "</div></div></h3>";
+      pop +=
+        "<div class='content'>Garden Terror<div class='sub header'>Spawned at: " +
+        formatSeconds(item.start) +
+        ', Duration: ' +
+        formatSeconds(item.end - item.start);
+      pop += '</div></div></h3>';
 
       item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">Garden Terror</div>';
       items.push(item);
@@ -1623,21 +1673,24 @@ function getSkyTempleEvents(items) {
 
       let item = {};
       item.start = shot.time;
-      item.className = t === "0" ? 'blue' : 'red';
+      item.className = t === '0' ? 'blue' : 'red';
       item.className += ' temple-shot';
       item.group = 5;
 
-      let pop = "<h3 class='ui header'><div class='content'>Temple Shot Fired<div class='sub header'>" + formatSeconds(item.start);
-      pop += ", Damage: " + shot.damage + "</div></div></h3>";
+      let pop =
+        "<h3 class='ui header'><div class='content'>Temple Shot Fired<div class='sub header'>" +
+        formatSeconds(item.start);
+      pop += ', Damage: ' + shot.damage + '</div></div></h3>';
 
-      item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '"><i class="bullseye icon"></i></div>';
+      item.content =
+        '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '"><i class="bullseye icon"></i></div>';
       items.push(item);
     }
   }
 }
 
 function getTowersEvents(items) {
-  for (let t in ["0", "1"]) {
+  for (let t in ['0', '1']) {
     for (let i in matchDetailMatch.objective[t].events) {
       let altar = matchDetailMatch.objective[t].events[i];
 
@@ -1646,7 +1699,10 @@ function getTowersEvents(items) {
       item.className = t === '0' ? 'blue' : 'red';
       item.group = 5;
 
-      let pop = "<h3 class='ui header'><div class='content'>Altar Captured<div class='sub header'>" + altar.damage + " Core Damage</div></div></h3>";
+      let pop =
+        "<h3 class='ui header'><div class='content'>Altar Captured<div class='sub header'>" +
+        altar.damage +
+        ' Core Damage</div></div></h3>';
       item.content = '<div class="timeline-popup" data-html="' + pop + '">Altar Capture</div>';
       items.push(item);
     }
@@ -1662,8 +1718,7 @@ function getTowersEvents(items) {
       complete = false;
       start = event.time;
       team = event.team;
-    }
-    else if (event.kind === 'end') {
+    } else if (event.kind === 'end') {
       complete = true;
       let item = {};
       item.start = start;
@@ -1699,8 +1754,10 @@ function getMinesEvents(items) {
       item.group = 5;
       item.className = golem.team === 0 ? 'blue' : 'red';
 
-      let pop = "<h3 class='ui header'><div class='content'>Grave Golem<div class='sub header'>Spawn: " + formatSeconds(golem.startTime);
-      pop += ", Duration: " + formatSeconds(golem.duration) + "</div></div></h3>";
+      let pop =
+        "<h3 class='ui header'><div class='content'>Grave Golem<div class='sub header'>Spawn: " +
+        formatSeconds(golem.startTime);
+      pop += ', Duration: ' + formatSeconds(golem.duration) + '</div></div></h3>';
 
       item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">Grave Golem</div>';
       items.push(item);
@@ -1719,9 +1776,13 @@ function getBOEEvents(items) {
     item.group = 5;
     item.className = immo.winner === 0 ? 'blue' : 'red';
 
-    let pop = "<h3 class='ui header'><div class='content'>" + formatStat('', immo.power, true) + "% Immortal";
-    pop += "<div class='sub header'>Spawn: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(immo.immortalDuration);
-    pop += "</div></div></h3>";
+    let pop = "<h3 class='ui header'><div class='content'>" + formatStat('', immo.power, true) + '% Immortal';
+    pop +=
+      "<div class='sub header'>Spawn: " +
+      formatSeconds(item.start) +
+      ', Duration: ' +
+      formatSeconds(immo.immortalDuration);
+    pop += '</div></div></h3>';
 
     item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">Immortal</div>';
     items.push(item);
@@ -1731,7 +1792,7 @@ function getBOEEvents(items) {
     bitem.start = immo.time - immo.duration;
     bitem.end = immo.time;
     bitem.group = 5;
-    bitem.content = "Immortals Active";
+    bitem.content = 'Immortals Active';
     bitem.type = 'background';
     items.push(bitem);
   }
@@ -1757,23 +1818,30 @@ function getDragonEvents(items) {
     for (let d in matchDetailMatch.objective[t].events) {
       let dragon = matchDetailMatch.objective[t].events[d];
 
-      if (!('duration' in dragon))
-        dragon.duration = matchDetailMatch.length - dragon.time;
+      if (!('duration' in dragon)) dragon.duration = matchDetailMatch.length - dragon.time;
 
       let item = {};
       item.start = dragon.time;
       item.end = item.start + dragon.duration;
-      item.className = t === "0" ? 'blue' : 'red';
+      item.className = t === '0' ? 'blue' : 'red';
       item.group = 5;
 
       let hero = matchDetailMatch.teams[t].heroes[matchDetailMatch.teams[t].ids.indexOf(dragon.player)];
       let pop = "<h3 class='ui image header'>";
-      pop += "<img src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(hero) + "' class='ui large circular image'>";
-      pop += "<div class='content'>Dragon Knight<div class='sub header'>Spawned at: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(dragon.duration);
-      pop += "</div></div></h3>";
+      pop +=
+        "<img src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(hero) + "' class='ui large circular image'>";
+      pop +=
+        "<div class='content'>Dragon Knight<div class='sub header'>Spawned at: " +
+        formatSeconds(item.start) +
+        ', Duration: ' +
+        formatSeconds(dragon.duration);
+      pop += '</div></div></h3>';
 
       item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">';
-      item.content += '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(hero) + '" class="ui circular avatar image">Dragon Knight';
+      item.content +=
+        '<img src="assets/heroes-talents/images/heroes/' +
+        Heroes.heroIcon(hero) +
+        '" class="ui circular avatar image">Dragon Knight';
       item.content += '</div>';
       items.push(item);
     }
@@ -1783,16 +1851,14 @@ function getDragonEvents(items) {
   let suns = matchDetailMatch.objective.shrines.sun;
   for (let i = 0; i < moons.length; i++) {
     let shrine = moons[i];
-    if (shrine.team === -1)
-      continue;
+    if (shrine.team === -1) continue;
 
     let item = {};
     item.start = shrine.time;
 
     if (i + 1 >= moons.length) {
       item.end = matchDetailMatch.length;
-    }
-    else {
+    } else {
       item.end = moons[i + 1].time;
     }
 
@@ -1805,16 +1871,14 @@ function getDragonEvents(items) {
 
   for (let i = 0; i < suns.length; i++) {
     let shrine = suns[i];
-    if (shrine.team === -1)
-      continue;
+    if (shrine.team === -1) continue;
 
     let item = {};
     item.start = shrine.time;
 
     if (i + 1 >= suns.length) {
       item.end = matchDetailMatch.length;
-    }
-    else {
+    } else {
       item.end = suns[i + 1].time;
     }
 
@@ -1825,9 +1889,9 @@ function getDragonEvents(items) {
     items.push(item);
   }
 
-  matchDetailTimelineGroups.update({id: 5, nestedGroups: [13, 14]});
-  matchDetailTimelineGroups.update({id: 13, visible: true});
-  matchDetailTimelineGroups.update({id: 14, visible: true});
+  matchDetailTimelineGroups.update({ id: 5, nestedGroups: [13, 14] });
+  matchDetailTimelineGroups.update({ id: 13, visible: true });
+  matchDetailTimelineGroups.update({ id: 14, visible: true });
 }
 
 function getShrinesEvents(items) {
@@ -1841,8 +1905,8 @@ function getShrinesEvents(items) {
     item.group = 5;
 
     let pop = "<h3 class='ui header'><div class='content'>Shrine Cleared";
-    pop += "<div class='sub header'>Blue: " + shrine.team0Score + ", Red: " + shrine.team1Score;
-    pop += "</div></div></h3>";
+    pop += "<div class='sub header'>Blue: " + shrine.team0Score + ', Red: ' + shrine.team1Score;
+    pop += '</div></div></h3>';
 
     item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">Shrine Cleared</div>';
     items.push(item);
@@ -1859,12 +1923,22 @@ function getShrinesEvents(items) {
       item.className = t === '0' ? 'blue' : 'red';
       item.group = 5;
 
-      let pop = "<h3 class='ui header'><div class='content'>" + punisher.type.substr(0, punisher.type.length - 6) + " Punisher";
-      pop += "<div class='sub header'>Spawn: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(punisher.duration);
-      pop += "</div></div></h3>";
-      pop += "<p>Siege Damage: " + parseInt(punisher.siegeDamage) + "<br>Hero Damage: " + parseInt(punisher.heroDamage) + "</p>";
+      let pop =
+        "<h3 class='ui header'><div class='content'>" + punisher.type.substr(0, punisher.type.length - 6) + ' Punisher';
+      pop +=
+        "<div class='sub header'>Spawn: " +
+        formatSeconds(item.start) +
+        ', Duration: ' +
+        formatSeconds(punisher.duration);
+      pop += '</div></div></h3>';
+      pop +=
+        '<p>Siege Damage: ' +
+        parseInt(punisher.siegeDamage) +
+        '<br>Hero Damage: ' +
+        parseInt(punisher.heroDamage) +
+        '</p>';
 
-      item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">'
+      item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">';
       item.content += punisher.type.substr(0, punisher.type.length - 6) + ' Punisher</div>';
       items.push(item);
     }
@@ -1883,8 +1957,9 @@ function getTombEvents(items) {
       item.className = spider.team === 0 ? 'blue' : 'red';
 
       let pop = "<h3 class='ui header'><div class='content'>Webweavers";
-      pop += "<div class='sub header'>Spawn: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(spider.duration);
-      pop += "</div></div></h3>";
+      pop +=
+        "<div class='sub header'>Spawn: " + formatSeconds(item.start) + ', Duration: ' + formatSeconds(spider.duration);
+      pop += '</div></div></h3>';
 
       item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">Webweavers</div>';
       items.push(item);
@@ -1893,28 +1968,29 @@ function getTombEvents(items) {
 }
 
 function getVolskayaEvents(items) {
- for (let t in [0, 1]) {
-   for (let p in matchDetailMatch.objective[t].events) {
-     let tri = matchDetailMatch.objective[t].events[p];
+  for (let t in [0, 1]) {
+    for (let p in matchDetailMatch.objective[t].events) {
+      let tri = matchDetailMatch.objective[t].events[p];
 
-     let item = {};
-     item.start = tri.time;
-     item.end = tri.time + tri.duration;
-     item.group = 5;
-     item.className = tri.team === 0 ? 'blue' : 'red';
+      let item = {};
+      item.start = tri.time;
+      item.end = tri.time + tri.duration;
+      item.group = 5;
+      item.className = tri.team === 0 ? 'blue' : 'red';
 
-     let pop = "<h3 class='ui header'><div class='content'>Triglav";
-     pop += "<div class='sub header'>Spawn: " + formatSeconds(item.start) + ", Duration: " + formatSeconds(tri.duration);
-     pop += "</div></div></h3>";
+      let pop = "<h3 class='ui header'><div class='content'>Triglav";
+      pop +=
+        "<div class='sub header'>Spawn: " + formatSeconds(item.start) + ', Duration: ' + formatSeconds(tri.duration);
+      pop += '</div></div></h3>';
 
-     item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">Triglav</div>';
-     items.push(item);
-   }
- }
+      item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">Triglav</div>';
+      items.push(item);
+    }
+  }
 }
 
 function getWarheadEvents(items) {
-  for (let t in [0,1]) {
+  for (let t in [0, 1]) {
     for (let w in matchDetailMatch.objective[t].events) {
       let nuke = matchDetailMatch.objective[t].events[w];
 
@@ -1925,13 +2001,17 @@ function getWarheadEvents(items) {
 
       let hero = matchDetailMatch.teams[t].heroes[matchDetailMatch.teams[t].ids.indexOf(nuke.player)];
       let pop = "<h3 class='ui image header'>";
-      pop += "<img src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(hero) + "' class='ui large circular image'>";
+      pop +=
+        "<img src='assets/heroes-talents/images/heroes/" + Heroes.heroIcon(hero) + "' class='ui large circular image'>";
       pop += "<div class='content'>Nuke" + (nuke.success ? '' : ' Attempt') + "<div class='sub header'>";
-      pop += "x: " + nuke.x + ", y: " + nuke.y;
-      pop += "</div></div></h3>";
+      pop += 'x: ' + nuke.x + ', y: ' + nuke.y;
+      pop += '</div></div></h3>';
 
       item.content = '<div class="timeline-popup" data-variation="wide" data-html="' + pop + '">';
-      item.content += '<img src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(hero) + '" class="ui circular avatar image">';
+      item.content +=
+        '<img src="assets/heroes-talents/images/heroes/' +
+        Heroes.heroIcon(hero) +
+        '" class="ui circular avatar image">';
       item.content += 'Nuke' + (nuke.success ? '' : ' Attempt');
       item.content += '</div>';
       items.push(item);
@@ -1945,20 +2025,22 @@ function getAlteracEvents(items) {
       const pop = `
         <h3 class='ui header'>
           <div class='content'>Cavalry
-            <div class='sub header'>Spawn: ${formatSeconds(cavalry.born)}, Duration: ${formatSeconds(cavalry.died - cavalry.born)}</div>
+            <div class='sub header'>Spawn: ${formatSeconds(cavalry.born)}, Duration: ${formatSeconds(
+        cavalry.died - cavalry.born,
+      )}</div>
           </div>
         </h3>
       `;
 
       const content = `<div class="timeline-popup" data-variation="wide" data-html="${pop}">Cavalry</div>`;
-    
+
       const item = {
         start: cavalry.born,
         group: 5,
         className: t === 0 ? 'blue' : 'red',
         end: cavalry.died,
-        content
-      }
+        content,
+      };
 
       items.push(item);
     }
@@ -1983,7 +2065,7 @@ function getBhbEvents(items) {
           start: event.time,
           group: 5,
           className: t === 0 ? 'blue' : 'red',
-          content
+          content,
         };
 
         items.push(item);
@@ -2009,7 +2091,7 @@ function getHanamuraEvents(items) {
           start: payload.died,
           className: payload.winner === 0 ? 'blue' : 'red',
           content: `Payload Delivered`,
-          group: 5
+          group: 5,
         };
         items.push(endItem);
       }
@@ -2018,8 +2100,7 @@ function getHanamuraEvents(items) {
       for (let i = 0; i < payload.control.length; i++) {
         let current = payload.control[i];
 
-        if (current.team === -1)
-          continue;
+        if (current.team === -1) continue;
 
         let endTime = payload.died ? payload.died : matchDetailMatch.length;
 
@@ -2034,7 +2115,7 @@ function getHanamuraEvents(items) {
           type: 'background',
           content: '',
           start: current.time,
-          end: endTime
+          end: endTime,
         };
 
         items.push(item);
@@ -2042,8 +2123,8 @@ function getHanamuraEvents(items) {
     }
   }
 
-  matchDetailTimelineGroups.update({id: 5, nestedGroups: [15]});
-  matchDetailTimelineGroups.update({id: 15, visible: true});
+  matchDetailTimelineGroups.update({ id: 5, nestedGroups: [15] });
+  matchDetailTimelineGroups.update({ id: 15, visible: true });
 }
 
 function initTeamStatGraphs() {
@@ -2051,217 +2132,246 @@ function initTeamStatGraphs() {
   teamOverallStatGraphData = {
     type: 'horizontalBar',
     data: {
-      labels: ["Hero Damage", "Healing", "Self Healing", "Protection", "Damage Taken", "Siege Damage", "Minion Damage", "Creep Damage"]
+      labels: [
+        'Hero Damage',
+        'Healing',
+        'Self Healing',
+        'Protection',
+        'Damage Taken',
+        'Siege Damage',
+        'Minion Damage',
+        'Creep Damage',
+      ],
     },
     options: {
       tooltips: {
         intersect: true,
-        mode: 'point'
+        mode: 'point',
       },
       responsive: true,
       maintainAspectRatio: false,
       legend: {
         labels: {
-          fontColor: '#FFFFFF'
-        }
+          fontColor: '#FFFFFF',
+        },
       },
       scales: {
-        xAxes: [{
-          stacked: true,
-          ticks: {
-            fontColor: '#FFFFFF'
+        xAxes: [
+          {
+            stacked: true,
+            ticks: {
+              fontColor: '#FFFFFF',
+            },
+            gridLines: {
+              color: '#ababab',
+            },
           },
-          gridLines: {
-            color: '#ababab'
-          }
-        }],
-        yAxes: [{
-          stacked: true,
-          ticks: {
-            fontColor: '#FFFFFF'
+        ],
+        yAxes: [
+          {
+            stacked: true,
+            ticks: {
+              fontColor: '#FFFFFF',
+            },
+            gridLines: {
+              display: false,
+            },
           },
-          gridLines: {
-            display: false
-          }
-        }]
-      }
-    }
+        ],
+      },
+    },
   };
 
   timePerTierGraphData = {
     type: 'bar',
     data: {
-      labels: ["Level 1", "Level 4", "Level 7", "Level 10", "Level 13", "Level 16"]
+      labels: ['Level 1', 'Level 4', 'Level 7', 'Level 10', 'Level 13', 'Level 16'],
     },
     options: {
       tooltips: {
-        callbacks : {
-          label: function(tooltipItem, data) {
+        callbacks: {
+          label: function (tooltipItem, data) {
             return `${data.datasets[tooltipItem.datasetIndex].label}: ${formatSeconds(tooltipItem.yLabel)}`;
-          }
-        }
+          },
+        },
       },
       responsive: true,
       maintainAspectRatio: false,
       legend: {
         labels: {
-          fontColor: '#FFFFFF'
-        }
+          fontColor: '#FFFFFF',
+        },
       },
       scales: {
-        xAxes: [{
-          ticks: {
-            fontColor: '#FFFFFF'
-          },
-          gridLines: {
-            color: '#ababab'
-          }
-        }],
-        yAxes: [{
-          ticks: {
-            fontColor: '#FFFFFF',
-            callback: function(value, index, values) {
-              return formatSeconds(value);
+        xAxes: [
+          {
+            ticks: {
+              fontColor: '#FFFFFF',
             },
-            stepSize: 60,
-            min: 0
+            gridLines: {
+              color: '#ababab',
+            },
           },
-          gridLines: {
-            display: false
-          }
-        }]
-      }
-    }
-  }
+        ],
+        yAxes: [
+          {
+            ticks: {
+              fontColor: '#FFFFFF',
+              callback: function (value, index, values) {
+                return formatSeconds(value);
+              },
+              stepSize: 60,
+              min: 0,
+            },
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
+      },
+    },
+  };
 
   heroUptimeGraphData = {
     type: 'bar',
     data: {
-      labels: ['0', '1', '2', '3', '4', '5']
+      labels: ['0', '1', '2', '3', '4', '5'],
     },
     options: {
       tooltips: {
-        callbacks : {
-          label: function(tooltipItem, data) {
+        callbacks: {
+          label: function (tooltipItem, data) {
             return `${data.datasets[tooltipItem.datasetIndex].label}: ${formatSeconds(tooltipItem.yLabel)}`;
-          }
-        }
+          },
+        },
       },
       responsive: true,
       maintainAspectRatio: false,
       legend: {
         labels: {
-          fontColor: '#FFFFFF'
-        }
+          fontColor: '#FFFFFF',
+        },
       },
       scales: {
-        xAxes: [{
-          ticks: {
-            fontColor: '#FFFFFF'
-          },
-          gridLines: {
-            color: '#ababab'
-          },
-          scaleLabel: {
-            display: true,
-            labelString: 'Heroes Alive',
-            fontColor: '#FFFFFF'
-          }
-        }],
-        yAxes: [{
-          ticks: {
-            fontColor: '#FFFFFF',
-            callback: function(value, index, values) {
-              return formatSeconds(value);
+        xAxes: [
+          {
+            ticks: {
+              fontColor: '#FFFFFF',
             },
-            min: 0
+            gridLines: {
+              color: '#ababab',
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Heroes Alive',
+              fontColor: '#FFFFFF',
+            },
           },
-          gridLines: {
-            display: false
-          }
-        }]
-      }
-    }
+        ],
+        yAxes: [
+          {
+            ticks: {
+              fontColor: '#FFFFFF',
+              callback: function (value, index, values) {
+                return formatSeconds(value);
+              },
+              min: 0,
+            },
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
+      },
+    },
   };
 
   teamfightStatGraphData = {
     type: 'horizontalBar',
     data: {
-      labels: ["Hero Damage", "Healing", "Damage Taken"]
+      labels: ['Hero Damage', 'Healing', 'Damage Taken'],
     },
     options: {
       tooltips: {
         intersect: true,
-        mode: 'point'
+        mode: 'point',
       },
       responsive: true,
       maintainAspectRatio: false,
       legend: {
         labels: {
-          fontColor: '#FFFFFF'
-        }
+          fontColor: '#FFFFFF',
+        },
       },
       scales: {
-        xAxes: [{
-          stacked: true,
-          ticks: {
-            fontColor: '#FFFFFF'
+        xAxes: [
+          {
+            stacked: true,
+            ticks: {
+              fontColor: '#FFFFFF',
+            },
+            gridLines: {
+              color: '#ababab',
+            },
           },
-          gridLines: {
-            color: '#ababab'
-          }
-        }],
-        yAxes: [{
-          stacked: true,
-          ticks: {
-            fontColor: '#FFFFFF'
+        ],
+        yAxes: [
+          {
+            stacked: true,
+            ticks: {
+              fontColor: '#FFFFFF',
+            },
+            gridLines: {
+              display: false,
+            },
           },
-          gridLines: {
-            display: false
-          }
-        }]
-      }
-    }
+        ],
+      },
+    },
   };
 
   teamCCGraphData = {
     type: 'horizontalBar',
     data: {
-      labels: ["CC", "Stuns", "Roots", "Silences", "Time Dead"]
+      labels: ['CC', 'Stuns', 'Roots', 'Silences', 'Time Dead'],
     },
     options: {
       tooltips: {
         intersect: true,
-        mode: 'point'
+        mode: 'point',
       },
       responsive: true,
       maintainAspectRatio: false,
       legend: {
         labels: {
-          fontColor: '#FFFFFF'
-        }
+          fontColor: '#FFFFFF',
+        },
       },
       scales: {
-        xAxes: [{
-          stacked: true,
-          ticks: {
-            fontColor: '#FFFFFF'
+        xAxes: [
+          {
+            stacked: true,
+            ticks: {
+              fontColor: '#FFFFFF',
+            },
+            gridLines: {
+              color: '#ababab',
+            },
           },
-          gridLines: {
-            color: '#ababab'
-          }
-        }],
-        yAxes: [{
-          stacked: true,
-          ticks: {
-            fontColor: '#FFFFFF'
+        ],
+        yAxes: [
+          {
+            stacked: true,
+            ticks: {
+              fontColor: '#FFFFFF',
+            },
+            gridLines: {
+              display: false,
+            },
           },
-          gridLines: {
-            display: false
-          }
-        }]
-      }
-    }
+        ],
+      },
+    },
   };
 
   teamOverallStatGraph = new Chart($('#match-detail-team-numbers'), teamOverallStatGraphData);
@@ -2287,7 +2397,7 @@ function drawTeamStatGraphs() {
   var blueCt = 0;
   var redCt = 0;
   let blueColors = ['#021F34', '#093A60', '#125080', '#25699E', '#4486B9'];
-  let redColors = ['#230000', '#510000', '#8E0E0E', '#BE2323', '#EB4747']
+  let redColors = ['#230000', '#510000', '#8E0E0E', '#BE2323', '#EB4747'];
   for (let t in matchDetailMatch.teams) {
     for (let i in matchDetailMatch.teams[t].ids) {
       let p = matchDetailPlayers[matchDetailMatch.teams[t].ids[i]];
@@ -2295,8 +2405,7 @@ function drawTeamStatGraphs() {
       if (p.team === 0) {
         color = blueColors[blueCt];
         blueCt += 1;
-      }
-      else {
+      } else {
         color = redColors[redCt];
         redCt += 1;
       }
@@ -2315,8 +2424,8 @@ function drawTeamStatGraphs() {
           p.gameStats.DamageTaken,
           p.gameStats.SiegeDamage,
           p.gameStats.MinionDamage,
-          p.gameStats.CreepDamage
-        ]
+          p.gameStats.CreepDamage,
+        ],
       };
       teamOverallStatGraphData.data.datasets.push(teamStat);
 
@@ -2324,11 +2433,7 @@ function drawTeamStatGraphs() {
         label: p.hero,
         backgroundColor: color,
         stack,
-        data: [
-          p.gameStats.TeamfightHeroDamage,
-          p.gameStats.TeamfightHealingDone,
-          p.gameStats.TeamfightDamageTaken
-        ]
+        data: [p.gameStats.TeamfightHeroDamage, p.gameStats.TeamfightHealingDone, p.gameStats.TeamfightDamageTaken],
       };
       teamfightStatGraphData.data.datasets.push(teamfightStat);
 
@@ -2341,62 +2446,64 @@ function drawTeamStatGraphs() {
           p.gameStats.TimeStunningEnemyHeroes,
           p.gameStats.TimeRootingEnemyHeroes,
           p.gameStats.TimeSilencingEnemyHeroes,
-          p.gameStats.TimeSpentDead
-        ]
+          p.gameStats.TimeSpentDead,
+        ],
       };
       teamCCGraphData.data.datasets.push(ccStat);
     }
   }
 
-  let intervals = [[1, 4], [4, 7], [7, 10], [10, 13], [13, 16], [16, 20]];
+  let intervals = [
+    [1, 4],
+    [4, 7],
+    [7, 10],
+    [10, 13],
+    [13, 16],
+    [16, 20],
+  ];
 
   let team0Levels = matchDetailMatch.levelTimes[0];
   let team1Levels = matchDetailMatch.levelTimes[1];
   timePerTierGraphData.data.datasets.push({
     label: 'Blue Team',
     backgroundColor: '#2185d0',
-    data: []
+    data: [],
   });
   timePerTierGraphData.data.datasets.push({
     label: 'Red Team',
     backgroundColor: '#db2828',
-    data: []
+    data: [],
   });
 
   heroUptimeGraphData.data.datasets.push({
     label: 'Blue Team',
     backgroundColor: '#2185d0',
-    data: []
+    data: [],
   });
   heroUptimeGraphData.data.datasets.push({
     label: 'Red Team',
     backgroundColor: '#db2828',
-    data: []
+    data: [],
   });
-  
 
   for (let i in intervals) {
     let interval = intervals[i];
 
     if (interval[1] in team0Levels) {
       timePerTierGraphData.data.datasets[0].data.push(team0Levels[interval[1]].time - team0Levels[interval[0]].time);
-    }
-    else if (interval[0] in team0Levels && !(interval[1] in team0Levels)) {
+    } else if (interval[0] in team0Levels && !(interval[1] in team0Levels)) {
       // end of game
       timePerTierGraph.data.datasets[0].data.push(matchDetailMatch.length - team0Levels[interval[0]].time);
-    }
-    else {
+    } else {
       timePerTierGraphData.data.datasets[0].data.push(0);
     }
 
     if (interval[1] in team1Levels) {
       timePerTierGraphData.data.datasets[1].data.push(team1Levels[interval[1]].time - team1Levels[interval[0]].time);
-    }
-    else if (interval[0] in team1Levels && !(interval[1] in team1Levels)) {
+    } else if (interval[0] in team1Levels && !(interval[1] in team1Levels)) {
       // end of game
       timePerTierGraph.data.datasets[1].data.push(matchDetailMatch.length - team1Levels[interval[0]].time);
-    }
-    else {
+    } else {
       timePerTierGraphData.data.datasets[1].data.push(0);
     }
   }
@@ -2430,15 +2537,13 @@ function updateTeamStats() {
 
     if ('timeTo10' in stats) {
       updateTeamStat(elem, 'team-time-to-10', formatSeconds(stats.timeTo10));
-    }
-    else {
+    } else {
       updateTeamStat(elem, 'team-time-to-10', '-');
     }
 
     if ('timeTo20' in stats) {
       updateTeamStat(elem, 'team-time-to-20', formatSeconds(stats.timeTo20));
-    }
-    else {
+    } else {
       updateTeamStat(elem, 'team-time-to-20', '-');
     }
 
@@ -2449,13 +2554,17 @@ function updateTeamStats() {
 
     updateTeamStat(elem, 'forts-destroyed', stats.structures.Fort.destroyed ? stats.structures.Fort.destroyed : '0');
     updateTeamStat(elem, 'forts-lost', stats.structures.Fort.lost);
-    updateTeamStat(elem, 'first-fort', stats.structures.Fort.destroyed === 0 ? '-' : formatSeconds(stats.structures.Fort.first));
+    updateTeamStat(
+      elem,
+      'first-fort',
+      stats.structures.Fort.destroyed === 0 ? '-' : formatSeconds(stats.structures.Fort.first),
+    );
 
     if (matchDetailMatch.map === ReplayTypes.MapType.TowersOfDoom) {
       updateTeamStat(elem, 'wells-destroyed', stats.structures['Fort Well'].destroyed);
       updateTeamStat(elem, 'wells-lost', stats.structures['Fort Well'].lost);
 
-      let hideWellTime = stats.structures['Fort Well'].destroyed === 0
+      let hideWellTime = stats.structures['Fort Well'].destroyed === 0;
       updateTeamStat(elem, 'first-well', hideWellTime ? '-' : formatSeconds(stats.structures['Fort Well'].first));
 
       updateTeamStat(elem, 'towers-destroyed', stats.structures['Fort Tower'].destroyed);
@@ -2467,23 +2576,46 @@ function updateTeamStats() {
       updateTeamStat(elem, 'keeps-destroyed', '0');
       updateTeamStat(elem, 'keeps-lost', 0);
       updateTeamStat(elem, 'first-keep', '-');
-    }
-    else {
+    } else {
       updateTeamStat(elem, 'keeps-destroyed', stats.structures.Keep.destroyed ? stats.structures.Keep.destroyed : '0');
       updateTeamStat(elem, 'keeps-lost', stats.structures.Keep.lost);
-      updateTeamStat(elem, 'first-keep', stats.structures.Keep.destroyed === 0 ? '-' : formatSeconds(stats.structures.Keep.first));
+      updateTeamStat(
+        elem,
+        'first-keep',
+        stats.structures.Keep.destroyed === 0 ? '-' : formatSeconds(stats.structures.Keep.first),
+      );
 
-      updateTeamStat(elem, 'wells-destroyed', stats.structures['Fort Well'].destroyed + stats.structures['Keep Well'].destroyed);
+      updateTeamStat(
+        elem,
+        'wells-destroyed',
+        stats.structures['Fort Well'].destroyed + stats.structures['Keep Well'].destroyed,
+      );
       updateTeamStat(elem, 'wells-lost', stats.structures['Fort Well'].lost + stats.structures['Keep Well'].lost);
 
-      let hideWellTime = (stats.structures['Fort Well'].destroyed + stats.structures['Keep Well'].destroyed) === 0
-      updateTeamStat(elem, 'first-well', hideWellTime ? '-' : formatSeconds(Math.min(stats.structures['Fort Well'].first, stats.structures['Keep Well'].first)));
+      let hideWellTime = stats.structures['Fort Well'].destroyed + stats.structures['Keep Well'].destroyed === 0;
+      updateTeamStat(
+        elem,
+        'first-well',
+        hideWellTime
+          ? '-'
+          : formatSeconds(Math.min(stats.structures['Fort Well'].first, stats.structures['Keep Well'].first)),
+      );
 
-      updateTeamStat(elem, 'towers-destroyed', stats.structures['Fort Tower'].destroyed + stats.structures['Keep Tower'].destroyed);
+      updateTeamStat(
+        elem,
+        'towers-destroyed',
+        stats.structures['Fort Tower'].destroyed + stats.structures['Keep Tower'].destroyed,
+      );
       updateTeamStat(elem, 'towers-lost', stats.structures['Fort Tower'].lost + stats.structures['Keep Tower'].lost);
 
-      let hideTowerTime = (stats.structures['Fort Tower'].destroyed + stats.structures['Keep Tower'].destroyed) === 0;
-      updateTeamStat(elem, 'first-tower', hideTowerTime ? '-' : formatSeconds(Math.min(stats.structures['Fort Tower'].first, stats.structures['Keep Tower'].first)));
+      let hideTowerTime = stats.structures['Fort Tower'].destroyed + stats.structures['Keep Tower'].destroyed === 0;
+      updateTeamStat(
+        elem,
+        'first-tower',
+        hideTowerTime
+          ? '-'
+          : formatSeconds(Math.min(stats.structures['Fort Tower'].first, stats.structures['Keep Tower'].first)),
+      );
     }
   }
 }
@@ -2531,114 +2663,120 @@ function addNewTeamFromMatch(teamID, name) {
 }
 
 function matchDetailCollectionAction(value, text, $elem) {
-  if (value ==='add') {
-    $('#matches-collection-select .header').text('Add Current Match To Collection')
-    $('#matches-collection-select p.text').text('Add the current match to the spcified collection. Matches can be added to multiple collections.');
+  if (value === 'add') {
+    $('#matches-collection-select .header').text('Add Current Match To Collection');
+    $('#matches-collection-select p.text').text(
+      'Add the current match to the spcified collection. Matches can be added to multiple collections.',
+    );
 
-    $('#matches-collection-select').modal({
-      onApprove: function() {
-        let collectionID = $('#matches-collection-select .collection-menu').dropdown('get value');
-        // adding to null collection is not allowed
-        if (collectionID === '')
-          return;
+    $('#matches-collection-select')
+      .modal({
+        onApprove: function () {
+          let collectionID = $('#matches-collection-select .collection-menu').dropdown('get value');
+          // adding to null collection is not allowed
+          if (collectionID === '') return;
 
-        DB.addMatchToCollection(matchDetailMatch._id, collectionID);
+          DB.addMatchToCollection(matchDetailMatch._id, collectionID);
 
-        if (collectionID === DB.getCollection())
-          resetAllSections();
-      }
-    }).
-    modal('show');
-  }
-  else if (value === 'remove') {
-    $('#matches-collection-select .header').text('Remove Current Match From Collection')
+          if (collectionID === DB.getCollection()) resetAllSections();
+        },
+      })
+      .modal('show');
+  } else if (value === 'remove') {
+    $('#matches-collection-select .header').text('Remove Current Match From Collection');
     $('#matches-collection-select p.text').text('Remove the current match from the spcified collection.');
 
-    $('#matches-collection-select').modal({
-      onApprove: function() {
-        let collectionID = $('#matches-collection-select .collection-menu').dropdown('get value');
-        // adding to null collection is not allowed
-        if (collectionID === '')
-          return;
+    $('#matches-collection-select')
+      .modal({
+        onApprove: function () {
+          let collectionID = $('#matches-collection-select .collection-menu').dropdown('get value');
+          // adding to null collection is not allowed
+          if (collectionID === '') return;
 
-        DB.removeMatchFromCollection(matchDetailMatch._id, collectionID);
+          DB.removeMatchFromCollection(matchDetailMatch._id, collectionID);
 
-        if (collectionID === DB.getCollection())
-          resetAllSections();
-      }
-    }).
-    modal('show');
+          if (collectionID === DB.getCollection()) resetAllSections();
+        },
+      })
+      .modal('show');
   }
 }
 
 function matchDetailFileAction(value, text, $elem) {
   if (value === 'match') {
-    dialog.showSaveDialog({
-      title: 'Export Match',
-      filters: [ {name: 'JSON', extensions: ['.json']} ]
-    }, function(filename) {
-      if (filename) {
-        exportMatch(matchDetailMatch._id, filename);
-      }
-    });
-  }
-  else if (value === 'delete') {
-    $('#match-detail-confirm-delete-match').modal({
-      onApprove: function() {
-        DB.deleteReplay(matchDetailMatch._id, function() {
-          showMessage('Match Deleted', '');
-          getMatchCount();
-          selectMatches();
-          changeSection('matches');
-        });
-      }
-    }).modal('show');
-  }
-  else if (value === 'print-all') {
-    dialog.showSaveDialog({
-      title: 'Print Match Report',
-      filters: [{name: 'pdf', extensions: ['pdf']}]
-    }, function(filename) {
-      if (filename) {
-        printMatchDetail(filename, null);
-      }
-    });
-  }
-  else if (value === 'print-sections') {
-    $('#match-detail-print-sections').modal({
-      onApprove: function() {
-        dialog.showSaveDialog({
-          title: 'Print Match Report',
-          filters: [{name: 'pdf', extensions: ['pdf']}]
-        }, function(filename) {
-          if (filename) {
-            let sections = $('#match-detail-print-sections .ui.dropdown').dropdown('get value').split(',');
-            printMatchDetail(filename, sections);
-          }
-        });
+    dialog.showSaveDialog(
+      {
+        title: 'Export Match',
+        filters: [{ name: 'JSON', extensions: ['.json'] }],
       },
-      closable: false
-    }).modal('show');
-  }
-  else if (value === 'standard') {
+      function (filename) {
+        if (filename) {
+          exportMatch(matchDetailMatch._id, filename);
+        }
+      },
+    );
+  } else if (value === 'delete') {
+    $('#match-detail-confirm-delete-match')
+      .modal({
+        onApprove: function () {
+          DB.deleteReplay(matchDetailMatch._id, function () {
+            showMessage('Match Deleted', '');
+            getMatchCount();
+            selectMatches();
+            changeSection('matches');
+          });
+        },
+      })
+      .modal('show');
+  } else if (value === 'print-all') {
+    dialog.showSaveDialog(
+      {
+        title: 'Print Match Report',
+        filters: [{ name: 'pdf', extensions: ['pdf'] }],
+      },
+      function (filename) {
+        if (filename) {
+          printMatchDetail(filename, null);
+        }
+      },
+    );
+  } else if (value === 'print-sections') {
+    $('#match-detail-print-sections')
+      .modal({
+        onApprove: function () {
+          dialog.showSaveDialog(
+            {
+              title: 'Print Match Report',
+              filters: [{ name: 'pdf', extensions: ['pdf'] }],
+            },
+            function (filename) {
+              if (filename) {
+                let sections = $('#match-detail-print-sections .ui.dropdown').dropdown('get value').split(',');
+                printMatchDetail(filename, sections);
+              }
+            },
+          );
+        },
+        closable: false,
+      })
+      .modal('show');
+  } else if (value === 'standard') {
     settings.set('matchDetailDraftDisplay', 'standard');
     updateDraft();
-  }
-  else if (value === 'expanded') {
+  } else if (value === 'expanded') {
     settings.set('matchDetailDraftDisplay', 'expanded');
     updateDraft();
-  }
-  else if (value === 'change-draft') {
+  } else if (value === 'change-draft') {
     showChangeDraftModal();
   }
 }
 
 function matchDetailAddTag(tagValue, tagText, $added) {
-  DB.tagReplay(matchDetailMatch._id, tagValue, function() {
+  DB.tagReplay(matchDetailMatch._id, tagValue, function () {
     console.log('added ' + tagValue + ' to ' + matchDetailMatch._id);
 
     let vals = $('#match-search-tags').dropdown('get value');
-    populateTagMenu($('#match-search-tags'), function() {
+    populateTagMenu($('#match-search-tags'), function () {
       $('#match-search-tags').dropdown('set exactly', vals);
     });
     populateTagMenu($('.filter-widget-tags'));
@@ -2646,11 +2784,11 @@ function matchDetailAddTag(tagValue, tagText, $added) {
 }
 
 function matchDetailRemoveTag(tagValue, tagText, $removed) {
-  DB.untagReplay(matchDetailMatch._id, tagValue, function() {
+  DB.untagReplay(matchDetailMatch._id, tagValue, function () {
     console.log('removed ' + tagValue + ' from ' + matchDetailMatch._id);
 
     let vals = $('#match-search-tags').dropdown('get value');
-    populateTagMenu($('#match-search-tags'), function() {
+    populateTagMenu($('#match-search-tags'), function () {
       $('#match-search-tags').dropdown('set exactly', vals);
     });
     populateTagMenu($('.filter-widget-tags'));
@@ -2689,7 +2827,7 @@ function layoutMatchDetailPrint(sections) {
   if (sects.indexOf('team-stats') !== -1) {
     addPrintPage('team-stats');
     addPrintSubHeader('Team Stats', 'team-stats');
-    getPrintPage('team-stats').append('<div class="grid"></div>')
+    getPrintPage('team-stats').append('<div class="grid"></div>');
     getPrintPage('team-stats').find('.grid').append($('.print-team-stats').clone());
   }
 
@@ -2720,24 +2858,36 @@ function layoutMatchDetailPrint(sections) {
     addPrintSubHeader('XP Graphs', 'xp');
     $('#print-window .contents .xp.page').append('<div class="ui two column grid xp-graphs"></div>');
 
-    $('#print-window .xp-graphs').append('<div class="column xp-vs-time"><h3 class="ui dividing header">XP vs Time</h3><canvas></div>')
+    $('#print-window .xp-graphs').append(
+      '<div class="column xp-vs-time"><h3 class="ui dividing header">XP vs Time</h3><canvas></div>',
+    );
     copyGraph(overallXPGraphData, $('#print-window .xp-vs-time canvas'), { width: 700, height: 400 });
 
-    $('#print-window .xp-graphs').append('<div class="column levels-vs-time"><h3 class="ui dividing header">Levels vs Time</h3><canvas></div>')
+    $('#print-window .xp-graphs').append(
+      '<div class="column levels-vs-time"><h3 class="ui dividing header">Levels vs Time</h3><canvas></div>',
+    );
     copyGraph(overallLevelGraphData, $('#print-window .levels-vs-time canvas'), { width: 700, height: 400 });
 
-    $('#print-window .xp-graphs').append('<div class="column blue-xpb"><h3 class="ui dividing header">Blue Team XP Breakdown</h3><canvas></div>')
+    $('#print-window .xp-graphs').append(
+      '<div class="column blue-xpb"><h3 class="ui dividing header">Blue Team XP Breakdown</h3><canvas></div>',
+    );
     copyGraph(blueTeamXPGraphData, $('#print-window .blue-xpb canvas'), { width: 700, height: 400 });
 
-    $('#print-window .xp-graphs').append('<div class="column red-xpb"><h3 class="ui dividing header">Red Team XP Breakdown</h3><canvas></div>')
+    $('#print-window .xp-graphs').append(
+      '<div class="column red-xpb"><h3 class="ui dividing header">Red Team XP Breakdown</h3><canvas></div>',
+    );
     copyGraph(redTeamXPGraphData, $('#print-window .red-xpb canvas'), { width: 700, height: 400 });
 
     addPrintPage('xp2');
     $('#print-window .contents .xp2.page').append('<div class="ui two column grid xp-graphs2"></div>');
-    $('#print-window .xp-graphs2').append('<div class="column soak-xp"><h3 class="ui dividing header">XP Soak</h3><canvas></div>')
+    $('#print-window .xp-graphs2').append(
+      '<div class="column soak-xp"><h3 class="ui dividing header">XP Soak</h3><canvas></div>',
+    );
     copyGraph(teamXPSoakGraphData, $('#print-window .soak-xp canvas'), { width: 700, height: 400 });
 
-    $('#print-window .xp-graphs2').append('<div class="column xp-time"><h3 class="ui dividing header">Time Per Tier</h3><canvas></div>')
+    $('#print-window .xp-graphs2').append(
+      '<div class="column xp-time"><h3 class="ui dividing header">Time Per Tier</h3><canvas></div>',
+    );
     copyGraph(timePerTierGraphData, $('#print-window .xp-time canvas'), { width: 700, height: 400 });
   }
 
@@ -2749,7 +2899,7 @@ function layoutMatchDetailPrint(sections) {
   }
 
   if (sects.indexOf('taunts') !== -1) {
-    addPrintPage('taunt')
+    addPrintPage('taunt');
     addPrintSubHeader('Taunt Log', 'taunt');
     copyFloatingTable($('#match-detail-chat-log .floatThead-wrapper'), getPrintPage('taunt'));
   }
@@ -2765,18 +2915,21 @@ function printMatchDetail(filename, sections) {
 function showChangeDraftModal() {
   // if game is qm we should disallow draft edits (it's not a draft queue)
   if (matchDetailMatch.mode === ReplayTypes.GameMode.QuickMatch) {
-    showMessage(`Unable to Edit Draft`, 'Quick Match games are a non-draft queue. Draft data cannot be added.', { class: 'negative' });
+    showMessage(`Unable to Edit Draft`, 'Quick Match games are a non-draft queue. Draft data cannot be added.', {
+      class: 'negative',
+    });
     return;
   }
 
   // reset modal here
   resetDraftModal();
 
-  $('#match-detail-fix-draft').modal({
-    onApprove: updateDraftModal,
-    closable: false
-  }).
-  modal('show');
+  $('#match-detail-fix-draft')
+    .modal({
+      onApprove: updateDraftModal,
+      closable: false,
+    })
+    .modal('show');
 }
 
 function resetDraftModal() {
@@ -2791,19 +2944,19 @@ function resetDraftModal() {
   }
 
   for (let i = 0; i < bluePicks.length; i++) {
-    let elem = $(`#match-detail-fix-draft .blue-${i+1} .pick-order.dropdown`);
-    let elemImg = $(`#match-detail-fix-draft .blue-${i+1} .draft-pick.image`);
+    let elem = $(`#match-detail-fix-draft .blue-${i + 1} .pick-order.dropdown`);
+    let elemImg = $(`#match-detail-fix-draft .blue-${i + 1} .draft-pick.image`);
 
-    elem.dropdown('set exactly', i+1);
+    elem.dropdown('set exactly', i + 1);
     elemImg.attr('src', `assets/heroes-talents/images/heroes/${Heroes.heroIcon(bluePicks[i])}`);
     elemImg.attr('heroName', bluePicks[i]);
   }
 
   for (let i = 0; i < redPicks.length; i++) {
-    let elem = $(`#match-detail-fix-draft .red-${i+1} .pick-order.dropdown`);
-    let elemImg = $(`#match-detail-fix-draft .red-${i+1} .draft-pick.image`);
+    let elem = $(`#match-detail-fix-draft .red-${i + 1} .pick-order.dropdown`);
+    let elemImg = $(`#match-detail-fix-draft .red-${i + 1} .draft-pick.image`);
 
-    elem.dropdown('set exactly', i+1);
+    elem.dropdown('set exactly', i + 1);
     elemImg.attr('src', `assets/heroes-talents/images/heroes/${Heroes.heroIcon(redPicks[i])}`);
     elemImg.attr('heroName', redPicks[i]);
   }
@@ -2815,24 +2968,21 @@ function resetDraftModal() {
       let team = t === ReplayTypes.TeamType.Blue ? 'blue' : 'red';
 
       for (let i = 0; i < bans.length; i++) {
-        let elem = $(`#match-detail-fix-draft .${team}-${i+1} .ban-order.dropdown`);
+        let elem = $(`#match-detail-fix-draft .${team}-${i + 1} .ban-order.dropdown`);
         if (bans[i].hero !== '') {
           elem.dropdown('set exactly', Heroes.heroNameFromAttr(bans[i].hero));
-        }
-        else {
+        } else {
           elem.dropdown('set exactly', 'none');
         }
       }
     }
-  }
-  else {
+  } else {
     $(`#match-detail-fix-draft ban-order.dropdown`).dropdown('set exactly', 'none');
   }
 }
 
 function updateDraftModal() {
-  if (!validateDraftModal())
-    return false;
+  if (!validateDraftModal()) return false;
 
   // assuming that returned, collect the new draft data.
   // first pick
@@ -2849,8 +2999,8 @@ function updateDraftModal() {
     let blueHero = $(`#match-detail-fix-draft .blue-${i} .draft-pick`).attr('heroName');
     let redHero = $(`#match-detail-fix-draft .red-${i} .draft-pick`).attr('heroName');
 
-    matchDetailMatch.picks[ReplayTypes.TeamType.Blue][blueVal -1] = blueHero
-    matchDetailMatch.picks[ReplayTypes.TeamType.Red][redVal -1] = redHero;
+    matchDetailMatch.picks[ReplayTypes.TeamType.Blue][blueVal - 1] = blueHero;
+    matchDetailMatch.picks[ReplayTypes.TeamType.Red][redVal - 1] = redHero;
   }
 
   // bans
@@ -2860,32 +3010,30 @@ function updateDraftModal() {
     let banOrders = [1, 1, 2];
     for (let i = 0; i < 3; i++) {
       let order = banOrders[i];
-      matchDetailMatch.bans[0].push({ absolute: i, order, hero: ''});
-      matchDetailMatch.bans[1].push({ absolute: i, order, hero: ''});
+      matchDetailMatch.bans[0].push({ absolute: i, order, hero: '' });
+      matchDetailMatch.bans[1].push({ absolute: i, order, hero: '' });
     }
   }
 
   for (let i = 0; i < 3; i++) {
-    let blueBan = $(`#match-detail-fix-draft .blue-${i+1} .ban-order.dropdown`).dropdown('get value');
-    let redBan = $(`#match-detail-fix-draft .red-${i+1} .ban-order.dropdown`).dropdown('get value');
+    let blueBan = $(`#match-detail-fix-draft .blue-${i + 1} .ban-order.dropdown`).dropdown('get value');
+    let redBan = $(`#match-detail-fix-draft .red-${i + 1} .ban-order.dropdown`).dropdown('get value');
 
     if (i < matchDetailMatch.bans[ReplayTypes.TeamType.Blue].length) {
       if (blueBan !== 'none')
         matchDetailMatch.bans[ReplayTypes.TeamType.Blue][i].hero = Heroes._heroes[blueBan].attributeId;
-      else
-        matchDetailMatch.bans[ReplayTypes.TeamType.Blue][i].hero = '';
+      else matchDetailMatch.bans[ReplayTypes.TeamType.Blue][i].hero = '';
 
       if (redBan !== 'none')
         matchDetailMatch.bans[ReplayTypes.TeamType.Red][i].hero = Heroes._heroes[redBan].attributeId;
-      else
-        matchDetailMatch.bans[ReplayTypes.TeamType.Red][i].hero = '';
+      else matchDetailMatch.bans[ReplayTypes.TeamType.Red][i].hero = '';
     }
   }
 
   // do a database update
   DB.updateMatchDraft(matchDetailMatch._id, matchDetailMatch.picks, matchDetailMatch.bans, () => {
     updateDraft();
-    showMessage('Draft Updated', 'Draft on matches list will update when reloaded.', { class: 'positive' });    
+    showMessage('Draft Updated', 'Draft on matches list will update when reloaded.', { class: 'positive' });
     $('#match-detail-fix-draft').modal('hide');
   });
 
@@ -2921,7 +3069,7 @@ function validateDraftModal() {
       $(`#match-detail-fix-draft .blue-${bluePicks[blueVal]} .pick-order.dropdown`).addClass('error');
       valid = false;
     }
-    
+
     if (redVal in redPicks) {
       $(`#match-detail-fix-draft .red-${i} .pick-order.dropdown`).addClass('error');
       $(`#match-detail-fix-draft .red-${redPicks[redVal]} .pick-order.dropdown`).addClass('error');

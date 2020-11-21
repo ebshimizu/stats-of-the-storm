@@ -3,7 +3,6 @@ var mapsMapDataFilter;
 var mapsMapRowTemplate;
 
 function initMapsPage(tags) {
-
   // templates
   mapsMapRowTemplate = getHandlebars('maps', '#map-table-row-template');
 
@@ -11,9 +10,9 @@ function initMapsPage(tags) {
   $('#maps-page-content table').tablesort();
   $('#maps-page-content table').floatThead({
     scrollContainer: closestWrapper,
-    autoReflow: true
+    autoReflow: true,
   });
-  $('#maps-page-content table th.stat').data('sortBy', function(th, td, tablesort) {
+  $('#maps-page-content table th.stat').data('sortBy', function (th, td, tablesort) {
     return parseFloat(td.attr('data-sort-value'));
   });
 
@@ -28,11 +27,11 @@ function initMapsPage(tags) {
     popup: '.filter-popup-widget[widget-name="maps-filter"]',
     on: 'click',
     variation: 'fluid',
-    closable: false
+    closable: false,
   });
 
   $('#maps-file-menu').dropdown({
-    onChange: handleMapsAction
+    onChange: handleMapsAction,
   });
 
   $('#map-overall-stats .statistic').popup();
@@ -66,7 +65,7 @@ function resetMapsFilter() {
 function loadMapStats() {
   $('#map-individual-stats tbody').html('');
 
-  DB.getMatches(mapsMapDataFilter, function(err, docs) {
+  DB.getMatches(mapsMapDataFilter, function (err, docs) {
     let mapData = summarizeMapData(docs);
 
     // stats
@@ -75,12 +74,28 @@ function loadMapStats() {
     updateTeamStat(statContainer, 'median', formatSeconds(mapData.aggregate.median));
     updateTeamStat(statContainer, 'min', formatSeconds(mapData.aggregate.min));
     updateTeamStat(statContainer, 'max', formatSeconds(mapData.aggregate.max));
-    updateTeamStat(statContainer, 'firstPickWin', formatStat('pct', mapData.aggregate.firstPickWin / mapData.aggregate.draftGames));
-    updateTeamStat(statContainer, 'firstObjectiveWins', formatStat('pct', mapData.aggregate.firstObjectiveWins / mapData.aggregate.games));
+    updateTeamStat(
+      statContainer,
+      'firstPickWin',
+      formatStat('pct', mapData.aggregate.firstPickWin / mapData.aggregate.draftGames),
+    );
+    updateTeamStat(
+      statContainer,
+      'firstObjectiveWins',
+      formatStat('pct', mapData.aggregate.firstObjectiveWins / mapData.aggregate.games),
+    );
     updateTeamStat(statContainer, 'blueWin', formatStat('pct', mapData.aggregate.blueWin / mapData.aggregate.games));
     updateTeamStat(statContainer, 'redWin', formatStat('pct', mapData.aggregate.redWin / mapData.aggregate.games));
-    updateTeamStat(statContainer, 'firstFortWin', formatStat('pct', mapData.aggregate.firstFortWin / mapData.aggregate.games));
-    updateTeamStat(statContainer, 'firstKeepWin', formatStat('pct', mapData.aggregate.firstKeepWin / mapData.aggregate.nonToDTotal));
+    updateTeamStat(
+      statContainer,
+      'firstFortWin',
+      formatStat('pct', mapData.aggregate.firstFortWin / mapData.aggregate.games),
+    );
+    updateTeamStat(
+      statContainer,
+      'firstKeepWin',
+      formatStat('pct', mapData.aggregate.firstKeepWin / mapData.aggregate.nonToDTotal),
+    );
 
     $('#map-overall-stats .statistic[name="min"]').attr('matchID', mapData.aggregate.minId);
     $('#map-overall-stats .statistic[name="max"]').attr('matchID', mapData.aggregate.maxId);
@@ -107,8 +122,8 @@ function loadMapStats() {
 
     // link binding
     $('#maps-page-content .match-link').off();
-    $('#maps-page-content .match-link').click(function() {
-      loadMatchData($(this).attr('matchId'), function() {
+    $('#maps-page-content .match-link').click(function () {
+      loadMatchData($(this).attr('matchId'), function () {
         changeSection('match-detail');
       });
     });
@@ -136,13 +151,16 @@ function printMaps(filename) {
 
 function handleMapsAction(value, text, $elem) {
   if (value === 'print') {
-    dialog.showSaveDialog({
-      title: 'Print Battleground Report',
-      filters: [{name: 'pdf', extensions: ['pdf']}]
-    }, function(filename) {
-      if (filename) {
-        printMaps(filename);
-      }
-    });
+    dialog.showSaveDialog(
+      {
+        title: 'Print Battleground Report',
+        filters: [{ name: 'pdf', extensions: ['pdf'] }],
+      },
+      function (filename) {
+        if (filename) {
+          printMaps(filename);
+        }
+      },
+    );
   }
 }

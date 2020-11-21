@@ -1,10 +1,3 @@
-const ComputedStats = [
-  'DDRatio',
-  'DPct',
-  'DTPct',
-  'HPct',
-  'SoftCCPct',
-  'HardCCPct'
-];
+const ComputedStats = ['DDRatio', 'DPct', 'DTPct', 'HPct', 'SoftCCPct', 'HardCCPct'];
 
 module.exports = ComputedStats;

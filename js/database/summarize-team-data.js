@@ -1,4 +1,4 @@
-const { median } = require("../util/math");
+const { median } = require('../util/math');
 
 function newHeroData() {
   return {
@@ -18,8 +18,8 @@ function newHeroData() {
       round2: { count: 0, wins: 0 },
       round3: { count: 0, wins: 0 },
       preMid: { count: 0, wins: 0 },
-      postMid: { count: 0, wins: 0 }
-    }
+      postMid: { count: 0, wins: 0 },
+    },
   };
 }
 
@@ -102,7 +102,7 @@ function summarizeTeamData(team, docs, HeroesTalents) {
       max: {},
       median: {},
       medianTmp: {},
-      total: {}
+      total: {},
     },
     maps: {},
     level10Games: 0,
@@ -113,25 +113,25 @@ function summarizeTeamData(team, docs, HeroesTalents) {
       total: 0,
       min: 1e10,
       max: 0,
-      medianTmp: []
+      medianTmp: [],
     },
     deaths: {
       average: 0,
       total: 0,
       min: 1e10,
       max: 0,
-      medianTmp: []
+      medianTmp: [],
     },
     matchLength: {
       total: 0,
       min: 1e10,
       max: 0,
-      medianTmp: []
+      medianTmp: [],
     },
     endOfGameLevels: {
       win: { total: 0, min: 1e10, max: 0, medianTmp: [] },
       loss: { total: 0, min: 1e10, max: 0, medianTmp: [] },
-      combined: { total: 0, min: 1e10, max: 0, medianTmp: [] }
+      combined: { total: 0, min: 1e10, max: 0, medianTmp: [] },
     },
     tierTimes: {
       T1: { total: 0, min: 1e10, max: 0, medianTmp: [], count: 0 },
@@ -139,8 +139,8 @@ function summarizeTeamData(team, docs, HeroesTalents) {
       T3: { total: 0, min: 1e10, max: 0, medianTmp: [], count: 0 },
       T4: { total: 0, min: 1e10, max: 0, medianTmp: [], count: 0 },
       T5: { total: 0, min: 1e10, max: 0, medianTmp: [], count: 0 },
-      T6: { total: 0, min: 1e10, max: 0, medianTmp: [], count: 0 }
-    }
+      T6: { total: 0, min: 1e10, max: 0, medianTmp: [], count: 0 },
+    },
   };
 
   for (let match of docs) {
@@ -172,14 +172,8 @@ function summarizeTeamData(team, docs, HeroesTalents) {
     levelDiff = t === 0 ? levelDiff : -levelDiff;
 
     data.endOfGameLevels.combined.total += levelDiff;
-    data.endOfGameLevels.combined.min = Math.min(
-      data.endOfGameLevels.combined.min,
-      levelDiff
-    );
-    data.endOfGameLevels.combined.max = Math.max(
-      data.endOfGameLevels.combined.max,
-      levelDiff
-    );
+    data.endOfGameLevels.combined.min = Math.min(data.endOfGameLevels.combined.min, levelDiff);
+    data.endOfGameLevels.combined.max = Math.max(data.endOfGameLevels.combined.max, levelDiff);
     data.endOfGameLevels.combined.medianTmp.push(levelDiff);
 
     if (!(match.map in data.maps)) {
@@ -191,25 +185,13 @@ function summarizeTeamData(team, docs, HeroesTalents) {
       data.wins += 1;
 
       data.endOfGameLevels.win.total += levelDiff;
-      data.endOfGameLevels.win.min = Math.min(
-        data.endOfGameLevels.win.min,
-        levelDiff
-      );
-      data.endOfGameLevels.win.max = Math.max(
-        data.endOfGameLevels.win.max,
-        levelDiff
-      );
+      data.endOfGameLevels.win.min = Math.min(data.endOfGameLevels.win.min, levelDiff);
+      data.endOfGameLevels.win.max = Math.max(data.endOfGameLevels.win.max, levelDiff);
       data.endOfGameLevels.win.medianTmp.push(levelDiff);
     } else {
       data.endOfGameLevels.loss.total += levelDiff;
-      data.endOfGameLevels.loss.min = Math.min(
-        data.endOfGameLevels.loss.min,
-        levelDiff
-      );
-      data.endOfGameLevels.loss.max = Math.max(
-        data.endOfGameLevels.loss.max,
-        levelDiff
-      );
+      data.endOfGameLevels.loss.min = Math.min(data.endOfGameLevels.loss.min, levelDiff);
+      data.endOfGameLevels.loss.max = Math.max(data.endOfGameLevels.loss.max, levelDiff);
       data.endOfGameLevels.loss.medianTmp.push(levelDiff);
     }
 
@@ -263,7 +245,7 @@ function summarizeTeamData(team, docs, HeroesTalents) {
     }
 
     // pick order
-    if ("picks" in match) {
+    if ('picks' in match) {
       let picks = match.picks[t];
       let first = match.picks.first === t;
 
@@ -276,8 +258,7 @@ function summarizeTeamData(team, docs, HeroesTalents) {
       }
     }
 
-    let otherTeamHeroes =
-      t === 0 ? match.teams[1].heroes : match.teams[0].heroes;
+    let otherTeamHeroes = t === 0 ? match.teams[1].heroes : match.teams[0].heroes;
     for (let h in otherTeamHeroes) {
       let hero = otherTeamHeroes[h];
       if (!(hero in data.heroes)) {
@@ -307,7 +288,7 @@ function summarizeTeamData(team, docs, HeroesTalents) {
     try {
       for (let b in match.bans[t]) {
         // typically this means they didn't ban
-        if (match.bans[t][b].hero === "") {
+        if (match.bans[t][b].hero === '') {
           continue;
         }
 
@@ -331,7 +312,7 @@ function summarizeTeamData(team, docs, HeroesTalents) {
       // bans against
       let otherTeamBans = t === 0 ? match.bans[1] : match.bans[0];
       for (let b in otherTeamBans) {
-        if (otherTeamBans[b].hero === "") continue;
+        if (otherTeamBans[b].hero === '') continue;
 
         let hero = HeroesTalents.heroNameFromAttr(otherTeamBans[b].hero);
         if (!(hero in data.heroes)) {
@@ -348,31 +329,28 @@ function summarizeTeamData(team, docs, HeroesTalents) {
 
     // stat aggregation
     for (let stat in match.teams[t].stats) {
-      if (stat === "uptime") continue;
+      if (stat === 'uptime') continue;
 
-      if (stat === "structures") {
+      if (stat === 'structures') {
         for (let struct in match.teams[t].stats.structures) {
           if (!(struct in data.structures)) {
             data.structures[struct] = {
               destroyed: 0,
               first: 0,
               lost: 0,
-              gamesWithFirst: 0
+              gamesWithFirst: 0,
             };
           }
 
-          data.structures[struct].destroyed +=
-            match.teams[t].stats.structures[struct].destroyed;
-          data.structures[struct].lost +=
-            match.teams[t].stats.structures[struct].lost;
+          data.structures[struct].destroyed += match.teams[t].stats.structures[struct].destroyed;
+          data.structures[struct].lost += match.teams[t].stats.structures[struct].lost;
 
           if (match.teams[t].stats.structures[struct].destroyed > 0) {
-            data.structures[struct].first +=
-              match.teams[t].stats.structures[struct].first;
+            data.structures[struct].first += match.teams[t].stats.structures[struct].first;
             data.structures[struct].gamesWithFirst += 1;
           }
         }
-      } else if (stat === "totals") {
+      } else if (stat === 'totals') {
         for (let total in match.teams[t].stats.totals) {
           if (!(total in data.stats.total)) {
             data.stats.total[total] = 0;
@@ -383,17 +361,11 @@ function summarizeTeamData(team, docs, HeroesTalents) {
 
           data.stats.total[total] += match.teams[t].stats.totals[total];
 
-          data.stats.min[total] = Math.min(
-            data.stats.min[total],
-            match.teams[t].stats.totals[total]
-          );
-          data.stats.max[total] = Math.max(
-            data.stats.max[total],
-            match.teams[t].stats.totals[total]
-          );
+          data.stats.min[total] = Math.min(data.stats.min[total], match.teams[t].stats.totals[total]);
+          data.stats.max[total] = Math.max(data.stats.max[total], match.teams[t].stats.totals[total]);
           data.stats.medianTmp[total].push(match.teams[t].stats.totals[total]);
         }
-      } else if (stat === "uptimeHistogram") {
+      } else if (stat === 'uptimeHistogram') {
         // bif of extra work to format these to cleanly fit in app
         for (let i = 0; i <= 5; i++) {
           const statName = `pctWith${i}HeroesAlive`;
@@ -423,31 +395,32 @@ function summarizeTeamData(team, docs, HeroesTalents) {
           data.stats.medianTmp[stat] = [];
         }
         data.stats.total[stat] += match.teams[t].stats[stat];
-        data.stats.min[stat] = Math.min(
-          data.stats.min[stat],
-          match.teams[t].stats[stat]
-        );
-        data.stats.max[stat] = Math.max(
-          data.stats.max[stat],
-          match.teams[t].stats[stat]
-        );
+        data.stats.min[stat] = Math.min(data.stats.min[stat], match.teams[t].stats[stat]);
+        data.stats.max[stat] = Math.max(data.stats.max[stat], match.teams[t].stats[stat]);
         data.stats.medianTmp[stat].push(match.teams[t].stats[stat]);
       }
 
-      if (stat === "timeTo10") {
+      if (stat === 'timeTo10') {
         data.level10Games += 1;
       }
 
-      if (stat === "timeTo20") {
+      if (stat === 'timeTo20') {
         data.level20Games += 1;
       }
     }
 
     // time per talent tier
-    let intervals = [[1, 4], [4, 7], [7, 10], [10, 13], [13, 16], [16, 20]];
+    let intervals = [
+      [1, 4],
+      [4, 7],
+      [7, 10],
+      [10, 13],
+      [13, 16],
+      [16, 20],
+    ];
     let levels = match.levelTimes[t];
     for (let i = 0; i < intervals.length; i++) {
-      let ikey = "T" + (i + 1);
+      let ikey = 'T' + (i + 1);
       let interval = intervals[i];
       let time;
 
@@ -471,10 +444,8 @@ function summarizeTeamData(team, docs, HeroesTalents) {
   }
 
   for (let stat in data.stats.total) {
-    if (stat === "timeTo10")
-      data.stats.average[stat] = data.stats.total[stat] / data.level10Games;
-    else if (stat === "timeTo20")
-      data.stats.average[stat] = data.stats.total[stat] / data.level20Games;
+    if (stat === 'timeTo10') data.stats.average[stat] = data.stats.total[stat] / data.level10Games;
+    else if (stat === 'timeTo20') data.stats.average[stat] = data.stats.total[stat] / data.level20Games;
     else data.stats.average[stat] = data.stats.total[stat] / data.totalMatches;
 
     // median
@@ -484,8 +455,7 @@ function summarizeTeamData(team, docs, HeroesTalents) {
   data.matchLength.median = median(data.matchLength.medianTmp);
 
   for (let tier in data.tierTimes) {
-    data.tierTimes[tier].average =
-      data.tierTimes[tier].total / Math.max(data.tierTimes[tier].count, 1);
+    data.tierTimes[tier].average = data.tierTimes[tier].total / Math.max(data.tierTimes[tier].count, 1);
 
     // median
     data.tierTimes[tier].median = median(data.tierTimes[tier].medianTmp);
@@ -499,17 +469,13 @@ function summarizeTeamData(team, docs, HeroesTalents) {
 
   data.endOfGameLevels.combined.median = median(data.endOfGameLevels.combined.medianTmp);
   data.endOfGameLevels.combined.average =
-    data.endOfGameLevels.combined.total /
-    data.endOfGameLevels.combined.medianTmp.length;
+    data.endOfGameLevels.combined.total / data.endOfGameLevels.combined.medianTmp.length;
 
   data.endOfGameLevels.win.median = median(data.endOfGameLevels.win.medianTmp);
-  data.endOfGameLevels.win.average =
-    data.endOfGameLevels.win.total / data.endOfGameLevels.win.medianTmp.length;
+  data.endOfGameLevels.win.average = data.endOfGameLevels.win.total / data.endOfGameLevels.win.medianTmp.length;
 
   data.endOfGameLevels.loss.median = median(data.endOfGameLevels.loss.medianTmp);
-  data.endOfGameLevels.loss.average =
-    data.endOfGameLevels.loss.total /
-    data.endOfGameLevels.loss.medianTmp.length;
+  data.endOfGameLevels.loss.average = data.endOfGameLevels.loss.total / data.endOfGameLevels.loss.medianTmp.length;
 
   // hero count
   data.heroesPlayed = 0;

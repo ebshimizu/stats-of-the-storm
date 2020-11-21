@@ -15,7 +15,7 @@ function summarizeTalentData(docs, Heroes) {
       buildStats[match.hero] = {};
     }
 
-    let key = "";
+    let key = '';
     for (let t in match.talents) {
       let tid = Heroes.getRenamedTalent(match.talents[t]);
       key += tid;
@@ -40,7 +40,7 @@ function summarizeTalentData(docs, Heroes) {
         games: 0,
         wins: 0,
         matches: [],
-        talents: match.talents
+        talents: match.talents,
       };
     }
     buildStats[match.hero][key].games += 1;

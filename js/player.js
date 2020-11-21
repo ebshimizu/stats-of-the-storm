@@ -13,7 +13,7 @@ var heroTalentRowTemplate;
 var playerDetailFilter = {};
 var playerHeroMatchThreshold = 0;
 
-var playerTables ={
+var playerTables = {
   withTable: null,
   againstTable: null,
   friendTable: null,
@@ -26,28 +26,39 @@ var playerTables ={
   detailStatTable: null,
   awardTrackerTable: null,
   duoWithTable: null,
-  duoAgainstTable: null
-}
+  duoAgainstTable: null,
+};
 
 const IntervalMode = {
   Month: 'month',
   Week: 'week',
   Season: 'season',
-  Patch: 'patch'
-}
+  Patch: 'patch',
+};
 var playerProgressionInterval = IntervalMode.Month;
 
 const tierToLevel = {
-  "Tier 1 Choice" : 1,
-  "Tier 2 Choice" : 4,
-  "Tier 3 Choice" : 7,
-  "Tier 4 Choice" : 10,
-  "Tier 5 Choice" : 13,
-  "Tier 6 Choice" : 16,
-  "Tier 7 Choice" : 20
-}
+  'Tier 1 Choice': 1,
+  'Tier 2 Choice': 4,
+  'Tier 3 Choice': 7,
+  'Tier 4 Choice': 10,
+  'Tier 5 Choice': 13,
+  'Tier 6 Choice': 16,
+  'Tier 7 Choice': 20,
+};
 
-const statColors = ['#DB2828', '#F2711C', '#FBBD08', '#B5CC18', '#21BA45', '#00B5AD', '#2185D0', '#6435C9', '#A333C8', '#E03997' ];
+const statColors = [
+  '#DB2828',
+  '#F2711C',
+  '#FBBD08',
+  '#B5CC18',
+  '#21BA45',
+  '#00B5AD',
+  '#2185D0',
+  '#6435C9',
+  '#A333C8',
+  '#E03997',
+];
 
 var progressionWinRateGraphData, progressionWinRateGraph;
 var progressionStatGraphData, progressionStatGraph;
@@ -61,33 +72,37 @@ var progressionGraphSettings = {
   tooltips: {
     position: 'nearest',
     mode: 'index',
-    intersect: false
+    intersect: false,
   },
   legend: {
     labels: {
-      fontColor: 'white'
-    }
+      fontColor: 'white',
+    },
   },
   scales: {
-    yAxes: [{
-      ticks: {
-        fontColor: '#FFFFFF',
-        min: 0,
-        max: 100
+    yAxes: [
+      {
+        ticks: {
+          fontColor: '#FFFFFF',
+          min: 0,
+          max: 100,
+        },
+        gridLines: {
+          color: '#ababab',
+        },
       },
-      gridLines: {
-        color: '#ababab'
-      }
-    }],
-    xAxes: [{
-      ticks: {
-        fontColor: '#FFFFFF'
+    ],
+    xAxes: [
+      {
+        ticks: {
+          fontColor: '#FFFFFF',
+        },
+        gridLines: {
+          color: '#ababab',
+        },
       },
-      gridLines: {
-        color: '#ababab'
-      }
-    }]
-  }
+    ],
+  },
 };
 
 var progressionWinGraphSettings = {
@@ -96,45 +111,50 @@ var progressionWinGraphSettings = {
   tooltips: {
     position: 'nearest',
     mode: 'index',
-    intersect: false
+    intersect: false,
   },
   legend: {
     labels: {
-      fontColor: 'white'
-    }
+      fontColor: 'white',
+    },
   },
   scales: {
-    yAxes: [{
-      ticks: {
-        fontColor: '#FFFFFF',
-        min: 0,
-        max: 100
+    yAxes: [
+      {
+        ticks: {
+          fontColor: '#FFFFFF',
+          min: 0,
+          max: 100,
+        },
+        position: 'left',
+        gridLines: {
+          color: '#ababab',
+        },
+        id: 'winPct',
       },
-      position: 'left',
-      gridLines: {
-        color: '#ababab'
+      {
+        position: 'right',
+        ticks: {
+          fontColor: '#FFFFFF',
+          min: 0,
+        },
+        gridLines: {
+          drawOnChartArea: 'false',
+        },
+        id: 'games',
       },
-      id: 'winPct'
-    }, {
-      position: 'right',
-      ticks: {
-        fontColor: '#FFFFFF',
-        min: 0
+    ],
+    xAxes: [
+      {
+        ticks: {
+          fontColor: '#FFFFFF',
+        },
+        gridLines: {
+          color: '#ababab',
+        },
       },
-      gridLines: {
-        drawOnChartArea: 'false'
-      },
-      id: 'games'
-    }],
-    xAxes: [{
-      ticks: {
-        fontColor: '#FFFFFF'
-      },
-      gridLines: {
-        color: '#ababab'
-      }
-    }]
-  }
+    ],
+  },
 };
 
 var progressionStatGraphSettings = {
@@ -143,77 +163,82 @@ var progressionStatGraphSettings = {
   tooltips: {
     position: 'nearest',
     mode: 'index',
-    intersect: false
+    intersect: false,
   },
   legend: {
     labels: {
-      fontColor: 'white'
-    }
+      fontColor: 'white',
+    },
   },
   scales: {
-    yAxes: [{
-      ticks: {
-        fontColor: '#FFFFFF'
+    yAxes: [
+      {
+        ticks: {
+          fontColor: '#FFFFFF',
+        },
+        position: 'left',
+        gridLines: {
+          color: '#ababab',
+        },
+        id: 'axis1',
       },
-      position: 'left',
-      gridLines: {
-        color: '#ababab'
+      {
+        position: 'right',
+        ticks: {
+          fontColor: '#FFFFFF',
+        },
+        gridLines: {
+          drawOnChartArea: 'false',
+        },
+        id: 'axis2',
       },
-      id: 'axis1'
-    }, {
-      position: 'right',
-      ticks: {
-        fontColor: '#FFFFFF'
+    ],
+    xAxes: [
+      {
+        ticks: {
+          fontColor: '#FFFFFF',
+        },
+        gridLines: {
+          color: '#ababab',
+        },
       },
-      gridLines: {
-        drawOnChartArea: 'false'
-      },
-      id: 'axis2'
-    }],
-    xAxes: [{
-      ticks: {
-        fontColor: '#FFFFFF'
-      },
-      gridLines: {
-        color: '#ababab'
-      }
-    }]
-  }
-}
+    ],
+  },
+};
 
 heroPoolGamesGraphData = {
   type: 'pie',
   data: {
     datasets: [],
-    labels: []
+    labels: [],
   },
   options: {
     responsive: true,
     maintainAspectRatio: false,
     legend: {
       labels: {
-        fontColor: 'white'
-      }
-    }
-  }
+        fontColor: 'white',
+      },
+    },
+  },
 };
 
 heroPoolWinsGraphData = {
   type: 'pie',
   data: {
     datasets: [],
-    labels: []
+    labels: [],
   },
   options: {
     legend: {
       labels: {
-        fontColor: 'white'
-      }
+        fontColor: 'white',
+      },
     },
     maintainAspectRatio: false,
-    responsive: true
-  }
-}
+    responsive: true,
+  },
+};
 
 function initPlayerPage(tags) {
   // player menu init
@@ -223,7 +248,7 @@ function initPlayerPage(tags) {
   $('#players-set-player').dropdown({
     action: 'activate',
     fullTextSearch: true,
-    onChange: updatePlayerDetailID
+    onChange: updatePlayerDetailID,
   });
   // this takes a bit too long at app load
   //$('#players-set-player').dropdown('set selected', selectedPlayerID);
@@ -251,7 +276,7 @@ function initPlayerPage(tags) {
   playerTables.duoAgainstTable = new Table('#player-duo-against', TableDefs.PlayerDuoAgainstFormat);
 
   $('#player-big-table-sub .item').tab();
-  $('#player-big-table-sub .item').click(function() {
+  $('#player-big-table-sub .item').click(function () {
     playerTables.duoWithTable.draw();
     playerTables.duoAgainstTable.draw();
   });
@@ -260,50 +285,50 @@ function initPlayerPage(tags) {
   playerTables.detailStatTable = new Table('#player-hero-detail-stats table', TableDefs.PlayerDetailStatFormat);
 
   $('#player-detail-submenu .item').tab();
-  $('#player-detail-submenu .item').click(function() {
+  $('#player-detail-submenu .item').click(function () {
     $('#player-detail-body table.floating').floatThead('reflow');
     redrawPlayerTables();
   });
 
   $('#player-hero-select-menu').dropdown({
     action: 'activate',
-    onChange: showHeroDetails
+    onChange: showHeroDetails,
   });
 
   $('#players-filter-button').popup({
     popup: '.filter-popup-widget[widget-name="player-filter"]',
     on: 'click',
     variation: 'fluid',
-    closable: false
+    closable: false,
   });
 
   $('#progression-interval-menu div.dropdown').dropdown({
-    onChange: updateGraphInterval
+    onChange: updateGraphInterval,
   });
 
   $('#player-hero-thresh input').popup({
-    on: 'focus'
+    on: 'focus',
   });
   $('#player-hero-thresh input').val(0);
-  $('#player-hero-thresh input').blur(function() {
+  $('#player-hero-thresh input').blur(function () {
     if (playerDetailID) {
       DB.getPlayer(playerDetailID, updatePlayerPage);
     }
   });
 
   $('#player-detail-hero-talent .menu .item').tab();
-  $('#player-detail-hero-talent .menu .item').click(function() {
+  $('#player-detail-hero-talent .menu .item').click(function () {
     $('#player-detail-body table.floating').floatThead('reflow');
   });
   $('#player-detail-hero-talent .talent-build table').tablesort();
-  $('#player-detail-hero-talent .talent-build table').on('tablesort:complete', function(event, tablesort) {
+  $('#player-detail-hero-talent .talent-build table').on('tablesort:complete', function (event, tablesort) {
     $('#player-detail-hero-talent .talent-build img').popup();
   });
 
   // this apparently has to go after tablesort
   $('#player-detail-body table.floating').floatThead({
     scrollContainer: closestWrapper,
-    autoReflow: true
+    autoReflow: true,
   });
 
   // filter popup
@@ -316,20 +341,24 @@ function initPlayerPage(tags) {
 
   bindFilterButton($('.filter-popup-widget[widget-name="player-filter"]'), updatePlayerFilter);
   bindFilterResetButton($('.filter-popup-widget[widget-name="player-filter"]'), resetPlayerFilter);
-  bindOtherSearchButton($('.filter-popup-widget[widget-name="player-filter"]'), $('#players-alt-search-button'), updatePlayerFilter);
+  bindOtherSearchButton(
+    $('.filter-popup-widget[widget-name="player-filter"]'),
+    $('#players-alt-search-button'),
+    updatePlayerFilter,
+  );
 
-  $('#player-hero-detail-stats .menu .item').click(function() {
+  $('#player-hero-detail-stats .menu .item').click(function () {
     togglePlayerDetailMode(this);
   });
 
   $('#player-export-menu').dropdown({
     action: 'hide',
-    onChange: handlePlayerExportAction
+    onChange: handlePlayerExportAction,
   });
 
   $('#player-edit-menu').dropdown({
     action: 'hide',
-    onChange: handlePlayerEditAction
+    onChange: handlePlayerEditAction,
   });
 
   $('#player-alias-icon').popup();
@@ -338,55 +367,59 @@ function initPlayerPage(tags) {
   progressionWinRateGraphData = {
     type: 'line',
     data: {
-      datasets: [{
-        label: 'Win Rate',
-        fill: false,
-        borderColor: '#21ba45',
-        backgroundColor: '#21ba45',
-        cubicInterpolationMode: 'monotone',
-        data: [],
-        yAxisID: 'winPct'
-      }, {
-        label: 'Games Played',
-        fill: false,
-        borderColor: '#fbbd08',
-        backgroundColor: '#fbbd08',
-        cubicInterpolationMode: 'monotone',
-        data: [],
-        yAxisID: 'games'
-      }]
+      datasets: [
+        {
+          label: 'Win Rate',
+          fill: false,
+          borderColor: '#21ba45',
+          backgroundColor: '#21ba45',
+          cubicInterpolationMode: 'monotone',
+          data: [],
+          yAxisID: 'winPct',
+        },
+        {
+          label: 'Games Played',
+          fill: false,
+          borderColor: '#fbbd08',
+          backgroundColor: '#fbbd08',
+          cubicInterpolationMode: 'monotone',
+          data: [],
+          yAxisID: 'games',
+        },
+      ],
     },
-    options: progressionWinGraphSettings
+    options: progressionWinGraphSettings,
   };
   progressionStatGraphData = {
     type: 'line',
     data: {
-      datasets: [{
-
-      }]
+      datasets: [{}],
     },
-    options: progressionStatGraphSettings
+    options: progressionStatGraphSettings,
   };
   progressionAwardsGraphData = {
     type: 'line',
-    data:{
-      datasets: [{
-        label: 'Award Rate',
-        fill: 'false',
-        borderColor: '#21ba45',
-        backgroundColor: '#21ba45',
-        cubicInterpolationMode: 'monotone',
-        data: []
-      }, {
-        label: 'MVP Rate',
-        fill: 'false',
-        borderColor: '#fbbd08',
-        backgroundColor: '#fbbd08',
-        cubicInterpolationMode: 'monotone',
-        data: []
-      }]
+    data: {
+      datasets: [
+        {
+          label: 'Award Rate',
+          fill: 'false',
+          borderColor: '#21ba45',
+          backgroundColor: '#21ba45',
+          cubicInterpolationMode: 'monotone',
+          data: [],
+        },
+        {
+          label: 'MVP Rate',
+          fill: 'false',
+          borderColor: '#fbbd08',
+          backgroundColor: '#fbbd08',
+          cubicInterpolationMode: 'monotone',
+          data: [],
+        },
+      ],
     },
-    options: progressionGraphSettings
+    options: progressionGraphSettings,
   };
 
   progressionWinRateGraphData.options.scales.yAxes[0].ticks.max = 100;
@@ -407,19 +440,19 @@ function initPlayerPage(tags) {
   $('#player-progression .player-detail-stat-graph .player-axis').popup({
     inline: true,
     on: 'click',
-    boundary: '#player-progression'
+    boundary: '#player-progression',
   });
   initPlayerStatGraphMenus();
 
   // collection averages
   $('#player-compare-collection').dropdown({
     action: 'activate',
-    onChange: updatePlayerCollectionCompare
-  })
+    onChange: updatePlayerCollectionCompare,
+  });
 
   // hero pool
   $('#player-detail-hero-summary-segment .top.menu .item').tab();
-  $('#player-detail-hero-summary-segment .top.menu .item').click(function() {
+  $('#player-detail-hero-summary-segment .top.menu .item').click(function () {
     $('#player-detail-hero-summary-segment table').floatThead('reflow');
   });
 
@@ -428,17 +461,19 @@ function initPlayerPage(tags) {
   // allias editor
   $('#player-alias-editor-menu').dropdown({
     action: 'activate',
-    fullTextSearch: true
+    fullTextSearch: true,
   });
 }
 
 function initPlayerStatGraphMenus() {
   for (let stat of DetailStatList) {
-    $('#player-progression .player-stat-menu .menu').append('<div class="item" data-value="' + stat + '">' + DetailStatString[stat] + '</div>');
+    $('#player-progression .player-stat-menu .menu').append(
+      '<div class="item" data-value="' + stat + '">' + DetailStatString[stat] + '</div>',
+    );
   }
 
   $('#player-progression .player-stat-menu').dropdown({
-    fullTextSearch: true
+    fullTextSearch: true,
   });
 
   $('.player-stat-menu[name="axis1"]').dropdown('set exactly', 'KDA');
@@ -506,8 +541,7 @@ function preloadPlayerID(id) {
 
 function updatePlayerDetailID(value, text, $item) {
   // only do this if the player id actually changes
-  if (playerDetailID === value)
-    return;
+  if (playerDetailID === value) return;
 
   playerDetailID = value;
 
@@ -528,14 +562,14 @@ function updatePlayerPage(err, doc) {
     }
 
     // need to resolve aliases
-    DB.getPlayers({ _id: { $in: playerDetailInfo.aliases }}, function(err, docs) {
+    DB.getPlayers({ _id: { $in: playerDetailInfo.aliases } }, function (err, docs) {
       playerDetailInfo.resolvedAliases = docs;
 
       updatePlayerPageHeader();
 
       // check player teams
-      DB.getPlayerTeams(playerDetailInfo._id, function(err, teams) {
-        let teamNames = []
+      DB.getPlayerTeams(playerDetailInfo._id, function (err, teams) {
+        let teamNames = [];
         for (let t in teams) {
           teamNames.push(teams[t].name);
         }
@@ -549,10 +583,9 @@ function updatePlayerPage(err, doc) {
       // then do the big query
       // depending on filters, this may get increasingly complicated
       DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, playerDetailFilter, processPlayerData);
-    })
-  }
-  else {
-    console.log("no player found?");
+    });
+  } else {
+    console.log('no player found?');
   }
 }
 
@@ -569,8 +602,7 @@ function updatePlayerPageHeader() {
     }
 
     formatName += '</span>';
-  }
-  else if (playerDetailInfo.tag) {
+  } else if (playerDetailInfo.tag) {
     formatName += '<span class="btag">#' + escapeHtml(playerDetailInfo.tag) + '</span>';
     menuName += '#' + escapeHtml(playerDetailInfo.tag);
   }
@@ -581,14 +613,13 @@ function updatePlayerPageHeader() {
   if (playerDetailInfo.resolvedAliases.length > 0) {
     let popup = '<b>Active Aliases</b>';
     for (let p of playerDetailInfo.resolvedAliases) {
-      let tag = p.tag ? `#${escapeHtml(p.tag)}` : ''
+      let tag = p.tag ? `#${escapeHtml(p.tag)}` : '';
       popup += `<br>${escapeHtml(p.name)}${tag} (${RegionString[p.region]})`;
     }
 
     $('#player-alias-icon').attr('data-html', popup);
     $('#player-alias-icon').removeClass('is-hidden');
-  }
-  else {
+  } else {
     $('#player-alias-icon').addClass('is-hidden');
   }
 
@@ -604,7 +635,8 @@ function processPlayerData(err, docs) {
   // dropdown initialization
   $('#player-hero-select-menu .menu').html('<div class="item" data-value="all">All Heroes</div>');
   for (let h in playerDetailStats.heroes) {
-    let elem = '<div class="item" data-value="' + h + '"><img class="ui avatar image" src="assets/heroes-talents/images/heroes/';
+    let elem =
+      '<div class="item" data-value="' + h + '"><img class="ui avatar image" src="assets/heroes-talents/images/heroes/';
     elem += Heroes.heroIcon(h) + '">' + h + '</div>';
     $('#player-hero-select-menu .menu').append(elem);
   }
@@ -619,18 +651,17 @@ function showHeroDetails(value, text, $selectedItem) {
 
   if (value === 'all' || value === '') {
     showPlayerLoader();
-    DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, playerDetailFilter, function(err, docs) {
+    DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, playerDetailFilter, function (err, docs) {
       playerDetailStats = summarizeHeroData(docs);
       renderPlayerData();
     });
-  }
-  else if (currentPlayerHero !== value) {
+  } else if (currentPlayerHero !== value) {
     showPlayerLoader();
     let query = Object.assign({}, playerDetailFilter);
     //query.ToonHandle = playerDetailInfo._id;
     query.hero = value;
 
-    DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, query, function(err, docs) {
+    DB.getHeroDataForPlayerWithFilter(playerDetailInfo._id, query, function (err, docs) {
       playerDetailStats = summarizeHeroData(docs);
       renderPlayerData(value, docs);
     });
@@ -645,8 +676,7 @@ function renderPlayerData(value, talents) {
   if (value) {
     renderHeroTalents(value, talents);
     updateHeroTitle($('#player-detail-summary-header'), value);
-  }
-  else {
+  } else {
     renderAllHeroSummary();
     updateHeroTitle($('#player-detail-summary-header'), 'all');
   }
@@ -670,9 +700,13 @@ function renderPlayerData(value, talents) {
 function updateHeroTitle(container, value) {
   if (value === 'all') {
     container.find('h2').html('All Hero Summary');
-  }
-  else {
-    let elem = '<img class="ui large rounded image" src="assets/heroes-talents/images/heroes/' + Heroes.heroIcon(value) + '">' + value + '</div>';
+  } else {
+    let elem =
+      '<img class="ui large rounded image" src="assets/heroes-talents/images/heroes/' +
+      Heroes.heroIcon(value) +
+      '">' +
+      value +
+      '</div>';
     container.find('h2').html(elem);
   }
 }
@@ -699,15 +733,19 @@ function renderAllHeroSummary() {
 
   // hero pool stats
   // graph init
-  heroPoolGamesGraphData.data.datasets = [{
-    data: [],
-    backgroundColor: []
-  }];
+  heroPoolGamesGraphData.data.datasets = [
+    {
+      data: [],
+      backgroundColor: [],
+    },
+  ];
   heroPoolGamesGraphData.data.labels = [];
-  heroPoolWinsGraphData.data.datasets = [{
-    data: [],
-    backgroundColor: []
-  }];
+  heroPoolWinsGraphData.data.datasets = [
+    {
+      data: [],
+      backgroundColor: [],
+    },
+  ];
   heroPoolWinsGraphData.data.labels = [];
 
   let idx = 0;
@@ -721,11 +759,12 @@ function renderAllHeroSummary() {
 
       heroPoolGamesGraphData.data.datasets[0].data.push(0);
       heroPoolWinsGraphData.data.datasets[0].data.push(0);
-    }
-    else {
+    } else {
       selector.find('div[name="games"] .value').text(formatStat('', roleData[r].games, true));
       selector.find('div[name="win"] .value').text(formatStat('pct', roleData[r].wins / roleData[r].games));
-      selector.find('div[name="pool"] .value').text(formatStat('', roleData[r].count, true) + ' / ' + Heroes.heroRoleCount(r));
+      selector
+        .find('div[name="pool"] .value')
+        .text(formatStat('', roleData[r].count, true) + ' / ' + Heroes.heroRoleCount(r));
 
       heroPoolGamesGraphData.data.datasets[0].data.push(roleData[r].games);
       heroPoolWinsGraphData.data.datasets[0].data.push(roleData[r].wins);
@@ -759,7 +798,9 @@ function renderHeroTalentsTo(hero, container, docs) {
 
   // picks
   for (let tier in data) {
-    container.find('.talent-pick tbody').append('<tr class="level-header"><td colspan="4">Level ' + tierToLevel[tier] + '</td></tr>');
+    container
+      .find('.talent-pick tbody')
+      .append('<tr class="level-header"><td colspan="4">Level ' + tierToLevel[tier] + '</td></tr>');
     let total = 0;
     for (let talent in data[tier]) {
       total += data[tier][talent].games;
@@ -781,8 +822,7 @@ function renderHeroTalentsTo(hero, container, docs) {
   let builds = talentData.buildStats[hero];
   let total = 0;
   // total games
-  for (let b in builds)
-    total += builds[b].games;
+  for (let b in builds) total += builds[b].games;
 
   // builds
   for (let b in builds) {
@@ -799,8 +839,7 @@ function renderHeroTalentsTo(hero, container, docs) {
         context.description = Heroes.talentDesc(build.talents[keys[i]]);
         context.name = Heroes.talentName(build.talents[keys[i]]);
         row.append(matchTalentRowCellTemplate(context));
-      }
-      else {
+      } else {
         row.append('<td></td>');
       }
     }
@@ -837,21 +876,49 @@ function renderPlayerSummary() {
   playerTables.awardTable.setData(TableDefs.preprocessAwards(playerDetailStats));
 
   // individual stats
-  $('#player-detail-misc-summary .statistic[name="overallWin"] .value').text(formatStat('pct', playerDetailStats.wins / playerDetailStats.games));
-  $('#player-detail-misc-summary .statistic[name="overallGames"] .value').text(formatStat('', playerDetailStats.games, true));
-  $('#player-detail-misc-summary .statistic[name="overallTD"] .value').text(formatStat('', playerDetailStats.totalTD, true));
-  $('#player-detail-misc-summary .statistic[name="overallDeaths"] .value').text(formatStat('', playerDetailStats.totalDeaths, true));
-  $('#player-detail-misc-summary .statistic[name="overallKDA"] .value').text(formatStat('KDA', playerDetailStats.totalTD / Math.max(playerDetailStats.totalDeaths, 1)));
-  $('#player-detail-misc-summary .statistic[name="timeDead"] .value').text(formatSeconds(playerDetailStats.totalTimeDead / playerDetailStats.games));
-  $('#player-detail-misc-summary .statistic[name="pctTimeDead"] .value').text(formatStat('pct', playerDetailStats.avgTimeDeadPct));
-  $('#player-detail-misc-summary .statistic[name="highestStreak"] .value').text(formatStat('', playerDetailStats.highestStreak, true));
-  $('#player-detail-misc-summary .statistic[name="passiveXPRate"] .value').text(formatStat('passiveXPRate', playerDetailStats.avgPassiveXP, true));
-  $('#player-detail-misc-summary .statistic[name="levelAdvPct"] .value').text(formatStat('levelAdvPct', playerDetailStats.avgLevelAdv, true));
-  $('#player-detail-misc-summary .statistic[name="pctWithHeroAdv"] .value').text(formatStat('pctWithHeroAdv', playerDetailStats.avgHeroAdv, true));
+  $('#player-detail-misc-summary .statistic[name="overallWin"] .value').text(
+    formatStat('pct', playerDetailStats.wins / playerDetailStats.games),
+  );
+  $('#player-detail-misc-summary .statistic[name="overallGames"] .value').text(
+    formatStat('', playerDetailStats.games, true),
+  );
+  $('#player-detail-misc-summary .statistic[name="overallTD"] .value').text(
+    formatStat('', playerDetailStats.totalTD, true),
+  );
+  $('#player-detail-misc-summary .statistic[name="overallDeaths"] .value').text(
+    formatStat('', playerDetailStats.totalDeaths, true),
+  );
+  $('#player-detail-misc-summary .statistic[name="overallKDA"] .value').text(
+    formatStat('KDA', playerDetailStats.totalTD / Math.max(playerDetailStats.totalDeaths, 1)),
+  );
+  $('#player-detail-misc-summary .statistic[name="timeDead"] .value').text(
+    formatSeconds(playerDetailStats.totalTimeDead / playerDetailStats.games),
+  );
+  $('#player-detail-misc-summary .statistic[name="pctTimeDead"] .value').text(
+    formatStat('pct', playerDetailStats.avgTimeDeadPct),
+  );
+  $('#player-detail-misc-summary .statistic[name="highestStreak"] .value').text(
+    formatStat('', playerDetailStats.highestStreak, true),
+  );
+  $('#player-detail-misc-summary .statistic[name="passiveXPRate"] .value').text(
+    formatStat('passiveXPRate', playerDetailStats.avgPassiveXP, true),
+  );
+  $('#player-detail-misc-summary .statistic[name="levelAdvPct"] .value').text(
+    formatStat('levelAdvPct', playerDetailStats.avgLevelAdv, true),
+  );
+  $('#player-detail-misc-summary .statistic[name="pctWithHeroAdv"] .value').text(
+    formatStat('pctWithHeroAdv', playerDetailStats.avgHeroAdv, true),
+  );
 
-  $('#player-detail-taunt-summary .statistic[name="votes"] .value').text(formatStat('', playerDetailStats.totalVotes, true));
-  $('#player-detail-taunt-summary .statistic[name="overallMVP"] .value').text(formatStat('pct', playerDetailStats.totalMVP / Math.max(playerDetailStats.games, 1)));
-  $('#player-detail-taunt-summary .statistic[name="overallAward"] .value').text(formatStat('pct', playerDetailStats.totalAward / Math.max(playerDetailStats.games)));
+  $('#player-detail-taunt-summary .statistic[name="votes"] .value').text(
+    formatStat('', playerDetailStats.totalVotes, true),
+  );
+  $('#player-detail-taunt-summary .statistic[name="overallMVP"] .value').text(
+    formatStat('pct', playerDetailStats.totalMVP / Math.max(playerDetailStats.games, 1)),
+  );
+  $('#player-detail-taunt-summary .statistic[name="overallAward"] .value').text(
+    formatStat('pct', playerDetailStats.totalAward / Math.max(playerDetailStats.games)),
+  );
 
   // taunts
   setTauntStats('bstep', playerDetailStats.taunts.bsteps);
@@ -885,8 +952,7 @@ function renderMapStatsTo(container, stats) {
 
 // expects stats to be from summarizeHeroData(docs).withHero / againstHero
 function renderHeroVsStatsTo(container, stats, threshold) {
-  if (threshold === undefined)
-    threshold = 0;
+  if (threshold === undefined) threshold = 0;
 
   container.find('tbody').empty();
 
@@ -895,15 +961,13 @@ function renderHeroVsStatsTo(container, stats, threshold) {
 
     if ('defeated' in context) {
       context.winPercent = context.defeated / context.games;
-    }
-    else {
+    } else {
       context.winPercent = context.wins / context.games;
     }
     context.formatWinPercent = formatStat('pct', context.winPercent);
     context.heroName = context.name;
 
-    if (context.games >= threshold)
-      container.find('tbody').append(heroWinRateRowTemplate(context));
+    if (context.games >= threshold) container.find('tbody').append(heroWinRateRowTemplate(context));
   }
 }
 
@@ -939,16 +1003,13 @@ function renderPlayerHeroDetail() {
   playerTables.detailStatTable.filterByMinGames(playerHeroMatchThreshold);
 }
 
-function renderPlayerHeroAwards() {
-  
-}
+function renderPlayerHeroAwards() {}
 
 function togglePlayerDetailMode(elem) {
   $('#player-hero-detail-stats .menu .item').removeClass('active');
   $(elem).addClass('active');
 
-  if (playerDetailStats)
-    renderPlayerHeroDetail();
+  if (playerDetailStats) renderPlayerHeroDetail();
 }
 
 function updatePlayerFilter(mapQ, heroQ) {
@@ -971,17 +1032,14 @@ function updateGraphInterval(value, text, $item) {
 }
 
 function renderProgression() {
-  if (!playerDetailStats)
-    return;
+  if (!playerDetailStats) return;
 
   let axis1Stats = $('.player-stat-menu[name="axis1"]').dropdown('get value').split(',');
   let axis2Stats = $('.player-stat-menu[name="axis2"]').dropdown('get value').split(',');
 
-  if (axis1Stats[0] === '')
-    axis1Stats = [];
+  if (axis1Stats[0] === '') axis1Stats = [];
 
-  if (axis2Stats[0] === '')
-    axis2Stats = [];
+  if (axis2Stats[0] === '') axis2Stats = [];
 
   // collect a few stats along the specified interval
 
@@ -994,7 +1052,7 @@ function renderProgression() {
     query.hero = value;
   }
 
-  DB.getHeroData(query, function(err, docs) {
+  DB.getHeroData(query, function (err, docs) {
     let data = {};
     for (let d in docs) {
       let doc = docs[d];
@@ -1003,8 +1061,7 @@ function renderProgression() {
       let hash;
       if (playerProgressionInterval === IntervalMode.Patch) {
         hash = hashInterval(doc.version, playerProgressionInterval);
-      }
-      else {
+      } else {
         hash = hashInterval(new Date(doc.date), playerProgressionInterval);
       }
 
@@ -1019,8 +1076,8 @@ function renderProgression() {
           mvp: 0,
           games: 0,
           sort: hash[1],
-          label: hash[0]
-        }
+          label: hash[0],
+        };
       }
 
       // stats
@@ -1032,15 +1089,13 @@ function renderProgression() {
       data[hash[0]].games += 1;
 
       for (let stat of axis1Stats) {
-        if (!(stat in data[hash[0]]))
-          data[hash[0]][stat] = 0;
+        if (!(stat in data[hash[0]])) data[hash[0]][stat] = 0;
 
         data[hash[0]][stat] += doc.gameStats[stat];
       }
 
       for (let stat of axis2Stats) {
-        if (!(stat in data[hash[0]]))
-          data[hash[0]][stat] = 0;
+        if (!(stat in data[hash[0]])) data[hash[0]][stat] = 0;
 
         data[hash[0]][stat] += doc.gameStats[stat];
       }
@@ -1053,32 +1108,25 @@ function renderProgression() {
     }
 
     if (playerProgressionInterval === IntervalMode.Week) {
-      dataArr.sort(function(a, b) {
+      dataArr.sort(function (a, b) {
         let ad = a.label.split('-');
         let bd = b.label.split('-');
 
-        if (parseInt(ad[0]) < parseInt(bd[0]))
-          return -1;
-        else if (parseInt(ad[0]) > parseInt(bd[0]))
-          return 1;
+        if (parseInt(ad[0]) < parseInt(bd[0])) return -1;
+        else if (parseInt(ad[0]) > parseInt(bd[0])) return 1;
 
-        if (parseInt(ad[1]) < parseInt(bd[1]))
-          return -1;
-        else if (parseInt(ad[1]) > parseInt(bd[1]))
-          return 1;
+        if (parseInt(ad[1]) < parseInt(bd[1])) return -1;
+        else if (parseInt(ad[1]) > parseInt(bd[1])) return 1;
 
         return 0;
       });
-    }
-    else {
-      dataArr.sort(function(a, b) {
-        if (a.sort < b.sort)
-          return -1;
-        else if (a.sort > b.sort)
-          return 1;
+    } else {
+      dataArr.sort(function (a, b) {
+        if (a.sort < b.sort) return -1;
+        else if (a.sort > b.sort) return 1;
 
         return 0;
-      })
+      });
     }
 
     // update data arrays
@@ -1098,8 +1146,8 @@ function renderProgression() {
         backgroundColor: statColors[ci],
         cubicInterpolationMode: 'monotone',
         data: [],
-        yAxisID: 'axis1'
-      }
+        yAxisID: 'axis1',
+      };
       ci += 1;
       ci %= statColors.length;
 
@@ -1114,8 +1162,8 @@ function renderProgression() {
         backgroundColor: statColors[ci],
         cubicInterpolationMode: 'monotone',
         data: [],
-        yAxisID: 'axis2'
-      }
+        yAxisID: 'axis2',
+      };
       ci += 1;
       ci %= statColors.length;
 
@@ -1128,25 +1176,22 @@ function renderProgression() {
       if (playerProgressionInterval === IntervalMode.Month) {
         let m = moment(stat.sort);
         labels.push(m.format('YYYY MMM'));
-      }
-      else if (playerProgressionInterval === IntervalMode.Week) {
+      } else if (playerProgressionInterval === IntervalMode.Week) {
         let spl = stat.label.split('-');
         labels.push(spl[0] + ' Week ' + spl[1]);
-      }
-      else {
+      } else {
         labels.push(stat.label);
       }
-      progressionWinRateGraphData.data.datasets[0].data.push((stat.wins / stat.games * 100).toFixed(2));
+      progressionWinRateGraphData.data.datasets[0].data.push(((stat.wins / stat.games) * 100).toFixed(2));
       progressionWinRateGraphData.data.datasets[1].data.push(stat.games);
-      progressionAwardsGraphData.data.datasets[0].data.push((stat.award / stat.games * 100).toFixed(2));
-      progressionAwardsGraphData.data.datasets[1].data.push((stat.mvp / stat.games * 100).toFixed(2));
+      progressionAwardsGraphData.data.datasets[0].data.push(((stat.award / stat.games) * 100).toFixed(2));
+      progressionAwardsGraphData.data.datasets[1].data.push(((stat.mvp / stat.games) * 100).toFixed(2));
 
       let idx = 0;
       for (let s of axis1Stats) {
         if (s === 'KDA') {
           progressionStatGraphData.data.datasets[idx].data.push((stat.takedowns / Math.max(stat.deaths, 1)).toFixed(2));
-        }
-        else {
+        } else {
           progressionStatGraphData.data.datasets[idx].data.push((stat[s] / stat.games).toFixed(2));
         }
 
@@ -1156,8 +1201,7 @@ function renderProgression() {
       for (let s of axis2Stats) {
         if (s === 'KDA') {
           progressionStatGraphData.data.datasets[idx].data.push((stat.takedowns / Math.max(stat.deaths, 1)).toFixed(2));
-        }
-        else {
+        } else {
           progressionStatGraphData.data.datasets[idx].data.push((stat[s] / stat.games).toFixed(2));
         }
 
@@ -1181,14 +1225,12 @@ function hashInterval(date, mode) {
   if (mode === IntervalMode.Month) {
     let ident = date.getFullYear() + '-' + (date.getUTCMonth() + 1);
     return [ident, new Date(ident + '-1')];
-  }
-  else if (mode === IntervalMode.Week) {
-    let mdate = moment(date)
+  } else if (mode === IntervalMode.Week) {
+    let mdate = moment(date);
     let ident = date.getFullYear() + '-' + mdate.week();
 
     return [ident, mdate];
-  }
-  else if (mode === IntervalMode.Season) {
+  } else if (mode === IntervalMode.Season) {
     for (let s in ReplayTypes.SeasonDates) {
       let season = ReplayTypes.SeasonDates[s];
       if (season.start <= date && date < season.end) {
@@ -1198,8 +1240,7 @@ function hashInterval(date, mode) {
 
     // if we didn't return, uh, the season isn't in the db yet so make one up
     return ['Future Season', Object.keys(ReplayTypes.SeasonDates).length];
-  }
-  else if (mode === IntervalMode.Patch) {
+  } else if (mode === IntervalMode.Patch) {
     // in this case date is not a date but instead a version object.
     let versionString = date.m_major + '.' + date.m_minor + '.' + date.m_revision + ' (build ' + date.m_build + ')';
     return [versionString, date.m_build];
@@ -1211,81 +1252,95 @@ function hashInterval(date, mode) {
 
 function handlePlayerExportAction(action, text, $elem) {
   if (action === 'player') {
-    if (!playerDetailID)
-      return;
+    if (!playerDetailID) return;
 
-    dialog.showSaveDialog({
-      title: 'Export Player',
-      filters: [{ name: 'JSON', extensions: ['.json'] }]
-    }, function(filename) {
-      if (filename) {
-        exportPlayer(playerDetailID, filename);
-      }
-    });
-  }
-  else if (action === 'all-players') {
-    dialog.showOpenDialog({
-      title: 'Select Export Folder',
-      properties: ["openDirectory", "createDirectory"]
-    }, function(files) {
-      if (files) {
-        // pick the first, should only be 1 dir
-        let path = files[0];
-        DB.getPlayers({}, function(err, docs) {
-          for (let i in docs) {
-            exportPlayer(docs[i]._id, path + '/' + docs[i].name + '-' + docs[i]._id + '.json');
-          }
-        });
-      }
-    })
-  }
-  else if (action === 'print-player') {
-    dialog.showSaveDialog({
-      title: 'Print Hero Stats',
-      filters: [{name: 'pdf', extensions: ['pdf']}]
-    }, function(filename) {
-      if (filename) {
-        printPlayerSummary(filename, null);
-      }
-    });
-  }
-  else if (action === 'print-sections') {
-    $('#player-print-sections').modal({
-      onApprove: function() {
-        dialog.showSaveDialog({
-          title: 'Print Hero Stats',
-          filters: [{name: 'pdf', extensions: ['pdf']}]
-        }, function(filename) {
-          if (filename) {
-            let sections = $('#player-print-sections .ui.dropdown').dropdown('get value').split(',');
-            printPlayerSummary(filename, sections);
-          }
-        });
+    dialog.showSaveDialog(
+      {
+        title: 'Export Player',
+        filters: [{ name: 'JSON', extensions: ['.json'] }],
       },
-      closable: false
-    }).modal('show');
-  }
-  else if (action === 'csv-current') {
-    dialog.showSaveDialog({
-      title: 'Export Current Player Hero Data to CSV',
-      filters: [{name: 'csv', extensions: ['csv']}]
-    }, function(filename) {
-      if (filename) {
-        exportPlayerHeroCSV(filename);
-      }
-    });
-  }
-  else if (action === 'csv-all') {
-    dialog.showSaveDialog({
-      title: 'Export Collection Hero Data to CSV',
-      filters: [{name: 'csv', extensions: ['csv']}]
-    }, function(filename) {
-      if (filename) {
-        DB.getHeroData({}, function(err, docs) {
-          exportHeroDataAsCSV(docs, filename);
-        });
-      }
-    });
+      function (filename) {
+        if (filename) {
+          exportPlayer(playerDetailID, filename);
+        }
+      },
+    );
+  } else if (action === 'all-players') {
+    dialog.showOpenDialog(
+      {
+        title: 'Select Export Folder',
+        properties: ['openDirectory', 'createDirectory'],
+      },
+      function (files) {
+        if (files) {
+          // pick the first, should only be 1 dir
+          let path = files[0];
+          DB.getPlayers({}, function (err, docs) {
+            for (let i in docs) {
+              exportPlayer(docs[i]._id, path + '/' + docs[i].name + '-' + docs[i]._id + '.json');
+            }
+          });
+        }
+      },
+    );
+  } else if (action === 'print-player') {
+    dialog.showSaveDialog(
+      {
+        title: 'Print Hero Stats',
+        filters: [{ name: 'pdf', extensions: ['pdf'] }],
+      },
+      function (filename) {
+        if (filename) {
+          printPlayerSummary(filename, null);
+        }
+      },
+    );
+  } else if (action === 'print-sections') {
+    $('#player-print-sections')
+      .modal({
+        onApprove: function () {
+          dialog.showSaveDialog(
+            {
+              title: 'Print Hero Stats',
+              filters: [{ name: 'pdf', extensions: ['pdf'] }],
+            },
+            function (filename) {
+              if (filename) {
+                let sections = $('#player-print-sections .ui.dropdown').dropdown('get value').split(',');
+                printPlayerSummary(filename, sections);
+              }
+            },
+          );
+        },
+        closable: false,
+      })
+      .modal('show');
+  } else if (action === 'csv-current') {
+    dialog.showSaveDialog(
+      {
+        title: 'Export Current Player Hero Data to CSV',
+        filters: [{ name: 'csv', extensions: ['csv'] }],
+      },
+      function (filename) {
+        if (filename) {
+          exportPlayerHeroCSV(filename);
+        }
+      },
+    );
+  } else if (action === 'csv-all') {
+    dialog.showSaveDialog(
+      {
+        title: 'Export Collection Hero Data to CSV',
+        filters: [{ name: 'csv', extensions: ['csv'] }],
+      },
+      function (filename) {
+        if (filename) {
+          DB.getHeroData({}, function (err, docs) {
+            exportHeroDataAsCSV(docs, filename);
+          });
+        }
+      },
+    );
   }
 }
 
@@ -1293,26 +1348,27 @@ function handlePlayerEditAction(action, text, $elem) {
   if (action === 'nickname') {
     if (playerDetailID) {
       $('#player-set-nickname-modal').find('input').val(playerDetailInfo.nickname);
-      $('#player-set-nickname-modal').modal({
-        onApprove: function() {
-          let name = $('#player-set-nickname-modal').find('input').val();
-          playerDetailInfo.nickname = name;
-          DB.setPlayerNickname(playerDetailID, name, function() {
-            // display message, update player header
-            showMessage('Nickname Updated', `${playerDetailInfo.name}'s nickname updated to "${name}"`);
-            updatePlayerPageHeader();
-          });
-        }
-      }).modal('show');
+      $('#player-set-nickname-modal')
+        .modal({
+          onApprove: function () {
+            let name = $('#player-set-nickname-modal').find('input').val();
+            playerDetailInfo.nickname = name;
+            DB.setPlayerNickname(playerDetailID, name, function () {
+              // display message, update player header
+              showMessage('Nickname Updated', `${playerDetailInfo.name}'s nickname updated to "${name}"`);
+              updatePlayerPageHeader();
+            });
+          },
+        })
+        .modal('show');
     }
-  }
-  else if (action === 'alias') {
+  } else if (action === 'alias') {
     if (playerDetailID) {
       // get current set of aliases with resolved player names
-      DB.getPlayers({ _id: { $in: playerDetailInfo.aliases } }, function(err, players) {
+      DB.getPlayers({ _id: { $in: playerDetailInfo.aliases } }, function (err, players) {
         // update the menu
         const menu = $('#player-alias-editor-menu');
-        let options = {values: []};
+        let options = { values: [] };
         let selected = [];
 
         for (let p of players) {
@@ -1321,7 +1377,7 @@ function handlePlayerEditAction(action, text, $elem) {
           options.values.push({
             value: p._id,
             text: `${p.name}${tag} (${RegionString[p.region]})`,
-            name: ''
+            name: '',
           });
           selected.push(p._id);
         }
@@ -1329,30 +1385,30 @@ function handlePlayerEditAction(action, text, $elem) {
         menu.dropdown('setup menu', options);
         menu.dropdown('set exactly', selected.join(','));
 
-        $('#player-alias-editor').modal({
-          onApprove: function() {
-            // get dropdown values, update aliases
-            const aliases = menu.dropdown('get value').split(',');
-            DB.updatePlayerAliases(playerDetailID, aliases, function(message) {
-              if (!message) {
-                showMessage('Aliases Update', 'Alias Update Complete', { class: 'positive' });
-                // trigger an update
-                preloadPlayerID(playerDetailID);
-              }
-              else {
-                showMessage('Alias Update Failed', message, { class: 'negative' });
-              }
-            });
-          }
-        }).modal('show');
+        $('#player-alias-editor')
+          .modal({
+            onApprove: function () {
+              // get dropdown values, update aliases
+              const aliases = menu.dropdown('get value').split(',');
+              DB.updatePlayerAliases(playerDetailID, aliases, function (message) {
+                if (!message) {
+                  showMessage('Aliases Update', 'Alias Update Complete', { class: 'positive' });
+                  // trigger an update
+                  preloadPlayerID(playerDetailID);
+                } else {
+                  showMessage('Alias Update Failed', message, { class: 'negative' });
+                }
+              });
+            },
+          })
+          .modal('show');
       });
     }
   }
 }
 
 function updatePlayerCollectionCompare(value, text, $elem) {
-  if (playerDetailID === undefined)
-    return;
+  if (playerDetailID === undefined) return;
 
   $('#player-compare-collection').addClass('loading disabled');
 
@@ -1360,8 +1416,7 @@ function updatePlayerCollectionCompare(value, text, $elem) {
 
   if ($elem.attr('data-type') === 'external')
     DB.getExternalCacheCollectionHeroStats(cid, processPlayerCollectionCompare);
-  else
-    DB.getCachedCollectionHeroStats(cid, processPlayerCollectionCompare);
+  else DB.getCachedCollectionHeroStats(cid, processPlayerCollectionCompare);
 }
 
 function processPlayerCollectionCompare(cache) {
@@ -1383,8 +1438,7 @@ function processPlayerCollectionCompare(cache) {
   if (activeHero === 'all' || activeHero === '') {
     cmpData = DB.allAverageHeroData(cache.heroData);
     pData = DB.allAverageHeroData(playerDetailStats);
-  }
-  else {
+  } else {
     cmpData = cache.heroData.averages[activeHero];
     pData = playerDetailStats.averages[activeHero];
   }
@@ -1407,21 +1461,21 @@ function processPlayerCollectionCompare(cache) {
     okdaCtx.cmpDataSort = cache.heroData.totalTD / Math.max(cache.heroData.totalDeaths, 1);
     lengthCtx.pDataSort = playerDetailStats.totalMatchLength / playerDetailStats.games;
     lengthCtx.cmpDataSort = cache.heroData.totalMatchLength / cache.heroData.games;
-  }
-  else {
+  } else {
     if (!cmpData) {
-      winCtx.cmpDataSort = 0
+      winCtx.cmpDataSort = 0;
       okdaCtx.cmpDataSort = 0;
       lengthCtx.cmpDataSort = 0;
-    }
-    else {
+    } else {
       winCtx.cmpDataSort = cache.heroData.heroes[activeHero].wins / cache.heroData.heroes[activeHero].games;
-      okdaCtx.cmpDataSort = cache.heroData.total[activeHero].Takedowns / Math.max(cache.heroData.total[activeHero].Deaths, 1);
+      okdaCtx.cmpDataSort =
+        cache.heroData.total[activeHero].Takedowns / Math.max(cache.heroData.total[activeHero].Deaths, 1);
       lengthCtx.cmpDataSort = cache.heroData.heroes[activeHero].totalTime / cache.heroData.heroes[activeHero].games;
     }
 
     lengthCtx.pDataSort = playerDetailStats.heroes[activeHero].totalTime / playerDetailStats.heroes[activeHero].games;
-    okdaCtx.pDataSort = playerDetailStats.total[activeHero].Takedowns / Math.max(playerDetailStats.total[activeHero].Deaths, 1);
+    okdaCtx.pDataSort =
+      playerDetailStats.total[activeHero].Takedowns / Math.max(playerDetailStats.total[activeHero].Deaths, 1);
     winCtx.pDataSort = playerDetailStats.heroes[activeHero].wins / playerDetailStats.heroes[activeHero].games;
   }
 
@@ -1433,7 +1487,7 @@ function processPlayerCollectionCompare(cache) {
   okdaCtx.cmpData = formatStat('KDA', okdaCtx.cmpDataSort);
   okdaCtx.pctDiff = (okdaCtx.pDataSort - okdaCtx.cmpDataSort) / okdaCtx.cmpDataSort;
 
-  lengthCtx.pData = formatSeconds(lengthCtx.pDataSort)
+  lengthCtx.pData = formatSeconds(lengthCtx.pDataSort);
   lengthCtx.cmpData = formatSeconds(lengthCtx.cmpDataSort);
   lengthCtx.pctDiff = (lengthCtx.pDataSort - lengthCtx.cmpDataSort) / lengthCtx.cmpDataSort;
 
@@ -1447,10 +1501,8 @@ function processPlayerCollectionCompare(cache) {
     let context = {};
     context.statName = DetailStatString[d];
 
-    if (cmpData === undefined || cmpData[d] === 0 || !(d in cmpData))
-      context.pctDiff = 0;
-    else
-      context.pctDiff = (pData[d] - cmpData[d]) / cmpData[d];
+    if (cmpData === undefined || cmpData[d] === 0 || !(d in cmpData)) context.pctDiff = 0;
+    else context.pctDiff = (pData[d] - cmpData[d]) / cmpData[d];
 
     context.pData = formatStat(d, pData[d], true);
     context.pDataSort = pData[d];
@@ -1462,22 +1514,38 @@ function processPlayerCollectionCompare(cache) {
     cmpTableData.push(context);
   }
 
-  playerTables.playerCmpTable.setData(cmpTableData);  
+  playerTables.playerCmpTable.setData(cmpTableData);
   $('#player-compare-collection').removeClass('loading disabled');
 }
 
 function layoutPlayerPrint(sections) {
   let sects = sections;
   if (!sects) {
-    sects = ['general', 'hero', 'pool', 'maps', 'with', 'against', 'awards', 'compare', 'with-player', 'against-player', 'skins', 'taunts', 'talents', 'builds'];
+    sects = [
+      'general',
+      'hero',
+      'pool',
+      'maps',
+      'with',
+      'against',
+      'awards',
+      'compare',
+      'with-player',
+      'against-player',
+      'skins',
+      'taunts',
+      'talents',
+      'builds',
+    ];
   }
 
   clearPrintLayout();
   if ($('#player-detail-summary-header h2').text() === 'All Hero Summary') {
     addPrintHeader('Player Summary: ' + playerDetailInfo.name);
-  }
-  else {
-    addPrintHeader('Player Summary: ' + playerDetailInfo.name + "'s " + $('#player-hero-select-menu').dropdown('get value'));
+  } else {
+    addPrintHeader(
+      'Player Summary: ' + playerDetailInfo.name + "'s " + $('#player-hero-select-menu').dropdown('get value'),
+    );
   }
   addPrintDate();
 
@@ -1494,7 +1562,9 @@ function layoutPlayerPrint(sections) {
       // copy raw stats
       addPrintPage('pool');
       addPrintSubHeader('Hero Pool', 'pool');
-      getPrintPage('pool').append('<div class="ui horizontal small statistic">' + $('#player-overall-hero-pool').html() + '</div>');
+      getPrintPage('pool').append(
+        '<div class="ui horizontal small statistic">' + $('#player-overall-hero-pool').html() + '</div>',
+      );
       getPrintPage('pool').find('#player-overall-hero-pool').removeClass('tiny');
       getPrintPage('pool').append('<div class="ui segment hero-pool"></div>');
       $('#print-window .hero-pool').append($('#player-detail-hero-pool .five.grid').clone());
@@ -1504,8 +1574,7 @@ function layoutPlayerPrint(sections) {
       copyGraph(heroPoolGamesGraphData, $('.hero-pool #player-hero-pool-games-graph'), { width: 500, height: 300 });
       copyGraph(heroPoolWinsGraphData, $('.hero-pool #player-hero-pool-win-graph'), { width: 500, height: 300 });
     }
-  }
-  else {
+  } else {
     if (sects.indexOf('talents') !== -1) {
       addPrintPage('talents');
       addPrintSubHeader('Talents', 'talents');
@@ -1513,7 +1582,7 @@ function layoutPlayerPrint(sections) {
     }
 
     if (sects.indexOf('builds') !== -1) {
-      addPrintPage('builds')
+      addPrintPage('builds');
       addPrintSubHeader('Builds', 'builds');
       copyFloatingTable($('#player-detail-hero-talent .talent-build .floatThead-wrapper'), getPrintPage('builds'));
     }
@@ -1551,7 +1620,10 @@ function layoutPlayerPrint(sections) {
 
   if (sects.indexOf('compare') !== -1) {
     addPrintPage('compare');
-    addPrintSubHeader('Comparison vs Collection Average: ' + $('#player-compare-collection').dropdown('get text'), 'compare');
+    addPrintSubHeader(
+      'Comparison vs Collection Average: ' + $('#player-compare-collection').dropdown('get text'),
+      'compare',
+    );
     copyFloatingTable($('#player-compare-segment'), getPrintPage('compare'));
   }
 
@@ -1598,7 +1670,7 @@ function exportPlayerHeroCSV(file) {
     query.hero = value;
   }
 
-  DB.getHeroData(query, function(err, docs) {
+  DB.getHeroData(query, function (err, docs) {
     exportHeroDataAsCSV(docs, file);
   });
 }

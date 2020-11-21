@@ -4,7 +4,7 @@ const Handlebars = require('handlebars');
 const cache = new Map();
 
 function getTemplate(name, selector) {
-  const link = document.querySelector('link[name="'+ name + '"]');
+  const link = document.querySelector('link[name="' + name + '"]');
   return link.import.querySelector(selector).innerHTML;
 }
 

@@ -46,27 +46,21 @@ class Table {
 
   // mostly for the min matches field in player for now
   filterByMinGames(threshold) {
-    this.table.
-      DataTable().
-      rows(function(idx, data, node) {
+    this.table
+      .DataTable()
+      .rows(function (idx, data, node) {
         return data.games < threshold;
-      }).
-      remove().
-      draw();
+      })
+      .remove()
+      .draw();
   }
 
   insertButtons() {
-    this.table.
-      DataTable().
-      buttons().
-      container().
-      appendTo($(
-          'div.eight.column:eq(0)',
-          this.table.
-            DataTable().
-            table().
-            container()
-        ));
+    this.table
+      .DataTable()
+      .buttons()
+      .container()
+      .appendTo($('div.eight.column:eq(0)', this.table.DataTable().table().container()));
   }
 }
 
@@ -76,7 +70,7 @@ function preprocessAwards(data) {
     awardsData.push({
       key: award,
       games: data.games,
-      wins: data.awards[award]
+      wins: data.awards[award],
     });
   }
 
@@ -111,9 +105,7 @@ function awardHeader(awardKey) {
   let awardData = Heroes.awardInfo(awardKey);
   return `
     <h3 class="ui image inverted header">
-      <img src="assets/images/${
-        awardData.image
-      }" class="ui rounded small image">
+      <img src="assets/images/${awardData.image}" class="ui rounded small image">
       <div class="content">
         ${awardData.name}
         <div class="sub header">${awardData.subtitle}</div>
@@ -124,9 +116,7 @@ function awardHeader(awardKey) {
 
 function deltaPctRender(data) {
   let pct = `${data > 0 ? '+' : ''}${formatStat('pct', data)}`;
-  return `<span class="${
-    data === 0 ? '' : data > 0 ? 'plus' : 'minus'
-  }">${pct}</span>`;
+  return `<span class="${data === 0 ? '' : data > 0 ? 'plus' : 'minus'}">${pct}</span>`;
 }
 
 function combinedNumericPct(pct, count, type) {
@@ -142,47 +132,53 @@ const PlayerVsTableFormat = {
     {
       title: 'Hero',
       data: 'name',
-      render: heroHeader
+      render: heroHeader,
     },
     {
       title: 'Win %',
       data: playerVsWinPctData,
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Games',
-      data: 'games'
-    }
+      data: 'games',
+    },
   ],
-  order: [[2, 'desc'], [1, 'desc']],
+  order: [
+    [2, 'desc'],
+    [1, 'desc'],
+  ],
   paging: false,
   searching: false,
   scrollY: STANDARD_SEGMENT_HEIGHT,
-  info: false
+  info: false,
 };
 
 const PlayerVsPlayerFormat = {
   columns: [
     {
       title: 'Player',
-      data: 'name'
+      data: 'name',
     },
     {
       title: 'Win %',
       data: playerVsWinPctData,
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Games',
-      data: 'games'
-    }
+      data: 'games',
+    },
   ],
-  order: [[2, 'desc'], [1, 'desc']],
+  order: [
+    [2, 'desc'],
+    [1, 'desc'],
+  ],
   paging: true,
   pageLength: 50,
   searching: true,
   info: true,
-  scrollY: STANDARD_SEGMENT_ALL
+  scrollY: STANDARD_SEGMENT_ALL,
 };
 
 const SkinFormat = {
@@ -190,49 +186,55 @@ const SkinFormat = {
     {
       title: 'Skin ID',
       data: 'key',
-      width: '50%'
+      width: '50%',
     },
     {
       title: 'Win %',
       data: playerVsWinPctData,
       render: (data) => formatStat('pct', data),
-      width: '25%'
+      width: '25%',
     },
     {
       title: 'Games',
       data: 'games',
-      width: '25%'
-    }
+      width: '25%',
+    },
   ],
-  order: [[1, 'desc'], [2, 'desc']],
+  order: [
+    [1, 'desc'],
+    [2, 'desc'],
+  ],
   paging: true,
   searching: true,
   info: true,
   scrollY: STANDARD_SEGMENT_ALL,
-  pageLength: 50
+  pageLength: 50,
 };
 
 const MapFormat = {
   columns: [
     {
       title: 'Map',
-      data: 'key'
+      data: 'key',
     },
     {
       title: 'Win %',
       data: playerVsWinPctData,
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Games',
-      data: 'games'
-    }
+      data: 'games',
+    },
   ],
-  order: [[1, 'desc'], [2, 'desc']],
+  order: [
+    [1, 'desc'],
+    [2, 'desc'],
+  ],
   paging: false,
   info: false,
   scrollY: TALL_SEGMENT_HEIGHT,
-  searching: false
+  searching: false,
 };
 
 const AwardFormat = {
@@ -240,23 +242,26 @@ const AwardFormat = {
     {
       title: 'Award',
       data: 'key',
-      render: (data) => awardHeader(data)
+      render: (data) => awardHeader(data),
     },
     {
       title: 'Award %',
       data: playerVsWinPctData,
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Games',
-      data: 'wins'
-    }
+      data: 'wins',
+    },
   ],
-  order: [[1, 'desc'], [2, 'desc']],
+  order: [
+    [1, 'desc'],
+    [2, 'desc'],
+  ],
   paging: false,
   info: false,
   scrollY: STANDARD_SEGMENT_HEIGHT,
-  searching: false
+  searching: false,
 };
 
 const PlayerCompareToAvgFormat = {
@@ -264,29 +269,29 @@ const PlayerCompareToAvgFormat = {
     {
       title: 'Stat',
       data: 'statName',
-      render: (data) => `<h3 class="ui inverted header">${data}</h3>`
+      render: (data) => `<h3 class="ui inverted header">${data}</h3>`,
     },
     {
       title: 'Player',
       data: 'pDataSort',
-      render: (data, type, row) => row.pData
+      render: (data, type, row) => row.pData,
     },
     {
       title: 'Diff',
       data: 'pctDiff',
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Average',
       data: 'cmpDataSort',
-      render: (data, type, row) => row.cmpData
-    }
+      render: (data, type, row) => row.cmpData,
+    },
   ],
   order: [[0, 'asc']],
   paging: false,
   info: false,
   scrollY: STANDARD_SEGMENT_WITH_SEARCH,
-  searching: true
+  searching: true,
 };
 
 const HeroSummaryFormat = {
@@ -294,54 +299,57 @@ const HeroSummaryFormat = {
     {
       title: 'Hero',
       data: 'key',
-      render: heroHeader
+      render: heroHeader,
     },
     {
       title: 'Win %',
       data: playerVsWinPctData,
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Games',
-      data: 'games'
+      data: 'games',
     },
     {
       title: 'KDA',
       data: 'stats.totalKDA',
-      render: (data) => formatStat('KDA', data)
+      render: (data) => formatStat('KDA', data),
     },
     {
       title: 'Takedowns',
-      data: 'stats.Takedowns'
+      data: 'stats.Takedowns',
     },
     {
       title: 'Kills',
-      data: 'stats.SoloKill'
+      data: 'stats.SoloKill',
     },
     {
       title: 'Assists',
-      data: 'stats.Assists'
+      data: 'stats.Assists',
     },
     {
       title: 'Deaths',
-      data: 'stats.Deaths'
+      data: 'stats.Deaths',
     },
     {
       title: 'MVP %',
       data: 'stats.MVPPct',
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Award %',
       data: 'stats.AwardPct',
-      render: (data) => formatStat('pct', data)
-    }
+      render: (data) => formatStat('pct', data),
+    },
   ],
-  order: [[1, 'desc'], [2, 'desc']],
+  order: [
+    [1, 'desc'],
+    [2, 'desc'],
+  ],
   paging: false,
   info: false,
   scrollY: TALL_SEGMENT_HEIGHT,
-  searching: false
+  searching: false,
 };
 
 function getHeroStatSafe(target, row) {
@@ -358,12 +366,12 @@ function playerDetailStatFormat() {
     {
       title: 'Hero',
       data: 'key',
-      render: (data) => heroHeader(data, '200px')
+      render: (data) => heroHeader(data, '200px'),
     },
     {
       title: 'Games',
-      data: 'games'
-    }
+      data: 'games',
+    },
   ];
 
   let allStats = DetailStatList;
@@ -379,7 +387,7 @@ function playerDetailStatFormat() {
         if (type === 'display') return formatStat(allStats[i], data);
 
         return parseFloat(data);
-      }
+      },
     });
   }
 
@@ -392,7 +400,7 @@ function playerDetailStatFormat() {
     scrollX: true,
     searching: false,
     fixedColumns: true,
-    scrollCollapse: true
+    scrollCollapse: true,
   };
 }
 
@@ -407,7 +415,7 @@ function addnlPlayerStats() {
         if (type === 'display') return formatStat(stat, data);
 
         return parseFloat(data);
-      }
+      },
     });
   }
 
@@ -419,96 +427,95 @@ function playerRankingStatFormat() {
   base.columns[0] = {
     title: 'Player',
     data: 'name',
-    render: (data, type, row) => `<h3 class="ui inverted header player-name link-to-player" player-id="${
-        row.id
-      }">${data}</h4>`
+    render: (data, type, row) =>
+      `<h3 class="ui inverted header player-name link-to-player" player-id="${row.id}">${data}</h4>`,
   };
 
   const wins = {
     title: 'Win %',
     data: 'winPercent',
-    render: (data) => formatStat('pct', data)
+    render: (data) => formatStat('pct', data),
   };
 
   base.columns.splice(2, 0, wins);
 
   base.columns.push({
     title: 'Hero Pool',
-    data: 'Pool'
+    data: 'Pool',
   });
 
   // awards n stuff
   const awardsColumns = [
     {
       title: 'Votes',
-      data: 'votes'
+      data: 'votes',
     },
     {
       title: 'Awards',
-      data: 'totalAwards'
+      data: 'totalAwards',
     },
     {
       title: 'Award %',
       data: 'awardPct',
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'MVP',
-      data: 'totalMVP'
+      data: 'totalMVP',
     },
     {
       title: 'MVP %',
       data: 'MVPPct',
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Bsteps',
-      data: 'taunts.bsteps.count'
+      data: 'taunts.bsteps.count',
     },
     {
       title: 'Bstep TD',
-      data: 'taunts.bsteps.takedowns'
+      data: 'taunts.bsteps.takedowns',
     },
     {
       title: 'Bstep Deaths',
-      data: 'taunts.bsteps.deaths'
+      data: 'taunts.bsteps.deaths',
     },
     {
       title: 'Taunts',
-      data: 'taunts.taunts.count'
+      data: 'taunts.taunts.count',
     },
     {
       title: 'Taunt TD',
-      data: 'taunts.taunts.takedowns'
+      data: 'taunts.taunts.takedowns',
     },
     {
       title: 'Taunt Deaths',
-      data: 'taunts.taunts.deaths'
+      data: 'taunts.taunts.deaths',
     },
     {
       title: 'Sprays',
-      data: 'taunts.sprays.count'
+      data: 'taunts.sprays.count',
     },
     {
       title: 'Spray TD',
-      data: 'taunts.sprays.takedowns'
+      data: 'taunts.sprays.takedowns',
     },
     {
       title: 'Spray Deaths',
-      data: 'taunts.sprays.deaths'
+      data: 'taunts.sprays.deaths',
     },
     {
       title: 'Dances',
-      data: 'taunts.dances.count'
+      data: 'taunts.dances.count',
     },
     {
       title: 'Dance TD',
-      data: 'taunts.dances.takedowns'
+      data: 'taunts.dances.takedowns',
     },
     {
       title: 'Dance Deaths',
-      data: 'taunts.dances.deaths'
-    }
+      data: 'taunts.dances.deaths',
+    },
   ];
 
   base.columns = base.columns.concat(addnlPlayerStats(), awardsColumns);
@@ -531,60 +538,63 @@ const TeamHeroSummaryFormat = {
     {
       title: 'Hero',
       data: 'heroName',
-      render: heroHeader
+      render: heroHeader,
     },
     {
       title: 'Win %',
       data: playerVsWinPctData,
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Pick %',
       data: (row) => row.games / row.totalMatches,
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Games',
-      data: 'games'
+      data: 'games',
     },
     {
       title: 'TD',
-      data: 'stats.Takedowns'
+      data: 'stats.Takedowns',
     },
     {
       title: 'D',
-      data: 'stats.Deaths'
+      data: 'stats.Deaths',
     },
     {
       title: 'K',
-      data: 'stats.SoloKill'
+      data: 'stats.SoloKill',
     },
     {
       title: 'KDA',
       data: (row) => row.stats.Takedowns / Math.max(1, row.stats.Deaths),
-      render: (data) => formatStat('KDA', data)
+      render: (data) => formatStat('KDA', data),
     },
     {
       title: 'Avg. % Dead',
       data: (row) => row.stats.timeDeadPct / row.games,
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Pick Pre-Mid',
       data: (row) => row.picks.preMid.count / row.totalMatches,
-      render: (data, type, row) => combinedNumericPct(data, row.picks.preMid.count, type)
+      render: (data, type, row) => combinedNumericPct(data, row.picks.preMid.count, type),
     },
     {
       title: 'Pick Post-Mid',
       data: (row) => row.picks.postMid.count / row.totalMatches,
-      render: (data, type, row) => combinedNumericPct(data, row.picks.postMid.count, type)
-    }
+      render: (data, type, row) => combinedNumericPct(data, row.picks.postMid.count, type),
+    },
   ],
   scrollY: STANDARD_SEGMENT_HEIGHT,
   paging: false,
   info: false,
   searching: false,
-  order: [[1, 'desc'], [2, 'desc']]
+  order: [
+    [1, 'desc'],
+    [2, 'desc'],
+  ],
 };
 
 const TeamHeroPickDetailFormat = {
@@ -592,53 +602,56 @@ const TeamHeroPickDetailFormat = {
     {
       title: 'Hero',
       data: 'heroName',
-      render: heroHeader
+      render: heroHeader,
     },
     {
       title: 'Win %',
       data: playerVsWinPctData,
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Pick %',
       data: (row) => row.games / row.totalMatches,
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Games',
-      data: 'games'
+      data: 'games',
     },
     {
       title: 'Pick Pre-Mid',
       data: (row) => row.picks.preMid.count / row.totalMatches,
-      render: (data, type, row) => combinedNumericPct(data, row.picks.preMid.count, type)
+      render: (data, type, row) => combinedNumericPct(data, row.picks.preMid.count, type),
     },
     {
       title: 'Pick Post-Mid',
       data: (row) => row.picks.postMid.count / row.totalMatches,
-      render: (data, type, row) => combinedNumericPct(data, row.picks.postMid.count, type)
+      render: (data, type, row) => combinedNumericPct(data, row.picks.postMid.count, type),
     },
     {
       title: 'Pick R1',
       data: (row) => row.picks.round1.count / row.totalMatches,
-      render: (data, type, row) => combinedNumericPct(data, row.picks.round1.count, type)
+      render: (data, type, row) => combinedNumericPct(data, row.picks.round1.count, type),
     },
     {
       title: 'Pick R2',
       data: (row) => row.picks.round2.count / row.totalMatches,
-      render: (data, type, row) => combinedNumericPct(data, row.picks.round2.count, type)
+      render: (data, type, row) => combinedNumericPct(data, row.picks.round2.count, type),
     },
     {
       title: 'Pick R3',
       data: (row) => row.picks.round3.count / row.totalMatches,
-      render: (data, type, row) => combinedNumericPct(data, row.picks.round3.count, type)
-    }
+      render: (data, type, row) => combinedNumericPct(data, row.picks.round3.count, type),
+    },
   ],
   scrollY: STANDARD_SEGMENT_HEIGHT,
   paging: false,
   info: false,
   searching: false,
-  order: [[1, 'desc'], [2, 'desc']]
+  order: [
+    [1, 'desc'],
+    [2, 'desc'],
+  ],
 };
 
 const TeamBanSummaryFormat = {
@@ -646,34 +659,37 @@ const TeamBanSummaryFormat = {
     {
       title: 'Hero',
       data: 'heroName',
-      render: heroHeader
+      render: heroHeader,
     },
     {
       title: 'Bans',
       data: (row) => row.bans / row.totalMatches,
-      render: (data, type, row) => combinedNumericPct(data, row.bans, type)
+      render: (data, type, row) => combinedNumericPct(data, row.bans, type),
     },
     {
       title: '1st Ban',
       data: (row) => row.first / row.totalMatches,
-      render: (data, type, row) => combinedNumericPct(data, row.first, type)
+      render: (data, type, row) => combinedNumericPct(data, row.first, type),
     },
     {
       title: '2nd Ban',
       data: (row) => row.second / row.totalMatches,
-      render: (data, type, row) => combinedNumericPct(data, row.second, type)
+      render: (data, type, row) => combinedNumericPct(data, row.second, type),
     },
     {
       title: 'Ban Vs.',
       data: (row) => row.banAgainst / row.totalMatches,
-      render: (data, type, row) => combinedNumericPct(data, row.banAgainst, type)
-    }
+      render: (data, type, row) => combinedNumericPct(data, row.banAgainst, type),
+    },
   ],
   scrollY: STANDARD_SEGMENT_HEIGHT,
   paging: false,
   info: false,
   searching: false,
-  order: [[1, 'desc'], [2, 'desc']]
+  order: [
+    [1, 'desc'],
+    [2, 'desc'],
+  ],
 };
 
 const TeamCompareToAvgFormat = {
@@ -681,29 +697,29 @@ const TeamCompareToAvgFormat = {
     {
       title: 'Stat',
       data: 'statName',
-      render: (data) => `<h3 class="ui inverted header">${data}</h3>`
+      render: (data) => `<h3 class="ui inverted header">${data}</h3>`,
     },
     {
       title: 'Team',
       data: 'pDataSort',
-      render: (data, type, row) => row.pData
+      render: (data, type, row) => row.pData,
     },
     {
       title: 'Diff',
       data: 'pctDiff',
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Average',
       data: 'cmpDataSort',
-      render: (data, type, row) => row.cmpData
-    }
+      render: (data, type, row) => row.cmpData,
+    },
   ],
   order: [[0, 'asc']],
   paging: false,
   info: false,
   scrollY: STANDARD_SEGMENT_WITH_SEARCH,
-  searching: true
+  searching: true,
 };
 
 const HeroDetailCompareFormat = {
@@ -711,28 +727,31 @@ const HeroDetailCompareFormat = {
     {
       title: 'Hero',
       data: 'name',
-      render: heroHeader
+      render: heroHeader,
     },
     {
       title: 'Win %',
       data: playerVsWinPctData,
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Games',
-      data: 'games'
+      data: 'games',
     },
     {
       title: 'Win % Δ',
       data: (row) => playerVsWinPctData(row) - row.avgWinPct,
-      render: deltaPctRender
-    }
+      render: deltaPctRender,
+    },
   ],
-  order: [[2, 'desc'], [1, 'desc']],
+  order: [
+    [2, 'desc'],
+    [1, 'desc'],
+  ],
   paging: false,
   searching: false,
   scrollY: STANDARD_SEGMENT_HEIGHT,
-  info: false
+  info: false,
 };
 
 const HeroDetailPlayerFormat = {
@@ -740,66 +759,68 @@ const HeroDetailPlayerFormat = {
     {
       title: 'Player',
       data: 'name',
-      render: (data, type, row) => `<h3 class="ui inverted header player-name link-to-player" player-id="${
-          row.key
-        }">${data}</h3>`
+      render: (data, type, row) =>
+        `<h3 class="ui inverted header player-name link-to-player" player-id="${row.key}">${data}</h3>`,
     },
     {
       title: 'Win %',
       data: playerVsWinPctData,
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Games',
-      data: 'games'
+      data: 'games',
     },
     {
       title: 'KDA',
       data: 'totalKDA',
-      render: (data) => formatStat('KDA', data)
+      render: (data) => formatStat('KDA', data),
     },
     {
       title: 'TD',
-      data: 'total.Takedowns'
+      data: 'total.Takedowns',
     },
     {
       title: 'K',
-      data: 'total.SoloKill'
+      data: 'total.SoloKill',
     },
     {
       title: 'A',
-      data: 'total.Assists'
+      data: 'total.Assists',
     },
     {
       title: 'D',
-      data: 'total.Deaths'
+      data: 'total.Deaths',
     },
     {
       title: 'Avg. Time Dead %',
       data: 'averages.timeDeadPct',
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Avg. DPM',
       data: 'averages.DPM',
-      render: (data) => formatStat('DPM', data, true)
+      render: (data) => formatStat('DPM', data, true),
     },
     {
       title: 'Avg. HPM',
       data: 'averages.HPM',
-      render: (data) => formatStat('HPM', data, true)
+      render: (data) => formatStat('HPM', data, true),
     },
     {
       title: 'Clutch Heals',
-      data: 'total.ClutchHealsPerformed'
-    }
+      data: 'total.ClutchHealsPerformed',
+    },
   ],
-  order: [[2, 'desc'], [1, 'desc']],
+  order: [
+    [2, 'desc'],
+    [1, 'desc'],
+  ],
   paging: true,
   pageLength: 50,
   searching: true,
   info: true,
-  scrollY: STANDARD_SEGMENT_ALL
+  scrollY: STANDARD_SEGMENT_ALL,
 };
 
 // this one sucks a lil, there's no list of team stats and they're all over the place.
@@ -809,52 +830,51 @@ const TeamRankingFormat = {
       title: 'Team Name',
       data: 'name',
       width: '300px',
-      render: (data, type, row) => `<h3 class="ui inverted header player-name link-to-team" team-id="${
-          row.id
-        }">${data}</h3>`
+      render: (data, type, row) =>
+        `<h3 class="ui inverted header player-name link-to-team" team-id="${row.id}">${data}</h3>`,
     },
     {
       title: 'Win %',
       data: (row) => row.wins / row.totalMatches,
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'Games',
-      data: 'totalMatches'
+      data: 'totalMatches',
     },
     {
       title: 'First Pick %',
       data: (row) => row.firstPicks / row.totalMatches,
-      render: (data) => formatStat('pct', data)
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'First Pick Win %',
-      data: (row) => row.firstPicks === 0 ? 0 : row.firstPickWins / row.firstPicks,
-      render: (data) => formatStat('pct', data)
+      data: (row) => (row.firstPicks === 0 ? 0 : row.firstPickWins / row.firstPicks),
+      render: (data) => formatStat('pct', data),
     },
     {
       title: 'KDA',
       data: 'selectedStats.totalKDA',
-      render: (data) => formatStat('KDA', data)
+      render: (data) => formatStat('KDA', data),
     },
     {
       title: 'Takedowns',
       data: 'selectedStats.Takedowns',
-      render: (data) => formatStat('Takedowns', data, true)
+      render: (data) => formatStat('Takedowns', data, true),
     },
     {
       title: 'Deaths',
       data: 'selectedStats.Deaths',
-      render: (data) => formatStat('Deaths', data, true)
+      render: (data) => formatStat('Deaths', data, true),
     },
     {
       title: 'Hero Pool',
-      data: 'heroesPlayed'
+      data: 'heroesPlayed',
     },
     {
       title: 'People Per Kill',
       data: 'selectedStats.PPK',
-      render: (data) => formatStat('PPK', data)
+      render: (data) => formatStat('PPK', data),
     },
     {
       title: 'Time Spent Dead',
@@ -863,12 +883,12 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('TimeSpentDead', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: '% Time Dead',
       data: 'selectedStats.timeDeadPct',
-      render: (data) => formatStat('timeDeadPct', data, true)
+      render: (data) => formatStat('timeDeadPct', data, true),
     },
     {
       title: 'Time w/ Level Adv.',
@@ -877,22 +897,22 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: '% of Game w/ Level Adv.',
       data: 'selectedStats.levelAdvPct',
-      render: (data) => formatStat('pct', data, true)
+      render: (data) => formatStat('pct', data, true),
     },
     {
       title: 'Avg. Level Adv.',
       data: 'selectedStats.avgLevelAdv',
-      render: (data) => formatStat('avgLevelAdv', data, true)
+      render: (data) => formatStat('avgLevelAdv', data, true),
     },
     {
       title: 'Avg. Heroes Alive',
       data: 'selectedStats.avgHeroesAlive',
-      render: (data) => formatStat('avgHeroesAlive', data, true)
+      render: (data) => formatStat('avgHeroesAlive', data, true),
     },
     {
       title: 'Time w/ Hero Adv.',
@@ -901,92 +921,92 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: '% of Game w/ Hero Adv.',
       data: 'selectedStats.pctWithHeroAdv',
-      render: (data) => formatStat('pct', data, true)
+      render: (data) => formatStat('pct', data, true),
     },
     {
       title: 'Aces',
       data: 'selectedStats.aces',
-      render: (data) => formatStat('aces', data, true)
+      render: (data) => formatStat('aces', data, true),
     },
     {
       title: 'Wipes',
       data: 'selectedStats.wipes',
-      render: (data) => formatStat('wipes', data, true)
+      render: (data) => formatStat('wipes', data, true),
     },
     {
       title: 'Passive XP/s',
       data: 'selectedStats.passiveXPRate',
-      render: (data) => formatStat('passiveXPRate', data, true)
+      render: (data) => formatStat('passiveXPRate', data, true),
     },
     {
       title: 'Passive XP % Gain',
       data: 'selectedStats.passiveXPDiff',
-      render: (data) => formatStat('passiveXPDiff', data, true)
+      render: (data) => formatStat('passiveXPDiff', data, true),
     },
     {
       title: 'Passive XP Gain',
       data: 'selectedStats.passiveXPGain',
-      render: (data) => formatStat('passiveXPGain', data, true)
+      render: (data) => formatStat('passiveXPGain', data, true),
     },
     {
       title: 'Hero Damage',
       data: 'selectedStats.HeroDamage',
-      render: (data) => formatStat('HeroDamage', data)
+      render: (data) => formatStat('HeroDamage', data),
     },
     {
       title: 'Siege Damage',
       data: 'selectedStats.SiegeDamage',
-      render: (data) => formatStat('SiegeDamage', data)
+      render: (data) => formatStat('SiegeDamage', data),
     },
     {
       title: 'Minion Damage',
       data: 'selectedStats.MinionDamage',
-      render: (data) => formatStat('MinionDamage', data)
+      render: (data) => formatStat('MinionDamage', data),
     },
     {
       title: 'Creep Damage',
       data: 'selectedStats.CreepDamage',
-      render: (data) => formatStat('CreepDamage', data)
+      render: (data) => formatStat('CreepDamage', data),
     },
     {
       title: 'Damage Taken',
       data: 'selectedStats.DamageTaken',
-      render: (data) => formatStat('DamageTaken', data)
+      render: (data) => formatStat('DamageTaken', data),
     },
     {
       title: 'Healing',
       data: 'selectedStats.Healing',
-      render: (data) => formatStat('Healing', data)
+      render: (data) => formatStat('Healing', data),
     },
     {
       title: 'Self Healing',
       data: 'selectedStats.SelfHealing',
-      render: (data) => formatStat('SelfHealing', data)
+      render: (data) => formatStat('SelfHealing', data),
     },
     {
       title: 'Shielding',
       data: 'selectedStats.ProtectionGivenToAllies',
-      render: (data) => formatStat('ProtectionGivenToAllies', data)
+      render: (data) => formatStat('ProtectionGivenToAllies', data),
     },
     {
       title: 'Team Fight Hero Damage',
       data: 'selectedStats.TeamfightHeroDamage',
-      render: (data) => formatStat('TeamfightHeroDamage', data)
+      render: (data) => formatStat('TeamfightHeroDamage', data),
     },
     {
       title: 'Team Fight Damage Taken',
       data: 'selectedStats.TeamfightDamageTaken',
-      render: (data) => formatStat('TeamfightDamageTaken', data)
+      render: (data) => formatStat('TeamfightDamageTaken', data),
     },
     {
       title: 'Teamfight Healing',
       data: 'selectedStats.TeamfightHealingDone',
-      render: (data) => formatStat('TeamfightHealingDone', data)
+      render: (data) => formatStat('TeamfightHealingDone', data),
     },
     {
       title: 'CC Time',
@@ -995,37 +1015,34 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('TimeCCdEnemyHeroes', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: 'Root Time',
       data: 'selectedStats.TimeRootingEnemyHeroes',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('TimeRootingEnemyHeroes', data);
+        if (type === 'display') return formatStat('TimeRootingEnemyHeroes', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: 'Silence Time',
       data: 'selectedStats.TimeSilencingEnemyHeroes',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('TimeSilencingEnemyHeroes', data);
+        if (type === 'display') return formatStat('TimeSilencingEnemyHeroes', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: 'Stun Time',
       data: 'selectedStats.TimeStunningEnemyHeroes',
       render: (data, type) => {
-        if (type === 'display')
-          return formatStat('TimeStunningEnemyHeroes', data);
+        if (type === 'display') return formatStat('TimeStunningEnemyHeroes', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: 'Match Length',
@@ -1034,7 +1051,7 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: 'Time to Level 10',
@@ -1043,11 +1060,11 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('timeTo10', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: 'Games Reached Level 10',
-      data: 'level10Games'
+      data: 'level10Games',
     },
     {
       title: 'Time to Level 20',
@@ -1056,11 +1073,11 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('timeTo20', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: 'Games Reached Level 20',
-      data: 'level20Games'
+      data: 'level20Games',
     },
     {
       title: 'Time @ Level 1',
@@ -1069,7 +1086,7 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: 'Time @ Level 4',
@@ -1078,7 +1095,7 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: 'Time @ Level 7',
@@ -1087,7 +1104,7 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: 'Time @ Level 10',
@@ -1096,7 +1113,7 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: 'Time @ Level 13',
@@ -1105,7 +1122,7 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: 'Time @ Level 16',
@@ -1114,42 +1131,42 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: '% of Game w/ 0 Heroes',
       data: 'selectedStats.pctWith0HeroesAlive',
-      render: (data) => formatStat('pctWith0HeroesAlive', data)
+      render: (data) => formatStat('pctWith0HeroesAlive', data),
     },
     {
       title: '% of Game w/ 1 Heroes',
       data: 'selectedStats.pctWith1HeroesAlive',
-      render: (data) => formatStat('pctWith1HeroesAlive', data)
+      render: (data) => formatStat('pctWith1HeroesAlive', data),
     },
     {
       title: '% of Game w/ 2 Heroes',
       data: 'selectedStats.pctWith2HeroesAlive',
-      render: (data) => formatStat('pctWith2HeroesAlive', data)
+      render: (data) => formatStat('pctWith2HeroesAlive', data),
     },
     {
       title: '% of Game w/ 3 Heroes',
       data: 'selectedStats.pctWith3HeroesAlive',
-      render: (data) => formatStat('pctWith3HeroesAlive', data)
+      render: (data) => formatStat('pctWith3HeroesAlive', data),
     },
     {
       title: '% of Game w/ 4 Heroes',
       data: 'selectedStats.pctWith4HeroesAlive',
-      render: (data) => formatStat('pctWith4HeroesAlive', data)
+      render: (data) => formatStat('pctWith4HeroesAlive', data),
     },
     {
       title: '% of Game w/ 5 Heroes',
       data: 'selectedStats.pctWith5HeroesAlive',
-      render: (data) => formatStat('pctWith5HeroesAlive', data)
+      render: (data) => formatStat('pctWith5HeroesAlive', data),
     },
     {
       title: 'Mercenary Captures',
       data: 'selectedStats.mercCaptures',
-      render: (data) => formatStat('mercCaptures', data)
+      render: (data) => formatStat('mercCaptures', data),
     },
     {
       title: 'Mercenary Uptime',
@@ -1158,37 +1175,37 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('mercUptime', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: 'Mercenary Uptime %',
       data: 'selectedStats.mercUptimePercent',
-      render: (data) => formatStat('mercUptimePercent', data)
+      render: (data) => formatStat('mercUptimePercent', data),
     },
     {
       title: 'Lv Δ',
       data: 'endOfGameLevels.combined.average',
-      render: (data) => formatStat('', data, true)
+      render: (data) => formatStat('', data, true),
     },
     {
       title: 'Win Lv Δ',
       data: 'endOfGameLevels.win.average',
-      render: (data) => formatStat('', data, true)
+      render: (data) => formatStat('', data, true),
     },
     {
       title: 'Loss Lv Δ',
       data: 'endOfGameLevels.loss.average',
-      render: (data) => formatStat('', data, true)
+      render: (data) => formatStat('', data, true),
     },
     {
       title: 'Max Level Adv.',
       data: 'selectedStats.maxLevelAdv',
-      render: (data) => formatStat('maxLevelAdv', data)
+      render: (data) => formatStat('maxLevelAdv', data),
     },
     {
       title: 'Forts Destroyed',
       data: 'structures.Fort.destroyed',
-      render: (data) => formatStat('', data, true)
+      render: (data) => formatStat('', data, true),
     },
     {
       title: 'Time to First Fort',
@@ -1197,17 +1214,17 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: 'Forts Lost',
       data: 'structures.Fort.lost',
-      render: (data) => formatStat('', data, true)
+      render: (data) => formatStat('', data, true),
     },
     {
       title: 'Keeps Destroyed',
       data: 'structures.Keep.destroyed',
-      render: (data) => formatStat('', data, true)
+      render: (data) => formatStat('', data, true),
     },
     {
       title: 'Time to First Keep',
@@ -1216,13 +1233,13 @@ const TeamRankingFormat = {
         if (type === 'display') return formatStat('Time', data);
 
         return parseFloat(data);
-      }
+      },
     },
     {
       title: 'Keeps Lost',
       data: 'structures.Keep.lost',
-      render: (data) => formatStat('', data, true)
-    }
+      render: (data) => formatStat('', data, true),
+    },
   ],
   order: [[0, 'asc']],
   paging: true,
@@ -1234,7 +1251,7 @@ const TeamRankingFormat = {
   scrollY: 'calc(100vh - 430px)',
   scrollX: true,
   buttons: ['csv', 'excel'],
-  fixedColumns: true
+  fixedColumns: true,
 };
 
 function safeAwardAccess(key, data) {
@@ -1249,18 +1266,18 @@ function awardsTrackerFormat() {
     {
       title: 'Hero',
       data: 'key',
-      render: heroHeader
+      render: heroHeader,
     },
     {
       title: 'Total',
       data: 'totalAwards',
-      render: (data) => `<span class="award">${data}</span>`
+      render: (data) => `<span class="award">${data}</span>`,
     },
     {
       title: 'MVP',
       data: (row) => safeAwardAccess('EndOfMatchAwardMVPBoolean', row),
-      render: (data) => `<span class="award">${data}</span>`
-    }
+      render: (data) => `<span class="award">${data}</span>`,
+    },
   ];
 
   // ok now the awards
@@ -1270,7 +1287,7 @@ function awardsTrackerFormat() {
     columns.push({
       title: Awards[awardKey].name,
       data: (row) => safeAwardAccess(awardKey, row),
-      render: (data) => `<span class="award">${data}</span>`
+      render: (data) => `<span class="award">${data}</span>`,
     });
   }
 
@@ -1283,9 +1300,9 @@ function awardsTrackerFormat() {
     scrollX: true,
     searching: false,
     fixedColumns: {
-      leftColumns: 2
+      leftColumns: 2,
     },
-    scrollCollapse: true
+    scrollCollapse: true,
   };
 }
 
@@ -1294,8 +1311,8 @@ function playerHeroDuoFormat(type) {
     {
       title: 'Hero',
       data: 'key',
-      render: heroHeader
-    }
+      render: heroHeader,
+    },
   ];
 
   // aaaand now the heroes
@@ -1325,16 +1342,16 @@ function playerHeroDuoFormat(type) {
 
           return `
             <div class="player-duo-cell">
-              <div class="cell-text">${formatStat('pct', data)}<br />${
-            row[type][hero].wins
-          } - ${row[type][hero].games - row[type][hero].wins}</div>
+              <div class="cell-text">${formatStat('pct', data)}<br />${row[type][hero].wins} - ${
+            row[type][hero].games - row[type][hero].wins
+          }</div>
             </div>
             <div class="duo-bg ${classname}"></div>
           `;
         }
 
         return '<div class="player-duo-cell empty"></div>';
-      }
+      },
     });
   }
 
@@ -1347,7 +1364,7 @@ function playerHeroDuoFormat(type) {
     scrollX: true,
     searching: false,
     fixedColumns: true,
-    scrollCollapse: true
+    scrollCollapse: true,
   };
 }
 

@@ -30,23 +30,23 @@ function initTeamRankingPage(tags) {
     popup: '.filter-popup-widget[widget-name="team-ranking-filter"]',
     on: 'click',
     variation: 'fluid',
-    closable: false
+    closable: false,
   });
 
   $('#team-ranking-body .buttons .button').click(toggleTeamRankingSection);
-  $('#team-ranking-body .top.attached.menu .item').click(function() {
+  $('#team-ranking-body .top.attached.menu .item').click(function () {
     toggleTeamRankingMode(this);
   });
 
   $('#team-ranking-file-menu').dropdown({
-    onChange: handleTeamRankingAction
+    onChange: handleTeamRankingAction,
   });
 
   $('#team-progress-bar').progress({
     text: {
-      active  : 'Loaded {value} of {total} teams',
-      success : 'All Teams Loaded'
-    }
+      active: 'Loaded {value} of {total} teams',
+      success: 'All Teams Loaded',
+    },
   });
 
   $('#team-ranking-print-sections .ui.dropdown').dropdown();
@@ -117,7 +117,9 @@ function initTeamRankingData(teams) {
 }
 
 function finalizeTeamRankingData() {
-  setTimeout(() => { $('#team-progress-bar').transition('scale'); }, 2000);
+  setTimeout(() => {
+    $('#team-progress-bar').transition('scale');
+  }, 2000);
   enableWidget('team-ranking-filter');
   $('#team-ranking-alt-search-button').removeClass('disabled');
   teamRankingTable.draw();
@@ -127,8 +129,7 @@ function updateTeamRankingData(err, matches, team) {
   $('#team-progress-bar').progress('increment', 1);
 
   // skip teams with no data
-  if (matches.length === 0)
-    return;
+  if (matches.length === 0) return;
 
   let mode = $('#team-ranking-body .top.attached.menu .active.item').attr('data-mode');
 
@@ -140,8 +141,7 @@ function updateTeamRankingData(err, matches, team) {
 
   if (mode === 'averages' || mode === 'total') {
     teamStats.stats.total.totalKDA = teamStats.takedowns.total / teamStats.deaths.total;
-  }
-  else {
+  } else {
     teamStats.stats.total.totalKDA = teamStats.stats[mode].KDA;
   }
   teamStats.matchLength.val = teamStats.matchLength[mode];
@@ -156,7 +156,7 @@ function updateTeamRankingData(err, matches, team) {
 
   teamStats.selectedStats = teamStats.stats[mode];
   teamStats.selectedStats.totalKDA = teamStats.stats.total.totalKDA;
-  
+
   teamStats.selectedStats.Takedowns = teamStats.takedowns[mode];
   teamStats.selectedStats.Deaths = teamStats.deaths[mode];
 
@@ -178,8 +178,7 @@ function updateTeamRankingData(err, matches, team) {
 function handleTeamRankingAction(value, text, $elem) {
   if (value === 'csv') {
     teamRankingTable.table.DataTable().button('0').trigger();
-  }
-  else if (value === 'excel') {
+  } else if (value === 'excel') {
     teamRankingTable.table.DataTable().button('1').trigger();
   }
 }

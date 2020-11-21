@@ -5,19 +5,19 @@
 // computes the win % of the team that wins the second objective phase
 // on sky temple
 function skyTempleSecondPhaseWin() {
-  DB.getMatches({ map: 'Sky Temple' }, function(err, docs) {
+  DB.getMatches({ map: 'Sky Temple' }, function (err, docs) {
     // aggregate
     const aggregate = {
       phase2WinnerGame: 0,
       nonDrawGames: 0,
-      data: []
+      data: [],
     };
 
     for (const match of docs) {
       const winner = match.winner;
 
       const shots = match.objective[0].events.concat(match.objective[1].events);
-      shots.sort(function(a, b) {
+      shots.sort(function (a, b) {
         return a.loop - b.loop;
       });
 
@@ -33,8 +33,7 @@ function skyTempleSecondPhaseWin() {
         else if (shots[i].team === ReplayTypes.TeamType.Red) redCt += 1;
       }
 
-      let towerWinner =
-        blueCt > redCt ? ReplayTypes.TeamType.Blue : ReplayTypes.TeamType.Red;
+      let towerWinner = blueCt > redCt ? ReplayTypes.TeamType.Blue : ReplayTypes.TeamType.Red;
 
       if (blueCt === redCt) towerWinner = -1;
 
@@ -51,7 +50,7 @@ function skyTempleSecondPhaseWin() {
         didPhase2WinnerWin: towerWinner === winner,
         didPhase2Draw: blueCt === redCt,
         winnerProportion,
-        winnerShots
+        winnerShots,
       });
 
       if (towerWinner === winner) {
@@ -64,8 +63,7 @@ function skyTempleSecondPhaseWin() {
     }
 
     aggregate.phase2WinnerGamePct = aggregate.phase2WinnerGame / docs.length;
-    aggregate.phase2WinnerGameNoDrawPct =
-      aggregate.phase2WinnerGame / aggregate.nonDrawGames;
+    aggregate.phase2WinnerGameNoDrawPct = aggregate.phase2WinnerGame / aggregate.nonDrawGames;
 
     console.log(aggregate);
   });
