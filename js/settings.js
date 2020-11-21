@@ -421,7 +421,7 @@ function addReplaysToList(path, collections) {
         context.status = '';
         context.date = new Date(stats.birthtime);
         context.fdate = context.date.toLocaleString('en-us');
-        context.folder = path.match(/([^\/\\]*)\/*$/)[1];
+        context.folder = path.match(/([^/\\]*)\/*$/)[1];
 
         // only used for import sets, safe to leave undefined otherwise
         context.collections = collections;
@@ -966,14 +966,14 @@ function liveAddReplay(evt, name) {
     // filtered out non-stormreplay files
     let stats = fs.statSync(name);
 
-    let prefix = name.match(/(.*)[\/\\]/)[1] || '';
+    let prefix = name.match(/(.*)[/\\]/)[1] || '';
 
     let context = {};
     context.status = '';
     context.date = new Date(stats.birthtime);
     context.fdate = context.date.toLocaleString('en-us');
-    context.folder = prefix.match(/([^\/\\]*)\/*$/)[1];
-    context.filename = name.match(/([^\/\\]*)\/*$/)[1];
+    context.folder = prefix.match(/([^/\\]*)\/*$/)[1];
+    context.filename = name.match(/([^/\\]*)\/*$/)[1];
 
     // only used for import sets, safe to leave undefined otherwise
     if (usingImportSet) {
