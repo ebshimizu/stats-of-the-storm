@@ -4,12 +4,12 @@ function initPopup(elem, tags) {
   // modes
   elem.find('.filter-widget-mode').dropdown({
     action: 'activate',
-    fullTextSearch: true
+    fullTextSearch: true,
   });
 
   // maps
   elem.find('.filter-widget-map').dropdown({
-    action: 'activate'
+    action: 'activate',
   });
   addMapMenuOptions(elem.find('.filter-widget-map'));
   elem.find('.filter-widget-map').dropdown('refresh');
@@ -21,16 +21,15 @@ function initPopup(elem, tags) {
   elem.find('.filter-widget-end-date').datepicker('setDate', new Date());
 
   elem.find('.filter-widget-season').dropdown({
-    onChange: function(value, text, $item) {
+    onChange: function (value, text, $item) {
       if (value !== '0' && value !== '') {
         elem.find('.filter-widget-start-date').datepicker('setDate', ReplayTypes.SeasonDates[text].start);
         elem.find('.filter-widget-end-date').datepicker('setDate', ReplayTypes.SeasonDates[text].end);
-      }
-      else {
+      } else {
         elem.find('.filter-widget-start-date').datepicker('setDate', new Date('1-1-2012'));
         elem.find('.filter-widget-end-date').datepicker('setDate', new Date());
       }
-    }
+    },
   });
   elem.find('.filter-widget-season .menu').html('');
   for (let s in ReplayTypes.SeasonDates) {
@@ -41,31 +40,31 @@ function initPopup(elem, tags) {
 
   // patch
   elem.find('.filter-widget-patch').dropdown({
-    fullTextSearch: true
+    fullTextSearch: true,
   });
-  addPatchMenuOptions(elem.find('.filter-widget-patch'), function() {
+  addPatchMenuOptions(elem.find('.filter-widget-patch'), function () {
     elem.find('.filter-widget-patch').dropdown('refresh');
   });
 
   // hero type
   elem.find('.filter-widget-hero-type').dropdown({
-    fullTextSearch: true
+    fullTextSearch: true,
   });
-  
+
   // team
   elem.find('.filter-widget-team-menu').dropdown({
-    fullTextSearch: true
+    fullTextSearch: true,
   });
 
   elem.find('.filter-widget-team-win').dropdown();
 
-  elem.find('.filter-widget-clear-team').click(function() {
+  elem.find('.filter-widget-clear-team').click(function () {
     $('.filter-widget-team-menu').dropdown('restore defaults');
-  })
+  });
 
   // tags
   elem.find('.filter-widget-tags').dropdown({
-    fullTextSearch: true
+    fullTextSearch: true,
   });
 
   //toggles
@@ -74,15 +73,17 @@ function initPopup(elem, tags) {
   elem.find('.filter-widget-search-players').dropdown();
 
   // populate hero menu
-  addHeroMenuOptions(elem.find('.filter-widget-hero-search')); 
+  addHeroMenuOptions(elem.find('.filter-widget-hero-search'));
   elem.find('.filter-widget-hero-search').dropdown({
-    fullTextSearch: true
+    fullTextSearch: true,
   });
 
   populateTagMenuWithValues(elem.find('.filter-widget-tags'), tags);
 
   // the buttons get rebound depending on the page
-  elem.find('.filter-widget-reset').click(function() { resetFilterWidget(elem) });
+  elem.find('.filter-widget-reset').click(function () {
+    resetFilterWidget(elem);
+  });
 }
 
 function disableWidget(name) {
@@ -103,8 +104,8 @@ function enableWidget(name) {
 function bindFilterButton(elem, callback) {
   elem.find('.filter-widget-search').off();
 
-  elem.find('.filter-widget-search').click(function() {
-    getPopupQuery(elem, function(queries) {
+  elem.find('.filter-widget-search').click(function () {
+    getPopupQuery(elem, function (queries) {
       callback(queries.map, queries.hero);
     });
   });
@@ -112,17 +113,17 @@ function bindFilterButton(elem, callback) {
 
 // Executes the filter button callback for theis element on an arbitrary element
 function bindOtherSearchButton(popup, elem, callback) {
-  elem.click(function() {
-    getPopupQuery(popup, function(queries) {
+  elem.click(function () {
+    getPopupQuery(popup, function (queries) {
       callback(queries.map, queries.hero);
     });
-  })
+  });
 }
 
 function bindFilterResetButton(elem, callback) {
   elem.find('.filter-widget-reset').off();
 
-  elem.find('.filter-widget-reset').click(function() {
+  elem.find('.filter-widget-reset').click(function () {
     resetFilterWidget(elem);
     callback();
   });
@@ -132,7 +133,7 @@ function resetFilterWidget(elem) {
   elem.find('.dropdown').dropdown('restore defaults');
 
   elem.find('.filter-widget-start-date').datepicker('setDate', new Date('1-1-2016'));
-  elem.find('.filter-widget-end-date').datepicker('setDate', new Date()); 
+  elem.find('.filter-widget-end-date').datepicker('setDate', new Date());
 }
 
 // this unfortunately needs to be async due to teams
@@ -140,8 +141,7 @@ function getPopupQuery(elem, callback) {
   // mode
   let modes = elem.find('.filter-widget-mode').dropdown('get value').split(',');
   for (let m in modes) {
-    if (modes[m] !== "")
-      modes[m] = parseInt(modes[m]);
+    if (modes[m] !== '') modes[m] = parseInt(modes[m]);
   }
 
   // dates
@@ -149,20 +149,18 @@ function getPopupQuery(elem, callback) {
   let end = elem.find('.filter-widget-end-date').datepicker('getDate');
 
   // hero type
-  let types = elem.find('.filter-widget-hero-type').dropdown('get value').split(',')
+  let types = elem.find('.filter-widget-hero-type').dropdown('get value').split(',');
   for (let t in types) {
-    if (types[t] !== "") {
+    if (types[t] !== '') {
       if (types[t].split(' ').length === 1) {
-        if (types[t] === "melee" || types[t] === "ranged") {
-          types[t] = { type: capitalize(types[t]) }
+        if (types[t] === 'melee' || types[t] === 'ranged') {
+          types[t] = { type: capitalize(types[t]) };
+        } else {
+          types[t] = { role: capitalize(types[t]) };
         }
-        else {
-          types[t] = { role: capitalize(types[t]) }
-        }
-      }
-      else {
+      } else {
         let s = types[t].split(' ');
-        types[t] = { type: capitalize(s[0]), role: capitalize(s[1])}
+        types[t] = { type: capitalize(s[0]), role: capitalize(s[1]) };
       }
     }
   }
@@ -187,29 +185,27 @@ function getPopupQuery(elem, callback) {
   let widgetHeroOnTeam = elem.find('.filter-widget-hero-team').checkbox('is checked');
 
   for (let p in patches) {
-    if (patches[p] !== "")
-      patches[p] = parseInt(patches[p]);
+    if (patches[p] !== '') patches[p] = parseInt(patches[p]);
   }
 
   // construct the query
   let query = {};
-  if (modes[0] !== "") {
+  if (modes[0] !== '') {
     query.mode = { $in: modes };
   }
 
-  if (maps[0] !== "") {
+  if (maps[0] !== '') {
     query.map = { $in: maps };
   }
 
-  if (patches[0] !== "") {
+  if (patches[0] !== '') {
     query['version.m_build'] = { $in: patches };
   }
 
-  if (tags[0] !== "") {
+  if (tags[0] !== '') {
     query.tags = { $in: tags };
   }
 
-  
   // date  // dates
   let incEnd = new Date(end);
   incEnd.setDate(end.getDate() + 1);
@@ -219,9 +215,8 @@ function getPopupQuery(elem, callback) {
   let map = Object.assign({}, query);
   let hero = Object.assign({}, query);
 
-  if (players[0] !== "") {
-    if (!('$or' in map))
-      map.$or = [];
+  if (players[0] !== '') {
+    if (!('$or' in map)) map.$or = [];
 
     for (let p in players) {
       map.$or.push({ playerIDs: players[p] });
@@ -232,7 +227,7 @@ function getPopupQuery(elem, callback) {
 
   // heroes
   let heroArr = [];
-  if (types[0] !== "") {
+  if (types[0] !== '') {
     if (!('$or' in map)) {
       map.$or = [];
     }
@@ -242,7 +237,7 @@ function getPopupQuery(elem, callback) {
       for (let h in heroest) {
         if (heroArr.indexOf(heroest[h]) === -1) {
           heroArr.push(heroest[h]);
-          map.$or.push({heroes: heroest[h] });
+          map.$or.push({ heroes: heroest[h] });
         }
       }
     }
@@ -257,7 +252,7 @@ function getPopupQuery(elem, callback) {
 
     for (let h of heroes) {
       heroArr.push(h);
-      map.$or.push({heroes: h});
+      map.$or.push({ heroes: h });
     }
 
     hero.hero = { $in: heroArr };
@@ -268,7 +263,7 @@ function getPopupQuery(elem, callback) {
     return;
   }
 
-  DB.getTeam(team, function(err, team) {
+  DB.getTeam(team, function (err, team) {
     let players = team.players;
 
     if (!('$or' in map)) {
@@ -283,14 +278,13 @@ function getPopupQuery(elem, callback) {
         t0queries.push({ 'teams.0.ids': players[i] });
         t1queries.push({ 'teams.1.ids': players[i] });
       }
-    }
-    else {
-      // basically we need a match 5 of the players and then we're ok 
+    } else {
+      // basically we need a match 5 of the players and then we're ok
       for (let i = 0; i < 5; i++) {
         const t0key = 'teams.0.ids.' + i;
         const t1key = 'teams.1.ids.' + i;
 
-        let t0arg = { };
+        let t0arg = {};
         t0arg[t0key] = { $in: players };
         let t1arg = {};
         t1arg[t1key] = { $in: players };
@@ -303,8 +297,7 @@ function getPopupQuery(elem, callback) {
     if (teamWin === 'win') {
       t0queries.push({ winner: 0 });
       t1queries.push({ winner: 1 });
-    }
-    else if (teamWin === 'loss') {
+    } else if (teamWin === 'loss') {
       t0queries.push({ winner: 1 });
       t1queries.push({ winner: 0 });
     }
@@ -328,11 +321,10 @@ function getPopupQuery(elem, callback) {
 
     if (teamWin === 'win') {
       hero.win = true;
-    }
-    else if (teamWin === 'loss') {
+    } else if (teamWin === 'loss') {
       hero.win = false;
     }
 
-    callback({map, hero});
+    callback({ map, hero });
   });
 }

@@ -16,24 +16,24 @@ var teamTables = {
   maps: null,
   duosWith: null,
   duosAgainst: null,
-  pickDetail: null
-}
+  pickDetail: null,
+};
 
 function initTeamsPage(tags) {
   $('#team-set-team').dropdown({
     onChange: updateTeamData,
-    fullTextSearch: true
+    fullTextSearch: true,
   });
   $('#team-set-team-compare').dropdown({
     onChange: updateCompareTeamData,
-    fullTextSearch: true
+    fullTextSearch: true,
   });
 
   populateTeamMenu($('.team-menu'));
 
   $('#team-add-player-menu').dropdown({
     action: 'activate',
-    fullTextSearch: true
+    fullTextSearch: true,
   });
 
   teamTables.maps = new Table('#team-map-summary table', TableDefs.MapFormat);
@@ -60,7 +60,7 @@ function initTeamsPage(tags) {
     popup: '.filter-popup-widget[widget-name="teams-filter"]',
     on: 'click',
     variation: 'fluid',
-    closable: false
+    closable: false,
   });
 
   bindFilterButton(filterWidget, updateTeamsFilter);
@@ -70,76 +70,76 @@ function initTeamsPage(tags) {
   $('#team-detail-body table.sortable').tablesort();
   $('#team-detail-body table.sortable').floatThead({
     scrollContainer: closestWrapper,
-    autoReflow: true
+    autoReflow: true,
   });
 
-  $('#team-detail-body th.stat').data('sortBy', function(th, td, tablesort) {
+  $('#team-detail-body th.stat').data('sortBy', function (th, td, tablesort) {
     return parseFloat(td.attr('data-sort-value'));
   });
 
   $('#team-duos-sub .item').tab();
-  $('#team-duos-sub .item').click(function() {
+  $('#team-duos-sub .item').click(function () {
     teamTables.duosWith.draw();
     teamTables.duosAgainst.draw();
   });
 
   $('#teams-submenu .item').tab();
-  $('#teams-submenu .item').click(function() {
+  $('#teams-submenu .item').click(function () {
     $('#team-detail-body table.sortable').floatThead('reflow');
     redrawTeamTables();
   });
 
   $('#team-hero-summary .menu .item').tab();
-  $('#team-hero-summary .item').click(function() {
+  $('#team-hero-summary .item').click(function () {
     $('#team-detail-body table.sortable').floatThead('reflow');
     teamTables.heroSummary.draw();
     teamTables.bans.draw();
     teamTables.pickDetail.draw();
   });
 
-  $('#teams-submenu .external-match-history').click(function() {
+  $('#teams-submenu .external-match-history').click(function () {
     showMatchHistory();
   });
 
   $('#team-edit-menu').dropdown({
-    onChange: function(value, text, $elem) {
+    onChange: function (value, text, $elem) {
       handleTeamMenuCallback(value);
-    }
+    },
   });
 
-  $('#team-roster-stats .top.attached.menu .item').click(function() {
+  $('#team-roster-stats .top.attached.menu .item').click(function () {
     toggleTeamRosterMode(this);
   });
 
   $('#team-confirm-action-user').modal({
-    closable: false
+    closable: false,
   });
   $('#team-add-user').modal({
-    closable: false
+    closable: false,
   });
   $('#team-text-input').modal({
-    closable: false
+    closable: false,
   });
   $('#team-add-player-button').click(addPlayerToTeam);
 
   // collection averages
   $('#team-compare-collection').dropdown({
     action: 'activate',
-    onChange: updateTeamCollectionCompare
-  })
+    onChange: updateTeamCollectionCompare,
+  });
   populateTeamCollectionMenu();
 
   // threshold
   $('#teams-hero-thresh input').popup({
-    on: 'focus'
+    on: 'focus',
   });
   $('#teams-hero-thresh input').val(0);
-  $('#teams-hero-thresh input').blur(function() {
+  $('#teams-hero-thresh input').blur(function () {
     updateTeamData($('#team-set-team').dropdown('get value'), $('#team-set-team').dropdown('get text'));
   });
 
   $('#team-file-menu').dropdown({
-    onChange: handleTeamMenuCallback
+    onChange: handleTeamMenuCallback,
   });
   $('#team-print-sections .ui.dropdown').dropdown();
 }
@@ -149,10 +149,12 @@ function populateTeamCollectionMenu() {
   $('#team-compare-collection .menu').append('<div class="item" data-value="all">All Matches</div>');
   $('#team-compare-collection .menu').append('<div class="ui divider"></div>');
 
-  DB.getCollections(function(err, collections) {
+  DB.getCollections(function (err, collections) {
     for (let c in collections) {
       let col = collections[c];
-      $('#team-compare-collection .menu').append('<div class="item" data-value="' + escapeHtml(col._id) + '">' + escapeHtml(col.name) + '</div>');
+      $('#team-compare-collection .menu').append(
+        '<div class="item" data-value="' + escapeHtml(col._id) + '">' + escapeHtml(col.name) + '</div>',
+      );
     }
 
     $('#team-compare-collection').dropdown('refresh');
@@ -206,11 +208,9 @@ function resetTeamsFilter() {
 
 function updateTeamData(value, text, $elem, force) {
   // lol that's the null team don't do this
-  if (value === '')
-    return;
+  if (value === '') return;
 
-  if (currentTeam && currentTeam._id === value && !force)
-    return;
+  if (currentTeam && currentTeam._id === value && !force) return;
 
   showTeamLoader();
   $('#teams-page-header .team-name').text(text);
@@ -219,15 +219,12 @@ function updateTeamData(value, text, $elem, force) {
 }
 
 function updateCompareTeamData(value, text, $elem, force) {
-  if (value === '')
-    return;
+  if (value === '') return;
 
-  if (currentTeam && currentTeam._id === value && !force)
-    return;
+  if (currentTeam && currentTeam._id === value && !force) return;
 
-  if (value === cmpTeamVal)
-    return;
-  
+  if (value === cmpTeamVal) return;
+
   cmpTeamVal = value;
   showTeamLoader();
 
@@ -259,7 +256,7 @@ function loadTeamData(team, matches, heroData) {
   for (let h in teamStats.heroes) {
     let hero = teamStats.heroes[h];
     if (hero.gamesAgainst >= teamHeroMatchThresh && hero.gamesAgainst > 0) {
-      against[h] = { name: h, games: hero.gamesAgainst, defeated: hero.defeated }
+      against[h] = { name: h, games: hero.gamesAgainst, defeated: hero.defeated };
     }
   }
 
@@ -267,7 +264,7 @@ function loadTeamData(team, matches, heroData) {
   teamTables.againstHero.setDataFromObject(against);
 
   let picked = 0;
-  let heroSummaryData = []
+  let heroSummaryData = [];
   for (let h in heroStats.heroes) {
     picked += 1;
     const hero = heroStats.heroes[h];
@@ -290,8 +287,7 @@ function loadTeamData(team, matches, heroData) {
     const hero = teamStats.heroes[h];
 
     // filter out only when a hero was faced without draft involvement
-    if (hero.bans === 0 && hero.banAgainst === 0)
-      continue;
+    if (hero.bans === 0 && hero.banAgainst === 0) continue;
 
     hero.totalMatches = teamStats.totalMatches;
     hero.heroName = h;
@@ -305,31 +301,57 @@ function loadTeamData(team, matches, heroData) {
 
   // other stats
   try {
-    $('#team-summary-stats .statistic[name="overallWin"] .value').text(formatStat('pct', teamStats.wins / teamStats.totalMatches));
+    $('#team-summary-stats .statistic[name="overallWin"] .value').text(
+      formatStat('pct', teamStats.wins / teamStats.totalMatches),
+    );
     $('#team-summary-stats .statistic[name="overallGames"] .value').text(formatStat('', teamStats.totalMatches, true));
     $('#team-summary-stats .statistic[name="overallTD"] .value').text(formatStat('', teamStats.takedowns.total, true));
     $('#team-summary-stats .statistic[name="overallDeaths"] .value').text(formatStat('', teamStats.deaths.total, true));
-    $('#team-summary-stats .statistic[name="overallKDA"] .value').text(formatStat('KDA', teamStats.takedowns.total / Math.max(1, teamStats.deaths.total)));
-    $('#team-summary-stats .statistic[name="timeDead"] .value').text(formatSeconds(teamStats.stats.average.avgTimeSpentDead));
-    $('#team-summary-stats .statistic[name="pctTimeDead"] .value').text(formatStat('pct', teamStats.stats.average.timeDeadPct));
+    $('#team-summary-stats .statistic[name="overallKDA"] .value').text(
+      formatStat('KDA', teamStats.takedowns.total / Math.max(1, teamStats.deaths.total)),
+    );
+    $('#team-summary-stats .statistic[name="timeDead"] .value').text(
+      formatSeconds(teamStats.stats.average.avgTimeSpentDead),
+    );
+    $('#team-summary-stats .statistic[name="pctTimeDead"] .value').text(
+      formatStat('pct', teamStats.stats.average.timeDeadPct),
+    );
     $('#team-summary-stats .statistic[name="heroesPlayed"] .value').text(picked);
     $('#team-summary-stats .statistic[name="heroesPct"] .value').text(formatStat('pct', picked / Heroes.heroCount));
     $('#team-summary-stats .statistic[name="avgLength"] .value').text(formatSeconds(teamStats.matchLength.average));
     $('#team-summary-stats .statistic[name="PPK"] .value').text(formatStat('KDA', teamStats.stats.average.PPK));
 
     let elem = $('#team-detail-stats');
-    $('#team-detail-stats .statistic[name="team-time-to-10"] .value').text(formatSeconds(teamStats.stats.average.timeTo10));
-    $('#team-detail-stats .statistic[name="team-times-at-10"] .value').text(formatStat('', teamStats.level10Games, true));
-    $('#team-detail-stats .statistic[name="team-time-to-20"] .value').text(formatSeconds(teamStats.stats.average.timeTo20));
-    $('#team-detail-stats .statistic[name="team-times-at-20"] .value').text(formatStat('', teamStats.level20Games, true));
+    $('#team-detail-stats .statistic[name="team-time-to-10"] .value').text(
+      formatSeconds(teamStats.stats.average.timeTo10),
+    );
+    $('#team-detail-stats .statistic[name="team-times-at-10"] .value').text(
+      formatStat('', teamStats.level10Games, true),
+    );
+    $('#team-detail-stats .statistic[name="team-time-to-20"] .value').text(
+      formatSeconds(teamStats.stats.average.timeTo20),
+    );
+    $('#team-detail-stats .statistic[name="team-times-at-20"] .value').text(
+      formatStat('', teamStats.level20Games, true),
+    );
 
-    $('#team-detail-stats .statistic[name="merc-captures"] .value').text(formatStat('mercCaptures', teamStats.stats.average.mercCaptures, true));
-    $('#team-detail-stats .statistic[name="merc-uptime"] .value').text(formatSeconds(teamStats.stats.average.mercUptime));
-    $('#team-detail-stats .statistic[name="merc-uptime-percent"] .value').text(formatStat('pct', teamStats.stats.average.mercUptimePercent));
+    $('#team-detail-stats .statistic[name="merc-captures"] .value').text(
+      formatStat('mercCaptures', teamStats.stats.average.mercCaptures, true),
+    );
+    $('#team-detail-stats .statistic[name="merc-uptime"] .value').text(
+      formatSeconds(teamStats.stats.average.mercUptime),
+    );
+    $('#team-detail-stats .statistic[name="merc-uptime-percent"] .value').text(
+      formatStat('pct', teamStats.stats.average.mercUptimePercent),
+    );
 
     updateTeamStat(elem, 'team-passive-rate', formatStat('passiveXPRate', teamStats.stats.average.passiveXPRate, true));
     updateTeamStat(elem, 'team-passive-gain', formatStat('passiveXPDiff', teamStats.stats.average.passiveXPDiff, true));
-    updateTeamStat(elem, 'team-passive-total', formatStat('passiveXPGain', teamStats.stats.average.passiveXPGain, true));
+    updateTeamStat(
+      elem,
+      'team-passive-total',
+      formatStat('passiveXPGain', teamStats.stats.average.passiveXPGain, true),
+    );
 
     updateTeamStat(elem, 'team-level-adv-time', formatSeconds(teamStats.stats.average.levelAdvTime));
     updateTeamStat(elem, 'team-level-adv-pct', formatStat('levelAdvPct', teamStats.stats.average.levelAdvPct, true));
@@ -350,32 +372,77 @@ function loadTeamData(team, matches, heroData) {
     elem = $('#team-structure-stats');
     updateTeamStat(elem, 'forts-destroyed', teamStats.structures.Fort.destroyed);
     updateTeamStat(elem, 'forts-lost', teamStats.structures.Fort.lost);
-    updateTeamStat(elem, 'first-fort', teamStats.structures.Fort.destroyed === 0 ? '-' : formatSeconds(teamStats.structures.Fort.first / teamStats.structures.Fort.gamesWithFirst));
+    updateTeamStat(
+      elem,
+      'first-fort',
+      teamStats.structures.Fort.destroyed === 0
+        ? '-'
+        : formatSeconds(teamStats.structures.Fort.first / teamStats.structures.Fort.gamesWithFirst),
+    );
 
     updateTeamStat(elem, 'keeps-destroyed', teamStats.structures.Keep.destroyed);
     updateTeamStat(elem, 'keeps-lost', teamStats.structures.Keep.lost);
-    updateTeamStat(elem, 'first-keep', teamStats.structures.Keep.destroyed === 0 ? '-' : formatSeconds(teamStats.structures.Keep.first / teamStats.structures.Keep.gamesWithFirst));
+    updateTeamStat(
+      elem,
+      'first-keep',
+      teamStats.structures.Keep.destroyed === 0
+        ? '-'
+        : formatSeconds(teamStats.structures.Keep.first / teamStats.structures.Keep.gamesWithFirst),
+    );
 
-    updateTeamStat(elem, 'wells-destroyed', teamStats.structures['Fort Well'].destroyed + teamStats.structures['Keep Well'].destroyed);
+    updateTeamStat(
+      elem,
+      'wells-destroyed',
+      teamStats.structures['Fort Well'].destroyed + teamStats.structures['Keep Well'].destroyed,
+    );
     updateTeamStat(elem, 'wells-lost', teamStats.structures['Fort Well'].lost + teamStats.structures['Keep Well'].lost);
 
-    let hideWellTime = teamStats.structures['Fort Well'].destroyed + teamStats.structures['Keep Well'].destroyed === 0
-    updateTeamStat(elem, 'first-well', hideWellTime ? '--:--' : formatSeconds(Math.min(
-      teamStats.structures['Fort Well'].first / teamStats.structures['Fort Well'].gamesWithFirst,
-      teamStats.structures['Keep Well'].gamesWithFirst === 0 ? 1e10 : teamStats.structures['Keep Well'].first / teamStats.structures['Keep Well'].gamesWithFirst)
-    ));
+    let hideWellTime = teamStats.structures['Fort Well'].destroyed + teamStats.structures['Keep Well'].destroyed === 0;
+    updateTeamStat(
+      elem,
+      'first-well',
+      hideWellTime
+        ? '--:--'
+        : formatSeconds(
+            Math.min(
+              teamStats.structures['Fort Well'].first / teamStats.structures['Fort Well'].gamesWithFirst,
+              teamStats.structures['Keep Well'].gamesWithFirst === 0
+                ? 1e10
+                : teamStats.structures['Keep Well'].first / teamStats.structures['Keep Well'].gamesWithFirst,
+            ),
+          ),
+    );
 
-    updateTeamStat(elem, 'towers-destroyed', teamStats.structures['Fort Tower'].destroyed + teamStats.structures['Keep Tower'].destroyed);
-    updateTeamStat(elem, 'towers-lost', teamStats.structures['Fort Tower'].lost + teamStats.structures['Keep Tower'].lost);
+    updateTeamStat(
+      elem,
+      'towers-destroyed',
+      teamStats.structures['Fort Tower'].destroyed + teamStats.structures['Keep Tower'].destroyed,
+    );
+    updateTeamStat(
+      elem,
+      'towers-lost',
+      teamStats.structures['Fort Tower'].lost + teamStats.structures['Keep Tower'].lost,
+    );
 
-    let hideTowerTime = teamStats.structures['Fort Tower'].destroyed + teamStats.structures['Keep Tower'].destroyed === 0;
-    updateTeamStat(elem, 'first-tower', hideTowerTime ? '--:--' : formatSeconds(Math.min(
-      teamStats.structures['Fort Tower'].first / teamStats.structures['Fort Tower'].gamesWithFirst,
-      teamStats.structures['Keep Tower'].gamesWithFirst === 0 ? 1e10 : teamStats.structures['Keep Tower'].first / teamStats.structures['Keep Tower'].gamesWithFirst)
-    ));
+    let hideTowerTime =
+      teamStats.structures['Fort Tower'].destroyed + teamStats.structures['Keep Tower'].destroyed === 0;
+    updateTeamStat(
+      elem,
+      'first-tower',
+      hideTowerTime
+        ? '--:--'
+        : formatSeconds(
+            Math.min(
+              teamStats.structures['Fort Tower'].first / teamStats.structures['Fort Tower'].gamesWithFirst,
+              teamStats.structures['Keep Tower'].gamesWithFirst === 0
+                ? 1e10
+                : teamStats.structures['Keep Tower'].first / teamStats.structures['Keep Tower'].gamesWithFirst,
+            ),
+          ),
+    );
 
     elem = $('#team-damage-stats');
-    updateTeamStat(elem, 'hero-damage',  formatStat('', teamStats.stats.average.HeroDamage, true));
+    updateTeamStat(elem, 'hero-damage', formatStat('', teamStats.stats.average.HeroDamage, true));
     updateTeamStat(elem, 'siege-damage', formatStat('', teamStats.stats.average.SiegeDamage, true));
     updateTeamStat(elem, 'creep-damage', formatStat('', teamStats.stats.average.CreepDamage, true));
     updateTeamStat(elem, 'minion-damage', formatStat('', teamStats.stats.average.MinionDamage, true));
@@ -393,22 +460,53 @@ function loadTeamData(team, matches, heroData) {
     updateTeamStat(elem, 'stun', formatSeconds(teamStats.stats.average.TimeStunningEnemyHeroes));
 
     updateTeamStat(elem, 'first-pick-pct', formatStat('pct', teamStats.firstPicks / teamStats.totalMatches));
-    updateTeamStat(elem, 'first-pick-win', formatStat('pct', teamStats.firstPicks === 0 ? 0 : teamStats.firstPickWins / teamStats.firstPicks));
+    updateTeamStat(
+      elem,
+      'first-pick-win',
+      formatStat('pct', teamStats.firstPicks === 0 ? 0 : teamStats.firstPickWins / teamStats.firstPicks),
+    );
     updateTeamStat(elem, 'team-aces', formatStat('aces', teamStats.stats.total.aces, true));
     updateTeamStat(elem, 'team-wipes', formatStat('wipes', teamStats.stats.total.wipes, true));
 
     updateTeamStat(elem, 'team-time-hero-adv', formatSeconds(teamStats.stats.average.timeWithHeroAdv));
     updateTeamStat(elem, 'team-time-hero-advp', formatStat('pct', teamStats.stats.average.pctWithHeroAdv, true));
-    updateTeamStat(elem, 'team-heroes-alive', formatStat('avgHeroesAlive', teamStats.stats.average.avgHeroesAlive, true));
+    updateTeamStat(
+      elem,
+      'team-heroes-alive',
+      formatStat('avgHeroesAlive', teamStats.stats.average.avgHeroesAlive, true),
+    );
 
-    updateTeamStat(elem, 'team-pct-0-hero', formatStat('pctWith0HeroesAlive', teamStats.stats.average.pctWith0HeroesAlive, true));
-    updateTeamStat(elem, 'team-pct-1-hero', formatStat('pctWith1HeroesAlive', teamStats.stats.average.pctWith1HeroesAlive, true));
-    updateTeamStat(elem, 'team-pct-2-hero', formatStat('pctWith2HeroesAlive', teamStats.stats.average.pctWith2HeroesAlive, true));
-    updateTeamStat(elem, 'team-pct-3-hero', formatStat('pctWith3HeroesAlive', teamStats.stats.average.pctWith3HeroesAlive, true));
-    updateTeamStat(elem, 'team-pct-4-hero', formatStat('pctWith4HeroesAlive', teamStats.stats.average.pctWith4HeroesAlive, true));
-    updateTeamStat(elem, 'team-pct-5-hero', formatStat('pctWith5HeroesAlive', teamStats.stats.average.pctWith5HeroesAlive, true));
-  }
-  catch (e) {
+    updateTeamStat(
+      elem,
+      'team-pct-0-hero',
+      formatStat('pctWith0HeroesAlive', teamStats.stats.average.pctWith0HeroesAlive, true),
+    );
+    updateTeamStat(
+      elem,
+      'team-pct-1-hero',
+      formatStat('pctWith1HeroesAlive', teamStats.stats.average.pctWith1HeroesAlive, true),
+    );
+    updateTeamStat(
+      elem,
+      'team-pct-2-hero',
+      formatStat('pctWith2HeroesAlive', teamStats.stats.average.pctWith2HeroesAlive, true),
+    );
+    updateTeamStat(
+      elem,
+      'team-pct-3-hero',
+      formatStat('pctWith3HeroesAlive', teamStats.stats.average.pctWith3HeroesAlive, true),
+    );
+    updateTeamStat(
+      elem,
+      'team-pct-4-hero',
+      formatStat('pctWith4HeroesAlive', teamStats.stats.average.pctWith4HeroesAlive, true),
+    );
+    updateTeamStat(
+      elem,
+      'team-pct-5-hero',
+      formatStat('pctWith5HeroesAlive', teamStats.stats.average.pctWith5HeroesAlive, true),
+    );
+  } catch (e) {
     // basically if a team has no people this will likely throw an exception.
     // instead of actually handling it, i'm just going to ignore it because a team with 0 people
     // is useless and you should just go to the roster and add people.
@@ -461,7 +559,11 @@ function loadTeamComparisonStats(team2, team2Matches, team2Data) {
   // need to merge these things
   const team1Maps = Object.keys(teamTeamStats.maps);
   const team2Maps = Object.keys(team2TeamStats.maps);
-  const teamMaps = team1Maps.concat(team2Maps.filter(function (item) { return team1Maps.indexOf(item) < 0; }));
+  const teamMaps = team1Maps.concat(
+    team2Maps.filter(function (item) {
+      return team1Maps.indexOf(item) < 0;
+    }),
+  );
 
   const mapTable = $('#team-compare-map-stats tbody');
   for (let map of teamMaps) {
@@ -490,7 +592,11 @@ function loadTeamComparisonStats(team2, team2Matches, team2Data) {
   // pick/ban stats
   const team1Heroes = Object.keys(teamTeamStats.heroes);
   const team2Heroes = Object.keys(team2TeamStats.heroes);
-  const teamHeroes = team1Heroes.concat(team2Heroes.filter(function(item) { return team1Heroes.indexOf(item) < 0; }));
+  const teamHeroes = team1Heroes.concat(
+    team2Heroes.filter(function (item) {
+      return team1Heroes.indexOf(item) < 0;
+    }),
+  );
 
   for (let hero of teamHeroes) {
     // team 1 data
@@ -498,7 +604,7 @@ function loadTeamComparisonStats(team2, team2Matches, team2Data) {
     const t1 = teamTeamStats.heroes[hero];
     const t2 = team2TeamStats.heroes[hero];
 
-    if (t1 && (t1.games > 0 || t1.bans > 0) || t2 && (t2.games > 0 || t2.bans > 0)) {
+    if ((t1 && (t1.games > 0 || t1.bans > 0)) || (t2 && (t2.games > 0 || t2.bans > 0))) {
       if (t1) {
         context.team1 = getTeamHeroCompareStats(t1, teamTeamStats.totalMatches);
       }
@@ -531,9 +637,10 @@ function checkContestedPick(context) {
     }
   }
 
-  if (context.team1.pickPct > 0.3 && context.team2.banPct > 0.3 ||
-      context.team2.pickPct > 0.3 && context.team1.banPct > 0.3)
-  {
+  if (
+    (context.team1.pickPct > 0.3 && context.team2.banPct > 0.3) ||
+    (context.team2.pickPct > 0.3 && context.team1.banPct > 0.3)
+  ) {
     return 'contested';
   }
 
@@ -548,75 +655,291 @@ function getTeamCompareStats(teamStats, heroStats) {
 
   // all of this is kinda terrible because the stats are scattered everywhere
   const winPct = formatStat('pct', teamStats.wins / teamStats.totalMatches);
-  stats.record = { name: 'Record', val: teamStats.wins / teamStats.totalMatches, format: `${winPct} (${teamStats.wins} - ${teamStats.totalMatches - teamStats.wins})` };
-  stats.overallTD = { name: 'Avg. TD', val: teamStats.takedowns.average, format: formatStat('', teamStats.takedowns.average, true) };
-  stats.overallDeaths = { name: 'Avg. Deaths', val: teamStats.deaths.average, format: formatStat('', teamStats.deaths.average, true) };
+  stats.record = {
+    name: 'Record',
+    val: teamStats.wins / teamStats.totalMatches,
+    format: `${winPct} (${teamStats.wins} - ${teamStats.totalMatches - teamStats.wins})`,
+  };
+  stats.overallTD = {
+    name: 'Avg. TD',
+    val: teamStats.takedowns.average,
+    format: formatStat('', teamStats.takedowns.average, true),
+  };
+  stats.overallDeaths = {
+    name: 'Avg. Deaths',
+    val: teamStats.deaths.average,
+    format: formatStat('', teamStats.deaths.average, true),
+  };
 
   const KDA = teamStats.takedowns.total / Math.max(1, teamStats.deaths.total);
   stats.overallKDA = { name: 'KDA', val: KDA, format: formatStat('KDA', KDA) };
-  stats.timeDead = { name: 'Avg. Time Dead', val: teamStats.stats.avgTimeSpentDead, format: formatSeconds(teamStats.stats.average.avgTimeSpentDead) };
-  stats.timeDeadPct = { name: 'Avg. % Time Dead', val: teamStats.stats.average.timeDeadPct, format: formatStat('pct', teamStats.stats.average.timeDeadPct) };
+  stats.timeDead = {
+    name: 'Avg. Time Dead',
+    val: teamStats.stats.avgTimeSpentDead,
+    format: formatSeconds(teamStats.stats.average.avgTimeSpentDead),
+  };
+  stats.timeDeadPct = {
+    name: 'Avg. % Time Dead',
+    val: teamStats.stats.average.timeDeadPct,
+    format: formatStat('pct', teamStats.stats.average.timeDeadPct),
+  };
   stats.heroPool = { name: 'Hero Pool', val: picked, format: picked };
-  stats.avgLength = { name: 'Avg. Length', val: teamStats.matchLength.average, format: formatSeconds(teamStats.matchLength.average) };
-  stats.ppk = { name: 'People Per Kill (PPK)', val: teamStats.stats.average.PPK, format: formatStat('KDA', teamStats.stats.average.PPK) };
+  stats.avgLength = {
+    name: 'Avg. Length',
+    val: teamStats.matchLength.average,
+    format: formatSeconds(teamStats.matchLength.average),
+  };
+  stats.ppk = {
+    name: 'People Per Kill (PPK)',
+    val: teamStats.stats.average.PPK,
+    format: formatStat('KDA', teamStats.stats.average.PPK),
+  };
 
-  stats.tt10 = { name: 'Avg. Time to 10', val: teamStats.stats.average.timeTo10, format: formatSeconds(teamStats.stats.average.timeTo10) };
-  stats.tt20 = { name: 'Avg. Time to 20', val: teamStats.stats.average.timeTo20, format: formatSeconds(teamStats.stats.average.timeTo20) };
+  stats.tt10 = {
+    name: 'Avg. Time to 10',
+    val: teamStats.stats.average.timeTo10,
+    format: formatSeconds(teamStats.stats.average.timeTo10),
+  };
+  stats.tt20 = {
+    name: 'Avg. Time to 20',
+    val: teamStats.stats.average.timeTo20,
+    format: formatSeconds(teamStats.stats.average.timeTo20),
+  };
 
-  stats.passiveRate = { name: 'Passive XP/Second', val: teamStats.stats.average.passiveXPRate, format: formatStat('passiveXPRate', teamStats.stats.average.passiveXPRate, true) };
-  stats.passiveGain = { name: 'Passive XP % Gain', val: teamStats.stats.average.passiveXPDiff, format: formatStat('passiveXPDiff', teamStats.stats.average.passiveXPDiff, true) };
-  stats.passiveTotal = { name: 'Passive XP Gain', val: teamStats.stats.average.passiveXPRate, format: formatStat('passiveXPGain', teamStats.stats.average.passiveXPGain, true) };
+  stats.passiveRate = {
+    name: 'Passive XP/Second',
+    val: teamStats.stats.average.passiveXPRate,
+    format: formatStat('passiveXPRate', teamStats.stats.average.passiveXPRate, true),
+  };
+  stats.passiveGain = {
+    name: 'Passive XP % Gain',
+    val: teamStats.stats.average.passiveXPDiff,
+    format: formatStat('passiveXPDiff', teamStats.stats.average.passiveXPDiff, true),
+  };
+  stats.passiveTotal = {
+    name: 'Passive XP Gain',
+    val: teamStats.stats.average.passiveXPRate,
+    format: formatStat('passiveXPGain', teamStats.stats.average.passiveXPGain, true),
+  };
 
-  stats.levelAdvTime = { name: 'Avg. Time w/ Level Adv.', val: teamStats.stats.average.levelAdvTime, format: formatSeconds(teamStats.stats.average.levelAdvTime) };
-  stats.levelAdvPct = { name: 'Avg. % of Game w/ Level Adv.', val: teamStats.stats.average.levelAdvPct, format: formatStat('pct', teamStats.stats.average.levelAdvPct, true) };
-  stats.levelAdv = { name: 'Avg. Level Adv.', val: teamStats.stats.average.avgLevelAdv, format: formatStat('avgLevelAdv', teamStats.stats.average.avgLevelAdv, true) };
-  stats.levelLead = { name: 'Avg. Max Level Lead', val: teamStats.stats.average.maxLevelAdv, format: formatSeconds('maxLevelAdv', teamStats.stats.average.maxLevelAdv, true) };
+  stats.levelAdvTime = {
+    name: 'Avg. Time w/ Level Adv.',
+    val: teamStats.stats.average.levelAdvTime,
+    format: formatSeconds(teamStats.stats.average.levelAdvTime),
+  };
+  stats.levelAdvPct = {
+    name: 'Avg. % of Game w/ Level Adv.',
+    val: teamStats.stats.average.levelAdvPct,
+    format: formatStat('pct', teamStats.stats.average.levelAdvPct, true),
+  };
+  stats.levelAdv = {
+    name: 'Avg. Level Adv.',
+    val: teamStats.stats.average.avgLevelAdv,
+    format: formatStat('avgLevelAdv', teamStats.stats.average.avgLevelAdv, true),
+  };
+  stats.levelLead = {
+    name: 'Avg. Max Level Lead',
+    val: teamStats.stats.average.maxLevelAdv,
+    format: formatSeconds('maxLevelAdv', teamStats.stats.average.maxLevelAdv, true),
+  };
 
-  stats.mercs = { name: 'Mercenary Captures', val: teamStats.stats.average.mercCaptures, format: formatStat('mercCaptures', teamStats.stats.average.mercCaptures, true) };
-  stats.mercUptime = { name: 'Mercenary Uptime', val: teamStats.stats.average.mercUptime, format: formatSeconds(teamStats.stats.average.mercUptime) };
-  stats.mercUptimePct = { name: 'Mercenary Uptime %', val: teamStats.stats.average.mercUptimePercent, format: formatStat('pct', teamStats.stats.average.mercUptimePercent) };
+  stats.mercs = {
+    name: 'Mercenary Captures',
+    val: teamStats.stats.average.mercCaptures,
+    format: formatStat('mercCaptures', teamStats.stats.average.mercCaptures, true),
+  };
+  stats.mercUptime = {
+    name: 'Mercenary Uptime',
+    val: teamStats.stats.average.mercUptime,
+    format: formatSeconds(teamStats.stats.average.mercUptime),
+  };
+  stats.mercUptimePct = {
+    name: 'Mercenary Uptime %',
+    val: teamStats.stats.average.mercUptimePercent,
+    format: formatStat('pct', teamStats.stats.average.mercUptimePercent),
+  };
 
-  stats.T1 = { name: 'Time at Level 1', val: teamStats.tierTimes.T1.average, format: formatSeconds(teamStats.tierTimes.T1.average) };
-  stats.T2 = { name: 'Time at Level 4', val: teamStats.tierTimes.T2.average, format: formatSeconds(teamStats.tierTimes.T2.average) };
-  stats.T3 = { name: 'Time at Level 7', val: teamStats.tierTimes.T3.average, format: formatSeconds(teamStats.tierTimes.T3.average) };
-  stats.T4 = { name: 'Time at Level 10', val: teamStats.tierTimes.T4.average, format: formatSeconds(teamStats.tierTimes.T4.average) };
-  stats.T5 = { name: 'Time at Level 13', val: teamStats.tierTimes.T5.average, format: formatSeconds(teamStats.tierTimes.T5.average) };
-  stats.T6 = { name: 'Time at Level 16', val: teamStats.tierTimes.T6.average, format: formatSeconds(teamStats.tierTimes.T6.average) };
+  stats.T1 = {
+    name: 'Time at Level 1',
+    val: teamStats.tierTimes.T1.average,
+    format: formatSeconds(teamStats.tierTimes.T1.average),
+  };
+  stats.T2 = {
+    name: 'Time at Level 4',
+    val: teamStats.tierTimes.T2.average,
+    format: formatSeconds(teamStats.tierTimes.T2.average),
+  };
+  stats.T3 = {
+    name: 'Time at Level 7',
+    val: teamStats.tierTimes.T3.average,
+    format: formatSeconds(teamStats.tierTimes.T3.average),
+  };
+  stats.T4 = {
+    name: 'Time at Level 10',
+    val: teamStats.tierTimes.T4.average,
+    format: formatSeconds(teamStats.tierTimes.T4.average),
+  };
+  stats.T5 = {
+    name: 'Time at Level 13',
+    val: teamStats.tierTimes.T5.average,
+    format: formatSeconds(teamStats.tierTimes.T5.average),
+  };
+  stats.T6 = {
+    name: 'Time at Level 16',
+    val: teamStats.tierTimes.T6.average,
+    format: formatSeconds(teamStats.tierTimes.T6.average),
+  };
 
-  stats.levelDiff = { name: 'Avg. Level Diff at End', val: teamStats.endOfGameLevels.combined.average, format: formatStat('', teamStats.endOfGameLevels.combined.average, true) };
-  stats.levelDiffW = { name: 'Avg. Level Diff at End (win)', val: teamStats.endOfGameLevels.win.average, format: formatStat('', teamStats.endOfGameLevels.win.average, true) };
-  stats.levelDiffL = { name: 'Avg. Level Diff at End (loss)', val: teamStats.endOfGameLevels.loss.average, format: formatStat('', teamStats.endOfGameLevels.loss.average, true) };
+  stats.levelDiff = {
+    name: 'Avg. Level Diff at End',
+    val: teamStats.endOfGameLevels.combined.average,
+    format: formatStat('', teamStats.endOfGameLevels.combined.average, true),
+  };
+  stats.levelDiffW = {
+    name: 'Avg. Level Diff at End (win)',
+    val: teamStats.endOfGameLevels.win.average,
+    format: formatStat('', teamStats.endOfGameLevels.win.average, true),
+  };
+  stats.levelDiffL = {
+    name: 'Avg. Level Diff at End (loss)',
+    val: teamStats.endOfGameLevels.loss.average,
+    format: formatStat('', teamStats.endOfGameLevels.loss.average, true),
+  };
 
-  stats.heroDamage = { name: 'Avg. Hero Damage', val: teamStats.stats.average.HeroDamage, format: formatStat('', teamStats.stats.average.HeroDamage, true) };
-  stats.siegeDamage = { name: 'Avg. Siege Damage', val: teamStats.stats.average.SiegeDamage, format: formatStat('', teamStats.stats.average.SiegeDamage, true) };
-  stats.creepDamage = { name: 'Avg. Creep Damage', val: teamStats.stats.average.CreepDamage, format: formatStat('', teamStats.stats.average.CreepDamage, true) };
-  stats.minionDamage = { name: 'Avg. Minion Damage', val: teamStats.stats.average.MinionDamage, format: formatStat('', teamStats.stats.average.MinionDamage, true) };
-  stats.healing = { name: 'Avg. Healing', val: teamStats.stats.average.Healing, format: formatStat('', teamStats.stats.average.Healing, true) };
-  stats.selfHealing = { name: 'Avg. Self Healing', val: teamStats.stats.average.SelfHealing, format: formatStat('', teamStats.stats.average.SelfHealing, true) };
-  stats.shields = { name: 'Avg. Shielding', val: teamStats.stats.average.ProtectionGivenToAllies, format: formatStat('', teamStats.stats.average.ProtectionGivenToAllies, true) };
-  stats.damageTaken = { name: 'Avg. Damage Taken', val: teamStats.stats.average.DamageTaken, format: formatStat('', teamStats.stats.average.DamageTaken, true) };
+  stats.heroDamage = {
+    name: 'Avg. Hero Damage',
+    val: teamStats.stats.average.HeroDamage,
+    format: formatStat('', teamStats.stats.average.HeroDamage, true),
+  };
+  stats.siegeDamage = {
+    name: 'Avg. Siege Damage',
+    val: teamStats.stats.average.SiegeDamage,
+    format: formatStat('', teamStats.stats.average.SiegeDamage, true),
+  };
+  stats.creepDamage = {
+    name: 'Avg. Creep Damage',
+    val: teamStats.stats.average.CreepDamage,
+    format: formatStat('', teamStats.stats.average.CreepDamage, true),
+  };
+  stats.minionDamage = {
+    name: 'Avg. Minion Damage',
+    val: teamStats.stats.average.MinionDamage,
+    format: formatStat('', teamStats.stats.average.MinionDamage, true),
+  };
+  stats.healing = {
+    name: 'Avg. Healing',
+    val: teamStats.stats.average.Healing,
+    format: formatStat('', teamStats.stats.average.Healing, true),
+  };
+  stats.selfHealing = {
+    name: 'Avg. Self Healing',
+    val: teamStats.stats.average.SelfHealing,
+    format: formatStat('', teamStats.stats.average.SelfHealing, true),
+  };
+  stats.shields = {
+    name: 'Avg. Shielding',
+    val: teamStats.stats.average.ProtectionGivenToAllies,
+    format: formatStat('', teamStats.stats.average.ProtectionGivenToAllies, true),
+  };
+  stats.damageTaken = {
+    name: 'Avg. Damage Taken',
+    val: teamStats.stats.average.DamageTaken,
+    format: formatStat('', teamStats.stats.average.DamageTaken, true),
+  };
 
-  stats.tfHeroDamage = { name: 'Avg. Team Fight Hero Damage', val: teamStats.stats.average.TeamfightHeroDamage, format: formatStat('', teamStats.stats.average.TeamfightHeroDamage, true) };
-  stats.tfDamageTaken = { name: 'Avg. Team Fight Damage Taken', val: teamStats.stats.average.TeamfightDamageTaken, format: formatStat('', teamStats.stats.average.TeamfightDamageTaken, true) };
-  stats.tfHealing = { name: 'Avg. Team Fight Healing', val: teamStats.stats.average.TeamfightHealingDone, format: formatStat('', teamStats.stats.average.TeamfightHealingDone, true) };
-  stats.cc = { name: 'Avg. CC Time', val: teamStats.stats.average.TimeCCdEnemyHeroes, format: formatSeconds(teamStats.stats.average.TimeCCdEnemyHeroes) };
-  stats.root = { name: 'Avg. Root Time', val: teamStats.stats.average.TimeRootingEnemyHeroes, format: formatSeconds(teamStats.stats.average.TimeRootingEnemyHeroes) };
-  stats.silence = { name: 'Avg. Silence Time', val: teamStats.stats.average.TimeSilencingEnemyHeroes, format: formatSeconds(teamStats.stats.average.TimeSilencingEnemyHeroes) };
-  stats.stun = { name: 'Avg. Stun Time', val: teamStats.stats.average.TimeStunningEnemyHeroes, format: formatSeconds(teamStats.stats.average.TimeStunningEnemyHeroes) };
+  stats.tfHeroDamage = {
+    name: 'Avg. Team Fight Hero Damage',
+    val: teamStats.stats.average.TeamfightHeroDamage,
+    format: formatStat('', teamStats.stats.average.TeamfightHeroDamage, true),
+  };
+  stats.tfDamageTaken = {
+    name: 'Avg. Team Fight Damage Taken',
+    val: teamStats.stats.average.TeamfightDamageTaken,
+    format: formatStat('', teamStats.stats.average.TeamfightDamageTaken, true),
+  };
+  stats.tfHealing = {
+    name: 'Avg. Team Fight Healing',
+    val: teamStats.stats.average.TeamfightHealingDone,
+    format: formatStat('', teamStats.stats.average.TeamfightHealingDone, true),
+  };
+  stats.cc = {
+    name: 'Avg. CC Time',
+    val: teamStats.stats.average.TimeCCdEnemyHeroes,
+    format: formatSeconds(teamStats.stats.average.TimeCCdEnemyHeroes),
+  };
+  stats.root = {
+    name: 'Avg. Root Time',
+    val: teamStats.stats.average.TimeRootingEnemyHeroes,
+    format: formatSeconds(teamStats.stats.average.TimeRootingEnemyHeroes),
+  };
+  stats.silence = {
+    name: 'Avg. Silence Time',
+    val: teamStats.stats.average.TimeSilencingEnemyHeroes,
+    format: formatSeconds(teamStats.stats.average.TimeSilencingEnemyHeroes),
+  };
+  stats.stun = {
+    name: 'Avg. Stun Time',
+    val: teamStats.stats.average.TimeStunningEnemyHeroes,
+    format: formatSeconds(teamStats.stats.average.TimeStunningEnemyHeroes),
+  };
 
-  stats.aces = { name : 'Aces', val: teamStats.stats.total.aces, format: formatStat('Aces', teamStats.stats.total.aces, true) };
-  stats.wipes = { name : 'Wipes', val: teamStats.stats.total.wipes, format: formatStat('Wipes', teamStats.stats.total.wipes, true) };
+  stats.aces = {
+    name: 'Aces',
+    val: teamStats.stats.total.aces,
+    format: formatStat('Aces', teamStats.stats.total.aces, true),
+  };
+  stats.wipes = {
+    name: 'Wipes',
+    val: teamStats.stats.total.wipes,
+    format: formatStat('Wipes', teamStats.stats.total.wipes, true),
+  };
 
-  stats.timeWithHeroAdv = { name : 'Avg. Time w/ Hero Adv.', val: teamStats.stats.average.timeWithHeroAdv, format: formatSeconds(teamStats.stats.average.timeWithHeroAdv) };
-  stats.pctWithHeroAdv = { name: 'Avg. % of Game w/ Hero Adv.', val: teamStats.stats.average.pctWithHeroAdv, format: formatStat('pctWithHeroAdv', teamStats.stats.average.pctWithHeroAdv, true) };
-  stats.avgHeroesAlive = { name : 'Avg. Heroes Alive', val: teamStats.stats.average.avgHeroesAlive, format: formatStat('avgHeroesAlive', teamStats.stats.average.avgHeroesAlive, true) };
+  stats.timeWithHeroAdv = {
+    name: 'Avg. Time w/ Hero Adv.',
+    val: teamStats.stats.average.timeWithHeroAdv,
+    format: formatSeconds(teamStats.stats.average.timeWithHeroAdv),
+  };
+  stats.pctWithHeroAdv = {
+    name: 'Avg. % of Game w/ Hero Adv.',
+    val: teamStats.stats.average.pctWithHeroAdv,
+    format: formatStat('pctWithHeroAdv', teamStats.stats.average.pctWithHeroAdv, true),
+  };
+  stats.avgHeroesAlive = {
+    name: 'Avg. Heroes Alive',
+    val: teamStats.stats.average.avgHeroesAlive,
+    format: formatStat('avgHeroesAlive', teamStats.stats.average.avgHeroesAlive, true),
+  };
 
-  stats.pct0Hero = { name: 'Avg. % 0 Heroes Alive', val: teamStats.stats.average.pctWith0HeroesAlive, format: formatStat('pctWith0HeroesAlive', teamStats.stats.average.pctWith0HeroesAlive, true) };
-  stats.pct1Hero = { name: 'Avg. % 1 Hero Alive', val: teamStats.stats.average.pctWith1HeroesAlive, format: formatStat('pctWith1HeroesAlive', teamStats.stats.average.pctWith1HeroesAlive, true) };
-  stats.pct2Hero = { name: 'Avg. % 2 Heroes Alive', val: teamStats.stats.average.pctWith2HeroesAlive, format: formatStat('pctWith2HeroesAlive', teamStats.stats.average.pctWith2HeroesAlive, true) };
-  stats.pct3Hero = { name: 'Avg. % 3 Heroes Alive', val: teamStats.stats.average.pctWith3HeroesAlive, format: formatStat('pctWith3HeroesAlive', teamStats.stats.average.pctWith3HeroesAlive, true) };
-  stats.pct4Hero = { name: 'Avg. % 4 Heroes Alive', val: teamStats.stats.average.pctWith4HeroesAlive, format: formatStat('pctWith4HeroesAlive', teamStats.stats.average.pctWith4HeroesAlive, true) };
-  stats.pct5Hero = { name: 'Avg. % 5 Heroes Alive', val: teamStats.stats.average.pctWith5HeroesAlive, format: formatStat('pctWith5HeroesAlive', teamStats.stats.average.pctWith5HeroesAlive, true) };
+  stats.pct0Hero = {
+    name: 'Avg. % 0 Heroes Alive',
+    val: teamStats.stats.average.pctWith0HeroesAlive,
+    format: formatStat('pctWith0HeroesAlive', teamStats.stats.average.pctWith0HeroesAlive, true),
+  };
+  stats.pct1Hero = {
+    name: 'Avg. % 1 Hero Alive',
+    val: teamStats.stats.average.pctWith1HeroesAlive,
+    format: formatStat('pctWith1HeroesAlive', teamStats.stats.average.pctWith1HeroesAlive, true),
+  };
+  stats.pct2Hero = {
+    name: 'Avg. % 2 Heroes Alive',
+    val: teamStats.stats.average.pctWith2HeroesAlive,
+    format: formatStat('pctWith2HeroesAlive', teamStats.stats.average.pctWith2HeroesAlive, true),
+  };
+  stats.pct3Hero = {
+    name: 'Avg. % 3 Heroes Alive',
+    val: teamStats.stats.average.pctWith3HeroesAlive,
+    format: formatStat('pctWith3HeroesAlive', teamStats.stats.average.pctWith3HeroesAlive, true),
+  };
+  stats.pct4Hero = {
+    name: 'Avg. % 4 Heroes Alive',
+    val: teamStats.stats.average.pctWith4HeroesAlive,
+    format: formatStat('pctWith4HeroesAlive', teamStats.stats.average.pctWith4HeroesAlive, true),
+  };
+  stats.pct5Hero = {
+    name: 'Avg. % 5 Heroes Alive',
+    val: teamStats.stats.average.pctWith5HeroesAlive,
+    format: formatStat('pctWith5HeroesAlive', teamStats.stats.average.pctWith5HeroesAlive, true),
+  };
 
   return stats;
 }
@@ -648,8 +971,7 @@ function loadTeamRoster(playerStats) {
   $('#team-roster-stats tbody').html('');
   let mode = $('#team-roster-stats .top.attached.menu .active.item').attr('data-mode');
 
-  if (currentTeam === undefined)
-    return;
+  if (currentTeam === undefined) return;
 
   // only show non-aliased players
   for (let p in currentTeam.resolvedPlayers) {
@@ -664,8 +986,7 @@ function loadTeamRoster(playerStats) {
       context.value = player[mode];
       context.value.totalKDA = player[mode].KDA;
 
-      if (mode === 'total' || mode === 'averages')
-        context.value.totalKDA = player.totalKDA;
+      if (mode === 'total' || mode === 'averages') context.value.totalKDA = player.totalKDA;
 
       for (let v in context.value) {
         context[v] = formatStat(v, context.value[v], true);
@@ -679,18 +1000,19 @@ function loadTeamRoster(playerStats) {
       // fill in the most played heroes
       let heroes = [];
       for (let h in player.heroes) {
-        heroes.push({hero: h, games: player.heroes[h]});
+        heroes.push({ hero: h, games: player.heroes[h] });
       }
 
       heroes.sort((a, b) => b.games - a.games);
 
-      for (let i = 0; i < Math.min(heroes.length, 3); i++) { // max 3 heroes, min heroes.length
+      for (let i = 0; i < Math.min(heroes.length, 3); i++) {
+        // max 3 heroes, min heroes.length
         const img = `<img src="assets/heroes-talents/images/heroes/${Heroes.heroIcon(heroes[i].hero)}">`;
         $('#team-roster-stats .top-three[player-id="' + id + '"] .images').append(img);
       }
 
       // nickname replacement
-      DB.getPlayer(id, function(err, doc) {
+      DB.getPlayer(id, function (err, doc) {
         // replace the recently added row
         if (doc[0].nickname) {
           $('#team-roster-stats .player-name[playerID="' + id + '"]').text(doc[0].nickname);
@@ -703,7 +1025,7 @@ function loadTeamRoster(playerStats) {
   for (let p in currentTeam.resolvedPlayers) {
     let player = currentTeam.resolvedPlayers[p];
     let id = player._id;
-    
+
     if ('aliasedTo' in player && player.aliasedTo !== '') {
       // player is an alias that was added to the team (either was aliased after add
       // or some internal thing happened) so skip
@@ -713,7 +1035,7 @@ function loadTeamRoster(playerStats) {
     if (!(id in playerStats)) {
       let context = {
         name: player.name,
-        id: player._id
+        id: player._id,
       };
 
       if (player.nickname && player.nickname !== '') {
@@ -723,22 +1045,22 @@ function loadTeamRoster(playerStats) {
       $('#team-roster-stats tbody').append(teamRosterRowTemplate(context));
 
       $('#team-roster-stats .dropdown.button[player-id="' + player._id + '"]').dropdown({
-        onChange: function(value, text, $elem) {
+        onChange: function (value, text, $elem) {
           handleTeamPlayerCallback(value, $elem.attr('player-id'), $elem.attr('player-name'));
-        }
+        },
       });
     }
   }
 
   $('#team-roster-stats .dropdown.button').dropdown({
-    onChange: function(value, text, $elem) {
+    onChange: function (value, text, $elem) {
       handleTeamPlayerCallback(value, $elem.attr('player-id'), $elem.attr('player-name'));
-    }
+    },
   });
 
-  $('#team-roster-stats .player-name').click(function() {
+  $('#team-roster-stats .player-name').click(function () {
     showPlayerProfile($(this).attr('playerID'));
-  })
+  });
 }
 
 // handles individual player action stuff
@@ -747,16 +1069,16 @@ function handleTeamPlayerCallback(action, id, name) {
     $('#team-confirm-action-user .header').text('Confirm Delete Player');
     $('#team-confirm-action-user .action').text('remove ' + name + ' from ' + currentTeam.name);
 
-    $('#team-confirm-action-user').modal({
-      onApprove: function() {
-        DB.removePlayerFromTeam(currentTeam._id, id, function() {
-          updateTeamData($('#team-set-team').dropdown('get value'), $('#team-set-team').dropdown('get text'));
-        })
-      }
-    }).
-    modal('show');
-  }
-  else if (action === 'profile') {
+    $('#team-confirm-action-user')
+      .modal({
+        onApprove: function () {
+          DB.removePlayerFromTeam(currentTeam._id, id, function () {
+            updateTeamData($('#team-set-team').dropdown('get value'), $('#team-set-team').dropdown('get text'));
+          });
+        },
+      })
+      .modal('show');
+  } else if (action === 'profile') {
     // load and then immediately switch to player profile
     showPlayerProfile(id);
   }
@@ -767,97 +1089,105 @@ function addPlayerToTeam() {
   if (currentTeam) {
     $('#team-add-user .team-name').text(currentTeam.name);
 
-    $('#team-add-user').modal({
-      onApprove: function() {
-        let id = $('#team-add-player-menu').dropdown('get value');
-        DB.addPlayerToTeam(currentTeam._id, id, function() {
-          updateTeamData($('#team-set-team').dropdown('get value'), $('#team-set-team').dropdown('get text'));
-        });
-      }
-    }).
-    modal('show');
+    $('#team-add-user')
+      .modal({
+        onApprove: function () {
+          let id = $('#team-add-player-menu').dropdown('get value');
+          DB.addPlayerToTeam(currentTeam._id, id, function () {
+            updateTeamData($('#team-set-team').dropdown('get value'), $('#team-set-team').dropdown('get text'));
+          });
+        },
+      })
+      .modal('show');
   }
 }
 
 function handleTeamMenuCallback(action) {
-  if (action === "new") {
-    $('#team-text-input .header').text('Create New Team')
+  if (action === 'new') {
+    $('#team-text-input .header').text('Create New Team');
     $('#team-text-input .input .label').text('Team Name');
     $('#team-text-input input').val('');
 
-    $('#team-text-input').modal({
-      onApprove: function() {
-        let name = $('#team-text-input input').val();
-        DB.addTeam([], name, function() {
-          populateTeamMenu($('.team-menu'));
-          $('#team-set-team').dropdown('refresh');
-        });
-      }
-    }).
-    modal('show');
-  }
-  else if (action === "rename") {
+    $('#team-text-input')
+      .modal({
+        onApprove: function () {
+          let name = $('#team-text-input input').val();
+          DB.addTeam([], name, function () {
+            populateTeamMenu($('.team-menu'));
+            $('#team-set-team').dropdown('refresh');
+          });
+        },
+      })
+      .modal('show');
+  } else if (action === 'rename') {
     if (currentTeam) {
       $('#team-text-input .header').text('Rename ' + currentTeam.name);
       $('#team-text-input .input .label').text('Team Name');
       $('#team-text-input input').val('');
 
-      $('#team-text-input').modal({
-        onApprove: function() {
-          let name = $('#team-text-input input').val();
-          DB.changeTeamName(currentTeam._id, name, function() {
-            populateTeamMenu($('.team-menu'));
-            $('#team-set-team').dropdown('refresh');
-            $('#teams-page-header .team-name').text(name);
-            $('#team-set-team').dropdown('set text', name);
-          });
-        }
-      }).
-      modal('show');
+      $('#team-text-input')
+        .modal({
+          onApprove: function () {
+            let name = $('#team-text-input input').val();
+            DB.changeTeamName(currentTeam._id, name, function () {
+              populateTeamMenu($('.team-menu'));
+              $('#team-set-team').dropdown('refresh');
+              $('#teams-page-header .team-name').text(name);
+              $('#team-set-team').dropdown('set text', name);
+            });
+          },
+        })
+        .modal('show');
     }
-  }
-  else if (action === "delete") {
+  } else if (action === 'delete') {
     $('#team-confirm-action-user .header').text('Delete ' + currentTeam.name);
     $('#team-confirm-action-user .action').text('delete the team ' + currentTeam.name);
 
-    $('#team-confirm-action-user').modal({
-      onApprove: function() {
-        DB.deleteTeam(currentTeam._id, function() {
-          currentTeam = null;
-          populateTeamMenu($('.team-menu'));
-          $('#team-set-team').dropdown('refresh');
-          $('#teams-page-header .team-name').text('');
-          $('#team-set-team').dropdown('set text', '');
-        })
-      }
-    }).
-    modal('show');
-  }
-  else if (action === 'print-team') {
-    dialog.showSaveDialog({
-      title: 'Print Team Report',
-      filters: [{name: 'pdf', extensions: ['pdf']}]
-    }, function(filename) {
-      if (filename) {
-        printTeamDetail(filename, null);
-      }
-    });
-  }
-  else if (action === 'print-sections') {
-    $('#team-print-sections').modal({
-      onApprove: function() {
-        dialog.showSaveDialog({
-          title: 'Print Team Report',
-          filters: [{name: 'pdf', extensions: ['pdf']}]
-        }, function(filename) {
-          if (filename) {
-            let sections = $('#team-print-sections .ui.dropdown').dropdown('get value').split(',');
-            printTeamDetail(filename, sections);
-          }
-        });
+    $('#team-confirm-action-user')
+      .modal({
+        onApprove: function () {
+          DB.deleteTeam(currentTeam._id, function () {
+            currentTeam = null;
+            populateTeamMenu($('.team-menu'));
+            $('#team-set-team').dropdown('refresh');
+            $('#teams-page-header .team-name').text('');
+            $('#team-set-team').dropdown('set text', '');
+          });
+        },
+      })
+      .modal('show');
+  } else if (action === 'print-team') {
+    dialog.showSaveDialog(
+      {
+        title: 'Print Team Report',
+        filters: [{ name: 'pdf', extensions: ['pdf'] }],
       },
-      closable: false
-    }).modal('show');
+      function (filename) {
+        if (filename) {
+          printTeamDetail(filename, null);
+        }
+      },
+    );
+  } else if (action === 'print-sections') {
+    $('#team-print-sections')
+      .modal({
+        onApprove: function () {
+          dialog.showSaveDialog(
+            {
+              title: 'Print Team Report',
+              filters: [{ name: 'pdf', extensions: ['pdf'] }],
+            },
+            function (filename) {
+              if (filename) {
+                let sections = $('#team-print-sections .ui.dropdown').dropdown('get value').split(',');
+                printTeamDetail(filename, sections);
+              }
+            },
+          );
+        },
+        closable: false,
+      })
+      .modal('show');
   }
 }
 
@@ -871,8 +1201,7 @@ function showMatchHistory() {
 }
 
 function updateTeamCollectionCompare(value, text, $elem) {
-  if (!teamTeamStats)
-    return;
+  if (!teamTeamStats) return;
 
   let cid = value === 'all' ? null : value;
 
@@ -887,13 +1216,12 @@ function loadTeamAverages(collectionID) {
     games: 0,
     takedowns: 0,
     deaths: 0,
-    matchLength: 0
+    matchLength: 0,
   };
-  teamAvgTracker = { target: 0, current: 0, actual: 0};
+  teamAvgTracker = { target: 0, current: 0, actual: 0 };
 
   let query = {};
-  if (collectionID)
-    query.collection = collectionID;
+  if (collectionID) query.collection = collectionID;
 
   DB.reduceTeams(query, initProcessTeamAverages, processTeamAverages, displayTeamAverages);
 }
@@ -914,8 +1242,7 @@ function processTeamAverages(err, matches, team) {
   let teamStats = summarizeTeamData(team, matches, Heroes);
 
   for (let s in teamStats.stats.total) {
-    if (!(s in teamAvgData))
-      teamAvgData[s] = 0;
+    if (!(s in teamAvgData)) teamAvgData[s] = 0;
 
     teamAvgData[s] += teamStats.stats.average[s];
   }
@@ -929,8 +1256,7 @@ function processTeamAverages(err, matches, team) {
 
   // tiers
   for (let t in teamStats.tierTimes) {
-    if (!(t in teamAvgData))
-      teamAvgData[t] = 0;
+    if (!(t in teamAvgData)) teamAvgData[t] = 0;
 
     teamAvgData[t] += teamStats.tierTimes[t].average;
   }
@@ -941,8 +1267,7 @@ function processTeamAverages(err, matches, team) {
 function displayTeamAverages() {
   // divide everything by number of teams (except games I guess)
   for (let s in teamAvgData) {
-    if (s === 'games')
-      continue;
+    if (s === 'games') continue;
 
     teamAvgData[s] /= teamAvgTracker.actual;
   }
@@ -954,36 +1279,31 @@ function displayTeamAverages() {
     // i kind of hate the sheer number of special cases that exist here
     if (s === 'games' || s === 'wins') {
       continue;
-    }
-    else if (s === 'takedowns') {
+    } else if (s === 'takedowns') {
       context.statName = 'Takedowns';
       context.cmpDataSort = teamAvgData[s];
       context.cmpData = formatStat(s, context.cmpDataSort, true);
       context.pDataSort = teamTeamStats.takedowns.average;
       context.pData = formatStat(s, context.pDataSort, true);
-    }
-    else if (s === 'deaths') {
+    } else if (s === 'deaths') {
       context.statName = 'Deaths';
       context.cmpDataSort = teamAvgData[s];
       context.cmpData = formatStat(s, context.cmpDataSort, true);
       context.pDataSort = teamTeamStats.deaths.average;
       context.pData = formatStat(s, context.pDataSort, true);
-    }
-    else if (s === 'matchLength') {
+    } else if (s === 'matchLength') {
       context.statName = 'Match Length';
       context.cmpDataSort = teamAvgData[s];
       context.cmpData = formatSeconds(context.cmpDataSort);
       context.pDataSort = teamTeamStats.matchLength.average;
       context.pData = formatSeconds(context.pDataSort);
-    }
-    else if (s === 'T1' || s === 'T2' || s === 'T3' || s === 'T4' || s === 'T5' || s === 'T6') {
+    } else if (s === 'T1' || s === 'T2' || s === 'T3' || s === 'T4' || s === 'T5' || s === 'T6') {
       context.statName = DetailStatString[s];
       context.cmpDataSort = teamAvgData[s];
       context.cmpData = formatSeconds(context.cmpDataSort);
       context.pDataSort = teamTeamStats.tierTimes[s].average;
       context.pData = formatSeconds(context.pDataSort);
-    }
-    else {
+    } else {
       context.statName = DetailStatString[s];
       context.cmpDataSort = teamAvgData[s];
       context.cmpData = formatStat(s, context.cmpDataSort, true);
@@ -991,10 +1311,8 @@ function displayTeamAverages() {
       context.pData = formatStat(s, context.pDataSort, true);
     }
 
-    if (context.cmpDataSort === 0)
-      context.pctDiff = 0;
-    else
-      context.pctDiff = (context.pDataSort - context.cmpDataSort) / context.cmpDataSort;
+    if (context.cmpDataSort === 0) context.pctDiff = 0;
+    else context.pctDiff = (context.pDataSort - context.cmpDataSort) / context.cmpDataSort;
 
     teamCmpTableData.push(context);
   }
@@ -1006,7 +1324,7 @@ function displayTeamAverages() {
 function layoutTeamDetailPrint(sections) {
   let sects = sections;
   if (!sects) {
-    sects = ['stats', 'summary', 'draft', 'maps', 'against', 'roster', 'compare']
+    sects = ['stats', 'summary', 'draft', 'maps', 'against', 'roster', 'compare'];
   }
 
   clearPrintLayout();
@@ -1067,7 +1385,10 @@ function layoutTeamDetailPrint(sections) {
 
   if (sects.indexOf('compare') !== -1) {
     addPrintPage('compare');
-    addPrintSubHeader('Comparison to Collection Average: ' + $('#team-compare-collection').dropdown('get text'), 'compare');
+    addPrintSubHeader(
+      'Comparison to Collection Average: ' + $('#team-compare-collection').dropdown('get text'),
+      'compare',
+    );
     copyFloatingTable($('#team-compare-table'), getPrintPage('compare'));
   }
 }

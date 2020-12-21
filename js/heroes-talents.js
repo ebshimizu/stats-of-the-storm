@@ -38,7 +38,7 @@ class HeroesTalents {
       let file = this._heroPath + '/' + files[i];
 
       console.log('loading ' + file + ' (' + (i + 1) + '/' + files.length + ')');
-      let data = JSON.parse(fs.readFileSync(file));  // eslint-disable-line global-require
+      let data = JSON.parse(fs.readFileSync(file)); // eslint-disable-line global-require
 
       // sort everything, some data is replicated but that's ok
 
@@ -56,12 +56,11 @@ class HeroesTalents {
 
       for (let tier in data.talents) {
         for (let t in data.talents[tier]) {
-          this._talents[data.talents[tier][t].talentTreeId] = data.talents[tier][t]
+          this._talents[data.talents[tier][t].talentTreeId] = data.talents[tier][t];
         }
       }
 
-      if (!(data.expandedRole in this._roles))
-        this._roles[data.expandedRole] = { all: [], Ranged: [], Melee: [] };
+      if (!(data.expandedRole in this._roles)) this._roles[data.expandedRole] = { all: [], Ranged: [], Melee: [] };
 
       this._roles[data.expandedRole].all.push(data.name);
       this._roles[data.expandedRole][data.type].push(data.name);
@@ -83,8 +82,7 @@ class HeroesTalents {
         result = result.concat(this._roles[r][data.type]);
       }
       return result;
-    }
-    else if (data.type) {
+    } else if (data.type) {
       return this._roles[data.role][data.type];
     }
 
@@ -116,8 +114,7 @@ class HeroesTalents {
   }
 
   heroNameFromAttr(attr) {
-    if (attr in this._heroAttr)
-      return this._heroAttr[attr];
+    if (attr in this._heroAttr) return this._heroAttr[attr];
 
     return 'NotFound';
   }
@@ -131,8 +128,7 @@ class HeroesTalents {
   }
 
   heroIcon(hero) {
-    if (hero in this._heroes)
-      return this._heroes[hero].icon;
+    if (hero in this._heroes) return this._heroes[hero].icon;
 
     // specific to this project
     return '../../../images/not-found.png';
@@ -183,11 +179,10 @@ class HeroesTalents {
   }
 
   awardInfo(award) {
-    if (award in Awards)
-      return Awards[award];
+    if (award in Awards) return Awards[award];
 
     console.log(award + ' is unknown!');
-    return { name: 'Unknown Award', subtitle: '', image: 'not-found.png'};
+    return { name: 'Unknown Award', subtitle: '', image: 'not-found.png' };
   }
 }
 

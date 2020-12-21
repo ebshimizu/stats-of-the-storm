@@ -8,16 +8,30 @@ var trendsDateLimits = {
   '1-start': new Date(),
   '1-end': new Date(),
   '2-start': new Date(),
-  '2-end': new Date()
+  '2-end': new Date(),
 };
 
 function initTrendsPage(tags) {
   trendsHeroDataFilter = {
-    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague, ReplayTypes.GameMode.Custom]}
-  }
+    mode: {
+      $in: [
+        ReplayTypes.GameMode.UnrankedDraft,
+        ReplayTypes.GameMode.HeroLeague,
+        ReplayTypes.GameMode.TeamLeague,
+        ReplayTypes.GameMode.Custom,
+      ],
+    },
+  };
   trendsMapDataFilter = {
-    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague, ReplayTypes.GameMode.Custom]}
-  }
+    mode: {
+      $in: [
+        ReplayTypes.GameMode.UnrankedDraft,
+        ReplayTypes.GameMode.HeroLeague,
+        ReplayTypes.GameMode.TeamLeague,
+        ReplayTypes.GameMode.Custom,
+      ],
+    },
+  };
 
   trendsOverallHeroRowTemplate = getHandlebars('trends', '#trends-hero-summary-row-template');
   trendsHeroPickTemplate = getHandlebars('trends', '#trends-hero-pick-row-template');
@@ -27,9 +41,9 @@ function initTrendsPage(tags) {
   $('#hero-trends-body table').tablesort();
   $('#hero-trends-body table').floatThead({
     scrollContainer: closestWrapper,
-    autoReflow: true
+    autoReflow: true,
   });
-  $('#hero-trends-body table th.stat').data('sortBy', function(th, td, tablesort) {
+  $('#hero-trends-body table th.stat').data('sortBy', function (th, td, tablesort) {
     return parseFloat(td.attr('data-sort-value'));
   });
 
@@ -44,7 +58,7 @@ function initTrendsPage(tags) {
     popup: '.filter-popup-widget[widget-name="hero-trends-filter"]',
     on: 'click',
     variation: 'fluid',
-    closable: false
+    closable: false,
   });
 
   // initialize the filter
@@ -60,16 +74,16 @@ function initTrendsPage(tags) {
 
   // tooltips
   $('#hero-trends-page-header input').popup({
-    on: 'focus'
+    on: 'focus',
   });
 
   // init values
   $('#hero-trends-hero-thresh input').val(trendsHeroMatchThreshold);
 
   $('#hero-trends-page-header .trends-date').datepicker({
-    autoHide: false
+    autoHide: false,
   });
-  $('#hero-trends-page-header .trends-date').on('pick.datepicker', function(e) {
+  $('#hero-trends-page-header .trends-date').on('pick.datepicker', function (e) {
     trendsDateLimits[$(this).attr('name')] = e.date;
   });
 
@@ -79,17 +93,17 @@ function initTrendsPage(tags) {
 
   // tabs and buttons
   $('#hero-trends-submenu .item').tab();
-  $('#hero-trends-submenu .item').click(function() {
+  $('#hero-trends-submenu .item').click(function () {
     $('#hero-trends-body table').floatThead('reflow');
   });
 
-  $('#hero-trends-body .six.ui.buttons .button').click(function() {
+  $('#hero-trends-body .six.ui.buttons .button').click(function () {
     toggleHeroCollectionType('#hero-trends-body', $(this), '#hero-trends-body');
   });
 
   $('#trends-print-sections .ui.dropdown').dropdown('get value').split(',');
   $('#trends-file-menu').dropdown({
-    onChange: handleTrendsAction
+    onChange: handleTrendsAction,
   });
 }
 
@@ -106,11 +120,25 @@ function showTrendsSection() {
 
 function resetTrendsFilter() {
   trendsHeroDataFilter = {
-    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague, ReplayTypes.GameMode.Custom]}
-  }
+    mode: {
+      $in: [
+        ReplayTypes.GameMode.UnrankedDraft,
+        ReplayTypes.GameMode.HeroLeague,
+        ReplayTypes.GameMode.TeamLeague,
+        ReplayTypes.GameMode.Custom,
+      ],
+    },
+  };
   trendsMapDataFilter = {
-    mode: { $in: [ReplayTypes.GameMode.UnrankedDraft, ReplayTypes.GameMode.HeroLeague, ReplayTypes.GameMode.TeamLeague, ReplayTypes.GameMode.Custom]}
-  }
+    mode: {
+      $in: [
+        ReplayTypes.GameMode.UnrankedDraft,
+        ReplayTypes.GameMode.HeroLeague,
+        ReplayTypes.GameMode.TeamLeague,
+        ReplayTypes.GameMode.Custom,
+      ],
+    },
+  };
 
   let filterWidget = $('.filter-popup-widget[widget-name="hero-trends-filter"]');
   for (let m in trendsHeroDataFilter.mode.$in) {
@@ -127,17 +155,22 @@ function loadTrends() {
 
   let incEnd1 = new Date(trendsDateLimits['1-end']);
   incEnd1.setDate(trendsDateLimits['1-end'].getDate() + 1);
-  
-  query1.$and = [{ rawDate: { $gte: dateToWinTime(trendsDateLimits['1-start']) } }, { rawDate: { $lte: dateToWinTime(incEnd1) } }];
+
+  query1.$and = [
+    { rawDate: { $gte: dateToWinTime(trendsDateLimits['1-start']) } },
+    { rawDate: { $lte: dateToWinTime(incEnd1) } },
+  ];
 
   let query2 = Object.assign({}, trendsMapDataFilter);
   let incEnd2 = new Date(trendsDateLimits['2-end']);
   incEnd2.setDate(trendsDateLimits['2-end'].getDate() + 1);
-  query2.$and = [{ rawDate: { $gte: dateToWinTime(trendsDateLimits['2-start']) } }, { rawDate: { $lte: dateToWinTime(incEnd2) } }];
+  query2.$and = [
+    { rawDate: { $gte: dateToWinTime(trendsDateLimits['2-start']) } },
+    { rawDate: { $lte: dateToWinTime(incEnd2) } },
+  ];
 
-
-  DB.getMatches(query1, function(err, dp1) {
-    DB.getMatches(query2, function(err, dp2) {
+  DB.getMatches(query1, function (err, dp1) {
+    DB.getMatches(query2, function (err, dp2) {
       let p1stats = summarizeMatchData(dp1, Heroes);
       let p2stats = summarizeMatchData(dp2, Heroes);
 
@@ -145,18 +178,39 @@ function loadTrends() {
 
       $('#hero-trends-body tbody').html('');
       $('#hero-trends-summary tbody').append(trendsOverallHeroRowTemplate({ context: hContext }));
-      $('#hero-trends-picks tbody').append(trendsHeroPickTemplate({context: hContext}));
-      $('#hero-trends-bans tbody').append(trendsHeroBanTemplate({context: hContext}));
+      $('#hero-trends-picks tbody').append(trendsHeroPickTemplate({ context: hContext }));
+      $('#hero-trends-bans tbody').append(trendsHeroBanTemplate({ context: hContext }));
 
       for (let c in comps) {
         let comp = comps[c];
-        let row = '<tr><td class="center aligned" data-sort-value="' + c + '">' + getCompositionElement(comp.roles) + '</td>';
-        row += '<td class="center aligned" data-sort-value="' + comp.p1Win + '">' + formatStat('pct', comp.p1Win) + '</td>';
-        row += '<td class="center aligned" data-sort-value="' + comp.p2Win + '">' + formatStat('pct', comp.p2Win) + '</td>';
-        row += '<td class="center aligned ' + (comp.winDelta > 0 ? 'plus' : 'minus') + '" data-sort-value="' + comp.winDelta + '">' + (comp.winDelta > 0 ? '+' : '') + formatStat('pct', comp.winDelta) + '</td>';
-        row += '<td class="center aligned" data-sort-value="' + comp.p1Pop + '">' + formatStat('pct', comp.p1Pop) + '</td>';
-        row += '<td class="center aligned" data-sort-value="' + comp.p2Pop + '">' + formatStat('pct', comp.p2Pop) + '</td>';
-        row += '<td class="center aligned ' + (comp.popDelta > 0 ? 'plus' : 'minus') + '" data-sort-value="' + comp.popDelta + '">' + (comp.popDelta > 0 ? '+' : '') + formatStat('pct', comp.popDelta) + '</td></tr>';
+        let row =
+          '<tr><td class="center aligned" data-sort-value="' + c + '">' + getCompositionElement(comp.roles) + '</td>';
+        row +=
+          '<td class="center aligned" data-sort-value="' + comp.p1Win + '">' + formatStat('pct', comp.p1Win) + '</td>';
+        row +=
+          '<td class="center aligned" data-sort-value="' + comp.p2Win + '">' + formatStat('pct', comp.p2Win) + '</td>';
+        row +=
+          '<td class="center aligned ' +
+          (comp.winDelta > 0 ? 'plus' : 'minus') +
+          '" data-sort-value="' +
+          comp.winDelta +
+          '">' +
+          (comp.winDelta > 0 ? '+' : '') +
+          formatStat('pct', comp.winDelta) +
+          '</td>';
+        row +=
+          '<td class="center aligned" data-sort-value="' + comp.p1Pop + '">' + formatStat('pct', comp.p1Pop) + '</td>';
+        row +=
+          '<td class="center aligned" data-sort-value="' + comp.p2Pop + '">' + formatStat('pct', comp.p2Pop) + '</td>';
+        row +=
+          '<td class="center aligned ' +
+          (comp.popDelta > 0 ? 'plus' : 'minus') +
+          '" data-sort-value="' +
+          comp.popDelta +
+          '">' +
+          (comp.popDelta > 0 ? '+' : '') +
+          formatStat('pct', comp.popDelta) +
+          '</td></tr>';
 
         $('#hero-trends-comps tbody').append(row);
       }
@@ -176,8 +230,12 @@ function layoutTrendsPrint(sections) {
   clearPrintLayout();
   addPrintHeader('Hero Trends');
   addPrintDate();
-  $('#print-window .contents').append('<p>[1] From: ' + trendsDateLimits['1-start'] + ' To: ' + trendsDateLimits['1-end']);
-  $('#print-window .contents').append('<p>[2] From: ' + trendsDateLimits['2-start'] + ' To: ' + trendsDateLimits['2-end']);
+  $('#print-window .contents').append(
+    '<p>[1] From: ' + trendsDateLimits['1-start'] + ' To: ' + trendsDateLimits['1-end'],
+  );
+  $('#print-window .contents').append(
+    '<p>[2] From: ' + trendsDateLimits['2-start'] + ' To: ' + trendsDateLimits['2-end'],
+  );
 
   for (let section of sects) {
     let sectionName = $('#' + section).attr('title');
@@ -197,29 +255,36 @@ function printTrends(filename, section) {
 
 function handleTrendsAction(value, text, $elem) {
   if (value === 'print') {
-    dialog.showSaveDialog({
-      title: 'Print Trends Report',
-      filters: [{name: 'pdf', extensions: ['pdf']}]
-    }, function(filename) {
-      if (filename) {
-        printTrends(filename, null);
-      }
-    });
-  }
-  else if (value === 'print-sections') {
-    $('#trends-print-sections').modal({
-      onApprove: function() {
-        dialog.showSaveDialog({
-          title: 'Print Trends Report',
-          filters: [{name: 'pdf', extensions: ['pdf']}]
-        }, function(filename) {
-          if (filename) {
-            let sections = $('#trends-print-sections .ui.dropdown').dropdown('get value').split(',');
-            printTrends(filename, sections);
-          }
-        });
+    dialog.showSaveDialog(
+      {
+        title: 'Print Trends Report',
+        filters: [{ name: 'pdf', extensions: ['pdf'] }],
       },
-      closable: false
-    }).modal('show');
+      function (filename) {
+        if (filename) {
+          printTrends(filename, null);
+        }
+      },
+    );
+  } else if (value === 'print-sections') {
+    $('#trends-print-sections')
+      .modal({
+        onApprove: function () {
+          dialog.showSaveDialog(
+            {
+              title: 'Print Trends Report',
+              filters: [{ name: 'pdf', extensions: ['pdf'] }],
+            },
+            function (filename) {
+              if (filename) {
+                let sections = $('#trends-print-sections .ui.dropdown').dropdown('get value').split(',');
+                printTrends(filename, sections);
+              }
+            },
+          );
+        },
+        closable: false,
+      })
+      .modal('show');
   }
 }

@@ -56,8 +56,7 @@ function heroDataCSV(docs) {
       for (let s of PerMapStatList[m]) {
         if (s in doc.gameStats) {
           row += ',' + doc.gameStats[s];
-        }
-        else {
+        } else {
           row += ', ';
         }
       }

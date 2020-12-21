@@ -51,7 +51,7 @@ const DetailStatList = [
   'levelAdvPct',
   'pctWithHeroAdv',
   'passiveXPRate',
-  'passiveXPGain'
+  'passiveXPGain',
 ];
 
 module.exports = DetailStatList;

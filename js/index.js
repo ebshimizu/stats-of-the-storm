@@ -3,39 +3,33 @@
 // their respective javascript files
 
 // helpers and constants
-const {
-  formatSeconds,
-  formatStat,
-  capitalize,
-  formatDelta,
-  escapeHtml
-} = require('./js/util/formatters');
+const { formatSeconds, formatStat, capitalize, formatDelta, escapeHtml } = require('./js/util/formatters');
 
 const RegionString = {
   1: 'NA',
   2: 'EU',
   3: 'KR',
   5: 'CN',
-  98: 'PTR/TR'
-}
+  98: 'PTR/TR',
+};
 
 const RoleColor = {
-  'Melee Assassin' : '#f2711c',
-  'Ranged Assassin' : '#db2828',
-  'Tank' : '#2185d0',
-  'Bruiser' : '#6435c9',
-  'Healer' : '#21ba45',
-  'Support' : '#00b5ad'
-}
+  'Melee Assassin': '#f2711c',
+  'Ranged Assassin': '#db2828',
+  Tank: '#2185d0',
+  Bruiser: '#6435c9',
+  Healer: '#21ba45',
+  Support: '#00b5ad',
+};
 
 const RoleColorClass = {
-  'Melee Assassin' : 'orange',
-  'Ranged Assassin' : 'red',
-  'Tank' : 'blue',
-  'Bruiser' : 'violet',
-  'Healer' : 'green',
-  'Support' : 'teal'
-}
+  'Melee Assassin': 'orange',
+  'Ranged Assassin': 'red',
+  Tank: 'blue',
+  Bruiser: 'violet',
+  Healer: 'green',
+  Support: 'teal',
+};
 
 const DetailStatList = require('./js/game-data/detail-stat-list');
 const PerMapStatList = require('./js/game-data/map-stats');
@@ -47,7 +41,7 @@ const dtse = require('datatables.net-se')(window, $);
 const dtfc = require('datatables.net-fixedcolumns')(window, $);
 const dtbt = require('datatables.net-buttons')(window, $);
 const dtbtse = require('datatables.net-buttons-se')(window, $);
-require('datatables.net-buttons/js/buttons.html5.js')(window, $);  // HTML 5 file export
+require('datatables.net-buttons/js/buttons.html5.js')(window, $); // HTML 5 file export
 const path = require('path');
 const settings = require('electron-settings');
 
@@ -67,7 +61,10 @@ const HeroesTalents = require('./js/heroes-talents.js');
 // load the heroes talents database
 // i need to do this earlier, so uh, here we are.
 console.log('Loading Heroes Talents database');
-const Heroes = new HeroesTalents.HeroesTalents(path.join(__dirname, '/assets/heroes-talents'), path.join(__dirname, '/assets/data'));
+const Heroes = new HeroesTalents.HeroesTalents(
+  path.join(__dirname, '/assets/heroes-talents'),
+  path.join(__dirname, '/assets/data'),
+);
 
 const ReplayTypes = require('./hots-parser/constants.js');
 
@@ -96,7 +93,7 @@ Handlebars.registerHelper('heroImage', (name) => `assets/heroes-talents/images/h
 
 // datepicker gloabl settings
 $.fn.datepicker.setDefaults({
-  autoHide: true
+  autoHide: true,
 });
 
 var DB;
@@ -108,19 +105,19 @@ $(document).ready(initApp);
 var bgWindow;
 
 // update functions
-ipcRenderer.on('updateReady', function(event, message) {
+ipcRenderer.on('updateReady', function (event, message) {
   // display a popup message to alert people
   let text = `An update has been downloaded and will be installed automatically
     when the application closes. If you can't wait, you can close and re-open the
-    app to get the latest features.`
+    app to get the latest features.`;
   showMessage('Update Ready!', text, { class: 'positive', sticky: true });
 });
 
-ipcRenderer.on('updateNotify', function(event, message) {
+ipcRenderer.on('updateNotify', function (event, message) {
   showMessage(message, 'Downloading Update...', { class: 'positive' });
 });
 
-ipcRenderer.on('updateStatus', function(event, message) {
+ipcRenderer.on('updateStatus', function (event, message) {
   console.log(message);
 });
 
@@ -129,22 +126,21 @@ function initApp() {
 
   // this is somewhat temporary, once 2.0 launches and is out for a bit,
   // we can probably eventually remove this
-  convertNeDB(settings.get('dbPath'), function() {
+  convertNeDB(settings.get('dbPath'), function () {
     // initial ui event bindings
     // this should happen first just in case someone needs to exit and
     // the script dies in a fire
-    $('#app-maximize-button').click(function() {
+    $('#app-maximize-button').click(function () {
       if (BrowserWindow.getFocusedWindow().isMaximized()) {
         BrowserWindow.getFocusedWindow().unmaximize();
-      }
-      else {
+      } else {
         BrowserWindow.getFocusedWindow().maximize();
       }
     });
-    $('#app-minimize-button').click(function() {
+    $('#app-minimize-button').click(function () {
       BrowserWindow.getFocusedWindow().minimize();
     });
-    $('#app-quit-button').click(function() {
+    $('#app-quit-button').click(function () {
       app.quit();
     });
     $('.app-version-number').text(app.getVersion());
@@ -169,10 +165,10 @@ function resumeInitApp() {
   initGlobalUIHandlers();
 
   setLoadMessage('Retrieving versions');
-  DB.getVersions(function(versions) {
+  DB.getVersions(function (versions) {
     dbVersions = versions;
     setLoadMessage('Retrieving tags');
-    DB.getTags(function(tags) {
+    DB.getTags(function (tags) {
       // sections
       setLoadMessage('Loading Sections');
       loadSections(tags);
@@ -182,9 +178,8 @@ function resumeInitApp() {
       setLoadMessage('Populating Menus');
       globalDBUpdate();
 
-      $('.player-menu input.search').keyup(function(e) {
-        if (e.which === 38 || e.which === 40 || e.which === 13)
-          return;
+      $('.player-menu input.search').keyup(function (e) {
+        if (e.which === 38 || e.which === 40 || e.which === 13) return;
 
         updatePlayerMenuOptions(this, $(this).val());
       });
@@ -200,7 +195,13 @@ function loadDatabase() {
   }
 
   if (!fs.existsSync(settings.get('dbPath'))) {
-    showMessage('Reverted to Default DB Location', `Failed to load database at ${settings.get('dbPath')}. The Database location was reset. You may change the Database location in settings`, { sticky: true, class: 'negative' });
+    showMessage(
+      'Reverted to Default DB Location',
+      `Failed to load database at ${settings.get(
+        'dbPath',
+      )}. The Database location was reset. You may change the Database location in settings`,
+      { sticky: true, class: 'negative' },
+    );
     settings.set('dbPath', app.getPath('userData'));
   }
 
@@ -211,14 +212,18 @@ function loadDatabase() {
   }
 
   const dbPath = settings.get('dbPath');
-  console.log("Database loading from " + dbPath);
+  console.log('Database loading from ' + dbPath);
   DB = new HeroesDB.HeroesDatabase(dbPath);
   DB.load(loadDatabaseComplete, setLoadMessage);
 }
 
 function loadDatabaseComplete(err) {
   if (err) {
-    showMessage('Database Load Error, Some App Functions May Not Work', 'Try restarting the app, and if the issue persists, please file a bug report with this message: "' + err + '"', { 'sticky' : true, 'class' : 'negative' })
+    showMessage(
+      'Database Load Error, Some App Functions May Not Work',
+      'Try restarting the app, and if the issue persists, please file a bug report with this message: "' + err + '"',
+      { sticky: true, class: 'negative' },
+    );
     console.log(err);
     // the app actually continues the load here, the message should be waiting at the end
   }
@@ -229,38 +234,37 @@ function loadDatabaseComplete(err) {
 
 function initGlobalUIHandlers() {
   // sidebar
-  $('#main-menu').sidebar('setting', 'transition', 'overlay').
-    sidebar('attach events', '#show-sidebar-button');
+  $('#main-menu').sidebar('setting', 'transition', 'overlay').sidebar('attach events', '#show-sidebar-button');
 
-  $('#main-menu a.item').each(function(idx, elem) {
+  $('#main-menu a.item').each(function (idx, elem) {
     let sectionName = $(elem).attr('section-name');
-    $(elem).click(function() {
+    $(elem).click(function () {
       changeSection(sectionName);
       $('#main-menu').sidebar('hide');
-    })
+    });
   });
 
-  $('#section-menu-back-button').click(function() {
+  $('#section-menu-back-button').click(function () {
     changeSection(prevSections.pop(), false, 'pop');
   });
 
   $('#collection-switch-menu').dropdown({
     action: 'activate',
-    onChange: setAppCollection
+    onChange: setAppCollection,
   });
   updateCollectionMenu();
 
   //open links externally by default
-  $(document).on('click', 'a[href^="http"]', function(event) {
-      event.preventDefault();
-      shell.openExternal(this.href);
+  $(document).on('click', 'a[href^="http"]', function (event) {
+    event.preventDefault();
+    shell.openExternal(this.href);
   });
 
-  $(document).on('click', '.link-to-player', function(event) {
+  $(document).on('click', '.link-to-player', function (event) {
     showPlayerProfile($(this).attr('player-id'));
   });
 
-  $(document).on('click', '.link-to-team', function(event) {
+  $(document).on('click', '.link-to-team', function (event) {
     $('#team-set-team').dropdown('set text', $(this).text());
     $('#team-set-team').dropdown('set value', $(this).attr('team-id'));
     $('#teams-page-header .team-name').text($(this).text());
@@ -291,7 +295,7 @@ function loadSections(tags) {
   $('#main-content').append(getTemplate('teams', '#teams-page'));
   initTeamsPage(tags);
 
-  $('#main-content').append(getTemplate('team-ranking', '#team-ranking-page'))
+  $('#main-content').append(getTemplate('team-ranking', '#team-ranking-page'));
   initTeamRankingPage(tags);
 
   $('#main-content').append(getTemplate('about', '#about-page'));
@@ -303,16 +307,67 @@ function loadSections(tags) {
   initMapsPage(tags);
 
   // register sections
-  sections.settings = {id: '#settings-page-content', title: 'App Settings', showBack: false, onShow: showSettingsPage };
-  sections.matches = {id: '#matches-page-content', title: 'Matches', showBack: false, reset: resetMatchesPage, onShow: showMatchesPage };
-  sections['match-detail'] = {id: '#match-detail-page-content', title: 'Match Details', showBack: true, onShow: matchDetailsShowSection };
-  sections.player = {id: '#player-page-content', title: 'Player Details', showBack: false, onShow: showPlayerPage, reset: resetPlayerPage};
-  sections['hero-collection'] = {id: '#hero-collection-page-content', title: 'Hero Statistics', showBack: false, reset: resetHeroCollection, onShow: heroCollectionShowSection };
-  sections['player-ranking'] = {id: '#player-ranking-page-content', title: 'Player Statistics', showBack: false, reset: resetPlayerRankingPage, onShow: playerRankingShowSection };
-  sections.teams = {id: '#teams-page-content', title: 'Teams', showBack: false, reset: resetTeamsPage, onShow: teamShowSection };
-  sections['team-ranking'] = {id: '#team-ranking-page-content', title: 'Team Statistics', reset: resetTeamRankingPage, onShow: showTeamRankingSection, showBack: false };
+  sections.settings = {
+    id: '#settings-page-content',
+    title: 'App Settings',
+    showBack: false,
+    onShow: showSettingsPage,
+  };
+  sections.matches = {
+    id: '#matches-page-content',
+    title: 'Matches',
+    showBack: false,
+    reset: resetMatchesPage,
+    onShow: showMatchesPage,
+  };
+  sections['match-detail'] = {
+    id: '#match-detail-page-content',
+    title: 'Match Details',
+    showBack: true,
+    onShow: matchDetailsShowSection,
+  };
+  sections.player = {
+    id: '#player-page-content',
+    title: 'Player Details',
+    showBack: false,
+    onShow: showPlayerPage,
+    reset: resetPlayerPage,
+  };
+  sections['hero-collection'] = {
+    id: '#hero-collection-page-content',
+    title: 'Hero Statistics',
+    showBack: false,
+    reset: resetHeroCollection,
+    onShow: heroCollectionShowSection,
+  };
+  sections['player-ranking'] = {
+    id: '#player-ranking-page-content',
+    title: 'Player Statistics',
+    showBack: false,
+    reset: resetPlayerRankingPage,
+    onShow: playerRankingShowSection,
+  };
+  sections.teams = {
+    id: '#teams-page-content',
+    title: 'Teams',
+    showBack: false,
+    reset: resetTeamsPage,
+    onShow: teamShowSection,
+  };
+  sections['team-ranking'] = {
+    id: '#team-ranking-page-content',
+    title: 'Team Statistics',
+    reset: resetTeamRankingPage,
+    onShow: showTeamRankingSection,
+    showBack: false,
+  };
   sections.about = { id: '#about-page-content', title: 'About', showBack: false };
-  sections.trends = { id: '#hero-trends-page-content', title: 'Hero Trends', showBack: false, onShow: showTrendsSection };
+  sections.trends = {
+    id: '#hero-trends-page-content',
+    title: 'Hero Trends',
+    showBack: false,
+    onShow: showTrendsSection,
+  };
   sections.maps = { id: '#maps-page-content', title: 'Battlegrounds', showBack: false, onShow: onShowMapsPage };
 
   // Matches should be the default view of the app.
@@ -326,13 +381,11 @@ function loadSections(tags) {
   changeSection('matches');
 }
 
-
 const getHandlebars = require('./js/util/handlebars');
-
 
 // returns the template contained in an import
 function getTemplate(name, selector) {
-  const link = document.querySelector('link[name="'+ name + '"]');
+  const link = document.querySelector('link[name="' + name + '"]');
   return link.import.querySelector(selector).innerHTML;
 }
 
@@ -344,8 +397,8 @@ function createBGWindow() {
     show: false,
     webPreferences: {
       nodeIntegration: true,
-      devTools: true
-    }
+      devTools: true,
+    },
   });
   bgWindow.loadURL(bgPath);
   //bgWindow.webContents.openDevTools();
@@ -353,8 +406,7 @@ function createBGWindow() {
 
 function changeSection(to, overrideBack, action) {
   // if it's already being shown, do nothing
-  if (!$(sections[to].id).hasClass('hidden'))
-    return;
+  if (!$(sections[to].id).hasClass('hidden')) return;
 
   // this should only trigger for the visible section
   // if the back button is visible, we should store a little history
@@ -367,8 +419,7 @@ function changeSection(to, overrideBack, action) {
     prevSections = [];
   }
 
-  for (let s in sections)
-    hideSection(s);
+  for (let s in sections) hideSection(s);
 
   // ok wait also hide the menu cause that changes from section to section
   $('#section-menu .section-submenu').addClass('is-hidden');
@@ -380,15 +431,13 @@ function changeSection(to, overrideBack, action) {
 }
 
 function showSection(name, overrideBack) {
-  if ($(sections[name].id).hasClass('hidden'))
-    $(sections[name].id).transition('fade right');
+  if ($(sections[name].id).hasClass('hidden')) $(sections[name].id).transition('fade right');
 
   setMenuTitle(sections[name].title, sections[name].showBack || overrideBack);
 }
 
 function hideSection(name) {
-  if ($(sections[name].id).hasClass('visible'))
-    $(sections[name].id).transition('fade right');
+  if ($(sections[name].id).hasClass('visible')) $(sections[name].id).transition('fade right');
 }
 
 function setMenuTitle(title, showBackButton) {
@@ -396,36 +445,34 @@ function setMenuTitle(title, showBackButton) {
 
   if (showBackButton) {
     $('#section-menu-back-button').addClass('show');
-  }
-  else {
+  } else {
     $('#section-menu-back-button').removeClass('show');
   }
 }
 
-
 // updates certain elements based on a new replay inserted into the database
 function globalDBUpdate() {
   // patch update
-  addPatchMenuOptions($('#filter-popup-widget .filter-widget-patch'), function() {
+  addPatchMenuOptions($('#filter-popup-widget .filter-widget-patch'), function () {
     $('#filter-popup-widget .filter-widget-patch').dropdown('refresh');
   });
 
-  addPatchMenuOptions($('#match-patch-select'), function() {
+  addPatchMenuOptions($('#match-patch-select'), function () {
     $('#match-patch-select').dropdown('refresh');
   });
 
- populateStatCollectionMenus();
+  populateStatCollectionMenus();
 }
 
 // called on keydown for all player input fields
 function updatePlayerMenuOptions(elem, value) {
   // ok so like search for the player i guess
   let q = new RegExp(value, 'i');
-  const aliasFilter = { $or: [{aliasedTo: ''}, { aliasedTo: { $exists: false }}] };
-  const playerQuery = { $or: [{name: { $regex: q } }, { nickname: { $regex: q } }] };
+  const aliasFilter = { $or: [{ aliasedTo: '' }, { aliasedTo: { $exists: false } }] };
+  const playerQuery = { $or: [{ name: { $regex: q } }, { nickname: { $regex: q } }] };
   const query = { $and: [aliasFilter, playerQuery] };
 
-  DB.getPlayers(query, function(err, players) {
+  DB.getPlayers(query, function (err, players) {
     let menu = $(elem).parent('.dropdown');
     menu.find('.menu .item').not('.active').remove();
     menu.find('.message').remove();
@@ -434,17 +481,23 @@ function updatePlayerMenuOptions(elem, value) {
     let max = settings.get('playerThreshold');
     let count = 0;
     for (let player of players) {
-      if (count > max)
-        break;
+      if (count > max) break;
 
       let name = formatPlayerName(player);
 
       let item = '<div class="item" data-value="' + escapeHtml(player._id) + '">';
       //item += '<div class="ui horizontal label"><i class="file outline icon"></i>' + player.matches + '</div>';
-      item += '<div class="item" data-value="' + escapeHtml(player._id) + '">' + name + ' (' + RegionString[player.region] + ')</div>'
+      item +=
+        '<div class="item" data-value="' +
+        escapeHtml(player._id) +
+        '">' +
+        name +
+        ' (' +
+        RegionString[player.region] +
+        ')</div>';
 
       menu.find('.menu').append(item);
-      count += 1
+      count += 1;
     }
 
     menu.dropdown('refresh');
@@ -464,8 +517,7 @@ function formatPlayerName(player, opts = {}) {
 
 // given a user id, returns 'focus-player' class if the player id is, well, the focus player
 function focusClass(id) {
-  if (id === settings.get('selectedPlayerID'))
-    return 'focus-player';
+  if (id === settings.get('selectedPlayerID')) return 'focus-player';
 
   return '';
 }
@@ -478,7 +530,10 @@ function addHeroMenuOptions(menu) {
   menu.find('.menu').html('');
   for (let i in heroes) {
     let val = heroes[i];
-    let elem = '<div class="item" data-value="' + heroes[i] + '"><img class="ui avatar image" src="assets/heroes-talents/images/heroes/';
+    let elem =
+      '<div class="item" data-value="' +
+      heroes[i] +
+      '"><img class="ui avatar image" src="assets/heroes-talents/images/heroes/';
     elem += Heroes.heroIcon(heroes[i]) + '">' + heroes[i] + '</div>';
     menu.find('.menu').append(elem);
   }
@@ -496,31 +551,35 @@ function addPatchMenuOptions(elem, callback) {
   elem.find('.menu').html('');
 
   for (let v in dbVersions) {
-    elem.find('.menu').append('<div class="item" data-value="' + escapeHtml(v) + '">' + escapeHtml(dbVersions[v]) + '</div>');
+    elem
+      .find('.menu')
+      .append('<div class="item" data-value="' + escapeHtml(v) + '">' + escapeHtml(dbVersions[v]) + '</div>');
   }
 
   callback();
 }
 
 function populateTeamMenu(elem) {
-  DB.getAllTeams(function(err, docs) {
+  DB.getAllTeams(function (err, docs) {
     elem.find('.menu').html('');
 
     let keys = [];
     for (let d in docs) {
       keys.push({ index: d, value: docs[d].name });
     }
-    keys = keys.sort(function(a, b) {
-      if (a.value < b.value)
-        return -1;
-      if (b.value < a.value)
-        return 1;
+    keys = keys.sort(function (a, b) {
+      if (a.value < b.value) return -1;
+      if (b.value < a.value) return 1;
       return 0;
     });
 
     for (let i of keys) {
       let d = i.index;
-      elem.find('.menu').append('<div class="item" data-value="' + escapeHtml(docs[d]._id) + '">' + escapeHtml(docs[d].name) + '</div>');
+      elem
+        .find('.menu')
+        .append(
+          '<div class="item" data-value="' + escapeHtml(docs[d]._id) + '">' + escapeHtml(docs[d].name) + '</div>',
+        );
     }
 
     elem.dropdown('refresh');
@@ -529,9 +588,9 @@ function populateTeamMenu(elem) {
 
 function updateCollectionMenu(callback) {
   // add the proper options n stuff
-  DB.getCollections(function(err, collections) {
+  DB.getCollections(function (err, collections) {
     // alpha sort
-    collections.sort(function(a, b) {
+    collections.sort(function (a, b) {
       if (a.name < b.name) {
         return -1;
       }
@@ -548,8 +607,7 @@ function updateCollectionMenu(callback) {
     $('.collection-menu .menu').html('');
     $('#collection-switch-menu .menu').append('<div class="item" data-value="none">All Matches</div>');
 
-    if (collections.length > 0)
-      $('#collection-switch-menu .menu').append('<div class="ui divider"></div>');
+    if (collections.length > 0) $('#collection-switch-menu .menu').append('<div class="ui divider"></div>');
 
     for (let c in collections) {
       let collection = collections[c];
@@ -575,7 +633,7 @@ function populateStatCollectionMenus() {
   $('.cache-collections .menu').html('');
   $('.cache-collections .menu').append('<div class="item" data-value="all">All Matches</div>');
 
-  DB.getCollections(function(err, collections) {
+  DB.getCollections(function (err, collections) {
     if (collections.length > 0) {
       $('.cache-collections .menu').append('<div class="ui divider"></div>');
     }
@@ -585,14 +643,22 @@ function populateStatCollectionMenus() {
       $('.cache-collections .menu').append('<div class="item" data-value="' + col._id + '">' + col.name + '</div>');
     }
 
-    DB.getExternalCacheCollections(function(err, collections) {
+    DB.getExternalCacheCollections(function (err, collections) {
       if (collections.length > 0) {
-        $('.cache-collections .menu').append('<div class="ui divider"></div>')
+        $('.cache-collections .menu').append('<div class="ui divider"></div>');
       }
 
       for (let c in collections) {
         let col = collections[c];
-        $('.cache-collections .menu').append('<div class="item" data-value="' + col._id + '" data-type="external">' + col.dbName + ': ' + col.name + '</div>');
+        $('.cache-collections .menu').append(
+          '<div class="item" data-value="' +
+            col._id +
+            '" data-type="external">' +
+            col.dbName +
+            ': ' +
+            col.name +
+            '</div>',
+        );
       }
 
       $('.cache-collections').dropdown('refresh');
@@ -600,7 +666,7 @@ function populateStatCollectionMenus() {
   });
 }
 
-function populateTagMenuWithValues (menu, tags) {
+function populateTagMenuWithValues(menu, tags) {
   menu.find('.menu').html('');
 
   for (let tag of tags) {
@@ -612,11 +678,10 @@ function populateTagMenuWithValues (menu, tags) {
 
 // populates the tag menu with available tags
 function populateTagMenu(menu, callback) {
-  DB.getTags(function(tags) {
-    populateTagMenuWithValues(menu, tags)
+  DB.getTags(function (tags) {
+    populateTagMenuWithValues(menu, tags);
 
-    if (callback)
-      callback();
+    if (callback) callback();
   });
 }
 
@@ -624,8 +689,7 @@ function setAppCollection(value, text, $elem) {
   if (value === 'none') {
     $('#collection-switch-menu .collection-name').text('None');
     DB.setCollection(null);
-  }
-  else {
+  } else {
     $('#collection-switch-menu .collection-name').text(text);
     DB.setCollection(value);
   }
@@ -658,7 +722,7 @@ function removeLoader() {
 }
 
 function showMessage(title, text, opts = {}) {
-  let elem = '<div class="ui message transition hidden">'
+  let elem = '<div class="ui message transition hidden">';
   elem += '<div class="header">' + title + '</div>';
   elem += '<p>' + text + '</p>';
   elem += '</div>';
@@ -671,15 +735,16 @@ function showMessage(title, text, opts = {}) {
 
   if (opts.sticky) {
     elem.prepend('<i class="close icon"></i>');
-    elem.find('i').click(function() {
-      $(this).parent().transition('fade left', 500, function() {
-        elem.remove();
-      });
+    elem.find('i').click(function () {
+      $(this)
+        .parent()
+        .transition('fade left', 500, function () {
+          elem.remove();
+        });
     });
     $('#message-container').append(elem);
     elem.transition('fade left');
-  }
-  else {
+  } else {
     $('#message-container').append(elem);
     elem.transition({
       animation: 'fade left',
@@ -689,10 +754,10 @@ function showMessage(title, text, opts = {}) {
             animation: 'fade left',
             onComplete: function () {
               elem.remove();
-            }
+            },
           });
-        }, 4000)
-      }
+        }, 4000);
+      },
     });
   }
 
@@ -701,33 +766,31 @@ function showMessage(title, text, opts = {}) {
 }
 
 function exportMatch(id, filename) {
-  DB.getMatchesByID([id], function(err, docs) {
+  DB.getMatchesByID([id], function (err, docs) {
     let match = docs[0];
-    DB.getHeroDataForID(id, function(err, docs) {
+    DB.getHeroDataForID(id, function (err, docs) {
       let matchExport = {
         match: match,
-        players: docs
+        players: docs,
       };
-      fs.writeFile(filename, JSON.stringify(matchExport, null, 2), function(err) {
+      fs.writeFile(filename, JSON.stringify(matchExport, null, 2), function (err) {
         if (err) {
           showMessage('Export Error', err, { class: 'negative' });
-        }
-        else {
+        } else {
           showMessage('Export Complete', 'Match ' + id + ' saved to ' + filename);
         }
       });
-    })
-  })
+    });
+  });
 }
 
 function exportPlayer(id, filename) {
-  DB.getHeroDataForPlayer(id, function(err, docs) {
+  DB.getHeroDataForPlayer(id, function (err, docs) {
     let data = summarizeHeroData(docs);
-    fs.writeFile(filename, JSON.stringify(data, null, 2), function(err) {
+    fs.writeFile(filename, JSON.stringify(data, null, 2), function (err) {
       if (err) {
         showMessage('Export Error', err, { class: 'negative' });
-      }
-      else {
+      } else {
         showMessage('Export Complete', 'Player ' + id + ' saved to ' + filename);
       }
     });
@@ -754,7 +817,7 @@ function createPlayerAliasMap(playerDocs) {
       }
     }
   }
-  return key
+  return key;
 }
 
 function clearPrintLayout() {
@@ -767,7 +830,7 @@ function addPrintPage(name) {
 
 function addPrintDate() {
   $('#print-window .contents').append('<p>Database path: ' + settings.get('dbPath') + '</p>');
-  $('#print-window .contents').append('<p>Printed on ' + (new Date()).toLocaleString('en-US') + '</p>');
+  $('#print-window .contents').append('<p>Printed on ' + new Date().toLocaleString('en-US') + '</p>');
 }
 
 function getPrintPage(page) {
@@ -778,10 +841,11 @@ function addPrintHeader(title, page) {
   let t = '<h1 class="ui dividing header new-page">' + title + '</h1>';
 
   if (!page) {
-    $('#print-window .contents').append(t)
-  }
-  else {
-    $('#print-window .contents').find('.page.' + page).append(t)
+    $('#print-window .contents').append(t);
+  } else {
+    $('#print-window .contents')
+      .find('.page.' + page)
+      .append(t);
   }
 }
 
@@ -790,9 +854,10 @@ function addPrintSubHeader(title, page) {
 
   if (!page) {
     $('#print-window .contents').append(t);
-  }
-  else {
-    $('#print-window .contents').find('.page.' + page).append(t);
+  } else {
+    $('#print-window .contents')
+      .find('.page.' + page)
+      .append(t);
   }
 }
 
@@ -812,15 +877,14 @@ function copyFloatingTable(src, dest) {
   table.find('table').attr('style', '');
 
   // shrink image headers
-  table.find('h3.image.header').replaceWith(function() {
+  table.find('h3.image.header').replaceWith(function () {
     return '<h4 class="ui image header">' + $(this).html() + '</h4>';
-  })
+  });
 
   // remove wrapper
   if (dest) {
     dest.append(table.find('table'));
-  }
-  else {
+  } else {
     $('#print-window .contents').append(table.find('table'));
   }
 }
@@ -839,7 +903,7 @@ function copyGraph(srcData, dest, opts = {}) {
 
   // hey lets deep copy objects by straight up serializing them and then
   // deserializing the string ??????????
-  let data = {}
+  let data = {};
   data.type = srcData.type;
   data.options = JSON.parse(JSON.stringify(srcData.options));
   data.options.legend.labels.fontColor = 'black';
@@ -875,16 +939,14 @@ function renderAndPrint(filename, size = 'Letter', landscape = false) {
     }
   }
 
-  win.webContents.printToPDF({ landscape: landscape, pageSize: size }, function(error, data) {
+  win.webContents.printToPDF({ landscape: landscape, pageSize: size }, function (error, data) {
     if (error) {
       showMessage('Print Error', error, { class: 'negative' });
-    }
-    else {
+    } else {
       try {
         fs.writeFileSync(filename, data);
         showMessage('Print Success', 'Printed to ' + filename, { class: 'positive' });
-      }
-      catch (err) {
+      } catch (err) {
         $('#print-window').addClass('is-hidden');
         showMessage('Print Error', err, { class: 'negative' });
       }
@@ -895,17 +957,15 @@ function renderAndPrint(filename, size = 'Letter', landscape = false) {
   });
 }
 
-
 // takes a bunch of hero data json docs and converts them into rows
 function exportHeroDataAsCSV(docs, file) {
   // assert docs > 0
   if (docs.length === 0) return;
 
-  fs.writeFile(file, heroDataCSV(docs), function(err) {
+  fs.writeFile(file, heroDataCSV(docs), function (err) {
     if (err) {
       showMessage('CSV Export Error', err, { class: 'negative' });
-    }
-    else {
+    } else {
       showMessage('CSV Export Complete', 'Exported to ' + file);
     }
   });

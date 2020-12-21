@@ -34,10 +34,10 @@ const TalentRenames = {
   JunkratHeroicAbilityRIPTire: 'JunkratRIPTire',
   JunkratHeroicRocketRide: 'JunkratRocketRide',
   JunkratSpreadVolley: 'JunkratFragLauncherSpreadVolley',
-  "Kael'thasLivingBombIgnite": 'KaelthasLivingBombIgnite',   // lol
+  "Kael'thasLivingBombIgnite": 'KaelthasLivingBombIgnite', // lol
   AnubarakHeroicAbilityCarrionSwarm: 'AnubarakLocustSwarm',
   AnubarakMasteryHiveMasterCarrionSwarm: 'AnubarakLocustSwarmHiveMaster',
-  KerriganMasteryRavageSiphoningImpact: 'KerriganSiphoningImpactRavage',                  // 2.36.0
+  KerriganMasteryRavageSiphoningImpact: 'KerriganSiphoningImpactRavage', // 2.36.0
   KerriganMasteryImpalingBladesSharpenedBlades: 'KerriganSharpenedBladesImpalingBlades',
   KerriganMasteryRavageCleanKill: 'KerriganCleanKillRavage',
   KerriganMasteryPrimalGraspPsionicPulse: 'KerriganPsionicPulsePrimalGrasp',
@@ -47,7 +47,7 @@ const TalentRenames = {
   KerriganMasteryAggressiveDefense: 'KerriganAggressiveDefense',
   KerriganMasteryMaelstromOmegastorm: 'KerriganOmegastormMaelstrom',
   KerriganMasteryTorrasqueSummonUltralisk: 'KerriganTorrasqueSummonUltralisk',
-  StitchesMasteryChewYourFood: 'StitchesChewYourFood',     // 2.37.0
+  StitchesMasteryChewYourFood: 'StitchesChewYourFood', // 2.37.0
   StitchesMasteryHeavySlam: 'StitchesHeavySlam',
   StitchesMasteryPutridGroundSlam: 'StitchesPutridGroundSlam',
   StitchesMasterySavorTheFlavorDevour: 'StitchesSavortheFlavorDevour',
@@ -59,8 +59,7 @@ const TalentRenames = {
   StitchesMasteryShishKabobHook: 'StitchesShishKabobHook',
   StitchesMasteryHungryHungryStitchesGorge: 'StitchesHungryHungryStitchesGorge',
   SylvanasHeroicAbilityMindControl: 'SylvanasMindControl',
-  ImperiusSolarionsFireBurnTheImpure: 'ImperiusValorousBrandBurnTheImpure'    // 2.42.1
+  ImperiusSolarionsFireBurnTheImpure: 'ImperiusValorousBrandBurnTheImpure', // 2.42.1
 };
-
 
 module.exports = TalentRenames;

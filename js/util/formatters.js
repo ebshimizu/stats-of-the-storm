@@ -14,14 +14,7 @@ function formatSeconds(val) {
   // going to display minutes only here, can change this later maybe
   minutes += hours * 60;
 
-  return (
-    (invert ? '-' : '') +
-    (minutes < 1 ? '0' : '') +
-    minutes +
-    ':' +
-    (seconds < 10 ? '0' : '') +
-    seconds
-  );
+  return (invert ? '-' : '') + (minutes < 1 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 }
 
 function formatStat(field, val, allFixed = false) {
@@ -41,11 +34,8 @@ function formatStat(field, val, allFixed = false) {
     field === 'SoftCCPct' ||
     field === 'HardCCPct'
   ) {
-    return (
-      (val * 100).toLocaleString('en-US', { maximumFractionDigits: 1 }) + '%'
-    );
-  } else if (field === 'KDA')
-    return val.toLocaleString('en-US', { maximumFractionDigits: 1 });
+    return (val * 100).toLocaleString('en-US', { maximumFractionDigits: 1 }) + '%';
+  } else if (field === 'KDA') return val.toLocaleString('en-US', { maximumFractionDigits: 1 });
   else if (
     field.startsWith('Time') ||
     field.startsWith('time') ||
@@ -59,7 +49,7 @@ function formatStat(field, val, allFixed = false) {
     return formatSeconds(val);
   } else if (field === 'passiveXPDiff') {
     return `+${((val - 1) * 100).toLocaleString('en-US', {
-      maximumFractionDigits: 1
+      maximumFractionDigits: 1,
     })}%`;
   }
 
@@ -86,11 +76,11 @@ var entityMap = {
   "'": '&#39;',
   '/': '&#x2F;',
   '`': '&#x60;',
-  '=': '&#x3D;'
+  '=': '&#x3D;',
 };
 
 function escapeHtml(string) {
-  return String(string).replace(/[&<>"'`=\/]/g, function(s) {
+  return String(string).replace(/[&<>"'`=/]/g, function (s) {
     return entityMap[s];
   });
 }
@@ -100,5 +90,5 @@ module.exports = {
   formatStat,
   capitalize,
   formatDelta,
-  escapeHtml
+  escapeHtml,
 };

@@ -1,13 +1,28 @@
 function heroDraftCSV(matchData, Heroes) {
   // pull specific values
   let outData = '';
-  let fields = ['hero', 'role', 'wins', 'games', 'involved', 'round 1', 'round 2', 'round 3', 'bans', 'ban 1', 'ban 2', 'round 1 wins', 'round 2 wins', 'round 3 wins', 'totalGames'];
+  let fields = [
+    'hero',
+    'role',
+    'wins',
+    'games',
+    'involved',
+    'round 1',
+    'round 2',
+    'round 3',
+    'bans',
+    'ban 1',
+    'ban 2',
+    'round 1 wins',
+    'round 2 wins',
+    'round 3 wins',
+    'totalGames',
+  ];
 
   outData += fields.join(',');
 
   for (let h in matchData.data) {
-    if (h === 'totalMatches' || h === 'totalBans')
-      continue;
+    if (h === 'totalMatches' || h === 'totalBans') continue;
 
     let hero = matchData.data[h];
 

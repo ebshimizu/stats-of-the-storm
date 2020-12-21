@@ -8,5 +8,5 @@ module.exports = {
     }
 
     return arr[(len - 1) / 2];
-  }
+  },
 };

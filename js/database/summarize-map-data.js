@@ -1,4 +1,4 @@
-const { median } = require("../util/math");
+const { median } = require('../util/math');
 const ReplayTypes = require('../../hots-parser/constants');
 
 // mapData data
@@ -23,7 +23,7 @@ function summarizeMapData(docs) {
         firstPickWin: 0,
         draftGames: 0,
         firstFortWin: 0,
-        firstKeepWin: 0
+        firstKeepWin: 0,
       };
     }
 
@@ -69,7 +69,7 @@ function summarizeMapData(docs) {
     draftGames: 0,
     firstFortWin: 0,
     firstKeepWin: 0,
-    nonToDTotal: 0    // necessary to adjust for first keep win stat (ToD has no keeps)
+    nonToDTotal: 0, // necessary to adjust for first keep win stat (ToD has no keeps)
   };
 
   for (let map in stats) {

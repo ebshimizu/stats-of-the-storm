@@ -10,7 +10,7 @@ const summaryProjection = {
   winner: 1,
   version: 1,
   bans: 1,
-  tags: 1
+  tags: 1,
 };
 
 const matchesPerPage = 20;
@@ -26,7 +26,7 @@ function initMatchesPage(tags) {
   // player menu init
   $('#match-search-players').dropdown({
     action: 'activate',
-    fullTextSearch: true
+    fullTextSearch: true,
   });
 
   // templates
@@ -35,14 +35,14 @@ function initMatchesPage(tags) {
   // bindings
   $('#match-filter-popup-button').popup({
     popup: '#match-filter-popup',
-    on: 'click'
+    on: 'click',
   });
   $('#match-mode-select').dropdown({
     action: 'activate',
-    fullTextSearch: true
+    fullTextSearch: true,
   });
   $('#match-search-players-mode').dropdown({
-    action: 'activate'
+    action: 'activate',
   });
   $('#match-search-heroes-mode').dropdown();
 
@@ -51,21 +51,21 @@ function initMatchesPage(tags) {
 
   // again most of the things here don't actually need callbacks
   $('#match-search-heroes').dropdown({
-    fullTextSearch: true
+    fullTextSearch: true,
   });
   addHeroMenuOptions($('#match-search-heroes'));
   $('#match-search-heroes').dropdown('refresh');
 
   $('#match-map-select').dropdown({
-    fullTextSearch: true
+    fullTextSearch: true,
   });
   addMapMenuOptions($('#match-map-select'));
   $('#match-map-select').dropdown('refresh');
 
   $('#match-patch-select').dropdown({
-    fullTextSearch: true
+    fullTextSearch: true,
   });
-  addPatchMenuOptions($('#match-patch-select'), function() {
+  addPatchMenuOptions($('#match-patch-select'), function () {
     $('#match-patch-select').dropdown('refresh');
   });
 
@@ -78,12 +78,12 @@ function initMatchesPage(tags) {
   // season menu tho that has some stuff
   initSeasonMenu();
 
-  $('#match-search-clear-team').click(function() {
+  $('#match-search-clear-team').click(function () {
     $('#match-search-team').dropdown('restore defaults');
   });
 
   $('#match-search-team').dropdown({
-    fullTextSearch: true
+    fullTextSearch: true,
   });
 
   $('#match-search-button').click(selectMatches);
@@ -91,28 +91,28 @@ function initMatchesPage(tags) {
 
   $('#matches-collection').dropdown({
     action: 'hide',
-    onChange: handleMatchesCollectionAction
+    onChange: handleMatchesCollectionAction,
   });
   $('#matches-file-menu').dropdown({
     action: 'hide',
-    onChange: handleMatchesFileAction
+    onChange: handleMatchesFileAction,
   });
 
   $('#matches-tags').popup({
     inline: true,
     position: 'bottom left',
-    on: 'click'
+    on: 'click',
   });
 
   $('#matches-tags-popup .search.dropdown').dropdown({
     fullTextSearch: true,
     allowAdditions: true,
     onAdd: matchesAddTag,
-    onRemove: matchesRemoveTag
+    onRemove: matchesRemoveTag,
   });
 
   $('#match-search-tags').dropdown({
-    fullTextSearch: true
+    fullTextSearch: true,
   });
 
   populateTagMenuWithValues($('#matches-tags-popup .search.dropdown'), tags);
@@ -121,12 +121,12 @@ function initMatchesPage(tags) {
   $('#matches-collection-select').modal();
 
   $('#search-hero-on-team').checkbox({
-    onChecked: function() {
+    onChecked: function () {
       requireHeroOnTeam = true;
     },
-    onUnchecked: function() {
+    onUnchecked: function () {
       requireHeroOnTeam = false;
-    }
+    },
   });
 
   // initial settings
@@ -162,7 +162,7 @@ function hideMatchLoader() {
 }
 
 function getMatchCount() {
-  DB.countMatches({}, function(err, count) {
+  DB.countMatches({}, function (err, count) {
     $('#matches-in-database-stat').text(count);
   });
 }
@@ -197,9 +197,7 @@ function selectMatches() {
   matchTeamActiveIDs = null;
 
   // mode
-  let modes = $('#match-mode-select').
-    dropdown('get value').
-    split(',');
+  let modes = $('#match-mode-select').dropdown('get value').split(',');
   for (let m in modes) {
     if (modes[m] !== '') modes[m] = parseInt(modes[m]);
   }
@@ -209,36 +207,26 @@ function selectMatches() {
   let end = $('#match-search-end-date').datepicker('getDate');
 
   // players
-  let players = $('#match-search-players').
-    dropdown('get value').
-    split(',');
+  let players = $('#match-search-players').dropdown('get value').split(',');
   let playerMode = $('#match-search-players-mode').dropdown('get value');
   let playerWin = $('#match-search-players-win').dropdown('get value');
 
   // heroes
-  let heroes = $('#match-search-heroes').
-    dropdown('get value').
-    split(',');
+  let heroes = $('#match-search-heroes').dropdown('get value').split(',');
   let heroMode = $('#match-search-heroes-mode').dropdown('get value');
 
   // maps
-  let maps = $('#match-map-select').
-    dropdown('get value').
-    split(',');
+  let maps = $('#match-map-select').dropdown('get value').split(',');
 
   // patches
-  let patches = $('#match-patch-select').
-    dropdown('get value').
-    split(',');
+  let patches = $('#match-patch-select').dropdown('get value').split(',');
 
   // team
   let team = $('#match-search-team').dropdown('get value');
   let teamWin = $('#match-search-team-win').dropdown('get value');
 
   // tags
-  let tags = $('#match-search-tags').
-    dropdown('get value').
-    split(',');
+  let tags = $('#match-search-tags').dropdown('get value').split(',');
 
   for (let p in patches) {
     if (patches[p] !== '') patches[p] = parseInt(patches[p]);
@@ -265,10 +253,7 @@ function selectMatches() {
   // dates
   let incEnd = new Date(end);
   incEnd.setDate(end.getDate() + 1);
-  query.$and = [
-    { rawDate: { $gte: dateToWinTime(start) } },
-    { rawDate: { $lte: dateToWinTime(incEnd) } }
-  ];
+  query.$and = [{ rawDate: { $gte: dateToWinTime(start) } }, { rawDate: { $lte: dateToWinTime(incEnd) } }];
 
   // heroes
   if (heroes[0] !== '' && !requireHeroOnTeam) {
@@ -333,7 +318,7 @@ function selectMatches() {
   // ok teams suck
   if (team !== '') {
     // get the team, then run the query as normal
-    DB.getTeam(team, function(err, team) {
+    DB.getTeam(team, function (err, team) {
       matchTeamActiveIDs = team.players;
       let players = team.players;
 
@@ -417,91 +402,74 @@ function teamsShouldSwap(data) {
 
 function showPage(pageNum) {
   showMatchLoader();
-  DB.countMatches(matchSearchQuery, function(err, count) {
+  DB.countMatches(matchSearchQuery, function (err, count) {
     $('#matches-selected').text(count);
 
     let maxPages = Math.ceil(count / matchesPerPage);
     if (pageNum >= 0 && pageNum < maxPages) {
-      DB.getMatchPage(
-        matchSearchQuery,
-        pageNum,
-        matchesPerPage,
-        summaryProjection,
-        function(err, selectedMatches) {
-          // clear
-          for (let i = 0; i < matchesPerPage; i++) {
-            $('tr[slot="' + i + '"]').html('');
-          }
-
-          // so like pick the correct range and just render it
-          for (let i = 0; i < selectedMatches.length; i++) {
-            renderToSlot(
-              selectedMatches[i],
-              i,
-              teamsShouldSwap(selectedMatches[i])
-            );
-          }
-          currentPage = pageNum;
-
-          // update the pagination buttons
-          $('#match-list-page-menu').html('');
-
-          // determine what to show
-          let show = Array.from(new Array(5), (x, i) => i - 2 + currentPage);
-          // first, we always have the first page
-          let elems = '';
-          if (currentPage > 0)
-            elems +=
-              '<a class="icon item prev"><i class="left chevron icon"></i></a>';
-          elems += '<a class="item" page="1">1</a>';
-
-          if (show[0] >= 2) elems += '<a class="item disabled">...</a>';
-
-          for (let i = 0; i < show.length; i++) {
-            let pn = show[i];
-
-            if (pn < 1 || pn >= maxPages - 1) continue;
-
-            elems +=
-              '<a class="item" page="' + (pn + 1) + '">' + (pn + 1) + '</a>';
-          }
-
-          if (show[show.length - 1] < maxPages - 2)
-            elems += '<a class="item disabled">...</a>';
-
-          if (maxPages > 1) {
-            elems +=
-              '<a class="item" page="' + maxPages + '">' + maxPages + '</a>';
-          }
-
-          if (currentPage < maxPages - 1)
-            elems +=
-              '<a class="icon item next"><i class="right chevron icon"></i></a>';
-
-          $('#match-list-page-menu').html(elems);
-          $('#match-list-page-menu .item[page="' + (currentPage + 1) + '"]').addClass('active');
-
-          $('#match-list-page-menu .item').click(function() {
-            if ($(this).hasClass('disabled')) return;
-
-            if ($(this).hasClass('next')) showPage(currentPage + 1);
-            else if ($(this).hasClass('prev')) showPage(currentPage - 1);
-            else showPage(parseInt($(this).attr('page')) - 1);
-          });
-
-          $('#match-page-table .match-summary').click(function() {
-            let id = $(this).attr('match-id');
-            // disable clicking on other matches
-            showMatchLoader();
-            loadMatchData(id, function() {
-              changeSection('match-detail');
-              hideMatchLoader();
-            });
-          });
-
-          hideMatchLoader();
+      DB.getMatchPage(matchSearchQuery, pageNum, matchesPerPage, summaryProjection, function (err, selectedMatches) {
+        // clear
+        for (let i = 0; i < matchesPerPage; i++) {
+          $('tr[slot="' + i + '"]').html('');
         }
-      );
+
+        // so like pick the correct range and just render it
+        for (let i = 0; i < selectedMatches.length; i++) {
+          renderToSlot(selectedMatches[i], i, teamsShouldSwap(selectedMatches[i]));
+        }
+        currentPage = pageNum;
+
+        // update the pagination buttons
+        $('#match-list-page-menu').html('');
+
+        // determine what to show
+        let show = Array.from(new Array(5), (x, i) => i - 2 + currentPage);
+        // first, we always have the first page
+        let elems = '';
+        if (currentPage > 0) elems += '<a class="icon item prev"><i class="left chevron icon"></i></a>';
+        elems += '<a class="item" page="1">1</a>';
+
+        if (show[0] >= 2) elems += '<a class="item disabled">...</a>';
+
+        for (let i = 0; i < show.length; i++) {
+          let pn = show[i];
+
+          if (pn < 1 || pn >= maxPages - 1) continue;
+
+          elems += '<a class="item" page="' + (pn + 1) + '">' + (pn + 1) + '</a>';
+        }
+
+        if (show[show.length - 1] < maxPages - 2) elems += '<a class="item disabled">...</a>';
+
+        if (maxPages > 1) {
+          elems += '<a class="item" page="' + maxPages + '">' + maxPages + '</a>';
+        }
+
+        if (currentPage < maxPages - 1) elems += '<a class="icon item next"><i class="right chevron icon"></i></a>';
+
+        $('#match-list-page-menu').html(elems);
+        $('#match-list-page-menu .item[page="' + (currentPage + 1) + '"]').addClass('active');
+
+        $('#match-list-page-menu .item').click(function () {
+          if ($(this).hasClass('disabled')) return;
+
+          if ($(this).hasClass('next')) showPage(currentPage + 1);
+          else if ($(this).hasClass('prev')) showPage(currentPage - 1);
+          else showPage(parseInt($(this).attr('page')) - 1);
+        });
+
+        $('#match-page-table .match-summary').click(function () {
+          let id = $(this).attr('match-id');
+          // disable clicking on other matches
+          showMatchLoader();
+          loadMatchData(id, function () {
+            changeSection('match-detail');
+            hideMatchLoader();
+          });
+        });
+
+        hideMatchLoader();
+      });
     } else {
       for (let i = 0; i < matchesPerPage; i++) {
         $('tr[slot="' + i + '"]').html('');
@@ -537,15 +505,12 @@ function renderToSlot(gameData, slot, swap) {
   // if player id is defined, highlight if present, otherwise red/blue
   let focusId = settings.get('selectedPlayerID');
   if (
-    gameData.teams[0].ids.indexOf(focusId) > -1 && gameData.winner === 0 ||
-    gameData.teams[1].ids.indexOf(focusId) > -1 && gameData.winner === 1
+    (gameData.teams[0].ids.indexOf(focusId) > -1 && gameData.winner === 0) ||
+    (gameData.teams[1].ids.indexOf(focusId) > -1 && gameData.winner === 1)
   ) {
     context.winClass = 'green';
     context.winText = 'Victory';
-  } else if (
-    gameData.teams[0].ids.indexOf(focusId) > -1 ||
-    gameData.teams[1].ids.indexOf(focusId) > -1
-  ) {
+  } else if (gameData.teams[0].ids.indexOf(focusId) > -1 || gameData.teams[1].ids.indexOf(focusId) > -1) {
     context.winClass = 'red';
     context.winText = 'Defeat';
   } else if (gameData.winner === 0) {
@@ -586,11 +551,11 @@ function renderToSlot(gameData, slot, swap) {
   context.length = formatSeconds(gameData.length);
   context.takedowns = {
     blue: gameData.teams[0].takedowns,
-    red: gameData.teams[1].takedowns
+    red: gameData.teams[1].takedowns,
   };
   context.level = {
     blue: gameData.teams[0].level,
-    red: gameData.teams[1].level
+    red: gameData.teams[1].level,
   };
   context.blueHeroes = [];
   context.redHeroes = [];
@@ -602,13 +567,13 @@ function renderToSlot(gameData, slot, swap) {
       heroName: bd.heroes[i],
       playerName: bd.names[i],
       playerID: bd.ids[i],
-      isFocus: focusClass(bd.ids[i])
+      isFocus: focusClass(bd.ids[i]),
     });
     context.redHeroes.push({
       heroName: rd.heroes[i],
       playerName: rd.names[i],
       playerID: rd.ids[i],
-      isFocus: focusClass(rd.ids[i])
+      isFocus: focusClass(rd.ids[i]),
     });
   }
 
@@ -617,44 +582,24 @@ function renderToSlot(gameData, slot, swap) {
 
   // team nameplates
   if (swap) {
-    populateTeamNameplate(
-      gameData._id,
-      0,
-      gameData.teams[0].ids,
-      gameData.winner === 1
-    );
-    populateTeamNameplate(
-      gameData._id,
-      1,
-      gameData.teams[1].ids,
-      gameData.winner === 0
-    );
+    populateTeamNameplate(gameData._id, 0, gameData.teams[0].ids, gameData.winner === 1);
+    populateTeamNameplate(gameData._id, 1, gameData.teams[1].ids, gameData.winner === 0);
   } else {
-    populateTeamNameplate(
-      gameData._id,
-      0,
-      gameData.teams[0].ids,
-      gameData.winner === 0
-    );
-    populateTeamNameplate(
-      gameData._id,
-      1,
-      gameData.teams[1].ids,
-      gameData.winner === 1
-    );
+    populateTeamNameplate(gameData._id, 0, gameData.teams[0].ids, gameData.winner === 0);
+    populateTeamNameplate(gameData._id, 1, gameData.teams[1].ids, gameData.winner === 1);
   }
 }
 
 function populateTeamNameplate(matchID, teamID, players, won) {
-  DB.getTeamByPlayers(players, function(err, docs) {
+  DB.getTeamByPlayers(players, function (err, docs) {
     if (docs.length > 0) {
       // take first team found, not room for all
       let team = docs[0];
       let elem = (teamID === 0 ? '.blue' : '.red') + '-team-nameplate';
 
-      $('.match-summary[match-id="' + matchID + '"]').
-        find(elem).
-        text(team.name);
+      $('.match-summary[match-id="' + matchID + '"]')
+        .find(elem)
+        .text(team.name);
 
       if (won) {
         let header = $('.match-summary[match-id="' + matchID + '"]').find('h3.match-team-winner');
@@ -675,40 +620,33 @@ function initSeasonMenu() {
   $('#match-search-seasons .menu').prepend('<div class="item" data-value="0">None</div>');
 
   $('#match-search-seasons').dropdown({
-    onChange: function(value, text, $item) {
+    onChange: function (value, text, $item) {
       if (value !== '0' && value !== '') {
-        $('#match-search-start-date').datepicker(
-          'setDate',
-          ReplayTypes.SeasonDates[text].start
-        );
-        $('#match-search-end-date').datepicker(
-          'setDate',
-          ReplayTypes.SeasonDates[text].end
-        );
+        $('#match-search-start-date').datepicker('setDate', ReplayTypes.SeasonDates[text].start);
+        $('#match-search-end-date').datepicker('setDate', ReplayTypes.SeasonDates[text].end);
       } else {
-        $('#match-search-start-date').datepicker(
-          'setDate',
-          new Date('1-1-2012')
-        );
+        $('#match-search-start-date').datepicker('setDate', new Date('1-1-2012'));
         $('#match-search-end-date').datepicker('setDate', new Date());
       }
-    }
+    },
   });
 }
 
 function handleMatchesCollectionAction(action, text, $elem) {
   if (action === 'add-current') {
     $('#matches-collection-select .header').text('Add Matches to Collection');
-    $('#matches-collection-select p.text').text('All all of the currently selected matches to the spcified collection. Matches can be added to multiple collections.');
+    $('#matches-collection-select p.text').text(
+      'All all of the currently selected matches to the spcified collection. Matches can be added to multiple collections.',
+    );
 
-    $('#matches-collection-select').
-      modal({
-        onApprove: function() {
+    $('#matches-collection-select')
+      .modal({
+        onApprove: function () {
           let collectionID = $('#matches-collection-select .collection-menu').dropdown('get value');
           // adding to null collection is not allowed
           if (collectionID === '') return;
 
-          DB.getMatches(matchSearchQuery, function(err, selectedMatches) {
+          DB.getMatches(matchSearchQuery, function (err, selectedMatches) {
             for (let i in selectedMatches) {
               DB.addMatchToCollection(selectedMatches[i]._id, collectionID);
             }
@@ -716,39 +654,35 @@ function handleMatchesCollectionAction(action, text, $elem) {
               resetAllSections();
             }
           });
-        }
-      }).
-      modal('show');
+        },
+      })
+      .modal('show');
   }
   if (action === 'remove-current') {
     if (DB.getCollection() !== null) {
       $('#matches-collection-select .header').text('Remove Matches to Collection');
-      $('#matches-collection-select p.text').text('Removes all of the currently selected matches from the spcified collection.');
-      $('#matches-collection-select .collection-menu').dropdown(
-        'set exactly',
-        DB.getCollection()
+      $('#matches-collection-select p.text').text(
+        'Removes all of the currently selected matches from the spcified collection.',
       );
+      $('#matches-collection-select .collection-menu').dropdown('set exactly', DB.getCollection());
 
-      $('#matches-collection-select').
-        modal({
-          onApprove: function() {
+      $('#matches-collection-select')
+        .modal({
+          onApprove: function () {
             let collectionID = $('#matches-collection-select .collection-menu').dropdown('get value');
             // removing from null collection also not allowed (and also impossible)
             if (collectionID === '') return;
 
-            DB.getMatches(matchSearchQuery, function(err, selectedMatches) {
+            DB.getMatches(matchSearchQuery, function (err, selectedMatches) {
               for (let i in selectedMatches) {
-                DB.removeMatchFromCollection(
-                  selectedMatches[i]._id,
-                  collectionID
-                );
+                DB.removeMatchFromCollection(selectedMatches[i]._id, collectionID);
               }
 
               if (collectionID === DB.getCollection()) resetAllSections();
             });
-          }
-        }).
-        modal('show');
+          },
+        })
+        .modal('show');
     }
   }
 }
@@ -758,34 +692,27 @@ function handleMatchesFileAction(action, text, $elem) {
     dialog.showOpenDialog(
       {
         title: 'Select Export Folder',
-        properties: ['openDirectory', 'createDirectory']
+        properties: ['openDirectory', 'createDirectory'],
       },
-      function(files) {
+      function (files) {
         if (files) {
           // pick the first, should only be 1 dir
           let path = files[0];
-          DB.getMatches(matchSearchQuery, function(err, selectedMatches) {
+          DB.getMatches(matchSearchQuery, function (err, selectedMatches) {
             for (let i in selectedMatches) {
-              exportMatch(
-                selectedMatches[i]._id,
-                path + '/' + selectedMatches[i]._id + '.json'
-              );
+              exportMatch(selectedMatches[i]._id, path + '/' + selectedMatches[i]._id + '.json');
             }
           });
         }
-      }
+      },
     );
   } else if (action === 'delete') {
-    $('#matches-confirm-delete-matches').
-      modal({
-        onApprove: function() {
-          DB.getMatches(matchSearchQuery, function(err, selectedMatches) {
+    $('#matches-confirm-delete-matches')
+      .modal({
+        onApprove: function () {
+          DB.getMatches(matchSearchQuery, function (err, selectedMatches) {
             if (selectedMatches.length === 0) {
-              showMessage(
-                'No Matches Selected',
-                'No matches deleted because no matches are selected',
-                {}
-              );
+              showMessage('No Matches Selected', 'No matches deleted because no matches are selected', {});
             } else {
               let toDelete = [];
               for (let m of selectedMatches) {
@@ -796,14 +723,14 @@ function handleMatchesFileAction(action, text, $elem) {
               handleDeleteMatches(toDelete.pop(), toDelete);
             }
           });
-        }
-      }).
-      modal('show');
+        },
+      })
+      .modal('show');
   }
 }
 
 function handleDeleteMatches(current, remaining) {
-  DB.deleteReplay(current, function() {
+  DB.deleteReplay(current, function () {
     if (remaining.length > 0) {
       handleDeleteMatches(remaining.pop(), remaining);
     } else {
@@ -817,17 +744,17 @@ function handleDeleteMatches(current, remaining) {
 function matchesAddTag(tagValue, tagText, $added) {
   if (!enableTagEdit) return;
 
-  DB.getMatches(matchSearchQuery, function(err, selectedMatches) {
+  DB.getMatches(matchSearchQuery, function (err, selectedMatches) {
     let ids = [];
     for (let m of selectedMatches) {
       ids.push(m._id);
     }
 
-    DB.tagReplays(ids, tagValue, function() {
+    DB.tagReplays(ids, tagValue, function () {
       console.log('added ' + tagValue + ' to ' + ids.join(','));
 
       let vals = $('#match-search-tags').dropdown('get value');
-      populateTagMenu($('#match-search-tags'), function() {
+      populateTagMenu($('#match-search-tags'), function () {
         $('#match-search-tags').dropdown('set exactly', vals);
       });
       populateTagMenu($('.filter-widget-tags'));
@@ -838,17 +765,17 @@ function matchesAddTag(tagValue, tagText, $added) {
 function matchesRemoveTag(tagValue, tagText, $removed) {
   if (!enableTagEdit) return;
 
-  DB.getMatches(matchSearchQuery, function(err, selectedMatches) {
+  DB.getMatches(matchSearchQuery, function (err, selectedMatches) {
     let ids = [];
     for (let m of selectedMatches) {
       ids.push(m._id);
     }
 
-    DB.untagReplays(ids, tagValue, function() {
+    DB.untagReplays(ids, tagValue, function () {
       console.log('removed ' + tagValue + ' from ' + ids.join(','));
 
       let vals = $('#match-search-tags').dropdown('get value');
-      populateTagMenu($('#match-search-tags'), function() {
+      populateTagMenu($('#match-search-tags'), function () {
         $('#match-search-tags').dropdown('set exactly', vals);
       });
       populateTagMenu($('.filter-widget-tags'));

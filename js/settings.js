@@ -19,10 +19,7 @@ function initSettingsPage() {
   // templates
   settingsRowTemplate = getHandlebars('settings', '#replay-row-template');
   collectionRowTemplate = getHandlebars('settings', '#collection-row-template');
-  collectionCacheRowTemplate = getHandlebars(
-    'settings',
-    '#collection-cache-row-template'
-  );
+  collectionCacheRowTemplate = getHandlebars('settings', '#collection-cache-row-template');
 
   let date = settings.get('lastReplayDate');
   if (!date) {
@@ -49,14 +46,14 @@ function initSettingsPage() {
   }
 
   $('#settings-hots-api-button').checkbox({
-    onChecked: function() {
+    onChecked: function () {
       settings.set('uploadToHotsAPI', true);
       $('#settings-hots-logs-button').checkbox('enable');
     },
-    onUnchecked: function() {
+    onUnchecked: function () {
       settings.set('uploadToHotsAPI', false);
       $('#settings-hots-logs-button').checkbox('disable');
-    }
+    },
   });
 
   if (sendCopyToHotsLogs) {
@@ -75,65 +72,65 @@ function initSettingsPage() {
   }
 
   $('#settings-hots-logs-button').checkbox({
-    onChecked: function() {
+    onChecked: function () {
       settings.set('sendCopyToHotsLogs', true);
     },
-    onUnchecked: function() {
+    onUnchecked: function () {
       settings.set('sendCopyToHotsLogs', false);
-    }
+    },
   });
 
   $('#settings-hots-logs-button').popup();
 
   $('#settings-force-duplicate').checkbox({
-    onChecked: function() {
+    onChecked: function () {
       importDuplicates = true;
     },
-    onUnchecked: function() {
+    onUnchecked: function () {
       importDuplicates = false;
-    }
+    },
   });
 
   $('#settings-upload-only').checkbox({
-    onChecked: function() {
+    onChecked: function () {
       settings.set('uploadOnly', true);
     },
-    onUnchecked: function() {
+    onUnchecked: function () {
       settings.set('uploadOnly', false);
-    }
+    },
   });
 
   // handlers
   $('#settings-set-replay-folder-button').click(setReplayFolder);
-  ipcRenderer.on('replayParsed', function(event, data) {
+  ipcRenderer.on('replayParsed', function (event, data) {
     loadReplay(data);
   });
   $('#start-process-button').click(parseReplays);
   $('#stop-process-button').click(stopParse);
   $('#rescan-replays-button').click(startReplayScan);
   $('#replay-file-start').datepicker();
-  $('#replay-file-start').on('hide.datepicker', function(e) {
+  $('#replay-file-start').on('hide.datepicker', function (e) {
     settings.set('lastReplayDate', e.date);
     startReplayScan();
   });
   $('#replay-file-start').datepicker('setDate', date);
   $('#settings-export-db-button').click(dumpDB);
-  $('#delete-db-button').click(function() {
-    $('#confirm-db-delete-modal').
-      modal({
+  $('#delete-db-button').click(function () {
+    $('#confirm-db-delete-modal')
+      .modal({
         closable: false,
-        onDeny: function() {
+        onDeny: function () {
           return true;
         },
-        onApprove: function() {
-          DB.deleteDB(function() {
+        onApprove: function () {
+          DB.deleteDB(function () {
             app.relaunch();
             app.quit();
           });
           return true;
-        }
-      }).
-      modal('show');
+        },
+      })
+      .modal('show');
   });
 
   $('#confirm-db-reset-modal').modal();
@@ -150,33 +147,28 @@ function initSettingsPage() {
   let selectedPlayerID = settings.get('selectedPlayerID');
   // add one thing to the player menu and like init it
   // it's basically temporary
-  let initOpt =
-    '<div class="item" data-value="' +
-    selectedPlayerID +
-    '">' +
-    selectedPlayerID +
-    '</div>';
+  let initOpt = '<div class="item" data-value="' + selectedPlayerID + '">' + selectedPlayerID + '</div>';
   $('#settings-set-player .menu').append(initOpt);
   $('#settings-set-player').dropdown({
     action: 'activate',
     fullTextSearch: true,
     direction: 'downward',
-    onChange: updateSelectedUser
+    onChange: updateSelectedUser,
   });
   $('#settings-set-player').dropdown('set selected', selectedPlayerID);
 
   $('#settings-submenu .item').tab();
-  $('#settings-submenu .item').click(function() {
+  $('#settings-submenu .item').click(function () {
     $('#settings-page-content table').floatThead('reflow');
   });
   $('#settings-new-collection-button').click(addNewCollection);
 
   $('#settings-page-content table').floatThead({
     scrollContainer: closestWrapper,
-    autoReflow: true
+    autoReflow: true,
   });
 
-  $('#settings-reset-focus-player').click(function() {
+  $('#settings-reset-focus-player').click(function () {
     settings.set('selectedPlayerID', null);
     $('#settings-set-player').dropdown('restore defaults');
   });
@@ -191,62 +183,62 @@ function initSettingsPage() {
   $('#player-menu-thresh-input input').val(threshold);
   $('#player-menu-thresh-input button').click(setPlayerMenuThreshold);
 
-  $('#show-app-dev-tools').click(function() {
+  $('#show-app-dev-tools').click(function () {
     remote.getCurrentWindow().toggleDevTools();
   });
 
-  $('#show-parser-dev-tools').click(function() {
+  $('#show-parser-dev-tools').click(function () {
     bgWindow.webContents.openDevTools();
   });
 
   loadCollections();
   loadCachedCollections();
 
-  $('#settings-set-cache-import-folder').click(function() {
+  $('#settings-set-cache-import-folder').click(function () {
     browseForFolder($(this), 'Select Database Folder');
   });
 
   $('#settings-new-cache-modal input').popup({
-    on: 'manual'
+    on: 'manual',
   });
 
-  $('#settings-import-external-db').click(function() {
+  $('#settings-import-external-db').click(function () {
     $('#settings-set-cache-name').removeClass('error');
     $('#settings-set-cache-import-folder').removeClass('error');
     $('#settings-new-cache-modal input').popup('hide');
 
-    $('#settings-new-cache-modal').
-      modal({
+    $('#settings-new-cache-modal')
+      .modal({
         closable: false,
-        onDeny: function() {
+        onDeny: function () {
           $('#settings-new-cache-modal input').popup('hide');
           return true;
         },
-        onApprove: cacheExternalDB
-      }).
-      modal('show');
+        onApprove: cacheExternalDB,
+      })
+      .modal('show');
   });
 
   // setting popup
   $('#settings-set-folder-options-button').popup({
     on: 'click',
     position: 'bottom right',
-    popup: $('#settings-replay-folder-settings-popup')
+    popup: $('#settings-replay-folder-settings-popup'),
   });
 
   $('#settings-recursive-replay').checkbox({
-    onChecked: function() {
+    onChecked: function () {
       settings.set('recursiveReplaySearch', true);
     },
-    onUnchecked: function() {
+    onUnchecked: function () {
       settings.set('recursiveReplaySearch', false);
-    }
+    },
   });
 
   // import sets
   $('#settings-use-import-set').checkbox({
     onChecked: () => setImportSetUse(true),
-    onUnchecked: () => setImportSetUse(false)
+    onUnchecked: () => setImportSetUse(false),
   });
 
   if (settings.get('usingImportSet') === true) {
@@ -272,7 +264,7 @@ function initSettingsPage() {
 
   $('#settings-watch-dirs').checkbox({
     onChecked: startWatcher,
-    onUnchecked: stopWatcher
+    onUnchecked: stopWatcher,
   });
 
   // watch directories
@@ -307,9 +299,9 @@ function setReplayFolder() {
     {
       defaultPath: settings.get('replayPath'),
       title: 'Select Replay Folder',
-      properties: ['openDirectory', 'createDirectory']
+      properties: ['openDirectory', 'createDirectory'],
     },
-    function(files) {
+    function (files) {
       if (files) {
         // pick the first, should only be 1 dir
         let path = files[0];
@@ -318,7 +310,7 @@ function setReplayFolder() {
 
         startReplayScan();
       }
-    }
+    },
   );
 }
 
@@ -328,15 +320,15 @@ function browseForFolder(elem, title) {
     {
       defaultPath: settings.get('replayPath'),
       title: title,
-      properties: ['openDirectory', 'createDirectory']
+      properties: ['openDirectory', 'createDirectory'],
     },
-    function(files) {
+    function (files) {
       if (files) {
         // pick the first, should only be 1 dir
         let path = files[0];
         elem.find('input').val(path);
       }
-    }
+    },
   );
 }
 
@@ -345,9 +337,9 @@ function setDBFolder() {
     {
       defaultPath: settings.get('dbPath'),
       title: 'Set Database Folder',
-      properties: ['openDirectory', 'createDirectory']
+      properties: ['openDirectory', 'createDirectory'],
     },
-    function(files) {
+    function (files) {
       if (files) {
         // 1 dir
         let path = files[0];
@@ -355,20 +347,20 @@ function setDBFolder() {
         app.relaunch();
         app.quit();
       }
-    }
+    },
   );
 }
 
 function resetDBFolder() {
-  $('#confirm-db-reset-modal').
-    modal({
-      onApprove: function() {
+  $('#confirm-db-reset-modal')
+    .modal({
+      onApprove: function () {
         settings.set('dbPath', app.getPath('userData'));
         app.relaunch();
         app.quit();
-      }
-    }).
-    modal('show');
+      },
+    })
+    .modal('show');
 }
 
 function startReplayScan() {
@@ -383,10 +375,7 @@ function startReplayScan() {
   if (usingImportSet) {
     // import from each path, assign collections to each thing
     for (let dir in localImportSet) {
-      replays = replays.concat(addReplaysToList(
-          localImportSet[dir].path,
-          localImportSet[dir].collections
-        ));
+      replays = replays.concat(addReplaysToList(localImportSet[dir].path, localImportSet[dir].collections));
     }
   } else {
     let path = settings.get('replayPath');
@@ -394,7 +383,7 @@ function startReplayScan() {
   }
 
   // sort by date
-  replays.sort(function(a, b) {
+  replays.sort(function (a, b) {
     if (a.date === b.date) return 0;
 
     if (a.date < b.date) return -1;
@@ -432,7 +421,7 @@ function addReplaysToList(path, collections) {
         context.status = '';
         context.date = new Date(stats.birthtime);
         context.fdate = context.date.toLocaleString('en-us');
-        context.folder = path.match(/([^\/\\]*)\/*$/)[1];
+        context.folder = path.match(/([^/\\]*)\/*$/)[1];
 
         // only used for import sets, safe to leave undefined otherwise
         context.collections = collections;
@@ -519,7 +508,7 @@ function parseReplaysAsync(replay) {
   // then hand back to the main thread to actually insert into the database
   $('tr[replay-id="' + replay.id + '"] .replay-status').text('Processing...');
 
-  DB.checkDuplicate(replay.path, function(result) {
+  DB.checkDuplicate(replay.path, function (result) {
     if (settings.get('uploadOnly') && settings.get('uploadToHotsAPI')) {
       $('tr[replay-id="' + replay.id + '"] .replay-status').text('Upload Only');
       uploadReplayToHotsAPI(replay.id, replay.path);
@@ -529,40 +518,32 @@ function parseReplaysAsync(replay) {
         uploadReplayToHotsAPI(replay.id, replay.path);
       }
 
-      bgWindow.webContents.send(
-        'parseReplay',
-        replay.path,
-        replay.idx,
-        BrowserWindow.getAllWindows()[0].id
-      );
+      bgWindow.webContents.send('parseReplay', replay.path, replay.idx, BrowserWindow.getAllWindows()[0].id);
       return;
     } else if (result === 'map') {
       console.log(replay.id + ' unsupported map');
       listedReplays[replay.idx].duplicate = false;
-      $('tr[replay-id="' + replay.id + '"] .replay-status').
-        text('Unsupported Map').
-        addClass('negative');
+      $('tr[replay-id="' + replay.id + '"] .replay-status')
+        .text('Unsupported Map')
+        .addClass('negative');
     } else if (result === true) {
       console.log(replay.id + ' is a duplicate');
       listedReplays[replay.idx].duplicate = true;
-      $('tr[replay-id="' + replay.id + '"] .replay-status').
-        text('Duplicate').
-        addClass('warning');
+      $('tr[replay-id="' + replay.id + '"] .replay-status')
+        .text('Duplicate')
+        .addClass('warning');
     } else {
       console.log(replay.id + ' Parser error');
 
       // this message is specifically for when a protocol doesn't exist
-      if (
-        result.message ===
-        "Cannot read property 'decodeReplayHeader' of undefined"
-      ) {
-        $('tr[replay-id="' + replay.id + '"] .replay-status').
-          text('Error: Missing Replay Protocol').
-          addClass('negative');
+      if (result.message === "Cannot read property 'decodeReplayHeader' of undefined") {
+        $('tr[replay-id="' + replay.id + '"] .replay-status')
+          .text('Error: Missing Replay Protocol')
+          .addClass('negative');
       } else {
-        $('tr[replay-id="' + replay.id + '"] .replay-status').
-          text('Error: Internal Exception').
-          addClass('negative');
+        $('tr[replay-id="' + replay.id + '"] .replay-status')
+          .text('Error: Internal Exception')
+          .addClass('negative');
       }
     }
 
@@ -582,24 +563,21 @@ function loadReplay(data) {
   if (data.status === Parser.ReplayStatus.OK) {
     let collection = null;
 
-    if (
-      !usingImportSet &&
-      $('#settings-collection-import').dropdown('get value') !== ''
-    ) {
+    if (!usingImportSet && $('#settings-collection-import').dropdown('get value') !== '') {
       collection = [$('#settings-collection-import').dropdown('get value')];
     } else if (usingImportSet) {
       collection = listedReplays[data.idx].collections;
     }
 
-    DB.insertReplay(data.match, data.players, collection, function() {
-      $('tr[replay-id="' + listedReplays[data.idx].id + '"] .replay-status').
-        text('Success').
-        addClass('positive');
+    DB.insertReplay(data.match, data.players, collection, function () {
+      $('tr[replay-id="' + listedReplays[data.idx].id + '"] .replay-status')
+        .text('Success')
+        .addClass('positive');
     });
   } else {
-    $('tr[replay-id="' + listedReplays[data.idx].id + '"] .replay-status').
-      text('Error: ' + Parser.StatusString[data.status]).
-      addClass('negative');
+    $('tr[replay-id="' + listedReplays[data.idx].id + '"] .replay-status')
+      .text('Error: ' + Parser.StatusString[data.status])
+      .addClass('negative');
   }
 
   listedReplays[data.idx].processed = true;
@@ -625,17 +603,14 @@ function uploadReplayToHotsAPI(id, path) {
 
   let form = new FormData();
   form.append('file', fs.createReadStream(path));
-  form.append(
-    'uploadToHotslogs',
-    settings.get('sendCopyToHotsLogs') === true ? 'true' : 'false'
-  );
+  form.append('uploadToHotslogs', settings.get('sendCopyToHotsLogs') === true ? 'true' : 'false');
 
-  form.submit(requestUrl, function(err, res) {
+  form.submit(requestUrl, function (err, res) {
     let body = '';
-    res.on('readable', function() {
+    res.on('readable', function () {
       body += res.read();
     });
-    res.on('end', function() {
+    res.on('end', function () {
       let resp = JSON.parse(body);
       $('tr[replay-id="' + id + '"] .upload-status').text(resp.status);
 
@@ -669,39 +644,35 @@ function addNewCollection() {
   $('#team-text-input .input .label').text('Collection Name');
   $('#team-text-input input').val('');
 
-  $('#team-text-input').
-    modal({
-      onApprove: function() {
+  $('#team-text-input')
+    .modal({
+      onApprove: function () {
         let name = $('#team-text-input input').val();
-        DB.addCollection(name, function() {
+        DB.addCollection(name, function () {
           updateCollectionMenu();
           loadCollections();
         });
-      }
-    }).
-    modal('show');
+      },
+    })
+    .modal('show');
 }
 
 function loadCollections() {
-  DB.getCollections(function(err, collections) {
+  DB.getCollections(function (err, collections) {
     $('#collection-list tbody').html('');
     for (let c in collections) {
       $('#collection-list tbody').append(collectionRowTemplate(collections[c]));
     }
 
     // bindings
-    $('#collection-list .button').click(function() {
-      handleCollectionAction(
-        $(this).attr('collection-id'),
-        $(this).attr('collection-name'),
-        $(this).attr('action')
-      );
+    $('#collection-list .button').click(function () {
+      handleCollectionAction($(this).attr('collection-id'), $(this).attr('collection-name'), $(this).attr('action'));
     });
   });
 }
 
 function loadCachedCollections() {
-  DB.getExternalCacheCollections(function(err, collections) {
+  DB.getExternalCacheCollections(function (err, collections) {
     $('#collection-cache-list tbody').html('');
     let combined = {};
     for (let c of collections) {
@@ -717,11 +688,8 @@ function loadCachedCollections() {
     }
 
     // bind
-    $('#collection-cache-list .button').click(function() {
-      handleCacheAction(
-        $(this).attr('collection-name'),
-        $(this).attr('action')
-      );
+    $('#collection-cache-list .button').click(function () {
+      handleCacheAction($(this).attr('collection-name'), $(this).attr('action'));
     });
   });
 }
@@ -731,49 +699,44 @@ function handleCollectionAction(id, name, action) {
     $('#team-confirm-action-user .header').text('Delete Collection ' + name);
     $('#team-confirm-action-user .action').text('delete ' + name);
 
-    $('#team-confirm-action-user').
-      modal({
-        onApprove: function() {
-          DB.deleteCollection(id, function() {
+    $('#team-confirm-action-user')
+      .modal({
+        onApprove: function () {
+          DB.deleteCollection(id, function () {
             updateCollectionMenu();
             loadCollections();
           });
-        }
-      }).
-      modal('show');
+        },
+      })
+      .modal('show');
   } else if (action === 'rename') {
     $('#team-text-input .header').text('Rename Collection ' + name);
     $('#team-text-input .input .label').text('Collection Name');
     $('#team-text-input input').val('');
     $('#team-text-input .actions .approve').text('Rename');
 
-    $('#team-text-input').
-      modal({
-        onApprove: function() {
+    $('#team-text-input')
+      .modal({
+        onApprove: function () {
           let name = $('#team-text-input input').val();
-          DB.renameCollection(id, name, function() {
+          DB.renameCollection(id, name, function () {
             // uh changing back to defaults here
             $('#team-text-input .actions .approve').text('Add');
             updateCollectionMenu();
             loadCollections();
           });
-        }
-      }).
-      modal('show');
+        },
+      })
+      .modal('show');
   }
 }
 
 function setPlayerMenuThreshold() {
-  settings.set(
-    'playerThreshold',
-    parseInt($('#player-menu-thresh-input input').val())
-  );
+  settings.set('playerThreshold', parseInt($('#player-menu-thresh-input input').val()));
   showMessage(
     'Player Menu Result Limit Updated',
-    'Menus will now show ' +
-      settings.get('playerThreshold') +
-      ' players maximum when searching.',
-    { class: 'positive' }
+    'Menus will now show ' + settings.get('playerThreshold') + ' players maximum when searching.',
+    { class: 'positive' },
   );
 }
 
@@ -796,9 +759,9 @@ function cacheExternalDB() {
 
   showMessage('Caching External Database ' + name, 'Reading from ' + path);
   $('#settings-import-external-db').addClass('disabled');
-  DB.cacheExternalDatabase(path, name, function() {
+  DB.cacheExternalDatabase(path, name, function () {
     showMessage('External Database Load Complete', name + ': ' + path, {
-      class: 'positive'
+      class: 'positive',
     });
     $('#settings-import-external-db').removeClass('disabled');
     loadCachedCollections();
@@ -811,54 +774,44 @@ function cacheExternalDB() {
 
 function handleCacheAction(dbName, action) {
   if (action === 'delete') {
-    $('#settings-confirm-cache-delete-modal').
-      modal({
-        onApprove: function() {
-          DB.deleteExternalCache(dbName, function() {
+    $('#settings-confirm-cache-delete-modal')
+      .modal({
+        onApprove: function () {
+          DB.deleteExternalCache(dbName, function () {
             loadCachedCollections();
             populateStatCollectionMenus();
           });
-        }
-      }).
-      modal('show');
+        },
+      })
+      .modal('show');
   } else if (action === 'update') {
     dialog.showOpenDialog(
       {
         defaultPath: settings.get('replayPath'),
         title: 'Select Database Location',
-        properties: ['openDirectory', 'createDirectory']
+        properties: ['openDirectory', 'createDirectory'],
       },
-      function(files) {
+      function (files) {
         if (files) {
           if (!fs.existsSync(files[0] + '/hero.db')) {
-            showMessage(
-              'Unable to Update Cache',
-              'Selected folder ' + files[0] + ' has no valid database.'
-            );
+            showMessage('Unable to Update Cache', 'Selected folder ' + files[0] + ' has no valid database.');
 
             return;
           }
 
           // update is basically just delete then import
-          DB.deleteExternalCache(dbName, function() {
-            showMessage(
-              'Updating External Database ' + dbName,
-              'Reading from ' + files[0]
-            );
+          DB.deleteExternalCache(dbName, function () {
+            showMessage('Updating External Database ' + dbName, 'Reading from ' + files[0]);
             $('#settings-import-external-db').addClass('disabled');
-            DB.cacheExternalDatabase(files[0], dbName, function() {
-              showMessage(
-                'External Database Update Complete',
-                dbName + ': ' + files[0],
-                { class: 'positive' }
-              );
+            DB.cacheExternalDatabase(files[0], dbName, function () {
+              showMessage('External Database Update Complete', dbName + ': ' + files[0], { class: 'positive' });
               $('#settings-import-external-db').removeClass('disabled');
               loadCachedCollections();
               populateStatCollectionMenus();
             });
           });
         }
-      }
+      },
     );
   }
 }
@@ -883,28 +836,26 @@ function addImportSetFolder() {
     {
       defaultPath: settings.get('replayPath'),
       title: 'Select Replay Folder',
-      properties: ['openDirectory', 'createDirectory']
+      properties: ['openDirectory', 'createDirectory'],
     },
-    function(files) {
+    function (files) {
       if (files) {
         // pick the first, should only be 1 dir
         let path = files[0];
         if (path in localImportSet) {
-          showMessage(
-            'Failed to Add Folder to Import Set',
-            'Folder is already in the import set',
-            { class: 'negative' }
-          );
+          showMessage('Failed to Add Folder to Import Set', 'Folder is already in the import set', {
+            class: 'negative',
+          });
         } else {
           localImportSet[path] = {
             path: path,
-            collections: []
+            collections: [],
           };
 
           insertImportSetRow(localImportSet[path]);
         }
       }
-    }
+    },
   );
 }
 
@@ -913,16 +864,11 @@ function insertImportSetRow(data) {
   elem += '<td>' + data.path + '</td>';
 
   // collection menu
-  elem +=
-    '<td><div path="' +
-    data.path +
-    '" class="ui fluid search multiple selection dropdown collection-menu">';
-  elem +=
-    '<i class="dropdown icon"></i><span class="text">[No Collection]</span><div class="menu"></div></div></td>';
+  elem += '<td><div path="' + data.path + '" class="ui fluid search multiple selection dropdown collection-menu">';
+  elem += '<i class="dropdown icon"></i><span class="text">[No Collection]</span><div class="menu"></div></div></td>';
 
   // actions
-  elem +=
-    '<td><div path="' + data.path + '" class="ui red button">Delete</div></td>';
+  elem += '<td><div path="' + data.path + '" class="ui red button">Delete</div></td>';
   elem += '</tr>';
 
   elem = $(elem);
@@ -931,17 +877,17 @@ function insertImportSetRow(data) {
   // bindings
   let path = data.path;
   elem.find('.collection-menu.dropdown').dropdown({
-    onChange: function(value, text, $elem) {
+    onChange: function (value, text, $elem) {
       localImportSet[path].collections = value.split(',');
       saveLocalImportSet();
-    }
+    },
   });
 
-  elem.find('.red.button').click(function() {
+  elem.find('.red.button').click(function () {
     deleteImportSetFolder(elem);
   });
 
-  updateCollectionMenu(function() {
+  updateCollectionMenu(function () {
     elem.find('.dropdown').dropdown('set exactly', data.collections);
   });
 
@@ -972,10 +918,7 @@ function startWatcher() {
   let watchDirs = settings.get('watchDirs');
   let dbPath = settings.get('dbPath');
   let recursive = settings.get('recursiveReplaySearch');
-  showMessage(
-    'Started watching replay folder',
-    'New files will be automatically imported'
-  );
+  showMessage('Started watching replay folder', 'New files will be automatically imported');
 
   if (!watchDirs) {
     watchDirs = {};
@@ -994,28 +937,17 @@ function startWatcher() {
       dirs.push(importSet[dir].path);
     }
 
-    watcher = watch(
-      dirs,
-      { recursive, filter: /\.stormreplay$/i, delay: 1000 },
-      liveAddReplay
-    );
+    watcher = watch(dirs, { recursive, filter: /\.stormreplay$/i, delay: 1000 }, liveAddReplay);
   } else {
     // just the one
-    watcher = watch(
-      settings.get('replayPath'),
-      { recursive, filter: /\.stormreplay$/i, delay: 1000 },
-      liveAddReplay
-    );
+    watcher = watch(settings.get('replayPath'), { recursive, filter: /\.stormreplay$/i, delay: 1000 }, liveAddReplay);
   }
 }
 
 function stopWatcher() {
   let watchDirs = settings.get('watchDirs');
   let dbPath = settings.get('dbPath');
-  showMessage(
-    'Stopped watching replay folder',
-    'New files will not be automatically imported'
-  );
+  showMessage('Stopped watching replay folder', 'New files will not be automatically imported');
 
   if (!watchDirs) {
     watchDirs = {};
@@ -1034,14 +966,14 @@ function liveAddReplay(evt, name) {
     // filtered out non-stormreplay files
     let stats = fs.statSync(name);
 
-    let prefix = name.match(/(.*)[\/\\]/)[1] || '';
+    let prefix = name.match(/(.*)[/\\]/)[1] || '';
 
     let context = {};
     context.status = '';
     context.date = new Date(stats.birthtime);
     context.fdate = context.date.toLocaleString('en-us');
-    context.folder = prefix.match(/([^\/\\]*)\/*$/)[1];
-    context.filename = name.match(/([^\/\\]*)\/*$/)[1];
+    context.folder = prefix.match(/([^/\\]*)\/*$/)[1];
+    context.filename = name.match(/([^/\\]*)\/*$/)[1];
 
     // only used for import sets, safe to leave undefined otherwise
     if (usingImportSet) {
@@ -1066,13 +998,13 @@ function liveAddReplay(evt, name) {
 }
 
 function compactAndReload() {
-  $('#settings-compact-and-reload').
-    modal({
+  $('#settings-compact-and-reload')
+    .modal({
       closable: false,
-      onDeny: function() {
+      onDeny: function () {
         return true;
       },
-      onApprove: function() {
+      onApprove: function () {
         setTimeout(() => {
           showLoader();
           setLoadMessage('Compacting Database');
@@ -1082,9 +1014,9 @@ function compactAndReload() {
           });
         }, 1500);
         return true;
-      }
-    }).
-    modal('show');
+      },
+    })
+    .modal('show');
 }
 
 function startUpdateFromUrl() {
@@ -1097,13 +1029,13 @@ function startUpdateFromUrl() {
     $('#settings-update-from-url input').val(lastURL[path]);
   }
 
-  $('#settings-update-from-url').
-    modal({
+  $('#settings-update-from-url')
+    .modal({
       closable: false,
-      onDeny: function() {
+      onDeny: function () {
         return true;
       },
-      onApprove: function() {
+      onApprove: function () {
         $('#settings-update-from-url .actions').addClass('is-hidden');
         let url = $('#settings-update-from-url input').val();
         updateUpdateURL(url);
@@ -1112,9 +1044,9 @@ function startUpdateFromUrl() {
 
         // don't actually dismiss
         return false;
-      }
-    }).
-    modal('show');
+      },
+    })
+    .modal('show');
 }
 
 function initDownloadProgress() {
@@ -1125,14 +1057,8 @@ function initDownloadProgress() {
 }
 
 function setDownloadProgress(val, label) {
-  $('#settings-update-from-url .update-status .progress').progress(
-    'set progress',
-    val
-  );
-  $('#settings-update-from-url .update-status .progress').progress(
-    'set label',
-    label
-  );
+  $('#settings-update-from-url .update-status .progress').progress('set progress', val);
+  $('#settings-update-from-url .update-status .progress').progress('set label', label);
 }
 
 function updateUpdateURL(url) {
@@ -1151,16 +1077,16 @@ function updateUpdateURL(url) {
 function downloadZipFromUrl(url, next) {
   let fileLoc = path.join(app.getPath('userData'), 'downloadedFile.zip');
 
-  request.
-    get(url).
-    on('response', function(response) {
+  request
+    .get(url)
+    .on('response', function (response) {
       console.log(response.statusCode);
-    }).
-    on('error', function(err) {
+    })
+    .on('error', function (err) {
       console.log(err);
-    }).
-    pipe(fs.createWriteStream(fileLoc)).
-    on('finish', next);
+    })
+    .pipe(fs.createWriteStream(fileLoc))
+    .on('finish', next);
 }
 
 function extractZipFromUrl() {
@@ -1172,10 +1098,10 @@ function extractZipFromUrl() {
   if (fs.statSync(fileLoc)) {
     // attempt extraction
     // ensure download-tmp is empty
-    fs.emptyDir(extractLoc, function(err) {
+    fs.emptyDir(extractLoc, function (err) {
       if (!err) {
         setDownloadProgress(33, 'Extracting Downloaded File...');
-        extractZip(fileLoc, { dir: extractLoc }, function(err) {
+        extractZip(fileLoc, { dir: extractLoc }, function (err) {
           if (!err) {
             console.log('extracted file');
             copyZipContents();
@@ -1196,8 +1122,8 @@ function copyZipContents() {
   setDownloadProgress(100, 'Rebooting to Complete Operation');
   console.log('proceeding to copy');
 
-  DB.close(function() {
-    DB.destroy(function() {
+  DB.close(function () {
+    DB.destroy(function () {
       // reboot now and continue later
       settings.set('completeDownload', true);
       setTimeout(() => {
@@ -1210,22 +1136,21 @@ function copyZipContents() {
 
 function finishCopyZipContents() {
   $('#settings-update-from-url .actions').addClass('is-hidden');
-  $('#settings-update-from-url').
-    modal({
-      closable: false
-    }).
-    modal('show');
+  $('#settings-update-from-url')
+    .modal({
+      closable: false,
+    })
+    .modal('show');
 
   // expected files
   for (let db of ['matches.ldb', 'hero.ldb', 'players.ldb', 'settings.ldb']) {
     try {
       fs.statSync(path.join(app.getPath('userData'), 'download-tmp', db));
     } catch (e) {
-      showMessage(
-        `External DB download failed`,
-        `Missing expected files. Database may be in inconsistent state`,
-        { class: 'negative', sticky: true }
-      );
+      showMessage(`External DB download failed`, `Missing expected files. Database may be in inconsistent state`, {
+        class: 'negative',
+        sticky: true,
+      });
       let fileLoc = path.join(app.getPath('userData'), 'downloadedFile.zip');
       fs.removeSync(fileLoc);
 
@@ -1237,17 +1162,16 @@ function finishCopyZipContents() {
 
   let idx = 0;
   for (let db of ['matches.ldb', 'hero.ldb', 'players.ldb', 'settings.ldb']) {
-    setDownloadProgress(66 + 33 / 4 * idx, `Copying ${db}`);
+    setDownloadProgress(66 + (33 / 4) * idx, `Copying ${db}`);
 
     let res = tryCopyDatabaseFolder(db);
 
     if (!res) {
       console.log('Copy error, aborting');
-      showMessage(
-        `External DB copy failed`,
-        `Error copying ${db}. Database may be in inconsistent state.`,
-        { class: 'negative', sticky: true }
-      );
+      showMessage(`External DB copy failed`, `Error copying ${db}. Database may be in inconsistent state.`, {
+        class: 'negative',
+        sticky: true,
+      });
       return;
     }
 
@@ -1265,7 +1189,7 @@ function finishCopyZipContents() {
 
   showMessage(`External DB Downloaded`, `Successfully updated database.`, {
     class: 'positive',
-    sticky: true
+    sticky: true,
   });
 }
 
@@ -1305,15 +1229,15 @@ function selectDBToImport() {
   dialog.showOpenDialog(
     {
       title: 'Select Database to Import',
-      properties: ['openDirectory']
+      properties: ['openDirectory'],
     },
-    function(files) {
+    function (files) {
       if (files) {
         // pick the first, should only be 1 dir
         let path = files[0];
         $('#settings-import-other-db-path').val(path);
       }
-    }
+    },
   );
 }
 
@@ -1321,15 +1245,13 @@ function importOtherDatabase() {
   $('#settings-import-other-db-menu').dropdown('set exactly', ['1', '2', '3']);
   $('#settings-import-other-db .message').addClass('is-hidden');
 
-  $('#settings-import-other-db').
-    modal({
+  $('#settings-import-other-db')
+    .modal({
       closable: false,
-      onApprove: function() {
+      onApprove: function () {
         // collect data
         let path = $('#settings-import-other-db-path').val();
-        let importData = $('#settings-import-other-db-menu').
-          dropdown('get value').
-          split(',');
+        let importData = $('#settings-import-other-db-menu').dropdown('get value').split(',');
         for (let i = 0; i < importData.length; i++) {
           importData[i] = parseInt(importData[i]);
         }
@@ -1341,10 +1263,10 @@ function importOtherDatabase() {
         DB.importDB(
           path,
           importData,
-          function(msg) {
+          function (msg) {
             $('#settings-import-other-db-status').text(msg);
           },
-          function(err) {
+          function (err) {
             // then reboot
             if (err) {
               $('#settings-import-other-db-status').text(`Error: ${err}. Please file a bug report and reboot the app.`);
@@ -1355,37 +1277,33 @@ function importOtherDatabase() {
                 app.quit();
               }, 5000);
             }
-          }
+          },
         );
 
         return false;
-      }
-    }).
-    modal('show');
+      },
+    })
+    .modal('show');
 }
 
 function dumpDB() {
   dialog.showOpenDialog(
     {
       title: 'Select Export Location',
-      properties: ['openDirectory']
+      properties: ['openDirectory'],
     },
-    function(files) {
+    function (files) {
       showMessage(
         'Exporting Database',
         'This may take a little bit. A message will display here when the operation is complete.',
-        { class: 'info' }
+        { class: 'info' },
       );
 
       let path = files[0];
 
-      DB.dump(path, function() {
-        showMessage(
-          'Database Export Complete',
-          `Exported 4 files to ${path}.`,
-          { class: 'positive' }
-        );
+      DB.dump(path, function () {
+        showMessage('Database Export Complete', `Exported 4 files to ${path}.`, { class: 'positive' });
       });
-    }
+    },
   );
 }

@@ -100,7 +100,7 @@ const DetailStatString = {
   DTPct: '% of Team Damage Taken',
   HPct: '% of Team Damage Healed',
   HardCCPct: '% of Time Non-Slow CC',
-  SoftCCPct: '% of Time Slow CC'
+  SoftCCPct: '% of Time Slow CC',
 };
 
 module.exports = DetailStatString;

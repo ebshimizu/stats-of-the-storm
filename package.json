@@ -6,17 +6,7 @@
   "bugs": "falindrith@gmail.com",
   "author": "Falindrith",
   "license": "MIT",
-  "files": [
-    "main.js",
-    "index.html",
-    "background.html",
-    "hots-parser/parser.js",
-    "hots-parser/constants.js",
-    "hots-parser/attrs.js",
-    "templates",
-    "js",
-    "assets"
-  ],
+  "files": ["main.js", "index.html", "background.html", "hots-parser/parser.js", "hots-parser/constants.js", "hots-parser/attrs.js", "templates", "js", "assets"],
   "repository": {
     "type": "git",
     "url": "https://github.com/ebshimizu/stats-of-the-storm.git"
@@ -65,19 +55,20 @@
   "devDependencies": {
     "electron": "^4.0.0",
     "electron-builder": "^20.11.1",
-    "eslint": "^4.19.1",
-    "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.11.0",
-    "eslint-plugin-node": "^5.2.1",
-    "eslint-plugin-promise": "^3.7.0",
-    "eslint-plugin-standard": "^3.1.0"
+    "eslint": "^7.13.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.1.2"
   },
   "scripts": {
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "app": "electron ./",
     "publish": "electron-builder --x64 --publish always",
-    "protocol": "node ./node_modules/heroprotocol/postinstall.js"
+    "protocol": "node ./node_modules/heroprotocol/postinstall.js",
+    "format": "prettier -c --write \"js/**/*.js\" \"main.js\"",
+    "test:eslint": "eslint \"js/**/*.js\" \"main.js\"",
+    "test:prettier": "prettier -c \"js/**/*.js\" \"main.js\"",
+    "test": "run-s test:eslint test:prettier"
   },
   "resolutions": {
     "graceful-fs": "^4.2.4"
@@ -86,12 +77,10 @@
     "appId": "com.stats-of-the-storm.app",
     "productName": "Stats of the Storm",
     "asar": true,
-    "publish": [
-      {
-        "provider": "github",
-        "private": false
-      }
-    ],
+    "publish": [{
+      "provider": "github",
+      "private": false
+    }],
     "nsis": {
       "oneClick": true,
       "installerIcon": "build/icon.ico"
@@ -99,5 +88,12 @@
     "mac": {
       "icon": "build/stats.icns"
     }
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "always",
+    "printWidth": 120,
+    "endOfLine": "auto"
   }
 }

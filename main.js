@@ -8,20 +8,20 @@ const windowStateKeeper = require('electron-window-state');
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
-autoUpdater.on('checking-for-update', function() {
+autoUpdater.on('checking-for-update', function () {
   win.webContents.send('updateStatus', 'Checking for Update...');
 });
-autoUpdater.on('update-available', function() {
+autoUpdater.on('update-available', function () {
   win.webContents.send('updateNotify', 'Update Available');
 });
-autoUpdater.on('update-downloaded', function(info) {
+autoUpdater.on('update-downloaded', function (info) {
   win.webContents.send('updateReady', 'Restart to Install Update');
 });
 
 function createWindow() {
   let mainWindowState = windowStateKeeper({
     defaultWidth: 1920,
-    defaultHeight: 1080
+    defaultHeight: 1080,
   });
 
   // Create the window using the state information
@@ -34,8 +34,8 @@ function createWindow() {
     backgroundColor: '#1b1c1d',
     webPreferences: {
       nodeIntegration: true,
-      devTools: true
-    }
+      devTools: true,
+    },
   });
 
   // Let us register listeners on the window, so we can update the state
@@ -44,11 +44,13 @@ function createWindow() {
   mainWindowState.manage(win);
 
   // and load the index.html of the app.
-  win.loadURL(url.format({
+  win.loadURL(
+    url.format({
       pathname: path.join(__dirname, 'index.html'),
       protocol: 'file:',
-      slashes: true
-    }));
+      slashes: true,
+    }),
+  );
 
   // Open the DevTools.
   // REMEMBER TO COMMENT THIS OUT FOR RELEASES

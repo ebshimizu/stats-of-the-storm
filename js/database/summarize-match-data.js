@@ -4,7 +4,7 @@ function newMatchHeroData() {
     bans: {
       first: 0,
       second: 0,
-      total: 0
+      total: 0,
     },
     games: 0,
     involved: 0,
@@ -13,9 +13,9 @@ function newMatchHeroData() {
       round2: { count: 0, wins: 0 },
       round3: { count: 0, wins: 0 },
       preMid: { count: 0, wins: 0 },
-      postMid: { count: 0, wins: 0 }
-    }
-  }
+      postMid: { count: 0, wins: 0 },
+    },
+  };
 }
 
 // this returns an object containing hero name and various pick
@@ -53,7 +53,7 @@ function summarizeMatchData(docs, HeroesTalents) {
       }
 
       comp.sort();
-      let key = comp.join("-");
+      let key = comp.join('-');
 
       if (!(key in compositions)) {
         compositions[key] = { games: 0, wins: 0, roles: comp };
@@ -63,7 +63,7 @@ function summarizeMatchData(docs, HeroesTalents) {
       compositions[key].wins += parseInt(t) === winner ? 1 : 0;
     }
 
-    if ("picks" in match) {
+    if ('picks' in match) {
       let pickData = match.picks;
 
       if (pickData[0].length === 5 && pickData[1].length === 5) {
@@ -121,11 +121,7 @@ function summarizeMatchData(docs, HeroesTalents) {
           data[pickData[second][4]].picks.postMid.wins += 1;
         }
       } else {
-        console.log(
-          "Match " +
-            match._id +
-            " missing full pick order, excluding from results"
-        );
+        console.log('Match ' + match._id + ' missing full pick order, excluding from results');
       }
     }
 
@@ -133,7 +129,7 @@ function summarizeMatchData(docs, HeroesTalents) {
       for (let b in match.bans[t]) {
         try {
           // typically this means they didn't ban
-          if (match.bans[t][b].hero === "") {
+          if (match.bans[t][b].hero === '') {
             continue;
           }
 
