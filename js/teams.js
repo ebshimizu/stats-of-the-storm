@@ -1369,6 +1369,8 @@ function layoutTeamDetailPrint(sections) {
     addPrintPage('bans');
     addPrintSubHeader('Ban Priority', 'bans');
     copyFloatingTable($('#team-ban-summary'), getPrintPage('bans'));
+    addPrintSubHeader('Pick Detail', 'bans');
+    copyFloatingTable($('#team-pick-detail'), getPrintPage('bans'));
   }
 
   if (sects.indexOf('against') !== -1) {
