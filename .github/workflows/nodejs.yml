@@ -17,6 +17,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: submodules-init
+      uses: snickerbockers/submodules-init@v4
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
