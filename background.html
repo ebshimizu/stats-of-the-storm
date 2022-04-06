@@ -8,7 +8,7 @@
     const app = require('electron').remote.app;
 
     ipc.on('parseReplay', function(event, file, id, fromWindowId) {
-      let out = Parser.processReplay(file, { legacyTalentKeys: true });
+      let out = Parser.processReplay(file, { legacyTalentKeys: true, overrideVerifiedBuild: true });
       out.idx = id;
 
       // you know what just broadcast it i don't care
