@@ -8,6 +8,7 @@ function heroDataCSV(docs) {
   // identifiers
   outData += 'ToonHandle';
   outData += ',name';
+  outData += ',turn';
   outData += ',hero';
   outData += ',date';
   outData += ',win';
@@ -41,6 +42,7 @@ function heroDataCSV(docs) {
     // identifiers
     row += doc.ToonHandle;
     row += ',' + doc.name;
+    row += ',' + doc.turn;
     row += ',' + doc.hero;
     row += ',' + doc.date;
     row += ',' + (doc.win ? 'true' : 'false');
