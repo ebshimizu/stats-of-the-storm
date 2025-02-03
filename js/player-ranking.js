@@ -153,6 +153,7 @@ function loadPlayerRankings() {
 
         let context = player[mode];
         context.id = p;
+        context.tag = player.tag;
         context.name = player.name;
         context.wins = player.wins;
         context.winPercent = player.wins / player.games;

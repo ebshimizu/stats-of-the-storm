@@ -431,6 +431,13 @@ function playerRankingStatFormat() {
       `<h3 class="ui inverted header player-name link-to-player" player-id="${row.id}">${data}</h4>`,
   };
 
+  const id = {
+    title: 'Tag',
+    data: 'tag',
+  };
+
+  base.columns.splice(1, 0, id);
+
   const wins = {
     title: 'Win %',
     data: 'winPercent',
