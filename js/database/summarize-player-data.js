@@ -32,6 +32,7 @@ function summarizePlayerData(docs, playerAliases = {}) {
     // set up the player object
     if (!(playerID in playerDetailStats)) {
       playerDetailStats[playerID] = {
+        tag: match.tag,
         games: 0,
         wins: 0,
         stats: {
