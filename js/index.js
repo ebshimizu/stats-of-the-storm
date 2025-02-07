@@ -264,6 +264,11 @@ function initGlobalUIHandlers() {
     showPlayerProfile($(this).attr('player-id'));
   });
 
+  $(document).on('click', '.link-to-hero', function (event) {
+    $('#hero-collection-submenu .item[data-tab="hero-collection-hero"]').trigger('click');
+    $(`.menu .item[data-value="${$(this).attr('data-hero')}"]`).trigger('click');
+  });
+
   $(document).on('click', '.link-to-team', function (event) {
     $('#team-set-team').dropdown('set text', $(this).text());
     $('#team-set-team').dropdown('set value', $(this).attr('team-id'));
