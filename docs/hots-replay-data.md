@@ -289,7 +289,7 @@ Events will have additional fields depending on the value of the `_eventid` fiel
 is a textual version of `_eventid` so it's probably faster to just use `_eventid` to case on events.
 In this section, the event object will be referred to as `event`.
 
-May of the maps have tracker events that detail who won the objective, however there are some notable exceptions.
+Many of the maps have tracker events that detail who won the objective, however there are some notable exceptions.
 Maps which either lack or have complex ways to detect objectives:
 
 * Blackheart's Bay - Other parsers reference a `GhostShipCaptured` event, however I have not seen that
