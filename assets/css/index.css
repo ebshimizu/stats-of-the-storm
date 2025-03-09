@@ -135,7 +135,7 @@ body {
     text-align: center;
 }
 
-.player-name {
+.player-name, .hero-name {
     cursor: pointer;
 }
 
@@ -176,6 +176,10 @@ p.status {
 
 .dt-semanticUI .ui.stackable.grid {
     margin-right: 0;
+}
+
+.dt-semanticUI .ui.stackable.grid .dt-table {
+    isolation: isolate;
 }
 
 .duo-cell {
